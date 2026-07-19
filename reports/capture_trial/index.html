@@ -1,0 +1,68 @@
+<!doctype html><meta charset="utf-8">
+<title>OWCS capture trial — owcs-afcxdimpsle</title>
+<style>
+ body{font:14px system-ui,sans-serif;margin:24px;max-width:1100px;
+   background:#0f1115;color:#e8e8ea}
+ h1{font-size:22px;margin:0 0 4px} h2{font-size:17px;margin:26px 0 8px;
+   border-bottom:1px solid #2a2e37;padding-bottom:4px}
+ h4{margin:14px 0 6px;font-size:13px;font-weight:600}
+ small{color:#8a90a0;font-weight:400} code{background:#1b1f27;padding:1px 5px;
+   border-radius:4px}
+ .banner{padding:12px 16px;border-radius:8px;font-weight:700;margin:12px 0}
+ .banner.ok{background:#123a1e;color:#7ee29b;border:1px solid #1e6b38}
+ .banner.warn{background:#3a2e12;color:#f2c879;border:1px solid #7a5c1e}
+ .reason{color:#f2c879}
+ pre{background:#1b1f27;padding:12px;border-radius:8px;overflow:auto;
+   font-size:12.5px;line-height:1.5}
+ .grid,.row{display:flex;flex-wrap:wrap;gap:10px}
+ figure{margin:0;text-align:center}
+ .shot img{width:210px;border:1px solid #2a2e37;border-radius:4px;background:#000}
+ .crop img{width:64px;height:64px;object-fit:contain;background:#000;
+   border:1px solid #2a2e37;image-rendering:pixelated}
+ figcaption{color:#8a90a0;font-size:11px;margin-top:2px}
+ .cropframe{margin:6px 0 14px} ul{line-height:1.7}
+ .meta{color:#8a90a0}
+</style>
+<h1>OWCS Comp Tracker — capture trial</h1>
+<p class="meta">owcs-afcxdimpsle ·
+ <a href="https://www.youtube.com/watch?v=AfCXDIMPsLE" style="color:#79b8ff">VOD</a> ·
+ generated 2026-07-19 00:34 UTC</p>
+<div class="banner ok">REAL YOUTUBE CAPTURE</div>
+
+
+<h2>What ran (no DB writes, no full-VOD detection)</h2>
+<ul>
+ <li><b>Real capture command:</b> <code>python3 pipeline/extract_calibration_frames.py --source owcs-afcxdimpsle --start 1:30:00 --end 1:31:00 --every 30 --clip-mode local-window</code></li>
+ <li><b>Clip mode:</b> <code>local-window</code></li>
+ <li>Planned real window: 1:30:00–1:31:00 every 30s → 2 frames</li>
+ <li>Layout used for these previews: <code>layouts\owcs_youtube_2026.json</code></li>
+ <li>Frames previewed: 2 ·
+     debug images: 2 ·
+     hero crops: 12</li>
+</ul>
+<pre># exact flow (fixture fallback runs the same three tools)
+python3 pipeline/extract_calibration_frames.py --source owcs-afcxdimpsle \
+      --start 1:30:00 --end 1:31:00 --every 30 \
+      --clip-mode local-window
+python3 pipeline/build_layout_debug.py --layout layouts/owcs_youtube_2026.json \
+      --frames-dir reports/calibration_frames/owcs-afcxdimpsle
+python3 pipeline/build_hero_templates.py --layout layouts/owcs_youtube_2026.json \
+      --frames-dir reports/calibration_frames/owcs-afcxdimpsle</pre>
+
+<h2>Captured frames</h2>
+<div class="grid"><figure class="shot"><a href="frames\005400.png" target="_blank"><img src="frames\005400.png" loading="lazy"></a><figcaption>005400.png</figcaption></figure><figure class="shot"><a href="frames\005430.png" target="_blank"><img src="frames\005430.png" loading="lazy"></a><figcaption>005430.png</figcaption></figure></div>
+
+<h2>Layout debug images</h2>
+<p>Green = team A slots, blue = team B slots, yellow = anchor,
+   red = replay, magenta = score/map.</p>
+<div class="grid"><figure class="shot"><a href="layout_debug\005400_debug.png" target="_blank"><img src="layout_debug\005400_debug.png" loading="lazy"></a><figcaption>005400_debug.png</figcaption></figure><figure class="shot"><a href="layout_debug\005430_debug.png" target="_blank"><img src="layout_debug\005430_debug.png" loading="lazy"></a><figcaption>005430_debug.png</figcaption></figure></div>
+
+
+
+<h2>Hero crop candidates</h2>
+<p>Rename the cleanest crop of each hero to
+   <code>templates/&lt;hero_id&gt;.png</code>. A/B = team, 1–5 = slot.</p>
+<div class="cropframe"><h4>1:30:00 <small>005400.png</small></h4><div class="row"><figure class="crop"><img src="crops\005400_A1.png" loading="lazy"><figcaption>A1</figcaption></figure><figure class="crop"><img src="crops\005400_A2.png" loading="lazy"><figcaption>A2</figcaption></figure><figure class="crop"><img src="crops\005400_A3.png" loading="lazy"><figcaption>A3</figcaption></figure><figure class="crop"><img src="crops\005400_A4.png" loading="lazy"><figcaption>A4</figcaption></figure><figure class="crop"><img src="crops\005400_A5.png" loading="lazy"><figcaption>A5</figcaption></figure><figure class="crop"><img src="crops\005400_B1.png" loading="lazy"><figcaption>B1</figcaption></figure></div></div><div class="cropframe"><h4>1:30:30 <small>005430.png</small></h4><div class="row"><figure class="crop"><img src="crops\005430_A1.png" loading="lazy"><figcaption>A1</figcaption></figure><figure class="crop"><img src="crops\005430_A2.png" loading="lazy"><figcaption>A2</figcaption></figure><figure class="crop"><img src="crops\005430_A3.png" loading="lazy"><figcaption>A3</figcaption></figure><figure class="crop"><img src="crops\005430_A4.png" loading="lazy"><figcaption>A4</figcaption></figure><figure class="crop"><img src="crops\005430_A5.png" loading="lazy"><figcaption>A5</figcaption></figure><figure class="crop"><img src="crops\005430_B1.png" loading="lazy"><figcaption>B1</figcaption></figure></div></div>
+
+<h2>Next adjustment needed</h2>
+<ul><li>Open the layout_debug images and confirm the boxes hug each hero portrait, the anchor, and the replay marker.</li><li>Nudge rectangles in layouts/owcs_youtube_2026.json where boxes are off, then re-run this trial.</li><li>From the crop candidates, rename one clean crop per hero to templates/&lt;hero_id&gt;.png.</li></ul>

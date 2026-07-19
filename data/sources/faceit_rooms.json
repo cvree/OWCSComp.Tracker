@@ -1,0 +1,11 @@
+{
+  "_readme": "Add OWCS FACEIT matchroom URLs here; the batch ingest reads this list. Each entry needs a url; region/stage/notes are optional metadata used to tag the match. Duplicate urls or match ids are skipped. This file is committed so GitHub Actions can ingest without secrets. Real rooms populate FACEIT facts only — hero comps still come from manual corrections or CV.",
+  "rooms": [
+    {
+      "url": "https://www.faceit.com/en/ow2/room/1-example-replace-me",
+      "region": "NA",
+      "stage": "Stage 2",
+      "notes": "Placeholder — replace with a real OWCS matchroom URL. Ingest will skip this unless it resolves to real data."
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+ "window": [
+  1805.0,
+  2778.0
+ ],
+ "baseline_every": 5.0,
+ "frames_sampled": 299,
+ "gameplay_frames": 196,
+ "skipped_frames": 103,
+ "dense_windows": 14,
+ "rounds": 3,
+ "confirmed_swaps": 2,
+ "rejected_swaps": 7,
+ "setup_changes": 4,
+ "setup_spans": [
+  [
+   1805.0,
+   1935.0
+  ],
+  [
+   2140.0,
+   2170.0
+  ],
+  [
+   2466.0,
+   2530.0
+  ]
+ ],
+ "detector_version": "det-v2"
+}

@@ -1,0 +1,379 @@
+{
+ "a1": {
+  "stints": [
+   {
+    "hero": "shion",
+    "start": 1805.0,
+    "end": 2765.0,
+    "n_obs": 196,
+    "mean_conf": 0.948,
+    "min_conf": 0.866,
+    "evidence_start": "t0001805.0_a1.png",
+    "evidence_end": "t0002765.0_a1.png"
+   }
+  ],
+  "events": [],
+  "n_reads": 196
+ },
+ "a2": {
+  "stints": [
+   {
+    "hero": "sym",
+    "start": 1805.0,
+    "end": 2765.0,
+    "n_obs": 195,
+    "mean_conf": 0.902,
+    "min_conf": 0.769,
+    "evidence_start": "t0001805.0_a2.png",
+    "evidence_end": "t0002765.0_a2.png"
+   }
+  ],
+  "events": [
+   {
+    "kind": "rejected-swap",
+    "slot_from": "sym",
+    "candidate": "sojourn",
+    "t": 2605.0,
+    "n_obs": 1,
+    "reason": "candidate sojourn seen 1x then sym returned \u2014 noise, not a swap",
+    "evidence": [
+     "t0002605.0_a2.png"
+    ]
+   }
+  ],
+  "n_reads": 196
+ },
+ "a3": {
+  "stints": [
+   {
+    "hero": "mauga",
+    "start": 1810.0,
+    "end": 2765.0,
+    "n_obs": 194,
+    "mean_conf": 0.909,
+    "min_conf": 0.661,
+    "evidence_start": "t0001810.0_a3.png",
+    "evidence_end": "t0002765.0_a3.png"
+   }
+  ],
+  "events": [
+   {
+    "kind": "rejected-swap",
+    "slot_from": "mauga",
+    "candidate": "sojourn",
+    "t": 2605.0,
+    "n_obs": 1,
+    "reason": "candidate sojourn seen 1x then mauga returned \u2014 noise, not a swap",
+    "evidence": [
+     "t0002605.0_a3.png"
+    ]
+   }
+  ],
+  "n_reads": 195
+ },
+ "a4": {
+  "stints": [
+   {
+    "hero": "kiriko",
+    "start": 1805.0,
+    "end": 1824.0,
+    "n_obs": 12,
+    "mean_conf": 0.86,
+    "min_conf": 0.813,
+    "evidence_start": "t0001805.0_a4.png",
+    "evidence_end": "t0001824.0_a4.png"
+   },
+   {
+    "hero": "lucio",
+    "start": 1825.0,
+    "end": 1834.0,
+    "n_obs": 6,
+    "mean_conf": 0.622,
+    "min_conf": 0.576,
+    "evidence_start": "t0001825.0_a4.png",
+    "evidence_end": "t0001834.0_a4.png"
+   },
+   {
+    "hero": "kiriko",
+    "start": 1835.0,
+    "end": 2755.0,
+    "n_obs": 171,
+    "mean_conf": 0.882,
+    "min_conf": 0.798,
+    "evidence_start": "t0001835.0_a4.png",
+    "evidence_end": "t0002755.0_a4.png"
+   }
+  ],
+  "events": [
+   {
+    "kind": "setup-change",
+    "from": "kiriko",
+    "to": "lucio",
+    "t": 1825.0,
+    "confidence": 0.621,
+    "margin": 0.318,
+    "n_obs": 3,
+    "evidence_before": "t0001824.0_a4.png",
+    "evidence_after": "t0001825.0_a4.png",
+    "reason": "lucio persisted 3 obs (1825s-1831s) while kiriko no longer detected [during setup phase \u2014 comp change, not an in-game swap]"
+   },
+   {
+    "kind": "setup-change",
+    "from": "lucio",
+    "to": "kiriko",
+    "t": 1835.0,
+    "confidence": 0.907,
+    "margin": 0.448,
+    "n_obs": 2,
+    "evidence_before": "t0001834.0_a4.png",
+    "evidence_after": "t0001835.0_a4.png",
+    "reason": "kiriko persisted 2 obs (1835s-1840s) while lucio no longer detected [during setup phase \u2014 comp change, not an in-game swap]"
+   },
+   {
+    "kind": "rejected-swap",
+    "slot_from": "kiriko",
+    "candidate": "sojourn",
+    "t": 2605.0,
+    "n_obs": 1,
+    "reason": "candidate sojourn seen 1x then kiriko returned \u2014 noise, not a swap",
+    "evidence": [
+     "t0002605.0_a4.png"
+    ]
+   }
+  ],
+  "n_reads": 190
+ },
+ "a5": {
+  "stints": [
+   {
+    "hero": "lucio",
+    "start": 1810.0,
+    "end": 1814.0,
+    "n_obs": 5,
+    "mean_conf": 0.512,
+    "min_conf": 0.508,
+    "evidence_start": "t0001810.0_a5.png",
+    "evidence_end": "t0001814.0_a5.png"
+   },
+   {
+    "hero": "juno",
+    "start": 1815.0,
+    "end": 2393.0,
+    "n_obs": 115,
+    "mean_conf": 0.963,
+    "min_conf": 0.923,
+    "evidence_start": "t0001815.0_a5.png",
+    "evidence_end": "t0002393.0_a5.png"
+   },
+   {
+    "hero": "lucio",
+    "start": 2394.0,
+    "end": 2423.0,
+    "n_obs": 10,
+    "mean_conf": 0.888,
+    "min_conf": 0.788,
+    "evidence_start": "t0002394.0_a5.png",
+    "evidence_end": "t0002423.0_a5.png"
+   },
+   {
+    "hero": "juno",
+    "start": 2466.0,
+    "end": 2574.0,
+    "n_obs": 24,
+    "mean_conf": 0.967,
+    "min_conf": 0.935,
+    "evidence_start": "t0002466.0_a5.png",
+    "evidence_end": "t0002574.0_a5.png"
+   },
+   {
+    "hero": "lucio",
+    "start": 2575.0,
+    "end": 2765.0,
+    "n_obs": 39,
+    "mean_conf": 0.864,
+    "min_conf": 0.777,
+    "evidence_start": "t0002575.0_a5.png",
+    "evidence_end": "t0002765.0_a5.png"
+   }
+  ],
+  "events": [
+   {
+    "kind": "setup-change",
+    "from": "lucio",
+    "to": "juno",
+    "t": 1815.0,
+    "confidence": 0.98,
+    "margin": 0.256,
+    "n_obs": 2,
+    "evidence_before": "t0001814.0_a5.png",
+    "evidence_after": "t0001815.0_a5.png",
+    "reason": "juno persisted 2 obs (1815s-1820s) while lucio no longer detected [during setup phase \u2014 comp change, not an in-game swap]"
+   },
+   {
+    "kind": "swap",
+    "from": "juno",
+    "to": "lucio",
+    "t": 2394.0,
+    "confidence": 0.817,
+    "margin": 0.391,
+    "n_obs": 3,
+    "evidence_before": "t0002393.0_a5.png",
+    "evidence_after": "t0002394.0_a5.png",
+    "reason": "lucio persisted 3 obs (2394s-2400s) while juno no longer detected"
+   },
+   {
+    "kind": "setup-change",
+    "from": "lucio",
+    "to": "juno",
+    "t": 2466.0,
+    "confidence": 0.973,
+    "margin": 0.211,
+    "n_obs": 2,
+    "evidence_before": "t0002423.0_a5.png",
+    "evidence_after": "t0002466.0_a5.png",
+    "reason": "juno persisted 2 obs (2466s-2470s) while lucio no longer detected [during setup phase \u2014 comp change, not an in-game swap]"
+   },
+   {
+    "kind": "swap",
+    "from": "juno",
+    "to": "lucio",
+    "t": 2575.0,
+    "confidence": 0.861,
+    "margin": 0.554,
+    "n_obs": 2,
+    "evidence_before": "t0002574.0_a5.png",
+    "evidence_after": "t0002575.0_a5.png",
+    "reason": "lucio persisted 2 obs (2575s-2595s) while juno no longer detected"
+   },
+   {
+    "kind": "rejected-swap",
+    "slot_from": "lucio",
+    "candidate": "sojourn",
+    "t": 2605.0,
+    "n_obs": 1,
+    "reason": "candidate sojourn seen 1x then lucio returned \u2014 noise, not a swap",
+    "evidence": [
+     "t0002605.0_a5.png"
+    ]
+   }
+  ],
+  "n_reads": 194
+ },
+ "b1": {
+  "stints": [
+   {
+    "hero": "sojourn",
+    "start": 1805.0,
+    "end": 2765.0,
+    "n_obs": 196,
+    "mean_conf": 0.946,
+    "min_conf": 0.52,
+    "evidence_start": "t0001805.0_b1.png",
+    "evidence_end": "t0002765.0_b1.png"
+   }
+  ],
+  "events": [],
+  "n_reads": 196
+ },
+ "b2": {
+  "stints": [
+   {
+    "hero": "sym",
+    "start": 1805.0,
+    "end": 2765.0,
+    "n_obs": 193,
+    "mean_conf": 0.808,
+    "min_conf": 0.364,
+    "evidence_start": "t0001805.0_b2.png",
+    "evidence_end": "t0002765.0_b2.png"
+   }
+  ],
+  "events": [
+   {
+    "kind": "rejected-swap",
+    "slot_from": "sym",
+    "candidate": "sojourn",
+    "t": 2200.0,
+    "n_obs": 2,
+    "reason": "candidate sojourn seen 2x then sym returned \u2014 noise, not a swap",
+    "evidence": [
+     "t0002200.0_b2.png",
+     "t0002202.0_b2.png"
+    ]
+   }
+  ],
+  "n_reads": 195
+ },
+ "b3": {
+  "stints": [
+   {
+    "hero": "dva",
+    "start": 1805.0,
+    "end": 2765.0,
+    "n_obs": 196,
+    "mean_conf": 0.967,
+    "min_conf": 0.61,
+    "evidence_start": "t0001805.0_b3.png",
+    "evidence_end": "t0002765.0_b3.png"
+   }
+  ],
+  "events": [],
+  "n_reads": 196
+ },
+ "b4": {
+  "stints": [
+   {
+    "hero": "lucio",
+    "start": 1805.0,
+    "end": 2765.0,
+    "n_obs": 195,
+    "mean_conf": 0.941,
+    "min_conf": 0.751,
+    "evidence_start": "t0001805.0_b4.png",
+    "evidence_end": "t0002765.0_b4.png"
+   }
+  ],
+  "events": [
+   {
+    "kind": "rejected-swap",
+    "slot_from": "lucio",
+    "candidate": "sojourn",
+    "t": 2330.0,
+    "n_obs": 1,
+    "reason": "candidate sojourn seen 1x then lucio returned \u2014 noise, not a swap",
+    "evidence": [
+     "t0002330.0_b4.png"
+    ]
+   }
+  ],
+  "n_reads": 196
+ },
+ "b5": {
+  "stints": [
+   {
+    "hero": "kiriko",
+    "start": 1805.0,
+    "end": 2765.0,
+    "n_obs": 195,
+    "mean_conf": 0.941,
+    "min_conf": 0.726,
+    "evidence_start": "t0001805.0_b5.png",
+    "evidence_end": "t0002765.0_b5.png"
+   }
+  ],
+  "events": [
+   {
+    "kind": "rejected-swap",
+    "slot_from": "kiriko",
+    "candidate": "juno",
+    "t": 1811.0,
+    "n_obs": 1,
+    "reason": "candidate juno seen 1x then kiriko returned \u2014 noise, not a swap",
+    "evidence": [
+     "t0001811.0_b5.png"
+    ]
+   }
+  ],
+  "n_reads": 196
+ }
+}

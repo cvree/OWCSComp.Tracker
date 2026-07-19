@@ -1,0 +1,13 @@
+# Normalize text line endings; keep binaries untouched.
+* text=auto eol=lf
+
+# Binary assets — never touch line endings or diff as text.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.sqlite binary
+*.mp4 binary
+*.webm binary
+*.min.js -diff

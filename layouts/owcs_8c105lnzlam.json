@@ -1,0 +1,114 @@
+{
+  "_comments": [
+    "CALIBRATION layout for OWCS VOD youtube 8C105lNzLAM (Crazy Raccoon vs",
+    "ZETA DIVISION, Champions Clash 2026 Upper Final). Calibrated against",
+    "REAL captured frames (t=360-390s) by locating the ult-charge chips",
+    "(orange = team A left, blue = team B right) and measuring the portrait",
+    "cell to their right: portrait = chip_x + 24px, y=46, 24x24 at 854x480,",
+    "uniform pitch 47.5px, B side mirrors A (854-18-46 = 790 = B5 chip).",
+    "Values below are those measurements scaled to 1920x1080 native",
+    "(x*2.2482, y*2.25); scale_layout_to_frame maps them back to any 16:9",
+    "capture size at run time.",
+    "",
+    "slots_a = Crazy Raccoon (left/team A: HEESANG STALK3R JUNBIN CHORONG",
+    "VIGILANTE), slots_b = ZETA DIVISION (right/team B: KNIFE PROPER",
+    "MEALGARU VIOL2T SHU), each [x,y,w,h] px at 1920x1080, origin top-left,",
+    "tight to the portrait art. Portrait pitch ~106.8px.",
+    "",
+    "anchor stays a PLACEHOLDER on purpose: the frame filter needs a",
+    "same-resolution template crop and is allowed to skip honestly until",
+    "one is cut; detection does not depend on it.",
+    "",
+    "templates_dir points at this source's own template set",
+    "(templates/owcs_8c105lnzlam/), built from these frames' verified",
+    "crops — the shared synthetic starter set in templates/ is untouched."
+  ],
+  "frame_width": 1920,
+  "frame_height": 1080,
+  "sample_interval_seconds": 10,
+  "anchor": {
+    "_adjust": "PLACEHOLDER — cut layouts/owcs_8c105lnzlam-anchor.png from a live-HUD region (e.g. the team nameplate) to activate the gameplay filter.",
+    "rect": [
+      40,
+      55,
+      540,
+      60
+    ],
+    "template": "layouts/owcs_8c105lnzlam-anchor.png",
+    "min_score": 0.7
+  },
+  "score_map": {
+    "rect": [
+      790,
+      55,
+      340,
+      60
+    ]
+  },
+  "slots_a": [
+    [
+      94,
+      103,
+      54,
+      54
+    ],
+    [
+      201,
+      103,
+      54,
+      54
+    ],
+    [
+      308,
+      103,
+      54,
+      54
+    ],
+    [
+      415,
+      103,
+      54,
+      54
+    ],
+    [
+      522,
+      103,
+      54,
+      54
+    ]
+  ],
+  "slots_b": [
+    [
+      1403,
+      103,
+      54,
+      54
+    ],
+    [
+      1510,
+      103,
+      54,
+      54
+    ],
+    [
+      1616,
+      103,
+      54,
+      54
+    ],
+    [
+      1723,
+      103,
+      54,
+      54
+    ],
+    [
+      1830,
+      103,
+      54,
+      54
+    ]
+  ],
+  "match_threshold": 0.6,
+  "templates_dir": "templates/owcs_8c105lnzlam"
+}

@@ -1,0 +1,8 @@
+{
+  "match_id": "1-missing-0000-0000-0000-fixturemissing3",
+  "teams": { "faction1": {"name": "Only Team A"}, "faction2": {} },
+  "maps": [
+    {"order": 1, "name": "Oasis"},
+    {"name": "Samoa", "replayCode": "ZZ99YY"}
+  ]
+}

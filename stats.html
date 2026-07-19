@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stats — OWCS Comp Tracker</title>
+<meta name="description" content="Hero pick, win and ban rates computed only from verified OWCS comps — every number links to its evidence.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/public.css">
+</head>
+<body class="pub">
+<a class="skip-link" href="#main">Skip to content</a>
+<main class="pub-main" id="main">
+  <div class="page-head rv">
+    <span class="ph-eyebrow">Pro meta</span>
+    <h1>Statistics</h1>
+    <p class="lede">Pick and win rates computed <b>only</b> from comps a human reviewed or that cleared the high-confidence gate. Every number links to the matches and frames behind it — if we can't prove it, we don't count it.</p>
+  </div>
+
+  <div class="stack rv">
+    <div class="seg-region" id="region-seg" role="group" aria-label="Region"></div>
+    <form class="filterbar" id="s-filters" aria-label="Filter statistics">
+      <label>Tournament
+        <select id="sf-tournament"><option value="all">All tournaments</option></select>
+      </label>
+      <label>Team
+        <select id="sf-team"><option value="all">All teams</option></select>
+      </label>
+      <label>Map
+        <select id="sf-map"><option value="all">All maps</option></select>
+      </label>
+      <div class="fb-actions"><button type="button" class="btn btn--ghost" id="sf-reset">Reset</button></div>
+    </form>
+    <div class="split">
+      <div class="filter-summary" id="sf-summary" aria-live="polite"></div>
+      <span class="freshness" id="freshness"></span>
+    </div>
+  </div>
+
+  <section class="section" aria-label="Summary">
+    <div class="stat-cards" id="s-cards"></div>
+  </section>
+
+  <section class="section" aria-label="Hero pick and win rates">
+    <h2>Hero pick &amp; win rates <span class="h-count" id="s-hero-count"></span></h2>
+    <div class="stat-note rv"><span aria-hidden="true">⛨</span>
+      <span>Counted from <b>verified comps only</b> (review status “reviewed” or “auto-high”; manual corrections override CV reads). Unreviewed detections are excluded until a human signs off.</span></div>
+    <div id="s-hero-table" style="margin-top:16px"></div>
+  </section>
+
+  <section class="section" aria-label="Hero bans">
+    <h2>Hero bans <span class="badge badge--src" data-src="faceit" style="vertical-align:4px">match facts</span></h2>
+    <p class="dim" style="margin-top:0;max-width:62ch">Bans are imported match facts (FACEIT / manual entry) — a different, clearly-labeled source than the vision-verified comps above.</p>
+    <div id="s-ban-table"></div>
+  </section>
+</main>
+
+<script src="assets/vendor/lenis.min.js" defer></script>
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="assets/vendor/three.min.js" defer></script>
+<script src="assets/vendor/vanta.net.min.js" defer></script>
+<script src="assets/js/motion.js" defer></script>
+<script src="assets/data/public_data.v1.js"></script>
+<script src="assets/data/public_fixture.v1.js"></script>
+<script src="assets/js/public/core.js"></script>
+<script src="assets/js/public/shell.js"></script>
+<script src="assets/js/public/stats.js"></script>
+<script src="assets/js/public/page-stats.js"></script>
+</body>
+</html>

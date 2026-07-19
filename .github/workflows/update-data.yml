@@ -1,0 +1,85 @@
+# =====================================================================
+# OWCS Comp Tracker — data update pipeline ($0, no secrets)
+# ---------------------------------------------------------------------
+# Ingests FACEIT rooms from data/sources/faceit_rooms.json, applies manual
+# corrections, validates, exports assets/js/data.js, and commits it. The
+# commit redeploys the static site (GitHub Pages / Cloudflare Pages).
+#
+# No paid services, no backend, no FACEIT API key. Uses only the default
+# GITHUB_TOKEN to push the regenerated data file.
+# =====================================================================
+name: update-data
+
+# MANUAL ONLY. Ingests FACEIT rooms + corrections and commits the
+# regenerated data.js/DB. Kept off cron and off push triggers so it can
+# never race the CI/Pages workflows or auto-mutate the committed
+# milestone. Run it deliberately when you have new FACEIT rooms to ingest.
+on:
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "Max FACEIT rooms to ingest this run"
+        required: false
+        default: ""
+
+concurrency:
+  group: owcs-update-data
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install --quiet opencv-python-headless
+
+      - name: Run pipeline
+        run: |
+          ARGS="--no-sample"
+          if [ -n "${{ github.event.inputs.limit }}" ]; then
+            ARGS="$ARGS --limit ${{ github.event.inputs.limit }}"
+          fi
+          python3 pipeline/run_batch.py $ARGS
+
+      - name: Sanity-check frontend JS (if node available)
+        run: |
+          if command -v node >/dev/null 2>&1; then
+            node --check assets/js/app.js && echo "app.js OK"
+          else
+            echo "node not available; skipping app.js check"
+          fi
+
+      - name: Commit updated data.js (and DB) if changed
+        run: |
+          git config user.name  "owcs-pipeline[bot]"
+          git config user.email "actions@users.noreply.github.com"
+          git add assets/js/data.js data/owcs.sqlite 2>/dev/null || git add assets/js/data.js
+          if git diff --cached --quiet; then
+            echo "No data changes this run."
+            exit 0
+          fi
+          git commit -m "data: update from FACEIT + corrections ($(date -u +'%Y-%m-%d %H:%M') UTC)"
+          git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+
+      - name: Run summary
+        if: always()
+        run: |
+          {
+            echo "### Data update summary"
+            echo ""
+            echo "- Matches in DB: $(python3 -c "import sys; sys.path.insert(0,'pipeline'); import db; print(db.connect().execute('SELECT COUNT(*) FROM matches').fetchone()[0])" 2>/dev/null || echo n/a)"
+            echo "- FACEIT rooms configured: $(python3 -c "import json; print(len(json.load(open('data/sources/faceit_rooms.json')).get('rooms', [])))" 2>/dev/null || echo n/a)"
+          } >> "$GITHUB_STEP_SUMMARY"

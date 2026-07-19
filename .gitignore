@@ -1,0 +1,77 @@
+# =====================================================================
+# OWCS Comp Tracker — .gitignore
+# Keep: source, docs, tests, layouts, per-source template dirs, schema,
+#       public pages, the SQLite DB, the public export, and the ESSENTIAL
+#       milestone evidence the public data + fixture + reports reference.
+# Drop: multi-GB VODs/clips/frames, scratch, caches, transient DB sidecars,
+#       template cluster candidates, and generated bulk reports.
+# =====================================================================
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# --- Virtualenvs / tooling ---
+.venv/
+venv/
+env/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+node_modules/
+
+# --- OS / editor junk ---
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*~
+.idea/
+.vscode/
+
+# --- Secrets / local config (never commit) ---
+.env
+*.env
+!.env.example
+*.key
+*.pem
+credentials*.json
+secrets*.json
+
+# --- Large media & local scratch (multi-GB; never commit) ---
+work/
+*.mp4
+*.mkv
+*.webm
+*.m4a
+*.part
+*.ytdl
+*.f4v
+
+# --- SQLite transient sidecars (the .sqlite itself IS committed) ---
+data/owcs.sqlite-wal
+data/owcs.sqlite-shm
+data/raw/
+
+# --- Template cluster scratch (4-5 MB, regenerable via harvest --cluster) ---
+_candidates/
+candidates/
+
+# --- Reports: keep ONLY the essential milestone evidence ---------------
+#   * reports/ingest/qad-twis-nepal/     -> production public_data.v1.js evidence
+#   * reports/capture_trial/             -> fixture evidence (test-validated)
+#   * reports/calibration/owcs-jksix-qwc -> calibration sheet
+# Everything else under reports/ (reports/auto, dryrun output, ...) is
+# generated bulk and stays out.
+reports/*
+!reports/ingest/
+reports/ingest/*
+!reports/ingest/qad-twis-nepal/
+!reports/capture_trial/
+!reports/calibration/
+reports/calibration/*
+!reports/calibration/owcs-jksix-qwc/

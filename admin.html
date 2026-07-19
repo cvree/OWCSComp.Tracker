@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Admin — comp corrections</title>
+<meta name="robots" content="noindex" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css" />
+<style>
+  .hero-picker { display:flex; flex-wrap:wrap; gap:6px; margin:8px 0 14px; }
+  .hero-picker .chip { cursor:pointer; user-select:none; }
+  .hero-picker .chip.sel { border-color: var(--amber); background: var(--amber-soft); }
+  .hero-picker .chip.sel-swap { border-color: var(--win); background: rgba(70,214,140,.12); }
+  .picker-count { font-family: var(--display); color: var(--amber); }
+  textarea.jsonout { width:100%; min-height:220px; background:var(--surface);
+    color:var(--text); border:1px solid var(--line); border-radius:10px;
+    padding:12px; font-family: ui-monospace, monospace; font-size:.8rem; }
+  .queue-row { display:flex; gap:10px; align-items:center; padding:8px 0;
+    border-bottom:1px dashed var(--line); font-size:.88rem; }
+</style>
+</head>
+<body data-page="admin" data-shell="control">
+
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="index.html"><span class="brand-mark"></span>OWCS Comp Tracker</a>
+    <div class="nav-links"><a href="run.html">Run</a><a href="runs.html">Runs</a><a href="sources.html">Sources</a><a href="matches.html">Matches</a><a class="active" href="admin.html">Admin</a></div>
+    <span class="nav-status" id="nav-status"><span class="dot"></span><span>checking…</span></span>
+  </div>
+</nav>
+
+<div class="wrap page-head">
+  <p class="eyebrow">Admin · manual corrections</p>
+  <h1 style="font-size:clamp(1.5rem,3vw,2.1rem)">Author comp corrections, commit as JSON.</h1>
+  <p class="muted">This page is local tooling — it never writes anywhere itself. Build corrections
+    below, then save the JSON as <code>corrections/corrections.json</code> in the repo and commit.
+    The next pipeline run applies them as <strong>manual-source</strong> data that overrides CV.</p>
+</div>
+
+<div class="wrap">
+  <div class="filters">
+    <div class="filter"><label for="c-match">Match</label><select id="c-match"></select></div>
+    <div class="filter"><label for="c-map">Map</label><select id="c-map"></select></div>
+    <div class="filter"><label for="c-team">Team</label><select id="c-team"></select></div>
+    <div class="filter"><label for="c-note">Note (source of truth)</label>
+      <input id="c-note" type="text" placeholder="e.g. replay code ABC123 review" style="min-width:240px"></div>
+  </div>
+
+  <div class="panel" style="margin-top:0">
+    <h3>Opener comp — pick exactly 5 <span class="picker-count" id="count-opener">0/5</span></h3>
+    <div class="hero-picker" id="pick-opener"></div>
+    <h3>Swapped in mid-map (optional) <span class="picker-count" id="count-swaps">0</span></h3>
+    <div class="hero-picker" id="pick-swaps"></div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" id="add-correction">Add to corrections</button>
+      <button class="btn btn-ghost" id="clear-picks">Clear picks</button>
+    </div>
+    <p class="muted small" id="add-msg"></p>
+  </div>
+
+  <div class="panel" style="border-color:var(--line)">
+    <h3>Correction queue</h3>
+    <div id="queue"></div>
+    <h3 style="margin-top:16px">corrections.json</h3>
+    <textarea class="jsonout" id="json-out" spellcheck="false"></textarea>
+    <div class="modal-actions">
+      <button class="btn btn-primary" id="copy-json">Copy JSON</button>
+      <button class="btn btn-ghost" id="download-json">Download corrections.json</button>
+      <button class="btn btn-ghost" id="load-json">Load JSON from box</button>
+    </div>
+    <p class="muted small">Then: commit to <code>corrections/corrections.json</code> →
+      the pipeline runs <code>apply_corrections.py</code> → site updates. To edit existing
+      corrections, paste the current file into the box and press “Load JSON from box”.</p>
+  </div>
+</div>
+
+<script src="assets/js/data.js"></script>
+<script>
+(function () {
+  const D = window.OWCS_DATA;
+  const $ = s => document.querySelector(s);
+  const heroById = Object.fromEntries(D.heroes.map(h => [h.id, h]));
+  const teamById = Object.fromEntries(D.teams.map(t => [t.id, t]));
+  const mapName = id => (D.maps.find(m => m.id === id) || {name:id}).name;
+
+  let opener = [], swaps = [], queue = [];
+
+  // ---- selectors ------------------------------------------------------
+  const mSel = $("#c-match"), gSel = $("#c-map"), tSel = $("#c-team");
+  D.matches.slice().sort((a,b)=>(b.date||"").localeCompare(a.date||"")).forEach(m => {
+    const label = `${m.date} — ${teamById[m.teamA]?.code} vs ${teamById[m.teamB]?.code} (${m.id})`;
+    mSel.insertAdjacentHTML("beforeend", `<option value="${m.id}">${label}</option>`);
+  });
+  function fillMapTeam() {
+    const m = D.matches.find(x => x.id === mSel.value);
+    gSel.innerHTML = (m.maps||[]).map(g => {
+      const f = g.faceit || {};
+      const det = (g.tracker && g.tracker.detected) ? "detected" : "PENDING";
+      return `<option value="${f.mapOrder}">#${f.mapOrder} ${mapName(g.map)} — ${det}</option>`;
+    }).join("");
+    tSel.innerHTML = [m.teamA, m.teamB].map(t =>
+      `<option value="${t}">${teamById[t]?.name || t}</option>`).join("");
+  }
+  mSel.addEventListener("change", fillMapTeam);
+  fillMapTeam();
+
+  // ---- query-param prefill: admin.html?match=m12&mapOrder=1&team=ssg -----
+  (function prefill() {
+    const q = new URLSearchParams(location.search);
+    const match = q.get("match"), mapOrder = q.get("mapOrder"), team = q.get("team");
+    if (match && [...mSel.options].some(o => o.value === match)) {
+      mSel.value = match;
+      fillMapTeam();
+    }
+    if (mapOrder && [...gSel.options].some(o => o.value === String(mapOrder)))
+      gSel.value = String(mapOrder);
+    if (team && [...tSel.options].some(o => o.value === team))
+      tSel.value = team;
+  })();
+
+  // ---- hero pickers ----------------------------------------------------
+  function chip(h, sel, cls) {
+    return `<span class="chip ${sel ? cls : ""}" data-h="${h.id}" title="${h.role}">
+      <span class="dot ${h.role}">${h.name.replace(/[^A-Za-z0-9 ]/g,"").split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase()}</span>${h.name}</span>`;
+  }
+  function renderPickers() {
+    $("#pick-opener").innerHTML = D.heroes.map(h => chip(h, opener.includes(h.id), "sel")).join("");
+    $("#pick-swaps").innerHTML  = D.heroes.map(h => chip(h, swaps.includes(h.id), "sel-swap")).join("");
+    $("#count-opener").textContent = opener.length + "/5";
+    $("#count-swaps").textContent = swaps.length;
+  }
+  function toggle(list, id, limit) {
+    const i = list.indexOf(id);
+    if (i >= 0) list.splice(i, 1);
+    else if (!limit || list.length < limit) list.push(id);
+  }
+  $("#pick-opener").addEventListener("click", e => {
+    const el = e.target.closest(".chip"); if (!el) return;
+    toggle(opener, el.dataset.h, 5);
+    swaps = swaps.filter(h => !opener.includes(h));
+    renderPickers();
+  });
+  $("#pick-swaps").addEventListener("click", e => {
+    const el = e.target.closest(".chip"); if (!el) return;
+    if (opener.includes(el.dataset.h)) return;   // swaps can't repeat opener
+    toggle(swaps, el.dataset.h, 0);
+    renderPickers();
+  });
+  $("#clear-picks").addEventListener("click", () => { opener=[]; swaps=[]; renderPickers(); });
+  renderPickers();
+
+  // ---- queue + JSON -----------------------------------------------------
+  function renderQueue() {
+    $("#queue").innerHTML = queue.length ? queue.map((c, i) => `
+      <div class="queue-row">
+        <span><strong>${c.match}</strong> map ${c.mapOrder} · ${teamById[c.team]?.code || c.team}
+          · ${c.openerComp.map(h=>heroById[h]?.name||h).join(", ")}
+          ${c.swaps?.length ? ` (+ ${c.swaps.map(h=>heroById[h]?.name||h).join(", ")})` : ""}</span>
+        <button class="btn btn-ghost btn-sm" data-del="${i}">Remove</button>
+      </div>`).join("") : `<p class="muted small">Nothing queued yet.</p>`;
+    $("#json-out").value = JSON.stringify({ corrections: queue }, null, 2);
+  }
+  $("#queue").addEventListener("click", e => {
+    const b = e.target.closest("[data-del]"); if (!b) return;
+    queue.splice(Number(b.dataset.del), 1); renderQueue();
+  });
+  $("#add-correction").addEventListener("click", () => {
+    const msg = $("#add-msg");
+    if (opener.length !== 5) { msg.textContent = "Opener must be exactly 5 heroes."; return; }
+    queue = queue.filter(c => !(c.match === mSel.value
+      && c.mapOrder === Number(gSel.value) && c.team === tSel.value));
+    queue.push({ match: mSel.value, mapOrder: Number(gSel.value), team: tSel.value,
+                 openerComp: opener.slice(), swaps: swaps.slice(),
+                 note: $("#c-note").value || undefined,
+                 author: undefined });
+    msg.textContent = "Added. Pick the other team or the next map, or export below.";
+    opener = []; swaps = []; renderPickers(); renderQueue();
+  });
+  $("#copy-json").addEventListener("click", () =>
+    navigator.clipboard?.writeText($("#json-out").value).catch(()=>{}));
+  $("#download-json").addEventListener("click", () => {
+    const blob = new Blob([$("#json-out").value], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = "corrections.json"; a.click();
+    URL.revokeObjectURL(a.href);
+  });
+  $("#load-json").addEventListener("click", () => {
+    try {
+      const parsed = JSON.parse($("#json-out").value);
+      queue = Array.isArray(parsed.corrections) ? parsed.corrections : [];
+      renderQueue(); $("#add-msg").textContent = "Loaded " + queue.length + " corrections.";
+    } catch { $("#add-msg").textContent = "Invalid JSON in the box."; }
+  });
+  renderQueue();
+})();
+</script>
+<script src="assets/vendor/lenis.min.js" defer></script>
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="assets/js/motion.js" defer></script>
+<script src="assets/js/ui.js"></script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tournaments — OWCS Comp Tracker</title>
+<meta name="description" content="OWCS tournaments: schedules, brackets, results and verified team compositions.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/public.css">
+</head>
+<body class="pub">
+<a class="skip-link" href="#main">Skip to content</a>
+<main class="pub-main" id="main">
+  <div class="page-head rv">
+    <span class="ph-eyebrow">OWCS circuit</span>
+    <h1>Tournaments</h1>
+    <p class="lede">Every tracked OWCS event — brackets, results and, where the vision pipeline has done its work, verified team compositions with evidence you can click through.</p>
+  </div>
+
+  <form class="filterbar rv" id="t-filters" aria-label="Filter tournaments">
+    <label>Region
+      <select name="region" id="f-region"></select>
+    </label>
+    <label>Year
+      <select name="year" id="f-year"></select>
+    </label>
+    <label>Tier
+      <select name="tier" id="f-tier">
+        <option value="all">All tiers</option>
+        <option value="S">Tier S</option>
+        <option value="A">Tier A</option>
+        <option value="B">Tier B</option>
+      </select>
+    </label>
+    <label>Status
+      <select name="status" id="f-status">
+        <option value="all">Any status</option>
+        <option value="live">Live</option>
+        <option value="upcoming">Upcoming</option>
+        <option value="completed">Completed</option>
+      </select>
+    </label>
+    <div class="fb-actions">
+      <button type="button" class="btn btn--ghost" id="f-reset">Reset</button>
+    </div>
+  </form>
+
+  <div class="split" style="margin-top:16px">
+    <div class="filter-summary" id="f-summary" aria-live="polite"></div>
+    <span class="freshness" id="freshness"></span>
+  </div>
+
+  <section class="section" aria-label="Tournament list">
+    <div class="grid-cards" id="t-grid"></div>
+    <div id="t-empty" hidden></div>
+  </section>
+</main>
+
+<script src="assets/vendor/lenis.min.js" defer></script>
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="assets/vendor/three.min.js" defer></script>
+<script src="assets/vendor/vanta.net.min.js" defer></script>
+<script src="assets/js/motion.js" defer></script>
+<script src="assets/data/public_data.v1.js"></script>
+<script src="assets/data/public_fixture.v1.js"></script>
+<script src="assets/js/public/core.js"></script>
+<script src="assets/js/public/shell.js"></script>
+<script src="assets/js/public/page-tournaments.js"></script>
+</body>
+</html>
