@@ -44,10 +44,23 @@
     }
   }
 
-  /* ---- flow: Lenis + GSAP ticker + ScrollTrigger sync ---------------- */
+  /* ---- flow: Lenis + GSAP ticker + ScrollTrigger sync ----------------
+     `lerp` (continuous exponential smoothing, frame-rate independent)
+     instead of `duration` (a fixed-length eased tween per wheel gesture).
+     Duration-mode replays a full tween on every wheel tick, so rapid or
+     repeated scrolling queues/overlaps tweens and feels laggy and
+     rubber-bandy; lerp mode just keeps chasing the latest target every
+     frame, which reads as both snappier (higher lerp = catches up faster)
+     and smoother (no per-gesture animation to restart or collide with). */
   function initFlow() {
     if (reduced || typeof window.Lenis !== "function") return;
-    const lenis = new window.Lenis({ duration: 0.85, smoothWheel: true });
+    const lenis = new window.Lenis({
+      lerp: 0.13,
+      wheelMultiplier: 1,
+      touchMultiplier: 1.4,
+      smoothWheel: true,
+      syncTouch: false,      // native touch scroll already feels best
+    });
     M.lenis = lenis;
     // inner scroll regions keep native wheel behavior
     $$(".console-body, [data-scroll-region]").forEach((el) =>
@@ -187,53 +200,127 @@
     });
   }
 
-  /* ---- hero figure: scroll turntable + pointer tilt + blink echo -----
-     Feeds CSS custom props on [data-tracer]; the stylesheet composes them
-     into a preserve-3d transform. No layer here throws or hard-depends on
-     GSAP, so the figure is a static cutout when motion is off. */
+  /* ---- hero figure: parallax depth + pointer float + blink-dash burst -
+     Everything here is written by GSAP directly onto the elements'
+     `transform`/`opacity` every tick (quickTo, ScrollTrigger scrub) —
+     never through a CSS transition. A transition racing a high-frequency
+     listener is what produced the old "shake": each new value restarted
+     the transition mid-flight, so the element chased a constantly moving
+     target instead of settling. GSAP's own ticker is the only smoothing
+     layer here, exactly like the (already smooth) magnetic buttons.
+
+     Depth comes from real layers on a shared preserve-3d stack (rings and
+     glow sit at negative Z, the figure at Z0) plus a SMALL rotateY on the
+     whole stack — small enough that the flat cutout doesn't visibly warp,
+     but enough that the layers visibly shift against each other. Rotating
+     the flat image itself by a large angle (the old approach) just skews
+     a photo, which is what read as cheap. */
   function initHeroFigure() {
     if (reduced) return;
+    const stage = document.querySelector(".tracer-stage");
     const stack = document.querySelector("[data-tracer]");
-    if (!stack) return;
-    const stage = stack.closest(".tracer-stage") || stack.parentElement;
-    const set = (k, v) => stack.style.setProperty(k, v);
+    if (!stage || !stack) return;
+    const fig = stack.querySelector("[data-tracer-fig]");
+    const rim = stack.querySelector("[data-tracer-rim]");
+    const streaks = $$("[data-tracer-streak]", stack);
+    if (!window.gsap) return;   // no animation engine -> she's just static, fine
+    const gsap = window.gsap;
 
-    // scroll: she rotates on Y like a turntable and drifts up a touch
-    const onScroll = () => {
-      const r = stage.getBoundingClientRect();
-      const vh = window.innerHeight || 1;
-      const p = Math.max(-1, Math.min(1,
-        (vh * 0.5 - (r.top + r.height * 0.5)) / (vh * 0.7)));
-      set("--turn", (p * 16).toFixed(2) + "deg");
-      set("--rise", (p * -16).toFixed(1) + "px");
-    };
-    addEventListener("scroll", onScroll, { passive: true });
-    addEventListener("resize", onScroll, { passive: true });
-    onScroll();
-
-    if (!finePointer) return;
-    // pointer: tilt toward the cursor; lateral travel triggers her recall
-    // afterimages (the --echo blink). Echo decays back to rest.
-    let echo = 0, raf = null;
-    const decay = () => {
-      echo *= 0.9;
-      set("--echo", echo.toFixed(3));
-      raf = echo > 0.01 ? requestAnimationFrame(decay) : null;
-    };
-    stage.addEventListener("pointermove", (e) => {
-      const r = stage.getBoundingClientRect();
-      const dx = (e.clientX - r.left) / r.width - 0.5;
-      const dy = (e.clientY - r.top) / r.height - 0.5;
-      set("--tilty", (dx * 20).toFixed(2) + "deg");
-      set("--tiltx", (dy * -10).toFixed(2) + "deg");
-      echo = Math.min(1, Math.abs(dx) * 1.5 + 0.12);
-      set("--echo", echo.toFixed(3));
-      if (!raf) raf = requestAnimationFrame(decay);
-    }, { passive: true });
-    stage.addEventListener("pointerleave", () => {
-      set("--tilty", "0deg"); set("--tiltx", "0deg");
-      if (!raf) raf = requestAnimationFrame(decay);
+    // ---- entrance: soft arrival, not a hard pop-in ---------------------
+    gsap.from(stage, {
+      opacity: 0, scale: 0.95, y: 14, duration: 0.9, delay: 0.25,
+      ease: "power3.out", clearProps: "transform,opacity",
     });
+
+    // ---- scroll: gentle recede as the hero scrolls past (translate +
+    //      scale + fade only -- never rotation, so she never warps) ----
+    if (window.ScrollTrigger) {
+      gsap.to(stack, {
+        y: -46, scale: 0.95, opacity: 0.85, ease: "none",
+        scrollTrigger: {
+          trigger: stage, start: "top top", end: "bottom top", scrub: 0.6,
+        },
+      });
+    }
+
+    // ---- pointer: restrained parallax float, not a warp ----------------
+    // rim opacity is a quickTo too -- one owner (GSAP) for that property,
+    // so its hover fade can never race the burst's flash of the same prop.
+    const rimFade = rim ? gsap.quickTo(rim, "opacity", { duration: 0.35, ease: "power2" }) : null;
+    if (finePointer) {
+      const stackRotY = gsap.quickTo(stack, "rotationY", { duration: 0.7, ease: "power3" });
+      const figX = gsap.quickTo(fig, "x", { duration: 0.6, ease: "power3" });
+      const figY = gsap.quickTo(fig, "y", { duration: 0.6, ease: "power3" });
+      const figRot = gsap.quickTo(fig, "rotation", { duration: 0.7, ease: "power3" });
+      let queued = false, lastX = 0, lastY = 0;
+      stage.addEventListener("pointermove", (e) => {
+        const r = stage.getBoundingClientRect();
+        lastX = (e.clientX - r.left) / r.width - 0.5;
+        lastY = (e.clientY - r.top) / r.height - 0.5;
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(() => {
+          queued = false;
+          stackRotY(lastX * 5);           // whole scene: rings/glow parallax
+          figX(lastX * 16); figY(lastY * 10);
+          figRot(lastX * 2);              // tiny in-plane tilt, never warps
+          if (rim) {
+            rim.style.setProperty("--rx", (lastX * 100 + 50).toFixed(1) + "%");
+            rim.style.setProperty("--ry", (lastY * 100 + 50).toFixed(1) + "%");
+          }
+        });
+      }, { passive: true });
+      stage.addEventListener("pointerenter", () => {
+        stage.classList.add("is-active");
+        if (rimFade) rimFade(1);
+      });
+      stage.addEventListener("pointerleave", () => {
+        stage.classList.remove("is-active");
+        stackRotY(0); figX(0); figY(0); figRot(0);
+        if (rimFade) rimFade(0);
+      });
+    }
+
+    // ---- blink-dash burst: a short, designed moment (not a continuous
+    //      mouse-follow smear) -- she hops, two energy streaks flash
+    //      through and fade, done in under half a second -------------
+    if (streaks.length && fig) {
+      let busy = false;
+      const burst = () => {
+        if (busy) return;
+        busy = true;
+        const tl = gsap.timeline({ onComplete: () => { busy = false; } })
+          .to(streaks, { opacity: 1, scaleX: 1.15, duration: 0.13, ease: "power2.out", stagger: 0.045 })
+          .to(fig, { x: "+=11", duration: 0.12, ease: "power1.inOut" }, "<")
+          .to(fig, { x: "-=11", duration: 0.24, ease: "power2.out" })
+          .to(streaks, { opacity: 0, scaleX: 0.4, duration: 0.32, ease: "power2.in" }, "<")
+          .to(fig, { scale: 1.02, duration: 0.12, ease: "power1.out" }, 0)
+          .to(fig, { scale: 1, duration: 0.3, ease: "power2.out" });
+        // rim flash rides the SAME quickTo instance as the hover fade
+        // (rimFade) -- one owner for that property, never two tweens
+        // racing each other for it.
+        if (rimFade) {
+          const restTo = stage.classList.contains("is-active") ? 1 : 0;
+          tl.call(rimFade, [0.9], 0)
+            .call(rimFade, [restTo], 0.18);
+        }
+        return tl;
+      };
+      let visible = true;
+      if ("IntersectionObserver" in window) {
+        new IntersectionObserver((es) => { visible = es[0].isIntersecting; },
+          { threshold: 0.2 }).observe(stage);
+      }
+      const schedule = () => {
+        setTimeout(() => {
+          if (visible && !document.hidden) burst();
+          schedule();
+        }, 6400 + Math.random() * 2600);
+      };
+      gsap.delayedCall(1.8, () => { if (visible) burst(); });
+      schedule();
+      stage.addEventListener("pointerenter", burst);
+    }
   }
 
   function initTiltSpot() {

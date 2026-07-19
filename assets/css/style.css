@@ -1008,25 +1008,31 @@ html.motion-on .console-body > div { animation: m-log-in .16s ease both; }
 .hero-readout .k { font-size: .72rem; letter-spacing: .12em;
   text-transform: uppercase; color: var(--muted); }
 
-/* ---- Tracer signature stage ----------------------------------------- */
+/* ---- Tracer signature stage -------------------------------------------
+   All motion here is written directly by GSAP (assets/js/motion.js), the
+   same engine that already drives the buttons — never a CSS transition.
+   A CSS transition racing a high-frequency scroll/pointer listener is what
+   causes visible "shake": each new value restarts the transition mid-
+   flight, so the element perpetually chases a moving target. GSAP writes
+   the resolved transform straight to the element every tick instead, so
+   there is exactly one smoothing system, not two fighting each other. */
 .tracer-stage {
   position: relative; z-index: 1; justify-self: center;
   /* height-driven so she always fits the fold; width follows the ratio */
   height: min(82vh, 720px); aspect-ratio: 360 / 620;
   width: auto; max-width: 100%;
-  perspective: 1300px; perspective-origin: 50% 42%; }
+  perspective: 1300px; perspective-origin: 50% 40%; }
+  /* visible by default -- JS applies its own FROM state via gsap.from()
+     right before animating, so a failed/blocked script never hides her */
 .tracer-stack {
   position: absolute; inset: 0; transform-style: preserve-3d;
-  /* motion.js feeds these; all default to neutral so no-JS is static */
-  --turn: 0deg; --tiltx: 0deg; --tilty: 0deg; --rise: 0px; --echo: 0;
-  transform: translateY(var(--rise))
-    rotateX(var(--tiltx)) rotateY(calc(var(--turn) + var(--tilty)));
-  transition: transform .18s cubic-bezier(.2,.7,.2,1); }
+  will-change: transform; }
 
-/* concentric chronal rings behind her */
+/* concentric chronal rings behind her -- cheap: stroke + a compositor-only
+   `rotate` custom-property animation, never touched by JS */
 .chrono-rings { position: absolute; left: 50%; top: 54%;
   width: 118%; aspect-ratio: 1; translate: -50% -50%;
-  transform: translateZ(-140px); opacity: .8; }
+  transform: translateZ(-150px); opacity: .8; z-index: 0; }
 .chrono-rings .r { fill: none; stroke: var(--line-bright);
   transform-origin: center; transform-box: fill-box; }
 .chrono-rings .r1 { stroke: rgba(79,169,255,.35); animation: spin 34s linear infinite; }
@@ -1035,36 +1041,49 @@ html.motion-on .console-body > div { animation: m-log-in .16s ease both; }
 .chrono-rings .r3 { stroke: rgba(148,168,205,.16); }
 @keyframes spin { to { rotate: 360deg; } }
 
-/* radial floor glow */
+/* radial floor glow -- one blur, on a plain gradient div (cheap) */
 .tracer-glow { position: absolute; left: 50%; top: 46%;
   width: 96%; aspect-ratio: 1; translate: -50% -50%;
-  transform: translateZ(-90px);
+  transform: translateZ(-100px); z-index: 0;
   background: radial-gradient(circle,
-    rgba(255,169,43,.34), rgba(79,169,255,.14) 42%, transparent 66%);
+    rgba(255,169,43,.30), rgba(79,169,255,.12) 42%, transparent 66%);
   filter: blur(8px); }
 
-.tracer-fig, .tracer-echo {
-  position: absolute; left: 50%; bottom: 0; height: 100%;
-  width: auto; translate: -50% 0; user-select: none;
-  -webkit-user-drag: none; pointer-events: none; }
-.tracer-fig { z-index: 3;
-  filter: drop-shadow(0 26px 34px rgba(0,0,0,.55))
-          drop-shadow(0 0 22px rgba(255,169,43,.18)); }
-/* blink afterimages - Tracer's recall, offset on --echo */
-.tracer-echo { z-index: 2; opacity: 0; mix-blend-mode: screen; }
-.tracer-echo--a { transform: translateZ(-40px)
-    translateX(calc(var(--echo) * -30px));
-  filter: blur(2px) drop-shadow(0 0 10px rgba(79,169,255,.9))
-    saturate(1.4) brightness(1.1);
-  opacity: calc(.5 * var(--echo)); }
-.tracer-echo--b { transform: translateZ(-70px)
-    translateX(calc(var(--echo) * 44px));
-  filter: blur(4px) drop-shadow(0 0 12px rgba(255,169,43,.9))
-    saturate(1.5) brightness(1.1);
-  opacity: calc(.4 * var(--echo)); }
+/* grounding contact shadow -- small element, cheap to blur, gives her
+   actual weight on the stage instead of looking pasted on */
+.tracer-shadow { position: absolute; left: 50%; bottom: 3%;
+  width: 44%; height: 6%; translate: -50% 0; transform: translateZ(-30px);
+  z-index: 1; border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,.6), transparent 72%);
+  filter: blur(5px); }
+
+.tracer-fig {
+  position: absolute; left: 50%; bottom: 0; height: 100%; width: auto;
+  translate: -50% 0; user-select: none; -webkit-user-drag: none;
+  pointer-events: none; z-index: 3; will-change: transform;
+  filter: drop-shadow(0 18px 22px rgba(0,0,0,.5)); }
+
+/* blink-dash burst -- two energy streaks that flash through on the dash,
+   not a continuous mouse-follow smear */
+.tracer-streak { position: absolute; left: 2%; right: 2%; height: 4px;
+  border-radius: 3px; z-index: 2; pointer-events: none;
+  opacity: 0; transform: scaleX(.4); transform-origin: center;
+  box-shadow: 0 0 14px 1px var(--sc);
+  background: linear-gradient(90deg, transparent, var(--sc) 45%, var(--sc) 55%, transparent); }
+.tracer-streak--a { top: 34%; --sc: rgba(120,195,255,.95); }
+.tracer-streak--b { top: 63%; --sc: rgba(255,183,79,.95); }
+
+/* rim light -- tracks the pointer; only ever touches opacity + a gradient
+   center, both paint-only, never triggers layout or a filter re-run.
+   Opacity is owned entirely by GSAP (hover fade AND the burst flash) --
+   never a CSS transition here, so the two can never race each other. */
+.tracer-rim { position: absolute; inset: -8%; z-index: 4;
+  pointer-events: none; opacity: 0;
+  background: radial-gradient(240px circle at var(--rx,50%) var(--ry,32%),
+    rgba(255,255,255,.14), rgba(79,169,255,.08) 45%, transparent 72%); }
 
 /* HUD target-lock frame + tracking tag */
-.lock-frame { position: absolute; inset: 6% 10%; z-index: 4;
+.lock-frame { position: absolute; inset: 6% 10%; z-index: 5;
   pointer-events: none; opacity: 0; animation: lock-in .5s 1.1s forwards; }
 @keyframes lock-in { to { opacity: .9; } }
 .lock-frame span { position: absolute; width: 26px; height: 26px;
@@ -1073,7 +1092,7 @@ html.motion-on .console-body > div { animation: m-log-in .16s ease both; }
 .lock-frame .tr { top: 0; right: 0; border-left: 0; border-bottom: 0; }
 .lock-frame .bl { bottom: 0; left: 0; border-right: 0; border-top: 0; }
 .lock-frame .br { bottom: 0; right: 0; border-left: 0; border-top: 0; }
-.track-tag { position: absolute; z-index: 5; top: 8%; right: 4%;
+.track-tag { position: absolute; z-index: 6; top: 8%; right: 4%;
   font-family: var(--mono); font-size: .68rem; letter-spacing: .1em;
   color: var(--amber); background: rgba(6,11,21,.72);
   border: 1px solid var(--amber-soft); border-radius: 6px;
@@ -1173,8 +1192,12 @@ html.motion-on .console-body > div { animation: m-log-in .16s ease both; }
 @media (prefers-reduced-motion: reduce) {
   .chrono-rings .r, .track-tag .dot { animation: none !important; }
   .lead-hero h1 .strike::after { animation: none; transform: scaleX(1); }
-  .tracer-stack { transition: none; }
+  /* JS never runs the entrance/parallax/blink tweens under reduced motion
+     (initHeroFigure returns early), so these static fallbacks make sure
+     nothing that depends on a tween to reach its resting state gets stuck
+     hidden -- Tracer, the lock frame and the tags all render at rest. */
   .lock-frame { animation: none; opacity: .9; }
+  .track-tag { opacity: 1; }
   .btn::after { display: none; }
 }
 
