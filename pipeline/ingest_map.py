@@ -59,6 +59,19 @@ AUTO_HIGH_MEAN = 0.70     # stint auto-promotion floors
 AUTO_HIGH_MIN = 0.60
 HUE_SWAP_TOL = 12.0       # chip-hue distance that still reads as "same team"
 
+# POST-UNLOCK GRACE WINDOW — players can still be speed-boosting or
+# teleporting out of spawn for several seconds after a control point
+# unlocks, sometimes still finishing a hero swap queued from the setup
+# phase. A hero establishing itself (opener OR a swap) in the first
+# POST_UNLOCK_GRACE seconds of a round is temporally real (it passed the
+# normal consensus checks) but not yet trustworthy AS THE SETTLED PICK —
+# it is capped at 'needs-review' unless the SAME hero is still being read
+# POST_UNLOCK_RECHECK seconds later, i.e. it survived the shaky window.
+# Dense sampling is forced through both windows (post_unlock_windows)
+# specifically so this recheck always has data to work with.
+POST_UNLOCK_GRACE = 30.0
+POST_UNLOCK_RECHECK = 30.0
+
 
 def log(msg: str) -> None:
     print(f"[ingest] {msg}", flush=True)
@@ -138,15 +151,37 @@ class FrameServer:
 
 # ------------------------------------------------------------- observation
 def observe(t: float, frame_path: str, layout_scaled: dict, lib: dict,
-            crops_dir: str, save_crop: bool = True) -> dict:
-    """One frame -> state + (if gameplay) ten slot reads with evidence."""
+            crops_dir: str, save_crop: bool = True,
+            ocr_read_fn=None, ocr_aliases: dict | None = None) -> dict:
+    """One frame -> state + (if gameplay) ten slot reads with evidence.
+
+    ocr_read_fn/ocr_aliases (both optional, from --ocr-guard) run OCR
+    EXACTLY ONCE per frame here — the resulting items are reused both to
+    feed gameplay_state's generalized highlight guard (via a trivial
+    wrapper closure, so it never re-invokes the engine) and stashed on
+    the observation (key '_ocr', stripped before the JSONL dump like
+    every other underscore-prefixed field) for team_identify/detect_bans,
+    which need OCR from non-gameplay frames too (pick/ban screens are
+    non-gameplay by definition)."""
     frame = cv2.imread(frame_path)
     if frame is None:
         return {"t": t, "state": "unreadable", "reason": "unreadable frame",
                 "slots": {}}
-    state, reason = gameplay_state.classify_frame(frame, layout_scaled)
+    ocr_items = None
+    guard_fn = None
+    if ocr_read_fn is not None and ocr_aliases is not None:
+        try:
+            ocr_items = ocr_read_fn(frame)
+        except Exception:
+            ocr_items = []
+        guard_fn = lambda _f, _items=ocr_items: _items      # noqa: E731
+    state, reason = gameplay_state.classify_frame(
+        frame, layout_scaled, ocr_read_fn=guard_fn,
+        ocr_aliases=ocr_aliases if guard_fn else None)
     obs = {"t": t, "state": state, "reason": reason,
            "frame": os.path.basename(frame_path), "slots": {}}
+    if ocr_items is not None:
+        obs["_ocr"] = ocr_items
     if state != "gameplay":
         return obs
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -209,13 +244,45 @@ MAX_RUN_GAP = 20.0        # a candidate run may not bridge a gap this long
                           # swap that really happened after a break
 
 
-def build_stints(track: list[dict], setup_spans: list[tuple[float, float]]
+def round_for(t: float, rounds: list[dict]) -> dict | None:
+    """The round whose start is the most recent one at/before t, else None."""
+    matches = [r for r in rounds if r["start"] <= t]
+    return max(matches, key=lambda r: r["start"]) if matches else None
+
+
+def grace_ok_for_stint(st: dict) -> bool:
+    """False only for a stint that both (a) began inside the post-unlock
+    grace window and (b) never persisted to the recheck deadline while the
+    round was still long enough for that recheck to have been possible.
+    True for every ordinary stint (early_grace not set) and for any grace
+    stint the round simply couldn't outlive."""
+    if not st.get("early_grace"):
+        return True
+    rs = st.get("round_start")
+    if rs is None:
+        return True
+    deadline = rs + POST_UNLOCK_GRACE + POST_UNLOCK_RECHECK
+    re_ = st.get("round_end")
+    if re_ is not None and re_ < deadline:
+        return True     # round ended before a recheck was even possible
+    return st["end"] >= deadline
+
+
+def build_stints(track: list[dict], setup_spans: list[tuple[float, float]],
+                 rounds: list[dict] | None = None
                  ) -> tuple[list[dict], list[dict]]:
     """Hysteresis walk over one slot's accepted reads.
 
     Returns (stints, events). Events include CONFIRMED swaps, REJECTED
     suspected swaps (with reasons + evidence) and SETUP-CHANGES (hero
-    toggles during a setup phase — comp updates, not in-game swaps)."""
+    toggles during a setup phase — comp updates, not in-game swaps).
+
+    `rounds` (optional, [{'start','end','index'}, ...]) tags every stint
+    that begins inside POST_UNLOCK_GRACE seconds of its round's start with
+    early_grace=True + the round's start/end, so write_db can cap its
+    promotion status unless a later recheck corroborates it (see
+    POST_UNLOCK_GRACE's docstring above)."""
+    rounds = rounds or []
     stints: list[dict] = []
     events: list[dict] = []
     cur = None            # {'hero', 'start', 'obs': [reads]}
@@ -223,6 +290,13 @@ def build_stints(track: list[dict], setup_spans: list[tuple[float, float]]
 
     def in_setup(t: float) -> bool:
         return any(s0 - 2 <= t <= s1 + 2 for (s0, s1) in setup_spans)
+
+    def grace_tag(t: float) -> dict:
+        r = round_for(t, rounds)
+        early = bool(r) and (t - r["start"]) <= POST_UNLOCK_GRACE
+        return {"early_grace": early,
+                "round_start": r["start"] if r else None,
+                "round_end": r["end"] if r else None}
 
     def confirmed(run: list[dict], against: str | None) -> tuple[bool, str]:
         """(ok, reason-if-not) for a candidate run replacing `against`."""
@@ -257,6 +331,9 @@ def build_stints(track: list[dict], setup_spans: list[tuple[float, float]]
                 "min_conf": round(min(scores), 3),
                 "evidence_start": cur["obs"][0].get("crop"),
                 "evidence_end": cur["obs"][-1].get("crop"),
+                "early_grace": cur.get("early_grace", False),
+                "round_start": cur.get("round_start"),
+                "round_end": cur.get("round_end"),
             })
 
     for read in track:
@@ -265,7 +342,8 @@ def build_stints(track: list[dict], setup_spans: list[tuple[float, float]]
             if len(pending) > 1 and pending[-2]["hero"] != read["hero"]:
                 pending = [read]
             if confirmed(pending, None)[0]:
-                cur = {"hero": read["hero"], "obs": pending[:]}
+                cur = {"hero": read["hero"], "obs": pending[:],
+                      **grace_tag(pending[0]["t"])}
                 pending = []
             continue
         if read["hero"] == cur["hero"]:
@@ -322,7 +400,8 @@ def build_stints(track: list[dict], setup_spans: list[tuple[float, float]]
                               " not an in-game swap]"
                               if kind == "setup-change" else "")),
             })
-            cur = {"hero": read["hero"], "obs": pending[:]}
+            cur = {"hero": read["hero"], "obs": pending[:],
+                  **grace_tag(pending[0]["t"])}
             pending = []
         elif len(pending) >= CONFIRM_N + 2 \
                 and (pending[-1]["t"] - pending[0]["t"]) > SWAP_MIN_SPAN:
@@ -467,6 +546,27 @@ def detect_rounds(observations: list[dict], start: float, end: float
     return rounds, []
 
 
+def post_unlock_windows(rounds: list[dict], start: float, end: float
+                        ) -> set[tuple[float, float]]:
+    """Dense-sample windows implementing the post-unlock capture policy:
+    guarantee fine-grained coverage right after every round unlock
+    (players speed-boosting/teleporting out of spawn can still swap heroes
+    there) AND again around the recheck deadline ~60s in (settle
+    confirmation) — regardless of whether the coarser baseline sampling
+    happened to notice a change there on its own."""
+    windows = set()
+    for r in rounds:
+        rs = r["start"]
+        w1 = (max(start, rs), min(end, rs + POST_UNLOCK_GRACE + 2))
+        if w1[1] > w1[0]:
+            windows.add(w1)
+        w2 = (max(start, rs + POST_UNLOCK_GRACE - 2),
+              min(end, rs + POST_UNLOCK_GRACE + POST_UNLOCK_RECHECK + 2))
+        if w2[1] > w2[0]:
+            windows.add(w2)
+    return windows
+
+
 def detect_side_swaps(observations: list[dict], rounds: list[dict]
                       ) -> list[dict]:
     """Per round: does each screen side still hold the same team?
@@ -503,29 +603,112 @@ def detect_side_swaps(observations: list[dict], rounds: list[dict]
     return out
 
 
+# ------------------------------------------------------ calibration health
+CAL_MIN_FULL_HOUSE = 0.40     # fraction of gameplay frames w/ all 10 slots
+                              # accepted, below which the calibration looks
+                              # unreliable on THIS capture
+CAL_MIN_MEDIAN_SCORE = 0.60
+CAL_MAX_UNKNOWN_RATE = 0.35
+
+
+def calibration_health(observations: list[dict]) -> dict:
+    """Runtime measurement of calibration health from THIS run's own
+    accepted/rejected slot reads — distinct from calibrate_source.py's
+    one-time offline confidence. A calibration can score well in
+    isolation (its own sample frames) and still drift on a different
+    capture of the same broadcast (resolution, compression, HUD scale
+    tweak); this measures the calibration against the map it is actually
+    being used on, every single run, and refuses to call it 'ok' when the
+    evidence says otherwise. Returns {'status': ok|suspect, 'reasons':
+    [...], 'metrics': {...}}."""
+    gameplay = [o for o in observations if o["state"] == "gameplay"]
+    if not gameplay:
+        return {"status": "suspect",
+                "reasons": ["no gameplay frames observed — cannot measure "
+                           "calibration at all"],
+                "metrics": {"gameplay_frames": 0}}
+    all_scores = []
+    full_house = 0
+    total_checks = unknown_checks = 0
+    for o in gameplay:
+        slots = o.get("slots") or {}
+        if not slots:
+            continue
+        accepted_this_frame = 0
+        for r in slots.values():
+            total_checks += 1
+            if r.get("reject") is None and r.get("hero") not in ("", "UNKNOWN"):
+                accepted_this_frame += 1
+                all_scores.append(r["score"])
+            else:
+                unknown_checks += 1
+        if accepted_this_frame == len(slots):
+            full_house += 1
+    full_house_rate = full_house / len(gameplay)
+    median_score = statistics.median(all_scores) if all_scores else 0.0
+    unknown_rate = (unknown_checks / total_checks) if total_checks else 1.0
+
+    reasons = []
+    if full_house_rate < CAL_MIN_FULL_HOUSE:
+        reasons.append(
+            f"only {full_house_rate:.0%} of gameplay frames had all 10 "
+            f"slots accepted (< {CAL_MIN_FULL_HOUSE:.0%})")
+    if median_score < CAL_MIN_MEDIAN_SCORE:
+        reasons.append(
+            f"median accepted match score {median_score:.2f} is low "
+            f"(< {CAL_MIN_MEDIAN_SCORE:.2f})")
+    if unknown_rate > CAL_MAX_UNKNOWN_RATE:
+        reasons.append(
+            f"{unknown_rate:.0%} of slot checks were UNKNOWN/rejected "
+            f"(> {CAL_MAX_UNKNOWN_RATE:.0%})")
+    status = "suspect" if reasons else "ok"
+    metrics = {
+        "gameplay_frames": len(gameplay),
+        "full_house_rate": round(full_house_rate, 3),
+        "median_top_score": round(median_score, 3),
+        "unknown_rate": round(unknown_rate, 3),
+        "total_slot_checks": total_checks,
+    }
+    if status == "suspect":
+        reasons.append(
+            "recommend: re-run pipeline/calibrate_source.py and/or "
+            "pipeline/harvest_templates.py for this source")
+    return {"status": status, "reasons": reasons, "metrics": metrics}
+
+
 # ----------------------------------------------------------------- persist
 def write_db(con, args, layout, observations, per_slot, rounds, side_map,
-             stats) -> dict:
+             stats, calib_health: dict | None = None,
+             team_result: dict | None = None,
+             ban_result: dict | None = None) -> dict:
     """Stage all ingestion data into the DB, idempotently.
 
     Rows belonging to this (match, map_order, detector_version) that came
     from CV and are not human-touched are REPLACED; manual_override rows
     and 'reviewed' stints are preserved untouched."""
     calib = layout.get("calibration") or {}
+    calib_health = calib_health or {"status": "ok", "reasons": [],
+                                    "metrics": {}}
+    calib_suspect = calib_health.get("status") == "suspect"
     con.execute(
         """INSERT INTO ingest_runs (id, source_id, vod_url, match_id,
              map_order, start_offset, end_offset, detector_version,
              calibration_profile, calibration_version, status, stats_json,
-             report_path, updated_at)
-           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP)
+             calibration_health, calibration_status, report_path,
+             updated_at)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP)
            ON CONFLICT(id) DO UPDATE SET
              status=excluded.status, stats_json=excluded.stats_json,
+             calibration_health=excluded.calibration_health,
+             calibration_status=excluded.calibration_status,
              report_path=excluded.report_path,
              updated_at=CURRENT_TIMESTAMP""",
         (args.ingest_id, args.source_id, args.vod_url, args.match,
          args.map_order, int(args.start), int(args.end), DETECTOR_VERSION,
          args.layout, calib.get("version"), "complete",
-         json.dumps(stats), f"reports/ingest/{args.ingest_id}/report.html"))
+         json.dumps(stats), json.dumps(calib_health),
+         calib_health.get("status", "ok"),
+         f"reports/ingest/{args.ingest_id}/report.html"))
 
     # map_result row for this map (create if missing; never override manual)
     mr = con.execute(
@@ -609,31 +792,49 @@ def write_db(con, args, layout, observations, per_slot, rounds, side_map,
     n_stints = n_swaps = 0
     for key, data in per_slot.items():
         side, slot = key[0], int(key[1])
+        grace_lookup: dict[tuple[str, int], bool] = {}
         for st in data["stints"]:
             team = side_map.get(st["start"], {}).get(side) or \
                 (args.team_a if side == "a" else args.team_b)
+            g_ok = grace_ok_for_stint(st)
+            grace_lookup[(st["hero"], int(st["start"]))] = g_ok
             status = ("auto-high"
-                      if (st["mean_conf"] >= AUTO_HIGH_MEAN
-                          and st["min_conf"] >= AUTO_HIGH_MIN
-                          and st["n_obs"] >= CONFIRM_N)
-                      # a long stint may contain one weak-but-accepted
-                      # frame; 20+ agreeing observations at a high mean
-                      # is overwhelming temporal evidence
-                      or (st["n_obs"] >= 20 and st["mean_conf"] >= 0.80)
+                      if g_ok and not calib_suspect and (
+                          (st["mean_conf"] >= AUTO_HIGH_MEAN
+                           and st["min_conf"] >= AUTO_HIGH_MIN
+                           and st["n_obs"] >= CONFIRM_N)
+                          # a long stint may contain one weak-but-accepted
+                          # frame; 20+ agreeing observations at a high
+                          # mean is overwhelming temporal evidence
+                          or (st["n_obs"] >= 20 and st["mean_conf"] >= 0.80))
                       else "needs-review")
+            note_parts = []
+            if not g_ok:
+                note_parts.append(
+                    f"established {int(st['start'] - st['round_start'])}s "
+                    "after round start (post-unlock grace window) — not "
+                    f"yet corroborated by a reobservation "
+                    f"~{int(POST_UNLOCK_GRACE + POST_UNLOCK_RECHECK)}s "
+                    "in; capped at needs-review in case this is a "
+                    "spawn-room straggler who was still mid-swap")
+            if calib_suspect:
+                note_parts.append(
+                    "calibration health suspect for this run: "
+                    + "; ".join(calib_health.get("reasons", [])))
+            notes = " | ".join(note_parts) or None
             con.execute(
                 """INSERT INTO hero_stints (ingest_id, match_id,
                      map_result_id, team_id, side, slot, hero_id,
                      start_offset, end_offset, n_obs, mean_conf, min_conf,
                      status, source, detector_version, evidence_start,
-                     evidence_end)
-                   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                     evidence_end, notes)
+                   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
                    ON CONFLICT(match_id, map_result_id, team_id, slot,
                                start_offset, detector_version)
                    DO UPDATE SET end_offset=excluded.end_offset,
                      n_obs=excluded.n_obs, mean_conf=excluded.mean_conf,
                      min_conf=excluded.min_conf, status=excluded.status,
-                     updated_at=CURRENT_TIMESTAMP
+                     notes=excluded.notes, updated_at=CURRENT_TIMESTAMP
                    WHERE hero_stints.manual_override=0
                      AND hero_stints.status != 'reviewed'""",
                 (args.ingest_id, args.match, map_result_id, team, side,
@@ -643,16 +844,28 @@ def write_db(con, args, layout, observations, per_slot, rounds, side_map,
                  (f"{ev_root}/evidence/{st['evidence_start']}"
                   if st.get("evidence_start") else None),
                  (f"{ev_root}/evidence/{st['evidence_end']}"
-                  if st.get("evidence_end") else None)))
+                  if st.get("evidence_end") else None),
+                 notes))
             n_stints += 1
         for ev in data["events"]:
             if ev["kind"] not in ("swap", "rejected-swap"):
                 continue
             team = side_map.get(ev["t"], {}).get(side) or \
                 (args.team_a if side == "a" else args.team_b)
-            status = ("confirmed" if ev["kind"] == "swap"
+            swap_grace_ok = grace_lookup.get(
+                (ev.get("to"), int(ev.get("t", -1))), True)
+            swap_ok = swap_grace_ok and not calib_suspect
+            status = ("confirmed" if ev["kind"] == "swap" and swap_ok
+                      else "uncertain" if ev["kind"] == "swap"
                       else ("uncertain" if ev.get("unresolved")
                             else "rejected"))
+            reason = ev["reason"]
+            if ev["kind"] == "swap" and not swap_grace_ok:
+                reason += (" [post-unlock grace: not yet corroborated by "
+                          f"a ~{int(POST_UNLOCK_RECHECK)}s-later recheck — "
+                          "could be a spawn-room straggler]")
+            if ev["kind"] == "swap" and calib_suspect:
+                reason += " [calibration health suspect for this run]"
             con.execute(
                 """INSERT INTO hero_swaps (ingest_id, match_id,
                      map_result_id, team_id, side, slot, from_hero,
@@ -667,16 +880,73 @@ def write_db(con, args, layout, observations, per_slot, rounds, side_map,
                 (args.ingest_id, args.match, map_result_id, team, side,
                  slot, ev.get("from") or ev.get("slot_from"),
                  ev.get("to") or ev.get("candidate"), int(ev["t"]),
-                 ev.get("confidence"), status, ev["reason"],
+                 ev.get("confidence"), status, reason,
                  (f"{ev_root}/evidence/{ev['evidence_before']}"
                   if ev.get("evidence_before") else None),
                  (f"{ev_root}/evidence/{ev['evidence_after']}"
                   if ev.get("evidence_after") else None),
                  DETECTOR_VERSION))
             n_swaps += 1
+
+    # ---- OCR findings: team identity + ban candidates (staged, reviewable)
+    # Only touched when this run actually carries fresh OCR evidence — a
+    # rerun WITHOUT --ocr-guard leaves any previously-written OCR findings
+    # alone rather than deleting them for lack of new data.
+    n_bans = n_findings = 0
+    import team_identify   # local import: only needed on this path
+    if team_result:
+        con.execute(
+            "DELETE FROM ingest_findings WHERE ingest_id=? AND kind=?",
+            (args.ingest_id, "team_identity"))
+        for side in ("a", "b"):
+            det = team_result.get(side)
+            operator_team = args.team_a if side == "a" else args.team_b
+            cross = team_identify.cross_check(det, operator_team)
+            con.execute(
+                """INSERT INTO ingest_findings (ingest_id, kind, field,
+                     raw_text, value, confidence, method, status, notes)
+                   VALUES (?,'team_identity',?,?,?,?,?,?,?)""",
+                (args.ingest_id, side, (det or {}).get("raw_text"),
+                 (det or {}).get("team"), (det or {}).get("confidence"),
+                 (det or {}).get("method"),
+                 "confirmed" if cross["agrees"] else "candidate",
+                 cross["note"]))
+            n_findings += 1
+            if cross["agrees"] is False:
+                log(f"WARNING team identity mismatch on side {side}: "
+                    f"{cross['note']}")
+    if ban_result:
+        con.execute("DELETE FROM hero_bans WHERE ingest_id=?",
+                    (args.ingest_id,))
+        con.execute(
+            "DELETE FROM ingest_findings WHERE ingest_id=? AND kind=?",
+            (args.ingest_id, "ban_candidate"))
+        for side in ("a", "b"):
+            team = args.team_a if side == "a" else args.team_b
+            for i, item in enumerate(ban_result.get(side, []), 1):
+                con.execute(
+                    """INSERT INTO hero_bans (match_id, map_result_id,
+                         map_order, team_id, hero_id, ban_order, source,
+                         confidence, ingest_id, evidence_path)
+                       VALUES (?,?,?,?,?,?,'cv',?,?,?)""",
+                    (args.match, map_result_id, args.map_order, team,
+                     item["hero"], i, item["confidence"], args.ingest_id,
+                     (f"{ev_root}/evidence/{item['evidence']}"
+                      if item.get("evidence") else None)))
+                n_bans += 1
+        for item in ban_result.get("unresolved", []):
+            con.execute(
+                """INSERT INTO ingest_findings (ingest_id, kind, field,
+                     value, confidence, status, notes)
+                   VALUES (?,'ban_candidate',?,?,?,'candidate',?)""",
+                (args.ingest_id, item.get("side"), item["hero"],
+                 item["confidence"], item["reason"]))
+            n_findings += 1
+
     con.commit()
     return {"map_result_id": map_result_id, "stints": n_stints,
-            "swaps": n_swaps, "observations": len(obs_rows)}
+            "swaps": n_swaps, "observations": len(obs_rows),
+            "bans": n_bans, "findings": n_findings}
 
 
 # --------------------------------------------------------------- side map
@@ -724,6 +994,21 @@ def run(args) -> dict:
                          f"{info['reason']}")
     log(f"frames {fw}x{fh} — {info['note']}")
 
+    # ---- optional OCR layer: generalized highlight guard, team identity,
+    # ban detection. Degrades gracefully — no engine installed means every
+    # OCR-dependent feature below silently sits out, exactly like ocr_hud.py.
+    ocr_read_fn = None
+    ocr_aliases = None
+    if getattr(args, "ocr_guard", False):
+        import ocr_hud
+        ocr_aliases = ocr_hud.load_aliases()
+        try:
+            ocr_read_fn = ocr_hud.make_reader(args.ocr_engine)
+            log(f"OCR guard enabled: engine={args.ocr_engine}")
+        except RuntimeError as e:
+            log(f"OCR guard requested but unavailable ({e}) — "
+                "continuing without it")
+
     # ---- pass 1: baseline
     ts = fs.extract_baseline(args.start, args.end, args.every)
     log(f"baseline: {len(ts)} frames every {args.every}s")
@@ -731,7 +1016,9 @@ def run(args) -> dict:
     for t in ts:
         p = fs.get(t)
         if p:
-            observations.append(observe(t, p, layout_scaled, lib, crops_dir))
+            observations.append(observe(
+                t, p, layout_scaled, lib, crops_dir,
+                ocr_read_fn=ocr_read_fn, ocr_aliases=ocr_aliases))
     n_game = sum(1 for o in observations if o["state"] == "gameplay")
     log(f"baseline states: gameplay {n_game}, "
         f"other {len(observations) - n_game}")
@@ -750,7 +1037,16 @@ def run(args) -> dict:
         if game_ts[i] - game_ts[i - 1] >= ROUND_GAP:
             dense_windows.add((max(args.start,
                                    game_ts[i] - args.every), game_ts[i]))
-    log(f"dense pass: {len(dense_windows)} windows")
+    # preliminary round detection (baseline data is enough — the emblem
+    # clusters at the baseline sample rate) purely to locate unlock times,
+    # so the post-unlock grace/recheck windows get guaranteed coverage
+    # before the FINAL round detection runs on the complete observation set
+    prelim_rounds, _prelim_setups = detect_rounds(
+        observations, args.start, args.end)
+    unlock_windows = post_unlock_windows(prelim_rounds, args.start, args.end)
+    dense_windows |= unlock_windows
+    log(f"dense pass: {len(dense_windows)} windows "
+        f"({len(unlock_windows)} post-unlock grace/recheck)")
     seen_ts = {o["t"] for o in observations}
     for (t0, t1) in sorted(dense_windows):
         t = t0 + DENSE_STEP
@@ -759,13 +1055,21 @@ def run(args) -> dict:
             if rt not in seen_ts:
                 p = fs.get(rt)
                 if p:
-                    observations.append(
-                        observe(rt, p, layout_scaled, lib, crops_dir))
+                    observations.append(observe(
+                        rt, p, layout_scaled, lib, crops_dir,
+                        ocr_read_fn=ocr_read_fn, ocr_aliases=ocr_aliases))
                     seen_ts.add(rt)
             t += DENSE_STEP
     observations.sort(key=lambda o: o["t"])
     n_game = sum(1 for o in observations if o["state"] == "gameplay")
     log(f"total observations: {len(observations)} ({n_game} gameplay)")
+
+    # ---- calibration health: measured from THIS run's own evidence, not
+    # trusted from calibrate_source.py's one-time offline confidence
+    calib_health = calibration_health(observations)
+    log(f"calibration health: {calib_health['status']}"
+        + (f" — {'; '.join(calib_health['reasons'])}"
+           if calib_health["reasons"] else ""))
 
     # ---- rounds + sides
     rounds, setups = detect_rounds(observations, args.start, args.end)
@@ -785,13 +1089,41 @@ def run(args) -> dict:
     per_slot = {}
     for key in slot_keys:
         track = slot_track(observations, key)
-        stints, events = build_stints(track, setup_spans)
+        stints, events = build_stints(track, setup_spans, rounds)
         per_slot[key] = {"stints": stints, "events": events,
                          "n_reads": len(track)}
         swaps = [e for e in events if e["kind"] == "swap"]
         if swaps:
             log(f"slot {key}: " + "; ".join(
                 f"{s['from']}->{s['to']}@{s['t']:.0f}s" for s in swaps))
+
+    # ---- team identity + ban detection (only when OCR is available) ------
+    team_result = None
+    ban_result = None
+    if ocr_read_fn is not None:
+        import team_identify
+        import detect_bans
+        ocr_frames = [(o["t"], o["_ocr"]) for o in observations
+                      if "_ocr" in o]
+        con_ro = db.connect()
+        known_teams = team_identify.known_teams_from_db(con_ro)
+        team_result = team_identify.identify_teams(
+            ocr_frames, ocr_frames, layout, known_teams, fw, fh)
+        for side in ("a", "b"):
+            det = team_result[side]
+            operator = args.team_a if side == "a" else args.team_b
+            cross = team_identify.cross_check(det, operator)
+            log(f"team identity {side}: {det.get('team') or '?'} "
+                f"({det.get('confidence', 0):.0%} over "
+                f"{det.get('n_frames', 0)} frame(s)) vs operator "
+                f"'{operator}' — {cross['note']}")
+        ban_result = detect_bans.detect_bans_in_frames(
+            ocr_frames, ocr_aliases, fw, layout=layout, fh=fh)
+        log(f"ban detection: {len(ban_result['a'])} confirmed side a, "
+            f"{len(ban_result['b'])} confirmed side b, "
+            f"{len(ban_result['unresolved'])} unresolved "
+            f"({ban_result['pickban_frames']}/{ban_result['frames_scanned']} "
+            "frames looked like a pick/ban screen)")
 
     # ---- artifacts
     stats = {
@@ -813,7 +1145,18 @@ def run(args) -> dict:
             for e in d["events"] if e["kind"] == "setup-change"),
         "setup_spans": [[s["start"], s["end"]] for s in setups],
         "detector_version": DETECTOR_VERSION,
+        "calibration_health": calib_health,
+        "ocr_guard": ocr_read_fn is not None,
     }
+    if team_result:
+        stats["team_identity"] = team_result
+    if ban_result:
+        stats["ban_detection"] = {
+            k: v for k, v in ban_result.items()
+            if k in ("frames_scanned", "pickban_frames")}
+        stats["ban_detection"]["confirmed"] = {
+            "a": len(ban_result["a"]), "b": len(ban_result["b"])}
+        stats["ban_detection"]["unresolved"] = len(ban_result["unresolved"])
     os.makedirs(out_root, exist_ok=True)
     with open(os.path.join(out_root, "observations.jsonl"), "w",
               encoding="utf-8") as f:
@@ -838,10 +1181,12 @@ def run(args) -> dict:
         con = db.connect()
         db.init_schema(con)
         wrote = write_db(con, args, layout, observations, per_slot, rounds,
-                         side_map, stats)
+                         side_map, stats, calib_health=calib_health,
+                         team_result=team_result, ban_result=ban_result)
         log(f"DB: map_result {wrote['map_result_id']}, "
             f"{wrote['stints']} stints, {wrote['swaps']} swap rows, "
-            f"{wrote['observations']} observations")
+            f"{wrote['observations']} observations, "
+            f"{wrote['bans']} CV bans, {wrote['findings']} findings")
         result["db"] = wrote
     else:
         log("dry run: nothing written to the DB (use --write)")
@@ -878,6 +1223,15 @@ def main(argv=None) -> int:
     ap.add_argument("--vod-url", default=None)
     ap.add_argument("--every", type=float, default=5.0)
     ap.add_argument("--write", action="store_true")
+    ap.add_argument("--ocr-guard", action="store_true",
+                    help="enable the generalized OCR layer: highlight/"
+                         "replay guard, team-identity cross-check, and "
+                         "ban detection. Requires an OCR engine (pip "
+                         "install easyocr, or --ocr-engine tesseract/"
+                         "paddle with their own install); silently sits "
+                         "out if none is available.")
+    ap.add_argument("--ocr-engine", default="easyocr",
+                    choices=["easyocr", "tesseract", "paddle", "none"])
     args = ap.parse_args(argv)
     run(args)
     return 0

@@ -358,6 +358,18 @@
    "ROUND",
    "OVERTIME STARTED",
    "TECHNICAL"
+  ],
+  "pickban": [
+   "BAN",
+   "BANS",
+   "BANNED",
+   "PICK PHASE",
+   "BAN PHASE",
+   "DRAFT",
+   "VETO",
+   "LOCKED IN",
+   "HERO SELECT",
+   "HERO POOL"
   ]
  }
 }

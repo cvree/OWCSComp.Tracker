@@ -13,7 +13,7 @@ States returned by classify_frame:
   gameplay       both chip rows present, portraits textured — hero-readable
   partial-hud    one side present / weak — HUD partly covered; not counted
   no-hud         chip structure absent (desk, transition, cams, graphics)
-  replay         layout's optional replay marker fired (checked first)
+  replay         a per-source template OR the generalized OCR guard fired
 
 Only 'gameplay' frames may feed the composition timeline; everything else
 is recorded as a skipped observation with its reason.
@@ -21,6 +21,20 @@ is recorded as a skipped observation with its reason.
 The probe is COLOR-AGNOSTIC (any team color saturates) and works on dead
 slots too: a death desaturates SOME chips, but 4-of-5 per side with the
 portrait-texture backstop keeps classification stable through team fights.
+
+GENERALIZED HIGHLIGHT/REPLAY GUARD (optional, second gate)
+A highlight/POTG replay renders a complete, in-focus HUD — that is exactly
+the failure mode the structural probe alone cannot catch, which is why the
+project previously required a hand-cut template crop PER BROADCAST
+PACKAGE (the layout's 'reject' markers). Passing ocr_read_fn + ocr_aliases
+adds a second, template-free gate: any frame the structural probe already
+calls 'gameplay' is re-OCR'd and checked for replay/highlight/intermission
+banner text (data/heroes_aliases.json's ignore_keywords, the SAME
+whole-word matching ocr_hud.classify_frame uses) — so a NEW broadcast's
+highlight package is caught without anyone cutting a template for it
+first. Omit both arguments (the default) and behavior is identical to
+before this existed; the per-source templates keep working unchanged and
+are still checked first (cheaper, no OCR engine required).
 """
 from __future__ import annotations
 import os
@@ -31,6 +45,9 @@ import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import capture  # noqa: E402
+import ocr_hud  # noqa: E402 — only used when an OCR reader is injected;
+                # importing it costs nothing (easyocr/tesseract/paddle are
+                # all lazy-imported inside ocr_hud.make_reader, not here)
 
 MIN_SAT_FRAC = 0.25       # fraction of chip box that must be saturated
 # real portrait rows measure thousands of Laplacian variance; full-screen
@@ -84,9 +101,33 @@ def probe_hud(frame_bgr, layout: dict) -> dict:
     return out
 
 
+def ocr_guard(frame_bgr, read_fn, aliases: dict) -> tuple[str | None, str]:
+    """Re-check a frame the structural probe already called 'gameplay'.
+
+    Returns (None, '') when clean (no override), or ('replay', reason)
+    when replay/highlight/intermission banner text is found. Any read_fn
+    failure is swallowed — the OCR guard can only ever ADD a rejection,
+    never crash a run or block the structural verdict it's layered on."""
+    try:
+        items = read_fn(frame_bgr)
+    except Exception:
+        return None, ""
+    scene, _hits, reason = ocr_hud.classify_frame(items, aliases)
+    if scene in ("replay", "highlight", "intermission"):
+        return "replay", f"OCR guard: {reason}"
+    return None, ""
+
+
 def classify_frame(frame_bgr, layout: dict,
-                   min_chips: int = DEFAULT_MIN_CHIPS) -> tuple[str, str]:
-    """(state, reason) for one frame against a scaled layout."""
+                   min_chips: int = DEFAULT_MIN_CHIPS,
+                   ocr_read_fn=None, ocr_aliases: dict | None = None
+                   ) -> tuple[str, str]:
+    """(state, reason) for one frame against a scaled layout.
+
+    ocr_read_fn/ocr_aliases are optional — see the module docstring's
+    "GENERALIZED HIGHLIGHT/REPLAY GUARD" section. Both must be given for
+    the OCR guard to run; either omitted (the default) reproduces the
+    exact prior behavior."""
     # reject markers (HIGHLIGHTS banner etc.) + optional replay marker are
     # checked FIRST — a highlight replay renders a complete HUD and would
     # otherwise pass the structural probe.
@@ -124,6 +165,11 @@ def classify_frame(frame_bgr, layout: dict,
               f"tex a:{ta:.0f} b:{tb:.0f}")
     if ca >= min_chips and cb >= min_chips \
             and ta >= MIN_PORTRAIT_TEXTURE and tb >= MIN_PORTRAIT_TEXTURE:
+        if ocr_read_fn is not None and ocr_aliases is not None:
+            guard_state, guard_reason = ocr_guard(
+                frame_bgr, ocr_read_fn, ocr_aliases)
+            if guard_state is not None:
+                return guard_state, guard_reason
         return "gameplay", detail
     if (ca >= min_chips or cb >= min_chips) and max(ta, tb) >= \
             MIN_PORTRAIT_TEXTURE:

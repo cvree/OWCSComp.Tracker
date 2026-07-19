@@ -87,6 +87,14 @@ def migrate_schema(con: sqlite3.Connection) -> None:
         "confidence": "REAL",
         "notes": "TEXT",
     })
+    _add_missing_columns(con, "hero_bans", {
+        "ingest_id": "TEXT",
+        "evidence_path": "TEXT",
+    })
+    _add_missing_columns(con, "ingest_runs", {
+        "calibration_health": "TEXT",
+        "calibration_status": "TEXT DEFAULT 'ok'",
+    })
     con.commit()
 
 

@@ -216,6 +216,84 @@ def load_auto_runs(path: str | None = None) -> list[dict]:
         return []
 
 
+def load_ingest_runs(con) -> list[dict]:
+    """Full-map ingestion runs (pipeline/ingest_map.py) for the Vision Lab
+    — calibration health, team identity, CV ban detections, round/swap
+    counts, all linked to that run's evidence report. This is the newer,
+    richer sibling of load_auto_runs (which only covers the older capture/
+    detect batch path) and is what runs.html leads with."""
+    try:
+        rows = con.execute(
+            "SELECT * FROM ingest_runs ORDER BY created_at DESC").fetchall()
+    except Exception:      # table missing on a very old DB -> empty, not fatal
+        return []
+    out = []
+    for r in rows:
+        ingest_id = r["id"]
+        match = con.execute("SELECT * FROM matches WHERE id=?",
+                            (r["match_id"],)).fetchone()
+        mr = con.execute(
+            "SELECT * FROM map_results WHERE match_id=? AND map_order=?",
+            (r["match_id"], r["map_order"])).fetchone()
+        map_result_id = mr["id"] if mr else None
+        n_rounds = (con.execute(
+            "SELECT COUNT(*) FROM map_rounds WHERE map_result_id=?",
+            (map_result_id,)).fetchone()[0] if map_result_id else 0)
+        n_stints = con.execute(
+            "SELECT COUNT(*) FROM hero_stints WHERE ingest_id=?",
+            (ingest_id,)).fetchone()[0]
+        n_swaps_confirmed = con.execute(
+            "SELECT COUNT(*) FROM hero_swaps WHERE ingest_id=? "
+            "AND status='confirmed'", (ingest_id,)).fetchone()[0]
+        n_swaps_uncertain = con.execute(
+            "SELECT COUNT(*) FROM hero_swaps WHERE ingest_id=? "
+            "AND status='uncertain'", (ingest_id,)).fetchone()[0]
+        n_bans = con.execute(
+            "SELECT COUNT(*) FROM hero_bans WHERE ingest_id=?",
+            (ingest_id,)).fetchone()[0]
+        n_ban_candidates = con.execute(
+            "SELECT COUNT(*) FROM ingest_findings WHERE ingest_id=? "
+            "AND kind='ban_candidate'", (ingest_id,)).fetchone()[0]
+        team_findings = [{
+            "side": rv(tf, "field"), "team": rv(tf, "value"),
+            "confidence": rv(tf, "confidence"), "status": rv(tf, "status"),
+            "notes": rv(tf, "notes"),
+        } for tf in con.execute(
+            "SELECT * FROM ingest_findings WHERE ingest_id=? "
+            "AND kind='team_identity' ORDER BY field", (ingest_id,))]
+        try:
+            calib_health = (json.loads(r["calibration_health"])
+                            if rv(r, "calibration_health") else None)
+        except (ValueError, TypeError):
+            calib_health = None
+        out.append({
+            "id": ingest_id,
+            "sourceId": rv(r, "source_id"),
+            "matchId": r["match_id"],
+            "matchTitle": (f"{match['team_a']} vs {match['team_b']}"
+                          if match else r["match_id"]),
+            "mapOrder": r["map_order"],
+            "mapId": rv(mr, "map_id") if mr else None,
+            "startOffset": rv(r, "start_offset"),
+            "endOffset": rv(r, "end_offset"),
+            "detectorVersion": r["detector_version"],
+            "calibrationVersion": rv(r, "calibration_version"),
+            "status": r["status"],
+            "calibrationStatus": rv(r, "calibration_status", "ok"),
+            "calibrationHealth": calib_health,
+            "reportPath": rv(r, "report_path"),
+            "createdAt": rv(r, "created_at"),
+            "rounds": n_rounds,
+            "stints": n_stints,
+            "swapsConfirmed": n_swaps_confirmed,
+            "swapsUncertain": n_swaps_uncertain,
+            "bansConfirmed": n_bans,
+            "banCandidates": n_ban_candidates,
+            "teamFindings": team_findings,
+        })
+    return out
+
+
 def build_payload(con) -> dict:
     heroes = [dict(r) for r in con.execute(
         "SELECT id, name, role FROM heroes ORDER BY role, name")]
@@ -367,6 +445,7 @@ def build_payload(con) -> dict:
         "matches": matches_out,
         "videoSources": load_video_sources(),
         "autoRuns": load_auto_runs(),
+        "ingestRuns": load_ingest_runs(con),
     }
 
 

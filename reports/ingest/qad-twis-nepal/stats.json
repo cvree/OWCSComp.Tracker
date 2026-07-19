@@ -4,27 +4,39 @@
   2778.0
  ],
  "baseline_every": 5.0,
- "frames_sampled": 299,
- "gameplay_frames": 196,
- "skipped_frames": 103,
- "dense_windows": 14,
+ "frames_sampled": 429,
+ "gameplay_frames": 307,
+ "skipped_frames": 122,
+ "dense_windows": 20,
  "rounds": 3,
  "confirmed_swaps": 2,
- "rejected_swaps": 7,
+ "rejected_swaps": 8,
  "setup_changes": 4,
  "setup_spans": [
   [
    1805.0,
-   1935.0
+   1940.0
   ],
   [
    2140.0,
-   2170.0
+   2177.0
   ],
   [
    2466.0,
-   2530.0
+   2545.0
   ]
  ],
- "detector_version": "det-v2"
+ "detector_version": "det-v2",
+ "calibration_health": {
+  "status": "ok",
+  "reasons": [],
+  "metrics": {
+   "gameplay_frames": 307,
+   "full_house_rate": 0.941,
+   "median_top_score": 0.937,
+   "unknown_rate": 0.007,
+   "total_slot_checks": 3070
+  }
+ },
+ "ocr_guard": false
 }

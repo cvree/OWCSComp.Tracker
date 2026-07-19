@@ -84,19 +84,24 @@ CREATE TABLE IF NOT EXISTS map_results (
 );
 
 -- FACEIT/OWCS hero bans, usually per map. team_id can be NULL if the
--- matchroom only exposes the ban without ownership.
+-- matchroom only exposes the ban without ownership. source='cv' rows come
+-- from pipeline/detect_bans.py (OCR'd off the broadcast pick/ban screen,
+-- generalized across overlay layouts, never guessed silently); ingest_id +
+-- evidence_path give them the same click-through proof as CV comps.
 CREATE TABLE IF NOT EXISTS hero_bans (
-  id            INTEGER PRIMARY KEY AUTOINCREMENT,
-  match_id      TEXT NOT NULL REFERENCES matches(id) ON DELETE CASCADE,
-  map_result_id INTEGER REFERENCES map_results(id) ON DELETE SET NULL,
-  map_order     INTEGER,
-  team_id       TEXT REFERENCES teams(id),
-  hero_id       TEXT NOT NULL REFERENCES heroes(id),
-  role          TEXT,
-  ban_order     INTEGER,
-  source        TEXT DEFAULT 'faceit',
-  confidence    REAL,
-  notes         TEXT
+  id             INTEGER PRIMARY KEY AUTOINCREMENT,
+  match_id       TEXT NOT NULL REFERENCES matches(id) ON DELETE CASCADE,
+  map_result_id  INTEGER REFERENCES map_results(id) ON DELETE SET NULL,
+  map_order      INTEGER,
+  team_id        TEXT REFERENCES teams(id),
+  hero_id        TEXT NOT NULL REFERENCES heroes(id),
+  role           TEXT,
+  ban_order      INTEGER,
+  source         TEXT DEFAULT 'faceit',    -- faceit | manual_facts | sample | cv
+  confidence     REAL,
+  notes          TEXT,
+  ingest_id      TEXT REFERENCES ingest_runs(id),
+  evidence_path  TEXT                      -- crop backing a source='cv' row
 );
 
 -- Optional structured map pick/veto timeline. This supports FACEIT when it
@@ -186,10 +191,40 @@ CREATE TABLE IF NOT EXISTS ingest_runs (
   status              TEXT NOT NULL DEFAULT 'running'
                       CHECK (status IN ('running','complete','failed')),
   stats_json          TEXT,               -- sampling/coverage counters
+  -- calibration_health is a RUNTIME measurement (this ingest's own accepted
+  -- observations), distinct from calibrate_source.py's one-time offline
+  -- confidence: a calibration can score well in isolation and still drift
+  -- on a different capture. See ingest_map.calibration_health().
+  calibration_health  TEXT,               -- json: {status, reasons[], metrics{}}
+  calibration_status  TEXT DEFAULT 'ok'
+                      CHECK (calibration_status IN ('ok','suspect')),
   report_path         TEXT,
   created_at          TEXT DEFAULT CURRENT_TIMESTAMP,
   updated_at          TEXT DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Staged, reviewable CV findings that are NOT comps/bans/rounds: team-name
+-- OCR candidates, event/stage/date-bug OCR candidates, and anything else
+-- that needs a human's eyes before it overrides operator-supplied facts.
+-- Mirrors the hero_stints/hero_swaps "never silently promote" pattern.
+CREATE TABLE IF NOT EXISTS ingest_findings (
+  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  ingest_id   TEXT NOT NULL REFERENCES ingest_runs(id) ON DELETE CASCADE,
+  kind        TEXT NOT NULL CHECK (kind IN
+              ('team_identity','ban_candidate','event_metadata',
+               'calibration_health')),
+  field       TEXT,                       -- e.g. 'a' / 'b' side, or 'event_name'
+  raw_text    TEXT,                       -- what OCR actually read
+  value       TEXT,                       -- resolved value (team_id, hero_id, ...)
+  confidence  REAL,
+  method      TEXT,                       -- exact | fuzzy | ambiguous | ...
+  evidence_path TEXT,
+  status      TEXT NOT NULL DEFAULT 'candidate'
+              CHECK (status IN ('candidate','confirmed','rejected')),
+  notes       TEXT,
+  created_at  TEXT DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_findings_ingest ON ingest_findings(ingest_id);
 
 CREATE TABLE IF NOT EXISTS slot_observations (
   id             INTEGER PRIMARY KEY AUTOINCREMENT,
