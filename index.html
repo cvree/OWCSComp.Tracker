@@ -4,7 +4,8 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>OWCS Comp Tracker — what the pros actually play</title>
-<meta name="description" content="Automatically recorded OWCS team compositions. Hero pick rates and win rates by map, region, and date — the data no one else records." />
+<meta name="description" content="The one place that records OWCS team compositions — every hero, every swap, every team — pulled from broadcast video with receipts. Hero pick and win rates by map, region and date." />
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css" />
@@ -19,146 +20,158 @@
       <a href="stats.html">Hero stats</a>
       <a href="teams.html">Teams</a>
       <a href="matches.html">Matches</a>
-      <a href="run.html">Control room</a>
+      <a href="run.html" style="color:var(--muted);opacity:.7">Control room</a>
     </div>
     <span class="nav-status" id="nav-status"><span class="dot"></span><span>checking…</span></span>
   </div>
 </nav>
 
-<!-- ============ HERO ============ -->
-<header class="hero">
-  <div class="wrap hero-grid">
-    <div data-hero>
-      <p class="eyebrow">OWCS · Every region · Every map</p>
-      <h1>See what the pros <em>actually play.</em></h1>
-      <p class="lead">Team compositions from OWCS broadcasts, recorded automatically and turned
-        into hero pick rates and win rates you can filter by map, region, and date.
-        The data no other site records — free to use.</p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="stats.html">Browse hero stats</a>
-        <a class="btn btn-ghost" href="run.html">Open the control room</a>
+<!-- ============ HERO — comp + team tracking, Tracer signature ============ -->
+<header class="lead-hero">
+  <div class="wrap lead-hero__grid">
+    <div class="lead-hero__copy" data-hero>
+      <p class="eyebrow">OWCS · Composition intelligence</p>
+      <h1>Know what they<br><span class="amber">actually played.</span></h1>
+      <p class="lead"><span class="strike">Results</span> tell you the score. This tracker
+        records the <b>compositions</b> — every hero, every swap, every team — pulled from
+        the broadcast and checked against the frames it came from.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary btn-xl" href="stats.html" data-magnetic><span>Browse hero stats</span></a>
+        <a class="btn btn-ghost btn-xl" href="teams.html" data-magnetic><span>Explore teams →</span></a>
+      </div>
+      <div class="hero-readout">
+        <div><span class="n" data-count-to="8">8</span><span class="k">comps verified</span></div>
+        <div><span class="n" data-count-to="2">2</span><span class="k">swaps caught</span></div>
+        <div><span class="n" data-count-to="52">52</span><span class="k">heroes supported</span></div>
       </div>
     </div>
 
-    <aside class="board" aria-label="Latest tracked matches">
-      <div class="board-head">
-        <span>Latest tracked</span><span class="board-live">● Auto-recorded</span>
+    <div class="tracer-stage" aria-hidden="true">
+      <div class="tracer-stack" data-tracer>
+        <svg class="chrono-rings" viewBox="0 0 200 200">
+          <circle class="r r3" cx="100" cy="100" r="94" stroke-width="1"/>
+          <circle class="r r1" cx="100" cy="100" r="78" stroke-width="1.5"/>
+          <circle class="r r2" cx="100" cy="100" r="60" stroke-width="2"/>
+          <circle class="r r3" cx="100" cy="100" r="40" stroke-width="1"/>
+        </svg>
+        <div class="tracer-glow"></div>
+        <img class="tracer-echo tracer-echo--a" src="assets/img/tracer.webp" alt="" width="360" height="782">
+        <img class="tracer-echo tracer-echo--b" src="assets/img/tracer.webp" alt="" width="360" height="782">
+        <img class="tracer-fig" src="assets/img/tracer.webp"
+             alt="Tracer, an Overwatch hero, used as the tracker's mascot" width="360" height="782">
+        <div class="lock-frame"><span class="tl"></span><span class="tr"></span><span class="bl"></span><span class="br"></span></div>
+        <span class="track-tag"><span class="dot"></span>TRACKING · <b>10/10 slots</b></span>
+        <span class="track-tag track-tag--comp"><b>SWAP</b> · Juno → Lúcio</span>
       </div>
-      <div class="board-body" id="board-rows"><!-- filled by app.js --></div>
-    </aside>
+    </div>
   </div>
 </header>
 
-<!-- ============ CONTROL DECK ============ -->
-<section id="deck" style="padding-top:0">
+<!-- ============ THE TWO THINGS THIS SITE DOES ============ -->
+<section id="product" style="padding-top:8px">
   <div class="wrap">
-    <div class="section-head reveal">
-      <p class="eyebrow">Control deck</p>
-      <h2>The pipeline, at a glance.</h2>
-      <p class="muted">Every comp on this site is traceable to a frame, a crop, a match score,
-        and a review status. This deck is where that chain starts.</p>
+    <div class="section-head pillars-head reveal">
+      <p class="eyebrow">The whole point</p>
+      <h2>Two things, done properly.</h2>
+      <p class="muted">Comp tracking and team tracking. Everything else on this site exists to
+        make these two trustworthy.</p>
     </div>
 
-    <div class="grid-3 reveal" style="margin-bottom:18px">
-      <a class="hud lift" href="run.html" style="text-decoration:none;color:inherit">
-        <p class="hud-kicker">Launch</p>
-        <h3>Run</h3>
-        <p class="muted small">Start a capture window, watch the live log, cancel if needed.</p>
+    <div class="pillars reveal">
+      <a class="pillar pillar--comp" href="stats.html" data-magnetic>
+        <div class="pillar__stat"><span class="n" data-count-to="8">8</span><span class="k">verified comps</span></div>
+        <div class="pillar__glyph">P%</div>
+        <h3>Comp tracking</h3>
+        <p>Which heroes pro teams actually run — pick rate and win rate, map by map, with the
+          sample size shown so you know what to trust.</p>
+        <span class="pillar__go">Open hero stats <span class="arw">→</span></span>
       </a>
-      <a class="hud lift" href="runs.html" style="text-decoration:none;color:inherit">
-        <p class="hud-kicker">History</p>
-        <h3>Runs</h3>
-        <p class="muted small">Every run, every step, every reason — with evidence reports.</p>
-      </a>
-      <a class="hud lift" href="sources.html" style="text-decoration:none;color:inherit">
-        <p class="hud-kicker">Library</p>
-        <h3>Sources</h3>
-        <p class="muted small">Saved OWCS VODs, ready to capture. Discovery adds more.</p>
-      </a>
-      <a class="hud lift" href="matches.html" style="text-decoration:none;color:inherit">
-        <p class="hud-kicker">Facts</p>
-        <h3>Matches</h3>
-        <p class="muted small">Teams, maps, scores — match metadata, never comp guesses.</p>
-      </a>
-      <a class="hud lift" href="admin.html" style="text-decoration:none;color:inherit">
-        <p class="hud-kicker">Review</p>
-        <h3>Admin</h3>
-        <p class="muted small">Manual corrections. Human review always overrides CV.</p>
-      </a>
-      <a class="hud lift" href="stats.html" style="text-decoration:none;color:inherit">
-        <p class="hud-kicker">Output</p>
-        <h3>Stats</h3>
-        <p class="muted small">Pick rates and win rates — built only from proven comps.</p>
+
+      <a class="pillar pillar--team" href="teams.html" data-magnetic>
+        <div class="pillar__stat"><span class="n">All</span><span class="k">OWCS teams</span></div>
+        <div class="pillar__glyph">T</div>
+        <h3>Team tracking</h3>
+        <p>Open any OWCS team and see exactly what they ran on each map, each match day —
+          openers, swaps and tendencies, win or lose.</p>
+        <span class="pillar__go">Browse teams <span class="arw">→</span></span>
       </a>
     </div>
 
-    <div id="recent-runs"><!-- filled below from data.js --></div>
-  </div>
-</section>
-
-<!-- ============ HOW IT WORKS ============ -->
-<section id="how">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <p class="eyebrow">How it works</p>
-      <h2>From broadcast to database — with proof at every step.</h2>
-    </div>
-    <div class="flow reveal">
-      <div class="flow-step"><span class="n">01</span><h3>Discover</h3><p>OWCS VODs are found and saved as capture sources.</p></div>
-      <div class="flow-step"><span class="n">02</span><h3>Run</h3><p>One command captures a broadcast window — clip reused, never re-downloaded.</p></div>
-      <div class="flow-step"><span class="n">03</span><h3>Extract</h3><p>Frames are sampled and filtered down to live gameplay only.</p></div>
-      <div class="flow-step"><span class="n">04</span><h3>Evidence</h3><p>Layout boxes, hero crops, and match scores are published per run.</p></div>
-      <div class="flow-step"><span class="n">05</span><h3>Review</h3><p>Low-confidence slots go to review. Humans confirm or correct.</p></div>
-      <div class="flow-step"><span class="n">06</span><h3>Export</h3><p>Only reviewed or high-confidence comps become stats.</p></div>
+    <!-- featured tracked comp: the proof -->
+    <div class="featured reveal">
+      <div class="featured__lede">
+        <p class="eyebrow">Latest on record</p>
+        <h3>Al Qadsiah <span class="muted">vs</span> Twisted Minds</h3>
+        <p>Nepal · Stage 2 Playoffs · Twisted Minds win</p>
+      </div>
+      <div class="comp-rows">
+        <div class="comp-row"><span class="team">QAD</span><span class="heroes">
+          <span class="hero-chip">Shion</span><span class="hero-chip">Symmetra</span>
+          <span class="hero-chip">Mauga</span><span class="hero-chip">Kiriko</span>
+          <span class="hero-chip hero-chip--swap">Juno → Lúcio</span></span></div>
+        <div class="comp-row"><span class="team">TM</span><span class="heroes">
+          <span class="hero-chip">Sojourn</span><span class="hero-chip">Symmetra</span>
+          <span class="hero-chip">D.Va</span><span class="hero-chip">Lúcio</span>
+          <span class="hero-chip">Kiriko</span></span></div>
+      </div>
+      <div class="featured__cta">
+        <a class="btn btn-primary" href="match.html?id=m-qad-twis-s2po" data-magnetic><span>See the match →</span></a>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ============ FEATURES ============ -->
-<section id="features">
+<!-- ============ WHY COMPS MATTER (product framing) ============ -->
+<section id="why">
   <div class="wrap">
     <div class="section-head reveal">
-      <p class="eyebrow">Why this exists</p>
+      <p class="eyebrow">Why it matters</p>
       <h2>Results sites tell you who won. Not what they played.</h2>
       <p class="muted">Comp data has always been the missing piece — scattered across five regional
-        broadcasts, gone the moment the stream ends. This tracker records it.</p>
+        broadcasts, gone the moment the stream ends. This is where it lives instead.</p>
     </div>
     <div class="grid-3 reveal">
-      <div class="card lift">
+      <div class="card lift card--spot">
         <div class="icon">P%</div>
-        <h3>Pick rate first</h3>
-        <p class="muted">See which heroes pro teams trust most, on every map. Pick rate leads,
-          win rate right beside it — sorted the way players actually read the meta.</p>
+        <h3>Pick rate, then win rate</h3>
+        <p class="muted">The heroes pro teams trust most, on every map — read the way players
+          actually read the meta, with win rate right beside it.</p>
       </div>
-      <div class="card lift">
-        <div class="icon">W%</div>
-        <h3>Win rate by map</h3>
+      <div class="card lift card--spot">
+        <div class="icon">◎</div>
+        <h3>Map-specific truth</h3>
         <p class="muted">A hero that wins on King's Row can flop on Busan. Every rate is
-          map-specific, with sample sizes shown so you know what to trust.</p>
+          map-scoped, and the maps-played count is always in view.</p>
       </div>
-      <div class="card lift">
-        <div class="icon">T</div>
-        <h3>Team-by-team comps</h3>
-        <p class="muted">Open any OWCS team and see exactly what they ran on each map, on each
-          match day — win or lose, comp by comp.</p>
-      </div>
-      <div class="card lift">
-        <div class="icon">⌕</div>
-        <h3>Filters that matter</h3>
-        <p class="muted">Date range, region, map, role. Scope the numbers to Stage 2 playoffs in
-          Asia or the whole season worldwide — your call.</p>
-      </div>
-      <div class="card lift">
-        <div class="icon">⟳</div>
-        <h3>Recorded automatically</h3>
-        <p class="muted">A pipeline reviews finished broadcast VODs and logs the comps.
-          No manual entry, no waiting on volunteers to fill in tables.</p>
-      </div>
-      <div class="card lift">
+      <div class="card lift card--spot">
         <div class="icon">✓</div>
-        <h3>Honest by design</h3>
-        <p class="muted">A comp only appears if it's traceable to evidence. Anything uncertain says
-          <em>needs review</em> — never a silent guess.</p>
+        <h3>Only what's proven</h3>
+        <p class="muted">A comp appears only when it traces to a frame, a crop and a match
+          score. Anything uncertain says <em>needs review</em> — never a silent guess.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ UNDER THE HOOD (background: the pipeline) ============ -->
+<section id="hood">
+  <div class="wrap">
+    <div class="under-hood reveal">
+      <div class="under-hood__inner">
+        <div>
+          <p class="eyebrow" style="color:var(--muted)">Under the hood</p>
+          <h2>Fed by an evidence pipeline.</h2>
+          <p>A computer-vision pipeline calibrates each broadcast, reads the ten hero slots
+            frame by frame, and stages every detection through human review before it counts.
+            That's the back office — you don't need it to use the tracker, but it's all here if
+            you want the receipts.</p>
+        </div>
+        <div class="under-hood__links">
+          <a class="hood-link" href="run.html">Control room</a>
+          <a class="hood-link" href="runs.html">Vision lab</a>
+          <a class="hood-link" href="sources.html">Sources</a>
+          <a class="hood-link" href="admin.html">Review</a>
+        </div>
       </div>
     </div>
   </div>
@@ -171,16 +184,16 @@
       <div>
         <p class="eyebrow">Keep it running</p>
         <h2>Free for everyone. Powered by donations.</h2>
-        <p class="muted">Everything on this site — team comps included — is free. The tracker runs
-          on free infrastructure, but time isn't free. If team comp pages save you VOD hours,
-          consider chipping in. Donors keep the pipeline reviewing every region, every week.</p>
+        <p class="muted">Everything here — team comps included — is free. The tracker runs on free
+          infrastructure, but time isn't. If comp pages save you VOD hours, consider chipping in.
+          Donors keep the pipeline reviewing every region, every week.</p>
       </div>
       <div class="tier">
         <p class="eyebrow">Suggested</p>
         <div class="price">$3<span class="muted small"> one-time</span></div>
         <p class="muted small">Or whatever it's worth to you. No accounts, no locked features.</p>
-        <a class="btn btn-primary" href="#" aria-disabled="true"
-           title="Replace with your Ko-fi / Buy Me a Coffee link">Donate ☕</a>
+        <a class="btn btn-primary" href="#" aria-disabled="true" data-magnetic
+           title="Replace with your Ko-fi / Buy Me a Coffee link"><span>Donate ☕</span></a>
       </div>
     </div>
   </div>
@@ -195,9 +208,9 @@
     </div>
     <details>
       <summary>Where does the comp data come from?</summary>
-      <p>From the OWCS broadcasts themselves. After a match finishes, an automated pipeline reviews
-        the VOD, samples frames of live gameplay, and identifies the hero icons shown for both
-        teams. Match results and schedules come from public OWCS results pages.</p>
+      <p>From the OWCS broadcasts themselves. After a match finishes, the pipeline reviews the VOD,
+        samples frames of live gameplay, and identifies the hero icons shown for both teams. Match
+        results and schedules come from public OWCS/FACEIT pages.</p>
     </details>
     <details>
       <summary>How is “win rate” defined here?</summary>
@@ -208,19 +221,7 @@
     <details>
       <summary>What happens when the pipeline isn't sure?</summary>
       <p>It says so. Every detection carries a per-slot confidence score. Low scores are labeled
-        <em>needs review</em> and stay out of the stats until a human confirms or corrects them.
-        The stats only ever count reviewed or high-confidence comps.</p>
-    </details>
-    <details>
-      <summary>How fresh is the data?</summary>
-      <p>Comps are recorded from finished VODs, so matches usually appear within a day of airing.
-        Live in-match tracking is on the roadmap.</p>
-    </details>
-    <details>
-      <summary>Which regions are covered?</summary>
-      <p>The goal is all OWCS regions — EMEA, North America, Asia, Japan, Pacific, and China —
-        added one at a time as each broadcast layout is calibrated. The region filter shows what's
-        live now.</p>
+        <em>needs review</em> and stay out of the stats until a human confirms or corrects them.</p>
     </details>
     <details>
       <summary>Is this affiliated with Blizzard or OWCS?</summary>
@@ -241,7 +242,7 @@
     </div>
     <div>
       <p><a href="stats.html">Hero stats</a> · <a href="teams.html">Teams</a> ·
-         <a href="matches.html">Matches</a> · <a href="runs.html">Runs</a> · <a href="#faq">FAQ</a></p>
+         <a href="matches.html">Matches</a> · <a href="run.html">Control room</a> · <a href="#faq">FAQ</a></p>
       <p class="muted">Data recorded from public broadcasts · results via public OWCS/FACEIT pages where available.</p>
     </div>
   </div>
@@ -256,38 +257,5 @@
 <script src="assets/vendor/vanta.net.min.js" defer></script>
 <script src="assets/js/motion.js" defer></script>
 <script src="assets/js/ui.js"></script>
-<script>
-/* Recent run cards on the control deck (data.js is optional here). */
-(function () {
-  const root = document.getElementById("recent-runs");
-  const runs = (window.OWCS_DATA && window.OWCS_DATA.autoRuns) || [];
-  const esc = s => String(s ?? "—").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  const statusOf = r => r.runStatus || (!r.ok ? "failed"
-    : ((r.detection || {}).status === "skipped" || (r.detection || {}).status === "error"
-       || r.filtered === false) ? "partial" : "ok");
-  if (!runs.length) {
-    root.innerHTML =
-      '<div class="empty-v2 reveal"><div class="glyph">▶</div>' +
-      '<h3>No pipeline runs yet</h3>' +
-      '<p>Start the control room and launch your first capture window.</p>' +
-      '<div class="cmd-chip"><span class="prompt">$</span><code>python pipeline/serve.py</code>' +
-      '<button class="cmd-copy" type="button">copy</button></div></div>';
-    return;
-  }
-  const cards = runs.slice(0, 3).map(r => {
-    const st = statusOf(r);
-    return `<a class="hud lift" href="${esc(r.reportDir)}index.html" style="text-decoration:none;color:inherit">
-      <p class="hud-kicker">${esc((r.startedAt || "").slice(0, 16).replace("T", " · "))}</p>
-      <h3 style="font-size:.95rem;word-break:break-all">${esc(r.run)}</h3>
-      <p class="muted small" style="margin:6px 0 10px">${esc(r.window)} · every ${esc(r.every)}s ·
-        ${esc(r.framesKept ?? "?")} frames kept</p>
-      <span class="pill-v2 ${st}">${st}</span>
-    </a>`;
-  }).join("");
-  root.innerHTML = `<p class="hud-kicker reveal" style="margin-bottom:10px">Recent runs ·
-      <a href="runs.html" style="letter-spacing:normal;text-transform:none">view all</a></p>
-    <div class="grid-3 reveal">${cards}</div>`;
-})();
-</script>
 </body>
 </html>

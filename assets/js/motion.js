@@ -166,14 +166,73 @@
   function initMagnetic() {
     if (reduced || !finePointer || !window.gsap) return;
     $$(".btn-primary, .pub-btn--gold, [data-magnetic]").forEach((btn) => {
+      const label = btn.querySelector("span") || btn;
       const xTo = window.gsap.quickTo(btn, "x", { duration: 0.3, ease: "power3" });
       const yTo = window.gsap.quickTo(btn, "y", { duration: 0.3, ease: "power3" });
+      // the label trails a little further behind the plate -> depth
+      const lx = label === btn ? null
+        : window.gsap.quickTo(label, "x", { duration: 0.45, ease: "power3" });
+      const ly = label === btn ? null
+        : window.gsap.quickTo(label, "y", { duration: 0.45, ease: "power3" });
       btn.addEventListener("pointermove", (e) => {
         const r = btn.getBoundingClientRect();
-        xTo((e.clientX - r.left - r.width / 2) * 0.22);
-        yTo((e.clientY - r.top - r.height / 2) * 0.22);
+        const dx = e.clientX - r.left - r.width / 2;
+        const dy = e.clientY - r.top - r.height / 2;
+        xTo(dx * 0.32); yTo(dy * 0.36);
+        if (lx) { lx(dx * 0.13); ly(dy * 0.15); }
       }, { passive: true });
-      btn.addEventListener("pointerleave", () => { xTo(0); yTo(0); });
+      btn.addEventListener("pointerleave", () => {
+        xTo(0); yTo(0); if (lx) { lx(0); ly(0); }
+      });
+    });
+  }
+
+  /* ---- hero figure: scroll turntable + pointer tilt + blink echo -----
+     Feeds CSS custom props on [data-tracer]; the stylesheet composes them
+     into a preserve-3d transform. No layer here throws or hard-depends on
+     GSAP, so the figure is a static cutout when motion is off. */
+  function initHeroFigure() {
+    if (reduced) return;
+    const stack = document.querySelector("[data-tracer]");
+    if (!stack) return;
+    const stage = stack.closest(".tracer-stage") || stack.parentElement;
+    const set = (k, v) => stack.style.setProperty(k, v);
+
+    // scroll: she rotates on Y like a turntable and drifts up a touch
+    const onScroll = () => {
+      const r = stage.getBoundingClientRect();
+      const vh = window.innerHeight || 1;
+      const p = Math.max(-1, Math.min(1,
+        (vh * 0.5 - (r.top + r.height * 0.5)) / (vh * 0.7)));
+      set("--turn", (p * 16).toFixed(2) + "deg");
+      set("--rise", (p * -16).toFixed(1) + "px");
+    };
+    addEventListener("scroll", onScroll, { passive: true });
+    addEventListener("resize", onScroll, { passive: true });
+    onScroll();
+
+    if (!finePointer) return;
+    // pointer: tilt toward the cursor; lateral travel triggers her recall
+    // afterimages (the --echo blink). Echo decays back to rest.
+    let echo = 0, raf = null;
+    const decay = () => {
+      echo *= 0.9;
+      set("--echo", echo.toFixed(3));
+      raf = echo > 0.01 ? requestAnimationFrame(decay) : null;
+    };
+    stage.addEventListener("pointermove", (e) => {
+      const r = stage.getBoundingClientRect();
+      const dx = (e.clientX - r.left) / r.width - 0.5;
+      const dy = (e.clientY - r.top) / r.height - 0.5;
+      set("--tilty", (dx * 20).toFixed(2) + "deg");
+      set("--tiltx", (dy * -10).toFixed(2) + "deg");
+      echo = Math.min(1, Math.abs(dx) * 1.5 + 0.12);
+      set("--echo", echo.toFixed(3));
+      if (!raf) raf = requestAnimationFrame(decay);
+    }, { passive: true });
+    stage.addEventListener("pointerleave", () => {
+      set("--tilty", "0deg"); set("--tiltx", "0deg");
+      if (!raf) raf = requestAnimationFrame(decay);
     });
   }
 
@@ -181,7 +240,7 @@
     if (reduced || !finePointer) return;
     // spotlight: CSS vars the stylesheets already read (--spot-x/--spot-y)
     document.addEventListener("pointermove", (e) => {
-      const card = e.target.closest && e.target.closest(".hud.lift, .card--spot");
+      const card = e.target.closest && e.target.closest(".hud.lift, .card--spot, .pillar");
       if (!card) return;
       const r = card.getBoundingClientRect();
       card.style.setProperty("--spot-x", (e.clientX - r.left) + "px");
@@ -196,7 +255,7 @@
       }
     }, { passive: true });
     document.addEventListener("pointerout", (e) => {
-      const card = e.target.closest && e.target.closest(".hud.lift, .card--spot");
+      const card = e.target.closest && e.target.closest(".hud.lift, .card--spot, .pillar");
       if (!card || card.contains(e.relatedTarget)) return;
       if (window.gsap)
         window.gsap.to(card, { rotationX: 0, rotationY: 0, duration: 0.45, ease: "power3.out" });
@@ -328,6 +387,7 @@
     safely("reveals", () => watchReveal($$(".hud, [data-rv]")));
     safely("decrypt", initDecrypt);
     safely("magnetic", initMagnetic);
+    safely("hero-figure", initHeroFigure);
     safely("tilt", initTiltSpot);
     safely("progress", initProgress);
     safely("counts", () => $$("[data-count-to]").forEach(M.countUp));

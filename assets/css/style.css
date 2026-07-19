@@ -952,3 +952,243 @@ html.motion-on .console-body > div { animation: m-log-in .16s ease both; }
   from { opacity: 0; transform: translateY(3px); }
   to   { opacity: 1; transform: none; }
 }
+
+/* =====================================================================
+   LANDING v3 - comp/team tracking foregrounded + Tracer signature stage
+   New classes only (no collision with the legacy .hero-grid deck).
+   ===================================================================== */
+
+/* ---- reactive buttons (magnetic pull comes from motion.js) ----------- */
+.btn { position: relative; overflow: hidden; will-change: transform;
+  transition: transform .16s cubic-bezier(.2,.7,.2,1), background .15s ease,
+    border-color .15s ease, box-shadow .2s ease; }
+.btn > span { position: relative; z-index: 1; display: inline-flex;
+  align-items: center; gap: 8px; }
+.btn::after {                      /* amber blink-sweep on hover */
+  content: ""; position: absolute; inset: 0; z-index: 0;
+  background: linear-gradient(105deg, transparent 30%,
+    rgba(255,255,255,.28) 50%, transparent 70%);
+  transform: translateX(-120%); transition: transform .5s ease; }
+.btn:hover::after { transform: translateX(120%); }
+.btn:active { transform: scale(.96); }
+.btn-primary { box-shadow: 0 6px 22px -8px var(--amber-glow); }
+.btn-primary:hover { box-shadow: 0 12px 34px -8px var(--amber-glow); }
+.btn-xl { padding: 14px 26px; font-size: 1.02rem; border-radius: 11px; }
+
+/* ---- hero shell ------------------------------------------------------ */
+.lead-hero { position: relative; padding: 70px 0 34px; overflow: clip; }
+.lead-hero__grid {
+  display: grid; grid-template-columns: 1.08fr .92fr;
+  gap: 40px; align-items: center; min-height: min(78vh, 720px); }
+.lead-hero__copy { position: relative; z-index: 2; }
+.lead-hero h1 {
+  font-size: clamp(2.4rem, 6vw, 4.6rem); line-height: .98;
+  letter-spacing: -.01em; margin: 0 0 18px; }
+.lead-hero h1 .amber { color: var(--amber);
+  text-shadow: 0 0 34px rgba(255,169,43,.28); }
+.lead-hero h1 .strike {                      /* "results" crossed out */
+  color: var(--muted); position: relative; white-space: nowrap; }
+.lead-hero h1 .strike::after { content: ""; position: absolute;
+  left: -2%; right: -2%; top: 52%; height: 3px; border-radius: 3px;
+  background: var(--team-b); transform: scaleX(0); transform-origin: left;
+  animation: strike-in .5s .9s cubic-bezier(.2,.7,.2,1) forwards; }
+@keyframes strike-in { to { transform: scaleX(1); } }
+.lead-hero .lead { font-size: 1.14rem; color: var(--muted);
+  max-width: 42ch; margin: 0 0 26px; }
+.lead-hero .lead b { color: var(--text); font-weight: 600; }
+.hero-cta { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+
+/* stat readout under the CTAs */
+.hero-readout { display: flex; gap: 26px; margin-top: 30px;
+  padding-top: 20px; border-top: 1px solid var(--line); flex-wrap: wrap; }
+.hero-readout div { display: flex; flex-direction: column; gap: 2px; }
+.hero-readout .n { font-family: var(--display); font-weight: 700;
+  font-size: 1.7rem; color: var(--text); line-height: 1;
+  font-variant-numeric: tabular-nums; }
+.hero-readout .k { font-size: .72rem; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--muted); }
+
+/* ---- Tracer signature stage ----------------------------------------- */
+.tracer-stage {
+  position: relative; z-index: 1; justify-self: center;
+  /* height-driven so she always fits the fold; width follows the ratio */
+  height: min(82vh, 720px); aspect-ratio: 360 / 620;
+  width: auto; max-width: 100%;
+  perspective: 1300px; perspective-origin: 50% 42%; }
+.tracer-stack {
+  position: absolute; inset: 0; transform-style: preserve-3d;
+  /* motion.js feeds these; all default to neutral so no-JS is static */
+  --turn: 0deg; --tiltx: 0deg; --tilty: 0deg; --rise: 0px; --echo: 0;
+  transform: translateY(var(--rise))
+    rotateX(var(--tiltx)) rotateY(calc(var(--turn) + var(--tilty)));
+  transition: transform .18s cubic-bezier(.2,.7,.2,1); }
+
+/* concentric chronal rings behind her */
+.chrono-rings { position: absolute; left: 50%; top: 54%;
+  width: 118%; aspect-ratio: 1; translate: -50% -50%;
+  transform: translateZ(-140px); opacity: .8; }
+.chrono-rings .r { fill: none; stroke: var(--line-bright);
+  transform-origin: center; transform-box: fill-box; }
+.chrono-rings .r1 { stroke: rgba(79,169,255,.35); animation: spin 34s linear infinite; }
+.chrono-rings .r2 { stroke: rgba(255,169,43,.30); stroke-dasharray: 5 12;
+  animation: spin 22s linear infinite reverse; }
+.chrono-rings .r3 { stroke: rgba(148,168,205,.16); }
+@keyframes spin { to { rotate: 360deg; } }
+
+/* radial floor glow */
+.tracer-glow { position: absolute; left: 50%; top: 46%;
+  width: 96%; aspect-ratio: 1; translate: -50% -50%;
+  transform: translateZ(-90px);
+  background: radial-gradient(circle,
+    rgba(255,169,43,.34), rgba(79,169,255,.14) 42%, transparent 66%);
+  filter: blur(8px); }
+
+.tracer-fig, .tracer-echo {
+  position: absolute; left: 50%; bottom: 0; height: 100%;
+  width: auto; translate: -50% 0; user-select: none;
+  -webkit-user-drag: none; pointer-events: none; }
+.tracer-fig { z-index: 3;
+  filter: drop-shadow(0 26px 34px rgba(0,0,0,.55))
+          drop-shadow(0 0 22px rgba(255,169,43,.18)); }
+/* blink afterimages - Tracer's recall, offset on --echo */
+.tracer-echo { z-index: 2; opacity: 0; mix-blend-mode: screen; }
+.tracer-echo--a { transform: translateZ(-40px)
+    translateX(calc(var(--echo) * -30px));
+  filter: blur(2px) drop-shadow(0 0 10px rgba(79,169,255,.9))
+    saturate(1.4) brightness(1.1);
+  opacity: calc(.5 * var(--echo)); }
+.tracer-echo--b { transform: translateZ(-70px)
+    translateX(calc(var(--echo) * 44px));
+  filter: blur(4px) drop-shadow(0 0 12px rgba(255,169,43,.9))
+    saturate(1.5) brightness(1.1);
+  opacity: calc(.4 * var(--echo)); }
+
+/* HUD target-lock frame + tracking tag */
+.lock-frame { position: absolute; inset: 6% 10%; z-index: 4;
+  pointer-events: none; opacity: 0; animation: lock-in .5s 1.1s forwards; }
+@keyframes lock-in { to { opacity: .9; } }
+.lock-frame span { position: absolute; width: 26px; height: 26px;
+  border: 2px solid var(--amber); }
+.lock-frame .tl { top: 0; left: 0; border-right: 0; border-bottom: 0; }
+.lock-frame .tr { top: 0; right: 0; border-left: 0; border-bottom: 0; }
+.lock-frame .bl { bottom: 0; left: 0; border-right: 0; border-top: 0; }
+.lock-frame .br { bottom: 0; right: 0; border-left: 0; border-top: 0; }
+.track-tag { position: absolute; z-index: 5; top: 8%; right: 4%;
+  font-family: var(--mono); font-size: .68rem; letter-spacing: .1em;
+  color: var(--amber); background: rgba(6,11,21,.72);
+  border: 1px solid var(--amber-soft); border-radius: 6px;
+  padding: 4px 9px; display: inline-flex; align-items: center; gap: 6px;
+  backdrop-filter: blur(4px); }
+.track-tag b { color: var(--text); font-weight: 600; }
+.track-tag .dot { width: 6px; height: 6px; border-radius: 50%;
+  background: var(--win); box-shadow: 0 0 8px var(--win);
+  animation: pulse-dot 1.6s ease-in-out infinite; }
+@keyframes pulse-dot { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+.track-tag--comp { top: auto; bottom: 16%; right: -6%; }
+
+/* ---- two pillars: THE product ---------------------------------------- */
+.pillars-head { margin: 48px 0 18px; }
+.pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.pillar { position: relative; overflow: hidden; display: block;
+  padding: 26px 26px 24px; border-radius: 16px; color: inherit;
+  text-decoration: none; border: 1px solid var(--line);
+  background:
+    radial-gradient(420px circle at var(--spot-x,80%) var(--spot-y,-10%),
+      var(--pill-tint), transparent 60%),
+    linear-gradient(180deg, var(--bg-raise), var(--surface));
+  transition: transform .25s cubic-bezier(.2,.7,.2,1),
+    border-color .25s ease, box-shadow .25s ease; will-change: transform; }
+.pillar, .pillar:hover { text-decoration: none; }
+.pillar:hover { transform: translateY(-4px);
+  border-color: var(--pill-line);
+  box-shadow: 0 24px 60px -28px var(--pill-line); }
+.pillar--comp { --pill-tint: rgba(255,169,43,.16); --pill-line: var(--amber); }
+.pillar--team { --pill-tint: rgba(79,169,255,.16); --pill-line: var(--team-a); }
+.pillar__glyph { font-family: var(--display); font-weight: 700;
+  font-size: 1rem; letter-spacing: .04em; width: 46px; height: 46px;
+  display: grid; place-items: center; border-radius: 12px;
+  color: #0a1120; background: var(--pill-line); margin-bottom: 16px; }
+.pillar h3 { font-size: 1.45rem; margin: 0 0 8px; }
+.pillar p { color: var(--muted); margin: 0 0 18px; max-width: 34ch; }
+.pillar__go { display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--display); font-weight: 600; color: var(--pill-line);
+  font-size: .95rem; }
+.pillar__go .arw { transition: transform .25s ease; }
+.pillar:hover .pillar__go .arw { transform: translateX(5px); }
+.pillar__stat { position: absolute; top: 22px; right: 24px;
+  text-align: right; font-family: var(--display); }
+.pillar__stat .n { display: block; font-size: 1.9rem; font-weight: 700;
+  color: var(--text); line-height: 1; font-variant-numeric: tabular-nums; }
+.pillar__stat .k { display: block; margin-top: 3px; font-size: .66rem;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+
+/* ---- featured tracked comp (proof) ----------------------------------- */
+.featured { margin-top: 20px; padding: 22px 24px; border-radius: 16px;
+  border: 1px solid var(--line); background: var(--surface);
+  display: grid; grid-template-columns: auto 1fr auto; gap: 22px;
+  align-items: center; }
+.featured__lede { max-width: 22ch; }
+.featured__lede .eyebrow { margin-bottom: 6px; }
+.featured__lede h3 { font-size: 1.1rem; margin: 0 0 4px; }
+.featured__lede p { color: var(--muted); font-size: .86rem; margin: 0; }
+.comp-rows { display: grid; gap: 8px; }
+.comp-row { display: flex; align-items: center; gap: 10px; }
+.comp-row .team { font-family: var(--display); font-weight: 600;
+  font-size: .82rem; width: 46px; color: var(--muted); }
+.comp-row .heroes { display: flex; gap: 5px; flex-wrap: wrap; }
+.hero-chip { font-size: .72rem; padding: 3px 9px; border-radius: 999px;
+  background: var(--bg-raise); border: 1px solid var(--line);
+  color: var(--text); white-space: nowrap; }
+.hero-chip--swap { border-color: var(--amber);
+  color: var(--amber); background: var(--amber-soft); }
+.featured__cta { white-space: nowrap; }
+
+/* ---- under the hood (deliberately recessed = "background") ----------- */
+.under-hood { margin: 56px 0 10px; padding: 22px 24px; border-radius: 14px;
+  border: 1px dashed var(--line); background: rgba(12,21,36,.45); }
+.under-hood__inner { display: grid;
+  grid-template-columns: 1.3fr 1fr; gap: 20px 40px; align-items: center; }
+.under-hood h2 { font-size: 1.05rem; color: var(--muted); margin: 0 0 6px;
+  letter-spacing: .02em; }
+.under-hood p { color: var(--muted); font-size: .9rem; margin: 0;
+  max-width: 52ch; opacity: .85; }
+.under-hood__links { display: flex; gap: 8px; flex-wrap: wrap;
+  justify-content: flex-end; }
+.hood-link { font-family: var(--display); font-size: .82rem;
+  color: var(--muted); border: 1px solid var(--line); border-radius: 8px;
+  padding: 7px 13px; transition: color .15s, border-color .15s; }
+.hood-link:hover { color: var(--text); border-color: var(--line-bright);
+  text-decoration: none; }
+
+@media (max-width: 900px) {
+  .lead-hero__grid { grid-template-columns: 1fr; gap: 8px;
+    min-height: 0; }
+  .tracer-stage { order: -1; height: min(46vh, 380px); max-width: 300px;
+    margin: 0 auto 6px; }
+  .pillars, .under-hood__inner, .featured { grid-template-columns: 1fr; }
+  .featured { text-align: left; }
+  .under-hood__links { justify-content: flex-start; }
+  .pillar__stat { position: static; text-align: left; margin-bottom: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .chrono-rings .r, .track-tag .dot { animation: none !important; }
+  .lead-hero h1 .strike::after { animation: none; transform: scaleX(1); }
+  .tracer-stack { transition: none; }
+  .lock-frame { animation: none; opacity: .9; }
+  .btn::after { display: none; }
+}
+
+/* landing nav: clean wrap on phones (brand one line, links own row) */
+@media (max-width: 640px) {
+  .nav-inner { flex-wrap: wrap; height: auto;
+    padding-top: 10px; padding-bottom: 10px; gap: 8px 14px; }
+  .brand { white-space: nowrap; font-size: 1rem; }
+  .nav-status { display: none; }
+  .nav-links { order: 3; width: 100%; margin-left: 0;
+    justify-content: flex-start; overflow-x: auto; }
+}
+
+@media (max-width: 640px) {
+  .nav-links { scrollbar-width: none; }
+  .nav-links::-webkit-scrollbar { display: none; }
+}
