@@ -376,6 +376,29 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                                         "job": STATE["job"]})
         if path == "/api/sources":
             return self._json(200, {"sources": load_sources()})
+        if path == "/api/calibration":
+            # per-source calibration health for the Calibration Lab page.
+            # Read-only: reports what the calibrator/harvester left on disk
+            # and in the DB, never mutates anything.
+            import calibration_status as cs
+            try:
+                return self._json(200, cs.build_status())
+            except Exception as e:      # a status read must never 500
+                return self._json(200, {"sources": [], "rosterSize": None,
+                                        "counts": {}, "error":
+                                        f"{type(e).__name__}: {e}"})
+        if path == "/api/portraits":
+            # provenance of the generated hero portraits (which real
+            # broadcast crop each one came from), for the Lab's asset panel.
+            mp = os.path.join(REPO, "assets", "img", "heroes",
+                              "manifest.json")
+            try:
+                with open(mp, "r", encoding="utf-8") as f:
+                    return self._json(200, json.load(f))
+            except (OSError, ValueError):
+                return self._json(200, {"heroes": {}, "size": None,
+                                        "note": "no portraits generated yet "
+                                        "— run pipeline/build_hero_portraits.py"})
         if path == "/api/preflight":
             # read-only readiness snapshot for the Run page panel. Never
             # mutates anything (fix_db=False) — the run itself auto-inits

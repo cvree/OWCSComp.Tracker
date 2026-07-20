@@ -781,3 +781,39 @@ html.motion-on .rv.rv-in { opacity: 1; transform: none; transition: opacity var(
   transform-origin: 0 50%; transform: scaleX(0);
   pointer-events: none;
 }
+
+/* ---------- 22. Team page + clickable team plates + hero drill-down ---------- */
+a.team-plate { text-decoration: none; color: inherit; border-radius: var(--r-2); }
+a.team-plate .team-plate__name {
+  border-bottom: 1px dashed color-mix(in srgb, var(--gold) 45%, transparent);
+  transition: color var(--dur-1) var(--ease), border-color var(--dur-1) var(--ease);
+}
+a.team-plate:hover .team-plate__name,
+a.team-plate:focus-visible .team-plate__name { color: var(--gold); border-bottom-style: solid; }
+a.team-plate:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.team-head { padding: var(--sp-5) 0 var(--sp-3); border-bottom: 1px solid var(--line); margin-bottom: var(--sp-4); }
+.meta-card .hero-tile--sm { position: relative; flex: none; }
+.meta-card__sub .ev-tick { margin-left: 6px; }
+
+/* hero drill-down row on the stats table */
+.stat-table tbody tr.is-drillable { cursor: pointer; }
+.stat-table tbody tr.is-drillable:hover td,
+.stat-table tbody tr.is-drillable:focus-within td { background: color-mix(in srgb, var(--gold) 6%, transparent); }
+.hero-drill td { background: var(--surface-1); padding: 0; }
+.hero-drill__inner { display: grid; gap: var(--sp-4); padding: var(--sp-4); border-left: 3px solid var(--role-c, var(--gold)); }
+.hero-drill__head { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.hero-drill__face { width: 64px; height: 64px; border-radius: var(--r-3); overflow: hidden; border: 1px solid var(--line); flex: none; }
+.hero-drill__face img { width: 100%; height: 100%; object-fit: cover; }
+.hero-drill__prov { font-family: var(--font-mono); font-size: 10.5px; color: var(--tx-3); }
+.hero-drill__teams { display: grid; gap: 8px; }
+.drill-team {
+  display: grid; grid-template-columns: minmax(140px, 200px) 1fr auto auto; gap: 12px;
+  align-items: center; padding: 7px 10px; border: 1px solid var(--line);
+  border-radius: var(--r-2); background: var(--surface-0);
+}
+.drill-team .rb-track { height: 5px; }
+.drill-team__evi { display: flex; gap: 6px; flex-wrap: wrap; }
+@media (max-width: 700px) { .drill-team { grid-template-columns: 1fr auto; } .drill-team > .rate-cell { display: none; } }
+button.meta-card { width: 100%; text-align: left; font: inherit; color: inherit; cursor: pointer; }
+button.meta-card:hover { border-color: color-mix(in srgb, var(--gold) 45%, var(--line)); }
+button.meta-card:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }

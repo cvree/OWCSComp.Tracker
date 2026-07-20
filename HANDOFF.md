@@ -1,5 +1,98 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
+## CURRENT STATUS (authoritative — 2026-07-20) — real portraits, clickable teams, Calibration Lab
+
+This session built the "ultimate" autocalibration + stat-viewing layer on top
+of the existing pipeline. Everything below is verified live in headless
+Chromium (control-room server + all four pages, zero non-font console errors)
+and by the offline suite (**36 suites green under Python 3.11**; the only
+non-passing suite, `test_calibration_tools.py`, needs a real `ffmpeg` binary
+this sandbox lacks — it was already failing before this session for the same
+reason).
+
+### 1. Real hero portraits from actual broadcast crops
+`pipeline/build_hero_portraits.py` turns the harvested per-source template
+crops (`templates/<source>/*.png`) into public portrait assets
+(`assets/img/heroes/<id>.png`, 96px) + `manifest.json`. **Honesty rule
+enforced in code and tests:** only real broadcast crops are used — the
+root-level synthetic starter set is never touched. Each portrait picks the
+best variant by a deterministic quality score (nameplate trimmed off, hue
+diversity + sharpness floor kill dead/ult/damage-flash states) and records
+which exact crop it came from. 14 heroes have real portraits today (the two
+calibrated broadcasts' rosters). `export_data.py` attaches `portraitUrl` to
+both `data.js` and `public_data.v1.js`; `core.js` hero tiles already render
+it, so portraits now show on stats, match, team and calibration pages.
+Heroes without a harvested crop still fall back to role-tinted monograms.
+
+### 2. Clickable teams + a real team page
+`team.html` + `assets/js/public/page-team.js`: team header (record, region,
+tournaments), 4 summary cards (match/map record, heroes fielded, team-map
+appearances), a **role-grouped hero pool with portraits and per-hero
+evidence links**, and match history — all built from `OWCS_STATS`, so the
+same verified-comps-only credibility rule applies unchanged. `teamPlate`
+gained an `opt.link` that renders a real `<a>` to `team.html?id=…`; it's
+enabled only at call sites NOT already nested inside another anchor (no
+`<a>`-in-`<a>`) — match VS band, comps/bans rows, standings, tournament
+team cards, and the stats drill-down.
+
+### 3. Stats drill-down (click a hero → per-team breakdown)
+Every hero row on `stats.html` is now expandable (click / Enter / Space,
+`aria-expanded`, URL-persisted via `?hero=`): it opens a panel with the
+hero's real portrait, portrait provenance, and a **per-team pick/W–L
+breakdown** with evidence links, computed by the new `S.heroDetail()` in
+`stats.js` (same appearances as the pick-rate table, so nothing new is
+invented). Meta-snapshot cards became clickable buttons that jump to and
+open the matching hero's drill-down, and now carry portraits.
+
+### 4. Calibration Lab (the autocalibration dashboard)
+`calibration.html` (control-room shell, in the nav on every control page) +
+`pipeline/calibration_status.py` + `GET /api/calibration` & `/api/portraits`
+on `serve.py`. For every real source it reports, **honestly, only what's on
+disk and in the DB**: layout + native size, auto-calibrator confidence,
+`hud_probe` present (without it the gameplay filter reads zero frames),
+round-emblem rect, reject-marker count (+ whether the PNGs resolve),
+per-source template coverage vs the 52-hero roster (with a bar), calibration
+reports found, and ingest-run status counts. Each source is graded
+ok / warn / fail with explicit "what's left" reasons and a copy-ready
+`calibrate_source.py` command. It also shows the real harvested portraits
+with provenance. Works live against the control-room server and degrades to
+a `data.js`-derived static view on plain hosting.
+
+### Also fixed (pre-existing, blocked 4 test suites)
+`pipeline/ingest_map.py:1076` had a multiline-f-string that only parses on
+Python 3.12+ (PEP 701); it made the core ingest module un-importable on
+3.11 and broke `test_map_ingestion`, `test_calibration_health`,
+`test_ingest_ocr_wiring`, `test_post_unlock_grace`. Rewritten to a 3.11-safe
+form (110 checks unblocked).
+
+### New/changed files
+NEW: `calibration.html`, `team.html`, `assets/js/public/page-team.js`,
+`assets/img/heroes/*` (14 portraits + manifest),
+`pipeline/build_hero_portraits.py`, `pipeline/calibration_status.py`,
+`pipeline/test_calibration_dashboard.py`.
+MODIFIED: `export_data.py` (portraitUrl), `serve.py` (2 endpoints),
+`ingest_map.py` (f-string fix), `core.js`/`stats.js`/`page-stats.js`/
+`page-match.js`/`page-tournament.js` (links + drill-down),
+`public.css` (team/drill/calibration styles), `run/runs/sources/admin.html`
+(Calibration nav link), the three affected test suites, regenerated
+`data.js` + `public_data.v1.js`.
+
+### Not done / honest gaps (unchanged from before + notes)
+- The CR-ZETA match (`m-cr-zeta-ccuf`) still has **no `ingest_map.py
+  --write`** — so it does not appear in `public_data.v1.js` yet (only the
+  Nepal `m-qad-twis-s2po` match does). Portraits, the Calibration Lab and
+  the team/stats drill-downs all work now; they'll simply gain breadth the
+  moment CR-ZETA is written. The next-command block below still applies.
+- The Nepal broadcast isn't registered as a *source* row in
+  `video_sources.json` (only its match/layout exist), so the Calibration
+  Lab lists the two registered sources; add a source row if you want its
+  card too.
+- `ffmpeg` is required for `test_calibration_tools.py` and for any real
+  clip work — not present in this sandbox.
+
+---
+
+
 ## CURRENT STATUS (authoritative — 2026-07-18)
 
 **The pipeline now processes a COMPLETE map end-to-end and the real data

@@ -203,7 +203,7 @@ def main() -> None:
 
     print("public pages load the public shell:")
     pages = ["tournaments.html", "tournament.html", "match.html",
-             "stats.html", "matches.html"]
+             "stats.html", "matches.html", "team.html"]
     for p in pages:
         h = read(p)
         check(f"{p}: public.css + fixture + core + shell wired",
@@ -266,6 +266,44 @@ def main() -> None:
           "aria-sort" in ps and "data-sort" in ps)
     check("stats evidence links open the match evidence tab",
           "tab=evidence" in ps)
+    check("stats hero rows drill down to a per-team breakdown",
+          "is-drillable" in ps and "drillPanel" in ps and "heroDetail" in ps)
+    check("stats meta cards are clickable buttons that open a hero",
+          'button type="button" class="meta-card' in ps and "data-hero" in ps)
+    check("stats drill-down keeps the credibility rule (via heroDetail)",
+          "S.heroDetail" in read("assets/js/public/stats.js")
+          and "computeHeroStats" in read("assets/js/public/stats.js"))
+
+    print("real hero portraits (from broadcast crops):")
+    core = read("assets/js/public/core.js")
+    check("core hero tile renders portraitUrl when present",
+          "portraitUrl" in core)
+    manifest_p = os.path.join(ROOT, "assets", "img", "heroes",
+                              "manifest.json")
+    check("portrait manifest exists", os.path.exists(manifest_p))
+    if os.path.exists(manifest_p):
+        with open(manifest_p, encoding="utf-8") as f:
+            man = json.load(f)
+        check("every portrait traces to a REAL per-source broadcast crop "
+              "(never the synthetic starter set)",
+              bool(man.get("heroes")) and all(
+                  "/" in m["file"] and m["file"].startswith("templates/")
+                  and m["file"].count("/") >= 2   # templates/<source>/<file>
+                  for m in man["heroes"].values()))
+        check("each manifest hero has its generated png on disk",
+              all(os.path.exists(os.path.join(ROOT, "assets", "img",
+                  "heroes", f"{h}.png")) for h in man["heroes"]))
+
+    print("clickable teams:")
+    check("core team plate can render a real anchor to the team page",
+          "team-plate--link" in core and "team.html?id=" in core)
+    check("team page built on the public shell + reads verified stats only",
+          "OWCS_STATS" in read("assets/js/public/page-team.js")
+          and "computeHeroStats" in read("assets/js/public/page-team.js"))
+    check("match/tournament pages link team plates (opt.link) "
+          "only outside nested anchors",
+          "link: true" in read("assets/js/public/page-match.js")
+          and "link: true" in read("assets/js/public/page-tournament.js"))
 
     print("accessibility + state markup:")
     css = read("assets/css/public.css")

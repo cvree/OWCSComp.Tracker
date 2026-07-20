@@ -65,7 +65,7 @@ def main() -> None:
 
     print("pages load the shared system:")
     pages = ["index.html", "run.html", "runs.html", "sources.html",
-             "admin.html", "teams.html",
+             "admin.html", "teams.html", "calibration.html",
              "prep.html", "fact-admin.html"]
     for p in pages:
         h = read(p)
@@ -99,6 +99,22 @@ def main() -> None:
         missing = [x for x in set(hrefs)
                    if not os.path.exists(os.path.join(ROOT, x))]
         check(f"{p}: all page links exist ({len(set(hrefs))})", not missing)
+
+    print("calibration.html — the autocalibration dashboard:")
+    ch = read("calibration.html")
+    check("reads the calibration + portraits APIs",
+          "/api/calibration" in ch and "/api/portraits" in ch
+          or ("/api/calibration" in ch and "manifest.json" in ch))
+    check("has a static (no-server) fallback from data.js",
+          "staticStatus" in ch and "OWCS_DATA" in ch)
+    check("surfaces the honest health signals",
+          all(s in ch for s in ["confidence", "hudProbe", "rejectMarkers",
+                                 "templates"]))
+    check("shows real hero portraits, never synthetic",
+          "assets/img/heroes/" in ch and "broadcast" in ch.lower())
+    check("every control page links Calibration in the nav",
+          all('href="calibration.html"' in read(p) for p in
+              ["run.html", "runs.html", "sources.html", "admin.html"]))
 
     print("run.html keeps the control-room contract:")
     h = read("run.html")
