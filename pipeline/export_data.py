@@ -478,6 +478,17 @@ def _region_id(raw: str | None) -> str:
     return r if r in {x["id"] for x in REGIONS} else "all"
 
 
+def _tournament_id(m: Any) -> str:
+    """Stable slug from the match's real event/season/stage — never a
+    single hardcoded id, so two matches from different events never get
+    silently lumped into (or overwrite) the same tournament."""
+    import re
+    parts = [rv(m, "event_name") or "owcs", rv(m, "season") or "",
+             rv(m, "stage") or ""]
+    slug = re.sub(r"[^a-z0-9]+", "-", "-".join(parts).lower()).strip("-")
+    return slug or "owcs-2026"
+
+
 def _fmt_clock(seconds: int | None) -> str | None:
     if seconds is None:
         return None
@@ -562,7 +573,7 @@ def build_public_payload(con) -> dict:
     teams_needed: set[str] = set()
     matches_out, runs_out, snaps_out, players_out = [], [], [], []
     vod_out: dict[str, dict] = {}
-    tournaments_out = []
+    tournaments_by_id: dict[str, dict] = {}
 
     for mid in match_ids:
         m = con.execute("SELECT * FROM matches WHERE id=?",
@@ -570,7 +581,7 @@ def build_public_payload(con) -> dict:
         if m is None:
             continue
         teams_needed.update((m["team_a"], m["team_b"]))
-        tid = "owcs-2026-naemea-s2po"
+        tid = _tournament_id(m)
         maps_out = []
         for mr in con.execute(
                 """SELECT * FROM map_results WHERE match_id=?
@@ -696,10 +707,11 @@ def build_public_payload(con) -> dict:
                 "heightAvailable": 1080,
             }
 
+        stage_name = rv(m, "stage") or "Matches"
         matches_out.append({
             "id": mid,
             "tournamentId": tid,
-            "stageId": f"{tid}-playoffs",
+            "stageId": f"{tid}-stage",
             "roundId": None,
             "teamA": m["team_a"],
             "teamB": m["team_b"],
@@ -717,36 +729,43 @@ def build_public_payload(con) -> dict:
                          "lastSynced": now}] if vurl else [],
             "captureStatus": "needs-review",
             "captureRunId": run_ids[0] if run_ids else None,
-            "summary": ("Map 1 (Nepal) captured and ingested by the CV "
-                        "pipeline; series score not yet recorded — only "
-                        "verified data is shown."),
+            "summary": (f"{len(maps_out)} map(s) captured and ingested by "
+                        "the CV pipeline; series score not yet recorded — "
+                        "only verified data is shown."),
             "maps": maps_out,
         })
 
-        tournaments_out = [{
-            "id": tid,
-            "name": rv(m, "event_name") or "OWCS 2026 Stage 2 Playoffs",
-            "series": "OWCS",
-            "region": _region_id(rv(m, "region")),
-            "tier": "S",
-            "year": 2026,
-            "startsAt": f"{m['date']}T00:00:00+00:00",
-            "endsAt": None,
-            "status": "completed",
-            "prizePool": None,
-            "teamIds": sorted(teams_needed),
-            "winnerTeamId": None,
-            "summary": ("NA/EMEA Stage 2 Playoffs. Matches appear here "
-                        "as their VODs are captured and reviewed."),
-            "logoUrl": None,
-            "sources": ([{"type": "vod", "url": vurl,
-                          "lastSynced": now}] if vurl else []),
-            "stages": [{"id": f"{tid}-playoffs",
-                        "name": "Stage 2 Playoffs", "order": 1,
-                        "format": "Double elimination",
-                        "status": "completed"}],
-            "standings": [],
-        }]
+        if tid not in tournaments_by_id:
+            tournaments_by_id[tid] = {
+                "id": tid,
+                "name": rv(m, "event_name") or "OWCS 2026",
+                "series": "OWCS",
+                "region": _region_id(rv(m, "region")),
+                "tier": "S",
+                "year": 2026,
+                "startsAt": f"{m['date']}T00:00:00+00:00",
+                "endsAt": None,
+                "status": "completed",
+                "prizePool": None,
+                "teamIds": set(),
+                "winnerTeamId": None,
+                "summary": (f"{stage_name}. Matches appear here as their "
+                            "VODs are captured and reviewed."),
+                "logoUrl": None,
+                "sources": [],
+                "stages": [{"id": f"{tid}-stage", "name": stage_name,
+                            "order": 1, "format": "Double elimination",
+                            "status": "completed"}],
+                "standings": [],
+            }
+        tourn = tournaments_by_id[tid]
+        tourn["teamIds"].update((m["team_a"], m["team_b"]))
+        if vurl and not any(s["url"] == vurl for s in tourn["sources"]):
+            tourn["sources"].append({"type": "vod", "url": vurl,
+                                     "lastSynced": now})
+
+    tournaments_out = [dict(t, teamIds=sorted(t["teamIds"]))
+                       for t in tournaments_by_id.values()]
 
     teams = [{"id": r["id"], "name": r["name"], "code": r["code"],
               "region": _region_id(rv(r, "region")),

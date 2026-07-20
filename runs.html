@@ -180,6 +180,7 @@
        <div class="run-links">
          <a href="${esc(r.reportPath)}">full report</a>
          <a href="reports/ingest/${esc(r.id)}/review.html">change-point review</a>
+         <a href="reports/ingest/${esc(r.id)}/crops.html">hero crop report</a>
        </div>`;
     root.appendChild(card);
   }
@@ -265,14 +266,14 @@
        </div>
        <div class="run-links">
          <a href="${esc(r.reportDir)}index.html">full report</a>
-         <a href="${esc(r.reportDir)}vision_dashboard.html" title="generate with: py pipeline\\vision_dashboard.py --run ${esc(r.run)} --open">vision dashboard</a>
+         <a href="${esc(r.reportDir)}vision_dashboard.html" title="hero/anchor/score debugging for every frame in this run — auto-generated with the run; if missing, use regenerate evidence below">vision dashboard</a>
          <a href="${esc(r.reportDir)}layout.html">layout debug</a>
          <a href="${esc(r.reportDir)}crops.html">crop report</a>` +
          (det.status === "ok"
            ? `<a href="${esc(r.reportDir)}detections.json">detections.json</a>`
              + `<a href="${esc(r.reportDir)}review_queue.json" title="promote-gate output; may not exist until you run promote_detections.py">review queue</a>`
            : "") +
-         `<button class="ev-btn" style="display:none" type="button" onclick="regenEvidence('${esc(r.run)}', this)" title="re-run layout.html + crops.html from this run's frames (no re-download)">regenerate evidence</button>` +
+         `<button class="ev-btn" style="display:none" type="button" onclick="regenEvidence('${esc(r.run)}', this)" title="re-run layout.html + crops.html + vision_dashboard.html from this run's frames (no re-download)">regenerate evidence</button>` +
       `</div>` +
       (r.error ? `<div class="err-line">error: ${esc(r.error)}</div>` : "") +
       stepsBlock;

@@ -326,6 +326,7 @@ def build_evidence_cmds(run_name: str) -> tuple[list | None, str | None]:
             "--out", os.path.join(report, "layout_debug")),
         _py("build_crop_report.py", "--layout", layout,
             "--frames-dir", frames, "--report-dir", report),
+        _py("vision_dashboard.py", "--run", run_name, "--layout", layout),
     ], None
 
 

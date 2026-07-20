@@ -145,7 +145,7 @@ def main() -> None:
     check("crop report css is dark-themed", "#060b15" in bcr._CSS)
     check("crop label colors on-palette",
           bcr._LABEL_COLORS["OK"] == "#2ebd6b"
-          and bcr._LABEL_COLORS["NO-MATCH"] == "#ff5c64")
+          and bcr._LABEL_COLORS["UNKNOWN"] == "#ff5c64")
 
     print("primary real-VOD source is registered:")
     import json as _json

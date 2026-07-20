@@ -238,10 +238,12 @@ def main() -> int:
     try:
         code, j = api(port, "/api/evidence", {"run": "src-a_013000_013030"})
         st = wait_idle(port)
-        check("evidence job = layout debug THEN crop report",
-              code == 200 and len(fr.cmds) == 2
+        check("evidence job = layout debug, crop report, THEN vision "
+              "dashboard",
+              code == 200 and len(fr.cmds) == 3
               and fr.cmds[0][1].endswith("build_layout_debug.py")
               and fr.cmds[1][1].endswith("build_crop_report.py")
+              and fr.cmds[2][1].endswith("vision_dashboard.py")
               and st["returncode"] == 0)
     finally:
         import shutil

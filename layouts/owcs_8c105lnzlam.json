@@ -26,6 +26,25 @@
   "frame_width": 1920,
   "frame_height": 1080,
   "sample_interval_seconds": 10,
+  "hud_probe": {
+    "_adjust": "chips_a/chips_b = the ult-charge % readout above each portrait (same cell as the chip box derived alongside slots_a/slots_b: chip_x = slot_x - 54, same y/w/h). Verified against a real t=365s frame: median sat 108-164, val 188-228 across all 10 cells; sat_min/val_min set with margin below the observed minimum.",
+    "chips_a": [
+      [40, 103, 54, 54],
+      [147, 103, 54, 54],
+      [254, 103, 54, 54],
+      [361, 103, 54, 54],
+      [468, 103, 54, 54]
+    ],
+    "chips_b": [
+      [1349, 103, 54, 54],
+      [1456, 103, 54, 54],
+      [1562, 103, 54, 54],
+      [1669, 103, 54, 54],
+      [1776, 103, 54, 54]
+    ],
+    "sat_min": 90,
+    "val_min": 150
+  },
   "anchor": {
     "_adjust": "PLACEHOLDER — cut layouts/owcs_8c105lnzlam-anchor.png from a live-HUD region (e.g. the team nameplate) to activate the gameplay filter.",
     "rect": [

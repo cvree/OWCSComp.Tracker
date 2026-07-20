@@ -80,6 +80,46 @@
       </tr>`).join("")}</tbody></table></div>`;
   }
 
+  const ROLE_ORDER = ["Tank", "Damage", "Support"];
+  const MAX_PER_ROLE = 6;
+
+  function metaSnapshot(rows) {
+    if (!rows.length)
+      return `<div class="meta-snap-empty">${P.emptyState("◈", "No verified comps yet",
+        "The meta snapshot fills in as ingested maps clear review.")}</div>`;
+    const byRole = new Map();
+    rows.forEach((r) => {
+      const role = ROLE_ORDER.includes(r.role) ? r.role : "Other";
+      if (!byRole.has(role)) byRole.set(role, []);
+      byRole.get(role).push(r);
+    });
+    const roles = ROLE_ORDER.filter((r) => byRole.has(r))
+      .concat(Array.from(byRole.keys()).filter((r) => !ROLE_ORDER.includes(r)));
+    return roles.map((role) => {
+      const list = byRole.get(role).slice().sort((a, b) => b.pickRate - a.pickRate || a.name.localeCompare(b.name));
+      const shown = list.slice(0, MAX_PER_ROLE);
+      const top = shown[0].pickRate || 0.0001;
+      const cards = shown.map((r, i) => {
+        const lead = i === 0;
+        const fill = Math.round((r.pickRate / top) * 100);
+        return `<div class="meta-card${lead ? " meta-card--lead" : ""}" style="--fill:${fill}%">
+          <span class="meta-card__rank">${lead ? "★" : i + 1}</span>
+          <span class="meta-card__body">
+            <span class="meta-card__name">${esc(r.name)}</span><br>
+            <span class="meta-card__sub">${r.picks} pick${r.picks === 1 ? "" : "s"}${r.winRate == null ? "" : " · " + r.wins + "–" + r.losses}</span>
+          </span>
+          <span class="meta-card__pct">${pct(r.pickRate)}</span>
+        </div>`;
+      }).join("");
+      const more = list.length > MAX_PER_ROLE
+        ? `<div class="faint" style="font-size:11px;padding:2px 2px 0">+${list.length - MAX_PER_ROLE} more</div>` : "";
+      return `<div class="meta-col" data-role="${esc(role)}">
+        <div class="meta-col__head">${esc(role)}<span class="mc-n">${list.length}</span></div>
+        ${cards}${more}
+      </div>`;
+    }).join("");
+  }
+
   function banTable(rows) {
     if (!rows.length)
       return P.emptyState("🚫", "No ban data for these filters", "Bans appear as match imports run.");
@@ -121,6 +161,7 @@
       `<span>${hs.rows.length} hero${hs.rows.length === 1 ? "" : "es"} · ${sum.comps} comps</span>` +
       (active.length ? active.map(([k, v]) => `<span class="fs-pill">${esc(k.replace("Id", ""))}: ${esc(k === "region" ? P.regionName(v) : v)}</span>`).join("") : `<span class="faint">no filters</span>`);
     P.$("#s-hero-count").textContent = hs.rows.length ? `${hs.rows.length} heroes` : "";
+    P.$("#s-meta").innerHTML = metaSnapshot(hs.rows);
     P.$("#s-hero-table").innerHTML = heroTable(hs.rows);
     P.$("#s-ban-table").innerHTML = banTable(bs.rows);
     P.observeReveals(document);

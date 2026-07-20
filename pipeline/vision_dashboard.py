@@ -472,6 +472,8 @@ def _cell(c: dict, crop_rel, ctx_rel, quality) -> dict:
     return {"id": c.get("id") or "", "slot": c.get("slot") or "",
             "crop_rel": crop_rel, "ctx_rel": ctx_rel, "quality": quality,
             "guess": c.get("guess"), "score": c.get("score"),
+            "second": c.get("second"), "second_score": c.get("secondScore"),
+            "margin": c.get("margin"), "reject": c.get("reject"),
             "label": c.get("label"),
             "label_status": c.get("label_status") or "unlabeled",
             "note": c.get("note") or ""}
@@ -635,10 +637,22 @@ def render_html(P: dict, checks: list[dict], rec: dict, visuals: dict,
                     "<div class='missing'>no crop</div>")
             ctx = (f"<img class='ctx' src='{_E(c['ctx_rel'])}' "
                    "loading='lazy'>" if c["ctx_rel"] else "")
-            det = (f"guess: <b>{_E(c['guess'])}</b> ({_E(c['score'])})"
-                   if c["guess"] is not None else
-                   ("score: " + _E(c["score"]) if c["score"] is not None
-                    else "no detector data"))
+            if c["guess"] == "UNKNOWN":
+                # read_slot refused to call it — show why, never a bare
+                # score that could look like a confident pick.
+                det = (f"guess: <b style='color:var(--bad)'>UNKNOWN</b>"
+                       + (f"<div class='missing'>{_E(c['reject'])}</div>"
+                          if c["reject"] else ""))
+            elif c["guess"] is not None:
+                det = f"guess: <b>{_E(c['guess'])}</b> ({_E(c['score'])})"
+                if c["second"] is not None:
+                    det += (f"<div class='missing'>2nd {_E(c['second'])} "
+                            f"({_E(c['second_score'])}) &middot; margin "
+                            f"{_E(c['margin'])}</div>")
+            elif c["score"] is not None:
+                det = "score: " + _E(c["score"])
+            else:
+                det = "no detector data"
             lab = (f"label: <b>{_E(c['label'])}</b>"
                    if c["label"] else c["label_status"])
             cells += (

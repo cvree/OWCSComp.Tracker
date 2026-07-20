@@ -71,6 +71,11 @@ def make_steps(order, detect_status="skipped"):
         order.append("debug")
         return {"images": 3, "outDir": out}
 
+    def dashboard(run_name, layout):
+        order.append("dashboard")
+        return {"status": "ok", "out": "vision_dashboard.html",
+                "next": "nothing — every check passed"}
+
     def export():
         order.append("export")
         return {"out": "assets/js/data.js", "matches": 0}
@@ -81,7 +86,7 @@ def make_steps(order, detect_status="skipped"):
 
     return dict(probe_fn=probe, clip_fn=clip, frame_fn=frame,
                 filter_fn=filt, detect_fn=detect, debug_fn=debug,
-                export_fn=export, status_fn=status,
+                dashboard_fn=dashboard, export_fn=export, status_fn=status,
                 preflight_fn=preflight), status
 
 
@@ -105,9 +110,9 @@ def main():
                            every=30, sources_path=sources, **steps)
     got = [s for s in order if not s.startswith("frame@")]
     check("steps run in order preflight→probe→clip→filter→detect→debug→"
-          "export→status",
+          "dashboard→export→status",
           got == ["preflight", "probe", "clip", "filter", "detect", "debug",
-                  "status", "export", "status"])
+                  "dashboard", "status", "export", "status"])
     check("status upserted before export (run visible in exported data)",
           order.index("status") < order.index("export"))
     check("frames extracted between clip and filter",
@@ -122,9 +127,10 @@ def main():
 
     print("progress logging:")
     out = buf.getvalue()
-    check("numbered step banners", "[auto] [1/8] preflight" in out
-          and "[auto] [2/8] probe" in out
-          and "[auto] [8/8] export" in out)
+    check("numbered step banners", "[auto] [1/9] preflight" in out
+          and "[auto] [2/9] probe" in out
+          and "[auto] [8/9] vision debug dashboard" in out
+          and "[auto] [9/9] export" in out)
     check("shows window + frame count",
           "1:30:00-1:31:30" in out and "3 planned frame(s)" in out)
     check("per-frame progress lines", "[1/3] frame @ 1:30:00" in out)
@@ -179,15 +185,19 @@ def main():
 
     print("per-step status records (Phase 1):")
     names = [s["name"] for s in rec["steps"]]
-    check("success run records all 8 steps",
+    check("success run records all 9 steps",
           names == ["preflight", "probe", "clip", "frames", "filter",
-                    "detect", "layout-debug", "export"])
+                    "detect", "layout-debug", "vision-dashboard", "export"])
     check("step records carry name/status/detail/out keys",
           all(set(s) >= {"name", "status", "detail", "out"}
               for s in rec["steps"]))
     check("detect step surfaces skipped + reason",
           next(s for s in rec["steps"] if s["name"] == "detect")["status"]
           == "skipped")
+    vstep = next(s for s in rec["steps"] if s["name"] == "vision-dashboard")
+    check("vision-dashboard step ran ok and names the next action",
+          vstep["status"] == "ok" and "next:" in vstep["detail"]
+          and vstep["out"].endswith("vision_dashboard.html"))
     check("unfiltered filter step shows skipped, not silent ok",
           next(s for s in rec["steps"] if s["name"] == "filter")["status"]
           == "skipped")
@@ -204,7 +214,7 @@ def main():
     check("failed runStatus label", rec3["runStatus"] == "failed")
     check("steps survive the auto_runs upsert round-trip",
           isinstance(status3.record.get("steps"), list)
-          and len(status3.record["steps"]) == 8)
+          and len(status3.record["steps"]) == 9)
 
     print("report generation (success + failure):")
     rep_ok = os.path.join(ROOT, "reports", "auto",
@@ -314,8 +324,8 @@ def main():
         roa.run_auto(local=local, start=0, end=60, every=30,
                      sources_path=sources, **stepsS)
     pre_export = snaps[0]   # the upsert that export_fn will read
-    check("pre-export upsert already has all 8 steps incl. export:ok",
-          len(pre_export["steps"]) == 8
+    check("pre-export upsert already has all 9 steps incl. export:ok",
+          len(pre_export["steps"]) == 9
           and pre_export["steps"][-1]["name"] == "export"
           and pre_export["steps"][-1]["status"] == "ok")
     check("pre-export upsert has final runStatus + finishedAt",
@@ -334,7 +344,7 @@ def main():
     check("export step flips ok -> failed (no duplicate row)",
           recE["ok"] is False and recE["runStatus"] == "failed"
           and byE["export"]["status"] == "failed"
-          and len(recE["steps"]) == 8
+          and len(recE["steps"]) == 9
           and "disk full" in byE["export"]["detail"])
 
     print("video-only download by default (--with-audio opts in):")

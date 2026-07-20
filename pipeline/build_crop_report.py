@@ -1,17 +1,23 @@
 #!/usr/bin/env python3
 """
 build_crop_report.py — cut every hero slot from calibration frames and emit
-crops.html: 10 crop strips per frame, each side-by-side with the best-matching
-hero template and its score (blueprint Phase 2 evidence page).
+crops.html: 10 crop strips per frame, each side-by-side with the closest-
+matching hero template and an honest read — top candidate, runner-up,
+score margin, and rejection reason (blueprint Phase 2 evidence page).
 
 This is how you verify — by eye, in the browser — that every layout box
 contains exactly one hero portrait, and later which templates are clean.
-It reads no comps and writes nothing to the database.
+It reads no comps and writes nothing to the database. Matching goes through
+detect.read_slot(), the same honest-evidence API the real ingest pipeline
+uses: a weak or ambiguous match is never silently shown as a confident
+hero label.
 
 Score labels (from the layout's match_threshold, default 0.6):
-  OK        score >= match_threshold
-  LOW       LOW_FLOOR <= score < match_threshold  (needs review)
-  NO-MATCH  score < LOW_FLOOR
+  OK       read_slot named a hero AND score >= match_threshold
+  LOW      read_slot named a hero but score < match_threshold (needs review)
+  UNKNOWN  read_slot itself refused to call it — below the match floor, or
+           the top two candidates were too close to trust (see the reject
+           reason shown on the cell)
   no templates yet -> crops only, clearly labeled.
 
 Usage:
@@ -34,7 +40,7 @@ import build_layout_debug as bld  # noqa: E402
 
 LOW_FLOOR = 0.35
 MAX_FRAMES = 8          # crops.html stays light; earliest N frames
-_LABEL_COLORS = {"OK": "#2ebd6b", "LOW": "#e8a13c", "NO-MATCH": "#ff5c64"}
+_LABEL_COLORS = {"OK": "#2ebd6b", "LOW": "#e8a13c", "UNKNOWN": "#ff5c64"}
 
 _CSS = """
 :root{--bg:#060b15;--raise:#0c1524;--surface:#111c31;--line:#1f2e4d;
@@ -48,7 +54,7 @@ h2{font-family:"Chakra Petch",sans-serif;font-size:.95rem;margin-top:26px;
 text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
 .strip{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
 .cell{border:1px solid var(--line);border-radius:8px;padding:6px;
-background:var(--surface);text-align:center;font-size:.72rem;width:96px;
+background:var(--surface);text-align:center;font-size:.72rem;width:128px;
 color:var(--muted);transition:border-color .12s ease}
 .cell:hover{border-color:var(--amber)}
 .cell img{width:80px;image-rendering:auto;border:1px solid var(--line);
@@ -79,12 +85,15 @@ def _esc(v) -> str:
             .replace(">", "&gt;"))
 
 
-def _label(score: float, threshold: float) -> str:
-    if score >= threshold:
-        return "OK"
-    if score >= LOW_FLOOR:
-        return "LOW"
-    return "NO-MATCH"
+def _label(read: dict, threshold: float) -> str:
+    """OK/LOW/UNKNOWN from a detect.read_slot() result.
+
+    UNKNOWN means read_slot itself refused to name a hero (below its match
+    floor, or the top two candidates were too close) — that verdict is
+    never downgraded back into a confident-looking score label."""
+    if read["hero"] == "UNKNOWN":
+        return "UNKNOWN"
+    return "OK" if read["score"] >= threshold else "LOW"
 
 
 def _try_load_lib(layout: dict, templates_dir: str | None):
@@ -126,12 +135,27 @@ def crop_slots(frame_bgr, layout: dict) -> list[dict]:
 
 def process(frames_dir: str, layout: dict, report_dir: str,
             templates_dir: str | None = None,
-            max_frames: int = MAX_FRAMES) -> dict:
-    """Write crops + crops.html into report_dir. Returns a summary dict."""
+            max_frames: int = MAX_FRAMES,
+            name_filter=None,
+            run_report_href: str = "index.html",
+            layout_href: str | None = "layout.html") -> dict:
+    """Write crops + crops.html into report_dir. Returns a summary dict.
+
+    name_filter, if given, is a f(filename) -> bool applied on top of the
+    image-extension check — lets a caller whose frames_dir can accumulate
+    stale/differently-named leftovers (e.g. ingest_map.py's FrameServer
+    cache across re-runs) restrict to its own current-scheme filenames.
+
+    run_report_href/layout_href point the footer nav at whatever this
+    caller's report is actually named — the run_owcs_auto.py pipeline
+    writes index.html + layout.html alongside crops.html, but other
+    callers (e.g. ingest_map.py's report.html, which has no layout.html)
+    need different targets. Pass layout_href=None to omit that link."""
     if not os.path.isdir(frames_dir):
         raise FileNotFoundError(f"no frames dir: {frames_dir}")
     frames = sorted(f for f in os.listdir(frames_dir)
-                    if f.lower().endswith((".png", ".jpg", ".jpeg")))
+                    if f.lower().endswith((".png", ".jpg", ".jpeg"))
+                    and (name_filter is None or name_filter(f)))
     crops_dir = os.path.join(report_dir, "crops")
     os.makedirs(crops_dir, exist_ok=True)
     ann_dir = os.path.join(report_dir, "annotated")
@@ -193,20 +217,38 @@ def process(frames_dir: str, layout: dict, report_dir: str,
             body = f"{slot_id}<br><img src='crops/{_esc(crop_fn)}'>"
             if lib:
                 gray = cv2.cvtColor(s["crop"], cv2.COLOR_BGR2GRAY)
-                hero, score = detect.match_slot(gray, lib)
-                lab = _label(score, threshold)
-                if hero and hero not in saved_tpl:  # show what it matched
-                    tfn = f"tpl_{hero}.png"
-                    # lib entries are (gray_img, filename) pairs
-                    cv2.imwrite(os.path.join(crops_dir, tfn),
-                                lib[hero][0][0])
-                    saved_tpl[hero] = tfn
-                tpl_img = (f"<img src='crops/{_esc(saved_tpl[hero])}'>"
-                           if hero in saved_tpl else "")
-                body += (f"{tpl_img}"
+                read = detect.read_slot(gray, lib)
+                lab = _label(read, threshold)
+                # closest candidate survives even when hero == 'UNKNOWN', so
+                # the cell can still show what the crop looked most like
+                closest = (max(read["scores"], key=read["scores"].get)
+                           if read["scores"] else "")
+                tpl_key = read["template"]
+                if tpl_key and tpl_key not in saved_tpl:  # what it matched
+                    tpl_img = next((img for img, fn in lib.get(closest, [])
+                                    if fn == tpl_key), None)
+                    if tpl_img is not None:
+                        base_key = (tpl_key[:-4] if tpl_key.lower()
+                                   .endswith(".png") else tpl_key)
+                        tfn = f"tpl_{base_key.replace('.', '_')}.png"
+                        cv2.imwrite(os.path.join(crops_dir, tfn), tpl_img)
+                        saved_tpl[tpl_key] = tfn
+                tpl_thumb = (f"<img src='crops/{_esc(saved_tpl[tpl_key])}'>"
+                             if tpl_key in saved_tpl else "")
+                if lab == "UNKNOWN":
+                    detail = (f"<span class='muted'>closest "
+                              f"{_esc(closest) or '—'} {read['score']:.2f}"
+                              f"</span><br><span class='muted'>"
+                              f"{_esc(read['reject'])}</span>")
+                else:
+                    detail = (f"{_esc(read['hero'])} {read['score']:.2f}<br>"
+                              f"<span class='muted'>2nd "
+                              f"{_esc(read['second']) or '—'} "
+                              f"{read['second_score']:.2f} &middot; margin "
+                              f"{read['margin']:.3f}</span>")
+                body += (f"{tpl_thumb}"
                          f"<span class='pill' style='background:"
-                         f"{_LABEL_COLORS[lab]}'>{lab}</span><br>"
-                         f"{_esc(hero) or '—'} {score:.2f}")
+                         f"{_LABEL_COLORS[lab]}'>{lab}</span><br>{detail}")
             cells.append(f"<div class='cell'>{body}</div>")
         got = sum(1 for c in cells if "BAD BOX" not in c)
         count_note = (f"<span class='muted'> — {got}/10 slots cropped"
@@ -217,11 +259,17 @@ def process(frames_dir: str, layout: dict, report_dir: str,
                         f"<div class='strip'>{''.join(cells)}</div>")
 
     if lib:
-        head_note = (f"<p class='muted'>Each cell: slot crop, the template "
-                     f"it matched best, and the score. OK &ge; {threshold}, "
-                     f"LOW &ge; {LOW_FLOOR}, else NO-MATCH. Low scores on "
-                     "real portraits usually mean the box or the template "
-                     "needs work — never a comp claim.</p>")
+        head_note = (f"<p class='muted'>Each cell: slot crop, the closest-"
+                     "matching template, and an honest read — top hero, "
+                     "runner-up, and score margin. <b>OK</b> &ge; "
+                     f"{threshold} with a clear top pick. <b>LOW</b> below "
+                     f"{threshold} but still a clear pick — needs review "
+                     "before trusting. <b>UNKNOWN</b> means the match "
+                     f"itself refused to call it (best score below "
+                     f"{LOW_FLOOR}, or the top two candidates were too "
+                     "close) — never a silently-confident guess. Low "
+                     "scores on real portraits usually mean the box or the "
+                     "template needs work — never a comp claim.</p>")
     else:
         head_note = (f"<div class='warn'>No hero templates yet "
                      f"({_esc(lib_reason or '')}) — crops only. Verify every "
@@ -233,8 +281,10 @@ def process(frames_dir: str, layout: dict, report_dir: str,
             f"<h1>Hero crop report — {min(len(frames), max_frames)} of "
             f"{len(frames)} frame(s)</h1>"
             f"{head_note}"
-            "<p><a href='layout.html'>layout debug</a> · "
-            "<a href='index.html'>run report</a> · "
+            "<p>"
+            + (f"<a href='{_esc(layout_href)}'>layout debug</a> · "
+               if layout_href else "")
+            + f"<a href='{_esc(run_report_href)}'>run report</a> · "
             "<a href='../../../runs.html'>all runs</a></p>"
             + "".join(sections or
                       ["<p class='muted'>No readable frames.</p>"])

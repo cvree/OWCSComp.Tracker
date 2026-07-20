@@ -1198,6 +1198,25 @@ def run(args) -> dict:
     build_ingest_report.build(args.ingest_id, args.layout,
                               result.get("db"), pairing)
     log(f"report -> {out_root}/report.html · review -> review.html")
+
+    # every report gets a hero crop report — the per-frame, per-slot evidence
+    # grid (top hero, runner-up, margin, honest UNKNOWN) that's otherwise
+    # only visible via observations.jsonl. Best-effort: never fails the run.
+    try:
+        import build_crop_report
+        # FrameServer names this run's frames "t<offset>.jpg"; a frames_dir
+        # reused across re-runs can also hold un-renamed "base######.jpg"
+        # leftovers from an earlier extraction — never show those as
+        # evidence for this ingest.
+        cres = build_crop_report.process(
+            frames_dir, layout, out_root,
+            name_filter=lambda fn: fn.startswith("t"),
+            run_report_href="report.html", layout_href=None)
+        log(f"crop report -> {out_root}/crops.html "
+            f"({cres['crops']} crop(s) from {cres['frames']} frame(s))")
+    except Exception as e:
+        log(f"crop report failed (non-fatal): {type(e).__name__}: {e}")
+
     return result
 
 

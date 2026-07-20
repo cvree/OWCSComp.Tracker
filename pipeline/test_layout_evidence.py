@@ -38,14 +38,21 @@ def good_layout() -> dict:
 
 
 def synth_frame(layout: dict):
-    """Frame with a distinct bright pattern inside every slot box."""
+    """Frame with a distinct bright pattern inside every slot box.
+
+    Circle radius varies by slot index (not just background color) so
+    grayscale template matching can actually tell slots apart — solid-color
+    blocks differing only by brightness tie at score 1.0 under normalized
+    cross-correlation, which is realistic detector behavior but useless for
+    exercising a clear top pick in tests."""
     img = np.zeros((layout["frame_height"], layout["frame_width"], 3),
                    dtype=np.uint8)
     val = 40
     for side in ("slots_a", "slots_b"):
-        for (x, y, w, h) in layout[side]:
+        for idx, (x, y, w, h) in enumerate(layout[side]):
             img[y:y + h, x:x + w] = (val, 255 - val, (val * 3) % 255)
-            cv2.circle(img, (x + w // 2, y + h // 2), w // 3,
+            r = max(6, w // 3 - idx * 4)
+            cv2.circle(img, (x + w // 2, y + h // 2), r,
                        (255, 255, 255), -1)
             val += 20
     return img
@@ -137,12 +144,19 @@ def main() -> int:
           and "hero1" in crops_html2)
     check("matched template image shown next to the crop",
           "tpl_hero1.png" in crops_html2)
+    check("runner-up and margin shown, not just a bare score",
+          "margin" in crops_html2 and "2nd" in crops_html2)
     check("score labels legend present",
-          "NO-MATCH" in crops_html2 or "LOW" in crops_html2
+          "UNKNOWN" in crops_html2 or "LOW" in crops_html2
           or "OK &ge;" in crops_html2)
-    check("label thresholds", bcr._label(0.9, 0.6) == "OK"
-          and bcr._label(0.5, 0.6) == "LOW"
-          and bcr._label(0.1, 0.6) == "NO-MATCH")
+
+    def _read(hero, score, second="x", second_score=0.0, reject=None):
+        return {"hero": hero, "score": score, "second": second,
+                "second_score": second_score, "reject": reject}
+    check("label thresholds",
+          bcr._label(_read("hero1", 0.9), 0.6) == "OK"
+          and bcr._label(_read("hero1", 0.5), 0.6) == "LOW"
+          and bcr._label(_read("UNKNOWN", 0.1), 0.6) == "UNKNOWN")
 
     print("bad boxes degrade per-slot, not per-run:")
     lay_oob = good_layout(); lay_oob["slots_b"][4] = [635, 10, 40, 40]

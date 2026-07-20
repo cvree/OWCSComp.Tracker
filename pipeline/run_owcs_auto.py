@@ -293,6 +293,16 @@ def _step_debug(frames_dir: str, layout_path: str, out_dir: str) -> dict:
     return res
 
 
+def _step_vision_dashboard(run_name: str, layout_path: str) -> dict:
+    """The ONE debug page: anchors (context crops), hero guesses, scores,
+    quality, status ladder — over whatever this run already produced.
+    Best-effort: it never writes comps/DB/templates, so a failure here is
+    never a run failure, only a note on the report."""
+    import vision_dashboard as vd
+    res = vd.generate(run_name, layout_path, root=db.REPO_ROOT)
+    return {"status": "ok", "out": res["html"], "next": res["rec"]["human"]}
+
+
 def _step_export() -> dict:
     import export_data
     con = db.connect()
@@ -527,9 +537,8 @@ def build_report_html(record: dict, debug_images: list[str]) -> str:
             "<p class='muted'>Hero crop review/capture only — does not write "
             "comps.</p>"
             f"<p>{det_link}"
-            "<a href='vision_dashboard.html' title='generate with: py "
-            "pipeline\\vision_dashboard.py --run &lt;run&gt;'>vision "
-            "dashboard</a> · "
+            "<a href='vision_dashboard.html' title='hero/anchor/score "
+            "debugging for every frame in this run'>vision dashboard</a> · "
             "<a href='layout.html'>layout debug viewer</a> · "
             "<a href='crops.html'>hero crop report</a> · "
             "<a href='hero_crops.html'>hero crop review + label</a> · "
@@ -570,7 +579,7 @@ def run_auto(source=None, local=None, start=0, end=None, every=30,
              layout=None, height=None, force_clip=False, sources_path=None,
              fast=False, with_audio=False, stall_timeout=None,
              probe_fn=None, clip_fn=None, frame_fn=None, filter_fn=None,
-             detect_fn=None, debug_fn=None, export_fn=None,
+             detect_fn=None, debug_fn=None, dashboard_fn=None, export_fn=None,
              status_fn=None, preflight_fn=None) -> dict:
     """Run the full pipeline. All step functions are injectable for tests."""
     sources_path = sources_path or vi.DEFAULT_SOURCES
@@ -579,6 +588,7 @@ def run_auto(source=None, local=None, start=0, end=None, every=30,
     filter_fn = filter_fn or _step_filter
     detect_fn = detect_fn or _step_detect
     debug_fn = debug_fn or _step_debug
+    dashboard_fn = dashboard_fn or _step_vision_dashboard
     export_fn = export_fn or _step_export
     status_fn = status_fn or append_run
     preflight_fn = preflight_fn or pf.run_checks
@@ -653,8 +663,8 @@ def run_auto(source=None, local=None, start=0, end=None, every=30,
         "withAudio": bool(with_audio),
     }
     _STEP_NAMES = ["preflight", "probe", "clip", "frames", "filter",
-                   "detect", "layout-debug", "export"]
-    n_steps = 8
+                   "detect", "layout-debug", "vision-dashboard", "export"]
+    n_steps = 9
     log(f"run: {run_name} · mode: {mode} · layout: {layout_path}")
     log(f"window: {record['window']} every {every}s -> "
         f"{len(offsets)} planned frame(s)")
@@ -818,7 +828,23 @@ def run_auto(source=None, local=None, start=0, end=None, every=30,
         _mark(steps, "layout-debug", "ok", detail=detail,
               out=f"{report_rel}layout.html")
 
-        # 8. export — complete the record and upsert FIRST, so the exported
+        # 8. vision dashboard — the one page with hero/anchor/score debugging
+        # over everything the run just produced. Best-effort: never fails
+        # the run, since it only summarizes evidence already on disk.
+        cur_step = "vision-dashboard"
+        banner(8, n_steps, "vision debug dashboard")
+        try:
+            vres = dashboard_fn(run_name, layout_path)
+            log(f"  wrote {vres.get('out')} — next: {vres.get('next')}")
+            _mark(steps, "vision-dashboard", vres.get("status", "ok"),
+                  detail=f"next: {vres.get('next')}" if vres.get("next")
+                  else "generated", out=f"{report_rel}vision_dashboard.html")
+        except Exception as e:
+            reason = f"{type(e).__name__}: {e}"
+            log(f"  vision dashboard failed (non-fatal): {reason}")
+            _mark(steps, "vision-dashboard", "error", detail=reason)
+
+        # 9. export — complete the record and upsert FIRST, so the exported
         # data.js contains this run's final step table (the export step is
         # self-referential: it must be in the data it exports).
         cur_step = "export"
@@ -828,7 +854,7 @@ def run_auto(source=None, local=None, start=0, end=None, every=30,
         record["runStatus"] = run_status_of(record)
         record["finishedAt"] = dt.datetime.now(dt.timezone.utc).isoformat()
         status_fn(record)
-        banner(8, n_steps, "export site data")
+        banner(9, n_steps, "export site data")
         eres = export_fn()
         log(f"  wrote {eres.get('out')}")
     except Exception as e:

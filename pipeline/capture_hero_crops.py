@@ -272,7 +272,9 @@ def capture_run(run: str, layout: dict, frames_dir: str, report_dir: str,
             entry = {
                 "id": cid, "run": run, "frame": fn, "offset": offset,
                 "side": s["side"], "slot": slot_id, "crop": None,
-                "guess": None, "score": None, "bad": False, "note": "",
+                "guess": None, "score": None, "second": None,
+                "secondScore": None, "margin": None, "reject": None,
+                "bad": False, "note": "",
                 "label_status": "unlabeled", "label": None,
             }
             if s["crop"] is None:                       # box outside frame etc.
@@ -287,9 +289,16 @@ def capture_run(run: str, layout: dict, frames_dir: str, report_dir: str,
                 n_crops += 1
                 if lib:
                     gray = cv2.cvtColor(s["crop"], cv2.COLOR_BGR2GRAY)
-                    hero, score = detect.match_slot(gray, lib)
-                    entry["guess"] = hero or None
-                    entry["score"] = round(float(score), 3)
+                    # honest evidence: top + runner-up + margin + rejection
+                    # reason — a weak/ambiguous match is never silently
+                    # shown as a confident guess (see detect.read_slot).
+                    read = detect.read_slot(gray, lib)
+                    entry["guess"] = read["hero"] or None
+                    entry["score"] = read["score"]
+                    entry["second"] = read["second"] or None
+                    entry["secondScore"] = read["second_score"]
+                    entry["margin"] = read["margin"]
+                    entry["reject"] = read["reject"]
             crops_meta.append(entry)
 
         frames_meta.append({
@@ -409,9 +418,9 @@ background:rgba(232,161,60,.12);padding:10px 14px;border-radius:10px;margin:12px
 .frames figcaption{color:var(--muted);font-size:.75rem;text-align:center}
 .strip{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}
 .cell{border:1px solid var(--line);border-radius:10px;padding:8px;
-background:var(--surface);text-align:center;font-size:.72rem;width:120px;
+background:var(--surface);text-align:center;font-size:.72rem;width:148px;
 color:var(--muted)}
-.cell img{width:104px;border:1px solid var(--line);display:block;margin:3px auto;
+.cell img{width:132px;border:1px solid var(--line);display:block;margin:3px auto;
 border-radius:4px;background:#050a13}
 .pill{display:inline-block;color:#fff;border-radius:999px;padding:0 8px;
 font-family:"Chakra Petch",sans-serif;font-weight:700;font-size:.6rem;
@@ -424,15 +433,7 @@ background:#0a1322;color:var(--text);cursor:pointer;padding:2px 6px;margin:3px 2
 .st-labeled{color:#2ebd6b}.st-rejected{color:#ff5c64}.st-unlabeled{color:var(--muted)}
 """
 
-_LABEL_COLORS = {"OK": "#2ebd6b", "LOW": "#e8a13c", "NO-MATCH": "#ff5c64"}
-
-
-def _score_label(score: float, threshold: float) -> str:
-    if score >= threshold:
-        return "OK"
-    if score >= LOW_FLOOR:
-        return "LOW"
-    return "NO-MATCH"
+_LABEL_COLORS = bcr._LABEL_COLORS
 
 
 def _cell_html(c: dict, threshold: float) -> str:
@@ -444,10 +445,19 @@ def _cell_html(c: dict, threshold: float) -> str:
     img = f"<img src='{_esc(c['crop'])}' alt='{slot}'>"
     guess = ""
     if c["guess"] is not None and c["score"] is not None:
-        lab = _score_label(c["score"], threshold)
-        guess = (f"<span class='pill' style='background:{_LABEL_COLORS[lab]}'>"
-                 f"{lab}</span><br><span class='muted'>{_esc(c['guess'])} "
-                 f"{c['score']:.2f}</span>")
+        lab = bcr._label({"hero": c["guess"], "score": c["score"]}, threshold)
+        if lab == "UNKNOWN":
+            guess = (f"<span class='pill' style='background:"
+                     f"{_LABEL_COLORS[lab]}'>{lab}</span><br>"
+                     f"<span class='muted'>{_esc(c['reject'])}</span>")
+        else:
+            guess = (f"<span class='pill' style='background:"
+                     f"{_LABEL_COLORS[lab]}'>{lab}</span><br>"
+                     f"<span class='muted'>{_esc(c['guess'])} "
+                     f"{c['score']:.2f} &middot; 2nd "
+                     f"{_esc(c['second']) or '—'} "
+                     f"{c['secondScore']:.2f} &middot; margin "
+                     f"{c['margin']:.3f}</span>")
     else:
         guess = "<span class='muted'>no templates</span>"
     status = c.get("label_status", "unlabeled")

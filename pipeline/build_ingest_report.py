@@ -151,7 +151,8 @@ def build_report(root: str, art: dict, layout: dict | None,
              f"offsets {t0:.0f}–{t1:.0f}s) · detector "
              f"{esc(stats['detector_version'])} · generated from "
              f"observations.jsonl / stints.json — see "
-             f"<a href='review.html'>change-point review</a></p>")
+             f"<a href='review.html'>change-point review</a> · "
+             f"<a href='crops.html'>hero crop report</a></p>")
 
     H.append("<h2>Coverage</h2><table>")
     rows = [
@@ -268,7 +269,8 @@ def build_review(root: str, art: dict, pairing: dict) -> str:
          f"{esc(pairing.get('title', root))}</h1>"
          "<p class='muted'>Every suspected hero change, confirmed or "
          "rejected, with evidence. Back to "
-         "<a href='report.html'>full report</a>.</p>"]
+         "<a href='report.html'>full report</a> · "
+         "<a href='crops.html'>hero crop report</a>.</p>"]
     kinds = [("swap", "Confirmed swaps", "ok"),
              ("setup-change", "Setup-phase comp changes", "warn"),
              ("rejected-swap", "Rejected suspected swaps", "bad"),
