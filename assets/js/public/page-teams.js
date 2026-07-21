@@ -24,9 +24,12 @@
       if (!mp.winner) return;
       if (mp.winner === t.id) mw += 1; else ml += 1;
     }));
+    const dated = matches.filter((m) => m.scheduledAt)
+      .sort((a, b) => new Date(b.scheduledAt) - new Date(a.scheduledAt));
+    const lastPlayed = dated[0] ? dated[0].scheduledAt : null;
     const hs = S.computeHeroStats({ teamId: t.id });
     const top = hs.rows.slice(0, 4);
-    return { team: t, matches: matches.length, mw, ml, heroes: hs.rows.length, top };
+    return { team: t, matches: matches.length, mw, ml, heroes: hs.rows.length, top, lastPlayed };
   }).sort((a, b) => b.heroes - a.heroes || a.team.name.localeCompare(b.team.name));
 
   function card(c) {
@@ -37,6 +40,7 @@
         ${P.teamPlate(t.id, { size: "lg" })}
         ${P.badgeRegion(t.region)}
       </div>
+      ${c.lastPlayed ? `<span class="recency-badge"><span class="rb-dot" aria-hidden="true"></span>Last played ${esc(P.fmtRel(c.lastPlayed))}</span>` : ""}
       <div class="cluster" style="gap:14px;margin-top:4px">
         <span class="mono" style="font-size:12px"><b style="font-size:15px">${c.mw}–${c.ml}</b> maps</span>
         <span class="mono" style="font-size:12px"><b style="font-size:15px">${c.heroes}</b> heroes</span>

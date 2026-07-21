@@ -576,6 +576,58 @@ def _nearest_frame(frames_dir_rel: str, t: int) -> str | None:
     return None
 
 
+def _layout_for_source(source_id: str | None) -> str | None:
+    """Resolve a source id to its calibration layout file. Registered
+    sources declare it in video_sources.json; ingest-only sources (e.g.
+    owcs-jksix-qwc) follow the slug convention layouts/<id_>.json."""
+    if not source_id:
+        return None
+    for s in load_video_sources():
+        if s["id"] == source_id and s.get("layout"):
+            p = os.path.join(db.REPO_ROOT, s["layout"])
+            return p if os.path.exists(p) else None
+    slug = source_id.replace("-", "_")
+    p = os.path.join(db.REPO_ROOT, "layouts", f"{slug}.json")
+    return p if os.path.exists(p) else None
+
+
+def calibration_summary(source_id: str | None, roster: int) -> dict | None:
+    """Compact, honest autocalibration provenance for a broadcast: the
+    confidence the auto-calibrator earned, whether the gameplay-filter
+    probe is present, and how much of the roster is templated. Powers the
+    'why you can trust this footage' story on team/match pages. Returns
+    None when the layout can't be found (never invents numbers)."""
+    import re as _re
+    path = _layout_for_source(source_id)
+    if not path:
+        return None
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            layout = json.load(f)
+    except (OSError, ValueError):
+        return None
+    cal = layout.get("calibration") or {}
+    tdir = layout.get("templates_dir")
+    heroes = 0
+    if tdir and os.path.isdir(os.path.join(db.REPO_ROOT, tdir)):
+        name_re = _re.compile(r"^([a-z0-9_-]+?)(?:\.(?:v\d+|[a-z]))?\.png$")
+        seen = set()
+        for fn in os.listdir(os.path.join(db.REPO_ROOT, tdir)):
+            m = name_re.match(fn)
+            if m:
+                seen.add(m.group(1))
+        heroes = len(seen)
+    return {
+        "sourceId": source_id,
+        "confidence": cal.get("confidence"),
+        "hudProbe": bool(layout.get("hud_probe")),
+        "rejectMarkers": len(layout.get("reject") or []),
+        "templateHeroes": heroes,
+        "roster": roster,
+        "frameSize": [layout.get("frame_width"), layout.get("frame_height")],
+    }
+
+
 def build_public_payload(con) -> dict:
     """The production public.v1 dataset, built ONLY from reviewed/staged
     DB state: matches, map_results, hero_stints (approved statuses),
@@ -589,10 +641,12 @@ def build_public_payload(con) -> dict:
                     for r in con.execute(
                         "SELECT * FROM game_maps ORDER BY name")]
 
+    roster_size = con.execute("SELECT COUNT(*) FROM heroes").fetchone()[0]
     ingest_rows = con.execute(
         "SELECT * FROM ingest_runs WHERE status='complete'").fetchall()
     match_ids = sorted({r["match_id"] for r in ingest_rows
                         if r["match_id"]})
+    hero_bans_out: list[dict] = []
 
     teams_needed: set[str] = set()
     matches_out, runs_out, snaps_out, players_out = [], [], [], []
@@ -629,11 +683,29 @@ def build_public_payload(con) -> dict:
                 "scoreA": rv(mr, "score_a"),
                 "scoreB": rv(mr, "score_b"),
                 # per-round capture % is not measured by the CV pipeline
-                # yet -> null means the page renders its honest fallback
+                # yet -> null means the page renders its honest fallback.
+                # roundCount IS real (segmented by the round-emblem detector)
+                # — the honest first step toward per-submap detail.
                 "scoreDetail": None,
+                "roundCount": len(rounds),
                 "pickedBy": rv(mr, "picked_by_team"),
                 "pickNote": None,
             })
+            # hero bans for this map (real match facts; empty when the
+            # broadcast/import recorded none — the UI says so honestly).
+            for b in con.execute(
+                    """SELECT * FROM hero_bans WHERE match_id=?
+                       AND (map_result_id=? OR map_result_id IS NULL)
+                       ORDER BY COALESCE(ban_order, id)""",
+                    (mid, mr["id"])):
+                hero_bans_out.append({
+                    "id": f"ban-{map_pub_id}-{b['hero_id']}-{rv(b, 'team_id') or 'x'}",
+                    "matchId": mid,
+                    "mapId": map_pub_id,
+                    "hero": b["hero_id"],
+                    "teamId": rv(b, "team_id"),
+                    "source": rv(b, "source", "manual"),
+                })
             if run is None:
                 continue
             frames_rel = f"reports/ingest/{run['id']}/frames"
@@ -710,6 +782,12 @@ def build_public_payload(con) -> dict:
                 "note": ("full-map CV ingestion "
                          f"({rv(r, 'detector_version')}, calibration "
                          f"{rv(r, 'calibration_version')})"),
+                # autocalibration provenance for the 'trust this footage'
+                # story — real numbers from the source's layout, or null.
+                "calibration": calibration_summary(
+                    rv(r, "source_id"), roster_size),
+                "calibrationStatus": rv(r, "calibration_status", "ok"),
+                "calibrationVersion": rv(r, "calibration_version"),
             })
 
         for p in con.execute(
@@ -814,7 +892,7 @@ def build_public_payload(con) -> dict:
         "extraRounds": [],
         "bracketMatches": [],
         "matches": matches_out,
-        "heroBans": [],
+        "heroBans": hero_bans_out,
         "captureRuns": runs_out,
         "compSnapshots": snaps_out,
         "vodSources": list(vod_out.values()),

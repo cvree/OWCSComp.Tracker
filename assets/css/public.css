@@ -817,3 +817,25 @@ a.team-plate:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px
 button.meta-card { width: 100%; text-align: left; font: inherit; color: inherit; cursor: pointer; }
 button.meta-card:hover { border-color: color-mix(in srgb, var(--gold) 45%, var(--line)); }
 button.meta-card:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+/* ---------- 23. Team story: recency, calibration provenance, maps ---------- */
+.recency-badge { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; color: var(--tx-2);
+  font-family: var(--font-mono); border: 1px solid var(--line); border-radius: 999px; padding: 3px 11px; }
+.recency-badge .rb-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--teal, #37d4c2);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--teal, #37d4c2) 20%, transparent); }
+.recency-badge b { color: var(--tx-1); font-weight: 600; }
+.calib-card { display: grid; gap: 12px; }
+.calib-card .ev-tick { white-space: nowrap; }
+.calib-card > .cluster { row-gap: 6px; }
+.calib-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px;
+  background: var(--line); border: 1px solid var(--line); border-radius: var(--r-2); overflow: hidden; }
+.cal-cell { background: var(--surface-1); padding: 10px 13px; display: grid; gap: 3px; }
+.cal-k { font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--tx-3); font-family: var(--font-mono); }
+.cal-v { font-family: var(--font-display); font-weight: 700; font-size: 17px; }
+.cal-v small { font-size: 11px; color: var(--tx-3); font-weight: 500; }
+.cal-v.good { color: var(--teal, #37d4c2); } .cal-v.bad { color: var(--role-damage, #ff6b6b); }
+.cal-cov { display: flex; align-items: center; gap: 10px; }
+.cal-cov .cov-track { flex: 1; height: 6px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
+.cal-cov .cov-fill { height: 100%; background: linear-gradient(90deg, var(--teal, #37d4c2), color-mix(in srgb, var(--teal,#37d4c2) 55%, transparent)); }
+.map-story { display: block; }
+.map-story .map-mode { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--tx-3); font-family: var(--font-mono); }

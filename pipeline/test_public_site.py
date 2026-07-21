@@ -300,6 +300,34 @@ def main() -> None:
     check("team page built on the public shell + reads verified stats only",
           "OWCS_STATS" in read("assets/js/public/page-team.js")
           and "computeHeroStats" in read("assets/js/public/page-team.js"))
+
+    print("team story: recency, calibration provenance, maps, bans:")
+    pteam = read("assets/js/public/page-team.js")
+    check("team page tells recency (last played + relative)",
+          "Last played" in pteam and "fmtRel" in pteam)
+    check("team page surfaces the autocalibration provenance",
+          "calibration" in pteam and "confidence" in pteam and "HUD probe" in pteam)
+    check("team page shows maps played with round/sub-map counts",
+          "roundCount" in pteam and "Maps played" in read("team.html"))
+    check("team page has an honest bans section",
+          "heroBans" in pteam and "No bans recorded" in pteam)
+    check("teams directory shows recency per team",
+          "Last played" in read("assets/js/public/page-teams.js"))
+    # the enriched PRODUCTION export must carry the story fields (honest:
+    # real numbers or null/empty, never invented). Loaded separately from
+    # the demo fixture above.
+    prod_src = read("assets/data/public_data.v1.js")
+    prod = json.loads(prod_src[prod_src.index("{"):prod_src.rindex("}") + 1])
+    prun = (prod["captureRuns"] or [{}])[0]
+    check("export: capture runs carry a calibration summary",
+          "calibration" in prun and isinstance(prun.get("calibration"), dict)
+          and "confidence" in prun["calibration"]
+          and "hudProbe" in prun["calibration"])
+    check("export: maps carry a real roundCount",
+          all("roundCount" in mp for m_ in prod["matches"]
+              for mp in m_["maps"]))
+    check("export: heroBans is a list (from the DB, may be empty)",
+          isinstance(prod["heroBans"], list))
     check("match/tournament pages link team plates (opt.link) "
           "only outside nested anchors",
           "link: true" in read("assets/js/public/page-match.js")

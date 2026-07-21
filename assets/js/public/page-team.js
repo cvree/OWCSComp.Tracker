@@ -32,9 +32,19 @@
   const tournaments = Array.from(new Set(matches.map((m) => m.tournamentId)))
     .map((tid) => P.tournament(tid)).filter(Boolean);
 
+  /* ---- recency ------------------------------------------------------ */
+  const dated = matches.filter((m) => m.scheduledAt)
+    .sort((a, b) => new Date(b.scheduledAt) - new Date(a.scheduledAt));
+  const lastPlayed = dated[0] ? dated[0].scheduledAt : null;
+  const recencyHtml = lastPlayed
+    ? `<span class="recency-badge" title="Most recent tracked match">
+         <span class="rb-dot" aria-hidden="true"></span>
+         Last played ${esc(P.fmtDate(lastPlayed))} · <b>${esc(P.fmtRel(lastPlayed))}</b></span>`
+    : "";
+
   /* ---- header ------------------------------------------------------- */
   P.$("#t-crumbs").innerHTML = P.breadcrumbs([
-    { label: "Matches", href: "matches.html" },
+    { label: "Teams", href: "teams.html" },
     { label: team.name },
   ]);
   P.$("#t-head").innerHTML = `
@@ -42,6 +52,7 @@
       <div class="cluster" style="gap:14px">
         ${P.teamPlate(id, { size: "lg" })}
         ${P.badgeRegion(team.region)}
+        ${recencyHtml}
       </div>
       <div class="cluster" style="gap:10px">
         ${tournaments.map((t) =>
@@ -134,6 +145,88 @@
     ? `<div class="stack-sm">${sorted.map(matchCard).join("")}</div>`
     : P.emptyState("◷", "No tracked matches yet",
       "Matches appear once a VOD for this team is captured and ingested.");
+
+  /* ---- footage & calibration (the autocalibration story) ------------ */
+  const runs = [];
+  const seenRun = new Set();
+  matches.forEach((m) => {
+    if (m.captureRunId && !seenRun.has(m.captureRunId)) {
+      seenRun.add(m.captureRunId);
+      const r = P.run(m.captureRunId);
+      if (r && r.calibration) runs.push({ run: r, match: m });
+    }
+  });
+  function calibCard({ run, match }) {
+    const c = run.calibration;
+    const conf = c.confidence;
+    const confPct = conf == null ? "—" : Math.round(conf * 100) + "%";
+    const cov = c.roster ? Math.round((c.templateHeroes / c.roster) * 100) : 0;
+    const cell = (k, v, ok) =>
+      `<div class="cal-cell"><span class="cal-k">${esc(k)}</span><span class="cal-v${ok === false ? " bad" : ok ? " good" : ""}">${v}</span></div>`;
+    return `<div class="card calib-card rv">
+      <div class="cluster" style="justify-content:space-between;gap:10px;flex-wrap:wrap">
+        <span class="cluster" style="gap:8px">
+          <span class="chip" data-cap="verified">auto-calibrated</span>
+          <span class="mono faint" style="font-size:11.5px">${esc(c.sourceId || run.sourceId || "")}</span>
+        </span>
+        <a class="ev-tick" href="match.html?id=${esc(match.id)}&tab=evidence">${esc(matchLabel(match.id))} · evidence</a>
+      </div>
+      <div class="calib-grid">
+        ${cell("Calibrator confidence", confPct, conf != null && conf >= 0.55)}
+        ${cell("HUD probe", c.hudProbe ? "verified" : "missing", c.hudProbe)}
+        ${cell("Heroes templated", `${c.templateHeroes}<small> / ${c.roster}</small>`, c.templateHeroes >= 10)}
+        ${cell("Reject markers", c.rejectMarkers || 0, (c.rejectMarkers || 0) > 0)}
+        ${cell("Capture resolution", c.frameSize && c.frameSize[0] ? c.frameSize.join("×") : "—")}
+        ${cell("Status", run.calibrationStatus || "ok", (run.calibrationStatus || "ok") === "ok")}
+      </div>
+      <div class="cal-cov"><span class="cal-k">Roster templated</span>
+        <span class="cov-track"><span class="cov-fill" style="width:${cov}%"></span></span>
+        <span class="mono" style="font-size:11px">${cov}%</span></div>
+    </div>`;
+  }
+  if (runs.length) {
+    P.$("#t-calib-sec").hidden = false;
+    P.$("#t-calib").innerHTML = `<div class="stack-sm">${runs.map(calibCard).join("")}</div>`;
+  }
+
+  /* ---- maps played (with round/submap counts) ----------------------- */
+  const mapRows = [];
+  matches.forEach((m) => (m.maps || []).forEach((mp) => {
+    if (!mp.map) return;
+    mapRows.push({ mp, match: m,
+      won: mp.winner ? mp.winner === id : null });
+  }));
+  function mapCard({ mp, match, won }) {
+    const info = P.mapInfo(mp.map);
+    return `<a class="card card--link map-story rv" href="match.html?id=${esc(match.id)}&tab=maps">
+      <div class="cluster" style="justify-content:space-between;gap:10px;flex-wrap:wrap">
+        <span class="cluster" style="gap:10px">
+          <b style="font-size:15px">${esc(info.name || mp.map)}</b>
+          <span class="map-mode">${esc(mp.mode || info.mode || "")}</span>
+          ${mp.roundCount ? `<span class="chip" title="Rounds / sub-maps detected">${mp.roundCount} round${mp.roundCount === 1 ? "" : "s"}</span>` : ""}
+        </span>
+        ${won == null ? `<span class="faint">result pending</span>`
+          : `<span class="chip" data-cap="${won ? "verified" : "failed"}">${won ? "won" : "lost"}</span>`}
+      </div>
+    </a>`;
+  }
+  if (mapRows.length) {
+    P.$("#t-maps-sec").hidden = false;
+    P.$("#t-maps-count").textContent = mapRows.length;
+    P.$("#t-maps").innerHTML = `<div class="stack-sm">${mapRows.map(mapCard).join("")}</div>`;
+  }
+
+  /* ---- hero bans in this team's matches ----------------------------- */
+  const myMatchIds = new Set(matches.map((m) => m.id));
+  const bans = (D.heroBans || []).filter((b) => myMatchIds.has(b.matchId));
+  P.$("#t-bans").innerHTML = bans.length
+    ? `<div class="cluster" style="gap:10px;flex-wrap:wrap">${bans.map((b) => {
+        const forThis = b.teamId === id;
+        return `<span class="cluster" style="gap:6px">${P.heroTile(b.hero, { sm: true })}
+          <span class="faint" style="font-size:11.5px">${forThis ? "banned by " + esc(team.code) : "banned vs " + esc(team.code)}</span></span>`;
+      }).join("")}</div>`
+    : P.emptyState("🚫", "No bans recorded in this team's tracked matches",
+      "OWCS hero bans appear here once a match with bans is imported. The Nepal milestone match had none recorded.");
 
   P.observeReveals(document);
 })();
