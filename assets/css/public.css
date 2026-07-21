@@ -839,3 +839,27 @@ button.meta-card:focus-visible { outline: 2px solid var(--gold); outline-offset:
 .cal-cov .cov-fill { height: 100%; background: linear-gradient(90deg, var(--teal, #37d4c2), color-mix(in srgb, var(--teal,#37d4c2) 55%, transparent)); }
 .map-story { display: block; }
 .map-story .map-mode { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--tx-3); font-family: var(--font-mono); }
+
+/* ---------- 24. Maps showcase (auto map meta) ---------- */
+.map-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: var(--sp-4); }
+.map-showcase { display: grid; gap: 12px; }
+.ms-head { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; }
+.ms-glyph { width: 40px; height: 40px; display: grid; place-items: center; border-radius: var(--r-2);
+  background: var(--surface-2); color: var(--gold); font-size: 20px; }
+.ms-name { font-size: 17px; font-weight: 700; }
+.ms-meta { display: block; font-family: var(--font-mono); font-size: 11px; color: var(--tx-3); margin-top: 2px; }
+.ms-head .ev-tick { white-space: nowrap; align-self: center; }
+.mm-list { display: grid; gap: 5px; }
+.mm-row { display: grid; grid-template-columns: 16px auto 1fr 90px 42px 34px; align-items: center; gap: 9px;
+  padding: 4px 2px; }
+.mm-rank { font-family: var(--font-mono); font-size: 11px; color: var(--tx-3); text-align: center; }
+.mm-row:first-child .mm-rank { color: var(--gold); }
+.mm-name { font-weight: 600; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mm-bar { height: 6px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
+.mm-fill { display: block; height: 100%; background: linear-gradient(90deg, var(--gold), color-mix(in srgb, var(--gold) 45%, transparent)); }
+.mm-pct { font-family: var(--font-display); font-weight: 700; font-size: 14px; text-align: right; color: var(--gold); }
+.mm-wl { font-size: 11px; color: var(--tx-3); text-align: right; }
+.mm-empty { padding: 10px 2px; font-size: 12.5px; }
+.mm-bans { display: flex; align-items: center; gap: 10px; border-top: 1px solid var(--line); padding-top: 10px; flex-wrap: wrap; }
+.mm-lbl { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--tx-3); }
+@media (max-width: 560px) { .mm-row { grid-template-columns: 16px auto 1fr 46px 34px; } .mm-row .mm-bar { display: none; } }

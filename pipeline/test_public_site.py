@@ -203,7 +203,8 @@ def main() -> None:
 
     print("public pages load the public shell:")
     pages = ["tournaments.html", "tournament.html", "match.html",
-             "stats.html", "matches.html", "team.html", "teams.html"]
+             "stats.html", "matches.html", "team.html", "teams.html",
+             "maps.html"]
     for p in pages:
         h = read(p)
         check(f"{p}: public.css + fixture + core + shell wired",
@@ -313,6 +314,19 @@ def main() -> None:
           "heroBans" in pteam and "No bans recorded" in pteam)
     check("teams directory shows recency per team",
           "Last played" in read("assets/js/public/page-teams.js"))
+
+    print("maps showcase (auto map meta):")
+    pmaps = read("assets/js/public/page-maps.js")
+    check("maps page is auto-built from played maps (no hard-coding)",
+          "D.matches" in pmaps and "played" in pmaps and "mapCard" in pmaps)
+    check("maps page shows map-scoped pick rates via the stats engine",
+          "computeHeroStats" in pmaps and "mapId" in pmaps)
+    check("maps page shows bans per map",
+          "heroBans" in pmaps and "Bans" in pmaps)
+    check("maps page links to the full per-map stats table",
+          "stats.html?map=" in pmaps)
+    check("Maps is in the public nav",
+          '{ href: "maps.html", label: "Maps" }' in read("assets/js/public/shell.js"))
     # the enriched PRODUCTION export must carry the story fields (honest:
     # real numbers or null/empty, never invented). Loaded separately from
     # the demo fixture above.
