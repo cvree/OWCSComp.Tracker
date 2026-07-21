@@ -47,6 +47,7 @@ import db  # noqa: E402
 import capture  # noqa: E402
 import detect  # noqa: E402
 import gameplay_state  # noqa: E402
+import comp_solver  # noqa: E402
 
 DETECTOR_VERSION = "det-v2"
 CONFIRM_N = 3             # consecutive accepted obs to (re)establish a hero
@@ -150,9 +151,25 @@ class FrameServer:
 
 
 # ------------------------------------------------------------- observation
+def resolve_sides(slots: dict, hero_roles: dict) -> dict:
+    """Role-aware {a,b} comp resolution for one frame's ten slot reads.
+
+    Purely additive: runs comp_solver on each side's five read_slot dicts so
+    a slot the matcher left UNKNOWN/ambiguous can be completed from the 1/2/2
+    role constraint, and a physically-impossible read is flagged. Returns
+    {a: solve(...), b: solve(...)}; callers keep the raw reads untouched."""
+    out = {}
+    for side in ("a", "b"):
+        reads = [slots.get(f"{side}{i}", {"hero": "UNKNOWN", "score": 0.0,
+                                          "scores": {}}) for i in range(1, 6)]
+        out[side] = comp_solver.solve(reads, hero_roles)
+    return out
+
+
 def observe(t: float, frame_path: str, layout_scaled: dict, lib: dict,
             crops_dir: str, save_crop: bool = True,
-            ocr_read_fn=None, ocr_aliases: dict | None = None) -> dict:
+            ocr_read_fn=None, ocr_aliases: dict | None = None,
+            hero_roles: dict | None = None) -> dict:
     """One frame -> state + (if gameplay) ten slot reads with evidence.
 
     ocr_read_fn/ocr_aliases (both optional, from --ocr-guard) run OCR
@@ -196,6 +213,12 @@ def observe(t: float, frame_path: str, layout_scaled: dict, lib: dict,
                     cv2.imwrite(cp, frame[y:y + h, x:x + w])
                 read["crop"] = os.path.basename(cp)
             obs["slots"][key] = read
+    # role-aware resolution (additive; raw reads above are untouched). Lets
+    # a UNKNOWN/ambiguous slot be completed from the 1/2/2 constraint and
+    # flags impossible comps — recorded for the report + consensus, never
+    # overwriting an honest read.
+    if hero_roles:
+        obs["resolved"] = resolve_sides(obs["slots"], hero_roles)
     for side in ("a", "b"):
         hue = gameplay_state.side_hue(frame, layout_scaled, side)
         if hue is not None:
@@ -971,6 +994,13 @@ def run(args) -> dict:
     lib = detect.load_templates(os.path.join(
         db.REPO_ROOT, layout["templates_dir"]))
     log(f"templates: {len(lib)} heroes from {layout['templates_dir']}")
+    try:
+        hero_roles = comp_solver.load_hero_roles(db.connect())
+        log(f"roles: loaded {len(hero_roles)} hero roles for 1/2/2 "
+            "composition resolution")
+    except Exception as e:      # role resolution is additive — never fatal
+        hero_roles = None
+        log(f"roles: unavailable ({e}); comp resolution disabled this run")
 
     out_root = os.path.join(db.REPO_ROOT, "reports", "ingest",
                             args.ingest_id)
@@ -1018,7 +1048,8 @@ def run(args) -> dict:
         if p:
             observations.append(observe(
                 t, p, layout_scaled, lib, crops_dir,
-                ocr_read_fn=ocr_read_fn, ocr_aliases=ocr_aliases))
+                ocr_read_fn=ocr_read_fn, ocr_aliases=ocr_aliases,
+                hero_roles=hero_roles))
     n_game = sum(1 for o in observations if o["state"] == "gameplay")
     log(f"baseline states: gameplay {n_game}, "
         f"other {len(observations) - n_game}")
@@ -1057,7 +1088,8 @@ def run(args) -> dict:
                 if p:
                     observations.append(observe(
                         rt, p, layout_scaled, lib, crops_dir,
-                        ocr_read_fn=ocr_read_fn, ocr_aliases=ocr_aliases))
+                        ocr_read_fn=ocr_read_fn, ocr_aliases=ocr_aliases,
+                        hero_roles=hero_roles))
                     seen_ts.add(rt)
             t += DENSE_STEP
     observations.sort(key=lambda o: o["t"])
