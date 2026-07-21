@@ -203,7 +203,7 @@ def main() -> None:
 
     print("public pages load the public shell:")
     pages = ["tournaments.html", "tournament.html", "match.html",
-             "stats.html", "matches.html"]
+             "stats.html", "matches.html", "team.html", "teams.html"]
     for p in pages:
         h = read(p)
         check(f"{p}: public.css + fixture + core + shell wired",
@@ -266,6 +266,72 @@ def main() -> None:
           "aria-sort" in ps and "data-sort" in ps)
     check("stats evidence links open the match evidence tab",
           "tab=evidence" in ps)
+    check("stats hero rows drill down to a per-team breakdown",
+          "is-drillable" in ps and "drillPanel" in ps and "heroDetail" in ps)
+    check("stats meta cards are clickable buttons that open a hero",
+          'button type="button" class="meta-card' in ps and "data-hero" in ps)
+    check("stats drill-down keeps the credibility rule (via heroDetail)",
+          "S.heroDetail" in read("assets/js/public/stats.js")
+          and "computeHeroStats" in read("assets/js/public/stats.js"))
+
+    print("real hero portraits (from broadcast crops):")
+    core = read("assets/js/public/core.js")
+    check("core hero tile renders portraitUrl when present",
+          "portraitUrl" in core)
+    manifest_p = os.path.join(ROOT, "assets", "img", "heroes",
+                              "manifest.json")
+    check("portrait manifest exists", os.path.exists(manifest_p))
+    if os.path.exists(manifest_p):
+        with open(manifest_p, encoding="utf-8") as f:
+            man = json.load(f)
+        check("every portrait traces to a REAL per-source broadcast crop "
+              "(never the synthetic starter set)",
+              bool(man.get("heroes")) and all(
+                  "/" in m["file"] and m["file"].startswith("templates/")
+                  and m["file"].count("/") >= 2   # templates/<source>/<file>
+                  for m in man["heroes"].values()))
+        check("each manifest hero has its generated png on disk",
+              all(os.path.exists(os.path.join(ROOT, "assets", "img",
+                  "heroes", f"{h}.png")) for h in man["heroes"]))
+
+    print("clickable teams:")
+    check("core team plate can render a real anchor to the team page",
+          "team-plate--link" in core and "team.html?id=" in core)
+    check("team page built on the public shell + reads verified stats only",
+          "OWCS_STATS" in read("assets/js/public/page-team.js")
+          and "computeHeroStats" in read("assets/js/public/page-team.js"))
+
+    print("team story: recency, calibration provenance, maps, bans:")
+    pteam = read("assets/js/public/page-team.js")
+    check("team page tells recency (last played + relative)",
+          "Last played" in pteam and "fmtRel" in pteam)
+    check("team page surfaces the autocalibration provenance",
+          "calibration" in pteam and "confidence" in pteam and "HUD probe" in pteam)
+    check("team page shows maps played with round/sub-map counts",
+          "roundCount" in pteam and "Maps played" in read("team.html"))
+    check("team page has an honest bans section",
+          "heroBans" in pteam and "No bans recorded" in pteam)
+    check("teams directory shows recency per team",
+          "Last played" in read("assets/js/public/page-teams.js"))
+    # the enriched PRODUCTION export must carry the story fields (honest:
+    # real numbers or null/empty, never invented). Loaded separately from
+    # the demo fixture above.
+    prod_src = read("assets/data/public_data.v1.js")
+    prod = json.loads(prod_src[prod_src.index("{"):prod_src.rindex("}") + 1])
+    prun = (prod["captureRuns"] or [{}])[0]
+    check("export: capture runs carry a calibration summary",
+          "calibration" in prun and isinstance(prun.get("calibration"), dict)
+          and "confidence" in prun["calibration"]
+          and "hudProbe" in prun["calibration"])
+    check("export: maps carry a real roundCount",
+          all("roundCount" in mp for m_ in prod["matches"]
+              for mp in m_["maps"]))
+    check("export: heroBans is a list (from the DB, may be empty)",
+          isinstance(prod["heroBans"], list))
+    check("match/tournament pages link team plates (opt.link) "
+          "only outside nested anchors",
+          "link: true" in read("assets/js/public/page-match.js")
+          and "link: true" in read("assets/js/public/page-tournament.js"))
 
     print("accessibility + state markup:")
     css = read("assets/css/public.css")
@@ -287,10 +353,14 @@ def main() -> None:
 
     print("old control-room surfaces untouched:")
     for p in ["index.html", "run.html", "runs.html", "sources.html",
-              "admin.html", "teams.html", "prep.html", "fact-admin.html"]:
+              "admin.html", "team-prep.html", "prep.html", "fact-admin.html"]:
         h = read(p)
         check(f"{p}: still on the control-room shell",
               "assets/css/style.css" in h and "assets/js/ui.js" in h)
+    check("public Teams directory links to the team detail page + Teams "
+          "is in the public nav",
+          "team.html?id=" in read("assets/js/public/page-teams.js")
+          and '{ href: "teams.html", label: "Teams" }' in read("assets/js/public/shell.js"))
 
     print()
     if FAILS:

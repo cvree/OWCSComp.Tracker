@@ -40,9 +40,9 @@
         <a class="btn btn-ghost btn-xl" href="teams.html" data-magnetic><span>Explore teams →</span></a>
       </div>
       <div class="hero-readout">
-        <div><span class="n" data-count-to="8">8</span><span class="k">comps verified</span></div>
-        <div><span class="n" data-count-to="2">2</span><span class="k">swaps caught</span></div>
-        <div><span class="n" data-count-to="52">52</span><span class="k">heroes supported</span></div>
+        <div><span class="n" id="ld-comps" data-count-to="8">8</span><span class="k">comps verified</span></div>
+        <div><span class="n" id="ld-maps" data-count-to="1">1</span><span class="k">maps tracked</span></div>
+        <div><span class="n" id="ld-heroes" data-count-to="52">52</span><span class="k">heroes supported</span></div>
       </div>
     </div>
 
@@ -81,7 +81,7 @@
 
     <div class="pillars reveal">
       <a class="pillar pillar--comp" href="stats.html" data-magnetic>
-        <div class="pillar__stat"><span class="n" data-count-to="8">8</span><span class="k">verified comps</span></div>
+        <div class="pillar__stat"><span class="n" id="ld-comps2" data-count-to="8">8</span><span class="k">verified comps</span></div>
         <div class="pillar__glyph">P%</div>
         <h3>Comp tracking</h3>
         <p>Which heroes pro teams actually run — pick rate and win rate, map by map, with the
@@ -90,7 +90,7 @@
       </a>
 
       <a class="pillar pillar--team" href="teams.html" data-magnetic>
-        <div class="pillar__stat"><span class="n">All</span><span class="k">OWCS teams</span></div>
+        <div class="pillar__stat"><span class="n" id="ld-teams">All</span><span class="k">OWCS teams</span></div>
         <div class="pillar__glyph">T</div>
         <h3>Team tracking</h3>
         <p>Open any OWCS team and see exactly what they ran on each map, each match day —
@@ -251,6 +251,33 @@
 </footer>
 
 <script src="assets/js/data.js"></script>
+<!-- verified public dataset + stats: keeps the landing's headline numbers
+     honest and self-updating (only reviewed/auto-high comps count). -->
+<script src="assets/data/public_data.v1.js"></script>
+<script src="assets/data/public_fixture.v1.js"></script>
+<script src="assets/js/public/core.js"></script>
+<script src="assets/js/public/stats.js"></script>
+<script>
+(function () {
+  var P = window.OWCS_PUB, S = window.OWCS_STATS;
+  if (!P || !P.data || !S) return;
+  var comps = P.publicComps ? P.publicComps() : [];
+  var maps = new Set(comps.map(function (c) { return c.mapId; }));
+  var teams = new Set();
+  (P.data.matches || []).forEach(function (m) { teams.add(m.teamA); teams.add(m.teamB); });
+  var heroes = (P.data.heroes || []).length || 52;
+  var set = function (id, v) {
+    var el = document.getElementById(id);
+    if (el) { el.setAttribute("data-count-to", v); el.textContent = v; }
+  };
+  set("ld-comps", comps.length);
+  set("ld-comps2", comps.length);
+  set("ld-maps", maps.size);
+  set("ld-heroes", heroes);
+  var t = document.getElementById("ld-teams");
+  if (t && teams.size) t.textContent = teams.size;
+})();
+</script>
 <script src="assets/js/app.js"></script>
 <script src="assets/vendor/lenis.min.js" defer></script>
 <script src="assets/vendor/gsap.min.js" defer></script>

@@ -153,9 +153,15 @@
       ? `<img src="${esc(t.logoUrl)}" alt="" width="34" height="34" loading="lazy" data-img-fallback="${esc(t.code)}">`
       : `<span>${esc(t.code)}</span>`;
     const style = t.logoUrl ? "" : ` style="background:hsl(${hue(t.id)} 42% 72%)"`;
-    return `<span class="team-plate${win}${size}" data-team="${esc(t.id)}">
-      <span class="team-plate__logo"${style} aria-hidden="true">${logo}</span>
-      <span class="team-plate__name">${esc(opt.short ? t.code : t.name)}</span></span>`;
+    const inner = `<span class="team-plate__logo"${style} aria-hidden="true">${logo}</span>
+      <span class="team-plate__name">${esc(opt.short ? t.code : t.name)}</span>`;
+    /* opt.link renders a real anchor to the team page. Only for call
+       sites NOT already nested inside another link (no <a> in <a>). */
+    if (opt.link) {
+      return `<a class="team-plate team-plate--link${win}${size}" data-team="${esc(t.id)}"
+        href="team.html?id=${esc(t.id)}" title="Open team page — ${esc(t.name)}">${inner}</a>`;
+    }
+    return `<span class="team-plate${win}${size}" data-team="${esc(t.id)}">${inner}</span>`;
   };
   P.heroTile = (heroId, opt) => {
     opt = opt || {};

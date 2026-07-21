@@ -3,6 +3,13 @@
 (function () {
   "use strict";
 
+  /* ---- Favicon (idempotent; stops the /favicon.ico 404 on tools) ----- */
+  if (!document.querySelector('link[rel="icon"]')) {
+    const l = document.createElement("link");
+    l.rel = "icon"; l.type = "image/svg+xml"; l.href = "assets/img/favicon.svg";
+    document.head.appendChild(l);
+  }
+
   /* ---- Copy-to-clipboard for .cmd-copy buttons (inside .cmd-chip) ---- */
   document.addEventListener("click", function (e) {
     const btn = e.target.closest(".cmd-copy");

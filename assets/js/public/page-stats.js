@@ -21,9 +21,10 @@
   selTeam.innerHTML += D.teams.map((t) => `<option value="${esc(t.id)}">${esc(t.name)}</option>`).join("");
   selMap.innerHTML += D.mapsCatalog.map((mp) => `<option value="${esc(mp.id)}">${esc(mp.name)}</option>`).join("");
 
-  const state = { region: "all", tournamentId: "all", teamId: "all", mapId: "all", sort: "picks", dir: "desc" };
+  const state = { region: "all", tournamentId: "all", teamId: "all", mapId: "all", sort: "picks", dir: "desc", openHero: null };
   const q = P.qs();
   ["region", "sort", "dir"].forEach((k) => { if (q.get(k)) state[k] = q.get(k); });
+  if (q.get("hero")) state.openHero = q.get("hero");
   if (q.get("tournament")) state.tournamentId = q.get("tournament");
   if (q.get("team")) state.teamId = q.get("team");
   if (q.get("map")) state.mapId = q.get("map");
@@ -47,6 +48,46 @@
   const pct = (v) => v == null ? `<span class="faint">—</span>` : (v * 100).toFixed(0) + "%";
   const rateBar = (v, hot) => `<span class="rate-bar${hot ? " hot" : ""}"><span class="rb-track"><span class="rb-fill" style="width:${Math.round((v || 0) * 100)}%"></span></span><span class="mono" style="font-size:11px">${pct(v)}</span></span>`;
 
+  /* -------- hero drill-down (click a row or a meta card) ------------- */
+  function drillPanel(heroId) {
+    const filters = { region: state.region, tournamentId: state.tournamentId, teamId: state.teamId, mapId: state.mapId };
+    const d = S.heroDetail(heroId, filters);
+    const h = P.hero(heroId);
+    if (!d.teams.length)
+      return P.emptyState("◈", "No verified picks in this slice", "");
+    const maxPicks = Math.max(...d.teams.map((t) => t.picks), 1);
+    const face = h.portraitUrl
+      ? `<img src="${esc(h.portraitUrl)}" alt="">`
+      : `<span class="hero-tile" data-role="${esc(h.role)}" style="width:64px"><span class="hero-tile__face" style="width:64px;height:64px;font-size:20px">${esc(h.name.slice(0, 2).toUpperCase())}</span></span>`;
+    const teamRows = d.teams.map((t) => {
+      const share = t.picks / maxPicks;
+      const evid = t.evidence.filter((e, i, a) => a.findIndex((x) => x.matchId === e.matchId) === i);
+      return `<div class="drill-team">
+        ${P.teamPlate(t.teamId, { size: "sm", link: true })}
+        <span class="rate-cell"><span class="rate-bar"><span class="rb-track"><span class="rb-fill" style="width:${Math.round(share * 100)}%"></span></span></span></span>
+        <span class="mono" style="font-size:12px">${t.picks} map${t.picks === 1 ? "" : "s"} · ${t.wins}–${t.losses}</span>
+        <span class="drill-team__evi">${evid.map((e) => {
+          const m = P.match(e.matchId);
+          const label = m ? `${(P.team(m.teamA) || { code: "?" }).code} v ${(P.team(m.teamB) || { code: "?" }).code}` : e.matchId;
+          return `<a class="ev-tick" href="match.html?id=${esc(e.matchId)}&tab=evidence" title="Open the evidence chain">${esc(label)}</a>`;
+        }).join("")}</span>
+      </div>`;
+    }).join("");
+    return `<div class="hero-drill__inner" data-role="${esc(h.role)}" style="--role-c:var(--role-${esc((h.role || "").toLowerCase())})">
+      <div class="hero-drill__head">
+        <span class="hero-drill__face">${face}</span>
+        <div>
+          <b style="font-size:16px">${esc(h.name)}</b>
+          <span class="chip" style="margin-left:8px">${esc(h.role)}</span><br>
+          <span class="hero-drill__prov">${h.portraitUrl
+            ? "portrait: real broadcast HUD crop (upscaled) — see assets/img/heroes/manifest.json"
+            : "no broadcast crop harvested for this hero yet — monogram shown"}</span>
+        </div>
+      </div>
+      <div class="hero-drill__teams" aria-label="Teams that picked ${esc(h.name)}">${teamRows}</div>
+    </div>`;
+  }
+
   function heroTable(rows) {
     if (!rows.length)
       return P.emptyState("⛨", "No verified comps match these filters",
@@ -69,15 +110,19 @@
         const aria = state.sort === k ? ` aria-sort="${state.dir === "asc" ? "ascending" : "descending"}"` : "";
         return `<th scope="col"${sortKey ? ` data-sort="${k}"${aria} tabindex="0" role="button" aria-label="Sort by ${esc(label)}"` : ""}>${esc(label)}</th>`;
       }).join("")}</tr></thead>
-      <tbody>${sorted.map((r) => `<tr>
-        <td><span class="cluster" style="gap:8px">${P.heroTile(r.heroId, { sm: true })}<b>${esc(r.name)}</b></span></td>
+      <tbody>${sorted.map((r) => {
+        const open = state.openHero === r.heroId;
+        return `<tr class="is-drillable" data-hero="${esc(r.heroId)}" tabindex="0" role="button"
+          aria-expanded="${open}" aria-label="Show per-team breakdown for ${esc(r.name)}">
+        <td><span class="cluster" style="gap:8px">${P.heroTile(r.heroId, { sm: true })}<b>${esc(r.name)}</b><span class="faint" aria-hidden="true" style="font-size:10px">${open ? "▾" : "▸"}</span></span></td>
         <td><span class="hero-tile" data-role="${esc(r.role)}" style="width:auto"><span style="color:var(--role-c);font-size:12px">${esc(r.role)}</span></span></td>
         <td class="num">${r.picks}</td>
         <td>${rateBar(r.pickRate, r.pickRate === maxPick)}</td>
         <td>${r.winRate == null ? `<span class="faint" title="No decided maps in this slice yet">—</span>` : rateBar(r.winRate, r.winRate >= 0.6)}</td>
         <td class="num">${r.wins}–${r.losses}</td>
         <td>${evidenceLinks(r.evidence)}</td>
-      </tr>`).join("")}</tbody></table></div>`;
+      </tr>` + (open ? `<tr class="hero-drill" data-drill="${esc(r.heroId)}"><td colspan="7">${drillPanel(r.heroId)}</td></tr>` : "");
+      }).join("")}</tbody></table></div>`;
   }
 
   const ROLE_ORDER = ["Tank", "Damage", "Support"];
@@ -102,14 +147,16 @@
       const cards = shown.map((r, i) => {
         const lead = i === 0;
         const fill = Math.round((r.pickRate / top) * 100);
-        return `<div class="meta-card${lead ? " meta-card--lead" : ""}" style="--fill:${fill}%">
+        return `<button type="button" class="meta-card${lead ? " meta-card--lead" : ""}" style="--fill:${fill}%"
+          data-hero="${esc(r.heroId)}" title="Open ${esc(r.name)}'s per-team breakdown">
           <span class="meta-card__rank">${lead ? "★" : i + 1}</span>
+          ${P.heroTile(r.heroId, { sm: true })}
           <span class="meta-card__body">
             <span class="meta-card__name">${esc(r.name)}</span><br>
             <span class="meta-card__sub">${r.picks} pick${r.picks === 1 ? "" : "s"}${r.winRate == null ? "" : " · " + r.wins + "–" + r.losses}</span>
           </span>
           <span class="meta-card__pct">${pct(r.pickRate)}</span>
-        </div>`;
+        </button>`;
       }).join("");
       const more = list.length > MAX_PER_ROLE
         ? `<div class="faint" style="font-size:11px;padding:2px 2px 0">+${list.length - MAX_PER_ROLE} more</div>` : "";
@@ -140,6 +187,7 @@
     if (push !== false) P.setQs({
       region: state.region, tournament: state.tournamentId, team: state.teamId,
       map: state.mapId, sort: state.sort === "picks" ? null : state.sort, dir: state.dir === "desc" ? null : state.dir,
+      hero: state.openHero,
     });
     P.$$("button", seg).forEach((b) => b.setAttribute("aria-pressed", b.dataset.region === state.region ? "true" : "false"));
 
@@ -166,6 +214,29 @@
     P.$("#s-ban-table").innerHTML = banTable(bs.rows);
     P.observeReveals(document);
     document.querySelectorAll("#s-cards [data-count-to]").forEach((el) => P.countUp && P.countUp(el));
+
+    /* hero row drill-down toggles (row click / Enter / Space; links inside
+       the row keep working) */
+    P.$$("#s-hero-table tr.is-drillable").forEach((tr) => {
+      const act = (e) => {
+        if (e.target.closest("a")) return;
+        state.openHero = state.openHero === tr.dataset.hero ? null : tr.dataset.hero;
+        render();
+      };
+      tr.addEventListener("click", act);
+      tr.addEventListener("keydown", (e) => {
+        if ((e.key === "Enter" || e.key === " ") && !e.target.closest("a")) { e.preventDefault(); act(e); }
+      });
+    });
+    /* meta cards jump to (and open) the hero's drill-down */
+    P.$$("#s-meta button[data-hero]").forEach((b) => {
+      b.addEventListener("click", () => {
+        state.openHero = b.dataset.hero;
+        render();
+        const row = P.$(`#s-hero-table tr[data-drill="${b.dataset.hero}"]`);
+        if (row) row.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+    });
 
     P.$$("[data-sort]").forEach((th) => {
       const act = () => {

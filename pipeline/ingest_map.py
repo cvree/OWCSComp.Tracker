@@ -1073,10 +1073,11 @@ def run(args) -> dict:
 
     # ---- rounds + sides
     rounds, setups = detect_rounds(observations, args.start, args.end)
-    log(f"rounds: {[(r['index'], int(r['start']), int(r['end']))
-                    for r in rounds]}")
-    log(f"setup phases: {[(int(s['start']), int(s['end']))
-                          for s in setups]}")
+    _round_spans = [(r['index'], int(r['start']), int(r['end']))
+                    for r in rounds]
+    log(f"rounds: {_round_spans}")
+    _setup_spans = [(int(s['start']), int(s['end'])) for s in setups]
+    log(f"setup phases: {_setup_spans}")
     side_decisions = detect_side_swaps(observations, rounds)
     for d in side_decisions:
         log(f"round {d['index']}: sides "

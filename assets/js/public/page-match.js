@@ -42,7 +42,7 @@
           ${t ? P.badgeRegion(t.region) : ""}
         </div>
         <div class="vs-band">
-          <div class="side-a">${P.teamPlate(m.teamA, { size: "lg", win: winA, tbd: m.tbdNote })}</div>
+          <div class="side-a">${P.teamPlate(m.teamA, { size: "lg", win: winA, tbd: m.tbdNote, link: true })}</div>
           <div class="vs-center">
             <div class="vs-score" aria-label="Series score">
               <span class="${winA ? "win" : ""}">${m.scoreA == null ? "–" : m.scoreA}</span>
@@ -51,7 +51,7 @@
             </div>
             <span class="mono dim" style="font-size:12px">${esc(P.fmtLocal(m.scheduledAt))} <span class="faint">(${esc(P.fmtRel(m.scheduledAt))})</span></span>
           </div>
-          <div class="side-b">${P.teamPlate(m.teamB, { size: "lg", win: winB, tbd: m.tbdNote })}</div>
+          <div class="side-b">${P.teamPlate(m.teamB, { size: "lg", win: winB, tbd: m.tbdNote, link: true })}</div>
         </div>
         ${m.status === "forfeit" ? `<div class="stat-note" style="border-color:color-mix(in srgb,var(--review) 40%,transparent);background:color-mix(in srgb,var(--review) 7%,transparent)">
           <span aria-hidden="true">⚑</span><span>This series ended in a forfeit — the score was awarded, no maps were played, and there is no broadcast to capture.</span></div>` : ""}
@@ -95,7 +95,7 @@
       </div>
       <span class="cluster">
         ${P.scorePlate(mp.scoreA, mp.scoreB, winA ? "a" : winB ? "b" : null)}
-        ${mp.winner ? P.teamPlate(mp.winner, { size: "sm", short: true, win: true }) : ""}
+        ${mp.winner ? P.teamPlate(mp.winner, { size: "sm", short: true, win: true, link: true }) : ""}
       </span>
     </div>`;
   }
@@ -150,7 +150,7 @@
         <div class="comp-block__head"><h3>${mi ? esc(mi.name) : "Match-level"}</h3>
           <span class="badge badge--src" data-src="${esc(list[0].source)}">${esc(list[0].source)} fact</span></div>
         <div class="cluster" style="gap:18px">${list.sort((a, b) => a.order - b.order).map((b) =>
-          `<span class="cluster" style="gap:8px">${P.teamPlate(b.teamId, { size: "sm", short: true })}<span class="faint">banned</span>${P.heroTile(b.hero)}</span>`).join("")}</div>
+          `<span class="cluster" style="gap:8px">${P.teamPlate(b.teamId, { size: "sm", short: true, link: true })}<span class="faint">banned</span>${P.heroTile(b.hero)}</span>`).join("")}</div>
       </div>`;
     }).join("") + `</div>
     <p class="faint" style="font-size:12px;margin-top:12px">Bans are match facts from the import pipeline — never inferred from video.</p>`;
@@ -180,7 +180,7 @@
       const rows = list.sort((a, b) => a.timestamp - b.timestamp || (a.side < b.side ? -1 : 1)).map((c) => {
         const overridden = c.overridesId ? (D.compSnapshots || []).find((x) => x.id === c.overridesId) : null;
         return `<div class="comp-row rv">
-          ${P.teamPlate(c.teamId, { size: "sm" })}
+          ${P.teamPlate(c.teamId, { size: "sm", link: true })}
           ${P.heroStrip(c.heroes)}
           <div class="stack-sm" style="gap:6px;justify-items:end">
             <span class="cluster" style="gap:6px">

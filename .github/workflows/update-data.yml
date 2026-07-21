@@ -52,6 +52,9 @@ jobs:
             ARGS="$ARGS --limit ${{ github.event.inputs.limit }}"
           fi
           python3 pipeline/run_batch.py $ARGS
+          # Also refresh the PUBLIC dataset the live site renders from, so a
+          # data update reaches fans, not just the control-room data.js.
+          python3 pipeline/export_data.py --public
 
       - name: Sanity-check frontend JS (if node available)
         run: |
@@ -65,7 +68,8 @@ jobs:
         run: |
           git config user.name  "owcs-pipeline[bot]"
           git config user.email "actions@users.noreply.github.com"
-          git add assets/js/data.js data/owcs.sqlite 2>/dev/null || git add assets/js/data.js
+          git add assets/js/data.js assets/data/public_data.v1.js data/owcs.sqlite 2>/dev/null \
+            || git add assets/js/data.js assets/data/public_data.v1.js
           if git diff --cached --quiet; then
             echo "No data changes this run."
             exit 0

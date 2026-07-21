@@ -1,8 +1,0 @@
-# OWCS Comp Tracker — Python dependencies
-# Core CV + numerics (the whole detection/calibration/ingestion stack):
-opencv-python-headless>=4.9
-numpy>=1.26
-
-# VOD download for the ingestion front-end (invoked as the `yt-dlp` binary,
-# not imported). ffmpeg must also be on PATH (system package, not pip).
-yt-dlp>=2024.1

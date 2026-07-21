@@ -60,7 +60,7 @@
       const key = c.mapId + "|" + c.teamId;
       let a = appearances.get(key);
       if (!a) {
-        a = { heroes: new Map(), result: mapResultFor(c), matchId: c.matchId, mapId: c.mapId };
+        a = { heroes: new Map(), result: mapResultFor(c), matchId: c.matchId, mapId: c.mapId, teamId: c.teamId };
         appearances.set(key, a);
       }
       (c.heroes || []).forEach((h) => {
@@ -81,7 +81,7 @@
         r.picks += 1;
         if (a.result === "win") r.wins += 1;
         else if (a.result === "loss") r.losses += 1;
-        r.evidence.push({ matchId: a.matchId, mapId: a.mapId, snapshotIds: snapIds });
+        r.evidence.push({ matchId: a.matchId, mapId: a.mapId, teamId: a.teamId, result: a.result, snapshotIds: snapIds });
       });
     });
     const out = Array.from(rows.values()).map((r) => {
@@ -93,6 +93,30 @@
     });
     out.sort((a, b) => b.picks - a.picks || a.name.localeCompare(b.name));
     return { rows: out, totalAppearances, compCount: comps.length };
+  };
+
+  /* Per-team breakdown for ONE hero — the drill-down behind a stat row.
+     Derived from the same verified appearances as computeHeroStats, so
+     the credibility rules apply unchanged. */
+  S.heroDetail = function (heroId, filters) {
+    const hs = S.computeHeroStats(filters);
+    const row = hs.rows.find((r) => r.heroId === heroId);
+    if (!row) return { heroId, teams: [], picks: 0 };
+    const teams = new Map();
+    row.evidence.forEach((e) => {
+      let t = teams.get(e.teamId);
+      if (!t) {
+        t = { teamId: e.teamId, picks: 0, wins: 0, losses: 0, evidence: [] };
+        teams.set(e.teamId, t);
+      }
+      t.picks += 1;
+      if (e.result === "win") t.wins += 1;
+      else if (e.result === "loss") t.losses += 1;
+      t.evidence.push(e);
+    });
+    const out = Array.from(teams.values())
+      .sort((a, b) => b.picks - a.picks || String(a.teamId).localeCompare(String(b.teamId)));
+    return { heroId, teams: out, picks: row.picks, row };
   };
 
   /* Ban counts — labeled match facts, never comps. */

@@ -212,7 +212,7 @@
         <table class="stat-table" style="min-width:0">
           <thead><tr><th scope="col">Team</th><th scope="col">W–L</th><th scope="col">Maps</th></tr></thead>
           <tbody>${g.rows.map((r, i) => `
-            <tr><td>${i < 2 ? `<span title="Advances to playoffs" style="color:var(--gold)">▸</span> ` : ""}${P.teamPlate(r.teamId, { size: "sm" })}</td>
+            <tr><td>${i < 2 ? `<span title="Advances to playoffs" style="color:var(--gold)">▸</span> ` : ""}${P.teamPlate(r.teamId, { size: "sm", link: true })}</td>
             <td class="num">${r.w}–${r.l}</td><td class="num">${esc(r.mapDiff)}</td></tr>`).join("")}
           </tbody>
         </table>
@@ -228,7 +228,7 @@
       const tm = P.team(tid);
       const roster = (D.players || []).filter((p) => p.teamId === tid);
       return `<div class="card t-card rv">
-        <div class="split">${P.teamPlate(tid)}${P.badgeRegion(tm.region)}</div>
+        <div class="split">${P.teamPlate(tid, { link: true })}${P.badgeRegion(tm.region)}</div>
         ${roster.length
           ? `<div class="cluster" style="gap:6px">${roster.map((p) =>
               `<span class="chip" title="${esc(p.role)}">${esc(p.handle)}</span>`).join("")}</div>`

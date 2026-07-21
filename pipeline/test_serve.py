@@ -147,6 +147,21 @@ def main() -> int:
     code, j = api(port, "/api/nope", {})
     check("unknown POST endpoint -> 404", code == 404)
 
+    print("calibration + portrait status endpoints (read-only):")
+    code, j = api(port, "/api/calibration")
+    check("calibration status returns sources + counts",
+          code == 200 and "sources" in j and "counts" in j
+          and isinstance(j["sources"], list))
+    check("each source carries the honest health fields",
+          all(all(k in s for k in ("id", "status", "hudProbe",
+                                   "templates", "reasons"))
+              for s in j["sources"]) if j.get("sources") else True)
+    check("status grades are only ok/warn/fail",
+          all(s["status"] in ("ok", "warn", "fail") for s in j["sources"]))
+    code, j = api(port, "/api/portraits")
+    check("portraits endpoint returns a manifest shape",
+          code == 200 and "heroes" in j)
+
     print("run param validation (nothing launches on bad input):")
     fr = FakeRunner()
     serve.RUNNER = fr
