@@ -1,0 +1,90 @@
+{
+ "note": "Hero portraits upscaled from REAL broadcast template crops (see 'file' per hero). The synthetic starter templates are never used.",
+ "size": 96,
+ "heroes": {
+  "ball": {
+   "file": "templates/owcs_8c105lnzlam/ball.b.png",
+   "source": "owcs_8c105lnzlam",
+   "score": 6.6471,
+   "size": 24
+  },
+  "cass": {
+   "file": "templates/owcs_8c105lnzlam/cass.png",
+   "source": "owcs_8c105lnzlam",
+   "score": 6.7812,
+   "size": 24
+  },
+  "dva": {
+   "file": "templates/owcs_jksix_qwc/dva.v3.png",
+   "source": "owcs_jksix_qwc",
+   "score": 7.077,
+   "size": 22
+  },
+  "jetcat": {
+   "file": "templates/owcs_8c105lnzlam/jetcat.b.png",
+   "source": "owcs_8c105lnzlam",
+   "score": 6.3886,
+   "size": 24
+  },
+  "juno": {
+   "file": "templates/owcs_jksix_qwc/juno.v1.png",
+   "source": "owcs_jksix_qwc",
+   "score": 6.8563,
+   "size": 22
+  },
+  "kiriko": {
+   "file": "templates/owcs_jksix_qwc/kiriko.png",
+   "source": "owcs_jksix_qwc",
+   "score": 7.1445,
+   "size": 22
+  },
+  "lucio": {
+   "file": "templates/owcs_8c105lnzlam/lucio.png",
+   "source": "owcs_8c105lnzlam",
+   "score": 6.719,
+   "size": 24
+  },
+  "mauga": {
+   "file": "templates/owcs_jksix_qwc/mauga.png",
+   "source": "owcs_jksix_qwc",
+   "score": 6.6158,
+   "size": 22
+  },
+  "mizuki": {
+   "file": "templates/owcs_8c105lnzlam/mizuki.a.png",
+   "source": "owcs_8c105lnzlam",
+   "score": 6.2722,
+   "size": 24
+  },
+  "shion": {
+   "file": "templates/owcs_jksix_qwc/shion.png",
+   "source": "owcs_jksix_qwc",
+   "score": 6.4571,
+   "size": 22
+  },
+  "sojourn": {
+   "file": "templates/owcs_jksix_qwc/sojourn.v3.png",
+   "source": "owcs_jksix_qwc",
+   "score": 6.6255,
+   "size": 22
+  },
+  "sym": {
+   "file": "templates/owcs_jksix_qwc/sym.v2.png",
+   "source": "owcs_jksix_qwc",
+   "score": 6.7517,
+   "size": 22
+  },
+  "tracer": {
+   "file": "templates/owcs_8c105lnzlam/tracer.png",
+   "source": "owcs_8c105lnzlam",
+   "score": 6.8257,
+   "size": 24
+  },
+  "winston": {
+   "file": "templates/owcs_8c105lnzlam/winston.b.png",
+   "source": "owcs_8c105lnzlam",
+   "score": 6.2589,
+   "size": 24
+  }
+ }
+}

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fact Admin — manual FACEIT facts</title>
+<meta name="robots" content="noindex" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css" />
+<style>
+  /* Facts admin uses a distinct blue accent so it's never confused with the
+     amber comp-correction tool — provenance stays visually obvious. */
+  .facts-scope { --accent: var(--team-a); }
+  .facts-scope .panel { border-color: var(--team-a); }
+  .facts-scope .btn-primary { background: var(--team-a); color: #061019; }
+  .facts-badge { display:inline-block; font-family:var(--display); font-size:.66rem;
+    letter-spacing:.1em; text-transform:uppercase; padding:2px 9px; border-radius:20px;
+    background:rgba(79,169,255,.14); color:var(--team-a); border:1px solid rgba(79,169,255,.4); }
+  .ban-picker { display:flex; flex-wrap:wrap; gap:6px; margin:8px 0 12px; }
+  .ban-picker .chip { cursor:pointer; user-select:none; }
+  .ban-picker .chip.sel-a { border-color:var(--team-a); background:rgba(79,169,255,.14); }
+  .ban-picker .chip.sel-b { border-color:var(--team-b); background:rgba(255,92,100,.14); }
+  textarea.jsonout { width:100%; min-height:200px; background:var(--surface);
+    color:var(--text); border:1px solid var(--line); border-radius:10px;
+    padding:12px; font-family:ui-monospace,monospace; font-size:.8rem; }
+  .queue-row { display:flex; gap:10px; align-items:center; padding:8px 0;
+    border-bottom:1px dashed var(--line); font-size:.88rem; }
+  .ban-side-toggle { display:inline-flex; gap:4px; margin-left:auto; }
+</style>
+</head>
+<body data-page="fact-admin" class="facts-scope">
+
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="index.html"><span class="brand-mark"></span>OWCS Comp Tracker</a>
+    <div class="nav-links">
+      <a href="matches.html">Matches</a>
+      <a href="admin.html">Comp admin</a>
+      <a class="active" href="fact-admin.html">Fact admin</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap page-head">
+  <p class="eyebrow" style="color:var(--team-a)">Fact admin · manual FACEIT facts <span class="facts-badge">facts, not comps</span></p>
+  <h1 style="font-size:clamp(1.5rem,3vw,2.1rem)">Fill facts FACEIT doesn't expose.</h1>
+  <p class="muted">Public FACEIT often lacks replay codes, hero bans, and pick/veto. Enter them here,
+    save as <code>corrections/match_facts.json</code>, and commit. The next pipeline run applies
+    them as <strong>manual facts</strong> (source <code>manual_facts</code>) — never comps.
+    Hero comps go in the <a href="admin.html">comp admin</a> instead.</p>
+</div>
+
+<div class="wrap">
+  <div class="filters">
+    <div class="filter"><label for="f-match">Match</label><select id="f-match"></select></div>
+    <div class="filter"><label for="f-map">Map</label><select id="f-map"></select></div>
+  </div>
+
+  <div class="panel" style="margin-top:0">
+    <h3>Map facts</h3>
+    <div class="filters" style="background:transparent;border:0;padding:0;margin:0 0 10px">
+      <div class="filter"><label for="f-replay">Replay code</label>
+        <input id="f-replay" type="text" placeholder="e.g. ABC123" maxlength="10" style="min-width:160px"></div>
+      <div class="filter"><label for="f-picked">Picked by team</label>
+        <select id="f-picked"><option value="">unknown</option></select></div>
+      <div class="filter"><label for="f-veto">Veto action</label>
+        <select id="f-veto"><option value="">unknown</option><option>pick</option><option>ban</option><option>decider</option></select></div>
+      <div class="filter" style="flex:1"><label for="f-note">Note</label>
+        <input id="f-note" type="text" placeholder="e.g. entered from FACEIT room" style="min-width:220px;width:100%"></div>
+    </div>
+
+    <h3>Hero bans <span class="muted" style="font-weight:400">— click a hero, it toggles which team banned it</span></h3>
+    <div class="ban-side-toggle">
+      <span class="muted small">Assign next ban to:</span>
+      <button class="btn btn-ghost btn-sm" id="ban-side-a">Team A</button>
+      <button class="btn btn-ghost btn-sm" id="ban-side-b">Team B</button>
+    </div>
+    <div class="ban-picker" id="ban-picker"></div>
+
+    <div class="modal-actions">
+      <button class="btn btn-primary" id="add-fact">Add to match facts</button>
+      <button class="btn btn-ghost" id="clear-fact">Clear</button>
+    </div>
+    <p class="muted small" id="add-msg"></p>
+  </div>
+
+  <div class="panel" style="border-color:var(--line)">
+    <h3>Match-facts queue</h3>
+    <div id="queue"></div>
+    <h3 style="margin-top:16px">match_facts.json</h3>
+    <textarea class="jsonout" id="json-out" spellcheck="false"></textarea>
+    <div class="modal-actions">
+      <button class="btn btn-primary" id="copy-json">Copy JSON</button>
+      <button class="btn btn-ghost" id="download-json">Download match_facts.json</button>
+      <button class="btn btn-ghost" id="load-json">Load JSON from box</button>
+    </div>
+    <p class="muted small">Then commit to <code>corrections/match_facts.json</code> →
+      the pipeline runs <code>apply_match_facts.py</code> → facts appear on the map. To edit an
+      existing file, paste it in and press "Load JSON from box".</p>
+  </div>
+</div>
+
+<script src="assets/js/data.js"></script>
+<script>
+(function () {
+  const D = window.OWCS_DATA;
+  const $ = s => document.querySelector(s);
+  const teamById = Object.fromEntries(D.teams.map(t => [t.id, t]));
+  const heroById = Object.fromEntries(D.heroes.map(h => [h.id, h]));
+  const mapName = id => (D.maps.find(m => m.id === id) || {name:id}).name;
+
+  let bans = [];        // [{hero, team:'A'|'B', order}]
+  let nextSide = "A";
+  let queue = [];       // matchFacts entries (grouped by match)
+
+  const mSel = $("#f-match"), gSel = $("#f-map"), pSel = $("#f-picked");
+  D.matches.slice().sort((a,b)=>(b.date||"").localeCompare(a.date||"")).forEach(m => {
+    mSel.insertAdjacentHTML("beforeend",
+      `<option value="${m.id}">${m.date} — ${teamById[m.teamA]?.code} vs ${teamById[m.teamB]?.code} (${m.id})</option>`);
+  });
+  function fillMap() {
+    const m = D.matches.find(x => x.id === mSel.value);
+    gSel.innerHTML = (m.maps||[]).map(g => {
+      const f = g.faceit || {};
+      const code = f.replayCode ? " · code ✓" : "";
+      return `<option value="${f.mapOrder}">#${f.mapOrder} ${mapName(g.map)}${code}</option>`;
+    }).join("");
+    pSel.innerHTML = `<option value="">unknown</option>` +
+      [m.teamA, m.teamB].map(t => `<option value="${t}">${teamById[t]?.name||t} (${t})</option>`).join("");
+    renderBans();
+  }
+  mSel.addEventListener("change", fillMap);
+  fillMap();
+
+  // query-param prefill: fact-admin.html?match=m12&mapOrder=1
+  (function prefill() {
+    const q = new URLSearchParams(location.search);
+    const match = q.get("match"), mapOrder = q.get("mapOrder");
+    if (match && [...mSel.options].some(o => o.value === match)) { mSel.value = match; fillMap(); }
+    if (mapOrder && [...gSel.options].some(o => o.value === String(mapOrder))) gSel.value = String(mapOrder);
+  })();
+
+  $("#ban-side-a").addEventListener("click", () => { nextSide = "A"; flagSide(); });
+  $("#ban-side-b").addEventListener("click", () => { nextSide = "B"; flagSide(); });
+  function flagSide() {
+    $("#ban-side-a").classList.toggle("btn-primary", nextSide === "A");
+    $("#ban-side-b").classList.toggle("btn-primary", nextSide === "B");
+  }
+  flagSide();
+
+  function renderBans() {
+    $("#ban-picker").innerHTML = D.heroes.map(h => {
+      const b = bans.find(x => x.hero === h.id);
+      const cls = b ? (b.team === "A" ? "sel-a" : "sel-b") : "";
+      const initials = h.name.replace(/[^A-Za-z0-9 ]/g,"").split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
+      return `<span class="chip ${cls}" data-h="${h.id}" title="${h.role}">
+        <span class="dot ${h.role}">${initials}</span>${h.name}${b?` · ${b.team}`:""}</span>`;
+    }).join("");
+  }
+  $("#ban-picker").addEventListener("click", e => {
+    const el = e.target.closest(".chip"); if (!el) return;
+    const id = el.dataset.h;
+    const i = bans.findIndex(x => x.hero === id);
+    if (i >= 0) bans.splice(i, 1);           // click again to remove
+    else bans.push({ hero: id, team: nextSide, order: bans.length + 1 });
+    renderBans();
+  });
+  renderBans();
+
+  function teamIdForSide(side) {
+    const m = D.matches.find(x => x.id === mSel.value);
+    return side === "A" ? m.teamA : m.teamB;
+  }
+
+  $("#add-fact").addEventListener("click", () => {
+    const match = mSel.value, mapOrder = Number(gSel.value);
+    const mm = { mapOrder };
+    if ($("#f-replay").value.trim()) mm.replayCode = $("#f-replay").value.trim().toUpperCase();
+    if (pSel.value) mm.pickedByTeam = pSel.value;
+    if ($("#f-veto").value) mm.vetoAction = $("#f-veto").value;
+    if ($("#f-note").value.trim()) mm.notes = $("#f-note").value.trim();
+    if (bans.length) mm.heroBans = bans.map((b,i) => ({ team: teamIdForSide(b.team), hero: b.hero, order: i+1 }));
+    if (Object.keys(mm).length === 1) { $("#add-msg").textContent = "Nothing entered for this map yet."; return; }
+
+    let entry = queue.find(q => q.match === match);
+    if (!entry) { entry = { match, maps: [] }; queue.push(entry); }
+    entry.maps = entry.maps.filter(x => x.mapOrder !== mapOrder);
+    entry.maps.push(mm);
+    $("#add-msg").textContent = "Added. Pick another map or export below.";
+    bans = []; $("#f-replay").value = $("#f-note").value = ""; $("#f-veto").value = ""; pSel.value = "";
+    renderBans(); renderQueue();
+  });
+  $("#clear-fact").addEventListener("click", () => {
+    bans = []; $("#f-replay").value = $("#f-note").value = ""; $("#f-veto").value=""; pSel.value="";
+    renderBans(); $("#add-msg").textContent = "";
+  });
+
+  function renderQueue() {
+    const rows = [];
+    queue.forEach(e => e.maps.forEach(mm => rows.push({ match: e.match, mm })));
+    $("#queue").innerHTML = rows.length ? rows.map((r, i) => {
+      const parts = [];
+      if (r.mm.replayCode) parts.push("code " + r.mm.replayCode);
+      if (r.mm.heroBans) parts.push(r.mm.heroBans.length + " bans");
+      if (r.mm.pickedByTeam) parts.push("pick " + r.mm.pickedByTeam);
+      return `<div class="queue-row"><span><strong>${r.match}</strong> map ${r.mm.mapOrder} · ${parts.join(" · ")||"note only"}</span>
+        <button class="btn btn-ghost btn-sm" data-del="${i}">Remove</button></div>`;
+    }).join("") : `<p class="muted small">Nothing queued yet.</p>`;
+    $("#json-out").value = JSON.stringify({ matchFacts: queue }, null, 2);
+  }
+  $("#queue").addEventListener("click", e => {
+    const b = e.target.closest("[data-del]"); if (!b) return;
+    const idx = Number(b.dataset.del);
+    const rows = [];
+    queue.forEach(e2 => e2.maps.forEach(mm => rows.push({ e: e2, mm })));
+    const t = rows[idx]; t.e.maps = t.e.maps.filter(x => x !== t.mm);
+    queue = queue.filter(e2 => e2.maps.length);
+    renderQueue();
+  });
+  $("#copy-json").addEventListener("click", () => navigator.clipboard?.writeText($("#json-out").value).catch(()=>{}));
+  $("#download-json").addEventListener("click", () => {
+    const blob = new Blob([$("#json-out").value], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = "match_facts.json"; a.click();
+    URL.revokeObjectURL(a.href);
+  });
+  $("#load-json").addEventListener("click", () => {
+    try {
+      const parsed = JSON.parse($("#json-out").value);
+      queue = Array.isArray(parsed.matchFacts) ? parsed.matchFacts : [];
+      renderQueue(); $("#add-msg").textContent = "Loaded " + queue.length + " match entries.";
+    } catch { $("#add-msg").textContent = "Invalid JSON in the box."; }
+  });
+  renderQueue();
+})();
+</script>
+<script src="assets/vendor/lenis.min.js" defer></script>
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="assets/js/motion.js" defer></script>
+<script src="assets/js/ui.js"></script>
+</body>
+</html>

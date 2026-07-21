@@ -1,0 +1,65 @@
+{
+  "_fixture_note": "SANITIZED shape of the FACEIT Data API v4 match response (GET /matches/{id}). Built to match FACEIT's documented public field names so the parser is ready for a real cached response. Player nicknames/ids are placeholders (SAMPLE-*), NOT real people. Match facts here are illustrative, not a real result. Replace with a real cached response fetched on a networked machine to confirm live field mapping.",
+  "match_id": "1-c55d6822-7ae7-4c53-b86c-015daa712dd3",
+  "version": 6,
+  "game": "ow2",
+  "region": "EU",
+  "competition_name": "OWCS EMEA",
+  "competition_type": "championship",
+  "organizer_id": "faceit",
+  "status": "FINISHED",
+  "started_at": 1717689600,
+  "finished_at": 1717693200,
+  "faceit_url": "https://www.faceit.com/{lang}/ow2/room/1-c55d6822-7ae7-4c53-b86c-015daa712dd3",
+  "teams": {
+    "faction1": {
+      "faction_id": "team-sample-alpha",
+      "leader": "player-a1",
+      "name": "SAMPLE Team Alpha",
+      "avatar": "",
+      "roster": [
+        {"player_id": "player-a1", "nickname": "SAMPLE-A-Tank", "game_player_name": "SAMPLE-A-Tank", "game_skill_level": 10},
+        {"player_id": "player-a2", "nickname": "SAMPLE-A-Dps1", "game_player_name": "SAMPLE-A-Dps1", "game_skill_level": 10},
+        {"player_id": "player-a3", "nickname": "SAMPLE-A-Dps2", "game_player_name": "SAMPLE-A-Dps2", "game_skill_level": 10},
+        {"player_id": "player-a4", "nickname": "SAMPLE-A-Sup1", "game_player_name": "SAMPLE-A-Sup1", "game_skill_level": 10},
+        {"player_id": "player-a5", "nickname": "SAMPLE-A-Sup2", "game_player_name": "SAMPLE-A-Sup2", "game_skill_level": 10}
+      ]
+    },
+    "faction2": {
+      "faction_id": "team-sample-beta",
+      "leader": "player-b1",
+      "name": "SAMPLE Team Beta",
+      "avatar": "",
+      "roster": [
+        {"player_id": "player-b1", "nickname": "SAMPLE-B-Tank", "game_player_name": "SAMPLE-B-Tank", "game_skill_level": 10},
+        {"player_id": "player-b2", "nickname": "SAMPLE-B-Dps1", "game_player_name": "SAMPLE-B-Dps1", "game_skill_level": 10},
+        {"player_id": "player-b3", "nickname": "SAMPLE-B-Dps2", "game_player_name": "SAMPLE-B-Dps2", "game_skill_level": 10},
+        {"player_id": "player-b4", "nickname": "SAMPLE-B-Sup1", "game_player_name": "SAMPLE-B-Sup1", "game_skill_level": 10},
+        {"player_id": "player-b5", "nickname": "SAMPLE-B-Sup2", "game_player_name": "SAMPLE-B-Sup2", "game_skill_level": 10}
+      ]
+    }
+  },
+  "voting": {
+    "map": {
+      "entities": [
+        {"guid": "mp_busan", "name": "Busan", "class_name": "control"},
+        {"guid": "mp_kings_row", "name": "King's Row", "class_name": "hybrid"},
+        {"guid": "mp_dorado", "name": "Dorado", "class_name": "escort"},
+        {"guid": "mp_colosseo", "name": "Colosseo", "class_name": "push"},
+        {"guid": "mp_new_queen_street", "name": "New Queen Street", "class_name": "push"}
+      ],
+      "pick": ["mp_busan", "mp_kings_row", "mp_dorado", "mp_colosseo", "mp_new_queen_street"]
+    }
+  },
+  "results": {
+    "winner": "faction1",
+    "score": {"faction1": 3, "faction2": 2}
+  },
+  "detailed_results": [
+    {"asc_score": false, "winner": "faction1", "factions": {"faction1": {"score": 2}, "faction2": {"score": 1}}},
+    {"asc_score": false, "winner": "faction2", "factions": {"faction1": {"score": 1}, "faction2": {"score": 3}}},
+    {"asc_score": false, "winner": "faction1", "factions": {"faction1": {"score": 3}, "faction2": {"score": 2}}},
+    {"asc_score": false, "winner": "faction2", "factions": {"faction1": {"score": 0}, "faction2": {"score": 1}}},
+    {"asc_score": false, "winner": "faction1", "factions": {"faction1": {"score": 2}, "faction2": {"score": 1}}}
+  ]
+}

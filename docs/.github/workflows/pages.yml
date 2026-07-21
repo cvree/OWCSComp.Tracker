@@ -1,0 +1,56 @@
+# =====================================================================
+# OWCS Comp Tracker — GitHub Pages deploy (static, no build)
+# ---------------------------------------------------------------------
+# Publishes the repo as-is to GitHub Pages. The public site is pure
+# static files (HTML + assets/js + assets/data/public_data.v1.js) with
+# no build step, so we upload the repo root directly. The committed
+# public_data.v1.js is what renders the real Nepal milestone.
+#
+# One-time manual step: Settings -> Pages -> Build and deployment ->
+# Source: "GitHub Actions". Then this workflow serves the site.
+# =====================================================================
+name: pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "*.html"
+      - "assets/**"
+      - "reports/**"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+# Allow only one concurrent deployment; let an in-progress deploy finish
+# rather than cancelling it (a half-cancelled Pages deploy can 404).
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload site artifact (repo root)
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "."
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

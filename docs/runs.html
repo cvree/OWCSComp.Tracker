@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Vision Lab — OWCS Comp Tracker</title>
+<meta name="robots" content="noindex" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css" />
+<style>
+  .run-card { margin-bottom: 14px; }
+  .run-title { font-family: var(--display); font-weight: 700; font-size: 1.02rem;
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap; word-break: break-all; }
+  .run-meta { font-size: .82rem; color: var(--muted); display: flex;
+    flex-wrap: wrap; gap: 5px 18px; margin-top: 7px; }
+  .run-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; align-items: center; }
+  .run-links a, .run-links button {
+    font: 600 .74rem var(--display); letter-spacing: .06em; text-transform: uppercase;
+    border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px;
+    color: var(--text); background: var(--bg-raise); cursor: pointer;
+    transition: border-color .12s ease, color .12s ease; text-decoration: none; }
+  .run-links a:hover, .run-links button:hover { border-color: var(--amber); color: var(--amber); text-decoration: none; }
+  .badge { display: inline-block; border: 1px solid var(--line); border-radius: 999px;
+    padding: 1px 9px; font: 600 .68rem var(--display); text-transform: uppercase;
+    letter-spacing: .06em; color: var(--muted); }
+  details.steps { margin-top: 12px; }
+  details.steps summary { cursor: pointer; font: 600 .74rem var(--display);
+    letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  details.steps summary:hover { color: var(--amber); }
+  table.steps-tbl { border-collapse: collapse; width: 100%; margin-top: 10px;
+    background: rgba(5,10,19,.5); border-radius: 8px; overflow: hidden; }
+  table.steps-tbl td, table.steps-tbl th { border-bottom: 1px solid var(--line);
+    padding: 7px 10px; font-size: .8rem; text-align: left; vertical-align: top; }
+  table.steps-tbl th { font: 600 .66rem var(--display); letter-spacing: .1em;
+    text-transform: uppercase; color: var(--muted); }
+  table.steps-tbl tr:last-child td { border-bottom: 0; }
+  .err-line { color: var(--st-bad); font-size: .84rem; margin-top: 8px; }
+  .list-tools { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin: 18px 0; }
+  .list-count { color: var(--muted); font-size: .82rem; }
+
+  /* ---- Vision Lab: map-ingestion cards (the primary content here) ---- */
+  .ingest-card { margin-bottom: 16px; }
+  .ingest-title { font-family: var(--display); font-weight: 700; font-size: 1.08rem;
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .ingest-stats { display: flex; gap: 22px; flex-wrap: wrap; margin: 12px 0 4px; }
+  .ingest-stats div { display: flex; flex-direction: column; gap: 2px; }
+  .ingest-stats .n { font-family: var(--display); font-weight: 700; font-size: 1.3rem;
+    color: var(--text); line-height: 1; font-variant-numeric: tabular-nums; }
+  .ingest-stats .n.warn { color: var(--st-warn); }
+  .ingest-stats .k { font-size: .68rem; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--muted); }
+  .ingest-findings { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 10px 0 2px;
+    font-size: .82rem; color: var(--muted); }
+  .ingest-findings b { color: var(--text); }
+  .ingest-findings .agree { color: var(--st-ok); }
+  .ingest-findings .disagree { color: var(--st-bad); font-weight: 600; }
+  .calib-note { margin-top: 8px; padding: 8px 12px; border-radius: 8px;
+    border: 1px solid rgba(255,92,100,.4); background: var(--st-bad-soft);
+    color: var(--text); font-size: .82rem; }
+  .section-divider { margin: 40px 0 0; padding-top: 24px; border-top: 1px dashed var(--line); }
+  .section-divider .eyebrow { color: var(--muted); }
+</style>
+</head>
+<body data-page="runs" data-shell="control">
+
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="index.html"><span class="brand-mark"></span>OWCS Comp Tracker</a>
+    <div class="nav-links"><a href="run.html">Run</a><a class="active" href="runs.html">Vision Lab</a><a href="calibration.html">Calibration</a><a href="sources.html">Sources</a><a href="matches.html">Matches</a><a href="admin.html">Admin</a></div>
+    <span class="nav-status" id="nav-status"><span class="dot"></span><span>checking…</span></span>
+  </div>
+</nav>
+
+<div class="wrap page-head">
+  <p class="eyebrow">Vision Lab</p>
+  <h1 style="font-size:clamp(1.6rem,3vw,2.3rem)">Team identification, ban identification, comp identification — with the receipts.</h1>
+  <p class="muted">Every <code>pipeline/ingest_map.py</code> run appears below with its
+    <strong>calibration health</strong> (measured live from this run's own reads, not just
+    trusted from a one-time offline check), <strong>team identity</strong> (OCR-matched
+    against the teams table and cross-checked against what the run was started with),
+    <strong>CV-detected hero bans</strong>, and round/swap counts — every number links to the
+    full evidence report and the change-point review page behind it.</p>
+</div>
+
+<div class="wrap">
+  <div id="ingest-runs-list"><p class="muted">Loading…</p></div>
+</div>
+
+<div class="wrap section-divider">
+  <p class="eyebrow">Capture runs (legacy pipeline)</p>
+  <h2 style="font-size:1.1rem;margin-bottom:6px">Older per-frame capture/detect batches</h2>
+  <p class="muted small">Each <code>pipeline/run_owcs_auto.py</code> run appears here with
+    per-step status and links to its evidence report. Runs here never write comps to the
+    database — superseded by the map ingestions above for anything you want to trust.</p>
+  <div class="list-tools" id="list-tools" style="display:none">
+    <div class="seg" role="group" aria-label="Filter runs by status">
+      <button type="button" data-f="all" aria-pressed="true">All</button>
+      <button type="button" data-f="ok" aria-pressed="false">OK</button>
+      <button type="button" data-f="partial" aria-pressed="false">Partial</button>
+      <button type="button" data-f="failed" aria-pressed="false">Failed</button>
+    </div>
+    <span class="list-count" id="list-count"></span>
+  </div>
+  <div id="runs-list"><p class="muted">Loading…</p></div>
+</div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/vendor/lenis.min.js" defer></script>
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="assets/js/motion.js" defer></script>
+<script src="assets/js/ui.js"></script>
+<script>
+/* ---- Vision Lab: map-ingestion cards (team/ban/comp identification) --- */
+(function () {
+  const root = document.getElementById("ingest-runs-list");
+  const runs = (window.OWCS_DATA && window.OWCS_DATA.ingestRuns) || [];
+  const esc = s => String(s ?? "—").replace(/&/g, "&amp;").replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+  const pct = n => (n == null ? "—" : Math.round(n * 100) + "%");
+
+  if (!runs.length) {
+    root.innerHTML =
+      '<div class="empty-v2"><div class="glyph">◎</div>' +
+      '<h3>No map ingestions yet</h3>' +
+      '<p>Run the full-map pipeline against a calibrated source:</p>' +
+      '<div class="cmd-chip"><span class="prompt">$</span>' +
+      '<code>python pipeline/ingest_map.py --clip &lt;clip&gt; --start &lt;s&gt; --end &lt;e&gt; ' +
+      '--layout &lt;layout&gt; --source-id &lt;id&gt; --ingest-id &lt;id&gt; --match &lt;id&gt; ' +
+      '--map-order 1 --team-a &lt;a&gt; --team-b &lt;b&gt; --write</code>' +
+      '<button class="cmd-copy" type="button" data-copy="python pipeline/ingest_map.py --clip <clip> --start <s> --end <e> --layout <layout> --source-id <id> --ingest-id <id> --match <id> --map-order 1 --team-a <a> --team-b <b> --write">copy</button></div></div>';
+    return;
+  }
+
+  root.innerHTML = "";
+  for (const r of runs) {
+    const calibOk = r.calibrationStatus !== "suspect";
+    const calibPill = calibOk
+      ? '<span class="pill-v2 ok">calibration ok</span>'
+      : '<span class="pill-v2 failed">calibration suspect</span>';
+    const findingsHtml = (r.teamFindings || []).map(tf => {
+      const agree = tf.status === "confirmed" ? "agree" :
+        (tf.notes && /mismatch/i.test(tf.notes) ? "disagree" : "unresolved");
+      const cls = agree === "agree" ? "agree" : agree === "disagree" ? "disagree" : "";
+      return `<span>side ${esc(tf.side)}: <b>${esc(tf.team || "unresolved")}</b> ` +
+        `(${pct(tf.confidence)}) <span class="${cls}">${esc(tf.notes || "")}</span></span>`;
+    }).join("");
+    const health = r.calibrationHealth;
+    const healthNote = (!calibOk && health && health.reasons && health.reasons.length)
+      ? `<div class="calib-note"><b>Calibration flagged this run:</b> ${esc(health.reasons.join("; "))}</div>`
+      : "";
+    const banStat = r.bansConfirmed > 0
+      ? `<div><span class="n">${esc(r.bansConfirmed)}</span><span class="k">CV bans</span></div>`
+      : r.banCandidates > 0
+        ? `<div><span class="n warn">${esc(r.banCandidates)}</span><span class="k">ban candidates (review)</span></div>`
+        : "";
+    const card = document.createElement("div");
+    card.className = "hud lift ingest-card";
+    card.innerHTML =
+      `<div class="ingest-title">${esc(r.matchTitle)}
+         <span class="badge">${esc(r.mapId || "map")} · #${esc(r.mapOrder)}</span>
+         ${calibPill}
+       </div>
+       <div class="ingest-stats">
+         <div><span class="n">${esc(r.rounds)}</span><span class="k">rounds</span></div>
+         <div><span class="n">${esc(r.stints)}</span><span class="k">hero stints</span></div>
+         <div><span class="n">${esc(r.swapsConfirmed)}</span><span class="k">swaps confirmed</span></div>
+         ${r.swapsUncertain ? `<div><span class="n warn">${esc(r.swapsUncertain)}</span><span class="k">uncertain</span></div>` : ""}
+         ${banStat}
+       </div>
+       ${findingsHtml ? `<div class="ingest-findings">${findingsHtml}</div>` : ""}
+       ${healthNote}
+       <div class="run-meta" style="margin-top:8px">
+         <span>detector ${esc(r.detectorVersion)}</span>
+         <span>calibration ${esc(r.calibrationVersion || "—")}</span>
+         <span>window ${esc(r.startOffset)}s–${esc(r.endOffset)}s</span>
+         <span>${esc((r.createdAt || "").slice(0, 16))}</span>
+       </div>
+       <div class="run-links">
+         <a href="${esc(r.reportPath)}">full report</a>
+         <a href="reports/ingest/${esc(r.id)}/review.html">change-point review</a>
+         <a href="reports/ingest/${esc(r.id)}/crops.html">hero crop report</a>
+       </div>`;
+    root.appendChild(card);
+  }
+})();
+
+/* ---- Legacy capture runs (run_owcs_auto.py) --------------------------- */
+(function () {
+  const root = document.getElementById("runs-list");
+  const runs = (window.OWCS_DATA && window.OWCS_DATA.autoRuns) || [];
+  const esc = s => String(s ?? "—").replace(/&/g, "&amp;").replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+
+  // Fallback for records written before runStatus existed.
+  function statusOf(r) {
+    if (r.runStatus) return r.runStatus;
+    if (!r.ok) return "failed";
+    const det = (r.detection || {}).status;
+    if (det === "skipped" || det === "error" || r.filtered === false) return "partial";
+    return "ok";
+  }
+
+  let apiUp = false;
+  fetch("/api/ping").then(r => r.json()).then(() => {
+    apiUp = true;
+    document.querySelectorAll(".ev-btn").forEach(b => b.style.display = "");
+  }).catch(() => {});
+
+  window.regenEvidence = async function (run, btn) {
+    btn.disabled = true; btn.textContent = "starting…";
+    try {
+      const r = await fetch("/api/evidence", {method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({run})});
+      const j = await r.json();
+      if (!r.ok || j.error) { alert(j.error || `HTTP ${r.status}`); btn.disabled = false; btn.textContent = "regenerate evidence"; return; }
+      btn.textContent = "running — watch on Run page";
+      window.location.href = "run.html";
+    } catch (e) { alert("control room API unavailable — start it with: python pipeline/serve.py"); btn.disabled = false; btn.textContent = "regenerate evidence"; }
+  };
+
+  if (!runs.length) {
+    root.innerHTML =
+      '<div class="empty-v2"><div class="glyph">▶</div>' +
+      '<h3>No automatic runs yet</h3>' +
+      '<p>Start one on the <a href="run.html">Run page</a> (needs <code>python pipeline/serve.py</code>), or from a terminal:</p>' +
+      '<div class="cmd-chip"><span class="prompt">$</span>' +
+      '<code>python pipeline/run_owcs_auto.py --source &lt;slug&gt; --start 1:30:00 --end 1:32:00 --every 30</code>' +
+      '<button class="cmd-copy" type="button" data-copy="python pipeline/run_owcs_auto.py --source <slug> --start 1:30:00 --end 1:32:00 --every 30">copy</button></div></div>';
+    return;
+  }
+
+  document.getElementById("list-tools").style.display = "";
+  root.innerHTML = "";
+  const cards = [];
+  for (const r of runs) {
+    const st = statusOf(r);
+    const det = r.detection || {};
+    const steps = r.steps || [];
+    const stepRows = steps.map((s, i) =>
+      `<tr><td>${i + 1}</td><td>${esc(s.name)}</td>` +
+      `<td><span class="pill-v2 ${esc(s.status)}">${esc(s.status)}</span></td>` +
+      `<td>${esc(s.detail || "")}</td>` +
+      `<td>${s.out ? `<code>${esc(s.out)}</code>` : "—"}</td></tr>`).join("");
+    const stepsBlock = steps.length
+      ? `<details class="steps"><summary>${steps.length} steps — expand for per-step status</summary>
+           <table class="steps-tbl"><tr><th>#</th><th>step</th><th>status</th><th>detail</th><th>output</th></tr>
+           ${stepRows}</table></details>`
+      : `<p class="muted" style="margin-top:8px">No per-step data (older run — re-run to get step statuses).</p>`;
+    const card = document.createElement("div");
+    card.className = "hud lift run-card";
+    card.dataset.status = st;
+    card.innerHTML =
+      `<div class="run-title">${esc(r.run)}
+         <span class="badge">${esc(r.mode)}</span>
+         <span class="pill-v2 ${st}">${st}</span>
+       </div>
+       <div class="run-meta">
+         <span>window: ${esc(r.window)} every ${esc(r.every)}s</span>
+         <span>frames: ${esc(r.framesKept ?? "?")} kept / ${esc(r.framesRaw ?? "?")} raw${r.filtered === false ? " (unfiltered)" : ""}</span>
+         <span>detection: ${esc(det.status || "—")}</span>
+         <span>layout: <code>${esc(r.layout || "—")}</code></span>
+         <span>started: ${esc((r.startedAt || "").slice(0, 16).replace("T", " "))}</span>
+       </div>
+       <div class="run-links">
+         <a href="${esc(r.reportDir)}index.html">full report</a>
+         <a href="${esc(r.reportDir)}vision_dashboard.html" title="hero/anchor/score debugging for every frame in this run — auto-generated with the run; if missing, use regenerate evidence below">vision dashboard</a>
+         <a href="${esc(r.reportDir)}layout.html">layout debug</a>
+         <a href="${esc(r.reportDir)}crops.html">crop report</a>` +
+         (det.status === "ok"
+           ? `<a href="${esc(r.reportDir)}detections.json">detections.json</a>`
+             + `<a href="${esc(r.reportDir)}review_queue.json" title="promote-gate output; may not exist until you run promote_detections.py">review queue</a>`
+           : "") +
+         `<button class="ev-btn" style="display:none" type="button" onclick="regenEvidence('${esc(r.run)}', this)" title="re-run layout.html + crops.html + vision_dashboard.html from this run's frames (no re-download)">regenerate evidence</button>` +
+      `</div>` +
+      (r.error ? `<div class="err-line">error: ${esc(r.error)}</div>` : "") +
+      stepsBlock;
+    root.appendChild(card);
+    cards.push(card);
+  }
+
+  /* ---- status filter --------------------------------------------------- */
+  const seg = document.querySelector(".seg");
+  const count = document.getElementById("list-count");
+  function applyFilter(f) {
+    let shown = 0;
+    for (const c of cards) {
+      const s = c.dataset.status;
+      const hit = f === "all" || s === f
+        || (f === "failed" && s === "timeout");  // timeouts group under Failed
+      c.style.display = hit ? "" : "none";
+      if (hit) shown++;
+    }
+    count.textContent = `${shown} of ${cards.length} run${cards.length === 1 ? "" : "s"}`;
+  }
+  seg.addEventListener("click", e => {
+    const b = e.target.closest("button[data-f]");
+    if (!b) return;
+    seg.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", "false"));
+    b.setAttribute("aria-pressed", "true");
+    applyFilter(b.dataset.f);
+  });
+  applyFilter("all");
+})();
+</script>
+</body>
+</html>

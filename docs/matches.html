@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Matches — OWCS Comp Tracker</title>
+<meta name="description" content="Live, upcoming and recent OWCS matches with capture status.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/public.css">
+</head>
+<body class="pub">
+<a class="skip-link" href="#main">Skip to content</a>
+<main class="pub-main" id="main">
+  <div class="page-head rv">
+    <span class="ph-eyebrow">Schedule</span>
+    <h1>Matches</h1>
+    <p class="lede">Who's playing, when (in your local time), where to watch — and how far the comp-capture pipeline has gotten on each series.</p>
+  </div>
+
+  <div class="stack rv">
+    <div class="seg-region" id="region-seg" role="group" aria-label="Region"></div>
+    <div class="split">
+      <div class="filter-summary" id="m-summary" aria-live="polite"></div>
+      <span class="freshness" id="freshness"></span>
+    </div>
+  </div>
+
+  <div id="m-live" class="section" aria-label="Live"></div>
+  <div id="m-upcoming" class="section" aria-label="Upcoming"></div>
+  <div id="m-recent" class="section" aria-label="Recent results"></div>
+</main>
+
+<script src="assets/vendor/lenis.min.js" defer></script>
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="assets/vendor/three.min.js" defer></script>
+<script src="assets/vendor/vanta.net.min.js" defer></script>
+<script src="assets/js/motion.js" defer></script>
+<script src="assets/data/public_data.v1.js"></script>
+<script src="assets/data/public_fixture.v1.js"></script>
+<script src="assets/js/public/core.js"></script>
+<script src="assets/js/public/shell.js"></script>
+<script src="assets/js/public/page-matches.js"></script>
+</body>
+</html>

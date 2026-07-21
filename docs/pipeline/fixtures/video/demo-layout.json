@@ -1,0 +1,91 @@
+{
+ "frame_width": 1280,
+ "frame_height": 720,
+ "sample_interval_seconds": 300,
+ "anchor": {
+  "rect": [
+   560,
+   8,
+   160,
+   40
+  ],
+  "template": "pipeline/fixtures/video/anchor.png",
+  "min_score": 0.7
+ },
+ "replay": {
+  "rect": [
+   20,
+   620,
+   120,
+   60
+  ],
+  "template": "pipeline/fixtures/video/replay.png",
+  "min_score": 0.7
+ },
+ "slots_a": [
+  [
+   40,
+   20,
+   64,
+   64
+  ],
+  [
+   120,
+   20,
+   64,
+   64
+  ],
+  [
+   200,
+   20,
+   64,
+   64
+  ],
+  [
+   280,
+   20,
+   64,
+   64
+  ],
+  [
+   360,
+   20,
+   64,
+   64
+  ]
+ ],
+ "slots_b": [
+  [
+   800,
+   20,
+   64,
+   64
+  ],
+  [
+   880,
+   20,
+   64,
+   64
+  ],
+  [
+   960,
+   20,
+   64,
+   64
+  ],
+  [
+   1040,
+   20,
+   64,
+   64
+  ],
+  [
+   1120,
+   20,
+   64,
+   64
+  ]
+ ],
+ "match_threshold": 0.6,
+ "templates_dir": "pipeline/fixtures/video/templates"
+}

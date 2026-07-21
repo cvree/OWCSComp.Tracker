@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Calibration Lab — OWCS Comp Tracker</title>
+<meta name="robots" content="noindex" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css" />
+<style>
+  .cal-grid { display: grid; gap: 16px; }
+  .cal-summary { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 4px; }
+  .cal-pill { display: inline-flex; align-items: center; gap: 7px; border-radius: 999px;
+    padding: 5px 13px; font: 700 .72rem var(--display); letter-spacing: .05em;
+    text-transform: uppercase; border: 1px solid var(--line); }
+  .cal-pill b { font-size: .9rem; }
+  .cal-pill.ok   { color: #6ff0a8; border-color: rgba(46,189,107,.5); background: rgba(46,189,107,.10); }
+  .cal-pill.warn { color: #ffca7a; border-color: rgba(232,161,60,.5); background: rgba(232,161,60,.10); }
+  .cal-pill.fail { color: #ff9ba0; border-color: rgba(255,92,100,.5); background: rgba(255,92,100,.10); }
+  .src-card { border: 1px solid var(--line); border-radius: 14px; background: var(--bg-raise);
+    padding: 0; overflow: hidden; }
+  .src-card__head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    padding: 14px 18px; border-bottom: 1px solid var(--line); }
+  .src-card__head h3 { margin: 0; font: 600 1.05rem var(--display); }
+  .src-card__id { font: 500 .74rem var(--mono, monospace); color: var(--muted); }
+  .src-card.is-fail { border-color: rgba(255,92,100,.35); }
+  .src-status { margin-left: auto; }
+  .badge-status { display: inline-block; border-radius: 999px; padding: 2px 11px;
+    font: 700 .66rem var(--display); letter-spacing: .07em; text-transform: uppercase; color: #06101c; }
+  .badge-status.ok { background: #2ebd6b; } .badge-status.warn { background: #e8a13c; }
+  .badge-status.fail { background: #ff5c64; color: #fff; }
+  .src-card__body { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1px; background: var(--line); }
+  .metric { background: var(--bg-raise); padding: 12px 15px; }
+  .metric .m-k { font: 600 .64rem var(--display); letter-spacing: .07em; text-transform: uppercase;
+    color: var(--muted); display: block; margin-bottom: 4px; }
+  .metric .m-v { font: 700 1.15rem var(--display); font-variant-numeric: tabular-nums; }
+  .metric .m-v.good { color: #6ff0a8; } .metric .m-v.bad { color: #ff9ba0; }
+  .metric .m-v small { font-size: .72rem; color: var(--muted); font-weight: 500; }
+  .cov-track { height: 6px; border-radius: 999px; background: var(--line); margin-top: 7px; overflow: hidden; }
+  .cov-fill { height: 100%; border-radius: inherit; background: linear-gradient(90deg,#2ebd6b,#7de0a6); }
+  .src-reasons { padding: 12px 18px; border-top: 1px solid var(--line); }
+  .src-reasons ul { margin: 6px 0 0; padding-left: 18px; }
+  .src-reasons li { font-size: .84rem; color: var(--muted); margin: 3px 0; }
+  .src-actions { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 18px; border-top: 1px solid var(--line); }
+  .src-links { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 18px 14px; }
+  .src-links a { font-size: .82rem; }
+  .pool-row { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 18px 14px; }
+  .pool-face { width: 40px; height: 40px; border-radius: 9px; overflow: hidden; border: 1px solid var(--line);
+    position: relative; }
+  .pool-face img { width: 100%; height: 100%; object-fit: cover; }
+  .pool-face span { display: flex; width: 100%; height: 100%; align-items: center; justify-content: center;
+    font: 700 .7rem var(--display); color: var(--muted); background: var(--bg); }
+  .pool-face b { position: absolute; left: 0; right: 0; bottom: 0; font: 600 .5rem var(--mono, monospace);
+    text-align: center; background: rgba(6,11,21,.72); color: #cdd8ec; padding: 1px 0; letter-spacing: .02em; }
+  .cmd-block { margin: 0 18px 14px; }
+  .portrait-strip { display: flex; flex-wrap: wrap; gap: 8px; }
+  .portrait-chip { display: flex; flex-direction: column; align-items: center; gap: 3px; width: 60px; }
+  .portrait-chip .pool-face { width: 54px; height: 54px; }
+  .portrait-chip small { font-size: .62rem; color: var(--muted); overflow-wrap: anywhere; text-align: center; }
+</style>
+</head>
+<body data-page="calibration" data-shell="control">
+
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="index.html"><span class="brand-mark"></span>OWCS Comp Tracker</a>
+    <div class="nav-links"><a href="run.html">Run</a><a href="runs.html">Vision Lab</a><a class="active" href="calibration.html">Calibration</a><a href="sources.html">Sources</a><a href="matches.html">Matches</a><a href="admin.html">Admin</a></div>
+    <span class="nav-status" id="nav-status"><span class="dot"></span><span>checking…</span></span>
+  </div>
+</nav>
+
+<div class="wrap page-head">
+  <p class="eyebrow">Autocalibration · control room</p>
+  <h1 style="font-size:clamp(1.6rem,3vw,2.3rem)">Calibration Lab</h1>
+  <p class="muted">Every real OWCS source, and exactly how far its auto-calibration has gotten:
+    HUD layout, calibrator confidence, gameplay-filter probe, reject markers, and the real hero
+    portraits harvested from its broadcast. Green means the pipeline can ingest a map from it end to end.</p>
+</div>
+
+<div class="wrap">
+  <div class="cal-summary" id="cal-summary"></div>
+
+  <section style="margin:18px 0">
+    <div class="hud" style="margin-bottom:14px">
+      <p class="hud-kicker">Hero portrait assets</p>
+      <p class="muted small" style="margin:2px 0 12px">Upscaled from <b>real broadcast HUD crops</b> — never synthetic art.
+        Regenerate with <code>python pipeline/build_hero_portraits.py</code>.</p>
+      <div class="portrait-strip" id="portrait-strip"><span class="muted small">loading…</span></div>
+    </div>
+  </section>
+
+  <div class="cal-grid" id="cal-grid"></div>
+</div>
+
+<script src="assets/vendor/lenis.min.js" defer></script>
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="assets/js/motion.js" defer></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/ui.js"></script>
+<script>
+(function () {
+  "use strict";
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s == null ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  const PORTRAITS = {};   // heroId -> {file} manifest, filled from API or data.js
+
+  function heroName(id) {
+    const d = (window.OWCS_DATA && window.OWCS_DATA.heroes || []).find((h) => h.id === id);
+    return d ? d.name : id;
+  }
+  function face(heroId) {
+    const url = `assets/img/heroes/${heroId}.png`;
+    const has = PORTRAITS[heroId];
+    return has
+      ? `<span class="pool-face"><img src="${esc(url)}" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'${esc((heroName(heroId)||'').slice(0,2).toUpperCase())}'}))"><b>${esc(heroId)}</b></span>`
+      : `<span class="pool-face"><span>${esc((heroName(heroId) || "").slice(0, 2).toUpperCase())}</span></span>`;
+  }
+
+  function pct(v) { return v == null ? "—" : Math.round(v * 100) + "%"; }
+
+  function metric(k, v, cls, extra) {
+    return `<div class="metric"><span class="m-k">${esc(k)}</span>
+      <span class="m-v ${cls || ""}">${v}</span>${extra || ""}</div>`;
+  }
+
+  function srcCard(s) {
+    const t = s.templates || { heroes: 0, files: 0, heroIds: [] };
+    const cov = s.rosterCoverage || 0;
+    // raw (unescaped) command — escaped exactly once at each boundary below
+    const cmd = `python pipeline/calibrate_source.py --clip work/clips/${s.id}.mp4 --times t1,t2,t3,t4,t5,t6 --source-id ${s.id} --out ${s.layoutPath || 'layouts/' + s.id + '.json'}`;
+    const reports = (s.calibrationReports || []).map((p) =>
+      `<a href="${esc(p)}" target="_blank" rel="noopener">${esc(p.split('/').pop())} ↗</a>`).join("");
+    const ingest = Object.entries(s.ingestRuns || {}).map(([k, n]) => `${n} ${esc(k)}`).join(" · ");
+    return `<div class="src-card is-${esc(s.status)}">
+      <div class="src-card__head">
+        <div>
+          <h3>${esc(s.title || s.id)}</h3>
+          <span class="src-card__id">${esc(s.id)}${s.frameSize ? " · " + s.frameSize.join("×") : ""}${ingest ? " · ingests: " + ingest : ""}</span>
+        </div>
+        <span class="src-status"><span class="badge-status ${esc(s.status)}">${esc(s.status)}</span></span>
+      </div>
+      <div class="src-card__body">
+        ${metric("Calibrator confidence", s.confidence == null ? "<small>none</small>" : (s.confidence).toFixed(2),
+          s.confidence == null ? "" : (s.confidence >= 0.55 ? "good" : "bad"))}
+        ${metric("HUD probe", s.hudProbe ? "present" : "missing", s.hudProbe ? "good" : "bad")}
+        ${metric("Round emblem", s.roundEmblem ? "present" : "—", s.roundEmblem ? "good" : "")}
+        ${metric("Reject markers", s.rejectMarkers || 0, (s.rejectMarkers && !(s.rejectMarkersMissing || []).length) ? "good" : (s.rejectMarkers ? "bad" : ""))}
+        ${metric("Template heroes", `${t.heroes}<small> / ${s.rosterSize || "?"} roster</small>`, t.heroes >= 10 ? "good" : (t.heroes ? "" : "bad"),
+          `<div class="cov-track"><span class="cov-fill" style="width:${Math.round(cov * 100)}%"></span></div>`)}
+        ${metric("Template files", t.files || 0, t.files ? "" : "bad")}
+      </div>
+      ${t.heroIds && t.heroIds.length ? `<div class="pool-row" aria-label="Harvested hero portraits">
+        ${t.heroIds.map(face).join("")}</div>` : ""}
+      ${s.reasons && s.reasons.length ? `<div class="src-reasons">
+        <span class="m-k" style="font:600 .64rem var(--display);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)">What's left</span>
+        <ul>${s.reasons.map((r) => `<li>${esc(r)}</li>`).join("")}</ul></div>` : ""}
+      <div class="cmd-block">
+        <div class="cmd-chip"><span class="prompt">$</span><code>${esc(cmd)}</code>
+          <button class="cmd-copy" type="button" data-copy="${esc(cmd)}">copy</button></div>
+      </div>
+      ${reports ? `<div class="src-links">${reports}</div>` : ""}
+    </div>`;
+  }
+
+  function render(status) {
+    const sources = (status.sources || []).filter((s) => s.mode !== "demo" && s.id.indexOf("REPLACE") < 0);
+    const c = status.counts || {};
+    $("cal-summary").innerHTML = [
+      ["ok", c.ok || 0, "ready to ingest"],
+      ["warn", c.warn || 0, "usable, incomplete"],
+      ["fail", c.fail || 0, "blocked"],
+    ].map(([k, n, label]) => `<span class="cal-pill ${k}"><b>${n}</b> ${esc(label)}</span>`).join("") +
+      `<span class="cal-pill"><b>${Object.keys(PORTRAITS).length}</b> hero portraits</span>` +
+      `<span class="cal-pill"><b>${status.rosterSize || "?"}</b> roster heroes</span>`;
+    $("cal-grid").innerHTML = sources.length
+      ? sources.map(srcCard).join("")
+      : `<div class="hud"><p class="muted">No real sources registered yet. Add one on
+         <a href="sources.html">Sources</a>, then calibrate it here.</p></div>`;
+    $("portrait-strip").innerHTML = Object.keys(PORTRAITS).length
+      ? Object.entries(PORTRAITS).map(([hid, m]) =>
+          `<div class="portrait-chip">${face(hid)}<small>${esc(heroName(hid))}</small></div>`).join("")
+      : `<span class="muted small">No portraits generated yet — run <code>python pipeline/build_hero_portraits.py</code>.</span>`;
+    /* .cmd-copy buttons are handled globally by assets/js/ui.js */
+  }
+
+  /* Static fallback: build a best-effort status from the exported data.js
+     (ingestRuns + videoSources) so the page is useful on plain hosting. */
+  function staticStatus() {
+    const D = window.OWCS_DATA || {};
+    const runsBySource = {};
+    (D.ingestRuns || []).forEach((r) => {
+      runsBySource[r.sourceId] = runsBySource[r.sourceId] || {};
+      runsBySource[r.sourceId][r.status] = (runsBySource[r.sourceId][r.status] || 0) + 1;
+    });
+    const sources = (D.videoSources || []).map((v) => ({
+      id: v.id, title: v.title, layoutPath: v.layout, mode: v.platform === "demo" ? "demo" : v.mode,
+      status: "warn", confidence: null, hudProbe: null, roundEmblem: false,
+      rejectMarkers: 0, rejectMarkersMissing: [], templates: { heroes: 0, files: 0, heroIds: [] },
+      rosterSize: (D.heroes || []).length, rosterCoverage: 0,
+      calibrationReports: [], ingestRuns: runsBySource[v.id] || {},
+      reasons: ["Live calibration health needs the control-room server — run `python pipeline/serve.py`. This static view shows registered sources + ingest counts only."],
+    }));
+    return { sources, rosterSize: (D.heroes || []).length,
+      counts: { ok: 0, warn: sources.filter((s) => s.mode !== "demo").length, fail: 0 } };
+  }
+
+  (async function init() {
+    // portraits first (both the live and static paths use them)
+    try {
+      const pm = await (await fetch("assets/img/heroes/manifest.json")).json();
+      Object.assign(PORTRAITS, pm.heroes || {});
+    } catch (e) { /* none generated yet */ }
+    // ui.js owns the #nav-status dot (live/offline) via /api/ping.
+    try {
+      const status = await (await fetch("/api/calibration")).json();
+      if (!status.sources) throw new Error("no api");
+      render(status);
+    } catch (e) {
+      render(staticStatus());   // plain hosting → data.js-derived view
+    }
+  })();
+})();
+</script>
+</body>
+</html>

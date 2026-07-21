@@ -1,0 +1,22 @@
+{
+  "_readme": "Manual FACEIT-FACT overrides — NOT comps. Use this to fill facts the public FACEIT API doesn't expose: replay codes, hero bans, pick/veto. Rename to match_facts.json and commit; apply_match_facts.py writes them with source='manual_facts', which never creates hero comps. Comps go in corrections/corrections.json instead. Build entries with fact-admin.html.",
+  "matchFacts": [
+    {
+      "match": "m12",
+      "faceitMatchId": "1-example-optional",
+      "maps": [
+        {
+          "mapOrder": 1,
+          "replayCode": "ABC123",
+          "heroBans": [
+            { "team": "ssg", "hero": "tracer", "order": 1 },
+            { "team": "nrg", "hero": "juno", "order": 2 }
+          ],
+          "pickedByTeam": "ssg",
+          "vetoAction": "pick",
+          "notes": "Entered from FACEIT room after match."
+        }
+      ]
+    }
+  ]
+}
