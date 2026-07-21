@@ -25,6 +25,7 @@
     { href: "tournaments.html", label: "Tournaments" },
     { href: "matches.html", label: "Matches" },
     { href: "teams.html", label: "Teams" },
+    { href: "maps.html", label: "Maps" },
     { href: "stats.html", label: "Stats" },
   ];
   const ADMIN = [

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maps — OWCS Comp Tracker</title>
+<meta name="description" content="The OWCS map meta — every map that's been played, the heroes that get run on it, and the bans, all from verified broadcast data.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/public.css">
+</head>
+<body class="pub">
+<a class="skip-link" href="#main">Skip to content</a>
+<main class="pub-main" id="main">
+  <div class="page-head rv">
+    <span class="ph-eyebrow">The map meta</span>
+    <h1>Maps</h1>
+    <p class="lede">Every map the tracker has verified comps for — and the heroes teams actually run on it.
+      Pick rates and bans are map-scoped, because a hero that dominates one map can vanish on the next.</p>
+  </div>
+
+  <div class="stack rv">
+    <div class="seg-region" id="region-seg" role="group" aria-label="Region"></div>
+    <div class="split">
+      <div class="filter-summary" id="mp-summary" aria-live="polite"></div>
+      <span class="freshness" id="freshness"></span>
+    </div>
+  </div>
+
+  <section class="section" aria-label="Maps">
+    <div id="mp-grid"></div>
+  </section>
+</main>
+
+<script src="assets/vendor/lenis.min.js" defer></script>
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="assets/vendor/three.min.js" defer></script>
+<script src="assets/vendor/vanta.net.min.js" defer></script>
+<script src="assets/js/motion.js" defer></script>
+<script src="assets/data/public_data.v1.js"></script>
+<script src="assets/data/public_fixture.v1.js"></script>
+<script src="assets/js/public/core.js"></script>
+<script src="assets/js/public/shell.js"></script>
+<script src="assets/js/public/stats.js"></script>
+<script src="assets/js/public/page-maps.js"></script>
+</body>
+</html>
