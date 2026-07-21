@@ -93,7 +93,141 @@ MODIFIED: `export_data.py` (portraitUrl), `serve.py` (2 endpoints),
 ---
 
 
-## CURRENT STATUS (authoritative — 2026-07-18)
+## CURRENT STATUS (authoritative — 2026-07-19)
+
+**Repo is pushed and in sync with GitHub** (`origin/main` ==
+local `main`, nothing uncommitted). A fresh clone gets everything below.
+Everything under this section down to the next `## PREVIOUS SESSION`
+marker is historical context; when it conflicts with this section, this
+section wins.
+
+### What shipped this session (on top of 07-18's Nepal milestone)
+
+* **Evidence pages upgraded to the honest-read standard everywhere.**
+  `build_crop_report.py`, `capture_hero_crops.py`, and
+  `vision_dashboard.py` all now use `detect.read_slot()` (top hero,
+  runner-up, margin, explicit `UNKNOWN` + reason) instead of the old
+  bare-score `match_slot()`. Scope note: the *production* accept/reject
+  path (`detect.py`'s `read_frame_comps()`/`validate()`, used by
+  `hero_overlay_detect.py` → `detections.json` →
+  `promote_detections.py` → real `comp_snapshots` writes) still uses the
+  old bare-score matcher — user explicitly chose "debug tooling only"
+  scope when asked, so that one's a known, deliberately-deferred gap.
+* **Every report now includes a hero crop report.** Wired
+  `build_crop_report.process()` into `ingest_map.py`'s own report step
+  (previously only `run_owcs_auto.py` runs had one), with a
+  `name_filter` fix for stale `base*.jpg` leftovers that accumulate in
+  a reused `frames_dir` across re-runs, and correct footer nav links per
+  caller (`run_report_href`/`layout_href` params on `process()`).
+* **`vision_dashboard.py` is now generated automatically**, not just on
+  manual invocation — it's step 8/9 in `run_owcs_auto.py`'s pipeline and
+  in `serve.py`'s "regenerate evidence" job.
+* **Pick-rate stats are real and now visually prominent.** Turned out
+  `hero_stints` → derived comp snapshots → `public_data.v1.js` →
+  `stats.js` was already correctly wired (not a gap); added a
+  role-grouped "Meta snapshot" visual (Tank/Damage/Support columns,
+  ranked within role, gold leader marker) to `stats.html` above the
+  existing sortable table.
+* **Found + fixed a real exporter bug**: `export_data.py`'s
+  `build_payload()` used a single **hardcoded** tournament id
+  (`"owcs-2026-naemea-s2po"`) and *reassigned* (not appended)
+  `tournaments_out` inside the per-match loop — harmless with exactly
+  one real match, but it would have silently mislabeled every match once
+  a second real match existed. Fixed: `_tournament_id()` derives a slug
+  from each match's real `event_name`/`season`/`stage`, and tournaments
+  now accumulate in a dict keyed by that id. Verified with a synthetic
+  2-tournament test (see session transcript) — no test file covers this
+  yet, worth adding `test_export_data.py` if touching this again.
+
+### IN PROGRESS — second real match (Crazy Raccoon vs ZETA DIVISION)
+
+Started ingesting a second real match beyond Nepal, to prove the
+multi-match path and give the pick-rate stats real breadth. **Not
+finished — this is the actual goal to hand off.**
+
+* **Source**: `owcs-8c105lnzlam` (`video_sources.json`), YouTube VOD
+  `https://www.youtube.com/watch?v=8C105lNzLAM`, "Champions Clash Upper
+  Finals | OWCS 2026 | Crazy Raccoon vs ZETA DIVISION" (official
+  Overwatch Esports channel, 102 min, uploaded 2026-06-03). Confirmed
+  from the broadcast overlay itself: **Map 1 is Control, "FIRST TO 3"**
+  (best of 5 rounds), OWCS Champions Clash Day 3 Upper Final.
+* **Layout is DONE and committed**: `layouts/owcs_8c105lnzlam.json` was
+  already calibrated in an earlier session (slots_a/slots_b, real player
+  names HEESANG/STALK3R/JUNBIN/CHORONG/VIGILANTE vs
+  KNIFE/PROPER/MEALGARU/VIOL2T/SHU). This session added the missing
+  **`hud_probe` block** (chip boxes derived from the same
+  `chip_x = slot_x - 54` geometry already documented in the layout's
+  own `_comments`, verified against a real t=365s frame: all 10 chips
+  clear `sat_min=90/val_min=150` with 0.51-0.89 saturated-pixel
+  fraction, comfortably above the `MIN_SAT_FRAC=0.25` gate). Without
+  this the pipeline read **zero gameplay frames** across a 13-minute
+  scan — `hud_probe` is required by `gameplay_state.classify_frame()`
+  and this layout never had one.
+* **Match record created and committed** (honest, no fabricated facts):
+  `matches.id = 'm-cr-zeta-ccuf'`, teams `cr`/`zeta` (already existed),
+  `event_name='OWCS 2026 Champions Clash'`, `round='Upper Finals'`,
+  `date='2026-06-03'`, `score_a=0/score_b=0/winner_team=NULL` (unknown,
+  never guessed). **No `map_results`/`hero_stints`/`ingest_runs` rows
+  yet** — `ingest_map.py --write` was never run.
+* **Template coverage is partial**: only 7 heroes harvested for this
+  broadcast so far (`templates/owcs_8c105lnzlam/`: ball, cass, jetcat,
+  lucio, mizuki, tracer, winston — 21 files incl. `.a`/`.b` variants).
+  A dry-run scan showed `calibration_health: ok` but
+  `full_house_rate: 0.588` — heroes outside these 7 correctly read
+  `UNKNOWN` rather than guessing, which means some slots may end up with
+  no established `hero_stint` at all until more templates are harvested.
+  This is honest incomplete-coverage behavior, not a bug.
+* **Round 1 is fully captured and clean**: dry-run over stream offsets
+  0–780s found `rounds: [(1, 325, 694), (2, 725, 779‑cutoff)]`,
+  `calibration_health: ok`, round 2 starts at 725s but the scan window
+  ended at 780s before it finished — **need more footage**.
+  `confirmed_swaps: 8`, `rejected_swaps: 58` (temporal consensus
+  correctly filtering noise from the template gap, not a red flag).
+* **What's NOT committed / won't transfer to a new machine** (all
+  gitignored, local-only, and this machine hit real download
+  bandwidth contention doing this — expect ~1.1 MB/s per stream, don't
+  run concurrent downloads of the same VOD):
+  - `work/clips/owcs-8c105lnzlam_map1_v2.mp4` — a full 1080p clip of
+    stream offsets 0–1080s (18 min), just finished downloading.
+  - `reports/ingest/cr-zeta-ccuf-m1-scan/` — the dry-run scan's
+    report/crops/evidence (safe to delete; regenerate anytime).
+  - Earlier abandoned attempts (`owcs-8c105lnzlam_map1_full.mp4`,
+    `_map1_ext.mp4`) — safe to delete.
+
+#### Exact next steps on the new machine
+
+1. `git pull`, confirm `layouts/owcs_8c105lnzlam.json` has a
+   `hud_probe` block and `matches` has `m-cr-zeta-ccuf` (it will, both
+   are committed).
+2. Re-download the clip (this is the part that doesn't transfer):
+   `python pipeline/download_vod_clip.py --source owcs-8c105lnzlam
+   --start 0:00 --end 18:00 --height 1080 --out
+   work/clips/owcs-8c105lnzlam_map1.mp4` (~660 MB, ~10 min at this
+   machine's observed ~1.1 MB/s — budget accordingly, and don't run it
+   twice concurrently).
+3. Dry-run first to confirm round 2's actual end (it wasn't captured
+   before offset 780s in the 13-min version — the 18-min clip *should*
+   cover it, but hasn't been dry-run yet):
+   `python pipeline/ingest_map.py --clip
+   work/clips/owcs-8c105lnzlam_map1.mp4 --clip-offset 0 --start 0
+   --end 1080 --layout layouts/owcs_8c105lnzlam.json --source-id
+   owcs-8c105lnzlam --ingest-id cr-zeta-ccuf-m1 --match m-cr-zeta-ccuf
+   --map-order 1 --team-a cr --team-b zeta` — check the printed
+   `rounds:` list. Since this is "first to 3," the map could legitimately
+   run past 1080s if it goes 3-2; extend the window and re-download
+   further if the last detected round still looks cut off.
+4. Decide whether to harvest more hero templates first (via
+   `capture_hero_crops.py`'s review workflow against this scan's crops)
+   for fuller comp coverage, or accept the partial-coverage result as-is
+   — both are legitimate, it's a judgment call on how complete this
+   needs to be before writing.
+5. `--write` once satisfied, then `python pipeline/export_data.py
+   --public` to regenerate `assets/data/public_data.v1.js`, then check
+   `stats.html`'s Meta Snapshot and `runs.html`'s Vision Lab card for
+   the new ingest — this is what actually proves the multi-match path
+   and enriches the pick-rate data.
+
+## PREVIOUS SESSION — 2026-07-18 — GitHub packaging + real hero detection
 
 **The pipeline now processes a COMPLETE map end-to-end and the real data
 renders on the public site.** Everything below this section is historical
