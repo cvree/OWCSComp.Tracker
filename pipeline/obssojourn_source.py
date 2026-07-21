@@ -47,6 +47,8 @@ NAME_TO_ID = {
     "paraiso": "paraiso", "paraíso": "paraiso", "colosseo": "colosseo",
     "esperanca": "esperanca", "esperança": "esperanca",
     "new queen street": "nqs", "runasapi": "runasapi",
+    # 2026 season maps (added as they appear in schedules)
+    "neon junction": "neonjunction",
 }
 
 

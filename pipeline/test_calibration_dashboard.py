@@ -52,12 +52,22 @@ def main() -> int:
         check("CR-ZETA is not falsely graded ok while coverage is partial",
               cr["status"] in ("warn", "fail"))
 
-    # a layout with no hud_probe must be flagged, not silently ok
+    # a layout that LOADED but has no hud_probe must be flagged (a source
+    # whose layout file is missing entirely is a distinct 'fail' case,
+    # already covered above — e.g. a POV source registered before its
+    # one-time calibration exists).
     probeless = [s for s in st["sources"]
-                 if s.get("layoutPath") and s["hudProbe"] is False]
+                 if s.get("layoutPath") and s["hudProbe"] is False
+                 and s["status"] != "fail"]
     for s in probeless:
         check(f"{s['id']}: missing hud_probe is called out in reasons",
               any("hud_probe" in r or "probe" in r for r in s["reasons"]))
+    # and a source registered before calibration is honestly graded fail
+    missing_layout = [s for s in st["sources"]
+                      if s.get("layoutPath") and s["status"] == "fail"]
+    for s in missing_layout:
+        check(f"{s['id']}: missing layout file is flagged (fail)",
+              any("missing" in r.lower() for r in s["reasons"]))
 
     print("build_hero_portraits: REAL broadcast crops only")
     files = bhp.real_template_files()
