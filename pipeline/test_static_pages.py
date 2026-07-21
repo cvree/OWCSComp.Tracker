@@ -65,7 +65,7 @@ def main() -> None:
 
     print("pages load the shared system:")
     pages = ["index.html", "run.html", "runs.html", "sources.html",
-             "admin.html", "teams.html", "calibration.html",
+             "admin.html", "team-prep.html", "calibration.html",
              "prep.html", "fact-admin.html"]
     for p in pages:
         h = read(p)
@@ -85,7 +85,7 @@ def main() -> None:
     # now load the public shell instead (fully covered by
     # test_public_site.py; asserted here too so a regression to neither
     # shell can slip through).
-    for p in ["stats.html", "matches.html"]:
+    for p in ["stats.html", "matches.html", "teams.html", "team.html"]:
         h = read(p)
         check(f"{p}: rebuilt on the public shell",
               "assets/css/public.css" in h

@@ -13,9 +13,18 @@
   const esc = P.esc || ((s) => String(s));
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  /* Ensure a favicon so tabs are branded and the browser stops 404-ing
+     /favicon.ico (the SVG lives in the repo). Cheap, idempotent. */
+  if (!document.querySelector('link[rel="icon"]')) {
+    const l = document.createElement("link");
+    l.rel = "icon"; l.type = "image/svg+xml"; l.href = "assets/img/favicon.svg";
+    document.head.appendChild(l);
+  }
+
   const NAV = [
     { href: "tournaments.html", label: "Tournaments" },
     { href: "matches.html", label: "Matches" },
+    { href: "teams.html", label: "Teams" },
     { href: "stats.html", label: "Stats" },
   ];
   const ADMIN = [
@@ -28,7 +37,8 @@
     const here = location.pathname.split("/").pop() || "tournaments.html";
     const link = (n, cls) => {
       const cur = here === n.href || (here === "tournament.html" && n.href === "tournaments.html") ||
-        (here === "match.html" && n.href === "matches.html");
+        (here === "match.html" && n.href === "matches.html") ||
+        (here === "team.html" && n.href === "teams.html");
       return `<a href="${n.href}" class="${cls || ""}"${cur ? ' aria-current="page"' : ""}>${esc(n.label)}</a>`;
     };
     const header = document.createElement("header");

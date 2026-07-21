@@ -203,7 +203,7 @@ def main() -> None:
 
     print("public pages load the public shell:")
     pages = ["tournaments.html", "tournament.html", "match.html",
-             "stats.html", "matches.html", "team.html"]
+             "stats.html", "matches.html", "team.html", "teams.html"]
     for p in pages:
         h = read(p)
         check(f"{p}: public.css + fixture + core + shell wired",
@@ -325,10 +325,14 @@ def main() -> None:
 
     print("old control-room surfaces untouched:")
     for p in ["index.html", "run.html", "runs.html", "sources.html",
-              "admin.html", "teams.html", "prep.html", "fact-admin.html"]:
+              "admin.html", "team-prep.html", "prep.html", "fact-admin.html"]:
         h = read(p)
         check(f"{p}: still on the control-room shell",
               "assets/css/style.css" in h and "assets/js/ui.js" in h)
+    check("public Teams directory links to the team detail page + Teams "
+          "is in the public nav",
+          "team.html?id=" in read("assets/js/public/page-teams.js")
+          and '{ href: "teams.html", label: "Teams" }' in read("assets/js/public/shell.js"))
 
     print()
     if FAILS:
