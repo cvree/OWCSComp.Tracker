@@ -121,31 +121,37 @@ workflow for a NEW VOD/map", step 3.)
 
 ---
 
-## Part 5 — read each map (dry-run first, then for real)
+## Part 5 — read every map (ONE command)
 
-Now the payoff. For each map you run one command with that map's window (all
-six windows are below, already worked out from the video's chapters). Do a
-**dry run first** (no `--write`) and read the summary; if it looks sane, add
-`--write` to save it.
+Now the payoff. All six map windows were already worked out from the video's
+chapters and stored in the database, so you don't type them — one
+orchestrator command reads them and runs every map for you.
 
-Map 1 — Antarctic Peninsula (0:00–13:20):
+**Do a dry run first** (no `--write` — reads and prints a summary, saves
+nothing):
+
 ```
-python pipeline/ingest_map.py --clip work/clips/krgf.mp4 --start 0 --end 800 --layout layouts/obssojourn_pov.json --source-id owcs-is7ehd0nf84 --ingest-id krgf-m1 --match m-cr-zeta-krgf --map-order 1 --map-id antarctic --team-a cr --team-b zeta --every 5
+python pipeline/ingest_obssojourn.py --clip work/clips/krgf.mp4 --match m-cr-zeta-krgf
 ```
-Map 2 — New Junk City (13:20–29:00): `--start 800 --end 1740 --ingest-id krgf-m2 --map-order 2 --map-id njc`
-Map 3 — King's Row (29:00–41:15): `--start 1740 --end 2475 --ingest-id krgf-m3 --map-order 3 --map-id kingsrow`
-Map 4 — Circuit Royal (41:15–58:50): `--start 2475 --end 3530 --ingest-id krgf-m4 --map-order 4 --map-id circuit`
-Map 5 — Colosseo (58:50–1:09:20): `--start 3530 --end 4160 --ingest-id krgf-m5 --map-order 5 --map-id colosseo`
-Map 6 — Neon Junction (1:09:20–end): `--start 4160 --end 5490 --ingest-id krgf-m6 --map-order 6 --map-id neonjunction`
 
-(For maps 2–6, take the map-1 command and swap in the `--start/--end/
---ingest-id/--map-order/--map-id` shown. When a dry run looks right, add
-`--write` to the end and run it again.)
+It prints, per map: how many frames it counted vs skipped (and why), the
+rounds it found, and any comps it resolved. Read that and sanity-check it
+looks reasonable. When you're happy, run it **for real** by adding `--write`:
 
-The vision upgrades all run here automatically: it only reads settled combat
-(skipping setup, the first seconds of each round, the last 10 s, and any
-replay/highlight), uses the 1-Tank/2-Damage/2-Support rule to resolve
-tricky slots, and cross-checks the team names/bans against the match.
+```
+python pipeline/ingest_obssojourn.py --clip work/clips/krgf.mp4 --match m-cr-zeta-krgf --write
+```
+
+That saves every map's comps to the database. (Options: `--maps 1,2` does just
+those maps; `--plan-only` prints the six underlying commands without running
+them; add `--ocr-guard` at the end to also read team names + bans for match
+confirmation.)
+
+The vision upgrades all run automatically inside this: it only reads settled
+combat (skipping setup, the first seconds of each round, the last 10 s, and
+any replay/highlight — all bookmarked in each map's `phases.json`), uses the
+1-Tank/2-Damage/2-Support rule to resolve tricky slots, and cross-checks the
+team names/bans against the match.
 
 ---
 

@@ -48,6 +48,7 @@ import capture  # noqa: E402
 import detect  # noqa: E402
 import gameplay_state  # noqa: E402
 import comp_solver  # noqa: E402
+import recapture_planner  # noqa: E402
 
 DETECTOR_VERSION = "det-v2"
 CONFIRM_N = 3             # consecutive accepted obs to (re)establish a hero
@@ -1117,11 +1118,42 @@ def run(args) -> dict:
     side_map = build_side_map(observations, rounds, side_decisions,
                               args.team_a, args.team_b)
 
+    # ---- phase gate (vision upgrade): tag every observation's phase,
+    # bookmark the don't-count moments with reasons, and plan the dense
+    # recapture windows over settled combat. Gating which reads feed the
+    # consensus is ON by default; --no-phase-gate restores raw behavior.
+    phase_plan = recapture_planner.plan(
+        [{"t": o["t"], "state": o["state"]} for o in observations],
+        rounds, setups)
+    phase_by_t = {round(x["t"], 1): x for x in phase_plan["tagged"]}
+    for o in observations:
+        tag = phase_by_t.get(round(o["t"], 1))
+        if tag:
+            o["phase"] = tag["phase"]
+            o["phase_counts"] = tag["counts"]
+    log(f"phase gate: {phase_plan['counted']} counted / "
+        f"{phase_plan['skipped']} skipped {phase_plan['skipBreakdown']}; "
+        f"{len(phase_plan['recaptureWindows'])} settled-combat window(s) "
+        f"({phase_plan['recaptureSeconds']}s)")
+    use_gate = not getattr(args, "no_phase_gate", False)
+    # setup + post-start reads STAY: build_stints has dedicated, tested
+    # handling for them (setup-change classification, post-unlock grace
+    # cap). The gate's new exclusions for consensus are the post-round
+    # "finish + 10s" swap window and out-of-round gameplay-lookalikes;
+    # highlight/replay/no-hud are already non-gameplay upstream.
+    GATE_DROP = {"post-round", "out-of-round"}
+    consensus_obs = ([o for o in observations
+                      if o.get("phase") not in GATE_DROP]
+                     if use_gate else observations)
+    if use_gate and len(consensus_obs) != len(observations):
+        log(f"phase gate dropped {len(observations) - len(consensus_obs)} "
+            "read(s) in post-round grace / out-of-round moments")
+
     # ---- consensus per slot
     setup_spans = [(s["start"], s["end"]) for s in setups]
     per_slot = {}
     for key in slot_keys:
-        track = slot_track(observations, key)
+        track = slot_track(consensus_obs, key)
         stints, events = build_stints(track, setup_spans, rounds)
         per_slot[key] = {"stints": stints, "events": events,
                          "n_reads": len(track)}
@@ -1180,6 +1212,28 @@ def run(args) -> dict:
         "detector_version": DETECTOR_VERSION,
         "calibration_health": calib_health,
         "ocr_guard": ocr_read_fn is not None,
+        "phase_gate": {
+            "enabled": use_gate,
+            "settle": phase_plan["settle"],
+            "grace": phase_plan["grace"],
+            "counted": phase_plan["counted"],
+            "skipped": phase_plan["skipped"],
+            "skipBreakdown": phase_plan["skipBreakdown"],
+            "recaptureWindows": phase_plan["recaptureWindows"],
+            "recaptureSeconds": phase_plan["recaptureSeconds"],
+        },
+        "role_resolution": {
+            "framesWithResolution": sum(
+                1 for o in observations if o.get("resolved")),
+            "inferredSlots": sum(
+                (o["resolved"][s].get("inferred") or 0)
+                for o in observations if o.get("resolved")
+                for s in ("a", "b")),
+            "anomalies": sum(
+                1 for o in observations if o.get("resolved")
+                for s in ("a", "b")
+                if o["resolved"][s].get("anomaly")),
+        },
     }
     if team_result:
         stats["team_identity"] = team_result
@@ -1197,10 +1251,13 @@ def run(args) -> dict:
             f.write(json.dumps(
                 {k: v for k, v in o.items() if not k.startswith("_")})
                 + "\n")
+    phases_payload = {k: v for k, v in phase_plan.items()
+                      if k != "tagged"}
     for name, payload in (("stints.json", per_slot),
                           ("rounds.json", {"rounds": rounds,
                                            "setups": setups,
                                            "sides": side_decisions}),
+                          ("phases.json", phases_payload),
                           ("stats.json", stats)):
         with open(os.path.join(out_root, name), "w", encoding="utf-8") as f:
             json.dump(payload, f, indent=1)
@@ -1275,6 +1332,9 @@ def main(argv=None) -> int:
     ap.add_argument("--vod-url", default=None)
     ap.add_argument("--every", type=float, default=5.0)
     ap.add_argument("--write", action="store_true")
+    ap.add_argument("--no-phase-gate", action="store_true",
+                    help="disable the phase gate (keep post-round/"
+                         "out-of-round reads in the consensus)")
     ap.add_argument("--ocr-guard", action="store_true",
                     help="enable the generalized OCR layer: highlight/"
                          "replay guard, team-identity cross-check, and "

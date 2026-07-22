@@ -62,6 +62,20 @@ def main() -> int:
     p2, c2 = R.classify_time(103, "gameplay", ROUNDS, SETUPS, settle=2.0)
     check("shorter settle counts an earlier post-start moment", c2 is True)
 
+    print("wired into the real ingest run:")
+    src = open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                            "ingest_map.py"), encoding="utf-8").read()
+    check("ingest_map imports the planner", "import recapture_planner" in src)
+    check("phase gate runs in the ingest flow (tag + log + gate)",
+          "recapture_planner.plan(" in src and "phase_counts" in src
+          and "GATE_DROP" in src)
+    check("gate keeps setup/post-start for build_stints, drops post-round/"
+          "out-of-round", '"post-round", "out-of-round"' in src)
+    check("--no-phase-gate escape hatch exists", "--no-phase-gate" in src)
+    check("phase_gate + role_resolution recorded in stats.json",
+          '"phase_gate"' in src and '"role_resolution"' in src)
+    check("phases.json artifact written", '"phases.json"' in src)
+
     print()
     if FAILS:
         print(f"FAILED: {FAILS} check(s)")
