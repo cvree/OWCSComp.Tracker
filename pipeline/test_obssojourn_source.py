@@ -36,11 +36,13 @@ def main() -> int:
     check("known maps resolved to catalog ids",
           p["maps"][0]["mapId"] == "antarctic" and p["maps"][2]["mapId"] == "kingsrow"
           and p["maps"][3]["mapId"] == "circuit" and p["maps"][4]["mapId"] == "colosseo"
-          and p["maps"][1]["mapId"] == "njc")
+          and p["maps"][1]["mapId"] == "njc" and p["maps"][5]["mapId"] == "neonjunction")
 
-    print("a brand-new season map is flagged, never silently dropped:")
-    check("Neon Junction has no id and is listed as unknown",
-          p["maps"][5]["mapId"] is None and "Neon Junction" in p["unknownMaps"])
+    print("a genuinely unknown map is flagged, never silently dropped:")
+    p_unk = O.parse_description(
+        "A vs B | E\nMatch Date: July 1, 2026\n\nSome Future Map: 0:00\nNepal: 5:00\n")
+    check("unknown map has no id and is listed in unknownMaps",
+          p_unk["maps"][0]["mapId"] is None and "Some Future Map" in p_unk["unknownMaps"])
 
     print("social links / non-chapter timestamps are ignored:")
     noisy = O.DEMO_DESC + "\nTwitter: 12:34\nsome video 5:00\n"
