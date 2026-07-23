@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hero analytics — OWCS Comp Tracker</title>
+<meta name="description" content="OWCS hero analytics — pick rates and win rates for every hero, computed only from verified broadcast-extracted compositions.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Cinzel:wght@500;600&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/public.css">
+</head>
+<body class="pub">
+<a class="skip-link" href="#main">Skip to content</a>
+<main class="pub-main" id="main">
+  <div class="page-head rv">
+    <span class="ph-eyebrow">The roster, measured</span>
+    <h1>Hero analytics</h1>
+    <p class="lede">Every hero in the pool, ranked by what pro teams actually run. Rates count only verified compositions — heroes with no proven appearances say so instead of pretending.</p>
+  </div>
+
+  <div class="stat-cards rv" id="hx-cards" aria-label="Headline numbers"></div>
+
+  <form class="filterbar rv" id="hx-filters" style="margin-top:16px" aria-label="Filter heroes">
+    <label>Role
+      <select name="role" id="hx-role">
+        <option value="all">All roles</option>
+        <option value="Tank">Tank</option>
+        <option value="Damage">Damage</option>
+        <option value="Support">Support</option>
+      </select>
+    </label>
+    <label>Search
+      <input type="search" id="hx-search" placeholder="Hero name…" autocomplete="off">
+    </label>
+    <div class="fb-actions">
+      <span class="filter-summary" id="hx-summary" aria-live="polite"></span>
+    </div>
+  </form>
+
+  <section class="section" aria-label="Heroes with verified appearances">
+    <h2>In the meta <span class="h-count" id="hx-live-count"></span></h2>
+    <div class="hero-dir" id="hx-live"></div>
+    <div id="hx-live-empty" hidden></div>
+  </section>
+
+  <section class="section" aria-label="Heroes without verified appearances">
+    <h2>Not yet sighted <span class="h-count" id="hx-dormant-count"></span></h2>
+    <p class="dim" style="margin:0 0 14px">No verified appearance in tracked matches yet — honest absence, not zero interest. They join the table the moment the pipeline proves a pick.</p>
+    <div class="hero-dir" id="hx-dormant"></div>
+  </section>
+</main>
+
+<script src="assets/vendor/lenis.min.js" defer></script>
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="assets/vendor/three.min.js" defer></script>
+<script src="assets/vendor/vanta.net.min.js" defer></script>
+<script src="assets/js/motion.js" defer></script>
+<script src="assets/data/public_data.v1.js"></script>
+<script src="assets/data/public_fixture.v1.js"></script>
+<script src="assets/js/public/core.js"></script>
+<script src="assets/js/public/assets.js"></script>
+<script src="assets/js/public/shell.js"></script>
+<script src="assets/js/public/stats.js"></script>
+<script src="assets/js/public/page-heroes.js"></script>
+</body>
+</html>

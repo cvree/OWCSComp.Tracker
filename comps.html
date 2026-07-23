@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Teams — OWCS Comp Tracker</title>
-<meta name="description" content="Every OWCS team the tracker has verified comps for — record, hero pool and match history, all evidence-linked.">
+<title>Compositions — OWCS Comp Tracker</title>
+<meta name="description" content="Verified OWCS team compositions — every five-hero lineup extracted from broadcast video, grouped, counted and linked to its evidence.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Cinzel:wght@500;600&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -14,22 +14,28 @@
 <a class="skip-link" href="#main">Skip to content</a>
 <main class="pub-main" id="main">
   <div class="page-head rv">
-    <span class="ph-eyebrow">Directory</span>
-    <h1>Teams</h1>
-    <p class="lede">Every roster the tracker has verified compositions for. Open a team for its
-      record, hero pool and match history — every number links to the frames behind it.</p>
+    <span class="ph-eyebrow">The moat</span>
+    <h1>Compositions</h1>
+    <p class="lede">Every verified five-hero lineup on record — who ran it, where, how it fared, and the exact frames it was read from. If a comp can't prove itself, it isn't here.</p>
   </div>
 
-  <div class="stack rv">
-    <div class="seg-region" id="region-seg" role="group" aria-label="Region"></div>
-    <div class="split">
-      <div class="filter-summary" id="tm-summary" aria-live="polite"></div>
-      <span class="freshness" id="freshness"></span>
+  <div class="stat-cards rv" id="cp-cards" aria-label="Composition headline numbers"></div>
+
+  <form class="filterbar rv" id="cp-filters" style="margin-top:16px" aria-label="Filter compositions">
+    <label>Team
+      <select name="team" id="cp-team"></select>
+    </label>
+    <label>Map
+      <select name="map" id="cp-map"></select>
+    </label>
+    <div class="fb-actions">
+      <span class="filter-summary" id="cp-summary" aria-live="polite"></span>
     </div>
-  </div>
+  </form>
 
-  <section class="section" aria-label="Teams">
-    <div class="grid-cards" id="tm-grid"></div>
+  <section class="section" aria-label="Composition list">
+    <div class="compi-list" id="cp-list"></div>
+    <div id="cp-empty" hidden></div>
   </section>
 </main>
 
@@ -45,6 +51,6 @@
 <script src="assets/js/public/assets.js"></script>
 <script src="assets/js/public/shell.js"></script>
 <script src="assets/js/public/stats.js"></script>
-<script src="assets/js/public/page-teams.js"></script>
+<script src="assets/js/public/page-comps.js"></script>
 </body>
 </html>

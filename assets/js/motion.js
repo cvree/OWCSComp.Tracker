@@ -54,6 +54,7 @@
      and smoother (no per-gesture animation to restart or collide with). */
   function initFlow() {
     if (reduced || typeof window.Lenis !== "function") return;
+    if (M.lenis) return;   // ONE Lenis instance, ever — shells never race
     const lenis = new window.Lenis({
       lerp: 0.13,
       wheelMultiplier: 1,
@@ -66,13 +67,26 @@
     $$(".console-body, [data-scroll-region]").forEach((el) =>
       el.setAttribute("data-lenis-prevent", ""));
     if (window.gsap && window.ScrollTrigger) {
+      // ONE ticker loop: GSAP's ticker drives lenis.raf (seconds -> ms),
+      // Lenis' scroll event drives ScrollTrigger.update. No second rAF.
       lenis.on("scroll", window.ScrollTrigger.update);
       window.gsap.ticker.add((t) => lenis.raf(t * 1000));
       window.gsap.ticker.lagSmoothing(0);
+      // late layout (fonts, dynamic page renders) shifts trigger points
+      window.addEventListener("load", () => window.ScrollTrigger.refresh());
     } else {
       const loop = (t) => { lenis.raf(t); requestAnimationFrame(loop); };
       requestAnimationFrame(loop);
     }
+    // in-page anchors go through Lenis so they aren't fought by the lerp
+    document.addEventListener("click", (e) => {
+      const a = e.target.closest && e.target.closest('a[href^="#"]');
+      if (!a || a.getAttribute("href") === "#") return;
+      const target = document.getElementById(a.getAttribute("href").slice(1));
+      if (!target) return;
+      e.preventDefault();
+      lenis.scrollTo(target, { offset: -70 });
+    });
   }
 
   /* ---- entrance: one page-load timeline ------------------------------ */
@@ -352,13 +366,16 @@
   /* ---- progress hairline --------------------------------------------- */
   function initProgress() {
     if (reduced) return;
-    if (document.documentElement.scrollHeight < innerHeight * 1.8) return;
     const bar = document.createElement("div");
     bar.className = "scroll-progress";
     bar.setAttribute("aria-hidden", "true");
     document.body.appendChild(bar);
     const update = () => {
+      // page length is re-read every frame it matters: pages render their
+      // content AFTER boot, so a boot-time length check would go stale
       const max = document.documentElement.scrollHeight - innerHeight;
+      const long = document.documentElement.scrollHeight > innerHeight * 1.6;
+      bar.style.opacity = long ? "1" : "0";
       bar.style.transform =
         "scaleX(" + (max > 0 ? Math.min(1, scrollY / max) : 0) + ")";
     };

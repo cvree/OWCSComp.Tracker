@@ -35,6 +35,7 @@ Rules:
 | `bracketMatches` | `[{id, roundId, position, matchId, feedsWinnerTo, feedsLoserTo}]` | feeds reference **bracket node ids** (validated by tests) |
 | `matches` | see below | |
 | `heroBans` | `[{id, matchId, mapId, teamId, hero, order, phase, source}]` | **match facts** (faceit/manual) — never comps |
+| `heroSwaps` | see below | temporal-consensus swap verdicts (confirmed + rejected) |
 | `captureRuns` | see below | the evidence spine |
 | `compSnapshots` | see below | the moat |
 | `vodSources` | `[{id, provider, url, title, matchIds, heightAvailable}]` | |
@@ -70,6 +71,27 @@ widget:
 | `flashpoint` | `capturesA`, `capturesB` |
 | `clash` | `pointsA`, `pointsB` |
 | `null` | live / unavailable → honest fallback text |
+
+### maps `rounds`
+Each map additionally carries `rounds:
+[{index, start, end, confidence, source}]` — the real round windows found
+by the round-emblem detector (broadcast offsets in seconds, ±1 sample).
+Empty when the map was not ingested by the CV pipeline.
+
+### heroSwaps — the swap intelligence layer
+`{id, matchId, mapId, teamId, side, slot, fromHero, toHero, offset(s),
+confidence, status("confirmed"/"rejected"), reason, evidenceBefore,
+evidenceAfter, ingestId}`
+
+1. Rows come only from the DB's `hero_swaps` table (temporal-consensus
+   verdicts) — never derived client-side, never invented.
+2. `status:"confirmed"` rows carry before/after evidence crops (paths are
+   dropped to `null` if the file is missing so the UI can never render a
+   broken image).
+3. `status:"rejected"` rows are exported too, with the honest `reason`
+   they were thrown out (dead-portrait lookalikes, killcam artifacts…).
+   Fan pages show confirmed swaps as the timeline and surface rejected
+   counts/reasons as credibility, never as swaps.
 
 ### captureRuns
 `{id, matchId, sourceId, window{start,end,every}, requestedHeight,

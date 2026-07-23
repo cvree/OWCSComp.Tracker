@@ -38,6 +38,46 @@ and `review.html` (every confirmed/rejected change point with crops).
 
 ---
 
+## The public site ("nocturne" redesign)
+
+The fan-facing site is a dark-gothic esports intelligence surface — still
+plain HTML/CSS/JS, still GitHub-Pages-safe, still evidence-first. Pages:
+
+| page | what it shows |
+|---|---|
+| `index.html` | cinematic homepage hero that replays the **real** detection story: the actual Nepal frame (39:54), the autocalibrated slot rectangles, the confirmed ZOX Juno→Lúcio swap crops, consensus 0.817, verified seal |
+| `tournaments.html` / `tournament.html` | events, brackets, standings |
+| `calendar.html` | month grid + agenda of tracked matches |
+| `matches.html` / `match.html` | schedule and the match page with comps, **confirmed swaps with before/after crops**, bans, evidence chain, review queue |
+| `teams.html` / `team.html` | directory + team dossier (record, hero pool, calibration provenance) |
+| `heroes.html` / `hero.html` | hero analytics directory + per-hero dossier (rates, teams, swap activity, portrait provenance) |
+| `comps.html` | every verified five-hero lineup, grouped and counted, with map results and evidence links |
+| `swaps.html` | swap intelligence — confirmed swaps with evidence, plus the rejected-noise honesty ledger |
+| `maps.html` / `stats.html` | map meta + the sortable pick/win-rate table with drill-downs |
+
+Screenshots live in [`docs/screenshots/`](docs/screenshots/).
+
+**Asset honesty** (`assets/data/asset_manifest.json`, built by
+`pipeline/build_asset_manifest.py`, validated by `pipeline/test_assets.py`):
+hero portraits are real broadcast crops harvested by the pipeline; heroes
+without one get a designed role monogram, teams without a **verified**
+official mark get a designed crest — never a guessed logo, never a broken
+image, never hotlinked art. Candidate official sources for team marks are
+documented in `assets/data/team_asset_sources.json` for a network-enabled
+fetch + review pass.
+
+**Motion**: one Lenis instance driven by one GSAP ticker loop
+(`assets/js/motion.js`), ScrollTrigger synced from Lenis' scroll event,
+native touch scrolling, and a complete static experience under
+`prefers-reduced-motion`. No scroll-jacking anywhere.
+
+**Swap data contract**: `heroSwaps` in `public_data.v1.js` is exported
+verbatim from the DB's temporal-consensus verdicts — confirmed rows carry
+before/after evidence crops, rejected rows carry the reason they were
+thrown out (see `docs/PUBLIC_DATA_CONTRACT.md`).
+
+---
+
 ## The pipeline (source → site)
 
 ```

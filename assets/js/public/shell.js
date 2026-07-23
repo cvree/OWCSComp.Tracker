@@ -23,8 +23,12 @@
 
   const NAV = [
     { href: "tournaments.html", label: "Tournaments" },
+    { href: "calendar.html", label: "Calendar" },
     { href: "matches.html", label: "Matches" },
     { href: "teams.html", label: "Teams" },
+    { href: "heroes.html", label: "Heroes" },
+    { href: "comps.html", label: "Comps" },
+    { href: "swaps.html", label: "Swaps" },
     { href: "maps.html", label: "Maps" },
     { href: "stats.html", label: "Stats" },
   ];
@@ -39,7 +43,8 @@
     const link = (n, cls) => {
       const cur = here === n.href || (here === "tournament.html" && n.href === "tournaments.html") ||
         (here === "match.html" && n.href === "matches.html") ||
-        (here === "team.html" && n.href === "teams.html");
+        (here === "team.html" && n.href === "teams.html") ||
+        (here === "hero.html" && n.href === "heroes.html");
       return `<a href="${n.href}" class="${cls || ""}"${cur ? ' aria-current="page"' : ""}>${esc(n.label)}</a>`;
     };
     const header = document.createElement("header");
@@ -106,7 +111,11 @@
           <h3>Explore</h3>
           <ul>
             <li><a href="tournaments.html">Tournaments</a></li>
+            <li><a href="calendar.html">Calendar</a></li>
             <li><a href="matches.html">Matches</a></li>
+            <li><a href="heroes.html">Hero analytics</a></li>
+            <li><a href="comps.html">Compositions</a></li>
+            <li><a href="swaps.html">Swap intelligence</a></li>
             <li><a href="stats.html">Statistics</a></li>
           </ul>
         </div>
@@ -144,16 +153,13 @@
      hairline. This shell keeps owning the .rv reveal contract because
      page scripts re-render fragments and call P.observeReveals(root). */
   function initMotion() {
+    /* The engine (motion.js) owns the ONE Lenis instance and the ONE
+       GSAP ticker loop. This shell never creates its own scroller — a
+       second Lenis racing the first is exactly what broke scrolling.
+       Without the engine, native scrolling is the correct behavior. */
     if (window.OWCSMotion) window.OWCSMotion.boot({ ambience: false });
     if (reduced) return;
     document.documentElement.classList.add("motion-on");
-    if (!window.OWCSMotion && typeof window.Lenis === "function") {
-      try {
-        const lenis = new window.Lenis({ duration: 0.9, smoothWheel: true });
-        const loop = (t) => { lenis.raf(t); requestAnimationFrame(loop); };
-        requestAnimationFrame(loop);
-      } catch (_) { /* plain scrolling is fine */ }
-    }
     const reveal = (els) => {
       if (window.gsap) {
         window.gsap.to(els, {

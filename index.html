@@ -20,16 +20,23 @@
       <a href="stats.html">Hero stats</a>
       <a href="teams.html">Teams</a>
       <a href="matches.html">Matches</a>
+      <a href="comps.html">Comps</a>
+      <a href="swaps.html">Swaps</a>
       <a href="run.html" style="color:var(--muted);opacity:.7">Control room</a>
     </div>
     <span class="nav-status" id="nav-status"><span class="dot"></span><span>checking…</span></span>
   </div>
 </nav>
 
-<!-- ============ HERO — comp + team tracking, Tracer signature ============ -->
-<header class="lead-hero">
-  <div class="wrap lead-hero__grid">
-    <div class="lead-hero__copy" data-hero>
+<!-- ============ HERO — the real detection story (Nepal, QAD vs TM) ============
+     Every artifact in this scene is real project data: the frame is the
+     ingest's frame_2394.jpg (stream 39:54), the ten slot brackets are the
+     autocalibrated layout's exact rectangles, the swap crops are the
+     confirmed ZOX Juno→Lúcio evidence, and every number (calib 0.912,
+     swap conf 0.817, 299 frames, 1950 reads) comes from the pipeline. -->
+<header class="det-hero">
+  <div class="wrap det-hero__grid">
+    <div class="det-hero__copy" data-hero>
       <p class="eyebrow">OWCS · Composition intelligence</p>
       <h1>Know what they<br><span class="amber">actually played.</span></h1>
       <p class="lead"><span class="strike">Results</span> tell you the score. This tracker
@@ -37,7 +44,7 @@
         the broadcast and checked against the frames it came from.</p>
       <div class="hero-cta">
         <a class="btn btn-primary btn-xl" href="stats.html" data-magnetic><span>Browse hero stats</span></a>
-        <a class="btn btn-ghost btn-xl" href="teams.html" data-magnetic><span>Explore teams →</span></a>
+        <a class="btn btn-ghost btn-xl" href="swaps.html" data-magnetic><span>See swap evidence →</span></a>
       </div>
       <div class="hero-readout">
         <div><span class="n" id="ld-comps" data-count-to="8">8</span><span class="k">comps verified</span></div>
@@ -46,24 +53,61 @@
       </div>
     </div>
 
-    <div class="tracer-stage" aria-hidden="true">
-      <div class="tracer-stack" data-tracer>
-        <svg class="chrono-rings" viewBox="0 0 200 200">
-          <circle class="r r3" cx="100" cy="100" r="94" stroke-width="1"/>
-          <circle class="r r1" cx="100" cy="100" r="78" stroke-width="1.5"/>
-          <circle class="r r2" cx="100" cy="100" r="60" stroke-width="2"/>
-          <circle class="r r3" cx="100" cy="100" r="40" stroke-width="1"/>
-        </svg>
-        <div class="tracer-glow"></div>
-        <div class="tracer-shadow"></div>
-        <span class="tracer-streak tracer-streak--a" data-tracer-streak></span>
-        <span class="tracer-streak tracer-streak--b" data-tracer-streak></span>
-        <img class="tracer-fig" data-tracer-fig src="assets/img/tracer.webp"
-             alt="Tracer, an Overwatch hero, used as the tracker's mascot" width="360" height="782">
-        <div class="tracer-rim" data-tracer-rim></div>
-        <div class="lock-frame"><span class="tl"></span><span class="tr"></span><span class="bl"></span><span class="br"></span></div>
-        <span class="track-tag"><span class="dot"></span>TRACKING · <b>10/10 slots</b></span>
-        <span class="track-tag track-tag--comp"><b>SWAP</b> · Juno → Lúcio</span>
+    <div class="det-stage" data-det>
+      <svg class="det-ring" data-det-ring viewBox="0 0 200 200" aria-hidden="true">
+        <circle cx="100" cy="100" r="96" fill="none" stroke-width=".5" stroke-dasharray="2 5"/>
+        <circle cx="100" cy="100" r="80" fill="none" stroke-width=".8" stroke-dasharray="40 14 8 14"/>
+        <circle cx="100" cy="100" r="63" fill="none" stroke-width=".5"/>
+        <path d="M100 10 L104 18 L96 18 Z" fill="currentColor"/>
+      </svg>
+
+      <figure class="det-frame" data-det-frame>
+        <img src="reports/ingest/qad-twis-nepal/frames/frame_2394.jpg"
+             alt="Real broadcast frame — Al Qadsiah vs Twisted Minds on Nepal at 39:54, the moment the Juno to Lúcio swap was detected"
+             width="1280" height="720">
+        <span class="det-scan" data-det-scan aria-hidden="true"></span>
+        <!-- the ten slot brackets: the autocalibrated layout's real rects,
+             normalized against the 1920×1080 broadcast frame -->
+        <span class="det-slot" data-det-slot style="--x:4.69%;--y:10.83%;--w:2.71%;--h:4.81%"></span>
+        <span class="det-slot" data-det-slot style="--x:10.16%;--y:10.83%;--w:2.71%;--h:4.81%"></span>
+        <span class="det-slot" data-det-slot style="--x:15.73%;--y:10.83%;--w:2.71%;--h:4.81%"></span>
+        <span class="det-slot" data-det-slot style="--x:21.25%;--y:10.83%;--w:2.71%;--h:4.81%"></span>
+        <span class="det-slot det-slot--swap" data-det-slot style="--x:26.72%;--y:10.83%;--w:2.71%;--h:4.81%"></span>
+        <span class="det-slot" data-det-slot style="--x:72.60%;--y:10.83%;--w:2.71%;--h:4.81%"></span>
+        <span class="det-slot" data-det-slot style="--x:78.12%;--y:10.83%;--w:2.71%;--h:4.81%"></span>
+        <span class="det-slot" data-det-slot style="--x:83.59%;--y:10.83%;--w:2.71%;--h:4.81%"></span>
+        <span class="det-slot" data-det-slot style="--x:89.06%;--y:10.83%;--w:2.71%;--h:4.81%"></span>
+        <span class="det-slot" data-det-slot style="--x:94.58%;--y:10.83%;--w:2.71%;--h:4.81%"></span>
+        <figcaption class="det-frame__cap"><span class="dot" aria-hidden="true"></span>REAL FRAME · Nepal @ 39:54 · autocalibration 0.912</figcaption>
+      </figure>
+
+      <ol class="det-steps" data-det-steps>
+        <li data-det-step>frame</li>
+        <li data-det-step>10 slots</li>
+        <li data-det-step>identify</li>
+        <li data-det-step>swap?</li>
+        <li data-det-step>verify</li>
+        <li data-det-step>publish</li>
+      </ol>
+
+      <div class="det-verdict" data-det-verdict>
+        <div class="det-verdict__crops">
+          <span class="det-crop" data-det-before>
+            <img src="reports/ingest/qad-twis-nepal/evidence/t0002393.0_a5.png" alt="Evidence crop before the swap — Juno in slot 5" width="72" height="72">
+            <b>Juno</b>
+          </span>
+          <span class="det-arrow" data-det-arrow aria-hidden="true"><i></i></span>
+          <span class="det-crop" data-det-after>
+            <img src="reports/ingest/qad-twis-nepal/evidence/t0002394.0_a5.png" alt="Evidence crop after the swap — Lúcio in slot 5" width="72" height="72">
+            <b>Lúcio</b>
+          </span>
+        </div>
+        <div class="det-verdict__text">
+          <b class="det-verdict__title">SWAP CONFIRMED</b>
+          <span>ZOX · Juno → Lúcio @ 39:54</span>
+          <span class="det-verdict__conf">consensus <b data-det-conf>0.817</b> · 3 obs · displacement ✓</span>
+        </div>
+        <span class="det-seal" data-det-seal aria-hidden="true">✓</span>
       </div>
     </div>
   </div>
@@ -256,6 +300,7 @@
 <script src="assets/data/public_data.v1.js"></script>
 <script src="assets/data/public_fixture.v1.js"></script>
 <script src="assets/js/public/core.js"></script>
+<script src="assets/js/public/assets.js"></script>
 <script src="assets/js/public/stats.js"></script>
 <script>
 (function () {
@@ -285,6 +330,7 @@
 <script src="assets/vendor/three.min.js" defer></script>
 <script src="assets/vendor/vanta.net.min.js" defer></script>
 <script src="assets/js/motion.js" defer></script>
+<script src="assets/js/landing-hero.js" defer></script>
 <script src="assets/js/ui.js"></script>
 </body>
 </html>

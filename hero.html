@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hero — OWCS Comp Tracker</title>
+<meta name="description" content="Per-hero OWCS intelligence: verified pick and win rates, the teams that run the hero, confirmed swaps and click-through evidence.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Cinzel:wght@500;600&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/public.css">
+</head>
+<body class="pub">
+<a class="skip-link" href="#main">Skip to content</a>
+<main class="pub-main" id="main">
+  <div id="hero-crumbs" class="rv"></div>
+
+  <header class="event-head rv" style="margin-top:12px">
+    <div class="hero-head" id="hero-head"></div>
+  </header>
+
+  <div class="stat-cards rv" id="hero-cards" style="margin-top:20px" aria-label="Hero headline numbers"></div>
+
+  <section class="section" aria-label="Teams running this hero">
+    <h2>Who runs it <span class="h-count" id="hero-teams-count"></span></h2>
+    <div class="hero-drill__teams" id="hero-teams"></div>
+    <div id="hero-teams-empty" hidden></div>
+  </section>
+
+  <section class="section" aria-label="Confirmed swaps involving this hero">
+    <h2>Swap activity <span class="h-count" id="hero-swaps-count"></span></h2>
+    <div class="swap-list" id="hero-swaps"></div>
+    <div id="hero-swaps-empty" hidden></div>
+  </section>
+
+  <section class="section" aria-label="Verified appearances">
+    <h2>Appearances <span class="h-count" id="hero-apps-count"></span></h2>
+    <div class="stack" id="hero-apps"></div>
+    <div id="hero-apps-empty" hidden></div>
+  </section>
+
+  <section class="section" aria-label="Portrait provenance">
+    <h2>Portrait provenance</h2>
+    <div class="ev-card" id="hero-prov"></div>
+  </section>
+</main>
+
+<script src="assets/vendor/lenis.min.js" defer></script>
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="assets/vendor/three.min.js" defer></script>
+<script src="assets/vendor/vanta.net.min.js" defer></script>
+<script src="assets/js/motion.js" defer></script>
+<script src="assets/data/public_data.v1.js"></script>
+<script src="assets/data/public_fixture.v1.js"></script>
+<script src="assets/js/public/core.js"></script>
+<script src="assets/js/public/assets.js"></script>
+<script src="assets/js/public/shell.js"></script>
+<script src="assets/js/public/stats.js"></script>
+<script src="assets/js/public/page-hero.js"></script>
+</body>
+</html>
