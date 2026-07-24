@@ -55,6 +55,12 @@ work/
 # --- SQLite transient sidecars (the .sqlite itself IS committed) ---
 data/owcs.sqlite-wal
 data/owcs.sqlite-shm
+
+# --- Automation job queue (RUNTIME state, regenerable via `cli.py init-db`;
+#     unlike owcs.sqlite this is a worker queue, not committed content) ---
+data/automation.sqlite
+data/automation.sqlite-wal
+data/automation.sqlite-shm
 data/raw/
 
 # --- Template cluster scratch (4-5 MB, regenerable via harvest --cluster) ---

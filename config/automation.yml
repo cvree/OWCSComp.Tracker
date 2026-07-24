@@ -1,0 +1,65 @@
+# =====================================================================
+# OWCS Comp Tracker — operator automation config (Roadmap Phase A4)
+# ---------------------------------------------------------------------
+# Single source of truth for the automation worker's tunables. Loaded by
+# pipeline/automation/config.py with a dependency-free parser (CI installs
+# no PyYAML), so keep this a SIMPLE subset: `key: value` scalars, and one
+# level of `-` list items under a key. Comments (`#`) and blank lines OK.
+#
+# Nothing here records or downloads anything on its own — these are the
+# knobs the discovery/coverage layer and (later) the self-hosted recording
+# worker read. Changing a value never rewrites history; it only changes how
+# future cycles behave.
+# =====================================================================
+
+# Rolling backfill window (Phase D). The system guarantees every configured
+# professional match completed within this many days has a tracked capture
+# state — never a silent gap.
+lookback_days: 14
+
+# How far ahead the calendar sync looks for scheduled matches (Phase B).
+schedule_horizon_days: 30
+
+# Recording arm/disarm padding around a scheduled broadcast (Phase E). Read
+# by the self-hosted worker; the discovery layer only records intent.
+recording_pre_roll_minutes: 15
+recording_post_roll_minutes: 30
+
+# Private raw-VOD retention after successful extraction (Phase J4). Raw video
+# is deleted after this many days; evidence crops and hashes are kept forever.
+raw_video_retention_days: 2
+
+# Retry ceilings (Phase J1). The job store stops retrying and moves a job to
+# FAILED_PERMANENT once these are exceeded, but the row always stays visible.
+max_recording_retries: 5
+max_processing_retries: 3
+max_discovery_retries: 6
+
+# Retry backoff schedule in minutes for the generic job store. Consumed in
+# order; the last value repeats until the per-kind retry ceiling is hit.
+retry_backoff_minutes:
+  - 10
+  - 30
+  - 60
+  - 180
+  - 720
+
+# Lease time-to-live for the distributed lock table (Phase A3). A worker must
+# heartbeat within this window or another worker may safely steal the lease.
+lock_lease_seconds: 300
+lock_heartbeat_seconds: 60
+
+# Publication behaviour (Phase I). `pull_request` opens a PR + CI auto-merge;
+# `direct` would commit straight to the branch (not enabled here).
+publish_mode: pull_request
+auto_publish_confidence: high
+
+# Supported regions (Phase B/C registries are filtered to these).
+regions:
+  - na
+  - emea
+  - korea
+  - japan
+  - pacific
+  - china
+  - global

@@ -70,9 +70,32 @@ length per frame. `shell.js` no longer spawns its own fallback Lenis
 Touch stays native (`syncTouch:false`); reduced-motion never boots the
 engine.
 
+### 7. Automation foundation installed (Roadmap Phase A + discovery scaffolding)
+New standalone package `pipeline/automation/` — the persistent job/state spine
+the *Complete Automation Roadmap* hangs off. Stdlib-only (sqlite3 + a tiny
+dependency-free YAML parser), so it runs in the same offline env as CI; it
+never writes hero comps. Delivered: the automation job DB
+(`schema.sql` — persistent queue, not workflow artifacts), the explicit
+`DISCOVERED…PUBLISHED/FAILED` state machine (illegal jumps rejected; failures
+retain full context and dead-letter to `FAILED_PERMANENT`, never deleted),
+deterministic idempotent job keys (`models.py`), lease locks with heartbeats +
+crash-steal (`locks.py`), the operator config `config/automation.yml`, the
+curated FACEIT competition + broadcast-channel registries
+(`config/faceit_competitions.json`, `config/broadcast_channels.json` — all
+placeholder IDs, all disabled by design), and the rolling 14-day completeness
+report (`coverage.py`, `cli.py coverage`). Operator CLI:
+`python pipeline/automation/cli.py {init-db,config,registries,coverage,status}`.
+Six new offline suites (`test_automation_*.py`) all green. Full details +
+go-live steps in **`docs/AUTOMATION.md`**. Recording/segmentation/detection/
+publication automation are the roadmap's later passes and plug into this spine.
+
 ### Not done / honest gaps
 - Team logos remain designed crests until a human fetches + verifies
   official marks (see §2 — the pipeline and manifest are ready).
+- Automation registries are placeholder IDs (disabled): FACEIT schedule
+  syncing (B2/B3), YouTube discovery (C2/C3), the self-hosted recording
+  worker (E), segmentation (F) and auto-publication (I) are not built yet —
+  they enqueue onto the Phase-A spine when they land.
 - CR-ZETA (`m-cr-zeta-ccuf`) still has no `ingest_map.py --write`; the
   new pages will gain breadth automatically when it lands.
 - Hero portraits are 96px broadcast crops — sharp at tile size, soft at

@@ -1,0 +1,87 @@
+{
+  "_readme": [
+    "Verified official broadcast-channel registry (Roadmap Phase C1).",
+    "",
+    "Discovery prefers KNOWN official channels and their upload playlists",
+    "over broad YouTube search (C2), because videos.list costs 1 quota unit",
+    "while search.list is ~100x more expensive (C4). Broad search is a",
+    "fallback only.",
+    "",
+    "Each channel scores candidates during broadcast matching (C3): an",
+    "official channel adds authority, an unofficial one is penalised. Only",
+    "high-confidence candidates auto-link; medium-confidence ones enter",
+    "review. `channelId` is null until the real YouTube channel id is",
+    "confirmed; a null-id channel is kept disabled so it never drives",
+    "discovery on a guess.",
+    "",
+    "`priority` breaks ties when multiple official feeds exist for one match",
+    "(higher wins). `allowedEventTypes` restricts a channel to the event",
+    "families it actually broadcasts. `language`/`region` feed the preferred",
+    "feed selection (Phase E4): one calibrated-layout feed is captured, not",
+    "every language."
+  ],
+  "version": 1,
+  "updated": "2026-07-24",
+  "channels": [
+    {
+      "id": "ow_esports_global",
+      "name": "Overwatch Esports (Global English)",
+      "platform": "youtube",
+      "channelId": null,
+      "region": "global",
+      "language": "en",
+      "official": true,
+      "priority": 100,
+      "allowedEventTypes": ["owcs"],
+      "enabled": false
+    },
+    {
+      "id": "ow_esports_korea",
+      "name": "Overwatch Esports (Korea)",
+      "platform": "youtube",
+      "channelId": null,
+      "region": "korea",
+      "language": "ko",
+      "official": true,
+      "priority": 90,
+      "allowedEventTypes": ["owcs"],
+      "enabled": false
+    },
+    {
+      "id": "ow_esports_japan",
+      "name": "Overwatch Esports (Japan)",
+      "platform": "youtube",
+      "channelId": null,
+      "region": "japan",
+      "language": "ja",
+      "official": true,
+      "priority": 85,
+      "allowedEventTypes": ["owcs"],
+      "enabled": false
+    },
+    {
+      "id": "owcs_pacific",
+      "name": "OWCS Pacific",
+      "platform": "youtube",
+      "channelId": null,
+      "region": "pacific",
+      "language": "en",
+      "official": true,
+      "priority": 80,
+      "allowedEventTypes": ["owcs"],
+      "enabled": false
+    },
+    {
+      "id": "owcs_china",
+      "name": "OWCS China",
+      "platform": "bilibili",
+      "channelId": null,
+      "region": "china",
+      "language": "zh",
+      "official": true,
+      "priority": 75,
+      "allowedEventTypes": ["owcs"],
+      "enabled": false
+    }
+  ]
+}
