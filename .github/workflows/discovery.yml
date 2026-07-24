@@ -1,17 +1,24 @@
 # =====================================================================
-# OWCS Comp Tracker — hourly discovery (Roadmap Phase B)
+# OWCS Comp Tracker — discovery + FACEIT registry ops (Roadmap Phase B)
 # ---------------------------------------------------------------------
-# Every hour this workflow runs the FACEIT + official-calendar discovery
-# sync. It is SAFE BY DEFAULT:
+# Hourly it runs the FACEIT + official-calendar discovery sync. It is
+# SAFE BY DEFAULT:
 #
 #   * With the registries still disabled (placeholder ids) or no
-#     FACEIT_API_KEY secret configured, it only runs a --dry-run health
-#     check that writes nothing and opens nothing. This is the shipped
-#     state.
-#   * Once real championship ids are enabled in config/faceit_competitions.json
-#     AND the FACEIT_API_KEY secret is set, it runs a live sync, regenerates
-#     the public calendar export, validates it, and opens a DATA-UPDATE
-#     pull request ONLY when the validated calendar data actually changes.
+#     FACEIT_API_KEY secret configured, the scheduled run only does a
+#     --dry-run health check that writes nothing and opens nothing.
+#   * Once real championship ids are enabled in
+#     config/faceit_competitions.json AND the FACEIT_API_KEY secret is
+#     set, the scheduled run does a live sync, regenerates the public
+#     calendar export, validates it, and opens a DATA-UPDATE pull request
+#     ONLY when the validated calendar data actually changes.
+#
+# workflow_dispatch adds READ-ONLY registry-config modes that use the
+# FACEIT_API_KEY secret but never write to the repo:
+#   mode=candidates  list OW2 championships + organizers to confirm ids
+#   mode=verify      verify every ENABLED competition via the FACEIT API
+#   mode=dryrun      rolling 14-day discovery dry-run (no db writes)
+#   mode=sync        (default) same as the scheduled run
 #
 # Recording/segmentation/CV are NOT part of this workflow — discovery is
 # lightweight and never downloads a VOD.
@@ -24,6 +31,14 @@ on:
     - cron: "17 * * * *"
   workflow_dispatch:
     inputs:
+      mode:
+        description: "sync | candidates | verify | dryrun"
+        required: false
+        default: "sync"
+      query:
+        description: "championship name search (candidates mode)"
+        required: false
+        default: "OWCS"
       lookback_days:
         description: "Rolling lookback window (days)"
         required: false
@@ -43,6 +58,8 @@ jobs:
     timeout-minutes: 15
     env:
       FACEIT_API_KEY: ${{ secrets.FACEIT_API_KEY }}
+      MODE: ${{ github.event.inputs.mode || 'sync' }}
+      QUERY: ${{ github.event.inputs.query || 'OWCS' }}
       LOOKBACK: ${{ github.event.inputs.lookback_days || '14' }}
     steps:
       - name: Check out repo
@@ -66,15 +83,50 @@ jobs:
           )
           echo "enabled_competitions=$ENABLED" >> "$GITHUB_OUTPUT"
           if [ -n "$FACEIT_API_KEY" ]; then echo "has_key=true" >> "$GITHUB_OUTPUT"; else echo "has_key=false" >> "$GITHUB_OUTPUT"; fi
-          echo "Enabled competitions: $ENABLED ; API key present: $([ -n "$FACEIT_API_KEY" ] && echo yes || echo no)"
+          echo "Mode: $MODE ; enabled competitions: $ENABLED ; API key present: $([ -n "$FACEIT_API_KEY" ] && echo yes || echo no)"
 
-      - name: Dry-run health check (always; writes nothing)
+      # -------- READ-ONLY registry-config modes (no repo writes) ----------
+      - name: List candidate championships + organizers (mode=candidates)
+        if: github.event.inputs.mode == 'candidates'
+        run: |
+          if [ -z "$FACEIT_API_KEY" ]; then echo "::error::FACEIT_API_KEY not set"; exit 1; fi
+          echo "::group::organizers matching 'Overwatch'"
+          python3 pipeline/automation/cli.py list-organizers --query "Overwatch" || true
+          echo "::endgroup::"
+          for Q in "$QUERY" "Overwatch Champions Series" "OWCS 2026"; do
+            echo "::group::championships name~'$Q' (all)"
+            python3 pipeline/automation/cli.py list-championships --query "$Q" --type all || true
+            echo "::endgroup::"
+            echo "::group::championships name~'$Q' (ongoing)"
+            python3 pipeline/automation/cli.py list-championships --query "$Q" --type ongoing || true
+            echo "::endgroup::"
+          done
+          echo "Confirm the OFFICIAL organizer id, then verify each championship id with mode=verify."
+
+      - name: Verify enabled competitions (mode=verify)
+        if: github.event.inputs.mode == 'verify'
+        run: |
+          if [ -z "$FACEIT_API_KEY" ]; then echo "::error::FACEIT_API_KEY not set"; exit 1; fi
+          python3 pipeline/automation/cli.py verify-registry
+
+      - name: Rolling 14-day discovery dry-run (mode=dryrun)
+        if: github.event.inputs.mode == 'dryrun'
+        run: |
+          if [ -z "$FACEIT_API_KEY" ]; then echo "::error::FACEIT_API_KEY not set"; exit 1; fi
+          python3 pipeline/automation/cli.py sync-all --dry-run --lookback-days "$LOOKBACK"
+          echo "::group::coverage (read-only)"
+          python3 pipeline/automation/cli.py coverage --window "$LOOKBACK" || true
+          echo "::endgroup::"
+
+      # -------- default/scheduled SYNC path (unchanged, safe) -------------
+      - name: Dry-run health check (sync mode; always safe, writes nothing)
+        if: env.MODE == 'sync'
         run: |
           python3 pipeline/automation/cli.py sync-all --dry-run --lookback-days "$LOOKBACK"
 
       - name: Live sync + regenerate public calendar
         id: sync
-        if: steps.gate.outputs.enabled_competitions != '0' && steps.gate.outputs.has_key == 'true'
+        if: env.MODE == 'sync' && steps.gate.outputs.enabled_competitions != '0' && steps.gate.outputs.has_key == 'true'
         run: |
           python3 pipeline/automation/cli.py sync-all --lookback-days "$LOOKBACK" --export
           python3 pipeline/automation/cli.py coverage --save || true
@@ -112,9 +164,8 @@ jobs:
         if: always()
         run: |
           {
-            echo "### Discovery run"
+            echo "### Discovery run — mode: ${MODE}"
             echo ""
             echo "- Enabled competitions: ${{ steps.gate.outputs.enabled_competitions }}"
             echo "- API key present: ${{ steps.gate.outputs.has_key }}"
-            echo "- Live sync ran: ${{ steps.sync.conclusion || 'skipped (registries disabled or no key)' }}"
           } >> "$GITHUB_STEP_SUMMARY"
