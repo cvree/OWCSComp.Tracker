@@ -18,8 +18,12 @@ trackable, resumable and safe to run twice.
 """
 from __future__ import annotations
 
-from . import config, coverage, job_store, locks, models, state_machine
+from . import (
+    config, coverage, discovery, faceit_api, job_store, locks, models,
+    owcs_calendar, reconcile, state_machine,
+)
 
 __all__ = [
-    "config", "coverage", "job_store", "locks", "models", "state_machine",
+    "config", "coverage", "discovery", "faceit_api", "job_store", "locks",
+    "models", "owcs_calendar", "reconcile", "state_machine",
 ]

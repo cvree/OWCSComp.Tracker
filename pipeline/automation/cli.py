@@ -26,9 +26,13 @@ _PIPELINE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if _PIPELINE_DIR not in sys.path:
     sys.path.insert(0, _PIPELINE_DIR)
 
+import db as content_db  # noqa: E402  (pipeline/db.py)
 from automation import config as cfg  # noqa: E402
 from automation import coverage as cov  # noqa: E402
+from automation import discovery as disc  # noqa: E402
+from automation import faceit_api  # noqa: E402
 from automation import job_store as js  # noqa: E402
+from automation import owcs_calendar  # noqa: E402
 
 
 def cmd_init_db(args: argparse.Namespace) -> int:
@@ -64,6 +68,109 @@ def cmd_registries(args: argparse.Namespace) -> int:
     if not comps_live and not chans_live:
         print("  (placeholders only — fill real FACEIT/YouTube ids, then enable)")
     return 0
+
+
+def _build_client(args: argparse.Namespace) -> faceit_api.FaceitClient:
+    """Real API client (FACEIT_API_KEY), or an offline fixture client when
+    --fixture-dir is given. Fixtures never touch the network."""
+    if getattr(args, "fixture_dir", None):
+        return faceit_api.FaceitClient(
+            transport=faceit_api.fixture_transport(args.fixture_dir))
+    cache = None if args.dry_run else os.path.join(
+        content_db.REPO_ROOT, "data", "raw", "faceit_api")
+    return faceit_api.FaceitClient(cache_dir=cache)
+
+
+def _open_content_db():
+    con = content_db.connect()
+    content_db.init_schema(con)
+    return con
+
+
+def _print_faceit_summary(s: dict) -> None:
+    print(f"  competitions   : {len(s['competitions'])} "
+          f"({', '.join(s['competitions']) or 'none enabled'})")
+    if s.get("note"):
+        print(f"  note           : {s['note']}")
+    print(f"  matches seen   : {s['matchesSeen']}  in-window: {s['inWindow']}")
+    print(f"  upserted       : {s['upserted']}  "
+          f"({'dry-run — no writes' if s['dryRun'] else 'written'})")
+    if s.get("byLifecycle"):
+        print(f"  by lifecycle   : {s['byLifecycle']}")
+    if s.get("rescheduled"):
+        print(f"  rescheduled    : {len(s['rescheduled'])} match(es)")
+    if not s["dryRun"]:
+        print(f"  broadcast jobs : {s['broadcastJobsCreated']} created")
+    for e in s.get("errors", []):
+        print(f"  API ERROR      : {e['competitionId']}: {e['error']}")
+
+
+def cmd_sync_faceit(args: argparse.Namespace) -> int:
+    config = cfg.load_config()
+    con = _open_content_db()
+    store = None if args.dry_run else js.JobStore(args.db, config=config)
+    try:
+        summary = disc.sync_faceit(
+            con=con, store=store, client=_build_client(args), config=config,
+            lookback_days=args.lookback_days, horizon_days=args.horizon_days,
+            dry_run=args.dry_run)
+        print(f"[automation] sync-faceit ({'dry-run' if args.dry_run else 'live'}):")
+        _print_faceit_summary(summary)
+        if args.export and not args.dry_run:
+            _run_export()
+    finally:
+        con.close()
+        if store:
+            store.close()
+    return 0
+
+
+def cmd_sync_calendar(args: argparse.Namespace) -> int:
+    store = None if args.dry_run else js.JobStore(args.db)
+    try:
+        events = owcs_calendar.load_events()
+        summary = disc.sync_calendar(store=store, events=events, dry_run=args.dry_run)
+        print(f"[automation] sync-calendar ({'dry-run' if args.dry_run else 'live'}):")
+        print(f"  events         : {summary['events']} "
+              f"({summary['unverified']} unverified)")
+        for eid in summary["eventIds"]:
+            print(f"    - {eid}")
+    finally:
+        if store:
+            store.close()
+    return 0
+
+
+def cmd_sync_all(args: argparse.Namespace) -> int:
+    config = cfg.load_config()
+    con = _open_content_db()
+    store = None if args.dry_run else js.JobStore(args.db, config=config)
+    try:
+        result = disc.sync_all(
+            con=con, store=store, client=_build_client(args), config=config,
+            lookback_days=args.lookback_days, horizon_days=args.horizon_days,
+            dry_run=args.dry_run)
+        print(f"[automation] sync-all ({'dry-run' if args.dry_run else 'live'}):")
+        _print_faceit_summary(result["faceit"])
+        print(f"  calendar events: {result['calendar']['events']}")
+        print(f"  reconciliation : {result['warningCount']} warning(s)")
+        for w in result["warnings"][:20]:
+            print(f"    [{w['code']}] {w['message']}")
+        if args.export and not args.dry_run:
+            _run_export()
+    finally:
+        con.close()
+        if store:
+            store.close()
+    return 0
+
+
+def _run_export() -> None:
+    """Regenerate the production public export so calendar.html updates."""
+    import subprocess
+    script = os.path.join(_PIPELINE_DIR, "export_data.py")
+    print("[automation] regenerating public export (export_data.py --public)…")
+    subprocess.run([sys.executable, script, "--public"], check=False)
 
 
 def cmd_coverage(args: argparse.Namespace) -> int:
@@ -107,6 +214,29 @@ def main(argv: list[str] | None = None) -> int:
     cvp.add_argument("--window", type=int, default=14, help="lookback days")
     cvp.add_argument("--save", action="store_true", help="persist a coverage snapshot")
     cvp.set_defaults(func=cmd_coverage)
+
+    # ---- Phase B discovery sync commands --------------------------------
+    def _add_sync_opts(sp):
+        sp.add_argument("--dry-run", action="store_true",
+                        help="fetch + reconcile, write nothing")
+        sp.add_argument("--lookback-days", type=int, default=None)
+        sp.add_argument("--horizon-days", type=int, default=None)
+        sp.add_argument("--fixture-dir", default=None,
+                        help="serve FACEIT responses from local fixtures (offline)")
+        sp.add_argument("--export", action="store_true",
+                        help="regenerate public_data.v1.js after a live sync")
+
+    sf = sub.add_parser("sync-faceit", help="sync enabled FACEIT competitions (B2)")
+    _add_sync_opts(sf)
+    sf.set_defaults(func=cmd_sync_faceit)
+
+    sc = sub.add_parser("sync-calendar", help="load official OWCS calendar (B3)")
+    sc.add_argument("--dry-run", action="store_true")
+    sc.set_defaults(func=cmd_sync_calendar)
+
+    sa = sub.add_parser("sync-all", help="FACEIT + calendar sync + reconcile (B)")
+    _add_sync_opts(sa)
+    sa.set_defaults(func=cmd_sync_all)
 
     args = p.parse_args(argv)
     return args.func(args)

@@ -89,13 +89,38 @@ Six new offline suites (`test_automation_*.py`) all green. Full details +
 go-live steps in **`docs/AUTOMATION.md`**. Recording/segmentation/detection/
 publication automation are the roadmap's later passes and plug into this spine.
 
+### 8. Phase B — automatic calendar ingestion (FACEIT + official OWCS)
+Production discovery pipeline on the Phase-A spine, stdlib-only and fully
+offline-tested. `faceit_api.py` (FACEIT Data API client + fact-only
+normalizer, injectable transport, response caching, forfeit/cancel/live/
+scheduled lifecycle mapping — never comps), `owcs_calendar.py` +
+`config/owcs_calendar.json` (official event-level adapter), `reconcile.py`
+(B4 warnings, never overwrites), `discovery.py` (idempotent upsert into the
+content DB with stable ids `faceit-<matchId>` + alias-safe team resolution,
+rolling 14-day + horizon window, per-match broadcast-discovery jobs +
+`scheduled_matches` ledger in the automation DB, API-failure retry jobs,
+dry-run purity). `export_data.py` now surfaces discovered scheduled matches
+into `public_data.v1.js` so `calendar.html` populates (facts before CV, I3);
+guarded so a pre-migration DB never crashes the export. New CLI:
+`sync-faceit`, `sync-calendar`, `sync-all [--dry-run] [--export]
+[--fixture-dir]`. Hourly `.github/workflows/discovery.yml` — safe by default
+(dry-run only until registries enabled + `FACEIT_API_KEY` set; opens a
+data-update PR only on validated calendar change). Four new suites
+(`test_automation_{faceit_api,discovery,reconcile,calendar_export}.py`) green.
+Content `matches` gained `lifecycle_status` / `capture_status` /
+`competition_id` (additive migration). Details + go-live steps + required
+secret in **`docs/AUTOMATION.md`**.
+
 ### Not done / honest gaps
 - Team logos remain designed crests until a human fetches + verifies
   official marks (see §2 — the pipeline and manifest are ready).
-- Automation registries are placeholder IDs (disabled): FACEIT schedule
-  syncing (B2/B3), YouTube discovery (C2/C3), the self-hosted recording
-  worker (E), segmentation (F) and auto-publication (I) are not built yet —
-  they enqueue onto the Phase-A spine when they land.
+- Phase B registries are placeholder IDs (disabled) and need real FACEIT
+  championship ids + the `FACEIT_API_KEY` secret before the hourly workflow
+  does anything but a dry-run health check. `config/owcs_calendar.json`
+  dates are unverified placeholders.
+- Phase C+ (YouTube broadcast discovery), the self-hosted recording worker
+  (E), segmentation (F) and auto-publication (I) are not built yet — they
+  enqueue onto the same spine when they land.
 - CR-ZETA (`m-cr-zeta-ccuf`) still has no `ingest_map.py --write`; the
   new pages will gain breadth automatically when it lands.
 - Hero portraits are 96px broadcast crops — sharp at tile size, soft at

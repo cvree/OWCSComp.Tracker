@@ -33,14 +33,83 @@ job keeps its error code, message, attempt count, timestamps, worker id, source
 URL and diagnostic path, then moves to `FAILED_PERMANENT` once its per-kind
 retry ceiling is hit (still visible, still actionable).
 
+## Phase B — automatic calendar ingestion (implemented)
+
+The production FACEIT + official-calendar discovery pipeline is built on the
+Phase A spine. It is stdlib-only and fully offline-testable (injectable HTTP
+transport + fixtures).
+
+| Roadmap item | Where | Status |
+|---|---|---|
+| B1 curated FACEIT competition registry (no broad search) | `config/faceit_competitions.json` + `config.load_competitions()` | ✅ (placeholder ids; enable to go live) |
+| B2 poll FACEIT (championships → matches → teams/players/status/result) | `faceit_api.py` + `discovery.sync_faceit` | ✅ |
+| B3 official OWCS calendar adapter | `config/owcs_calendar.json` + `owcs_calendar.py` | ✅ |
+| B4 source reconciliation (never silently overwrites) | `reconcile.py` | ✅ |
+| B5 generate the public calendar | `export_data.py` (discovered-window matches) → `public_data.v1.js` → `calendar.html` | ✅ |
+| Rolling 14-day window + future horizon | `discovery.in_window` (config `lookback_days` / `schedule_horizon_days`) | ✅ |
+| Delayed / rescheduled / cancelled / forfeited / completed / duplicate handling | `faceit_api.map_status` + `discovery.upsert_match` | ✅ |
+| Idempotent upsert with stable public ids (`faceit-<matchId>`) | `discovery.upsert_match` (alias-safe team resolution) | ✅ |
+| Deterministic discovery + broadcast-discovery jobs | `discovery` → `jobs` / `scheduled_matches` in `data/automation.sqlite` | ✅ |
+| Dry-run (fetch + reconcile, zero writes) | `--dry-run` on every sync command | ✅ |
+| Response caching + raw-metadata retention | `FaceitClient(cache_dir=…)`, `raw` kept on every normalized match | ✅ |
+| Never writes/infers compositions | normalized shape has no comp field; discovery never touches comp tables | ✅ |
+| API failures → retry jobs | `discovery` enqueues a `KIND_DISCOVERY` retry via `record_attempt` (backoff/dead-letter) | ✅ |
+
+Discovery status distinctions on the public site: `upcoming`, `live`,
+`completed`, `forfeit`, `cancelled` (match status) and `needs-source` /
+`queued` / `needs-review` (capture status), mapped from the precise FACEIT
+lifecycle in `export_data._public_match_status` / `_public_capture_status`.
+
+### Sync CLI
+
+```bash
+python pipeline/automation/cli.py sync-faceit   --dry-run
+python pipeline/automation/cli.py sync-calendar --dry-run
+python pipeline/automation/cli.py sync-all      --lookback-days 14 [--export]
+python pipeline/automation/cli.py coverage
+# offline demo against local fixtures (no key, no network):
+python pipeline/automation/cli.py sync-all --dry-run --fixture-dir pipeline/fixtures/automation
+```
+
+`--export` regenerates `public_data.v1.js` after a live sync so `calendar.html`
+updates. Dry-run performs all API retrieval + reconciliation but writes nothing.
+
+### Hourly workflow
+
+`.github/workflows/discovery.yml` runs every hour. It is **safe by default**:
+with the registries disabled or no `FACEIT_API_KEY` secret it only runs a
+`--dry-run` health check (writes nothing, opens nothing). Once real ids are
+enabled AND the secret is set, it runs a live sync, validates the result
+(`check_packaging.py` + calendar/public-site tests) and opens a data-update PR
+**only when the validated calendar data actually changes**.
+
+### Required secrets
+
+| Secret | Where to set it | Used by |
+|---|---|---|
+| `FACEIT_API_KEY` | GitHub → repo **Settings → Secrets and variables → Actions**; locally via an untracked `.env` / shell env | `faceit_api.urllib_transport` (live FACEIT Data API calls) |
+
+No key is committed; `.env`, `credentials*.json`, `secrets*.json` and
+`data/raw/` (cached API responses) are gitignored. `data/automation.sqlite`
+(the runtime job queue) is gitignored too.
+
+### Registry entries still needing real ids (before going live)
+
+- `config/faceit_competitions.json` — every competition has `championshipId: null`
+  and `enabled: false`. Set the real FACEIT Data API championship id and flip
+  `enabled: true`. Only then does `load_competitions()` return it.
+- `config/broadcast_channels.json` — every channel has `channelId: null` and
+  `enabled: false` (Phase C — broadcast discovery, next pass).
+- `config/owcs_calendar.json` — event dates are `verified: false` placeholders;
+  confirm against the official Overwatch Esports schedule.
+
 ## Not yet implemented (later roadmap passes)
 
-FACEIT schedule syncing (B2/B3), YouTube upload discovery (C2/C3), the
-self-hosted recording daemon (Phase E), broadcast segmentation (Phase F), the
-detector/layout/template automation (Phase G), and automated publication PRs
-(Phase I). Each of these plugs into this foundation: they enqueue jobs with the
-deterministic keys above, take a lease before touching a shared resource, and
-transition through the state machine.
+YouTube upload discovery (C2/C3), the self-hosted recording daemon (Phase E),
+broadcast segmentation (Phase F), the detector/layout/template automation
+(Phase G), and automated publication PRs (Phase I). Each plugs into this
+foundation: they enqueue jobs with the deterministic keys above, take a lease
+before touching a shared resource, and transition through the state machine.
 
 ## Operator CLI
 
@@ -82,9 +151,17 @@ discovery layer never ingests on a guess:
 
 ## Tests
 
-Six offline suites, run the same way as the rest of the pipeline
+Ten offline suites, run the same way as the rest of the pipeline
 (`python pipeline/test_*.py`):
 
-`test_automation_state_machine.py`, `test_automation_config.py`,
+Phase A — `test_automation_state_machine.py`, `test_automation_config.py`,
 `test_automation_schema.py`, `test_automation_job_store.py`,
 `test_automation_locks.py`, `test_automation_coverage.py`.
+
+Phase B — `test_automation_faceit_api.py`, `test_automation_discovery.py`
+(idempotent repeat sync, multi-tournament/region, changed start times,
+cancellation/forfeit, duplicate teams/aliases, 14-day boundary, partial
+responses, API-failure retry jobs, stable ids, dry-run purity, no comp
+leakage, no fixture contamination), `test_automation_reconcile.py`
+(FACEIT↔calendar conflicts), `test_automation_calendar_export.py`
+(public calendar export, end-to-end discovery→export).
