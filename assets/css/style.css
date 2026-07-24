@@ -41,6 +41,14 @@
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
+/* Lenis integration: when the smooth-scroll engine is active it drives the
+   scroll position itself, so native CSS smooth-scroll MUST be disabled or
+   the two fight frame-by-frame (the cause of janky homepage scrolling).
+   These mirror the public stylesheet so both shells scroll identically. */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+.lenis.lenis-smooth iframe { pointer-events: none; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -1229,6 +1237,31 @@ body[data-page="landing"] {
     #04050a;
 }
 body[data-page="landing"] .nav { background: rgba(4,5,10,.8); }
+
+/* Brand mark matched to the public header (.pub-brand) so the logo is
+   identical from the homepage to every other page: hexagonal gold "CT"
+   badge + uppercase wordmark + tagline. Scoped to the landing shell so
+   the control-room tool pages keep their own compact mark. */
+body[data-page="landing"] .brand--pub {
+  text-transform: uppercase; letter-spacing: .05em; font-size: 18px; gap: 10px;
+}
+body[data-page="landing"] .brand--pub .brand-mark {
+  width: 27px; height: 27px; border-radius: 0;
+  background: linear-gradient(135deg, #f0c473, #a87a26);
+  clip-path: polygon(50% 0, 100% 26%, 100% 74%, 50% 100%, 0 74%, 0 26%);
+  display: grid; place-items: center;
+  color: #201503; font-size: 12px; font-weight: 800; line-height: 1;
+}
+body[data-page="landing"] .brand--pub .brand-mark::after { content: none; }
+body[data-page="landing"] .brand--pub .brand-word { white-space: nowrap; }
+/* tagline matches .pub-brand__tag exactly: uppercase (inherited), muted,
+   and only shown at >=1560px so the header is identical to every other
+   page at every width */
+body[data-page="landing"] .brand--pub .brand-tag {
+  color: var(--muted); font-weight: 400; font-size: 11.5px;
+  letter-spacing: .14em; white-space: nowrap; display: none;
+}
+@media (min-width: 1560px) { body[data-page="landing"] .brand--pub .brand-tag { display: inline; } }
 
 /* ---- det-hero: the real detection story ----------------------------- */
 .det-hero { padding: 56px 0 24px; position: relative; overflow: hidden; }
