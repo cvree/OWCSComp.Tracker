@@ -16,7 +16,8 @@ from automation import job_store as js  # noqa: E402
 
 EXPECTED_TABLES = {
     "source_channels", "source_events", "scheduled_matches",
-    "broadcast_candidates", "map_segments", "review_tasks",
+    "broadcast_candidates", "broadcast_coverage", "youtube_quota",
+    "map_segments", "review_tasks",
     "publication_runs", "coverage_snapshots", "jobs", "job_attempts", "locks",
 }
 EXPECTED_VIEWS = {"recording_jobs", "processing_jobs"}

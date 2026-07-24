@@ -1,0 +1,17 @@
+{
+  "items": [
+    {
+      "id": "oldstage1vod",
+      "snippet": {
+        "title": "OWCS 2026 North America Stage 1 — Day 9 (old)",
+        "description": "Overwatch Champions Series 2026 North America Stage 1. Outside the rolling window.",
+        "channelId": "UC_OW_ESPORTS_OFFICIAL",
+        "channelTitle": "Overwatch Esports",
+        "publishedAt": "2026-06-01T23:30:00Z",
+        "liveBroadcastContent": "none"
+      },
+      "contentDetails": {"duration": "PT7H00M"},
+      "status": {"privacyStatus": "public"}
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "items": [
+    {
+      "id": "nafinalsvod",
+      "snippet": {
+        "title": "Spacestation vs NTMR | OWCS 2026 North America Stage 2",
+        "description": "Full match VOD — Spacestation Gaming vs NTMR. OWCS North America.",
+        "channelId": "UC_OW_ESPORTS_OFFICIAL",
+        "channelTitle": "Overwatch Esports",
+        "publishedAt": "2026-07-22T23:30:00Z",
+        "liveBroadcastContent": "none"
+      },
+      "contentDetails": {"duration": "PT1H48M"},
+      "status": {"privacyStatus": "public"}
+    }
+  ]
+}

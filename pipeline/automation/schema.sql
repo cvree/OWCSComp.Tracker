@@ -84,6 +84,41 @@ CREATE TABLE IF NOT EXISTS broadcast_candidates (
   UNIQUE (match_id, platform, video_id)
 );
 
+-- --- Broadcast coverage per scheduled match (Phase C5) ---------------
+-- The EXPLICIT per-match broadcast state. Every scheduled match that reaches
+-- broadcast discovery gets exactly one row here so an uncovered event is a
+-- recorded MISSING fact, never a silent gap (mirrors the D4 rule). Idempotent
+-- on match_id: a rerun updates the same row rather than duplicating it.
+CREATE TABLE IF NOT EXISTS broadcast_coverage (
+  match_id          TEXT PRIMARY KEY,       -- -> scheduled_matches.id
+  region            TEXT,
+  state             TEXT NOT NULL DEFAULT 'MISSING',  -- LOCATED / NEEDS_REVIEW / MISSING / UNSUPPORTED
+  best_video_id     TEXT,
+  best_channel_id   TEXT,
+  best_confidence   TEXT,                   -- high / medium / low / none
+  best_score        INTEGER,
+  candidate_count   INTEGER NOT NULL DEFAULT 0,
+  auto_linked       INTEGER NOT NULL DEFAULT 0,
+  reason            TEXT,                   -- why MISSING/UNSUPPORTED (human note)
+  first_seen_at     TEXT DEFAULT CURRENT_TIMESTAMP,
+  updated_at        TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
+-- --- YouTube quota ledger (Phase C4) ---------------------------------
+-- Every discovery run appends what it spent so an operator can prove the day
+-- stayed inside the API budget. Never holds a key.
+CREATE TABLE IF NOT EXISTS youtube_quota (
+  id                INTEGER PRIMARY KEY AUTOINCREMENT,
+  day               TEXT NOT NULL,          -- UTC YYYY-MM-DD
+  units             INTEGER NOT NULL DEFAULT 0,
+  calls             INTEGER NOT NULL DEFAULT 0,
+  budget            INTEGER,
+  mode              TEXT,                   -- verify-channels / discover / ...
+  run_at            TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_youtube_quota_day ON youtube_quota (day);
+
 -- --- Broadcast segmentation (Phase F) --------------------------------
 CREATE TABLE IF NOT EXISTS map_segments (
   id                  INTEGER PRIMARY KEY AUTOINCREMENT,

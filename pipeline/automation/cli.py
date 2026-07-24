@@ -28,12 +28,14 @@ if _PIPELINE_DIR not in sys.path:
     sys.path.insert(0, _PIPELINE_DIR)
 
 import db as content_db  # noqa: E402  (pipeline/db.py)
+from automation import broadcast as bcast  # noqa: E402
 from automation import config as cfg  # noqa: E402
 from automation import coverage as cov  # noqa: E402
 from automation import discovery as disc  # noqa: E402
 from automation import faceit_api  # noqa: E402
 from automation import job_store as js  # noqa: E402
 from automation import owcs_calendar  # noqa: E402
+from automation import youtube_api  # noqa: E402
 
 
 def cmd_init_db(args: argparse.Namespace) -> int:
@@ -255,6 +257,120 @@ def cmd_verify_registry(args: argparse.Namespace) -> int:
     return 1 if failures else 0
 
 
+# ---- Phase C broadcast discovery ------------------------------------------
+def _build_youtube_client(args: argparse.Namespace) -> youtube_api.YoutubeClient:
+    """Fixture client when --fixture-dir is given (offline, no key); otherwise a
+    live client reading YOUTUBE_API_KEY. Only a live, non-dry run caches into the
+    gitignored data/raw/ dir."""
+    config = cfg.load_config()
+    budget = config.youtube_daily_quota
+    if getattr(args, "fixture_dir", None):
+        return youtube_api.YoutubeClient(
+            transport=youtube_api.fixture_transport(args.fixture_dir),
+            quota_budget=budget)
+    cache = None if getattr(args, "dry_run", True) else os.path.join(
+        content_db.REPO_ROOT, "data", "raw", "youtube_api")
+    return youtube_api.YoutubeClient(cache_dir=cache, quota_budget=budget)
+
+
+def cmd_verify_channels(args: argparse.Namespace) -> int:
+    """Verify/resolve every configured official channel against the live YouTube
+    Data API (channels.list, 1 unit each). READ-ONLY: prints confirmed channel
+    id + exact name + uploads playlist so a human can commit them. Never writes
+    video, compositions, or the registry file. The API key is never printed."""
+    channels = cfg.load_all_channels()
+    client = _build_youtube_client(args)
+    report = bcast.verify_channels(client, channels)
+    if args.json:
+        print(json.dumps(report, indent=2))
+        return 0
+    print(f"[automation] verify-channels ({report['verified']}/"
+          f"{len(report['channels'])} verified, quota {report['quotaUsed']}u):")
+    print(f"  {'registry id':<22} {'status':<16} {'resolved channelId':<26} name")
+    for r in report["channels"]:
+        print(f"  {r['id']:<22} {r['status']:<16} "
+              f"{(r.get('resolvedChannelId') or '-'):<26} "
+              f"{r.get('resolvedTitle') or r.get('officialSourceUrl') or '-'}")
+        if r.get("uploadsPlaylistId"):
+            print(f"      uploads playlist: {r['uploadsPlaylistId']}  "
+                  f"(verificationDate {r.get('verificationDate')})")
+        if r.get("error"):
+            print(f"      note: {youtube_api.redact_key(r['error'])}")
+    print("\n  Paste each confirmed channelId + uploadsPlaylistId into")
+    print("  config/broadcast_channels.json and flip enabled=true. IDs are")
+    print("  never guessed; only API-verified ids belong in the registry.")
+    return 0
+
+
+def _print_broadcast_summary(s: dict) -> None:
+    print(f"  official channels : {len(s['officialChannels'])} "
+          f"({', '.join(s['officialChannels']) or 'none enabled/verified'})")
+    if s.get("note"):
+        print(f"  note              : {s['note']}")
+    print(f"  channels scanned  : {s['channelsScanned']}  "
+          f"videos seen: {s['videosSeen']}")
+    if s.get("byBroadcastType"):
+        print(f"  by broadcast type : {s['byBroadcastType']}")
+    print(f"  matches           : {s['matchesConsidered']} considered")
+    print(f"    located (auto)  : {len(s['located'])}"
+          f"   review: {len(s['review'])}"
+          f"   missing: {len(s['missing'])}"
+          f"   unsupported: {len(s['unsupported'])}")
+    print(f"    rejected mirrors: {len(s['rejectedMirrors'])}"
+          f"   auto-link switch: {'ON' if s['autoLinkEnabled'] else 'OFF (review-only)'}")
+    print(f"  YouTube quota     : {s['quotaUsed']}/{s['quotaBudget']} units "
+          f"({s.get('quotaCalls', 0)} calls)")
+    for e in s.get("errors", []):
+        print(f"  ERROR             : {e.get('channel')}: "
+              f"{youtube_api.redact_key(str(e.get('error')))}")
+    for rec in s["review"][:12]:
+        teams = rec.get("videoId")
+        print(f"    review  {rec['confidence']:<6} score={rec['score']:<3} "
+              f"{rec['matchId']} -> {rec['url']}")
+    for rec in s["missing"][:12]:
+        tm = " vs ".join(t or "?" for t in rec.get("teams", []))
+        print(f"    MISSING [{rec.get('region')}] {tm} — {rec['matchId']}")
+
+
+def cmd_discover_broadcasts(args: argparse.Namespace) -> int:
+    """Rolling broadcast discovery over scheduled matches. Dry-run does full
+    retrieval + scoring and writes nothing. Never downloads video."""
+    config = cfg.load_config()
+    channels = cfg.load_all_channels()
+    con = _open_content_db()
+    store = None if args.dry_run else js.JobStore(args.db, config=config)
+    try:
+        if store is not None:
+            matches = bcast.scheduled_matches_from_store(
+                store, content_con=con,
+                lookback_days=args.lookback_days or config.lookback_days,
+                horizon_days=args.horizon_days or config.schedule_horizon_days)
+        else:
+            # Dry-run without a store still reads scheduled matches read-only.
+            tmp = js.JobStore(args.db, config=config)
+            try:
+                matches = bcast.scheduled_matches_from_store(
+                    tmp, content_con=con,
+                    lookback_days=args.lookback_days or config.lookback_days,
+                    horizon_days=args.horizon_days or config.schedule_horizon_days)
+            finally:
+                tmp.close()
+        client = _build_youtube_client(args)
+        summary = bcast.discover_broadcasts(
+            store=store, client=client, config=config, channels=channels,
+            matches=matches, content_con=(None if args.dry_run else con),
+            lookback_days=args.lookback_days, horizon_days=args.horizon_days,
+            dry_run=args.dry_run)
+        print(f"[automation] discover-broadcasts "
+              f"({'dry-run' if args.dry_run else 'live'}):")
+        _print_broadcast_summary(summary)
+    finally:
+        con.close()
+        if store:
+            store.close()
+    return 0
+
+
 def _run_export() -> None:
     """Regenerate the production public export so calendar.html updates."""
     import subprocess
@@ -359,6 +475,23 @@ def main(argv: list[str] | None = None) -> int:
                         help="verify every ENABLED competition via the FACEIT API")
     vr.add_argument("--fixture-dir", default=None)
     vr.set_defaults(func=cmd_verify_registry)
+
+    # ---- Phase C broadcast discovery ------------------------------------
+    vch = sub.add_parser("verify-channels",
+                         help="verify official YouTube channels via channels.list (read-only)")
+    vch.add_argument("--fixture-dir", default=None)
+    vch.add_argument("--json", action="store_true")
+    vch.set_defaults(func=cmd_verify_channels)
+
+    dbc = sub.add_parser("discover-broadcasts",
+                         help="rolling official YouTube broadcast discovery (Phase C)")
+    dbc.add_argument("--dry-run", action="store_true",
+                     help="retrieve + score, write nothing (never downloads video)")
+    dbc.add_argument("--lookback-days", type=int, default=None)
+    dbc.add_argument("--horizon-days", type=int, default=None)
+    dbc.add_argument("--fixture-dir", default=None,
+                     help="serve YouTube responses from local fixtures (offline)")
+    dbc.set_defaults(func=cmd_discover_broadcasts)
 
     args = p.parse_args(argv)
     return args.func(args)

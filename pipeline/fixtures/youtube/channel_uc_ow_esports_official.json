@@ -1,0 +1,25 @@
+{
+  "items": [
+    {
+      "id": "UC_OW_ESPORTS_OFFICIAL",
+      "snippet": {
+        "title": "Overwatch Esports",
+        "customUrl": "@ow_esports",
+        "country": "US",
+        "publishedAt": "2016-05-01T00:00:00Z"
+      },
+      "contentDetails": {
+        "relatedPlaylists": {
+          "uploads": "UU_OW_ESPORTS_OFFICIAL"
+        }
+      },
+      "statistics": {
+        "subscriberCount": "1000000",
+        "videoCount": "5000"
+      },
+      "status": {
+        "privacyStatus": "public"
+      }
+    }
+  ]
+}
