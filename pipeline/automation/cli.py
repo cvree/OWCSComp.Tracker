@@ -17,6 +17,7 @@ only commands that write, and both only touch the automation DB.
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import sys
 
