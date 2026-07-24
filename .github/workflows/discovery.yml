@@ -107,9 +107,9 @@ jobs:
               echo "::endgroup::"
             done
           else
-            for Q in "$QUERY" "Overwatch Champions Series" "OWCS 2026"; do
-              echo "::group::championships name~'$Q' (all)"
-              python3 pipeline/automation/cli.py list-championships --query "$Q" --type all || true
+            for Q in "$QUERY" "OWCS 2026" "OWCS 2026 Stage"; do
+              echo "::group::championships name~'$Q' (all, json)"
+              python3 pipeline/automation/cli.py list-championships --query "$Q" --type all --limit 30 --json || true
               echo "::endgroup::"
             done
           fi
