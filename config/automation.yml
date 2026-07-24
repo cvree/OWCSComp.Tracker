@@ -54,6 +54,35 @@ lock_heartbeat_seconds: 60
 publish_mode: pull_request
 auto_publish_confidence: high
 
+# ---- Broadcast discovery (Phase C) ----------------------------------------
+# YouTube Data API daily quota ceiling for a single run. The client tracks
+# every unit (channels/playlistItems/videos = 1u, search = 100u) and stops
+# cleanly with a quota error before exceeding this — it never invents a
+# broadcast to fill a gap left by exhausted quota.
+youtube_daily_quota: 10000
+
+# MASTER SAFETY SWITCH. When false, high-confidence official broadcasts are
+# still DISCOVERED and scored, but they are routed to review instead of being
+# auto-linked to a match (no vod_url is written). Keep this false until the
+# first real dry-run has been reviewed; flip to true only for supervised
+# production linking.
+broadcast_auto_link: false
+
+# A candidate at/above this score AND on an official channel is high-confidence
+# (auto-linkable when broadcast_auto_link is true). At/above the medium
+# threshold it goes to review. Below medium it is not recorded as a candidate.
+broadcast_high_score: 90
+broadcast_medium_score: 45
+
+# How close (hours) a broadcast's time must be to a match's scheduled time for a
+# same-window time signal. A full-day broadcast covering several matches uses
+# the wider same-DAY signal instead.
+broadcast_time_window_hours: 6
+
+# Max uploads-playlist pages to scan per channel per run (1 unit each). Six
+# pages * 50 = up to 300 recent uploads, comfortably covering a rolling window.
+broadcast_playlist_pages: 6
+
 # Supported regions (Phase B/C registries are filtered to these).
 regions:
   - na

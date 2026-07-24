@@ -40,6 +40,13 @@ DEFAULTS: dict[str, Any] = {
     "publish_mode": "pull_request",
     "auto_publish_confidence": "high",
     "regions": ["na", "emea", "korea", "japan", "pacific", "china", "global"],
+    # Phase C broadcast discovery.
+    "youtube_daily_quota": 10000,
+    "broadcast_auto_link": False,
+    "broadcast_high_score": 90,
+    "broadcast_medium_score": 45,
+    "broadcast_time_window_hours": 6,
+    "broadcast_playlist_pages": 6,
 }
 
 
@@ -144,6 +151,31 @@ class AutomationConfig:
     @property
     def publish_mode(self) -> str:
         return str(self.get("publish_mode"))
+
+    # -- Phase C broadcast discovery ---------------------------------------
+    @property
+    def youtube_daily_quota(self) -> int:
+        return int(self.get("youtube_daily_quota"))
+
+    @property
+    def broadcast_auto_link(self) -> bool:
+        return bool(self.get("broadcast_auto_link"))
+
+    @property
+    def broadcast_high_score(self) -> int:
+        return int(self.get("broadcast_high_score"))
+
+    @property
+    def broadcast_medium_score(self) -> int:
+        return int(self.get("broadcast_medium_score"))
+
+    @property
+    def broadcast_time_window_hours(self) -> int:
+        return int(self.get("broadcast_time_window_hours"))
+
+    @property
+    def broadcast_playlist_pages(self) -> int:
+        return int(self.get("broadcast_playlist_pages"))
 
     def max_attempts_for(self, kind: str) -> int:
         """Per-kind retry ceiling (Phase J1)."""

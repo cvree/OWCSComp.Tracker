@@ -110,13 +110,66 @@ No key is committed; `.env`, `credentials*.json`, `secrets*.json` and
 The full verification procedure, verified organizer/championship ids, coverage
 finding, and the real dry-run output are documented in **`docs/FACEIT-REGISTRY.md`**.
 
+## Phase C — official YouTube broadcast discovery (implemented)
+
+Read-only broadcast discovery: it finds WHERE each scheduled match was streamed
+(upcoming / live / completed livestream / uploaded VOD) on the official OWCS
+YouTube channels, scores each candidate, and records an explicit per-match
+coverage state — **without downloading a byte of video or writing a single hero
+composition**. Full procedure, scoring model and the first dry-run inputs are in
+**`docs/BROADCAST-DISCOVERY.md`**.
+
+| Roadmap item | Where | Status |
+|---|---|---|
+| C1 verified broadcast-channel registry (id, name, region, language, source URL, priority, verification date, enabled) | `config/broadcast_channels.json` + `config.load_channels()` | ✅ (ids null/disabled until API-verified) |
+| C2 YouTube Data API client (channels/playlistItems/videos/search) | `automation/youtube_api.py` | ✅ |
+| C2 prefer official upload playlists over broad search | `broadcast.fetch_channel_videos` (uploads first; search is the 100u fallback) | ✅ |
+| C3 match broadcasts (teams, event, region, language, time, FACEIT, official authority) | `broadcast.score_candidate` | ✅ |
+| C3 auto-link high-confidence official only; uncertain → review; reject mirrors | `broadcast.discover_broadcasts` (+ `broadcast_auto_link` switch) | ✅ |
+| C3 one full-day broadcast covering several matches | `broadcast.score_candidate` (`fullDay`) → one video, many links | ✅ |
+| C4 YouTube quota tracking + response caching outside VC | `youtube_api.YoutubeClient` (`quota_used`, `data/raw/youtube_api`, gitignored) | ✅ |
+| C5 explicit missing-broadcast state for uncovered events | `broadcast_coverage` table (LOCATED / NEEDS_REVIEW / MISSING / UNSUPPORTED) | ✅ |
+| Idempotent broadcast-discovery jobs | `broadcast:<videoId>` key + `broadcast_candidates` UNIQUE | ✅ |
+| Never downloads video / never writes compositions | no download path exists; only `vod_url` is ever written (gated) | ✅ |
+
+Verification mirrors the FACEIT pass: channel ids are **only** committed after
+they are confirmed against the live YouTube Data API. The `YOUTUBE_API_KEY`
+secret lives only in GitHub Actions, so run the `discovery` workflow with
+`mode=verify-channels` to resolve each official handle to its channel id +
+uploads playlist, then paste the confirmed ids into the registry and enable
+them. As of 2026-07-24 every channel is still `channelId: null, enabled: false`
+— no id was guessed.
+
+### Broadcast CLI
+
+```bash
+python pipeline/automation/cli.py verify-channels            # resolve official channels (read-only)
+python pipeline/automation/cli.py discover-broadcasts --dry-run
+# offline demo (no key, no network):
+python pipeline/automation/cli.py discover-broadcasts --dry-run --fixture-dir pipeline/fixtures/youtube
+```
+
+### workflow_dispatch modes
+
+`.github/workflows/discovery.yml` adds read-only modes: `verify-channels`,
+`calendar-dryrun`, `broadcast-dryrun`, `coverage` (plus the existing
+`candidates` / `verify` / `sync`). `YOUTUBE_API_KEY` is passed only as a step
+env from the secret and is never printed, committed, or logged. **Scheduled
+production linking stays disabled** — the hourly run never auto-links a
+broadcast; `broadcast_auto_link` is `false` until the first real dry-run is
+reviewed.
+
+| Secret | Used by |
+|---|---|
+| `YOUTUBE_API_KEY` | `youtube_api.urllib_transport` (live YouTube Data API calls) |
+
 ## Not yet implemented (later roadmap passes)
 
-YouTube upload discovery (C2/C3), the self-hosted recording daemon (Phase E),
-broadcast segmentation (Phase F), the detector/layout/template automation
-(Phase G), and automated publication PRs (Phase I). Each plugs into this
-foundation: they enqueue jobs with the deterministic keys above, take a lease
-before touching a shared resource, and transition through the state machine.
+The self-hosted recording daemon (Phase E), broadcast segmentation (Phase F),
+the detector/layout/template automation (Phase G), and automated publication PRs
+(Phase I). Each plugs into this foundation: they enqueue jobs with the
+deterministic keys above, take a lease before touching a shared resource, and
+transition through the state machine.
 
 ## Operator CLI
 
@@ -158,7 +211,7 @@ discovery layer never ingests on a guess:
 
 ## Tests
 
-Ten offline suites, run the same way as the rest of the pipeline
+Offline suites, run the same way as the rest of the pipeline
 (`python pipeline/test_*.py`):
 
 Phase A — `test_automation_state_machine.py`, `test_automation_config.py`,
@@ -172,3 +225,12 @@ responses, API-failure retry jobs, stable ids, dry-run purity, no comp
 leakage, no fixture contamination), `test_automation_reconcile.py`
 (FACEIT↔calendar conflicts), `test_automation_calendar_export.py`
 (public calendar export, end-to-end discovery→export).
+
+Phase C — `test_automation_youtube_api.py` (broadcast lifecycle classification,
+quota accounting + budget stop, API quotaExceeded, key REDACTION everywhere,
+fixture transport, no-composition/no-key-leak), `test_automation_broadcast.py`
+(delayed + renamed broadcasts, duplicate videos, full-day broadcast covering
+several matches, multiple language feeds, unofficial-mirror rejection, missing +
+unsupported coverage, quota exhaustion, API-failure retry jobs, rolling 14-day
+boundary, idempotent reruns, auto-link gating, and NO hero-composition writes),
+plus the committed offline scenario under `pipeline/fixtures/youtube/`.

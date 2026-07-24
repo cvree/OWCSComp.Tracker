@@ -1,0 +1,20 @@
+{
+  "items": [
+    {
+      "id": "upcomingnaday4",
+      "snippet": {
+        "title": "OWCS 2026 North America Stage 2 — Day 4 (LIVE SOON)",
+        "description": "Official Overwatch Champions Series 2026 North America Stage 2, Day 4. Upcoming English broadcast.",
+        "channelId": "UC_OW_ESPORTS_OFFICIAL",
+        "channelTitle": "Overwatch Esports",
+        "publishedAt": "2026-07-24T09:00:00Z",
+        "liveBroadcastContent": "upcoming"
+      },
+      "contentDetails": {"duration": "P0D"},
+      "liveStreamingDetails": {
+        "scheduledStartTime": "2026-07-25T18:00:00Z"
+      },
+      "status": {"privacyStatus": "public"}
+    }
+  ]
+}

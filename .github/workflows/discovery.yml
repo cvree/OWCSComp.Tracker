@@ -13,12 +13,23 @@
 #     calendar export, validates it, and opens a DATA-UPDATE pull request
 #     ONLY when the validated calendar data actually changes.
 #
-# workflow_dispatch adds READ-ONLY registry-config modes that use the
-# FACEIT_API_KEY secret but never write to the repo:
-#   mode=candidates  list OW2 championships + organizers to confirm ids
-#   mode=verify      verify every ENABLED competition via the FACEIT API
-#   mode=dryrun      rolling 14-day discovery dry-run (no db writes)
-#   mode=sync        (default) same as the scheduled run
+# workflow_dispatch adds READ-ONLY modes that use the FACEIT_API_KEY /
+# YOUTUBE_API_KEY secrets but never write to the repo and never download a VOD:
+#   mode=candidates       list OW2 championships + organizers to confirm ids
+#   mode=verify           verify every ENABLED competition via the FACEIT API
+#   mode=verify-channels  verify official YouTube channels via channels.list (C1)
+#   mode=calendar-dryrun  rolling FACEIT + calendar discovery dry-run (no writes)
+#   mode=broadcast-dryrun rolling YouTube broadcast discovery dry-run (no writes)
+#   mode=coverage         rolling completeness report (read-only)
+#   mode=dryrun           alias of calendar-dryrun (kept for back-compat)
+#   mode=sync             (default) same as the scheduled run
+#
+# The YouTube key is passed ONLY as a step env from the secret; it is never
+# printed, committed, or written into a log or report. SCHEDULED PRODUCTION
+# LINKING STAYS DISABLED: the hourly run only does the safe FACEIT dry-run
+# health check + (when enabled) the FACEIT calendar sync. Broadcast auto-linking
+# is off (config broadcast_auto_link: false) until the first real dry-run is
+# reviewed — this workflow never auto-links a broadcast on a schedule.
 #
 # Recording/segmentation/CV are NOT part of this workflow — discovery is
 # lightweight and never downloads a VOD.
@@ -32,7 +43,7 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "sync | candidates | verify | dryrun"
+        description: "sync | candidates | verify | verify-channels | calendar-dryrun | broadcast-dryrun | coverage"
         required: false
         default: "sync"
       query:
@@ -62,6 +73,7 @@ jobs:
     timeout-minutes: 15
     env:
       FACEIT_API_KEY: ${{ secrets.FACEIT_API_KEY }}
+      YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
       MODE: ${{ github.event.inputs.mode || 'sync' }}
       QUERY: ${{ github.event.inputs.query || 'OWCS' }}
       LOOKBACK: ${{ github.event.inputs.lookback_days || '14' }}
@@ -79,15 +91,19 @@ jobs:
       - name: Detect readiness (enabled competitions + secret)
         id: gate
         run: |
-          ENABLED=$(python3 - <<'PY'
+          read ENABLED CHANNELS <<PY_OUT
+          $(python3 - <<'PY'
           import sys; sys.path.insert(0, "pipeline")
           from automation import config as c
-          print(len(c.load_competitions()))
+          print(len(c.load_competitions()), len(c.load_channels()))
           PY
           )
+          PY_OUT
           echo "enabled_competitions=$ENABLED" >> "$GITHUB_OUTPUT"
+          echo "enabled_channels=$CHANNELS" >> "$GITHUB_OUTPUT"
           if [ -n "$FACEIT_API_KEY" ]; then echo "has_key=true" >> "$GITHUB_OUTPUT"; else echo "has_key=false" >> "$GITHUB_OUTPUT"; fi
-          echo "Mode: $MODE ; enabled competitions: $ENABLED ; API key present: $([ -n "$FACEIT_API_KEY" ] && echo yes || echo no)"
+          if [ -n "$YOUTUBE_API_KEY" ]; then echo "has_youtube_key=true" >> "$GITHUB_OUTPUT"; else echo "has_youtube_key=false" >> "$GITHUB_OUTPUT"; fi
+          echo "Mode: $MODE ; enabled competitions: $ENABLED ; enabled channels: $CHANNELS ; FACEIT key: $([ -n "$FACEIT_API_KEY" ] && echo yes || echo no) ; YouTube key: $([ -n "$YOUTUBE_API_KEY" ] && echo yes || echo no)"
 
       # -------- READ-ONLY registry-config modes (no repo writes) ----------
       - name: List candidate championships + organizers (mode=candidates)
@@ -121,14 +137,38 @@ jobs:
           if [ -z "$FACEIT_API_KEY" ]; then echo "::error::FACEIT_API_KEY not set"; exit 1; fi
           python3 pipeline/automation/cli.py verify-registry
 
-      - name: Rolling 14-day discovery dry-run (mode=dryrun)
-        if: github.event.inputs.mode == 'dryrun'
+      - name: Rolling FACEIT + calendar discovery dry-run (mode=calendar-dryrun|dryrun)
+        if: github.event.inputs.mode == 'calendar-dryrun' || github.event.inputs.mode == 'dryrun'
         run: |
           if [ -z "$FACEIT_API_KEY" ]; then echo "::error::FACEIT_API_KEY not set"; exit 1; fi
           python3 pipeline/automation/cli.py sync-all --dry-run --lookback-days "$LOOKBACK"
           echo "::group::coverage (read-only)"
           python3 pipeline/automation/cli.py coverage --window "$LOOKBACK" || true
           echo "::endgroup::"
+
+      # -------- Phase C: YouTube broadcast discovery (read-only) ----------
+      - name: Verify official YouTube channels (mode=verify-channels)
+        if: github.event.inputs.mode == 'verify-channels'
+        run: |
+          if [ -z "$YOUTUBE_API_KEY" ]; then echo "::error::YOUTUBE_API_KEY not set"; exit 1; fi
+          # Resolves each official channel handle -> channelId + uploads playlist
+          # (channels.list, 1 unit each). Read-only; the key is never printed.
+          python3 pipeline/automation/cli.py verify-channels
+
+      - name: Rolling YouTube broadcast discovery dry-run (mode=broadcast-dryrun)
+        if: github.event.inputs.mode == 'broadcast-dryrun'
+        run: |
+          if [ -z "$YOUTUBE_API_KEY" ]; then echo "::error::YOUTUBE_API_KEY not set"; exit 1; fi
+          # Populate scheduled_matches read-only first so there is something to
+          # match broadcasts against, then discover broadcasts WITHOUT writing.
+          # No VOD is ever downloaded and no broadcast is auto-linked here.
+          python3 pipeline/automation/cli.py sync-all --lookback-days "$LOOKBACK" || true
+          python3 pipeline/automation/cli.py discover-broadcasts --dry-run --lookback-days "$LOOKBACK"
+
+      - name: Rolling completeness report (mode=coverage)
+        if: github.event.inputs.mode == 'coverage'
+        run: |
+          python3 pipeline/automation/cli.py coverage --window "$LOOKBACK"
 
       # -------- default/scheduled SYNC path (unchanged, safe) -------------
       - name: Dry-run health check (sync mode; always safe, writes nothing)
@@ -178,6 +218,9 @@ jobs:
           {
             echo "### Discovery run — mode: ${MODE}"
             echo ""
-            echo "- Enabled competitions: ${{ steps.gate.outputs.enabled_competitions }}"
-            echo "- API key present: ${{ steps.gate.outputs.has_key }}"
+            echo "- Enabled FACEIT competitions: ${{ steps.gate.outputs.enabled_competitions }}"
+            echo "- Enabled+verified broadcast channels: ${{ steps.gate.outputs.enabled_channels }}"
+            echo "- FACEIT key present: ${{ steps.gate.outputs.has_key }}"
+            echo "- YouTube key present: ${{ steps.gate.outputs.has_youtube_key }}"
+            echo "- Broadcast auto-linking: disabled on schedule (review-only until first dry-run is approved)"
           } >> "$GITHUB_STEP_SUMMARY"
