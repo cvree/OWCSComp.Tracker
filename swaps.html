@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Swap intelligence — OWCS Comp Tracker</title>
+<meta name="description" content="Confirmed OWCS hero swaps with before/after broadcast evidence — plus every rejected false positive, with the reason it was thrown out.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Cinzel:wght@500;600&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/public.css">
+</head>
+<body class="pub">
+<a class="skip-link" href="#main">Skip to content</a>
+<main class="pub-main" id="main">
+  <div class="page-head rv">
+    <span class="ph-eyebrow">Mid-map intelligence</span>
+    <h1>Swap intelligence</h1>
+    <p class="lede">A swap only counts when it survives temporal consensus — persistence, margin and displacement checks against the broadcast itself. Confirmed swaps ship with before/after crops; everything the detector rejected is listed too, with the reason.</p>
+  </div>
+
+  <div class="stat-cards rv" id="sw-cards" aria-label="Swap headline numbers"></div>
+
+  <section class="section" aria-label="Confirmed swaps">
+    <h2>Confirmed <span class="h-count" id="sw-count"></span></h2>
+    <div class="swap-list" id="sw-list"></div>
+    <div id="sw-empty" hidden></div>
+  </section>
+
+  <section class="section" aria-label="Rejected swap candidates">
+    <h2>Rejected as noise <span class="h-count" id="sw-rej-count"></span></h2>
+    <p class="dim" style="margin:0 0 14px">Candidates the temporal-consensus model threw out — dead-portrait lookalikes, killcam artifacts, one-frame flickers. None of these became a public swap. That's the point.</p>
+    <div class="card swap-rejects" id="sw-rejects" style="padding:6px 16px"></div>
+    <div id="sw-rej-empty" hidden></div>
+  </section>
+</main>
+
+<script src="assets/vendor/lenis.min.js" defer></script>
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="assets/vendor/three.min.js" defer></script>
+<script src="assets/vendor/vanta.net.min.js" defer></script>
+<script src="assets/js/motion.js" defer></script>
+<script src="assets/data/public_data.v1.js"></script>
+<script src="assets/data/public_fixture.v1.js"></script>
+<script src="assets/js/public/core.js"></script>
+<script src="assets/js/public/assets.js"></script>
+<script src="assets/js/public/shell.js"></script>
+<script src="assets/js/public/stats.js"></script>
+<script src="assets/js/public/page-swaps.js"></script>
+</body>
+</html>

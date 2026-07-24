@@ -650,6 +650,7 @@ def build_public_payload(con) -> dict:
 
     teams_needed: set[str] = set()
     matches_out, runs_out, snaps_out, players_out = [], [], [], []
+    swaps_out: list[dict] = []
     vod_out: dict[str, dict] = {}
     tournaments_by_id: dict[str, dict] = {}
 
@@ -688,9 +689,45 @@ def build_public_payload(con) -> dict:
                 # — the honest first step toward per-submap detail.
                 "scoreDetail": None,
                 "roundCount": len(rounds),
+                # real round windows from the round-emblem detector —
+                # broadcast offsets in seconds, ±1 sample (~5 s).
+                "rounds": [{"index": r_["round_index"],
+                            "start": rv(r_, "start_offset"),
+                            "end": rv(r_, "end_offset"),
+                            "confidence": rv(r_, "confidence"),
+                            "source": rv(r_, "source", "cv")}
+                           for r_ in rounds],
                 "pickedBy": rv(mr, "picked_by_team"),
                 "pickNote": None,
             })
+            # hero swaps for this map — the temporal-consensus verdicts,
+            # confirmed AND rejected. Confirmed rows carry before/after
+            # evidence crops; rejected rows carry the honest reason they
+            # were thrown out. Nothing here is invented.
+            for s in con.execute(
+                    """SELECT * FROM hero_swaps WHERE map_result_id=?
+                       ORDER BY offset_seconds""", (mr["id"],)):
+                evb, eva = rv(s, "evidence_before"), rv(s, "evidence_after")
+                swaps_out.append({
+                    "id": f"sw-{map_pub_id}-{s['team_id']}-{s['slot']}-"
+                          f"{s['offset_seconds']}-{s['status']}",
+                    "matchId": mid,
+                    "mapId": map_pub_id,
+                    "teamId": s["team_id"],
+                    "side": rv(s, "side"),
+                    "slot": rv(s, "slot"),
+                    "fromHero": s["from_hero"],
+                    "toHero": s["to_hero"],
+                    "offset": rv(s, "offset_seconds"),
+                    "confidence": rv(s, "confidence"),
+                    "status": s["status"],
+                    "reason": rv(s, "reason"),
+                    "evidenceBefore": evb if evb and os.path.exists(
+                        os.path.join(db.REPO_ROOT, evb)) else None,
+                    "evidenceAfter": eva if eva and os.path.exists(
+                        os.path.join(db.REPO_ROOT, eva)) else None,
+                    "ingestId": rv(s, "ingest_id"),
+                })
             # hero bans for this map (real match facts; empty when the
             # broadcast/import recorded none — the UI says so honestly).
             for b in con.execute(
@@ -893,6 +930,7 @@ def build_public_payload(con) -> dict:
         "bracketMatches": [],
         "matches": matches_out,
         "heroBans": hero_bans_out,
+        "heroSwaps": swaps_out,
         "captureRuns": runs_out,
         "compSnapshots": snaps_out,
         "vodSources": list(vod_out.values()),

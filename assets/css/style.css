@@ -1215,3 +1215,117 @@ html.motion-on .console-body > div { animation: m-log-in .16s ease both; }
   .nav-links { scrollbar-width: none; }
   .nav-links::-webkit-scrollbar { display: none; }
 }
+
+/* =====================================================================
+   Landing "nocturne" layer — the public homepage goes dark-gothic while
+   the control-room work surfaces keep the calmer broadcast-desk look.
+   Scoped to body[data-page="landing"].
+   ===================================================================== */
+body[data-page="landing"] {
+  background:
+    radial-gradient(1100px 520px at 78% -12%, rgba(143,108,240,.08), transparent 60%),
+    radial-gradient(900px 460px at 10% -6%, rgba(255,169,43,.05), transparent 55%),
+    radial-gradient(1400px 800px at 50% 118%, rgba(194,42,78,.07), transparent 60%),
+    #04050a;
+}
+body[data-page="landing"] .nav { background: rgba(4,5,10,.8); }
+
+/* ---- det-hero: the real detection story ----------------------------- */
+.det-hero { padding: 56px 0 24px; position: relative; overflow: hidden; }
+.det-hero__grid {
+  display: grid; grid-template-columns: minmax(320px, 46fr) minmax(340px, 54fr);
+  gap: 40px; align-items: center;
+}
+.det-hero__copy .lead { max-width: 46ch; }
+.det-stage { position: relative; display: grid; gap: 14px; padding: 10px 0 6px; }
+.det-ring {
+  position: absolute; inset: -12% -8% auto auto; width: 64%; z-index: 0;
+  color: rgba(143,108,240,.35); stroke: currentColor; opacity: .5;
+  pointer-events: none;
+}
+.det-frame {
+  position: relative; margin: 0; z-index: 1;
+  border: 1px solid var(--line-bright);
+  background: #000; box-shadow: 0 24px 60px -18px rgba(0,0,0,.8);
+  clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
+}
+.det-frame img { display: block; width: 100%; height: auto; }
+.det-scan {
+  position: absolute; left: 0; right: 0; top: 0; height: 34%; pointer-events: none;
+  background: linear-gradient(180deg, transparent, rgba(69,200,232,.10) 82%, rgba(69,200,232,.5) 99%, transparent);
+  opacity: 0;
+}
+.det-slot {
+  position: absolute; left: var(--x); top: var(--y); width: var(--w); height: var(--h);
+  border: 1.5px solid rgba(69,200,232,.95); border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.5), 0 0 12px rgba(69,200,232,.35);
+  pointer-events: none;
+}
+.det-slot::before, .det-slot::after {
+  content: ""; position: absolute; width: 5px; height: 5px; border-color: inherit;
+}
+.det-slot::before { top: -4px; left: -4px; border-top: 1.5px solid; border-left: 1.5px solid; }
+.det-slot::after { bottom: -4px; right: -4px; border-bottom: 1.5px solid; border-right: 1.5px solid; }
+.det-slot.is-locked { border-color: rgba(70,214,140,.95); box-shadow: 0 0 0 1px rgba(0,0,0,.5), 0 0 12px rgba(70,214,140,.3); }
+.det-slot--swap.is-locked { border-color: var(--amber); box-shadow: 0 0 0 1px rgba(0,0,0,.5), 0 0 16px var(--amber-glow); }
+.det-frame__cap {
+  position: absolute; left: 10px; bottom: 8px;
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em;
+  color: #cfe4ff; background: rgba(4,8,16,.78); border: 1px solid var(--line);
+  padding: 4px 9px; border-radius: 3px;
+}
+.det-frame__cap .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--st-bad);
+  animation: det-live 1.6s ease-in-out infinite; }
+@keyframes det-live { 50% { opacity: .35; } }
+.det-steps {
+  list-style: none; display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase;
+  position: relative; z-index: 1;
+}
+.det-steps li {
+  padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted);
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.det-steps li::before { content: "○"; font-size: 9px; }
+.det-steps li.is-on { color: #cfe4ff; border-color: var(--line-bright); }
+.det-steps li.is-done { color: var(--st-ok); border-color: rgba(46,189,107,.4); }
+.det-steps li.is-done::before { content: "✓"; }
+.det-verdict {
+  position: relative; z-index: 1;
+  display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+  border: 1px solid rgba(70,214,140,.35);
+  background: linear-gradient(120deg, rgba(70,214,140,.07), rgba(255,169,43,.05) 70%), var(--bg-raise);
+  padding: 12px 16px;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+.det-verdict__crops { display: flex; align-items: center; gap: 10px; }
+.det-crop { display: grid; gap: 3px; justify-items: center; }
+.det-crop img {
+  width: 64px; height: 64px; object-fit: cover; image-rendering: pixelated;
+  border: 1px solid var(--line-bright); border-radius: 3px; background: #000;
+}
+.det-crop b { font-family: var(--mono); font-size: 10px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+.det-arrow { position: relative; width: 46px; height: 2px; background: linear-gradient(90deg, transparent, var(--amber), transparent); }
+.det-arrow i {
+  position: absolute; right: -1px; top: -4px; border: 5px solid transparent; border-left-color: var(--amber);
+}
+.det-verdict__text { display: grid; gap: 2px; font-size: .86rem; color: var(--muted); min-width: 0; }
+.det-verdict__title { font-family: var(--display); color: var(--st-ok); letter-spacing: .12em; font-size: .8rem; }
+.det-verdict__conf { font-family: var(--mono); font-size: .72rem; }
+.det-verdict__conf b { color: var(--amber); }
+.det-seal {
+  margin-left: auto; width: 46px; height: 46px; flex: none;
+  display: grid; place-items: center; font-size: 19px; font-weight: 800; color: #201503;
+  background: linear-gradient(160deg, #f0c473, #c98f2f);
+  clip-path: polygon(50% 0, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+  box-shadow: 0 0 26px -4px var(--amber-glow);
+}
+@media (max-width: 1020px) {
+  .det-hero__grid { grid-template-columns: 1fr; gap: 28px; }
+  .det-ring { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .det-scan { display: none; }
+  .det-steps li { color: var(--st-ok); }
+}

@@ -139,41 +139,57 @@
     for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) % 360;
     return h;
   };
+  /* team mark: verified logo <img> when present, else the registry's
+     designed crest (assets.js), else a plain monogram — never broken. */
+  const teamMarkHtml = (t) => {
+    if (P.assets && P.assets.teamMark) return P.assets.teamMark(t);
+    if (t && t.logoUrl)
+      return `<img src="${esc(t.logoUrl)}" alt="" width="34" height="34" loading="lazy" data-img-fallback="${esc(t.code)}">`;
+    return `<span>${esc(t ? t.code : "?")}</span>`;
+  };
   P.teamPlate = (teamId, opt) => {
     opt = opt || {};
     const t = teamId ? P.team(teamId) : null;
     const size = opt.size ? ` team-plate--${opt.size}` : "";
     if (!t) {
+      const crest = P.assets && P.assets.teamCrest ? P.assets.teamCrest(null, opt) : "<span>?</span>";
       return `<span class="team-plate team-plate--tbd${size}">
-        <span class="team-plate__logo" aria-hidden="true"><span>?</span></span>
+        <span class="team-plate__logo" aria-hidden="true">${crest}</span>
         <span class="team-plate__name">${esc(opt.tbd || "TBD")}</span></span>`;
     }
     const win = opt.win ? " team-plate--win" : "";
-    const logo = t.logoUrl
-      ? `<img src="${esc(t.logoUrl)}" alt="" width="34" height="34" loading="lazy" data-img-fallback="${esc(t.code)}">`
-      : `<span>${esc(t.code)}</span>`;
-    const style = t.logoUrl ? "" : ` style="background:hsl(${hue(t.id)} 42% 72%)"`;
-    const inner = `<span class="team-plate__logo"${style} aria-hidden="true">${logo}</span>
+    const accent = P.assets && P.assets.teamHue
+      ? ` style="--team-h:${P.assets.teamHue(t.id)}"` : ` style="--team-h:${hue(t.id)}"`;
+    const inner = `<span class="team-plate__logo" aria-hidden="true">${teamMarkHtml(t)}</span>
       <span class="team-plate__name">${esc(opt.short ? t.code : t.name)}</span>`;
     /* opt.link renders a real anchor to the team page. Only for call
        sites NOT already nested inside another link (no <a> in <a>). */
     if (opt.link) {
-      return `<a class="team-plate team-plate--link${win}${size}" data-team="${esc(t.id)}"
+      return `<a class="team-plate team-plate--link${win}${size}" data-team="${esc(t.id)}"${accent}
         href="team.html?id=${esc(t.id)}" title="Open team page — ${esc(t.name)}">${inner}</a>`;
     }
-    return `<span class="team-plate${win}${size}" data-team="${esc(t.id)}">${inner}</span>`;
+    return `<span class="team-plate${win}${size}" data-team="${esc(t.id)}"${accent}>${inner}</span>`;
   };
   P.heroTile = (heroId, opt) => {
     opt = opt || {};
     const h = P.hero(heroId);
     const initials = h.name.replace(/[^A-Za-z0-9. ]/g, "").split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
-    const face = h.portraitUrl
-      ? `<img src="${esc(h.portraitUrl)}" alt="" loading="lazy">`
-      : esc(initials);
-    return `<span class="hero-tile${opt.sm ? " hero-tile--sm" : ""}" data-role="${esc(h.role)}" title="${esc(h.name)} — ${esc(h.role)}">
-      <span class="hero-tile__face">${face}<span class="hero-tile__role" aria-hidden="true"></span></span>
+    const face = P.assets && P.assets.heroFace
+      ? P.assets.heroFace(h)
+      : (h.portraitUrl
+        ? `<img src="${esc(h.portraitUrl)}" alt="" loading="lazy" data-img-fallback="${esc(initials)}">`
+        : esc(initials));
+    /* opt.link renders a real anchor to the hero page (only for call
+       sites not already nested inside another link). */
+    const cls = `hero-tile${opt.sm ? " hero-tile--sm" : ""}`;
+    const body = `<span class="hero-tile__face">${face}<span class="hero-tile__role" aria-hidden="true"></span></span>
       <span class="hero-tile__name">${esc(h.name)}</span>
-      <span class="visually-hidden">${esc(h.name)} (${esc(h.role)})</span></span>`;
+      <span class="visually-hidden">${esc(h.name)} (${esc(h.role)})</span>`;
+    if (opt.link) {
+      return `<a class="${cls} hero-tile--link" data-role="${esc(h.role)}" href="hero.html?id=${esc(h.id)}"
+        title="Open hero page — ${esc(h.name)} (${esc(h.role)})">${body}</a>`;
+    }
+    return `<span class="${cls}" data-role="${esc(h.role)}" title="${esc(h.name)} — ${esc(h.role)}">${body}</span>`;
   };
   P.heroStrip = (heroIds, opt) =>
     `<span class="hero-strip">${(heroIds || []).map((h) => P.heroTile(h, opt)).join("")}</span>`;

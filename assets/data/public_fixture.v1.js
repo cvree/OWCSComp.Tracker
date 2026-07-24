@@ -420,6 +420,24 @@ window.OWCS_PUBLIC = window.OWCS_PUBLIC || {
   {"id": "ban-12", "matchId": "pm-lbr1",  "mapId": "pm-lbr1-m1",  "teamId": "nrg", "hero": "kiriko", "order": 2, "phase": "pre-map", "source": "faceit"}
  ],
 
+ /* Hero swaps — temporal-consensus verdicts (demo). Confirmed rows carry
+    before/after evidence crops that resolve to real fixture assets;
+    rejected rows carry the honest reason they were thrown out. */
+ "heroSwaps": [
+  {"id": "sw-pm-ubsf1-m1-cr-3-870-confirmed", "matchId": "pm-ubsf1", "mapId": "pm-ubsf1-m1",
+   "teamId": "cr", "side": "b", "slot": 3, "fromHero": "sombra", "toHero": "tracer",
+   "offset": 870, "confidence": 0.84, "status": "confirmed",
+   "reason": "tracer persisted 3 obs while sombra no longer detected",
+   "evidenceBefore": "reports/capture_trial/crops/005400_B1.png",
+   "evidenceAfter": "reports/capture_trial/crops/005400_A1.png",
+   "ingestId": "fix-run-ubsf1"},
+  {"id": "sw-pm-ubsf1-m1-falcons-2-905-rejected", "matchId": "pm-ubsf1", "mapId": "pm-ubsf1-m1",
+   "teamId": "falcons", "side": "a", "slot": 2, "fromHero": "tracer", "toHero": "sojourn",
+   "offset": 905, "confidence": null, "status": "rejected",
+   "reason": "candidate sojourn seen 1x then tracer returned — noise, not a swap",
+   "evidenceBefore": null, "evidenceAfter": null, "ingestId": "fix-run-ubsf1"}
+ ],
+
  /* Capture runs — the pipeline evidence spine. Resolutions are honest:
     requested vs actual is always shown. Report/frame paths point at real
     fixture assets that ship in this repo (reports/capture_trial/...). */

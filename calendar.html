@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calendar — OWCS Comp Tracker</title>
+<meta name="description" content="OWCS match calendar — every tracked match by day, with verified composition coverage at a glance.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Cinzel:wght@500;600&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/public.css">
+</head>
+<body class="pub">
+<a class="skip-link" href="#main">Skip to content</a>
+<main class="pub-main" id="main">
+  <div class="page-head rv">
+    <span class="ph-eyebrow">Match schedule</span>
+    <h1>Calendar</h1>
+    <p class="lede">Every tracked OWCS match, laid out by day. Days glow when the vision pipeline has verified compositions for a match — click through for the receipts.</p>
+  </div>
+
+  <div class="cal-toolbar rv" role="group" aria-label="Calendar month navigation">
+    <button class="btn" id="cal-prev" aria-label="Previous month">‹</button>
+    <span class="cal-month" id="cal-title" aria-live="polite"></span>
+    <button class="btn" id="cal-next" aria-label="Next month">›</button>
+    <button class="btn btn--ghost" id="cal-today">Latest match</button>
+    <div class="filter-summary" id="cal-summary" style="margin-left:auto"></div>
+  </div>
+
+  <section class="section" aria-label="Month grid">
+    <div class="cal-grid-wrap rv">
+      <div class="cal-grid" id="cal-grid" role="grid" aria-label="Matches by day"></div>
+    </div>
+  </section>
+
+  <section class="section" aria-label="Agenda">
+    <h2>Agenda <span class="h-count" id="agenda-count"></span></h2>
+    <div class="cal-agenda" id="cal-agenda"></div>
+    <div id="cal-empty" hidden></div>
+  </section>
+</main>
+
+<script src="assets/vendor/lenis.min.js" defer></script>
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="assets/vendor/three.min.js" defer></script>
+<script src="assets/vendor/vanta.net.min.js" defer></script>
+<script src="assets/js/motion.js" defer></script>
+<script src="assets/data/public_data.v1.js"></script>
+<script src="assets/data/public_fixture.v1.js"></script>
+<script src="assets/js/public/core.js"></script>
+<script src="assets/js/public/assets.js"></script>
+<script src="assets/js/public/shell.js"></script>
+<script src="assets/js/public/page-calendar.js"></script>
+</body>
+</html>

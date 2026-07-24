@@ -204,7 +204,8 @@ def main() -> None:
     print("public pages load the public shell:")
     pages = ["tournaments.html", "tournament.html", "match.html",
              "stats.html", "matches.html", "team.html", "teams.html",
-             "maps.html"]
+             "maps.html", "calendar.html", "heroes.html", "hero.html",
+             "comps.html", "swaps.html"]
     for p in pages:
         h = read(p)
         check(f"{p}: public.css + fixture + core + shell wired",
@@ -364,6 +365,51 @@ def main() -> None:
     check("core.js: broken team logos fall back to monograms",
           "imgFallback" in core or "img-fallback" in core)
     check("core.js: stale detection helper present", "isStale" in core)
+
+    print("swap intelligence (heroSwaps contract):")
+    check("fixture carries heroSwaps with a confirmed + a rejected row",
+          isinstance(d.get("heroSwaps"), list)
+          and any(s["status"] == "confirmed" for s in d["heroSwaps"])
+          and any(s["status"] == "rejected" for s in d["heroSwaps"]))
+    check("fixture confirmed-swap evidence crops resolve to real files",
+          all(os.path.exists(os.path.join(ROOT, s[k]))
+              for s in d["heroSwaps"] if s["status"] == "confirmed"
+              for k in ("evidenceBefore", "evidenceAfter") if s.get(k)))
+    check("production export carries heroSwaps from the DB",
+          isinstance(prod.get("heroSwaps"), list))
+    check("production confirmed swaps carry resolving evidence crops",
+          all(os.path.exists(os.path.join(ROOT, s[k]))
+              for s in prod.get("heroSwaps", [])
+              if s["status"] == "confirmed"
+              for k in ("evidenceBefore", "evidenceAfter") if s.get(k)))
+    check("production maps carry real round windows",
+          all("rounds" in mp for m_ in prod["matches"] for mp in m_["maps"]))
+    psw = read("assets/js/public/page-swaps.js")
+    check("swap page renders confirmed swaps only as swaps",
+          'status === "confirmed"' in psw)
+    check("swap page ships the rejected honesty ledger",
+          "rejected" in psw and "reason" in psw)
+    check("swap data is never derived client-side (exported verbatim)",
+          "heroSwaps" in psw and "D.heroSwaps" in psw)
+    check("match page surfaces confirmed swaps with evidence",
+          "heroSwaps" in pm or "heroSwaps" in read("assets/js/public/page-match.js"))
+
+    print("new page scripts (string-level):")
+    pcal = read("assets/js/public/page-calendar.js")
+    check("calendar builds only from real scheduled matches",
+          "D.matches" in pcal and "scheduledAt" in pcal)
+    check("calendar has an honest empty month state",
+          "No tracked matches" in pcal)
+    phx = read("assets/js/public/page-heroes.js")
+    check("hero directory splits verified picks from honest absence",
+          "not yet sighted" in read("heroes.html").lower()
+          and "computeHeroStats" in phx)
+    ph = read("assets/js/public/page-hero.js")
+    check("hero detail uses the verified stats engine + provenance",
+          "heroDetail" in ph and "manifest" in ph.lower())
+    pcp = read("assets/js/public/page-comps.js")
+    check("comps page groups only publicComps (credibility rule)",
+          "publicComps" in pcp)
 
     print("old control-room surfaces untouched:")
     for p in ["index.html", "run.html", "runs.html", "sources.html",

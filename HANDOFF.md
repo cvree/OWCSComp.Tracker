@@ -1,6 +1,86 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
-## CURRENT STATUS (authoritative — 2026-07-20) — real portraits, clickable teams, Calibration Lab
+## CURRENT STATUS (authoritative — 2026-07-23) — "nocturne" public redesign, swap intelligence, asset registry
+
+This session rebuilt the public site into a dark-gothic esports
+intelligence surface and shipped the swap-intelligence layer. Everything
+below is verified: **all 44 offline suites green** (incl. the new
+`test_assets.py`), `check_packaging.py` OK, and every public page
+screenshotted in headless Chromium at 1440/820/390 with **zero
+non-font/pre-existing console errors** (`docs/screenshots/`).
+
+### 1. Swap + round data exported (real DB rows, nothing derived)
+`export_data.py` now writes `heroSwaps` (all temporal-consensus verdicts:
+2 confirmed with before/after evidence crops, 8 rejected with reasons) and
+per-map `rounds` windows into `public_data.v1.js`. Contract documented in
+`docs/PUBLIC_DATA_CONTRACT.md`; the fixture gained matching demo rows.
+Evidence paths are dropped to null if the file is missing — the UI can
+never render a broken crop.
+
+### 2. Asset registry (never guess, never break)
+- `pipeline/build_asset_manifest.py` → `assets/data/asset_manifest.json`:
+  audited registry of every team/hero image (source, attribution, dims,
+  hash, review status). 14 heroes have verified broadcast-crop portraits;
+  the rest are explicit `fallback-monogram`. All 9 teams are explicit
+  `fallback-crest` — **no verified official logo could be fetched from
+  this sandbox** (network policy blocks all non-registry hosts), so team
+  marks render as designed inline-SVG crests. Candidate official sources
+  are documented in `assets/data/team_asset_sources.json`; drop a verified
+  `assets/img/teams/<id>/logo.png` + source URL and re-run the builder to
+  flip a team to `verified-official`.
+- `assets/js/public/assets.js`: client resolver — crest SVG (can't 404),
+  hero face (real crop or role monogram), role icons, per-team accent
+  hues. `core.js` team plates + hero tiles delegate to it.
+- `pipeline/test_assets.py` proves every hero/team id in both datasets
+  resolves to a real file or an intentional fallback.
+
+### 3. "Nocturne" design system (public.css rewritten)
+Near-black blue-black bases, bone-white type, gold/emerald/crimson/violet
+accent system, clipped-corner broadcast panels, engraved dividers, noise
++ stained-glass atmosphere, energy-trace card hovers, verified seals.
+Every pre-existing selector contract kept (all string-level tests pass
+unchanged). Cinzel added as the serif accent face on public pages.
+
+### 4. New public pages (all on the shared shell, all evidence-first)
+`calendar.html` (month grid + agenda from real scheduledAt),
+`heroes.html` (analytics directory; "not yet sighted" section is honest
+absence), `hero.html?id=` (dossier: rates, teams, swap activity,
+portrait provenance from the manifest), `comps.html` (distinct verified
+lineups grouped by team+heroes), `swaps.html` (confirmed swaps with
+crops + the rejected honesty ledger). Nav/footer updated; admin links
+moved to mobile menu + footer so the desktop rail never overflows.
+
+### 5. Homepage hero rebuilt (index.html)
+The Tracer mascot scene is replaced by the real detection story: the
+actual `frame_2394.jpg`, the autocalibrated slot rects drawn at their
+true normalized positions, scanline → locate → identify → swap flare →
+verdict panel with the real Juno/Lúcio crops → conf 0.817 count-up →
+gold seal. GSAP timeline in `assets/js/landing-hero.js` (~6 s, plays
+once); reduced-motion/mobile/no-GSAP get the complete static final
+state. Landing-only gothic overrides appended to style.css; control-room
+pages untouched.
+
+### 6. Scrolling fixed at the root
+`motion.js`: ONE Lenis instance guard + ONE GSAP ticker loop
+(`gsap.ticker.add(t => lenis.raf(t*1000))`), ScrollTrigger.update from
+Lenis' scroll event, ScrollTrigger.refresh on window load, anchors
+routed through `lenis.scrollTo`, progress hairline re-measures page
+length per frame. `shell.js` no longer spawns its own fallback Lenis
+(the second racing instance was the root cause of broken scrolling).
+Touch stays native (`syncTouch:false`); reduced-motion never boots the
+engine.
+
+### Not done / honest gaps
+- Team logos remain designed crests until a human fetches + verifies
+  official marks (see §2 — the pipeline and manifest are ready).
+- CR-ZETA (`m-cr-zeta-ccuf`) still has no `ingest_map.py --write`; the
+  new pages will gain breadth automatically when it lands.
+- Hero portraits are 96px broadcast crops — sharp at tile size, soft at
+  the 120px dossier size; harvesting higher-res crops would fix that.
+
+---
+
+## PREVIOUS SESSION (2026-07-20) — real portraits, clickable teams, Calibration Lab
 
 This session built the "ultimate" autocalibration + stat-viewing layer on top
 of the existing pipeline. Everything below is verified live in headless

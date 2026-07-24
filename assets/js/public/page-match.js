@@ -207,7 +207,38 @@
       <div class="stat-note"><span aria-hidden="true">⛨</span>
         <span>Every comp below is either <b>human reviewed</b> or passed the <b>auto-high</b> confidence gate, and links to the frames it was read from. ${hiddenCount ? `${hiddenCount} lower-confidence snapshot${hiddenCount > 1 ? "s are" : " is"} held back pending review.` : ""}</span></div>
       ${blocks}
+      ${swapsHtml()}
       ${uncoveredMaps.length ? `<div class="comp-why">No verified comps yet for ${uncoveredMaps.map((mp) => esc(P.mapInfo(mp.map).name)).join(", ")} — the capture run only covered a window of the broadcast, or detections there haven't cleared review.</div>` : ""}
+    </div>`;
+  }
+
+  /* confirmed swaps for this match (from the DB's temporal-consensus
+     verdicts, exported as D.heroSwaps) with before/after evidence crops.
+     Rejected candidates are only summarized — they never render as swaps. */
+  function swapsHtml() {
+    const all = (D.heroSwaps || []).filter((s) => s.matchId === m.id);
+    if (!all.length) return "";
+    const confirmed = all.filter((s) => s.status === "confirmed")
+      .sort((a, b) => (a.offset || 0) - (b.offset || 0));
+    const rejected = all.length - confirmed.length;
+    const crop = (p, hh) => `<span class="swap-flow__crop" style="width:56px;height:56px">${p
+      ? `<img src="${esc(p)}" alt="Broadcast crop — ${esc(hh.name)}" width="56" height="56" loading="lazy">`
+      : (P.assets ? P.assets.heroFace(hh, { px: 56 }) : "")}</span>`;
+    if (!confirmed.length && !rejected) return "";
+    return `<div class="card comp-block">
+      <div class="comp-block__head"><h3>Confirmed swaps</h3>
+        <span class="chip" data-sw="confirmed">${confirmed.length}</span>
+        <a class="ev-tick" style="margin-left:auto" href="swaps.html">swap intelligence ↗</a></div>
+      ${confirmed.map((s) => {
+        const from = P.hero(s.fromHero), to = P.hero(s.toHero);
+        return `<div class="comp-row rv" style="grid-template-columns:minmax(120px,180px) 1fr auto">
+          ${P.teamPlate(s.teamId, { size: "sm", link: true })}
+          <span class="cluster" style="gap:10px">${crop(s.evidenceBefore, from)}
+            <span class="mono dim">${esc(from.name)} → ${esc(to.name)}</span>${crop(s.evidenceAfter, to)}</span>
+          <span class="mono faint" style="font-size:10.5px">@ ${esc(P.fmtOffset(s.offset))}${s.confidence != null ? ` · conf ${s.confidence}` : ""}</span>
+        </div>`;
+      }).join("")}
+      ${rejected ? `<div class="comp-why">${rejected} suspected swap${rejected === 1 ? "" : "s"} rejected by temporal consensus (dead-portrait lookalikes, one-frame flickers) — none became a public swap.</div>` : ""}
     </div>`;
   }
 

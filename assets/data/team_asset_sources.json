@@ -1,0 +1,27 @@
+{
+ "_note": "Documented CANDIDATE sources for verified team marks. Nothing here is asserted as verified until a human confirms the org's official site/press kit, downloads the mark to assets/img/teams/<id>/logo.png, fills sourceUrl/retrievedAt, and re-runs pipeline/build_asset_manifest.py. Never hotlink; never scrape third-party stat sites; never guess which mark belongs to a team.",
+ "teams": {
+  "qadsiah": {
+   "candidateSources": [
+    "Official Al Qadsiah club channels (verify the esports division's current press/brand page before use)",
+    "Official OWCS broadcast graphics (crop only with provenance recorded)"
+   ]
+  },
+  "twis": {
+   "candidateSources": [
+    "Official Twisted Minds channels (verify the org's current press/brand page before use)",
+    "Official OWCS broadcast graphics (crop only with provenance recorded)"
+   ]
+  },
+  "cr": {
+   "candidateSources": [
+    "Official Crazy Raccoon channels (verify current press/brand page before use)"
+   ]
+  },
+  "zeta": {
+   "candidateSources": [
+    "Official ZETA DIVISION channels (verify current press/brand page before use)"
+   ]
+  }
+ }
+}
