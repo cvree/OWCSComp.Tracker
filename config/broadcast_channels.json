@@ -18,9 +18,34 @@
     "(higher wins). `allowedEventTypes` restricts a channel to the event",
     "families it actually broadcasts. `language`/`region` feed the preferred",
     "feed selection (Phase E4): one calibrated-layout feed is captured, not",
-    "every language."
+    "every language.",
+    "",
+    "New Phase C1 fields on every entry:",
+    "  sourceUrl          candidate/confirmed official channel URL (evidence,",
+    "                     NOT a channel id — ids only come from the live API)",
+    "  ownershipEvidence   why this URL is believed to be the official channel",
+    "  verifiedDate        last UTC date channelId was confirmed via the",
+    "                     YouTube Data API channels.list (null = never verified)",
+    "  verifiedStatus      unverified | verified | stale | failed",
+    "  disabledReason      explicit reason an entry stays disabled (required",
+    "                     whenever enabled=false so a gap is never silent)",
+    "  preferredLayout     optional calibrated broadcast-layout id (Phase E4);",
+    "                     null until a layout exists for this feed",
+    "",
+    "VERIFICATION STATUS (2026-07-24): no channelId has been confirmed via a",
+    "live YouTube Data API call yet — this registry pass ran without network",
+    "access to the YouTube API (no key in this environment by design; the key",
+    "only exists as a GitHub Actions secret). `ow_esports_global` carries a",
+    "sourceUrl evidenced from Liquipedia's OWCS page (which lists",
+    "https://www.youtube.com/OW_Esports alongside the official Twitch/",
+    "Discord/social accounts, credited to Blizzard Entertainment). Every",
+    "other regional entry has NO evidenced channel URL from sources reachable",
+    "this pass, so it stays disabled with an explicit reason rather than a",
+    "guess. Run `cli.py verify-channels` (or the discovery workflow's",
+    "`mode=verify-channels` dispatch, where YOUTUBE_API_KEY lives) to resolve",
+    "real channel ids from these sourceUrls and flip verifiedStatus."
   ],
-  "version": 1,
+  "version": 2,
   "updated": "2026-07-24",
   "channels": [
     {
@@ -33,6 +58,12 @@
       "official": true,
       "priority": 100,
       "allowedEventTypes": ["owcs"],
+      "sourceUrl": "https://www.youtube.com/OW_Esports",
+      "ownershipEvidence": "Listed as the official YouTube channel on Liquipedia's Overwatch Champions Series page, alongside the official Twitch (twitch.tv/OW_Esports), Discord, Instagram and X/Twitter accounts, credited to Blizzard Entertainment in partnership with FACEIT/WDG/NetEase.",
+      "verifiedDate": null,
+      "verifiedStatus": "unverified",
+      "disabledReason": "channelId not yet confirmed via a live YouTube Data API channels.list call (requires YOUTUBE_API_KEY, only available as a GitHub Actions secret). Run verify-channels in Actions to resolve.",
+      "preferredLayout": null,
       "enabled": false
     },
     {
@@ -45,6 +76,12 @@
       "official": true,
       "priority": 90,
       "allowedEventTypes": ["owcs"],
+      "sourceUrl": null,
+      "ownershipEvidence": null,
+      "verifiedDate": null,
+      "verifiedStatus": "unverified",
+      "disabledReason": "no regional-specific official YouTube channel could be evidenced from sources reachable this pass. Do not guess a separate channel id; the global channel (ow_esports_global) may itself carry Korea broadcasts once verified. Needs a human-sourced official URL before verify-channels can resolve an id.",
+      "preferredLayout": null,
       "enabled": false
     },
     {
@@ -57,6 +94,12 @@
       "official": true,
       "priority": 85,
       "allowedEventTypes": ["owcs"],
+      "sourceUrl": null,
+      "ownershipEvidence": null,
+      "verifiedDate": null,
+      "verifiedStatus": "unverified",
+      "disabledReason": "no regional-specific official YouTube channel could be evidenced from sources reachable this pass. Do not guess a separate channel id. Needs a human-sourced official URL before verify-channels can resolve an id.",
+      "preferredLayout": null,
       "enabled": false
     },
     {
@@ -69,6 +112,12 @@
       "official": true,
       "priority": 80,
       "allowedEventTypes": ["owcs"],
+      "sourceUrl": null,
+      "ownershipEvidence": null,
+      "verifiedDate": null,
+      "verifiedStatus": "unverified",
+      "disabledReason": "no regional-specific official YouTube channel could be evidenced from sources reachable this pass. Do not guess a separate channel id. Needs a human-sourced official URL before verify-channels can resolve an id.",
+      "preferredLayout": null,
       "enabled": false
     },
     {
@@ -81,6 +130,12 @@
       "official": true,
       "priority": 75,
       "allowedEventTypes": ["owcs"],
+      "sourceUrl": null,
+      "ownershipEvidence": null,
+      "verifiedDate": null,
+      "verifiedStatus": "unverified",
+      "disabledReason": "platform is bilibili, not YouTube — out of scope for the Phase C2 YouTube Data API client. This entry is kept in the registry so coverage reporting can show China as an explicit 'unsupported-source' region rather than a silent gap; it will never be driven by the YouTube discovery layer.",
+      "preferredLayout": null,
       "enabled": false
     }
   ]

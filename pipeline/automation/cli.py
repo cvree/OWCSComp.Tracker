@@ -17,6 +17,7 @@ only commands that write, and both only touch the automation DB.
 from __future__ import annotations
 
 import argparse
+import datetime as dt
 import json
 import os
 import sys
@@ -28,12 +29,16 @@ if _PIPELINE_DIR not in sys.path:
     sys.path.insert(0, _PIPELINE_DIR)
 
 import db as content_db  # noqa: E402  (pipeline/db.py)
+from automation import broadcast_discovery as bdisc  # noqa: E402
+from automation import broadcast_matching as bmatch  # noqa: E402
 from automation import config as cfg  # noqa: E402
 from automation import coverage as cov  # noqa: E402
 from automation import discovery as disc  # noqa: E402
 from automation import faceit_api  # noqa: E402
 from automation import job_store as js  # noqa: E402
 from automation import owcs_calendar  # noqa: E402
+from automation import reconcile as rec  # noqa: E402
+from automation import youtube_api as yt  # noqa: E402
 
 
 def cmd_init_db(args: argparse.Namespace) -> int:
@@ -269,7 +274,130 @@ def cmd_coverage(args: argparse.Namespace) -> int:
     if args.save:
         rid = cov.save_snapshot(args.db, report)
         print(f"\n[automation] coverage snapshot #{rid} saved to {args.db}")
+    # Phase C6 — broadcast coverage over the same window, from the
+    # automation DB's scheduled_matches/broadcast_candidates/broadcast_videos.
+    channels = cfg.load_all_channels()
+    supported_regions = {c["region"] for c in channels if c.get("platform") == "youtube" and c.get("region")}
+    bcov = cov.build_broadcast_coverage(args.db, window_days=args.window, supported_regions=supported_regions)
+    print()
+    print(cov.format_broadcast_coverage(bcov))
     return 0
+
+
+# ------------------------------------------------- Phase C1/C2/C3/C4 (YouTube)
+def _build_youtube_client(args: argparse.Namespace, store: "js.JobStore | None" = None) -> yt.YouTubeClient:
+    """Real API client (YOUTUBE_API_KEY), or an offline fixture client when
+    --fixture-dir is given. Fixtures never touch the network. When `store` is
+    given, every call's quota cost is persisted into the automation DB's
+    quota_usage table (Phase C2) so `coverage` can report spend across runs."""
+    quota_sink = None
+    if store is not None:
+        quota_sink = bdisc._record_quota(store, dt.datetime.now(dt.timezone.utc).date().isoformat())
+    if getattr(args, "fixture_dir", None):
+        return yt.YouTubeClient(transport=yt.fixture_transport(args.fixture_dir), quota_sink=quota_sink)
+    cache = None if getattr(args, "dry_run", True) else os.path.join(
+        content_db.REPO_ROOT, "data", "raw", "youtube_api")
+    return yt.YouTubeClient(cache_dir=cache, quota_sink=quota_sink)
+
+
+def cmd_verify_channels(args: argparse.Namespace) -> int:
+    """Verify every configured channel (enabled or not) against the live
+    YouTube API (Phase C1). Read-only: NEVER edits
+    config/broadcast_channels.json — a human applies the result, exactly
+    like the FACEIT registry pass (see docs/FACEIT-REGISTRY.md)."""
+    channels = cfg.load_all_channels()
+    if not channels:
+        print("[automation] no channels configured in config/broadcast_channels.json.")
+        return 0
+    client = _build_youtube_client(args)
+    report = bdisc.verify_channels(client, channels)
+    if args.json:
+        print(json.dumps(report, indent=2))
+        return 0
+    print(f"[automation] verify-channels: {report['verifiedCount']} verified, "
+          f"{report['skippedCount']} skipped, {report['errorCount']} error/not-found")
+    for r in report["channels"]:
+        if r["status"] == "verified":
+            print(f"  OK    {r['id']:<20} -> {r['channelId']}  {r['title']!r} "
+                  f"(uploads={r['uploadsPlaylistId']})")
+        elif r["status"] == "skipped":
+            print(f"  SKIP  {r['id']:<20} {r['reason']}")
+        else:
+            print(f"  {r['status'].upper():<6}{r['id']:<20} {r.get('error') or ''}")
+    if client.quota_used:
+        print(f"  quota used: {client.quota_used} units {dict(client.quota_by_endpoint)}")
+    print("\n  NOTE: this command never edits config/broadcast_channels.json —")
+    print("  apply a verified channelId by hand (or a follow-up PR) after review.")
+    return 0
+
+
+def cmd_calendar_dryrun(args: argparse.Namespace) -> int:
+    """Rolling official-calendar dry-run + reconciliation (Phase C7). Never
+    writes. `--lookback-days` is accepted for CLI symmetry with the other
+    dry-run commands; the official calendar is an EVENT-level source with no
+    per-match rolling window, so it does not filter events by that value."""
+    events = owcs_calendar.load_events()
+    summary = disc.sync_calendar(store=None, events=events, dry_run=True)
+    print(f"[automation] calendar-dryrun ({summary['events']} events, "
+          f"{summary['unverified']} unverified; lookback-days={args.lookback_days} "
+          f"accepted but not applied — event-level source has no rolling window):")
+    for eid in summary["eventIds"]:
+        print(f"    - {eid}")
+    comps = cfg.load_all_competitions()
+    channels = cfg.load_all_channels()
+    warnings = rec.reconcile([], events, channels_by_id={c["id"]: c for c in channels},
+                            competitions=[c for c in comps if c.get("enabled") and c.get("championshipId")])
+    print(f"  reconciliation: {len(warnings)} warning(s)")
+    for w in warnings[:20]:
+        print(f"    [{w['code']}] {w['message']}")
+    return 0
+
+
+def _run_broadcast_discovery(args: argparse.Namespace) -> int:
+    config = cfg.load_config()
+    store = js.JobStore(args.db, config=config)
+    try:
+        client = _build_youtube_client(args, store=None if args.dry_run else store)
+        channels = cfg.load_channels()
+        disc_summary = bdisc.sync_broadcasts(
+            client=client, store=store, channels=channels,
+            lookback_days=args.lookback_days or config.lookback_days,
+            horizon_days=args.horizon_days or config.schedule_horizon_days,
+            dry_run=args.dry_run, allow_search_fallback=args.allow_search_fallback)
+        print(f"[automation] broadcast discovery ({'dry-run' if args.dry_run else 'live'}):")
+        if disc_summary.get("note"):
+            print(f"  note: {disc_summary['note']}")
+        print(f"  channels scanned : {len(disc_summary['channels'])}")
+        print(f"  videos seen      : {disc_summary['videosSeen']}  in-window: {disc_summary['inWindow']}")
+        print(f"  upserted         : {disc_summary['upserted']} "
+              f"({'dry-run — no writes' if args.dry_run else 'written'})")
+        for e in disc_summary["errors"]:
+            print(f"  ERROR  {e['channelId']}: {e['error']}")
+
+        match_summary = bmatch.match_broadcasts(store, dry_run=args.dry_run)
+        print("[automation] broadcast matching:")
+        print(f"  videos scored    : {match_summary['videosScored']}")
+        print(f"  linked (high)    : {match_summary['linked']}")
+        print(f"  review (medium)  : {match_summary['reviewed']}")
+        print(f"  rejected (low)   : {match_summary['rejected']}")
+        if client.quota_used:
+            print(f"  quota used       : {client.quota_used} units {dict(client.quota_by_endpoint)}")
+    finally:
+        store.close()
+    return 0
+
+
+def cmd_broadcast_dryrun(args: argparse.Namespace) -> int:
+    """`broadcast-dryrun` always forces --dry-run (Phase C3/C4 read-only
+    demonstration): discover + score, write nothing."""
+    args.dry_run = True
+    return _run_broadcast_discovery(args)
+
+
+def cmd_discover_broadcasts(args: argparse.Namespace) -> int:
+    """`discover-broadcasts [--dry-run]` — the production broadcast
+    discovery + matching entry point (Phase C3/C4/C5)."""
+    return _run_broadcast_discovery(args)
 
 
 def cmd_status(args: argparse.Namespace) -> int:
@@ -359,6 +487,40 @@ def main(argv: list[str] | None = None) -> int:
                         help="verify every ENABLED competition via the FACEIT API")
     vr.add_argument("--fixture-dir", default=None)
     vr.set_defaults(func=cmd_verify_registry)
+
+    # ---- Phase C1/C2/C3/C4 broadcast discovery commands -------------------
+    vc2 = sub.add_parser("verify-channels",
+                         help="verify every configured YouTube channel via the Data API (C1)")
+    vc2.add_argument("--fixture-dir", default=None,
+                     help="serve YouTube responses from local fixtures (offline)")
+    vc2.add_argument("--json", action="store_true")
+    vc2.set_defaults(func=cmd_verify_channels)
+
+    cd = sub.add_parser("calendar-dryrun",
+                        help="rolling official-calendar dry-run + reconciliation (C7)")
+    cd.add_argument("--lookback-days", type=int, default=14)
+    cd.set_defaults(func=cmd_calendar_dryrun)
+
+    bd_p = sub.add_parser("broadcast-dryrun",
+                          help="YouTube broadcast discovery + matching, read-only (C3/C4)")
+    bd_p.add_argument("--lookback-days", type=int, default=None)
+    bd_p.add_argument("--horizon-days", type=int, default=None)
+    bd_p.add_argument("--fixture-dir", default=None,
+                      help="serve YouTube responses from local fixtures (offline)")
+    bd_p.add_argument("--allow-search-fallback", action="store_true",
+                      help="permit the quota-expensive search.list fallback (C2/C4)")
+    bd_p.set_defaults(dry_run=True, func=cmd_broadcast_dryrun)
+
+    db_p = sub.add_parser("discover-broadcasts",
+                          help="YouTube broadcast discovery + matching (C3/C4/C5)")
+    db_p.add_argument("--dry-run", action="store_true", help="fetch + score, write nothing")
+    db_p.add_argument("--lookback-days", type=int, default=None)
+    db_p.add_argument("--horizon-days", type=int, default=None)
+    db_p.add_argument("--fixture-dir", default=None,
+                      help="serve YouTube responses from local fixtures (offline)")
+    db_p.add_argument("--allow-search-fallback", action="store_true",
+                      help="permit the quota-expensive search.list fallback (C2/C4)")
+    db_p.set_defaults(func=cmd_discover_broadcasts)
 
     args = p.parse_args(argv)
     return args.func(args)

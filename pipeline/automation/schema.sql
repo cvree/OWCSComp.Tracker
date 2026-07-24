@@ -29,6 +29,12 @@ CREATE TABLE IF NOT EXISTS source_channels (
   official          INTEGER NOT NULL DEFAULT 0,
   priority          INTEGER NOT NULL DEFAULT 0,
   enabled           INTEGER NOT NULL DEFAULT 0,
+  source_url        TEXT,                   -- candidate/confirmed official channel URL (C1)
+  ownership_evidence TEXT,                  -- why this channel is believed official (C1)
+  verified_date     TEXT,                   -- last time channel_id was API-verified
+  verified_status   TEXT NOT NULL DEFAULT 'unverified', -- verified/unverified/stale/failed
+  disabled_reason   TEXT,                   -- why an entry stays disabled (never guessed)
+  preferred_layout  TEXT,                   -- optional calibrated-layout id (Phase E4)
   updated_at        TEXT DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -66,6 +72,37 @@ CREATE TABLE IF NOT EXISTS scheduled_matches (
   first_seen_at     TEXT DEFAULT CURRENT_TIMESTAMP,
   updated_at        TEXT DEFAULT CURRENT_TIMESTAMP
 );
+
+-- --- YouTube broadcast catalog (Phase C3) ------------------------------
+-- One row per discovered video/livestream, independent of any match link
+-- (broadcast_candidates below is the many-to-many match-link scoring
+-- table; a full-day broadcast can cover several matches, so the video
+-- catalog and the link table are deliberately separate).
+CREATE TABLE IF NOT EXISTS broadcast_videos (
+  video_id            TEXT PRIMARY KEY,     -- platform video id (e.g. YouTube)
+  platform            TEXT NOT NULL DEFAULT 'youtube',
+  channel_id          TEXT,                 -- -> source_channels.id
+  title               TEXT,
+  description         TEXT,
+  published_at        TEXT,                 -- ISO, upload/publish time
+  scheduled_start_at  TEXT,                 -- ISO, liveStreamingDetails.scheduledStartTime
+  actual_start_at     TEXT,                 -- ISO, liveStreamingDetails.actualStartTime
+  actual_end_at       TEXT,                 -- ISO, liveStreamingDetails.actualEndTime
+  live_broadcast_status TEXT,               -- none/upcoming/live/completed
+  duration_seconds    INTEGER,
+  thumbnail_url       TEXT,
+  source_url          TEXT,                 -- https://www.youtube.com/watch?v=<id>
+  region              TEXT,
+  language            TEXT,
+  official_channel    INTEGER NOT NULL DEFAULT 0,
+  response_hash       TEXT,                 -- sha256 of the raw API item (audit, not raw storage)
+  coverage_state      TEXT NOT NULL DEFAULT 'DISCOVERED',
+  discovered_at       TEXT DEFAULT CURRENT_TIMESTAMP,
+  updated_at          TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_broadcast_videos_channel ON broadcast_videos (channel_id);
+CREATE INDEX IF NOT EXISTS idx_broadcast_videos_published ON broadcast_videos (published_at);
 
 -- --- Broadcast candidates for a scheduled match (Phase C) -------------
 CREATE TABLE IF NOT EXISTS broadcast_candidates (
@@ -126,6 +163,21 @@ CREATE TABLE IF NOT EXISTS publication_runs (
   revert_command    TEXT,
   created_at        TEXT DEFAULT CURRENT_TIMESTAMP,
   completed_at      TEXT
+);
+
+-- --- YouTube API quota accounting (Phase C2) --------------------------
+-- Cumulative units spent per UTC day per endpoint, so a run can report
+-- "quota used" and a future run can budget the remaining daily allowance
+-- (default project quota is 10,000 units/day; videos.list ~= 1 unit,
+-- search.list ~= 100 units — see docs/AUTOMATION.md for the full table).
+CREATE TABLE IF NOT EXISTS quota_usage (
+  id                INTEGER PRIMARY KEY AUTOINCREMENT,
+  day               TEXT NOT NULL,          -- YYYY-MM-DD (UTC)
+  endpoint          TEXT NOT NULL,          -- channels.list / playlistItems.list / videos.list / search.list
+  units             INTEGER NOT NULL DEFAULT 0,
+  calls             INTEGER NOT NULL DEFAULT 0,
+  updated_at        TEXT DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE (day, endpoint)
 );
 
 -- --- Rolling coverage snapshots (Phase D4 report history) -------------
