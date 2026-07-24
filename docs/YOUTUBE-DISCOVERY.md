@@ -50,26 +50,41 @@ Each run's stdout (never containing the API key — see "no secret leakage"
 below) is uploaded as a workflow artifact (`discovery-<mode>-<run-id>`,
 30-day retention); nothing is committed to the repo by these modes.
 
-## Registry state (this pass, 2026-07-24)
+## Registry state (verified 2026-07-24 against the live YouTube API)
 
-**No channelId has been confirmed** — this pass ran with no YouTube API
-network access (the key only exists as a GitHub Actions secret). What was
-established from public, non-API sources:
+**`ow_esports_global` is confirmed** via a real GitHub Actions
+`mode=verify-channels` dispatch:
+
+| Field | Value |
+|---|---|
+| Internal id | `ow_esports_global` |
+| Channel name | Overwatch Esports |
+| channelId | `UCiAInBL9kUzz1XRxk66v-gw` |
+| uploadsPlaylistId | `UUiAInBL9kUzz1XRxk66v-gw` |
+| Official source URL | `https://www.youtube.com/OW_Esports` |
+| Region / language | global / en |
+| Verification method | YouTube Data API v3 `channels.list` (resolved via the channel's public handle) |
+| Verification date | 2026-07-24 |
+| Quota cost | **1 unit** |
+
+It is now the **only** `enabled: true` / `verifiedStatus: verified` entry —
+`cfg.load_channels()` (what `sync_broadcasts`/`discover_channel_videos`
+actually iterate) returns exactly this one channel
+(`test_exactly_the_verified_global_channel_is_enabled`,
+`test_only_enabled_verified_channel_drives_discovery`).
 
 | Registry id | sourceUrl (evidence) | Status |
 |---|---|---|
-| `ow_esports_global` | `https://www.youtube.com/OW_Esports` — listed as the official YouTube channel on Liquipedia's Overwatch Champions Series page, alongside the official Twitch/Discord/social accounts, credited to Blizzard Entertainment | `unverified`, disabled — needs `verify-channels` in Actions |
+| `ow_esports_global` | `https://www.youtube.com/OW_Esports` | **verified, enabled** (channelId `UCiAInBL9kUzz1XRxk66v-gw`) |
 | `ow_esports_korea` | none found | disabled — no regional-specific channel evidenced |
 | `ow_esports_japan` | none found | disabled — no regional-specific channel evidenced |
 | `owcs_pacific` | none found | disabled — no regional-specific channel evidenced |
-| `owcs_china` | n/a (bilibili) | disabled — out of scope for the YouTube API client by design |
+| `owcs_china` | n/a (bilibili) | disabled — out of scope for the YouTube API client by design; surfaces as `coverage_state=unsupported-source` rather than a silent gap |
 
-**Next step to go live**: dispatch `mode=verify-channels` on this branch (or
-after merge) to resolve `ow_esports_global`'s real `channelId` via
-`channels.list(forHandle=@OW_Esports)`, then a human edits
-`config/broadcast_channels.json` to set the id, `verifiedStatus: verified`,
-`verifiedDate`, and `enabled: true`. Regional channels need a human-sourced
-official URL first (see each entry's `disabledReason`) — never guessed.
+**Next step**: the regional channels (Korea/Japan/Pacific) still need a
+human-sourced official URL before `verify-channels` can resolve anything for
+them — never guessed. `owcs_china` stays permanently out of the YouTube
+client's scope (different platform), by design, not as a gap to fill.
 
 ## Quota cost assumptions (Data API v3)
 

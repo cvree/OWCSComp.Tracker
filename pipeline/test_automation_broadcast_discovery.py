@@ -22,11 +22,17 @@ import unittest
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 from automation import broadcast_discovery as bd  # noqa: E402
+from automation import config as cfg  # noqa: E402
 from automation import models  # noqa: E402
 from automation import state_machine as sm  # noqa: E402
 from automation import youtube_api as yt  # noqa: E402
 from automation.config import AutomationConfig, DEFAULTS  # noqa: E402
 from automation.job_store import JobStore  # noqa: E402
+
+# The real, live-verified values from the 2026-07-24 GitHub Actions
+# verify-channels dispatch (config/broadcast_channels.json).
+VERIFIED_CHANNEL_ID = "UCiAInBL9kUzz1XRxk66v-gw"
+VERIFIED_UPLOADS_PLAYLIST_ID = "UUiAInBL9kUzz1XRxk66v-gw"
 
 NOW = dt.datetime(2026, 7, 24, 12, 0, 0, tzinfo=dt.timezone.utc)
 
@@ -416,6 +422,51 @@ class TestSyncBroadcasts(DiscoveryCase):
         forbidden = {"comp_snapshots", "snapshot_heroes", "hero_stints", "hero_swaps"}
         self.assertEqual(tables & forbidden, set())
         s.close()
+
+
+class TestVerifiedRegistryStability(unittest.TestCase):
+    """Proves the committed, live-verified ow_esports_global entry behaves
+    correctly against the real config file (not a synthetic channel_row)."""
+
+    def _real_channel_fixture(self, d):
+        with open(os.path.join(d, f"channels_id_{yt._slug(VERIFIED_CHANNEL_ID)}.json"), "w") as f:
+            json.dump({"items": [raw_channel(cid=VERIFIED_CHANNEL_ID,
+                                            uploads=VERIFIED_UPLOADS_PLAYLIST_ID)]}, f)
+
+    def test_uploads_playlist_stable_across_reverification(self):
+        real_ch = next(c for c in cfg.load_all_channels() if c["id"] == "ow_esports_global")
+        with tempfile.TemporaryDirectory() as d:
+            self._real_channel_fixture(d)
+            client = yt.YouTubeClient(transport=yt.fixture_transport(d))
+            report1 = bd.verify_channels(client, [real_ch], now=NOW)
+            report2 = bd.verify_channels(client, [real_ch], now=NOW)
+            self.assertEqual(report1["channels"][0]["uploadsPlaylistId"], VERIFIED_UPLOADS_PLAYLIST_ID)
+            self.assertEqual(report1["channels"][0]["uploadsPlaylistId"],
+                             report2["channels"][0]["uploadsPlaylistId"])
+            self.assertEqual(report1["channels"][0]["channelId"], report2["channels"][0]["channelId"])
+
+    def test_only_enabled_verified_channel_drives_discovery(self):
+        # cfg.load_channels() is what sync_broadcasts/discover_channel_videos
+        # actually iterate over — prove it is exactly the one verified entry.
+        live = cfg.load_channels()
+        self.assertEqual([c["id"] for c in live], ["ow_esports_global"])
+        with tempfile.TemporaryDirectory() as d:
+            self._real_channel_fixture(d)
+            with open(os.path.join(d, f"playlistItems_{yt._slug(VERIFIED_UPLOADS_PLAYLIST_ID)}_page1.json"), "w") as f:
+                json.dump({"items": [{"contentDetails": {"videoId": "real1"}}]}, f)
+            with open(os.path.join(d, "videos_real1.json"), "w") as f:
+                json.dump({"items": [raw_video("real1", published=epoch_iso(-1))]}, f)
+            client = yt.YouTubeClient(transport=yt.fixture_transport(d))
+            result = bd.discover_channel_videos(client, live[0], lookback_days=14,
+                                                horizon_days=30, now=NOW)
+            self.assertIsNone(result["error"])
+            self.assertEqual(result["videosSeen"], 1)
+
+    def test_china_excluded_from_supported_regions(self):
+        channels = cfg.load_all_channels()
+        supported = {c["region"] for c in channels if c.get("platform") == "youtube" and c.get("region")}
+        self.assertNotIn("china", supported)
+        self.assertIn("global", supported)
 
 
 if __name__ == "__main__":

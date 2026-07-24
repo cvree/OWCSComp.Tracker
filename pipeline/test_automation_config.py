@@ -92,21 +92,73 @@ class TestRegistries(unittest.TestCase):
     def test_channels_file_parses(self):
         allch = cfg.load_all_channels()
         self.assertTrue(len(allch) >= 1)
-        self.assertEqual(cfg.load_channels(), [])
         for ch in allch:
             self.assertIn("official", ch)
             self.assertIn("priority", ch)
             # Phase C1: every entry declares the new evidence/verification
             # fields, and every disabled entry MUST carry an explicit reason
             # (a gap in coverage is never allowed to be silent).
-            for key in ("sourceUrl", "ownershipEvidence", "verifiedDate",
-                       "verifiedStatus", "disabledReason", "preferredLayout"):
+            for key in ("sourceUrl", "ownershipEvidence", "uploadsPlaylistId",
+                       "verificationMethod", "verifiedDate", "verifiedStatus",
+                       "disabledReason", "preferredLayout"):
                 self.assertIn(key, ch)
             if not ch.get("enabled"):
                 self.assertTrue(ch.get("disabledReason"),
                                 f"{ch['id']} is disabled but has no disabledReason")
-            self.assertIsNone(ch.get("channelId"))  # none verified yet — never guessed
-            self.assertEqual(ch.get("verifiedStatus"), "unverified")
+
+    def test_exactly_the_verified_global_channel_is_enabled(self):
+        # Live 2026-07-24 GitHub Actions verify-channels result: only
+        # ow_esports_global resolved a real channelId; every other entry
+        # (regional channels with no evidenced URL, and China on bilibili)
+        # must remain disabled — never guessed into existence.
+        live = cfg.load_channels()
+        self.assertEqual(len(live), 1)
+        self.assertEqual(live[0]["id"], "ow_esports_global")
+        self.assertEqual(live[0]["channelId"], "UCiAInBL9kUzz1XRxk66v-gw")
+
+    def test_verified_channel_fields_complete(self):
+        ch = next(c for c in cfg.load_all_channels() if c["id"] == "ow_esports_global")
+        self.assertEqual(ch["name"], "Overwatch Esports")
+        self.assertEqual(ch["channelId"], "UCiAInBL9kUzz1XRxk66v-gw")
+        self.assertEqual(ch["uploadsPlaylistId"], "UUiAInBL9kUzz1XRxk66v-gw")
+        self.assertEqual(ch["sourceUrl"], "https://www.youtube.com/OW_Esports")
+        self.assertEqual(ch["region"], "global")
+        self.assertEqual(ch["language"], "en")
+        self.assertTrue(ch["verifiedStatus"] == "verified")
+        self.assertTrue(ch["enabled"])
+        self.assertEqual(ch["verifiedDate"], "2026-07-24")
+        self.assertTrue(ch["verificationMethod"])
+        self.assertIsNone(ch["disabledReason"])
+        self.assertGreaterEqual(ch["priority"], 90)  # still the tie-break winner
+
+    def test_regional_channels_remain_disabled_with_no_guessed_id(self):
+        for cid in ("ow_esports_korea", "ow_esports_japan", "owcs_pacific"):
+            ch = next(c for c in cfg.load_all_channels() if c["id"] == cid)
+            self.assertFalse(ch["enabled"])
+            self.assertIsNone(ch["channelId"])
+            self.assertIsNone(ch["uploadsPlaylistId"])
+            self.assertIsNone(ch["sourceUrl"])
+            self.assertEqual(ch["verifiedStatus"], "unverified")
+            self.assertTrue(ch["disabledReason"])
+
+    def test_china_stays_unsupported_not_silently_missing(self):
+        ch = next(c for c in cfg.load_all_channels() if c["id"] == "owcs_china")
+        self.assertEqual(ch["platform"], "bilibili")
+        self.assertFalse(ch["enabled"])
+        self.assertIsNone(ch["channelId"])
+        self.assertIn("unsupported", ch["disabledReason"])
+
+    def test_no_guessed_ids_accepted(self):
+        # Structural "never guess" invariant: every disabled entry (any
+        # region, any platform) must carry channelId=None. load_channels()
+        # (the enabled+ready set discovery actually uses) enforces this by
+        # construction — a disabled row can never leak into it even if a
+        # channelId were mistakenly filled in without flipping enabled.
+        for ch in cfg.load_all_channels():
+            if not ch.get("enabled"):
+                self.assertIsNone(ch.get("channelId"))
+        live_ids = {c["channelId"] for c in cfg.load_channels()}
+        self.assertNotIn(None, live_ids)
 
 
 class TestJobIdentity(unittest.TestCase):

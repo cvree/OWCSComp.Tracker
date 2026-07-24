@@ -101,11 +101,13 @@ No key is committed; `.env`, `credentials*.json`, `secrets*.json` and
   championship exists for them (see `docs/FACEIT-REGISTRY.md`). IDs are never
   guessed. Verify enabled entries any time with `cli.py verify-registry` (or
   the `discovery.yml` `mode=verify` dispatch).
-- `config/broadcast_channels.json` — every channel still has `channelId: null`
-  and `enabled: false`; `ow_esports_global` now carries a Liquipedia-evidenced
-  `sourceUrl` (`youtube.com/OW_Esports`) ready for `verify-channels` to resolve
-  in Actions. Full Phase C implementation (discovery + matching + coverage)
-  landed this pass — see the "Phase C" section above and
+- `config/broadcast_channels.json` — **`ow_esports_global` is API-verified**
+  (live `mode=verify-channels` dispatch, 2026-07-24): channelId
+  `UCiAInBL9kUzz1XRxk66v-gw`, uploads playlist `UUiAInBL9kUzz1XRxk66v-gw`,
+  1 quota unit spent, now the only `enabled: true` entry. Regional channels
+  (Korea/Japan/Pacific) stay `channelId: null` / disabled — no human-sourced
+  official URL yet, never guessed. China stays disabled/bilibili, explicitly
+  out of the YouTube client's scope. Full detail + procedure in
   `docs/YOUTUBE-DISCOVERY.md`.
 - `config/owcs_calendar.json` — event dates remain `verified: false`; the
   official Overwatch Esports schedule site is not reachable from the config
@@ -123,7 +125,7 @@ produces still requires a human or a later phase (E/F/G/I) to confirm.
 
 | Roadmap item | Where | Status |
 |---|---|---|
-| C1 verified broadcast-channel registry | `config/broadcast_channels.json` (sourceUrl/ownershipEvidence/verifiedDate/verifiedStatus/disabledReason/preferredLayout) + `cli.py verify-channels` | ✅ (no channelId confirmed yet — no live API access from this pass; see `docs/YOUTUBE-DISCOVERY.md`) |
+| C1 verified broadcast-channel registry | `config/broadcast_channels.json` (sourceUrl/ownershipEvidence/uploadsPlaylistId/verificationMethod/verifiedDate/verifiedStatus/disabledReason/preferredLayout) + `cli.py verify-channels` | ✅ **`ow_esports_global` API-verified 2026-07-24** (channelId `UCiAInBL9kUzz1XRxk66v-gw`, 1 quota unit); see `docs/YOUTUBE-DISCOVERY.md` |
 | C2 YouTube Data API client (dependency-light, injectable transport) | `pipeline/automation/youtube_api.py` | ✅ |
 | C2 quota-unit accounting + exhaustion detection | `youtube_api.QUOTA_COSTS`, `YouTubeQuotaExceeded`, `quota_usage` table | ✅ |
 | C3 broadcast discovery (upcoming/live/completed/archive/VOD, cheapest-path-first) | `broadcast_discovery.py` (`discover_channel_videos`, `sync_broadcasts`) | ✅ |
