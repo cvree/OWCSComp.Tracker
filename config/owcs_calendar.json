@@ -17,7 +17,16 @@
     "as 'official event without a known FACEIT competition'.",
     "",
     "No credentials, no scraping secrets — this file is committed so CI and",
-    "offline reconciliation run without network access."
+    "offline reconciliation run without network access.",
+    "",
+    "VERIFICATION STATUS (2026-07-24): all events remain verified=false. The",
+    "official Overwatch Esports schedule site is NOT reachable from the",
+    "registry-config environment (network policy blocks non-registry hosts),",
+    "so no event date could be confirmed against an official source. Per the",
+    "task rule, verified stays false until an official source is available.",
+    "The FACEIT registry pass confirmed only the OWCS 2026 NA/EMEA Open",
+    "Qualifiers exist on FACEIT; the main-stage regional windows below are",
+    "unconfirmed placeholders."
   ],
   "version": 1,
   "updated": "2026-07-24",
