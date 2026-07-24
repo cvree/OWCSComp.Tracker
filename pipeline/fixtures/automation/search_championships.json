@@ -1,0 +1,4 @@
+{"items":[
+  {"championship_id":"owcs-na-demo-0001","name":"OWCS 2026 North America Stage 2","organizer_id":"org-owcs-demo","game":"ow2","region":"US","status":"ongoing","championship_start":1782000000},
+  {"championship_id":"community-demo-9999","name":"OWCS Fan Cup (community)","organizer_id":"org-random","game":"ow2","region":"US","status":"upcoming","championship_start":1783000000}
+]}

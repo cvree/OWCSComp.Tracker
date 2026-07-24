@@ -69,12 +69,25 @@ class TestRegistries(unittest.TestCase):
     def test_competitions_file_parses(self):
         allc = cfg.load_all_competitions()
         self.assertTrue(len(allc) >= 1)
-        # Placeholders are disabled by design, so nothing is "live" yet.
-        self.assertEqual(cfg.load_competitions(), [])
         # Every row declares an explicit tier and region.
         for c in allc:
             self.assertIn(c.get("tier"), (1, 2, 3))
             self.assertTrue(c.get("region"))
+        # The enabled entries are the two API-verified OWCS 2026 Open
+        # Qualifiers (NA, EMEA); every enabled entry must carry a real
+        # championshipId and be marked verified.
+        live = cfg.load_competitions()
+        self.assertEqual(len(live), 2)
+        regions = {c["region"] for c in live}
+        self.assertEqual(regions, {"na", "emea"})
+        for c in live:
+            self.assertTrue(c.get("championshipId"))
+            self.assertTrue(c.get("verified"))
+            self.assertEqual(c.get("season"), "2026")
+        # Disabled entries must NOT carry a championshipId (never guessed).
+        for c in allc:
+            if not c.get("enabled"):
+                self.assertIsNone(c.get("championshipId"))
 
     def test_channels_file_parses(self):
         allch = cfg.load_all_channels()

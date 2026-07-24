@@ -112,16 +112,30 @@ def fixture_transport(fixture_dir: str) -> Transport:
     Anything missing returns a 404 so the caller's error/retry path is exercised
     exactly as it would be against the real API. No network, no key.
     """
-    def _t(url: str, headers: dict) -> "tuple[int | None, str | None, str | None]":
-        m = re.search(r"/championships/([^/?]+)(/matches)?", url)
-        if not m:
-            return 404, None, "unmapped fixture url"
-        champ_id, is_matches = m.group(1), bool(m.group(2))
-        fname = f"{champ_id}.json" if is_matches else f"{champ_id}.championship.json"
+    def _serve(fname: str):
         path = os.path.join(fixture_dir, fname)
         if not os.path.exists(path):
             return 404, None, f"no fixture: {fname}"
         return 200, Path(path).read_text(encoding="utf-8"), None
+
+    def _t(url: str, headers: dict) -> "tuple[int | None, str | None, str | None]":
+        # Candidate-discovery endpoints (registry config pass).
+        if "/search/championships" in url:
+            return _serve("search_championships.json")
+        if "/search/organizers" in url:
+            return _serve("search_organizers.json")
+        mo = re.search(r"/organizers/([^/?]+)(/championships)?", url)
+        if mo:
+            oid, is_champs = mo.group(1), bool(mo.group(2))
+            return _serve(f"organizer_{oid}_championships.json" if is_champs
+                          else f"organizer_{oid}.json")
+        # Production endpoints.
+        m = re.search(r"/championships/([^/?]+)(/matches)?", url)
+        if not m:
+            return 404, None, "unmapped fixture url"
+        champ_id, is_matches = m.group(1), bool(m.group(2))
+        return _serve(f"{champ_id}.json" if is_matches
+                      else f"{champ_id}.championship.json")
     return _t
 
 
@@ -193,6 +207,45 @@ class FaceitClient:
             items = payload.get("items", []) or []
             out.extend(items)
             if len(items) < page_size:
+                break
+            offset += page_size
+        return out
+
+    # -- candidate discovery (read-only; for the registry config pass) -----
+    # These power `cli.py list-championships / list-organizers / verify-
+    # competition`. Search is used ONLY here, to help a human confirm ids
+    # before enabling them — the production sync loop never searches.
+    def search_championships(
+        self, name: str, *, game: str = "ow2", ctype: str = "all",
+        limit: int = 20, offset: int = 0,
+    ) -> list[dict]:
+        payload = self._get("/search/championships",
+                            {"name": name, "game": game, "type": ctype,
+                             "offset": offset, "limit": limit})
+        return payload.get("items", []) or []
+
+    def search_organizers(self, name: str, *, limit: int = 10, offset: int = 0) -> list[dict]:
+        payload = self._get("/search/organizers",
+                            {"name": name, "offset": offset, "limit": limit})
+        return payload.get("items", []) or []
+
+    def get_organizer(self, organizer_id: str) -> dict:
+        return self._get(f"/organizers/{organizer_id}")
+
+    def list_organizer_championships(
+        self, organizer_id: str, *, game: str | None = "ow2",
+        page_size: int = 50, max_pages: int = 20,
+    ) -> list[dict]:
+        out: list[dict] = []
+        offset = 0
+        for _ in range(max_pages):
+            payload = self._get(f"/organizers/{organizer_id}/championships",
+                                {"offset": offset, "limit": page_size})
+            items = payload.get("items", []) or []
+            if game:
+                items = [c for c in items if (c.get("game") or "").lower() == game.lower()]
+            out.extend(items)
+            if len(payload.get("items", []) or []) < page_size:
                 break
             offset += page_size
         return out
@@ -297,4 +350,41 @@ def normalize_match(raw_match: dict, *, region: str | None = None) -> dict:
         "score": {"a": sa, "b": sb},
         "winnerSide": winner_side,
         "raw": raw_match,
+    }
+
+
+# ------------------------------------------------- championship normalizer
+def normalize_championship(raw: dict) -> dict:
+    """Normalize a championship (search result or /championships/{id} detail)
+    into the fields the registry config pass records. Facts only."""
+    start = raw.get("championship_start") or raw.get("subscription_start")
+    end = raw.get("championship_end") or raw.get("subscription_end")
+    url = _clean(raw.get("faceit_url"))
+    if url:
+        url = url.replace("{lang}", "en")
+    return {
+        # /championships/{id} uses championship_id; /search/championships items
+        # use competition_id (and sometimes guid) — accept all so search results
+        # surface a real id, not a dash.
+        "championshipId": _clean(raw.get("championship_id") or raw.get("competition_id")
+                                 or raw.get("guid") or raw.get("id")),
+        "name": _clean(raw.get("name") or raw.get("competition_name")),
+        "organizerId": _clean(raw.get("organizer_id")),
+        "game": _clean(raw.get("game")),
+        "region": _clean(raw.get("region")),
+        "status": _clean(raw.get("status") or raw.get("type")),
+        "startDate": (_epoch_to_iso(start) or "")[:10] or None,
+        "endDate": (_epoch_to_iso(end) or "")[:10] or None,
+        "faceitUrl": url,
+        "slots": raw.get("slots"),
+        "raw": raw,
+    }
+
+
+def normalize_organizer(raw: dict) -> dict:
+    return {
+        "organizerId": _clean(raw.get("organizer_id") or raw.get("id")),
+        "name": _clean(raw.get("name")),
+        "faceitUrl": _clean(raw.get("faceit_url")),
+        "raw": raw,
     }

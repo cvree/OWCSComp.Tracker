@@ -93,15 +93,22 @@ No key is committed; `.env`, `credentials*.json`, `secrets*.json` and
 `data/raw/` (cached API responses) are gitignored. `data/automation.sqlite`
 (the runtime job queue) is gitignored too.
 
-### Registry entries still needing real ids (before going live)
+### Registry state (verified 2026-07-24 against the live FACEIT API)
 
-- `config/faceit_competitions.json` — every competition has `championshipId: null`
-  and `enabled: false`. Set the real FACEIT Data API championship id and flip
-  `enabled: true`. Only then does `load_competitions()` return it.
+- `config/faceit_competitions.json` — **2 enabled, API-verified** competitions:
+  the OWCS 2026 NA + EMEA Open Qualifiers (Tier 2). All other regions/stages
+  stay `enabled: false` with `championshipId: null` because no official FACEIT
+  championship exists for them (see `docs/FACEIT-REGISTRY.md`). IDs are never
+  guessed. Verify enabled entries any time with `cli.py verify-registry` (or
+  the `discovery.yml` `mode=verify` dispatch).
 - `config/broadcast_channels.json` — every channel has `channelId: null` and
   `enabled: false` (Phase C — broadcast discovery, next pass).
-- `config/owcs_calendar.json` — event dates are `verified: false` placeholders;
-  confirm against the official Overwatch Esports schedule.
+- `config/owcs_calendar.json` — event dates remain `verified: false`; the
+  official Overwatch Esports schedule site is not reachable from the config
+  environment, so no date could be confirmed against an official source.
+
+The full verification procedure, verified organizer/championship ids, coverage
+finding, and the real dry-run output are documented in **`docs/FACEIT-REGISTRY.md`**.
 
 ## Not yet implemented (later roadmap passes)
 

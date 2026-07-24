@@ -17,6 +17,7 @@ only commands that write, and both only touch the automation DB.
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import sys
 
@@ -76,7 +77,8 @@ def _build_client(args: argparse.Namespace) -> faceit_api.FaceitClient:
     if getattr(args, "fixture_dir", None):
         return faceit_api.FaceitClient(
             transport=faceit_api.fixture_transport(args.fixture_dir))
-    cache = None if args.dry_run else os.path.join(
+    # Read-only/dry commands don't cache into the repo; only a live sync does.
+    cache = None if getattr(args, "dry_run", True) else os.path.join(
         content_db.REPO_ROOT, "data", "raw", "faceit_api")
     return faceit_api.FaceitClient(cache_dir=cache)
 
@@ -165,6 +167,94 @@ def cmd_sync_all(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_list_championships(args: argparse.Namespace) -> int:
+    """Read-only candidate discovery: search OW2 championships (optionally an
+    organizer's) so a human can confirm official ids before enabling them.
+    Prints facts only; never writes and never enables anything."""
+    client = _build_client(args)
+    rows: list[dict] = []
+    if args.organizer:
+        try:
+            org = faceit_api.normalize_organizer(client.get_organizer(args.organizer))
+            print(f"[automation] organizer {args.organizer}: {org['name']}")
+        except (faceit_api.FaceitApiError, faceit_api.FaceitAuthError) as exc:
+            print(f"[automation] organizer {args.organizer}: (details unavailable: {exc})")
+        raw = client.list_organizer_championships(args.organizer, game=args.game)
+        rows = [faceit_api.normalize_championship(c) for c in raw]
+        header = f"organizer {args.organizer} championships (game={args.game})"
+    else:
+        raw = client.search_championships(args.query, game=args.game, ctype=args.type,
+                                          limit=args.limit)
+        rows = [faceit_api.normalize_championship(c) for c in raw]
+        header = f"search championships name~'{args.query}' game={args.game} type={args.type}"
+    if args.json:
+        print(json.dumps(rows, indent=2))
+        return 0
+    print(f"[automation] {header}: {len(rows)} result(s)")
+    print(f"  {'championshipId':<40} {'region':<8} {'status':<10} name")
+    for r in rows:
+        print(f"  {(r['championshipId'] or '-'):<40} {(r['region'] or '-'):<8} "
+              f"{(r['status'] or '-'):<10} {r['name'] or '-'}  "
+              f"[org={r['organizerId'] or '-'}]")
+    print("\n  NOTE: verify each id with `verify-competition <id>` and confirm the")
+    print("  organizer is the OFFICIAL OWCS organizer before setting enabled=true.")
+    return 0
+
+
+def cmd_list_organizers(args: argparse.Namespace) -> int:
+    client = _build_client(args)
+    rows = [faceit_api.normalize_organizer(o) for o in client.search_organizers(args.query)]
+    if args.json:
+        print(json.dumps(rows, indent=2))
+        return 0
+    print(f"[automation] organizers name~'{args.query}': {len(rows)} result(s)")
+    for r in rows:
+        print(f"  {(r['organizerId'] or '-'):<40} {r['name'] or '-'}")
+    return 0
+
+
+def cmd_verify_competition(args: argparse.Namespace) -> int:
+    """Retrieve a championship's official FACEIT details to verify it before/after
+    enabling. Prints the exact name, organizer, region and dates."""
+    client = _build_client(args)
+    try:
+        raw = client.get_championship(args.championship_id)
+    except (faceit_api.FaceitApiError, faceit_api.FaceitAuthError) as exc:
+        print(f"[automation] verify FAILED for {args.championship_id}: {exc}")
+        return 1
+    c = faceit_api.normalize_championship(raw)
+    if args.json:
+        print(json.dumps(c, indent=2))
+        return 0
+    print(f"[automation] championship {args.championship_id}:")
+    for k in ("name", "organizerId", "game", "region", "status", "startDate", "endDate", "faceitUrl"):
+        print(f"  {k:<13}: {c.get(k)}")
+    return 0
+
+
+def cmd_verify_registry(args: argparse.Namespace) -> int:
+    """Verify EVERY enabled competition in config/faceit_competitions.json by
+    retrieving its official FACEIT details. Non-zero exit if any fails."""
+    comps = cfg.load_competitions()
+    if not comps:
+        print("[automation] no enabled competitions to verify "
+              "(registry entries are placeholders/disabled).")
+        return 0
+    client = _build_client(args)
+    failures = 0
+    for comp in comps:
+        cid = comp.get("championshipId")
+        try:
+            c = faceit_api.normalize_championship(client.get_championship(cid))
+            print(f"  OK  {comp['id']:<26} {cid}  ->  {c['name']} "
+                  f"[org={c['organizerId']}, region={c['region']}]")
+        except (faceit_api.FaceitApiError, faceit_api.FaceitAuthError) as exc:
+            failures += 1
+            print(f"  ERR {comp['id']:<26} {cid}  ->  {exc}")
+    print(f"[automation] verified {len(comps) - failures}/{len(comps)} enabled competitions")
+    return 1 if failures else 0
+
+
 def _run_export() -> None:
     """Regenerate the production public export so calendar.html updates."""
     import subprocess
@@ -237,6 +327,38 @@ def main(argv: list[str] | None = None) -> int:
     sa = sub.add_parser("sync-all", help="FACEIT + calendar sync + reconcile (B)")
     _add_sync_opts(sa)
     sa.set_defaults(func=cmd_sync_all)
+
+    # ---- read-only candidate discovery / verification (registry config) --
+    lc = sub.add_parser("list-championships",
+                        help="search OW2 championships to confirm ids (read-only)")
+    lc.add_argument("--query", default="OWCS", help="name search (default: OWCS)")
+    lc.add_argument("--game", default="ow2")
+    lc.add_argument("--type", default="all",
+                    choices=["all", "upcoming", "ongoing", "past"])
+    lc.add_argument("--organizer", default=None,
+                    help="list this organizer's championships instead of searching")
+    lc.add_argument("--limit", type=int, default=20)
+    lc.add_argument("--fixture-dir", default=None)
+    lc.add_argument("--json", action="store_true")
+    lc.set_defaults(func=cmd_list_championships)
+
+    lo = sub.add_parser("list-organizers", help="search organizers (read-only)")
+    lo.add_argument("--query", default="Overwatch")
+    lo.add_argument("--fixture-dir", default=None)
+    lo.add_argument("--json", action="store_true")
+    lo.set_defaults(func=cmd_list_organizers)
+
+    vc = sub.add_parser("verify-competition",
+                        help="retrieve one championship's official details")
+    vc.add_argument("championship_id")
+    vc.add_argument("--fixture-dir", default=None)
+    vc.add_argument("--json", action="store_true")
+    vc.set_defaults(func=cmd_verify_competition)
+
+    vr = sub.add_parser("verify-registry",
+                        help="verify every ENABLED competition via the FACEIT API")
+    vr.add_argument("--fixture-dir", default=None)
+    vr.set_defaults(func=cmd_verify_registry)
 
     args = p.parse_args(argv)
     return args.func(args)
