@@ -136,6 +136,56 @@ produces still requires a human or a later phase (E/F/G/I) to confirm.
 | C6 explicit coverage states (nothing disappears silently) | `coverage.build_broadcast_coverage` / `derive_coverage_label` | ✅ |
 | C7 official-calendar adapter improvements (season/format/sourceUrl/retrievedAt/sourceHash/verificationStatus, live Next.js extraction) | `owcs_calendar.py` (`http_fetcher`, `extract_events_from_next_data`) | ✅ |
 
+### Phase C real dry-run fix (2026-07-24)
+
+The first real `broadcast-dryrun` Actions run found 7 in-window videos but
+`videos_scored` came back **0** — this section documents the root causes and
+the fix, since the bug wasn't in scoring itself but in what fed it.
+
+**Root causes (two, compounding):**
+1. `sync_broadcasts` only ever collected `discover_channel_videos`'s
+   in-window video list inside its `not dry_run` write branch. A dry-run —
+   which by definition writes nothing to `broadcast_videos` — therefore
+   discarded every discovered video before matching ever ran.
+2. `cli.py`'s `_run_broadcast_discovery` called `match_broadcasts(store, …)`
+   with no `videos=` argument, so matching fell back to reading the (empty,
+   because of #1) `broadcast_videos` table — and separately, matching only
+   ever built targets from `scheduled_matches`, which was also empty because
+   `broadcast-dryrun` never runs `sync_faceit`/`sync_calendar`.
+
+**Fix:**
+- `sync_broadcasts` now always populates `summary["videos"]` with every
+  in-window video, dry-run or not (writes remain gated on `not dry_run` —
+  dry-run purity is unaffected).
+- `cli.py` passes that list straight into `match_broadcasts(videos=…)`
+  instead of relying on the DB table.
+- `match_broadcasts` now pools matching targets from **three** sources — a
+  video is never required to match a specific FACEIT match:
+  1. `scheduled_matches` (verified FACEIT matches)
+  2. `source_events` (automation DB — mirrors the calendar once
+     `sync_calendar` has run)
+  3. `owcs_calendar.load_events()` (the **committed seed file** — always
+     available, independent of any prior sync; this is what makes matching
+     work against a completely empty automation DB)
+- Every video now gets exactly one top-level classification (see
+  `broadcast_matching.ALL_CLASSIFICATIONS`) in addition to its per-target
+  candidate rows, so `videosScored == sum(classifications.values())`
+  always holds — nothing can silently vanish from the report again:
+  `high`, `needs-review`, `event-level-candidate`, `unmatched-official-video`,
+  `unrelated-official-upload`, `unsupported-event`, `outside-configured-coverage`.
+
+**Efficiency (the "videos seen: 1000" complaint):** an uploads playlist is
+newest-first, so `youtube_api.list_playlist_items` now stops paginating once
+a fetched page's oldest item predates `lookback_days + 2` days (pass
+`--full-history` to disable). `YouTubeClient` also gained a TTL-based
+response cache (default 1h) that skips the network call AND the quota spend
+entirely on a repeated identical request within the TTL — `cli.py` enables
+this cache even in dry-run (caching a read is not a production write).
+
+See `pipeline/automation/broadcast_matching.py`'s module docstring and
+`test_automation_broadcast_matching.py` / `test_automation_broadcast_discovery.py`
+/ `test_automation_youtube_api.py` for the full pinned behavior.
+
 ### CLI
 
 ```bash
@@ -175,11 +225,12 @@ normalization/window/discovery, idempotent reruns, renamed/delayed
 broadcasts, multi-language feeds, API-failure retry jobs),
 `test_automation_broadcast_matching.py` (every C4 signal in isolation,
 HIGH/MEDIUM/LOW boundaries, linking, one-to-many/many-to-one, unofficial
-mirror rejection), `test_automation_owcs_calendar.py` (C7 fields, resilient
-`__NEXT_DATA__` extraction, live-fetch failure modes), plus extensions to
-`test_automation_schema.py` (new tables) and `test_automation_config.py`
-(registry field completeness) and `test_automation_coverage.py` (C6 label
-derivation).
+mirror rejection, the three-target-source matching + classification fix,
+full-day multi-match, the accounting invariant), `test_automation_owcs_calendar.py`
+(C7 fields, resilient `__NEXT_DATA__` extraction, live-fetch failure modes),
+plus extensions to `test_automation_schema.py` (new tables),
+`test_automation_config.py` (registry field completeness), and
+`test_automation_coverage.py` (C6 label derivation).
 
 ## Not yet implemented (later roadmap passes)
 

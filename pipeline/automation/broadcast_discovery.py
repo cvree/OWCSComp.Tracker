@@ -226,44 +226,72 @@ def _initial_coverage_state(video: dict) -> str:
     return sm.ARCHIVED  # completed livestream or an ordinary uploaded VOD
 
 
+# A channel's uploads playlist is newest-first; once a fetched page's oldest
+# item predates lookback + this buffer, later pages can only be older still,
+# so pagination stops there (unless full_history=True). The buffer absorbs
+# upload-vs-broadcast clock skew (a stream recorded on day N sometimes
+# doesn't finish processing/publish until day N+1) without re-walking a
+# channel's entire history on every run.
+PAGINATION_SAFETY_BUFFER_DAYS = 2
+
+
 # ------------------------------------------------------------- C3: discovery
 def discover_channel_videos(
     client: yt.YouTubeClient, channel: dict, *,
     lookback_days: int, horizon_days: int,
     now: dt.datetime | None = None, allow_search_fallback: bool = False,
+    full_history: bool = False,
 ) -> dict:
     """Discover one channel's videos via the cheap uploads-playlist path,
     falling back to search.list ONLY if `allow_search_fallback` is set AND
     the channel has no resolvable uploads playlist (C2's documented cost
     order: channels.list -> playlistItems.list -> videos.list -> search.list
-    last). Returns a summary; performs no DB writes itself (see
-    sync_broadcasts for the write path) so it is safe to call in dry-run."""
+    last). Returns a summary that ALWAYS carries the in-window `videos` list
+    (dry-run or not — a caller like sync_broadcasts decides whether to
+    persist them; discovery itself performs no DB writes, so it is safe to
+    call in dry-run).
+
+    Pagination stops once a fetched page's oldest item predates the rolling
+    lookback window (+ a small safety buffer) — pass `full_history=True` to
+    walk the channel's entire upload history instead (e.g. a one-off backfill)."""
     now = now or _now()
     summary: dict[str, Any] = {
         "channelId": channel["id"], "videosSeen": 0, "inWindow": 0,
         "videos": [], "error": None, "usedSearchFallback": False,
+        "pagesFetched": 0, "cacheHits": 0,
     }
+    hits_before = client.cache_hits
+
+    def _done() -> dict:
+        summary["cacheHits"] = client.cache_hits - hits_before
+        return summary
+
     cid = channel.get("channelId")
     if not cid:
         summary["error"] = "no confirmed channelId (disabled/unverified) — skipped"
-        return summary
+        return _done()
     try:
         ch_item = client.get_channel_by_id(cid)
     except yt.YouTubeQuotaExceeded as exc:
         summary["error"] = f"quota_exceeded: {exc}"
-        return summary
+        return _done()
     except (yt.YouTubeApiError, yt.YouTubeAuthError) as exc:
         summary["error"] = str(exc)
-        return summary
+        return _done()
     if not ch_item:
         summary["error"] = f"channel {cid} not found via API"
-        return summary
+        return _done()
 
     playlist_id = yt.uploads_playlist_id(ch_item)
     video_ids: list[str] = []
+    stop_before = None
+    if not full_history:
+        stop_before = _iso(now - dt.timedelta(days=lookback_days + PAGINATION_SAFETY_BUFFER_DAYS))
     try:
         if playlist_id:
-            items = client.list_playlist_items(playlist_id)
+            stats: dict[str, Any] = {}
+            items = client.list_playlist_items(playlist_id, stop_before=stop_before, stats=stats)
+            summary["pagesFetched"] += stats.get("pages", 0)
             video_ids = [(i.get("contentDetails") or {}).get("videoId") for i in items]
             video_ids = [v for v in video_ids if v]
         if not video_ids and allow_search_fallback:
@@ -274,10 +302,10 @@ def discover_channel_videos(
         videos_raw = client.list_videos(video_ids) if video_ids else []
     except yt.YouTubeQuotaExceeded as exc:
         summary["error"] = f"quota_exceeded: {exc}"
-        return summary
+        return _done()
     except (yt.YouTubeApiError, yt.YouTubeAuthError) as exc:
         summary["error"] = str(exc)
-        return summary
+        return _done()
 
     for raw in videos_raw:
         v = normalize_video(raw, channel=channel, discovered_at=now)
@@ -287,7 +315,7 @@ def discover_channel_videos(
         if in_window(v, now, lookback_days, horizon_days):
             summary["inWindow"] += 1
             summary["videos"].append(v)
-    return summary
+    return _done()
 
 
 def upsert_broadcast_video(store: JobStore, v: dict) -> str:
@@ -359,20 +387,30 @@ def sync_broadcasts(
     horizon_days: int,
     dry_run: bool = False,
     allow_search_fallback: bool = False,
+    full_history: bool = False,
     now: dt.datetime | None = None,
 ) -> dict:
     """Discover + (unless dry-run) persist broadcasts for every enabled,
     channelId-verified channel. Idempotent: reruns never duplicate a video
     row or a `broadcast:<id>` job; a `broadcast-discovery:<channel>:<window>`
     scan job is enqueued per channel so repeated scans of an unchanged
-    window are visibly deduplicated too (C5)."""
+    window are visibly deduplicated too (C5).
+
+    IMPORTANT: `summary["videos"]` always carries every discovered in-window
+    video, dry-run or not. An earlier version only collected videos inside
+    the `not dry_run` write branch, so a dry-run's own matching stage had
+    nothing to score against even when discovery found real in-window
+    videos (videos_scored=0 despite videos_seen>0) — see
+    docs/AUTOMATION.md's "Phase C real dry-run fix" note. Dry-run still
+    performs ZERO database writes; only the in-memory summary changed."""
     now = now or _now()
     window_start = (now - dt.timedelta(days=lookback_days)).date().isoformat()
     window_end = (now + dt.timedelta(days=horizon_days)).date().isoformat()
     summary: dict[str, Any] = {
         "dryRun": dry_run, "lookbackDays": lookback_days, "horizonDays": horizon_days,
         "channels": [], "videosSeen": 0, "inWindow": 0, "upserted": 0,
-        "scanJobsCreated": 0, "errors": [],
+        "scanJobsCreated": 0, "errors": [], "videos": [],
+        "pagesFetched": 0, "cacheHits": 0,
     }
     if not channels:
         summary["note"] = "no enabled+verified channels — nothing to discover"
@@ -381,14 +419,17 @@ def sync_broadcasts(
     for ch in channels:
         result = discover_channel_videos(
             client, ch, lookback_days=lookback_days, horizon_days=horizon_days,
-            now=now, allow_search_fallback=allow_search_fallback)
+            now=now, allow_search_fallback=allow_search_fallback, full_history=full_history)
         summary["channels"].append({
             "channelId": ch["id"], "videosSeen": result["videosSeen"],
             "inWindow": result["inWindow"], "error": result["error"],
             "usedSearchFallback": result["usedSearchFallback"],
+            "pagesFetched": result["pagesFetched"], "cacheHits": result["cacheHits"],
         })
         summary["videosSeen"] += result["videosSeen"]
         summary["inWindow"] += result["inWindow"]
+        summary["pagesFetched"] += result["pagesFetched"]
+        summary["cacheHits"] += result["cacheHits"]
         if result["error"]:
             summary["errors"].append({"channelId": ch["id"], "error": result["error"]})
             if not dry_run and store is not None:
@@ -397,6 +438,12 @@ def sync_broadcasts(
                 store.record_attempt(key, ok=False, error_code="YOUTUBE_API_ERROR",
                                      error_message=result["error"], now=now)
             continue
+
+        # Discovered videos are always surfaced (dry-run or not) so a caller
+        # (e.g. broadcast_matching.match_broadcasts) can evaluate them even
+        # when nothing is persisted to the DB.
+        summary["videos"].extend(result["videos"])
+
         if not dry_run and store is not None:
             key = models.broadcast_discovery_key(ch["id"], window_start, window_end)
             before = store.get(key)

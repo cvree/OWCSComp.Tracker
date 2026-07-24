@@ -234,6 +234,56 @@ class TestDiscoverChannelVideos(DiscoveryCase):
             self.assertEqual(result["inWindow"], 2)
             self.assertFalse(result["usedSearchFallback"])
 
+    def test_pagination_stops_at_lookback_boundary_not_full_1000_uploads(self):
+        # Regression for the "videos seen: 1000" efficiency complaint: a
+        # normal 14-day discover_channel_videos call must stop pagination
+        # once a page's oldest item predates lookback+buffer, never walking
+        # a channel's entire upload history.
+        with tempfile.TemporaryDirectory() as d:
+            with open(os.path.join(d, "channels_id_uc123.json"), "w") as f:
+                json.dump({"items": [raw_channel()]}, f)
+            with open(os.path.join(d, "playlistItems_uuuploads_page1.json"), "w") as f:
+                json.dump({"items": [
+                    {"contentDetails": {"videoId": "recent1", "videoPublishedAt": epoch_iso(-1)}},
+                ], "nextPageToken": "PAGE2"}, f)
+            with open(os.path.join(d, "playlistItems_uuuploads_page2.json"), "w") as f:
+                json.dump({"items": [
+                    {"contentDetails": {"videoId": "old1", "videoPublishedAt": epoch_iso(-30)}},
+                ], "nextPageToken": "PAGE3"}, f)
+            # page3 deliberately has NO fixture file — if pagination reaches
+            # it, the call raises a YouTubeApiError, failing this test.
+            with open(os.path.join(d, "videos_old1_recent1.json"), "w") as f:
+                json.dump({"items": [raw_video("recent1", published=epoch_iso(-1)),
+                                     raw_video("old1", published=epoch_iso(-30))]}, f)
+            client = yt.YouTubeClient(transport=yt.fixture_transport(d))
+            result = bd.discover_channel_videos(client, channel_row(), lookback_days=14,
+                                                horizon_days=30, now=NOW)
+            self.assertIsNone(result["error"])
+            self.assertEqual(result["pagesFetched"], 2)
+            self.assertEqual(client.quota_by_endpoint["playlistItems.list"], 2)
+
+    def test_full_history_walks_every_page(self):
+        with tempfile.TemporaryDirectory() as d:
+            with open(os.path.join(d, "channels_id_uc123.json"), "w") as f:
+                json.dump({"items": [raw_channel()]}, f)
+            with open(os.path.join(d, "playlistItems_uuuploads_page1.json"), "w") as f:
+                json.dump({"items": [
+                    {"contentDetails": {"videoId": "recent1", "videoPublishedAt": epoch_iso(-1)}},
+                ], "nextPageToken": "PAGE2"}, f)
+            with open(os.path.join(d, "playlistItems_uuuploads_page2.json"), "w") as f:
+                json.dump({"items": [
+                    {"contentDetails": {"videoId": "ancient1", "videoPublishedAt": epoch_iso(-900)}},
+                ]}, f)
+            with open(os.path.join(d, "videos_ancient1_recent1.json"), "w") as f:
+                json.dump({"items": [raw_video("recent1", published=epoch_iso(-1)),
+                                     raw_video("ancient1", published=epoch_iso(-900))]}, f)
+            client = yt.YouTubeClient(transport=yt.fixture_transport(d))
+            result = bd.discover_channel_videos(client, channel_row(), lookback_days=14,
+                                                horizon_days=30, now=NOW, full_history=True)
+            self.assertIsNone(result["error"])
+            self.assertEqual(result["pagesFetched"], 2)
+            self.assertEqual(result["videosSeen"], 2)  # ancient1 seen even if outside the window
+
     def test_search_fallback_only_when_no_uploads(self):
         with tempfile.TemporaryDirectory() as d:
             with open(os.path.join(d, "channels_id_uc123.json"), "w") as f:
@@ -343,6 +393,22 @@ class TestSyncBroadcasts(DiscoveryCase):
         self.assertEqual(summary["upserted"], 0)
         self.assertEqual(s.con.execute("SELECT COUNT(*) FROM broadcast_videos").fetchone()[0], 0)
         self.assertEqual(len(s.list_jobs()), 0)
+        s.close()
+
+    def test_dry_run_still_surfaces_discovered_videos_for_matching(self):
+        # Regression test for the real dry-run bug: 7 in-window videos were
+        # discovered but never reached the matching stage because dry-run
+        # only collected `result["videos"]` inside the `not dry_run` write
+        # branch. summary["videos"] must be populated in dry-run too, even
+        # though ZERO rows are written to broadcast_videos.
+        s = self.store()
+        client = self._client_with_video()
+        summary = bd.sync_broadcasts(client=client, store=s, channels=[channel_row()],
+                                     lookback_days=14, horizon_days=30, dry_run=True, now=NOW)
+        self.assertEqual(len(summary["videos"]), 1)
+        self.assertEqual(summary["videos"][0]["videoId"], "v1")
+        # Still zero writes — dry-run purity is not weakened by this fix.
+        self.assertEqual(s.con.execute("SELECT COUNT(*) FROM broadcast_videos").fetchone()[0], 0)
         s.close()
 
     def test_live_sync_upserts_and_dedupes_on_rerun(self):

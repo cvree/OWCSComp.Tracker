@@ -289,14 +289,18 @@ def _build_youtube_client(args: argparse.Namespace, store: "js.JobStore | None" 
     """Real API client (YOUTUBE_API_KEY), or an offline fixture client when
     --fixture-dir is given. Fixtures never touch the network. When `store` is
     given, every call's quota cost is persisted into the automation DB's
-    quota_usage table (Phase C2) so `coverage` can report spend across runs."""
+    quota_usage table (Phase C2) so `coverage` can report spend across runs.
+
+    The response cache (data/raw/youtube_api/, gitignored, never committed)
+    is enabled EVEN in dry-run — caching a read is not a production write,
+    and it's what lets a repeated dry-run skip network calls/quota entirely
+    within the cache TTL (see YouTubeClient's cache_ttl_seconds)."""
     quota_sink = None
     if store is not None:
         quota_sink = bdisc._record_quota(store, dt.datetime.now(dt.timezone.utc).date().isoformat())
     if getattr(args, "fixture_dir", None):
         return yt.YouTubeClient(transport=yt.fixture_transport(args.fixture_dir), quota_sink=quota_sink)
-    cache = None if getattr(args, "dry_run", True) else os.path.join(
-        content_db.REPO_ROOT, "data", "raw", "youtube_api")
+    cache = os.path.join(content_db.REPO_ROOT, "data", "raw", "youtube_api")
     return yt.YouTubeClient(cache_dir=cache, quota_sink=quota_sink)
 
 
@@ -353,6 +357,28 @@ def cmd_calendar_dryrun(args: argparse.Namespace) -> int:
     return 0
 
 
+def _sanitize_title(title: str | None, max_len: int = 80) -> str:
+    """Collapse newlines/control chars and cap length for the report — a
+    title is public broadcast metadata, not a secret, but a report line
+    should never let one blow up into multiple lines or an unbounded string."""
+    t = " ".join((title or "(no title)").split())
+    return t if len(t) <= max_len else t[: max_len - 1] + "…"
+
+
+def _classify_video_kind(v: dict) -> str:
+    """Human-readable one-liner: completed livestream / ordinary upload /
+    upcoming stream / currently live — the exact distinction the C3
+    diagnostic report needs per video."""
+    status = v.get("liveBroadcastStatus")
+    if status == "live":
+        return "currently live"
+    if status == "upcoming":
+        return "upcoming stream"
+    if status == "completed":
+        return "completed livestream"
+    return "ordinary upload (never a livestream)"
+
+
 def _run_broadcast_discovery(args: argparse.Namespace) -> int:
     config = cfg.load_config()
     store = js.JobStore(args.db, config=config)
@@ -363,25 +389,61 @@ def _run_broadcast_discovery(args: argparse.Namespace) -> int:
             client=client, store=store, channels=channels,
             lookback_days=args.lookback_days or config.lookback_days,
             horizon_days=args.horizon_days or config.schedule_horizon_days,
-            dry_run=args.dry_run, allow_search_fallback=args.allow_search_fallback)
+            dry_run=args.dry_run, allow_search_fallback=args.allow_search_fallback,
+            full_history=getattr(args, "full_history", False))
         print(f"[automation] broadcast discovery ({'dry-run' if args.dry_run else 'live'}):")
         if disc_summary.get("note"):
             print(f"  note: {disc_summary['note']}")
-        print(f"  channels scanned : {len(disc_summary['channels'])}")
-        print(f"  videos seen      : {disc_summary['videosSeen']}  in-window: {disc_summary['inWindow']}")
-        print(f"  upserted         : {disc_summary['upserted']} "
+        print(f"  channels discovered : {len(disc_summary['channels'])}")
+        print(f"  pages fetched       : {disc_summary['pagesFetched']}")
+        print(f"  cache hits          : {disc_summary['cacheHits']}")
+        print(f"  videos inspected    : {disc_summary['videosSeen']}")
+        print(f"  videos in window    : {disc_summary['inWindow']}")
+        print(f"  upserted            : {disc_summary['upserted']} "
               f"({'dry-run — no writes' if args.dry_run else 'written'})")
         for e in disc_summary["errors"]:
-            print(f"  ERROR  {e['channelId']}: {e['error']}")
+            print(f"  API ERROR  {e['channelId']}: {e['error']}")
 
-        match_summary = bmatch.match_broadcasts(store, dry_run=args.dry_run)
+        # Root-cause fix: pass the videos discovered THIS run into matching —
+        # a dry-run never persists to broadcast_videos, so relying on the DB
+        # table here previously left matching with nothing to score (see
+        # broadcast_discovery.sync_broadcasts's docstring).
+        match_summary = bmatch.match_broadcasts(
+            store, videos=disc_summary["videos"], dry_run=args.dry_run)
         print("[automation] broadcast matching:")
-        print(f"  videos scored    : {match_summary['videosScored']}")
-        print(f"  linked (high)    : {match_summary['linked']}")
-        print(f"  review (medium)  : {match_summary['reviewed']}")
-        print(f"  rejected (low)   : {match_summary['rejected']}")
-        if client.quota_used:
-            print(f"  quota used       : {client.quota_used} units {dict(client.quota_by_endpoint)}")
+        t = match_summary["targetsLoaded"]
+        print(f"  matching targets    : {t['matches']} FACEIT match(es), "
+              f"{t['sourceEvents']} source_event(s), {t['calendarEvents']} calendar event(s)")
+        print(f"  videos scored       : {match_summary['videosScored']}")
+        print(f"  linked (high)       : {match_summary['linked']}")
+        print(f"  review (medium)     : {match_summary['reviewed']}")
+        print(f"  rejected (low)      : {match_summary['rejected']}")
+        print("  classifications     :")
+        for label in bmatch.ALL_CLASSIFICATIONS:
+            n = match_summary["classifications"].get(label, 0)
+            if n:
+                print(f"    {label:<28}: {n}")
+        accounted = sum(match_summary["classifications"].values())
+        print(f"  videos accounted    : {accounted} / {disc_summary['inWindow']} in-window "
+              f"({'OK — every video classified' if accounted == disc_summary['inWindow'] else 'MISMATCH'})")
+
+        if disc_summary["videos"]:
+            print("[automation] per-video diagnostic (every in-window video, no raw API response):")
+            for v, r in zip(disc_summary["videos"], match_summary["results"]):
+                print(f"  - {v['videoId']}  \"{_sanitize_title(v['title'])}\"")
+                print(f"      kind            : {_classify_video_kind(v)}")
+                print(f"      liveBroadcastContent-derived status: {v['liveBroadcastStatus']}")
+                print(f"      publishedAt     : {v.get('publishedAt')}")
+                print(f"      scheduledStartAt: {v.get('scheduledStartAt')}")
+                print(f"      actualStartAt   : {v.get('actualStartAt')}")
+                print(f"      actualEndAt     : {v.get('actualEndAt')}")
+                print(f"      durationSeconds : {v.get('durationSeconds')}")
+                print(f"      classification  : {r['classification']} "
+                      f"(targets considered: {r['targetsConsidered']})")
+
+        if client.quota_used or client.cache_hits:
+            print(f"  quota used          : {client.quota_used} units {dict(client.quota_by_endpoint)}")
+            print(f"  client cache hits   : {client.cache_hits}")
     finally:
         store.close()
     return 0
@@ -509,6 +571,9 @@ def main(argv: list[str] | None = None) -> int:
                       help="serve YouTube responses from local fixtures (offline)")
     bd_p.add_argument("--allow-search-fallback", action="store_true",
                       help="permit the quota-expensive search.list fallback (C2/C4)")
+    bd_p.add_argument("--full-history", action="store_true",
+                      help="walk a channel's ENTIRE upload history instead of stopping "
+                           "pagination at lookback+buffer (expensive; off by default)")
     bd_p.set_defaults(dry_run=True, func=cmd_broadcast_dryrun)
 
     db_p = sub.add_parser("discover-broadcasts",
@@ -520,6 +585,9 @@ def main(argv: list[str] | None = None) -> int:
                       help="serve YouTube responses from local fixtures (offline)")
     db_p.add_argument("--allow-search-fallback", action="store_true",
                       help="permit the quota-expensive search.list fallback (C2/C4)")
+    db_p.add_argument("--full-history", action="store_true",
+                      help="walk a channel's ENTIRE upload history instead of stopping "
+                           "pagination at lookback+buffer (expensive; off by default)")
     db_p.set_defaults(func=cmd_discover_broadcasts)
 
     args = p.parse_args(argv)
