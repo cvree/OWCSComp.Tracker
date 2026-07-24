@@ -519,16 +519,19 @@ class TestMatchBroadcastsThreeTargetSources(LinkingCase):
     def test_unsupported_event_region_not_youtube_supported(self):
         s = self.store()
         # A target exists for 'china' (so the region IS tracked), but no
-        # YouTube channel covers china (bilibili-only). Signals are kept
-        # weak enough that the pairing still scores LOW overall — only then
-        # does the unsupported-platform distinction (vs. plain
+        # YouTube channel covers china (bilibili-only). The video genuinely
+        # LOOKS like a broadcast (passes the likeness gate: completed
+        # livestream, substantial duration, tournament terminology) but its
+        # time is far enough from the target's to net a LOW pairing score —
+        # only then does the unsupported-platform distinction (vs. plain
         # unrelated-upload) actually matter.
-        m = {"id": "match:cn", "team_a": "A", "team_b": "B", "region": "china",
+        m = {"id": "match:cn", "team_a": "Longwind", "team_b": "Skyforge", "region": "china",
              "scheduled_at": "2026-07-20T20:00:00+00:00", "status": "finished"}
         v = self._video_dict(
-            title="random content", description="", region="china", officialChannel=True,
-            actualStartAt=None, scheduledStartAt=None, publishedAt="2020-01-01T00:00:00+00:00",
-            durationSeconds=45, liveBroadcastStatus="none")
+            title="Broadcast Day 1", description="", region="china", officialChannel=True,
+            actualStartAt="2026-07-22T22:00:00+00:00", scheduledStartAt=None,
+            publishedAt="2026-07-22T22:00:00+00:00",
+            durationSeconds=3600, liveBroadcastStatus="completed")
         summary = bm.match_broadcasts(
             s, videos=[v], scheduled_matches=[m], source_events=[], calendar_events=[],
             supported_regions={"na"}, dry_run=True)
@@ -574,6 +577,215 @@ class TestMatchBroadcastsThreeTargetSources(LinkingCase):
                             calendar_events=[ev], supported_regions={"na"}, dry_run=True)
         self.assertEqual(s.con.execute("SELECT COUNT(*) FROM broadcast_candidates").fetchone()[0], 0)
         self.assertEqual(len(s.list_jobs()), 0)
+        s.close()
+
+
+class TestBroadcastLikeness(unittest.TestCase):
+    """Pure broadcast_likeness() signal tests — the pre-filter that stops a
+    flat +40 official-channel bonus from calling a 6-second promo clip a
+    broadcast candidate. Every case here mirrors a real short-form upload
+    shape (sanitized: no real titles, no real channel data)."""
+
+    def test_shorts_length_promotional_upload_is_unlikely(self):
+        v = video(title="New item available now", description="", liveBroadcastStatus="none",
+                  durationSeconds=6, actualStartAt=None, scheduledStartAt=None)
+        r = bm.broadcast_likeness(v)
+        self.assertEqual(r["confidence"], "unlikely")
+        self.assertTrue(any("Shorts-length" in x for x in r["reasons"]))
+
+    def test_tips_upload_is_unlikely(self):
+        v = video(title="Top damage-role tips to climb faster", description="",
+                  liveBroadcastStatus="none", durationSeconds=97,
+                  actualStartAt=None, scheduledStartAt=None)
+        r = bm.broadcast_likeness(v)
+        self.assertEqual(r["confidence"], "unlikely")
+        self.assertTrue(any("instructional" in x for x in r["reasons"]))
+
+    def test_perk_guide_is_unlikely(self):
+        v = video(title="Perk selection guide for the new season", description="",
+                  liveBroadcastStatus="none", durationSeconds=99,
+                  actualStartAt=None, scheduledStartAt=None)
+        r = bm.broadcast_likeness(v)
+        self.assertEqual(r["confidence"], "unlikely")
+
+    def test_patch_breakdown_is_unlikely(self):
+        v = video(title="Midseason patch breakdown: every change explained", description="",
+                  liveBroadcastStatus="none", durationSeconds=126,
+                  actualStartAt=None, scheduledStartAt=None)
+        r = bm.broadcast_likeness(v)
+        self.assertEqual(r["confidence"], "unlikely")
+
+    def test_completed_multi_hour_livestream_with_tournament_terms_is_likely(self):
+        v = video(title="Group Draw — Season Championship", description="",
+                  liveBroadcastStatus="completed", durationSeconds=2502)
+        r = bm.broadcast_likeness(v)
+        self.assertEqual(r["confidence"], "likely")
+
+    def test_does_not_rely_on_duration_alone(self):
+        # A LONG video with only instructional signals must still be
+        # unlikely (duration alone can't save it); a SHORT video with strong
+        # tournament/livestream signals scores lower than a real broadcast
+        # but duration is only one of several independent signals — no
+        # single signal dominates the outcome by itself.
+        long_instructional = video(
+            title="Full tutorial: every perk explained in depth", description="",
+            liveBroadcastStatus="none", durationSeconds=1800,
+            actualStartAt=None, scheduledStartAt=None)
+        r = bm.broadcast_likeness(long_instructional)
+        self.assertEqual(r["confidence"], "unlikely",
+                        "a long instructional upload must not pass on duration alone")
+
+    def test_no_brittle_title_special_case(self):
+        # The signals are generic keyword/structure checks, not a hard-coded
+        # check for one specific tournament's name — a differently-named
+        # event with the same generic shape (completed livestream,
+        # substantial duration, tournament terminology) scores the same way.
+        a = bm.broadcast_likeness(video(title="Group Draw Show", liveBroadcastStatus="completed",
+                                        durationSeconds=2502))
+        b = bm.broadcast_likeness(video(title="Regional Qualifier Group Stage Draw",
+                                        liveBroadcastStatus="completed", durationSeconds=2502))
+        self.assertEqual(a["confidence"], b["confidence"])
+        self.assertEqual(a["confidence"], "likely")
+
+    def test_real_match_broadcast_shape_is_likely(self):
+        v = video()  # the default helper video: full-length completed OWCS broadcast
+        r = bm.broadcast_likeness(v)
+        self.assertEqual(r["confidence"], "likely")
+
+
+class TestSevenRealShapedVideos(LinkingCase):
+    """End-to-end regression using sanitized metadata SHAPED like the seven
+    real videos from the live broadcast-dryrun that over-classified all of
+    them as event-level-candidate. No real titles/channel data — durations
+    and structural shape (short-form vs. long-form livestream) match the
+    real report."""
+
+    def _channel_video(self, video_id, **over):
+        base = {
+            "videoId": video_id, "platform": "youtube", "channelId": "ow_esports_global",
+            "description": "", "officialChannel": True, "region": "global", "language": "en",
+            "actualStartAt": None, "scheduledStartAt": None,
+            "publishedAt": "2026-07-20T12:00:00+00:00",
+        }
+        base.update(over)
+        return base
+
+    def _seven_videos(self):
+        return [
+            self._channel_video("v1", title="New item available now", durationSeconds=6,
+                               liveBroadcastStatus="none"),
+            self._channel_video("v2", title="Top DPS tips to climb faster", durationSeconds=97,
+                               liveBroadcastStatus="none"),
+            self._channel_video("v3", title="Perk selection guide", durationSeconds=99,
+                               liveBroadcastStatus="none"),
+            self._channel_video("v4", title="Support perks guide", durationSeconds=167,
+                               liveBroadcastStatus="none"),
+            self._channel_video("v5", title="Midseason patch breakdown", durationSeconds=126,
+                               liveBroadcastStatus="none"),
+            self._channel_video("v6", title="Support player tips", durationSeconds=131,
+                               liveBroadcastStatus="none"),
+            self._channel_video(
+                "v7", title="Group Draw — Season Championship", durationSeconds=2502,
+                liveBroadcastStatus="completed",
+                actualStartAt="2026-07-20T12:00:00+00:00",
+                scheduledStartAt="2026-07-20T12:00:00+00:00"),
+        ]
+
+    def test_six_short_uploads_are_unrelated_official_upload(self):
+        s = self.store()
+        videos = self._seven_videos()
+        summary = bm.match_broadcasts(
+            s, videos=videos, scheduled_matches=[], source_events=[], calendar_events=[],
+            supported_regions={"global"}, dry_run=True)
+        by_id = {r["videoId"]: r for r in summary["results"]}
+        for vid in ("v1", "v2", "v3", "v4", "v5", "v6"):
+            self.assertEqual(by_id[vid]["classification"], bm.CLASS_UNRELATED_UPLOAD,
+                            f"{vid} should be unrelated-official-upload")
+        s.close()
+
+    def test_completed_draw_is_not_a_match_broadcast(self):
+        s = self.store()
+        videos = self._seven_videos()
+        summary = bm.match_broadcasts(
+            s, videos=videos, scheduled_matches=[], source_events=[], calendar_events=[],
+            supported_regions={"global"}, dry_run=True)
+        by_id = {r["videoId"]: r for r in summary["results"]}
+        # May be event-level-candidate or unsupported-event (no target here,
+        # so it's unmatched-official-video — either way, never CLASS_HIGH,
+        # since there is no team-level FACEIT match to confirm against).
+        self.assertNotEqual(by_id["v7"]["classification"], bm.CLASS_HIGH)
+        self.assertEqual(summary["distinctVideos"]["high"], 0)
+        s.close()
+
+    def test_real_multi_hour_stream_remains_a_broadcast_candidate_with_a_match_target(self):
+        s = self.store()
+        m = {"id": "match:1", "team_a": "Falcons", "team_b": "Zeta", "region": "global",
+             "scheduled_at": "2026-07-20T12:00:00+00:00", "status": "finished"}
+        videos = self._seven_videos()
+        videos[-1] = self._channel_video(
+            "v7", title="OWCS Group Championship: Falcons vs Zeta", durationSeconds=2502,
+            liveBroadcastStatus="completed",
+            actualStartAt="2026-07-20T12:00:00+00:00", scheduledStartAt="2026-07-20T12:00:00+00:00")
+        summary = bm.match_broadcasts(
+            s, videos=videos, scheduled_matches=[m], source_events=[], calendar_events=[],
+            supported_regions={"global"}, dry_run=True)
+        by_id = {r["videoId"]: r for r in summary["results"]}
+        self.assertEqual(by_id["v7"]["classification"], bm.CLASS_HIGH)
+        for vid in ("v1", "v2", "v3", "v4", "v5", "v6"):
+            self.assertEqual(by_id[vid]["classification"], bm.CLASS_UNRELATED_UPLOAD)
+        s.close()
+
+    def test_distinct_video_counts_not_confused_with_pair_counts(self):
+        s = self.store()
+        m = {"id": "match:1", "team_a": "Falcons", "team_b": "Zeta", "region": "global",
+             "scheduled_at": "2026-07-20T12:00:00+00:00", "status": "finished"}
+        videos = self._seven_videos()
+        # Give the one real broadcast candidate real team names so it scores
+        # HIGH against the match target.
+        videos[-1] = self._channel_video(
+            "v7", title="OWCS Group Championship: Falcons vs Zeta", durationSeconds=2502,
+            liveBroadcastStatus="completed",
+            actualStartAt="2026-07-20T12:00:00+00:00", scheduledStartAt="2026-07-20T12:00:00+00:00")
+        summary = bm.match_broadcasts(
+            s, videos=videos, scheduled_matches=[m], source_events=[], calendar_events=[],
+            supported_regions={"global"}, dry_run=True)
+        # 7 distinct videos scored, only ONE candidate pair (v7 x the single
+        # match target) — never confuse "3 pairs" with "3 videos".
+        self.assertEqual(summary["videosScored"], 7)
+        self.assertEqual(summary["totalCandidatePairsEvaluated"], 1)
+        self.assertEqual(summary["distinctVideos"]["high"], 1)
+        self.assertEqual(sum(summary["classifications"].values()), 7)
+        s.close()
+
+    def test_every_video_accounted_for(self):
+        s = self.store()
+        videos = self._seven_videos()
+        summary = bm.match_broadcasts(
+            s, videos=videos, scheduled_matches=[], source_events=[], calendar_events=[],
+            supported_regions={"global"}, dry_run=True)
+        self.assertEqual(summary["videosScored"], 7)
+        self.assertEqual(sum(summary["classifications"].values()), 7)
+        s.close()
+
+    def test_dry_run_writes_nothing_for_seven_videos(self):
+        s = self.store()
+        m = {"id": "match:1", "team_a": "Falcons", "team_b": "Zeta", "region": "global",
+             "scheduled_at": "2026-07-20T12:00:00+00:00", "status": "finished"}
+        videos = self._seven_videos()
+        bm.match_broadcasts(s, videos=videos, scheduled_matches=[m], source_events=[],
+                            calendar_events=[], supported_regions={"global"}, dry_run=True)
+        self.assertEqual(s.con.execute("SELECT COUNT(*) FROM broadcast_candidates").fetchone()[0], 0)
+        self.assertEqual(len(s.list_jobs()), 0)
+        s.close()
+
+    def test_no_hero_composition_tables_touched(self):
+        s = self.store()
+        videos = self._seven_videos()
+        bm.match_broadcasts(s, videos=videos, scheduled_matches=[], source_events=[],
+                            calendar_events=[], supported_regions={"global"}, dry_run=False)
+        tables = {r[0] for r in s.con.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+        forbidden = {"comp_snapshots", "snapshot_heroes", "hero_stints", "hero_swaps"}
+        self.assertEqual(tables & forbidden, set())
         s.close()
 
 

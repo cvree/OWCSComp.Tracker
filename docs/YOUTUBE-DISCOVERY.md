@@ -120,6 +120,49 @@ line report how many. This is enabled even during `--dry-run` (reading a
 local cache is not a production write), so re-running a dry-run minutes
 apart doesn't re-spend quota on identical requests.
 
+## Broadcast-likeness pre-filter (2026-07-24 refinement)
+
+A live `broadcast-dryrun` correctly fixed the "0 scored" bug (see above) and
+found 7 in-window videos on the verified channel — but scoring alone
+classified **all seven** as `event-level-candidate`, including six that were
+plainly short-form promotional/instructional uploads (a 6-second lootbox
+promo, several 1.5–2.5 minute tips/perk/patch videos). The root cause: a flat
+**+40 official-channel bonus** plus a region-match bonus outweighed the lone
+**−15 short-duration penalty**, so almost anything from the verified channel
+cleared `MEDIUM_THRESHOLD=35` regardless of what it actually was.
+
+`broadcast_matching.broadcast_likeness(video)` now runs BEFORE any
+target/event scoring and asks a narrower question: does this even look like
+a broadcast? It uses several independent, generic signals — never a single
+duration cutoff, never a hard-coded title:
+
+| Signal | Weight | Notes |
+|---|---:|---|
+| Livestream metadata present (live/upcoming/completed) | **+25** | A real broadcast has real live-streaming timestamps |
+| No livestream metadata (`liveBroadcastContent`-derived status = none) | **−10** | An ordinary upload — most promos/guides are |
+| Substantial duration (≥ 20 min) | **+20** | |
+| Short duration (60s–20min) | **−20** | |
+| Shorts-length duration (< 60s) | **−25** | |
+| Tournament/broadcast terminology (tournament, stage, match, day N, group, playoffs, finals, bracket, qualifier, round, …) | **+15** | |
+| Match/series formatting (`vs`, `BoN`, `Game N`, `Map N`, a `3-1`-style score) | **+15** | Generic regex, not any specific team/event name |
+| Neither of the above two | **−10** | "no team/competition relationship signal" |
+| Instructional/promotional keyword (tips, guide, perk(s), patch, clip(s), trailer, giveaway, lootbox, highlight(s), how to, tutorial, tier list, rework, breakdown, update, shorts) | **−30** | The strongest negative signal — these words essentially never appear in an official match broadcast title |
+
+`confidence = "likely"` when the total is ≥ 0, else `"unlikely"`. A video
+scored `"unlikely"` is classified `unrelated-official-upload` immediately and
+is **never** scored against any match/event target — it costs zero candidate
+pairs. A video scored `"likely"` proceeds to the existing target-scoring
+stage exactly as before (a completed multi-hour "Group Draw"-style show
+still reaches event-level-candidate/unsupported-event, but can never reach
+`CLASS_HIGH` without a real team-level FACEIT match — see `classify_video`).
+
+Verified against sanitized shapes of the real 7 videos
+(`test_automation_broadcast_matching.py`'s `TestSevenRealShapedVideos`): the
+six short uploads all land `unrelated-official-upload`; the one genuine
+completed livestream stays a broadcast candidate and is the only one ever
+scored against a target, so `totalCandidatePairsEvaluated` reflects 1 video's
+comparisons, not 7×N.
+
 ## C4 matching score — weights and thresholds
 
 `pipeline/automation/broadcast_matching.py` scores every (video, nearby
@@ -177,7 +220,7 @@ omitted from a report:
 | `needs-review` | Ambiguous against a specific FACEIT match — opens a review task |
 | `event-level-candidate` | Matches an event/calendar target (no team pairing available) at any confidence above LOW — the "full-day broadcast" case |
 | `unmatched-official-video` | Official, in-window, YouTube-supported region — but no eligible target existed at all |
-| `unrelated-official-upload` | Eligible targets existed but every one scored LOW |
+| `unrelated-official-upload` | Failed the broadcast-likeness gate (never scored against any target), OR eligible targets existed but every one scored LOW |
 | `unsupported-event` | A target references this region, but no YouTube channel covers it (e.g. China/bilibili) |
 | `outside-configured-coverage` | Nothing anywhere (FACEIT, calendar, or channel registry) tracks this region |
 
@@ -185,6 +228,19 @@ omitted from a report:
 — see `test_automation_broadcast_matching.py`'s `TestClassifyVideo` and
 `TestMatchBroadcastsThreeTargetSources` for the pinned behavior, including
 the regression test for the exact "7 videos, 0 scored" bug this fixed.
+
+**Distinct videos vs. candidate pairs — don't confuse the two.**
+`summary["linked"]`/`["reviewed"]`/`["rejected"]` and
+`summary["totalCandidatePairsEvaluated"]` count video×target PAIRS (one
+video can be compared against several targets); `summary["classifications"]`
+and `summary["distinctVideos"]` (`{high, mediumOrReview,
+rejectedOrUnrelated}`) count DISTINCT VIDEOS. A run with 7 videos and 3
+targets can produce up to 21 pairs — the CLI report labels each number
+explicitly so "21" is never misread as "21 videos". Each per-video result
+also carries `targetsFiltered`: which loaded targets were excluded for that
+video and why (outside its time/date window, or never evaluated because the
+video failed the likeness gate) — this is what answers "4 calendar events
+were loaded, why were only 3 actually considered for this video?".
 
 ## No secret leakage, by construction
 

@@ -12,7 +12,8 @@ a live GitHub Actions `mode=verify-channels` dispatch confirmed
 `ow_esports_global` — channelId `UCiAInBL9kUzz1XRxk66v-gw` ("Overwatch
 Esports"), uploads playlist `UUiAInBL9kUzz1XRxk66v-gw`, 1 quota unit. It is
 now the only `enabled: true` / `verifiedStatus: verified` registry entry;
-regional channels and China remain disabled exactly as below (no
+regional channels and China remain disabled exactly as before (no
+human-sourced URL / different platform, never guessed).
 
 **Update 2 (same day, branch `claude/phase-c-real-dryrun-fix`):** the first
 real `broadcast-dryrun` Actions run found 7 in-window videos but
@@ -31,7 +32,27 @@ the reported "videos seen: 1000" inefficiency: playlist pagination now stops
 at the lookback boundary (+2-day buffer) instead of walking a channel's full
 history, and the YouTube client gained a TTL response cache so repeated
 dry-runs don't re-spend quota. 8 new tests + 3 extended files, all offline.
-human-sourced URL / different platform, never guessed).
+
+**Update 3 (same day, branch `claude/phase-c-broadcast-classification-refinement`):**
+the corrected dry-run scored all 7 real videos but classified all 7 as
+`event-level-candidate`, including six plainly short-form promotional/
+instructional uploads (a 6-second lootbox promo; several 1.5–2.5 minute
+tips/perk/patch videos) — a flat +40 official-channel bonus outweighed the
+lone −15 short-duration penalty. Fixed with a new `broadcast_likeness()`
+pre-filter stage (livestream metadata, duration, tournament/match-format
+terms vs. instructional keywords — no single duration cutoff, no hard-coded
+title) that runs BEFORE target scoring: an "unlikely" video is classified
+`unrelated-official-upload` immediately, never scored against any target.
+Also fixed report clarity: candidate video×target PAIR counts were being
+conflated with DISTINCT VIDEO counts (e.g. "21" meaning 7 videos × 3
+targets, not 21 videos) — `match_broadcasts` now separates
+`totalCandidatePairsEvaluated` from `distinctVideos`, and every per-video
+result carries explicit `reasons` and `targetsFiltered` (which targets were
+excluded and why). See `docs/AUTOMATION.md`'s "Phase C broadcast-
+classification refinement" section and `docs/YOUTUBE-DISCOVERY.md`'s
+"Broadcast-likeness pre-filter" section. 15 new tests, all offline,
+including a sanitized end-to-end regression shaped exactly like the 7 real
+videos.
 
 * **C1** `config/broadcast_channels.json` gained sourceUrl/ownershipEvidence/
   uploadsPlaylistId/verificationMethod/verifiedDate/verifiedStatus/

@@ -101,6 +101,101 @@ def _contains(haystack: str, needle: str | None) -> bool:
     return bool(n) and n in _norm_text(haystack)
 
 
+# =============================================================================
+# Broadcast-likeness pre-filter (Roadmap C4 refinement).
+#
+# score_candidate() alone let a 6-second lootbox promo clip land in MEDIUM
+# territory: +40 official channel + a region-match bonus outweighed a lone
+# -15 short-duration penalty. This stage runs BEFORE any target/event scoring
+# and answers a narrower question — "does this video even look like a
+# broadcast at all?" — using several independent, generic signals (never a
+# single duration cutoff, never a specific title special-case). A video that
+# fails this gate is classified CLASS_UNRELATED_UPLOAD directly and is never
+# scored against any match/event target; a video that passes proceeds to the
+# existing target-scoring stage exactly as before.
+# =============================================================================
+LIKENESS_WEIGHT_LIVESTREAM_METADATA = 25   # liveBroadcastStatus in (live, upcoming, completed)
+LIKENESS_PENALTY_NO_LIVESTREAM_METADATA = -10
+LIKENESS_WEIGHT_SUBSTANTIAL_DURATION = 20  # >= LIKENESS_SUBSTANTIAL_DURATION_SECONDS
+LIKENESS_PENALTY_SHORT_DURATION = -20       # below substantial, at/above shorts-length
+LIKENESS_PENALTY_SHORTS_LENGTH = -25        # below LIKENESS_SHORTS_DURATION_SECONDS
+LIKENESS_WEIGHT_TOURNAMENT_TERMINOLOGY = 15
+LIKENESS_WEIGHT_MATCH_FORMATTING = 15       # "vs", "BoN", "Game N", "Map N", a score pattern
+LIKENESS_PENALTY_INSTRUCTIONAL_TERMS = -30
+LIKENESS_PENALTY_NO_MATCH_SIGNAL = -10       # neither tournament terms nor match formatting
+
+LIKENESS_SUBSTANTIAL_DURATION_SECONDS = MIN_PLAUSIBLE_DURATION_SECONDS  # 20 minutes
+LIKENESS_SHORTS_DURATION_SECONDS = 60                                    # sub-60s is Shorts territory
+LIKENESS_THRESHOLD = 0  # score >= this -> "likely" a broadcast; below -> "unlikely"
+
+_TOURNAMENT_TERMS = (
+    "tournament", "stage", "match", "day 1", "day 2", "day 3", "group",
+    "playoffs", "playoff", "finals", "final", "broadcast", "bracket",
+    "qualifier", "semifinal", "quarterfinal", "grand final", "round",
+)
+_INSTRUCTIONAL_TERMS = (
+    "tips", "tip", "guide", "perk", "perks", "patch", "clip", "clips",
+    "trailer", "giveaway", "lootbox", "loot box", "highlight", "highlights",
+    "how to", "tutorial", "tier list", "rework", "breakdown", "update",
+    "shorts",
+)
+# Generic "this reads like a match/series" formatting — not any specific
+# team or event name: "vs"/"vs.", best-of notation, "Game N"/"Map N", or a
+# bare series score like "3-1".
+_MATCH_FORMAT_RE = re.compile(r"\bvs\b|\bbo[1-9]\b|\bgame\s*\d+\b|\bmap\s*\d+\b|\b\d+\s*-\s*\d+\b")
+
+
+def broadcast_likeness(video: dict) -> dict:
+    """Score how much a video LOOKS like a broadcast, independent of any
+    specific match/event target. Pure; every signal recorded in `reasons`.
+    Returns {"score": int, "confidence": "likely"|"unlikely", "reasons": [...]}."""
+    score = 0
+    reasons: list[str] = []
+    text = f"{video.get('title') or ''} {video.get('description') or ''}"
+    norm = _norm_text(text)
+    status = video.get("liveBroadcastStatus")
+    dur = video.get("durationSeconds")
+
+    if status in ("live", "upcoming", "completed"):
+        score += LIKENESS_WEIGHT_LIVESTREAM_METADATA
+        reasons.append(f"+{LIKENESS_WEIGHT_LIVESTREAM_METADATA} livestream metadata ({status})")
+    else:
+        score += LIKENESS_PENALTY_NO_LIVESTREAM_METADATA
+        reasons.append(f"{LIKENESS_PENALTY_NO_LIVESTREAM_METADATA} no livestream timing metadata")
+
+    if dur is not None:
+        if dur >= LIKENESS_SUBSTANTIAL_DURATION_SECONDS:
+            score += LIKENESS_WEIGHT_SUBSTANTIAL_DURATION
+            reasons.append(f"+{LIKENESS_WEIGHT_SUBSTANTIAL_DURATION} substantial duration ({dur}s)")
+        elif dur < LIKENESS_SHORTS_DURATION_SECONDS:
+            score += LIKENESS_PENALTY_SHORTS_LENGTH
+            reasons.append(f"{LIKENESS_PENALTY_SHORTS_LENGTH} Shorts-length duration ({dur}s)")
+        else:
+            score += LIKENESS_PENALTY_SHORT_DURATION
+            reasons.append(f"{LIKENESS_PENALTY_SHORT_DURATION} duration too short for a broadcast ({dur}s)")
+
+    has_tournament_terms = any(t in norm for t in _TOURNAMENT_TERMS)
+    has_match_format = bool(_MATCH_FORMAT_RE.search(norm))
+    if has_tournament_terms:
+        score += LIKENESS_WEIGHT_TOURNAMENT_TERMINOLOGY
+        reasons.append(f"+{LIKENESS_WEIGHT_TOURNAMENT_TERMINOLOGY} tournament/broadcast terminology "
+                       f"in title/description")
+    if has_match_format:
+        score += LIKENESS_WEIGHT_MATCH_FORMATTING
+        reasons.append(f"+{LIKENESS_WEIGHT_MATCH_FORMATTING} match/series formatting signal "
+                       f"(vs / best-of / game-map / score pattern)")
+    if not has_tournament_terms and not has_match_format:
+        score += LIKENESS_PENALTY_NO_MATCH_SIGNAL
+        reasons.append(f"{LIKENESS_PENALTY_NO_MATCH_SIGNAL} no team/competition relationship signal")
+
+    if any(t in norm for t in _INSTRUCTIONAL_TERMS):
+        score += LIKENESS_PENALTY_INSTRUCTIONAL_TERMS
+        reasons.append(f"{LIKENESS_PENALTY_INSTRUCTIONAL_TERMS} instructional/promotional-title signal")
+
+    confidence = "likely" if score >= LIKENESS_THRESHOLD else "unlikely"
+    return {"score": score, "confidence": confidence, "reasons": reasons}
+
+
 def confidence_band(score: int) -> str:
     if score >= HIGH_THRESHOLD:
         return "high"
@@ -333,6 +428,29 @@ def _ctx_from_target(t: dict) -> dict:
     }
 
 
+def _window_exclusion_reason(
+    video_time: "dt.datetime | None", target: dict, time_window_hours: int,
+) -> str:
+    """Human-readable reason a target was excluded by the time-window
+    pre-filter — surfaced per-video in the sanitized report so an operator
+    can see WHY, say, 4 calendar events were loaded but only 1 was actually
+    considered for a given video. Does NOT repeat the target's kind/id — the
+    caller already labels each filtered entry with those."""
+    if target["windowStart"] or target["windowEnd"]:
+        if video_time is None:
+            return "unreachable (no exclusion — video has no known time)"
+        day = video_time.date().isoformat()
+        return (f"video date {day} falls outside its event window "
+               f"[{target['windowStart'] or '...'}..{target['windowEnd'] or '...'}]")
+    target_time = _parse_iso(target.get("scheduledAt") or target.get("completedAt"))
+    if target_time and video_time:
+        delta_hours = abs((target_time - video_time).total_seconds()) / 3600.0
+        return (f"scheduled/completed at {target_time.isoformat()} is "
+               f"{delta_hours:.0f}h from the video's time, beyond the "
+               f"{time_window_hours}h pre-filter window")
+    return "excluded (reason unavailable)"
+
+
 def classify_video(
     scored: list[tuple[dict, dict]], *, region_supported: bool, region_tracked: bool,
 ) -> str:
@@ -415,7 +533,23 @@ def match_broadcasts(
     Every video gets exactly one top-level classification (see
     `classify_video`) in addition to its per-target HIGH/MEDIUM candidate
     rows — nothing is silently omitted from the summary, so
-    `videosScored == sum(classifications.values())` always holds."""
+    `videosScored == sum(classifications.values())` always holds.
+
+    Before target scoring, every video passes a `broadcast_likeness` gate
+    (see that function): a video that doesn't even look like a broadcast
+    (short-form promos, tips/guides/patch-note uploads — no livestream
+    metadata, no substantial duration, no tournament/match-format signal,
+    often explicit instructional keywords) is classified
+    CLASS_UNRELATED_UPLOAD directly and is NEVER scored against any target —
+    a flat +40 official-channel bonus alone must not be enough to call a
+    6-second promo clip an "event candidate".
+
+    `summary["linked"]`/`["reviewed"]`/`["rejected"]` count candidate TARGET
+    PAIRS (one video can pair with several targets); `summary
+    ["classifications"]` counts DISTINCT VIDEOS. These are different units —
+    do not read one as the other. `summary["distinctVideos"]` groups the
+    per-video classification counts into the three buckets an operator
+    actually asks for (high / medium-review / rejected-unrelated)."""
     if videos is None:
         videos = [_video_row_to_dict(r) for r in store.con.execute(
             "SELECT * FROM broadcast_videos WHERE coverage_state IN "
@@ -442,34 +576,68 @@ def match_broadcasts(
     tracked_regions = {t["region"] for t in targets if t.get("region")}
 
     summary: dict[str, Any] = {
-        "dryRun": dry_run, "videosScored": 0, "linked": 0, "reviewed": 0,
-        "rejected": 0, "results": [], "classifications": {},
+        "dryRun": dry_run, "videosScored": 0,
+        "totalCandidatePairsEvaluated": 0,  # video x target comparisons scored — NOT a video count
+        "linked": 0, "reviewed": 0, "rejected": 0,
+        "results": [], "classifications": {},
         "targetsLoaded": {
             "matches": len(scheduled_matches), "sourceEvents": len(source_events),
             "calendarEvents": len(calendar_events),
         },
     }
     for v in videos:
+        likeness = broadcast_likeness(v)
         v_time = _parse_iso(v.get("actualStartAt") or v.get("scheduledStartAt") or v.get("publishedAt"))
-        pairs: list[tuple[dict, dict]] = []
-        for t in targets:
-            if not _target_in_window(v_time, t, time_window_hours):
-                continue
-            ctx = _ctx_from_target(t)
-            pairs.append((ctx, score_candidate(v, ctx)))
-        link_summary = link_candidates(store, v, pairs, dry_run=dry_run)
-
         region_supported = (v.get("region") in supported_regions) if v.get("region") else True
         region_tracked = (v.get("region") in tracked_regions) if v.get("region") else True
-        scored_best_first = sorted(pairs, key=lambda p: p[1]["score"], reverse=True)
-        classification = classify_video(
-            scored_best_first, region_supported=region_supported, region_tracked=region_tracked)
+
+        if likeness["confidence"] == "unlikely":
+            # Gated out BEFORE target scoring — never compared against any
+            # match/event target, regardless of how many were loaded.
+            classification = CLASS_UNRELATED_UPLOAD
+            link_summary = {"videoId": v["videoId"], "linked": [], "reviewed": [], "rejected": []}
+            pairs: list[tuple[dict, dict]] = []
+            filtered_targets: list[dict] = [
+                {"targetId": t["targetId"], "kind": t["kind"], "reason": "not evaluated — video "
+                 "failed the broadcast-likeness gate before target scoring"} for t in targets]
+            reasons = list(likeness["reasons"])
+        else:
+            pairs = []
+            filtered_targets = []
+            for t in targets:
+                if not _target_in_window(v_time, t, time_window_hours):
+                    filtered_targets.append({
+                        "targetId": t["targetId"], "kind": t["kind"],
+                        "reason": _window_exclusion_reason(v_time, t, time_window_hours)})
+                    continue
+                ctx = _ctx_from_target(t)
+                pairs.append((ctx, score_candidate(v, ctx)))
+            link_summary = link_candidates(store, v, pairs, dry_run=dry_run)
+            scored_best_first = sorted(pairs, key=lambda p: p[1]["score"], reverse=True)
+            classification = classify_video(
+                scored_best_first, region_supported=region_supported, region_tracked=region_tracked)
+            reasons = list(likeness["reasons"])
+            if scored_best_first:
+                reasons += scored_best_first[0][1]["reasons"]
 
         summary["videosScored"] += 1
+        summary["totalCandidatePairsEvaluated"] += len(pairs)
         summary["linked"] += len(link_summary["linked"])
         summary["reviewed"] += len(link_summary["reviewed"])
         summary["rejected"] += len(link_summary["rejected"])
         summary["classifications"][classification] = summary["classifications"].get(classification, 0) + 1
-        summary["results"].append({**link_summary, "classification": classification,
-                                   "targetsConsidered": len(pairs)})
+        summary["results"].append({
+            **link_summary, "classification": classification, "reasons": reasons,
+            "likeness": likeness, "targetsConsidered": len(pairs),
+            "targetsFiltered": filtered_targets,
+        })
+
+    c = summary["classifications"]
+    summary["distinctVideos"] = {
+        "high": c.get(CLASS_HIGH, 0),
+        "mediumOrReview": c.get(CLASS_NEEDS_REVIEW, 0) + c.get(CLASS_EVENT_LEVEL_CANDIDATE, 0),
+        "rejectedOrUnrelated": (
+            c.get(CLASS_UNMATCHED_OFFICIAL, 0) + c.get(CLASS_UNRELATED_UPLOAD, 0)
+            + c.get(CLASS_UNSUPPORTED_EVENT, 0) + c.get(CLASS_OUTSIDE_COVERAGE, 0)),
+    }
     return summary
