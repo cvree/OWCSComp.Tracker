@@ -7,12 +7,20 @@ Phase A/B spine. Never downloads video, never records, never writes hero
 compositions, never enables unattended production linking. Full detail in
 `docs/AUTOMATION.md` ("Phase C") and `docs/YOUTUBE-DISCOVERY.md`.
 
+**Update (same day, follow-up branch `claude/verified-owcs-youtube-channel`):**
+a live GitHub Actions `mode=verify-channels` dispatch confirmed
+`ow_esports_global` — channelId `UCiAInBL9kUzz1XRxk66v-gw` ("Overwatch
+Esports"), uploads playlist `UUiAInBL9kUzz1XRxk66v-gw`, 1 quota unit. It is
+now the only `enabled: true` / `verifiedStatus: verified` registry entry;
+regional channels and China remain disabled exactly as below (no
+human-sourced URL / different platform, never guessed).
+
 * **C1** `config/broadcast_channels.json` gained sourceUrl/ownershipEvidence/
-  verifiedDate/verifiedStatus/disabledReason/preferredLayout on every entry +
-  `cli.py verify-channels`. `ow_esports_global` now carries a
-  Liquipedia-evidenced `sourceUrl`; no `channelId` is confirmed yet — this
-  pass had no YouTube API network access (the key is Actions-only). Dispatch
-  `mode=verify-channels` to resolve it live.
+  uploadsPlaylistId/verificationMethod/verifiedDate/verifiedStatus/
+  disabledReason/preferredLayout on every entry + `cli.py verify-channels`.
+  `ow_esports_global` is now API-verified (see the Update above); regional
+  channels (Korea/Japan/Pacific) and China remain disabled — no
+  human-sourced official URL yet / different platform, never guessed.
 * **C2** `pipeline/automation/youtube_api.py` — dependency-light Data API v3
   client (channels/playlistItems/videos/search.list), injectable transport,
   quota-unit accounting + exhaustion detection, sanitized errors (the API key
@@ -47,10 +55,13 @@ compositions, never enables unattended production linking. Full detail in
   `test_automation_{schema,config,coverage}.py`. All offline, no network/key.
 
 ### Honest gaps
-- No YouTube channel id is verified yet (needs an Actions dispatch with the
-  real secret — this sandbox has no network path to the YouTube API).
-- Regional channels (Korea/Japan/Pacific) have no evidenced official URL;
-  China stays explicitly out of scope (bilibili, not YouTube).
+- Regional channels (Korea/Japan/Pacific) still have no evidenced official
+  URL — `verify-channels` can't resolve an id without one, and none is
+  guessed. China stays explicitly out of scope (bilibili, not YouTube).
+- No broadcast has actually been discovered/matched yet — that needs a live
+  `discover-broadcasts`/`broadcast-dryrun` Actions run now that one channel
+  is enabled; production linking stays off regardless (HIGH confidence only
+  proposes a candidate, per the roadmap's Phase C scope boundary).
 - Phase E (self-hosted recording), F (segmentation), G (detector/layout/
   template automation) and I (auto-publication PRs) are still not built —
   they plug into this spine when they land.
