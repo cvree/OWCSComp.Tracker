@@ -72,6 +72,13 @@ def migrate_schema(con: sqlite3.Connection) -> None:
         "raw_source": "TEXT",
         "prep_notes": "TEXT",
         "updated_at": "TEXT",
+        # Phase B discovery: precise FACEIT lifecycle (scheduled/live/finished/
+        # cancelled/forfeit/aborted) plus a coarse capture state and the
+        # source competition id. `status` stays within its CHECK set; these
+        # carry the finer facts the public calendar renders.
+        "lifecycle_status": "TEXT",
+        "capture_status": "TEXT",
+        "competition_id": "TEXT",
     })
     _add_missing_columns(con, "map_results", {
         "score_a": "INTEGER",

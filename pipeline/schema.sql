@@ -50,6 +50,11 @@ CREATE TABLE IF NOT EXISTS matches (
   finished_at     TEXT,
   status          TEXT NOT NULL DEFAULT 'final'
                   CHECK (status IN ('upcoming','live','final','unknown')),
+  -- Phase B discovery adds a precise FACEIT lifecycle word and a coarse
+  -- capture state alongside the CHECK-constrained `status` above.
+  lifecycle_status TEXT,             -- scheduled/live/finished/cancelled/forfeit/aborted
+  capture_status   TEXT,             -- pending / cancelled / ... (discovery-side)
+  competition_id   TEXT,             -- FACEIT competition/registry id
   team_a          TEXT NOT NULL REFERENCES teams(id),
   team_b          TEXT NOT NULL REFERENCES teams(id),
   score_a         INTEGER DEFAULT 0,

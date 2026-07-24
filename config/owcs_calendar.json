@@ -1,0 +1,70 @@
+{
+  "_readme": [
+    "Official OWCS calendar — EVENT-LEVEL source (Roadmap Phase B3).",
+    "",
+    "This is the official-schedule adapter's data: competition dates, regional",
+    "stage windows, major-event dates and official broadcast destinations. It",
+    "is used to RECONCILE against FACEIT match facts (B4) — it never supplies",
+    "compositions and never silently overwrites FACEIT. When FACEIT and this",
+    "calendar disagree (e.g. start times), reconciliation raises a warning; a",
+    "human decides.",
+    "",
+    "Entries here are a committed SEED/TEMPLATE for the 2026 season structure",
+    "(regional stages + global live events). Dates are placeholders marked",
+    "`verified: false` until confirmed against the official Overwatch Esports",
+    "schedule. `faceitCompetitionId` links an event to a registry competition",
+    "in config/faceit_competitions.json; a null link is exactly what B4 flags",
+    "as 'official event without a known FACEIT competition'.",
+    "",
+    "No credentials, no scraping secrets — this file is committed so CI and",
+    "offline reconciliation run without network access."
+  ],
+  "version": 1,
+  "updated": "2026-07-24",
+  "events": [
+    {
+      "id": "owcs_2026_na_stage2",
+      "name": "OWCS 2026 — North America Stage 2",
+      "region": "na",
+      "stage": "Stage 2",
+      "startDate": "2026-07-01",
+      "endDate": "2026-08-15",
+      "faceitCompetitionId": "owcs_2026_na_stage",
+      "broadcastChannels": ["ow_esports_global"],
+      "verified": false
+    },
+    {
+      "id": "owcs_2026_emea_stage2",
+      "name": "OWCS 2026 — EMEA Stage 2",
+      "region": "emea",
+      "stage": "Stage 2",
+      "startDate": "2026-07-01",
+      "endDate": "2026-08-15",
+      "faceitCompetitionId": "owcs_2026_emea_stage",
+      "broadcastChannels": ["ow_esports_global"],
+      "verified": false
+    },
+    {
+      "id": "owcs_2026_korea_stage2",
+      "name": "OWCS 2026 — Korea Stage 2",
+      "region": "korea",
+      "stage": "Stage 2",
+      "startDate": "2026-07-01",
+      "endDate": "2026-08-15",
+      "faceitCompetitionId": "owcs_2026_korea_stage",
+      "broadcastChannels": ["ow_esports_korea"],
+      "verified": false
+    },
+    {
+      "id": "owcs_2026_global_finals",
+      "name": "OWCS 2026 — Global Finals",
+      "region": "global",
+      "stage": "Playoffs",
+      "startDate": "2026-11-01",
+      "endDate": "2026-11-10",
+      "faceitCompetitionId": "owcs_2026_global_finals",
+      "broadcastChannels": ["ow_esports_global", "ow_esports_korea", "ow_esports_japan"],
+      "verified": false
+    }
+  ]
+}

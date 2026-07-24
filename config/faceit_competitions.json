@@ -1,0 +1,110 @@
+{
+  "_readme": [
+    "Curated FACEIT competition registry (Roadmap Phase B1).",
+    "",
+    "FACEIT is authoritative for match FACTS ONLY (teams, rosters, schedule,",
+    "series result, bracket) — never compositions. This registry tells the",
+    "discovery layer WHICH FACEIT championships/tournaments count as official",
+    "professional OWCS, so we never rely on unrestricted text search over all",
+    "of FACEIT on every run (see B1: 'Do not rely on unrestricted text search').",
+    "",
+    "A competition is ingested only if it is listed here AND enabled. Every",
+    "entry declares an explicit inclusion tier (see the roadmap's 'Definition",
+    "of all pro games'): tier 1 = global live events / regional playoffs /",
+    "regional regular seasons; tier 2 = promotion-relegation, official",
+    "qualifiers, FACEIT League Master feeders; tier 3 = other approved",
+    "professional events with an official broadcast.",
+    "",
+    "IDs below are placeholders (championshipId/organizerId begin with the",
+    "region tag) — fill them with real FACEIT Data API ids as they are",
+    "confirmed. An entry with a null championshipId stays disabled and is",
+    "surfaced by source reconciliation (B4) as 'no known FACEIT competition'",
+    "rather than silently ingested."
+  ],
+  "version": 1,
+  "updated": "2026-07-24",
+  "organizers": [
+    { "id": "blizzard_owcs", "name": "Overwatch Champions Series", "official": true },
+    { "id": "faceit_league", "name": "FACEIT League (OW2)", "official": true }
+  ],
+  "competitions": [
+    {
+      "id": "owcs_2026_na_stage",
+      "name": "OWCS 2026 — North America",
+      "organizerId": "blizzard_owcs",
+      "championshipId": null,
+      "game": "ow2",
+      "region": "na",
+      "season": "2026",
+      "stage": null,
+      "tier": 1,
+      "enabled": false,
+      "notes": "Set championshipId from the FACEIT Data API, then enable."
+    },
+    {
+      "id": "owcs_2026_emea_stage",
+      "name": "OWCS 2026 — EMEA",
+      "organizerId": "blizzard_owcs",
+      "championshipId": null,
+      "game": "ow2",
+      "region": "emea",
+      "season": "2026",
+      "stage": null,
+      "tier": 1,
+      "enabled": false,
+      "notes": "Set championshipId from the FACEIT Data API, then enable."
+    },
+    {
+      "id": "owcs_2026_korea_stage",
+      "name": "OWCS 2026 — Korea",
+      "organizerId": "blizzard_owcs",
+      "championshipId": null,
+      "game": "ow2",
+      "region": "korea",
+      "season": "2026",
+      "stage": null,
+      "tier": 1,
+      "enabled": false,
+      "notes": "Set championshipId from the FACEIT Data API, then enable."
+    },
+    {
+      "id": "owcs_2026_japan_stage",
+      "name": "OWCS 2026 — Japan",
+      "organizerId": "blizzard_owcs",
+      "championshipId": null,
+      "game": "ow2",
+      "region": "japan",
+      "season": "2026",
+      "stage": null,
+      "tier": 1,
+      "enabled": false,
+      "notes": "Set championshipId from the FACEIT Data API, then enable."
+    },
+    {
+      "id": "owcs_2026_pacific_stage",
+      "name": "OWCS 2026 — Pacific",
+      "organizerId": "blizzard_owcs",
+      "championshipId": null,
+      "game": "ow2",
+      "region": "pacific",
+      "season": "2026",
+      "stage": null,
+      "tier": 1,
+      "enabled": false,
+      "notes": "Set championshipId from the FACEIT Data API, then enable."
+    },
+    {
+      "id": "owcs_2026_global_finals",
+      "name": "OWCS 2026 — Global Live Event",
+      "organizerId": "blizzard_owcs",
+      "championshipId": null,
+      "game": "ow2",
+      "region": "global",
+      "season": "2026",
+      "stage": "playoffs",
+      "tier": 1,
+      "enabled": false,
+      "notes": "International LAN. Highest backfill priority (Phase D5)."
+    }
+  ]
+}

@@ -512,6 +512,77 @@ def _tournament_id(m: Any) -> str:
     return slug or "owcs-2026"
 
 
+def _discovery_window_days() -> tuple[int, int]:
+    """(lookback, horizon) from config/automation.yml, defaulting safely if the
+    automation package/config is unavailable."""
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        from automation import config as _acfg  # noqa: WPS433
+        c = _acfg.load_config()
+        return c.lookback_days, c.schedule_horizon_days
+    except Exception:
+        return 14, 30
+
+
+def _discovered_window_matches(con) -> list[Any]:
+    """Content-DB matches inside the rolling discovery window, ordered for a
+    stable export. Uses scheduled_at/finished_at/date; a match with no time is
+    kept (never silently dropped). Returns [] on a pre-migration DB that has no
+    discovery columns yet, so the public export never crashes on an older DB."""
+    cols = {r["name"] for r in con.execute("PRAGMA table_info(matches)")}
+    if not {"competition_id", "lifecycle_status"} <= cols:
+        return []
+    lookback, horizon = _discovery_window_days()
+    now = dt.datetime.now(dt.timezone.utc)
+    past = (now - dt.timedelta(days=lookback)).date().isoformat()
+    future = (now + dt.timedelta(days=horizon)).date().isoformat()
+    rows = con.execute(
+        """SELECT * FROM matches
+           WHERE competition_id IS NOT NULL OR lifecycle_status IS NOT NULL
+           ORDER BY COALESCE(scheduled_at, finished_at, date), id"""
+    ).fetchall()
+    out = []
+    for m in rows:
+        when = (rv(m, "scheduled_at") or rv(m, "finished_at") or m["date"] or "")[:10]
+        if not when:
+            out.append(m)
+            continue
+        if when < past or when > future:
+            continue
+        out.append(m)
+    return out
+
+
+def _public_match_status(m: Any) -> str:
+    """Map the FACEIT lifecycle/content status onto the public vocab
+    (upcoming/live/completed/forfeit/cancelled)."""
+    lifecycle = (rv(m, "lifecycle_status") or "").lower()
+    if lifecycle in ("cancelled", "aborted"):
+        return "cancelled"
+    if lifecycle == "forfeit":
+        return "forfeit"
+    if lifecycle == "live":
+        return "live"
+    if lifecycle == "finished":
+        return "completed"
+    status = (m["status"] or "").lower()
+    return {"upcoming": "upcoming", "live": "live",
+            "final": "completed"}.get(status, "upcoming")
+
+
+def _public_capture_status(m: Any, has_vod: bool, has_maps: bool) -> str | None:
+    """Coarse capture state for the public chip. None for cancelled (no
+    capture is expected). Vocab matches assets/js/public/core.js CAPTURE_LABELS."""
+    lifecycle = (rv(m, "lifecycle_status") or "").lower()
+    if lifecycle in ("cancelled", "aborted"):
+        return None
+    if has_maps:
+        return "needs-review"
+    if has_vod:
+        return "queued"
+    return "needs-source"
+
+
 def _fmt_clock(seconds: int | None) -> str | None:
     if seconds is None:
         return None
@@ -902,6 +973,66 @@ def build_public_payload(con) -> dict:
         if vurl and not any(s["url"] == vurl for s in tourn["sources"]):
             tourn["sources"].append({"type": "vod", "url": vurl,
                                      "lastSynced": now})
+
+    # ---- Phase B: discovered scheduled matches (facts before CV) ----------
+    # A match can publish its calendar facts before its compositions are
+    # processed (roadmap I3). Any content-DB match in the rolling discovery
+    # window that hasn't already been emitted from a CV run is added here with
+    # its real scheduled time and an honest capture state, so calendar.html
+    # populates the moment FACEIT discovery upserts a match — no comps invented.
+    emitted_ids = {mo["id"] for mo in matches_out}
+    for m in _discovered_window_matches(con):
+        if m["id"] in emitted_ids:
+            continue
+        tid = _tournament_id(m)
+        vurl = rv(m, "vod_url")
+        has_maps = con.execute(
+            "SELECT 1 FROM map_results WHERE match_id=? LIMIT 1", (m["id"],)
+        ).fetchone() is not None
+        teams_needed.update((m["team_a"], m["team_b"]))
+        matches_out.append({
+            "id": m["id"],
+            "tournamentId": tid,
+            "stageId": f"{tid}-stage",
+            "roundId": None,
+            "teamA": m["team_a"],
+            "teamB": m["team_b"],
+            "bestOf": 5,
+            "scheduledAt": (rv(m, "scheduled_at")
+                            or f"{m['date']}T00:00:00+00:00"),
+            "status": _public_match_status(m),
+            "scoreA": rv(m, "score_a") or None,
+            "scoreB": rv(m, "score_b") or None,
+            "winner": rv(m, "winner_team"),
+            "streamUrl": vurl,
+            "faceitUrl": rv(m, "faceit_room_url"),
+            "liquipediaUrl": None,
+            "casters": [],
+            "sources": ([{"type": "vod", "url": vurl, "lastSynced": now}]
+                        if vurl else []),
+            "captureStatus": _public_capture_status(m, bool(vurl), has_maps),
+            "captureRunId": None,
+            "summary": ("Discovered from FACEIT; calendar facts only — "
+                        "compositions are not yet processed."),
+            "maps": [],
+        })
+        if tid not in tournaments_by_id:
+            stage_name = rv(m, "stage") or "Matches"
+            tournaments_by_id[tid] = {
+                "id": tid, "name": rv(m, "event_name") or "OWCS 2026",
+                "series": "OWCS", "region": _region_id(rv(m, "region")),
+                "tier": "S", "year": 2026,
+                "startsAt": f"{m['date']}T00:00:00+00:00", "endsAt": None,
+                "status": "upcoming", "prizePool": None,
+                "teamIds": set(), "winnerTeamId": None,
+                "summary": f"{stage_name}. Discovered via FACEIT sync.",
+                "logoUrl": None, "sources": [],
+                "stages": [{"id": f"{tid}-stage", "name": stage_name,
+                            "order": 1, "format": "Double elimination",
+                            "status": "upcoming"}],
+                "standings": [],
+            }
+        tournaments_by_id[tid]["teamIds"].update((m["team_a"], m["team_b"]))
 
     tournaments_out = [dict(t, teamIds=sorted(t["teamIds"]))
                        for t in tournaments_by_id.values()]
