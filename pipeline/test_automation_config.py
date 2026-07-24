@@ -96,6 +96,17 @@ class TestRegistries(unittest.TestCase):
         for ch in allch:
             self.assertIn("official", ch)
             self.assertIn("priority", ch)
+            # Phase C1: every entry declares the new evidence/verification
+            # fields, and every disabled entry MUST carry an explicit reason
+            # (a gap in coverage is never allowed to be silent).
+            for key in ("sourceUrl", "ownershipEvidence", "verifiedDate",
+                       "verifiedStatus", "disabledReason", "preferredLayout"):
+                self.assertIn(key, ch)
+            if not ch.get("enabled"):
+                self.assertTrue(ch.get("disabledReason"),
+                                f"{ch['id']} is disabled but has no disabledReason")
+            self.assertIsNone(ch.get("channelId"))  # none verified yet — never guessed
+            self.assertEqual(ch.get("verifiedStatus"), "unverified")
 
 
 class TestJobIdentity(unittest.TestCase):

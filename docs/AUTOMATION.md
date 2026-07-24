@@ -22,7 +22,7 @@ already use — no new dependencies, no secrets.
 | A3 distributed locking (leases + heartbeats + crash steal) | `locks.py` | ✅ |
 | A4 operator config file | `config/automation.yml` + `config.py` | ✅ |
 | B1 curated FACEIT competition registry | `config/faceit_competitions.json` | ✅ (placeholder IDs; fill + enable) |
-| C1 verified broadcast-channel registry | `config/broadcast_channels.json` | ✅ (placeholder IDs; fill + enable) |
+| C1 verified broadcast-channel registry | `config/broadcast_channels.json` | ✅ (placeholder IDs; see the "Phase C" section below for the full implementation) |
 | D4 rolling 14-day completeness report | `coverage.py` + `cli.py coverage` | ✅ |
 | State-retention on failure (dead-letter, J1/J2) | `job_store.record_attempt` → `RETRY_SCHEDULED` / `FAILED_PERMANENT` | ✅ |
 
@@ -101,8 +101,12 @@ No key is committed; `.env`, `credentials*.json`, `secrets*.json` and
   championship exists for them (see `docs/FACEIT-REGISTRY.md`). IDs are never
   guessed. Verify enabled entries any time with `cli.py verify-registry` (or
   the `discovery.yml` `mode=verify` dispatch).
-- `config/broadcast_channels.json` — every channel has `channelId: null` and
-  `enabled: false` (Phase C — broadcast discovery, next pass).
+- `config/broadcast_channels.json` — every channel still has `channelId: null`
+  and `enabled: false`; `ow_esports_global` now carries a Liquipedia-evidenced
+  `sourceUrl` (`youtube.com/OW_Esports`) ready for `verify-channels` to resolve
+  in Actions. Full Phase C implementation (discovery + matching + coverage)
+  landed this pass — see the "Phase C" section above and
+  `docs/YOUTUBE-DISCOVERY.md`.
 - `config/owcs_calendar.json` — event dates remain `verified: false`; the
   official Overwatch Esports schedule site is not reachable from the config
   environment, so no date could be confirmed against an official source.
@@ -110,13 +114,78 @@ No key is committed; `.env`, `credentials*.json`, `secrets*.json` and
 The full verification procedure, verified organizer/championship ids, coverage
 finding, and the real dry-run output are documented in **`docs/FACEIT-REGISTRY.md`**.
 
+## Phase C — official OWCS schedule + YouTube broadcast discovery (implemented)
+
+Read-only discovery of official broadcasts, built on the same Phase A/B spine.
+Never downloads video, never records, never writes hero compositions, and
+never enables unattended production linking — every candidate this phase
+produces still requires a human or a later phase (E/F/G/I) to confirm.
+
+| Roadmap item | Where | Status |
+|---|---|---|
+| C1 verified broadcast-channel registry | `config/broadcast_channels.json` (sourceUrl/ownershipEvidence/verifiedDate/verifiedStatus/disabledReason/preferredLayout) + `cli.py verify-channels` | ✅ (no channelId confirmed yet — no live API access from this pass; see `docs/YOUTUBE-DISCOVERY.md`) |
+| C2 YouTube Data API client (dependency-light, injectable transport) | `pipeline/automation/youtube_api.py` | ✅ |
+| C2 quota-unit accounting + exhaustion detection | `youtube_api.QUOTA_COSTS`, `YouTubeQuotaExceeded`, `quota_usage` table | ✅ |
+| C3 broadcast discovery (upcoming/live/completed/archive/VOD, cheapest-path-first) | `broadcast_discovery.py` (`discover_channel_videos`, `sync_broadcasts`) | ✅ |
+| C3 rolling 14-day window + future horizon | `broadcast_discovery.in_window` | ✅ |
+| C4 explainable scoring + HIGH/MEDIUM/LOW bands | `broadcast_matching.py` (`score_candidate`, `confidence_band`) | ✅ — see `docs/YOUTUBE-DISCOVERY.md` for the full weight table |
+| C4 one-video-to-many-matches / many-videos-to-one-match | `broadcast_candidates` (match_id, platform, video_id) unique key | ✅ |
+| C5 deterministic job keys + idempotency | `models.broadcast_discovery_key`, `models.broadcast_key`, `models.broadcast_match_link_key` | ✅ |
+| C6 explicit coverage states (nothing disappears silently) | `coverage.build_broadcast_coverage` / `derive_coverage_label` | ✅ |
+| C7 official-calendar adapter improvements (season/format/sourceUrl/retrievedAt/sourceHash/verificationStatus, live Next.js extraction) | `owcs_calendar.py` (`http_fetcher`, `extract_events_from_next_data`) | ✅ |
+
+### CLI
+
+```bash
+python pipeline/automation/cli.py verify-channels [--json]
+python pipeline/automation/cli.py calendar-dryrun --lookback-days 14
+python pipeline/automation/cli.py broadcast-dryrun --lookback-days 14 [--allow-search-fallback]
+python pipeline/automation/cli.py discover-broadcasts [--dry-run] --lookback-days 14
+python pipeline/automation/cli.py coverage --window 14   # now includes Phase C6 broadcast coverage
+```
+
+### Required secrets (updated)
+
+| Secret | Where to set it | Used by |
+|---|---|---|
+| `FACEIT_API_KEY` | GitHub → repo **Settings → Secrets and variables → Actions** | `faceit_api.urllib_transport` |
+| `YOUTUBE_API_KEY` | GitHub → repo **Settings → Secrets and variables → Actions** | `youtube_api.urllib_transport` (channel verification + broadcast discovery) |
+
+Neither key is committed, logged, or ever appears in a cache filename or
+exception message (`youtube_api._sanitize_url` strips it from every URL
+before it's used for anything) — see `docs/YOUTUBE-DISCOVERY.md`.
+
+### Workflow modes
+
+`.github/workflows/discovery.yml` gained four read-only `workflow_dispatch`
+modes: `verify-channels`, `calendar-dryrun`, `broadcast-dryrun`, `coverage`.
+Each is safe by default (no key -> `::error::` and exit, never a silent
+no-op that looks successful), writes nothing to the repo, and uploads its
+sanitized stdout as a workflow artifact. Full dispatch instructions in
+`docs/YOUTUBE-DISCOVERY.md`.
+
+### Tests
+
+`test_automation_youtube_api.py` (client: pagination, quota accounting, error
+classification, quota exhaustion, cache determinism, no secret leakage),
+`test_automation_broadcast_discovery.py` (C1 channel verification, C3
+normalization/window/discovery, idempotent reruns, renamed/delayed
+broadcasts, multi-language feeds, API-failure retry jobs),
+`test_automation_broadcast_matching.py` (every C4 signal in isolation,
+HIGH/MEDIUM/LOW boundaries, linking, one-to-many/many-to-one, unofficial
+mirror rejection), `test_automation_owcs_calendar.py` (C7 fields, resilient
+`__NEXT_DATA__` extraction, live-fetch failure modes), plus extensions to
+`test_automation_schema.py` (new tables) and `test_automation_config.py`
+(registry field completeness) and `test_automation_coverage.py` (C6 label
+derivation).
+
 ## Not yet implemented (later roadmap passes)
 
-YouTube upload discovery (C2/C3), the self-hosted recording daemon (Phase E),
-broadcast segmentation (Phase F), the detector/layout/template automation
-(Phase G), and automated publication PRs (Phase I). Each plugs into this
-foundation: they enqueue jobs with the deterministic keys above, take a lease
-before touching a shared resource, and transition through the state machine.
+The self-hosted recording daemon (Phase E), broadcast segmentation
+(Phase F), the detector/layout/template automation (Phase G), and automated
+publication PRs (Phase I). Each plugs into this foundation: they enqueue jobs
+with the deterministic keys above, take a lease before touching a shared
+resource, and transition through the state machine.
 
 ## Operator CLI
 

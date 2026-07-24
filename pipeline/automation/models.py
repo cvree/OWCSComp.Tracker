@@ -63,6 +63,21 @@ def broadcast_key(video_id: str) -> str:
     return f"broadcast:{slug(video_id)}"
 
 
+def broadcast_discovery_key(channel_id: str, window_start: str, window_end: str) -> str:
+    """One key per (channel, rolling window) scan — Phase C5. Reusing the
+    same window twice (e.g. an hourly rerun before the window has moved)
+    must not re-enqueue duplicate scan jobs."""
+    return f"broadcast-discovery:{slug(channel_id)}:{slug(window_start)}:{slug(window_end)}"
+
+
+def broadcast_match_link_key(video_id: str, match_id: str) -> str:
+    """One key per (video, match) proposed link — Phase C5. A single
+    full-day broadcast can legitimately link to many matches, and a single
+    match can have candidate links from several videos; the pair is what
+    must stay unique."""
+    return f"broadcast-match-link:{slug(video_id)}:{slug(match_id)}"
+
+
 def record_key(video_id: str, quality: str = "source") -> str:
     return f"record:{slug(video_id)}:{slug(quality)}"
 

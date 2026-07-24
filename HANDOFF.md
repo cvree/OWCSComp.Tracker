@@ -1,6 +1,63 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
-## CURRENT STATUS (authoritative — 2026-07-23) — "nocturne" public redesign, swap intelligence, asset registry
+## CURRENT STATUS (authoritative — 2026-07-24) — Phase C: YouTube broadcast discovery
+
+Read-only official-schedule + YouTube broadcast discovery, built on the
+Phase A/B spine. Never downloads video, never records, never writes hero
+compositions, never enables unattended production linking. Full detail in
+`docs/AUTOMATION.md` ("Phase C") and `docs/YOUTUBE-DISCOVERY.md`.
+
+* **C1** `config/broadcast_channels.json` gained sourceUrl/ownershipEvidence/
+  verifiedDate/verifiedStatus/disabledReason/preferredLayout on every entry +
+  `cli.py verify-channels`. `ow_esports_global` now carries a
+  Liquipedia-evidenced `sourceUrl`; no `channelId` is confirmed yet — this
+  pass had no YouTube API network access (the key is Actions-only). Dispatch
+  `mode=verify-channels` to resolve it live.
+* **C2** `pipeline/automation/youtube_api.py` — dependency-light Data API v3
+  client (channels/playlistItems/videos/search.list), injectable transport,
+  quota-unit accounting + exhaustion detection, sanitized errors (the API key
+  can never reach a log, cache filename, or exception message), deterministic
+  cache keys.
+* **C3** `broadcast_discovery.py` — cheapest-path-first discovery (uploads
+  playlist before search.list fallback), normalizes upcoming/live/completed/
+  archived/VOD broadcasts, rolling 14-day + horizon window, idempotent
+  `broadcast_videos` ledger + `broadcast:<video-id>` jobs.
+* **C4** `broadcast_matching.py` — explainable additive scoring (channel
+  authority, team/competition/title-pattern text match, region/language,
+  time proximity/conflict, live status, duration plausibility) into
+  HIGH/MEDIUM/LOW bands; HIGH proposes a link (never auto-applied), MEDIUM
+  opens a review task, LOW is rejected. One video can link many matches and
+  vice versa (`broadcast_candidates`).
+* **C6** `coverage.py` gained `build_broadcast_coverage` — 11 explicit states
+  (schedule-discovered … published) + an honest `cancelled` bucket, so no
+  configured match/event can silently disappear from the report; also
+  surfaces quota used, last successful refresh, last source error.
+* **C7** `owcs_calendar.py` gained a live `http_fetcher` that resiliently
+  parses the official schedule's `__NEXT_DATA__` (Next.js) blob — any parse
+  failure degrades to "fetched nothing" rather than raising or fabricating
+  match pairings/times; the committed seed stays authoritative.
+* New CLI: `verify-channels`, `calendar-dryrun`, `broadcast-dryrun`,
+  `discover-broadcasts`. New workflow_dispatch modes on `discovery.yml`
+  (read-only, sanitized-artifact output, no video download/recording/comp
+  writes ever).
+* **4 new test suites** (`test_automation_youtube_api.py`,
+  `test_automation_broadcast_discovery.py`,
+  `test_automation_broadcast_matching.py`,
+  `test_automation_owcs_calendar.py`) + extensions to
+  `test_automation_{schema,config,coverage}.py`. All offline, no network/key.
+
+### Honest gaps
+- No YouTube channel id is verified yet (needs an Actions dispatch with the
+  real secret — this sandbox has no network path to the YouTube API).
+- Regional channels (Korea/Japan/Pacific) have no evidenced official URL;
+  China stays explicitly out of scope (bilibili, not YouTube).
+- Phase E (self-hosted recording), F (segmentation), G (detector/layout/
+  template automation) and I (auto-publication PRs) are still not built —
+  they plug into this spine when they land.
+
+---
+
+## PREVIOUS SESSION (2026-07-23) — "nocturne" public redesign, swap intelligence, asset registry
 
 This session rebuilt the public site into a dark-gothic esports
 intelligence surface and shipped the swap-intelligence layer. Everything
