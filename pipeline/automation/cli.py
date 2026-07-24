@@ -173,6 +173,11 @@ def cmd_list_championships(args: argparse.Namespace) -> int:
     client = _build_client(args)
     rows: list[dict] = []
     if args.organizer:
+        try:
+            org = faceit_api.normalize_organizer(client.get_organizer(args.organizer))
+            print(f"[automation] organizer {args.organizer}: {org['name']}")
+        except (faceit_api.FaceitApiError, faceit_api.FaceitAuthError) as exc:
+            print(f"[automation] organizer {args.organizer}: (details unavailable: {exc})")
         raw = client.list_organizer_championships(args.organizer, game=args.game)
         rows = [faceit_api.normalize_championship(c) for c in raw]
         header = f"organizer {args.organizer} championships (game={args.game})"

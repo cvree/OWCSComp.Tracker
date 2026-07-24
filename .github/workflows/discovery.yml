@@ -39,6 +39,10 @@ on:
         description: "championship name search (candidates mode)"
         required: false
         default: "OWCS"
+      org:
+        description: "comma-separated organizer ids to list championships for (candidates mode)"
+        required: false
+        default: ""
       lookback_days:
         description: "Rolling lookback window (days)"
         required: false
@@ -88,19 +92,27 @@ jobs:
       # -------- READ-ONLY registry-config modes (no repo writes) ----------
       - name: List candidate championships + organizers (mode=candidates)
         if: github.event.inputs.mode == 'candidates'
+        env:
+          ORGS: ${{ github.event.inputs.org }}
         run: |
           if [ -z "$FACEIT_API_KEY" ]; then echo "::error::FACEIT_API_KEY not set"; exit 1; fi
           echo "::group::organizers matching 'Overwatch'"
           python3 pipeline/automation/cli.py list-organizers --query "Overwatch" || true
           echo "::endgroup::"
-          for Q in "$QUERY" "Overwatch Champions Series" "OWCS 2026"; do
-            echo "::group::championships name~'$Q' (all)"
-            python3 pipeline/automation/cli.py list-championships --query "$Q" --type all || true
-            echo "::endgroup::"
-            echo "::group::championships name~'$Q' (ongoing)"
-            python3 pipeline/automation/cli.py list-championships --query "$Q" --type ongoing || true
-            echo "::endgroup::"
-          done
+          if [ -n "$ORGS" ]; then
+            IFS=',' read -ra OA <<< "$ORGS"
+            for O in "${OA[@]}"; do
+              echo "::group::organizer $O championships (json, authoritative ids)"
+              python3 pipeline/automation/cli.py list-championships --organizer "$O" --json || true
+              echo "::endgroup::"
+            done
+          else
+            for Q in "$QUERY" "Overwatch Champions Series" "OWCS 2026"; do
+              echo "::group::championships name~'$Q' (all)"
+              python3 pipeline/automation/cli.py list-championships --query "$Q" --type all || true
+              echo "::endgroup::"
+            done
+          fi
           echo "Confirm the OFFICIAL organizer id, then verify each championship id with mode=verify."
 
       - name: Verify enabled competitions (mode=verify)

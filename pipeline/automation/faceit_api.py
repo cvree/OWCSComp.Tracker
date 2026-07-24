@@ -363,8 +363,12 @@ def normalize_championship(raw: dict) -> dict:
     if url:
         url = url.replace("{lang}", "en")
     return {
-        "championshipId": _clean(raw.get("championship_id") or raw.get("id")),
-        "name": _clean(raw.get("name")),
+        # /championships/{id} uses championship_id; /search/championships items
+        # use competition_id (and sometimes guid) — accept all so search results
+        # surface a real id, not a dash.
+        "championshipId": _clean(raw.get("championship_id") or raw.get("competition_id")
+                                 or raw.get("guid") or raw.get("id")),
+        "name": _clean(raw.get("name") or raw.get("competition_name")),
         "organizerId": _clean(raw.get("organizer_id")),
         "game": _clean(raw.get("game")),
         "region": _clean(raw.get("region")),
