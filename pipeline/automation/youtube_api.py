@@ -35,6 +35,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -194,7 +195,14 @@ class YouTubeClient:
     """Thin YouTube Data API v3 client. Caches raw responses for auditability
     and tracks quota spend per endpoint. `quota_sink`, if given, is called
     as `quota_sink(endpoint_name, units)` after every successful accounting
-    step (used to persist into the automation DB's `quota_usage` table)."""
+    step (used to persist into the automation DB's `quota_usage` table).
+
+    `cache_ttl_seconds` (default 3600) makes repeated calls to the SAME
+    logical request (same sanitized URL) within the TTL a cache HIT: no
+    network call, no quota spent. This is what lets a repeated dry-run stay
+    cheap — a rerun within the hour reuses the previous run's channel/
+    playlist/video responses instead of re-fetching them. Set to `None`/`0`
+    to disable (always hit the network when a transport is real)."""
 
     def __init__(
         self,
@@ -202,6 +210,7 @@ class YouTubeClient:
         *,
         transport: Transport | None = None,
         cache_dir: str | None = None,
+        cache_ttl_seconds: int | None = 3600,
         quota_sink: "Callable[[str, int], None] | None" = None,
     ):
         self.api_key = api_key or os.environ.get("YOUTUBE_API_KEY")
@@ -212,10 +221,12 @@ class YouTubeClient:
         else:
             self._transport = None  # set on first real call -> clear error
         self.cache_dir = cache_dir
+        self.cache_ttl_seconds = cache_ttl_seconds
         self.quota_sink = quota_sink
         self.calls: list[dict] = []  # sanitized audit trail (no key, ever)
         self.quota_used = 0
         self.quota_by_endpoint: dict[str, int] = {}
+        self.cache_hits = 0
 
     # -- low level ---------------------------------------------------------
     def _get(self, endpoint_name: str, params: dict) -> dict:
@@ -225,6 +236,22 @@ class YouTubeClient:
             q["key"] = self.api_key
         url = API_ROOT + path + "?" + urllib.parse.urlencode(q)
         sanitized = _sanitize_url(url)
+
+        cached_text = self._cached_response(sanitized) if self.cache_dir else None
+        if cached_text is not None:
+            try:
+                payload = json.loads(cached_text)
+            except (ValueError, TypeError):
+                payload = None  # corrupt/stale cache entry — fall through to a real fetch
+            if payload is not None:
+                self.cache_hits += 1
+                self.calls.append({
+                    "endpoint": endpoint_name, "url": sanitized, "status": 200,
+                    "error": None, "units": 0, "cacheHit": True,
+                    "sha256": hashlib.sha256(cached_text.encode()).hexdigest(),
+                })
+                return payload
+
         if self._transport is None:
             raise YouTubeAuthError(
                 "YOUTUBE_API_KEY is not set and no transport was injected; "
@@ -238,7 +265,7 @@ class YouTubeClient:
             self.quota_sink(endpoint_name, cost)
         record = {
             "endpoint": endpoint_name, "url": sanitized, "status": status,
-            "error": error, "units": cost,
+            "error": error, "units": cost, "cacheHit": False,
             "sha256": hashlib.sha256((text or "").encode()).hexdigest() if text else None,
         }
         self.calls.append(record)
@@ -254,14 +281,28 @@ class YouTubeClient:
         except (ValueError, TypeError) as exc:
             raise YouTubeApiError(endpoint_name, status, None, f"invalid JSON: {exc}") from exc
 
+    def _cache_path(self, sanitized_url: str) -> str:
+        key = hashlib.sha256(sanitized_url.encode()).hexdigest()[:20]
+        return os.path.join(self.cache_dir, f"{key}.json")
+
+    def _cached_response(self, sanitized_url: str) -> str | None:
+        if not self.cache_ttl_seconds:
+            return None
+        path = self._cache_path(sanitized_url)
+        if not os.path.exists(path):
+            return None
+        age = time.time() - os.path.getmtime(path)
+        if age > self.cache_ttl_seconds:
+            return None
+        return Path(path).read_text(encoding="utf-8")
+
     def _cache(self, url: str, text: str) -> None:
         """Deterministic cache key from the sanitized (key-free) URL, so the
         same logical request always lands on the same file — repeat runs hit
         cache instead of re-spending quota. Never checked into git (the
         caller passes a path under data/raw/, which is gitignored)."""
         Path(self.cache_dir).mkdir(parents=True, exist_ok=True)
-        key = hashlib.sha256(url.encode()).hexdigest()[:20]
-        Path(os.path.join(self.cache_dir, f"{key}.json")).write_text(text, encoding="utf-8")
+        Path(self._cache_path(url)).write_text(text, encoding="utf-8")
 
     # -- endpoints -----------------------------------------------------------
     def get_channel_by_id(self, channel_id: str) -> dict | None:
@@ -281,19 +322,41 @@ class YouTubeClient:
 
     def list_playlist_items(
         self, playlist_id: str, *, max_pages: int = 20, page_size: int = 50,
+        stop_before: str | None = None, stats: dict | None = None,
     ) -> list[dict]:
+        """Enumerate a playlist's items, newest-first (that's how YouTube
+        orders an uploads playlist). If `stop_before` (an ISO-8601 timestamp)
+        is given, pagination stops as soon as a fetched page's OLDEST item
+        (`contentDetails.videoPublishedAt`, the last item on the page given
+        the newest-first order) is older than it — a normal 14-day run then
+        fetches only a handful of pages instead of a channel's entire upload
+        history. Pass `stop_before=None` for full-history discovery.
+
+        If `stats` (a plain dict) is given, `stats['pages']` is set to the
+        number of pages actually fetched — feeds the dry-run report's
+        "pages fetched" field without changing this method's return type.
+        """
         out: list[dict] = []
         token: str | None = None
+        pages = 0
         for _ in range(max_pages):
             params = {"part": "snippet,contentDetails",
                       "playlistId": playlist_id, "maxResults": page_size}
             if token:
                 params["pageToken"] = token
             payload = self._get("playlistItems.list", params)
-            out.extend(payload.get("items") or [])
+            pages += 1
+            items = payload.get("items") or []
+            out.extend(items)
+            if stop_before and items:
+                oldest_on_page = items[-1].get("contentDetails", {}).get("videoPublishedAt")
+                if oldest_on_page and oldest_on_page < stop_before:
+                    break
             token = payload.get("nextPageToken")
             if not token:
                 break
+        if stats is not None:
+            stats["pages"] = pages
         return out
 
     def list_videos(self, video_ids: list[str]) -> list[dict]:

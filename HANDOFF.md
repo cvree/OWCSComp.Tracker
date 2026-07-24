@@ -13,6 +13,24 @@ a live GitHub Actions `mode=verify-channels` dispatch confirmed
 Esports"), uploads playlist `UUiAInBL9kUzz1XRxk66v-gw`, 1 quota unit. It is
 now the only `enabled: true` / `verifiedStatus: verified` registry entry;
 regional channels and China remain disabled exactly as below (no
+
+**Update 2 (same day, branch `claude/phase-c-real-dryrun-fix`):** the first
+real `broadcast-dryrun` Actions run found 7 in-window videos but
+`videos_scored` came back 0 — diagnosed and fixed. Root cause: dry-run
+discovery never surfaced its discovered videos to the matching stage (only
+the write-path did, and dry-run never writes), and matching only built
+targets from `scheduled_matches` (empty, since `broadcast-dryrun` never runs
+`sync_faceit`/`sync_calendar`). Fixed: discovered videos now always flow
+into matching regardless of dry-run; matching pools targets from THREE
+sources (FACEIT matches, automation-DB source_events, and the always-
+available committed calendar seed) so a video is never required to match a
+specific FACEIT match; every video now gets one of 7 explicit
+classifications so `videosScored == sum(classifications)` always holds —
+see `docs/AUTOMATION.md`'s "Phase C real dry-run fix" section. Also fixed
+the reported "videos seen: 1000" inefficiency: playlist pagination now stops
+at the lookback boundary (+2-day buffer) instead of walking a channel's full
+history, and the YouTube client gained a TTL response cache so repeated
+dry-runs don't re-spend quota. 8 new tests + 3 extended files, all offline.
 human-sourced URL / different platform, never guessed).
 
 * **C1** `config/broadcast_channels.json` gained sourceUrl/ownershipEvidence/

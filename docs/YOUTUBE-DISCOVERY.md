@@ -103,6 +103,23 @@ call. Spend is tracked in the automation DB's `quota_usage` table
 (`pipeline/automation/broadcast_discovery._record_quota`) and surfaced by
 `cli.py coverage` / `broadcast-dryrun`.
 
+**Pagination is bounded by the lookback window, not the channel's full
+history.** An uploads playlist is newest-first; `youtube_api.
+list_playlist_items` stops fetching pages once a page's oldest item predates
+`lookback_days + 2` days (`broadcast_discovery.PAGINATION_SAFETY_BUFFER_DAYS`).
+A normal 14-day run against a channel with 1,000+ total uploads fetches only
+the handful of pages that actually fall in-window — pass `--full-history` to
+`broadcast-dryrun`/`discover-broadcasts` to walk the entire history instead
+(e.g. a one-off backfill).
+
+**Repeated runs are cache-aware.** `YouTubeClient` caches every response
+under `data/raw/youtube_api/` (gitignored) keyed by its sanitized URL, and a
+request within the cache TTL (default 1 hour) is served from disk with
+**zero quota spent** — `client.cache_hits` / the CLI's "client cache hits"
+line report how many. This is enabled even during `--dry-run` (reading a
+local cache is not a production write), so re-running a dry-run minutes
+apart doesn't re-spend quota on identical requests.
+
 ## C4 matching score — weights and thresholds
 
 `pipeline/automation/broadcast_matching.py` scores every (video, nearby
@@ -144,6 +161,30 @@ Bands (`confidence_band`, `HIGH_THRESHOLD=70`, `MEDIUM_THRESHOLD=35`):
 These constants are the single source of truth for the numbers above — see
 `test_automation_broadcast_matching.py` for the pinned boundary behavior
 (exact HIGH/MEDIUM/LOW transitions, every signal in isolation).
+
+### A video is never required to match a specific FACEIT match
+
+A video is scored against THREE pooled target sources — `scheduled_matches`
+(verified FACEIT matches), `source_events` (automation DB, mirrors the
+calendar once `sync_calendar` has run), and `owcs_calendar.load_events()`
+(the committed seed file, always available). Every in-window video reduces
+to exactly one top-level classification, so nothing is ever silently
+omitted from a report:
+
+| Classification | Meaning |
+|---|---|
+| `high` | Confirmed against a specific team-level FACEIT match, high confidence |
+| `needs-review` | Ambiguous against a specific FACEIT match — opens a review task |
+| `event-level-candidate` | Matches an event/calendar target (no team pairing available) at any confidence above LOW — the "full-day broadcast" case |
+| `unmatched-official-video` | Official, in-window, YouTube-supported region — but no eligible target existed at all |
+| `unrelated-official-upload` | Eligible targets existed but every one scored LOW |
+| `unsupported-event` | A target references this region, but no YouTube channel covers it (e.g. China/bilibili) |
+| `outside-configured-coverage` | Nothing anywhere (FACEIT, calendar, or channel registry) tracks this region |
+
+`match_broadcasts` guarantees `videosScored == sum(classifications.values())`
+— see `test_automation_broadcast_matching.py`'s `TestClassifyVideo` and
+`TestMatchBroadcastsThreeTargetSources` for the pinned behavior, including
+the regression test for the exact "7 videos, 0 scored" bug this fixed.
 
 ## No secret leakage, by construction
 

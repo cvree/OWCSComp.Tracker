@@ -100,6 +100,55 @@ class TestFixtureClient(unittest.TestCase):
             self.assertEqual(ids, ["v1", "v2", "v3"])
             self.assertEqual(client.quota_by_endpoint["playlistItems.list"], 2)
 
+    def test_pagination_stops_at_lookback_boundary(self):
+        # Page 1 is all recent (within the boundary); page 2's oldest item
+        # predates it, so pagination must stop WITHOUT fetching page 3 at all
+        # (a 1000-video channel should not be walked for a 14-day lookback).
+        with tempfile.TemporaryDirectory() as d:
+            page1 = {"items": [
+                {"contentDetails": {"videoId": "new1", "videoPublishedAt": "2026-07-20T00:00:00Z"}},
+                {"contentDetails": {"videoId": "new2", "videoPublishedAt": "2026-07-15T00:00:00Z"}},
+            ], "nextPageToken": "PAGE2"}
+            page2 = {"items": [
+                {"contentDetails": {"videoId": "old1", "videoPublishedAt": "2026-01-01T00:00:00Z"}},
+            ], "nextPageToken": "PAGE3"}
+            page3 = {"items": [
+                {"contentDetails": {"videoId": "ancient", "videoPublishedAt": "2020-01-01T00:00:00Z"}},
+            ]}
+            for name, payload in (("page1", page1), ("page2", page2), ("page3", page3)):
+                with open(os.path.join(d, f"playlistItems_uuuploads123_{name}.json"), "w") as f:
+                    json.dump(payload, f)
+            client = yt.YouTubeClient(transport=yt.fixture_transport(d))
+            stats: dict = {}
+            items = client.list_playlist_items(
+                "UUuploads123", stop_before="2026-07-01T00:00:00Z", stats=stats)
+            ids = [i["contentDetails"]["videoId"] for i in items]
+            # page2's oldest item (old1, 2026-01-01) is already before the
+            # cutoff, so page2 is fetched (page1 didn't cross it yet) but
+            # page3 (PAGE3 token) is never requested.
+            self.assertIn("new1", ids)
+            self.assertIn("old1", ids)
+            self.assertNotIn("ancient", ids)
+            self.assertEqual(stats["pages"], 2)
+            self.assertEqual(client.quota_by_endpoint["playlistItems.list"], 2)
+
+    def test_full_history_ignores_stop_before(self):
+        with tempfile.TemporaryDirectory() as d:
+            page1 = {"items": [
+                {"contentDetails": {"videoId": "new1", "videoPublishedAt": "2026-07-20T00:00:00Z"}},
+            ], "nextPageToken": "PAGE2"}
+            page2 = {"items": [
+                {"contentDetails": {"videoId": "ancient", "videoPublishedAt": "2020-01-01T00:00:00Z"}},
+            ]}
+            for name, payload in (("page1", page1), ("page2", page2)):
+                with open(os.path.join(d, f"playlistItems_uuuploads123_{name}.json"), "w") as f:
+                    json.dump(payload, f)
+            client = yt.YouTubeClient(transport=yt.fixture_transport(d))
+            # stop_before=None (the full_history contract) walks every page.
+            items = client.list_playlist_items("UUuploads123", stop_before=None)
+            ids = [i["contentDetails"]["videoId"] for i in items]
+            self.assertIn("ancient", ids)
+
     def test_videos_list_batches_and_dedupes(self):
         with tempfile.TemporaryDirectory() as d:
             ids = [f"v{i}" for i in range(3)]
@@ -185,6 +234,42 @@ class TestCaching(unittest.TestCase):
             # A second identical call reuses the same deterministic filename.
             client.get_channel_by_id("UC123")
             self.assertEqual(os.listdir(cachedir), cached_files)
+
+    def test_cache_hit_skips_network_and_quota(self):
+        with tempfile.TemporaryDirectory() as fixdir, tempfile.TemporaryDirectory() as cachedir:
+            with open(os.path.join(fixdir, "channels_id_uc123.json"), "w") as f:
+                json.dump({"items": [channel_item(cid="UC123")]}, f)
+            calls_made = []
+            real_transport = yt.fixture_transport(fixdir)
+
+            def counting_transport(url, headers):
+                calls_made.append(url)
+                return real_transport(url, headers)
+
+            client = yt.YouTubeClient(transport=counting_transport, cache_dir=cachedir,
+                                      cache_ttl_seconds=3600)
+            client.get_channel_by_id("UC123")
+            self.assertEqual(len(calls_made), 1)
+            self.assertEqual(client.quota_used, 1)
+            self.assertEqual(client.cache_hits, 0)
+            # Repeated dry-runs within the TTL must not hit the network again
+            # or spend more quota — this is the "incremental/cache-aware"
+            # efficiency requirement.
+            client.get_channel_by_id("UC123")
+            self.assertEqual(len(calls_made), 1, "second call should be served from cache")
+            self.assertEqual(client.quota_used, 1, "cache hit must not spend quota")
+            self.assertEqual(client.cache_hits, 1)
+
+    def test_cache_ttl_zero_disables_caching(self):
+        with tempfile.TemporaryDirectory() as fixdir, tempfile.TemporaryDirectory() as cachedir:
+            with open(os.path.join(fixdir, "channels_id_uc123.json"), "w") as f:
+                json.dump({"items": [channel_item(cid="UC123")]}, f)
+            client = yt.YouTubeClient(transport=yt.fixture_transport(fixdir), cache_dir=cachedir,
+                                      cache_ttl_seconds=0)
+            client.get_channel_by_id("UC123")
+            client.get_channel_by_id("UC123")
+            self.assertEqual(client.quota_used, 2)
+            self.assertEqual(client.cache_hits, 0)
 
     def test_no_key_in_call_audit_trail(self):
         with tempfile.TemporaryDirectory() as d:

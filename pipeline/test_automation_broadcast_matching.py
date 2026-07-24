@@ -10,6 +10,7 @@ Run: python3 pipeline/test_automation_broadcast_matching.py
 """
 from __future__ import annotations
 import datetime as dt
+import json
 import os
 import sys
 import tempfile
@@ -19,6 +20,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 from automation import broadcast_matching as bm  # noqa: E402
 from automation import models  # noqa: E402
+from automation import owcs_calendar  # noqa: E402
 from automation import state_machine as sm  # noqa: E402
 from automation.config import AutomationConfig, DEFAULTS  # noqa: E402
 from automation.job_store import JobStore  # noqa: E402
@@ -352,6 +354,226 @@ class TestMatchBroadcastsOrchestrator(LinkingCase):
         summary = bm.match_broadcasts(s, dry_run=False, time_window_hours=72)
         matched_ids = {c["matchId"] for r in summary["results"] for c in r["linked"] + r["reviewed"]}
         self.assertNotIn("match:far", matched_ids)
+        s.close()
+
+
+class TestClassifyVideo(unittest.TestCase):
+    """Every in-window video reduces to exactly one classification — the
+    fix for the real dry-run bug where 7 discovered videos scored 0."""
+
+    def test_no_targets_at_all_is_unmatched_official(self):
+        label = bm.classify_video([], region_supported=True, region_tracked=True)
+        self.assertEqual(label, bm.CLASS_UNMATCHED_OFFICIAL)
+
+    def test_no_targets_unsupported_region(self):
+        label = bm.classify_video([], region_supported=False, region_tracked=True)
+        self.assertEqual(label, bm.CLASS_UNSUPPORTED_EVENT)
+
+    def test_no_targets_outside_coverage(self):
+        label = bm.classify_video([], region_supported=False, region_tracked=False)
+        self.assertEqual(label, bm.CLASS_OUTSIDE_COVERAGE)
+
+    def test_high_match_target_is_class_high(self):
+        ctx = {"matchId": "m1", "kind": "match"}
+        result = {"score": 100, "confidence": "high"}
+        label = bm.classify_video([(ctx, result)], region_supported=True, region_tracked=True)
+        self.assertEqual(label, bm.CLASS_HIGH)
+
+    def test_high_event_target_is_event_level_candidate_not_high(self):
+        ctx = {"matchId": "e1", "kind": "calendar_event"}
+        result = {"score": 90, "confidence": "high"}
+        label = bm.classify_video([(ctx, result)], region_supported=True, region_tracked=True)
+        self.assertEqual(label, bm.CLASS_EVENT_LEVEL_CANDIDATE)
+
+    def test_medium_match_target_is_needs_review(self):
+        ctx = {"matchId": "m1", "kind": "match"}
+        result = {"score": 50, "confidence": "medium"}
+        label = bm.classify_video([(ctx, result)], region_supported=True, region_tracked=True)
+        self.assertEqual(label, bm.CLASS_NEEDS_REVIEW)
+
+    def test_medium_source_event_target_is_event_level_candidate(self):
+        ctx = {"matchId": "se1", "kind": "source_event"}
+        result = {"score": 50, "confidence": "medium"}
+        label = bm.classify_video([(ctx, result)], region_supported=True, region_tracked=True)
+        self.assertEqual(label, bm.CLASS_EVENT_LEVEL_CANDIDATE)
+
+    def test_all_low_targets_existed_is_unrelated_upload(self):
+        ctx = {"matchId": "m1", "kind": "match"}
+        result = {"score": -10, "confidence": "low"}
+        label = bm.classify_video([(ctx, result)], region_supported=True, region_tracked=True)
+        self.assertEqual(label, bm.CLASS_UNRELATED_UPLOAD)
+
+    def test_all_classifications_are_partitioned(self):
+        # Every label this module can ever emit must be one of the 7 the
+        # roadmap names — no ad hoc fifth wheel.
+        self.assertEqual(set(bm.ALL_CLASSIFICATIONS), {
+            "high", "needs-review", "event-level-candidate",
+            "unmatched-official-video", "unrelated-official-upload",
+            "unsupported-event", "outside-configured-coverage",
+        })
+
+
+class TestMatchBroadcastsThreeTargetSources(LinkingCase):
+    """Matching must work with FACEIT matches, automation-DB source_events,
+    AND the committed official calendar — a video is never required to
+    match a specific FACEIT match (Roadmap C4 fix)."""
+
+    def _video_dict(self, video_id="v1", **over):
+        return video(videoId=video_id, **over)
+
+    def test_seven_videos_cannot_score_zero_without_classification(self):
+        # The exact reported bug: discovery found real in-window videos but
+        # matching scored none of them. With NO targets configured at all,
+        # every video must still get an explicit classification — never a
+        # silent drop, and videosScored must equal len(videos).
+        s = self.store()
+        videos = [self._video_dict(video_id=f"v{i}", region="na") for i in range(7)]
+        summary = bm.match_broadcasts(
+            s, videos=videos, scheduled_matches=[], source_events=[], calendar_events=[],
+            supported_regions={"na"}, dry_run=True)
+        self.assertEqual(summary["videosScored"], 7)
+        self.assertEqual(sum(summary["classifications"].values()), 7)
+        self.assertEqual(summary["classifications"], {bm.CLASS_UNMATCHED_OFFICIAL: 7})
+        s.close()
+
+    def test_matching_works_with_faceit_match_target_only(self):
+        s = self.store()
+        m = {"id": "match:1", "team_a": "Falcons", "team_b": "Zeta", "region": "na",
+             "scheduled_at": "2026-07-20T20:00:00+00:00", "completed_at": None,
+             "status": "finished", "faceit_room_url": None}
+        v = self._video_dict(title="OWCS 2026 NA Grand Final: Falcons vs Zeta",
+                             actualStartAt="2026-07-20T20:05:00+00:00")
+        summary = bm.match_broadcasts(
+            s, videos=[v], scheduled_matches=[m], source_events=[], calendar_events=[],
+            supported_regions={"na"}, dry_run=True)
+        self.assertEqual(summary["classifications"], {bm.CLASS_HIGH: 1})
+        s.close()
+
+    def test_matching_works_with_calendar_event_target_only(self):
+        s = self.store()
+        ev = owcs_calendar._normalize_event({
+            "id": "owcs_test_event", "name": "OWCS 2026 NA Stage", "region": "na",
+            "startDate": "2026-07-01", "endDate": "2026-08-15", "verified": False})
+        v = self._video_dict(title="OWCS 2026 NA Stage — Full Day VOD",
+                             publishedAt="2026-07-20T20:00:00+00:00",
+                             actualStartAt=None, scheduledStartAt=None)
+        summary = bm.match_broadcasts(
+            s, videos=[v], scheduled_matches=[], source_events=[], calendar_events=[ev],
+            supported_regions={"na"}, dry_run=True)
+        self.assertIn(bm.CLASS_EVENT_LEVEL_CANDIDATE, summary["classifications"])
+        s.close()
+
+    def test_matching_works_with_source_event_target_only(self):
+        s = self.store()
+        row = {"id": "se1", "region": "na", "name": "OWCS 2026 NA Stage",
+              "raw": json.dumps({"startDate": "2026-07-01", "endDate": "2026-08-15"})}
+        v = self._video_dict(title="OWCS 2026 NA Stage — Full Day VOD",
+                             publishedAt="2026-07-20T20:00:00+00:00",
+                             actualStartAt=None, scheduledStartAt=None)
+        summary = bm.match_broadcasts(
+            s, videos=[v], scheduled_matches=[], source_events=[row], calendar_events=[],
+            supported_regions={"na"}, dry_run=True)
+        self.assertIn(bm.CLASS_EVENT_LEVEL_CANDIDATE, summary["classifications"])
+        s.close()
+
+    def test_full_day_broadcast_maps_to_multiple_matches(self):
+        # A full-day VOD covering two best-of-fives must produce candidate
+        # rows for BOTH matches, not just the top-scoring one.
+        s = self.store()
+        m1 = {"id": "match:1", "team_a": "Falcons", "team_b": "Zeta", "region": "na",
+              "scheduled_at": "2026-07-20T14:00:00+00:00", "status": "finished"}
+        m2 = {"id": "match:2", "team_a": "Titans", "team_b": "Comets", "region": "na",
+              "scheduled_at": "2026-07-20T19:00:00+00:00", "status": "finished"}
+        v = self._video_dict(
+            title="OWCS 2026 NA Day 3: Falcons vs Zeta AND Titans vs Comets",
+            actualStartAt="2026-07-20T13:00:00+00:00", durationSeconds=6 * 3600)
+        summary = bm.match_broadcasts(
+            s, videos=[v], scheduled_matches=[m1, m2], source_events=[], calendar_events=[],
+            supported_regions={"na"}, dry_run=False)
+        rows = s.con.execute(
+            "SELECT match_id FROM broadcast_candidates WHERE video_id=?", (v["videoId"],)).fetchall()
+        matched = {r["match_id"] for r in rows}
+        self.assertEqual(matched, {"match:1", "match:2"})
+        s.close()
+
+    def test_unrelated_official_upload_explicit_not_silent(self):
+        s = self.store()
+        m = {"id": "match:1", "team_a": "Falcons", "team_b": "Zeta", "region": "na",
+             "scheduled_at": "2026-07-20T20:00:00+00:00", "status": "finished"}
+        # Official channel, but nothing else about it relates to the match:
+        # no region match, no team names, a too-short duration, and a start
+        # time 50h away — within match_broadcasts' own 72h pre-filter (so it
+        # DOES get scored against this target) but past score_candidate's
+        # internal 48h conflict threshold, so the pairing nets a LOW score.
+        v = self._video_dict(
+            title="community meme compilation", description="", region=None,
+            officialChannel=True, actualStartAt="2026-07-22T22:00:00+00:00",
+            scheduledStartAt=None, publishedAt="2026-07-22T22:00:00+00:00",
+            durationSeconds=45, liveBroadcastStatus="none")
+        summary = bm.match_broadcasts(
+            s, videos=[v], scheduled_matches=[m], source_events=[], calendar_events=[],
+            supported_regions={"na"}, dry_run=True)
+        self.assertEqual(summary["classifications"], {bm.CLASS_UNRELATED_UPLOAD: 1})
+        s.close()
+
+    def test_unsupported_event_region_not_youtube_supported(self):
+        s = self.store()
+        # A target exists for 'china' (so the region IS tracked), but no
+        # YouTube channel covers china (bilibili-only). Signals are kept
+        # weak enough that the pairing still scores LOW overall — only then
+        # does the unsupported-platform distinction (vs. plain
+        # unrelated-upload) actually matter.
+        m = {"id": "match:cn", "team_a": "A", "team_b": "B", "region": "china",
+             "scheduled_at": "2026-07-20T20:00:00+00:00", "status": "finished"}
+        v = self._video_dict(
+            title="random content", description="", region="china", officialChannel=True,
+            actualStartAt=None, scheduledStartAt=None, publishedAt="2020-01-01T00:00:00+00:00",
+            durationSeconds=45, liveBroadcastStatus="none")
+        summary = bm.match_broadcasts(
+            s, videos=[v], scheduled_matches=[m], source_events=[], calendar_events=[],
+            supported_regions={"na"}, dry_run=True)
+        self.assertEqual(summary["classifications"], {bm.CLASS_UNSUPPORTED_EVENT: 1})
+        s.close()
+
+    def test_outside_configured_coverage_when_region_never_tracked(self):
+        s = self.store()
+        v = self._video_dict(region="antarctica")
+        summary = bm.match_broadcasts(
+            s, videos=[v], scheduled_matches=[], source_events=[], calendar_events=[],
+            supported_regions={"na"}, dry_run=True)
+        self.assertEqual(summary["classifications"], {bm.CLASS_OUTSIDE_COVERAGE: 1})
+        s.close()
+
+    def test_accounting_invariant_holds_across_mixed_videos(self):
+        s = self.store()
+        m = {"id": "match:1", "team_a": "Falcons", "team_b": "Zeta", "region": "na",
+             "scheduled_at": "2026-07-20T20:00:00+00:00", "status": "finished"}
+        videos = [
+            self._video_dict(video_id="high1", title="OWCS 2026 NA Grand Final: Falcons vs Zeta",
+                             actualStartAt="2026-07-20T20:05:00+00:00"),
+            self._video_dict(video_id="unmatched1", region="na", publishedAt="2026-01-01T00:00:00+00:00"),
+            self._video_dict(video_id="unrelated1", title="unrelated clip", description="",
+                             durationSeconds=30, liveBroadcastStatus="none",
+                             actualStartAt="2026-07-20T20:05:00+00:00"),
+        ]
+        summary = bm.match_broadcasts(
+            s, videos=videos, scheduled_matches=[m], source_events=[], calendar_events=[],
+            supported_regions={"na"}, dry_run=True)
+        self.assertEqual(summary["videosScored"], 3)
+        self.assertEqual(sum(summary["classifications"].values()), 3)
+        s.close()
+
+    def test_dry_run_writes_nothing_with_multi_source_targets(self):
+        s = self.store()
+        ev = owcs_calendar._normalize_event({
+            "id": "owcs_test_event2", "name": "OWCS 2026 NA Stage", "region": "na",
+            "startDate": "2026-07-01", "endDate": "2026-08-15", "verified": False})
+        v = self._video_dict(title="OWCS 2026 NA Stage — Full Day VOD",
+                             publishedAt="2026-07-20T20:00:00+00:00")
+        bm.match_broadcasts(s, videos=[v], scheduled_matches=[], source_events=[],
+                            calendar_events=[ev], supported_regions={"na"}, dry_run=True)
+        self.assertEqual(s.con.execute("SELECT COUNT(*) FROM broadcast_candidates").fetchone()[0], 0)
+        self.assertEqual(len(s.list_jobs()), 0)
         s.close()
 
 
