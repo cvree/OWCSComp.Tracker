@@ -23,6 +23,9 @@
 #   mode=broadcast-dryrun  YouTube broadcast discovery + matching, read-only (C3/C4)
 #   mode=teams-dryrun      team profile enrichment (bio/website/socials), read-only (D)
 #   mode=coverage          print the rolling completeness + broadcast-coverage report
+#   mode=team-coverage     per-team identity/roster/logo/broadcast/capture ledger (D2)
+#   mode=team-assets-dryrun  promote+list ranked logo candidates, read-only (D2;
+#                            never approves or publishes anything)
 #   mode=sync              (default) same as the scheduled run — now also runs LIVE
 #                          team enrichment + opens (and auto-merges once green) a
 #                          data-update PR when calendar or team facts change
@@ -46,7 +49,7 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "sync | candidates | verify | dryrun | verify-channels | calendar-dryrun | broadcast-dryrun | teams-dryrun | coverage"
+        description: "sync | candidates | verify | dryrun | verify-channels | calendar-dryrun | broadcast-dryrun | teams-dryrun | coverage | team-coverage | team-assets-dryrun"
         required: false
         default: "sync"
       query:
@@ -179,8 +182,20 @@ jobs:
           if [ -z "$FACEIT_API_KEY" ]; then echo "::error::FACEIT_API_KEY not set"; exit 1; fi
           python3 pipeline/automation/cli.py enrich-teams --dry-run | tee run-output.txt
 
+      - name: Team coverage report (mode=team-coverage)
+        if: github.event.inputs.mode == 'team-coverage'
+        run: |
+          python3 pipeline/automation/cli.py team-coverage --window "$LOOKBACK" | tee run-output.txt
+
+      - name: Team asset candidate collection, read-only (mode=team-assets-dryrun)
+        if: github.event.inputs.mode == 'team-assets-dryrun'
+        run: |
+          python3 pipeline/automation/cli.py collect-team-assets | tee run-output.txt
+          echo "" >> run-output.txt
+          python3 pipeline/automation/cli.py publish-team-assets >> run-output.txt
+
       - name: Upload sanitized run output
-        if: contains(fromJSON('["verify-channels","calendar-dryrun","broadcast-dryrun","teams-dryrun","coverage"]'), github.event.inputs.mode)
+        if: contains(fromJSON('["verify-channels","calendar-dryrun","broadcast-dryrun","teams-dryrun","coverage","team-coverage","team-assets-dryrun"]'), github.event.inputs.mode)
         uses: actions/upload-artifact@v4
         with:
           name: discovery-${{ github.event.inputs.mode }}-${{ github.run_id }}
@@ -227,7 +242,7 @@ jobs:
           git config user.name  "owcs-discovery[bot]"
           git config user.email "actions@users.noreply.github.com"
           git add assets/js/data.js assets/data/public_data.v1.js data/owcs.sqlite \
-                  assets/data/team_asset_sources.json 2>/dev/null || true
+                  assets/data/team_asset_sources.json assets/data/team_coverage.v1.json 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "No validated calendar/team changes this run — nothing to publish."
             exit 0

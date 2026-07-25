@@ -37,7 +37,23 @@ CREATE TABLE IF NOT EXISTS teams (
   facebook           TEXT,
   member_count       INTEGER,
   avatar_source_url  TEXT,             -- CANDIDATE logo source only; never hotlinked
-  faceit_enriched_at TEXT              -- UTC ISO timestamp of last successful enrichment
+  faceit_enriched_at TEXT,             -- UTC ISO timestamp of last successful enrichment
+  -- Canonical team registry (Phase D2 — see team_registry.py). Renames and
+  -- region conflicts are never silently resolved: previous names are kept,
+  -- and an unresolved conflict sets needs_review instead of guessing.
+  aliases            TEXT,             -- JSON array of known alternate names
+  previous_names     TEXT,             -- JSON array, oldest first (renames)
+  organization       TEXT,             -- parent org identity, when distinct from the team name
+  status             TEXT NOT NULL DEFAULT 'active'
+                     CHECK (status IN ('active','inactive','historical','unsigned')),
+  effective_start    TEXT,             -- ISO date this identity became current
+  effective_end      TEXT,             -- ISO date it stopped being current (historical)
+  source_authority   TEXT,             -- faceit | official-calendar | broadcast-discovery | manual
+  identity_verified_at TEXT,           -- UTC ISO — last time identity facts were confirmed by source_authority
+  roster_source      TEXT,             -- faceit | manual
+  roster_verified_at TEXT,             -- UTC ISO — last time match_rosters were refreshed for this team
+  needs_review       INTEGER NOT NULL DEFAULT 0,
+  review_reason      TEXT              -- explicit reason (never a silent guess) when needs_review=1
 );
 
 -- Core match metadata (FACEIT/results ingest + vision fill this) -------
