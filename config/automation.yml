@@ -15,7 +15,7 @@
 # Rolling backfill window (Phase D). The system guarantees every configured
 # professional match completed within this many days has a tracked capture
 # state — never a silent gap.
-lookback_days: 14
+lookback_days: 30
 
 # How far ahead the calendar sync looks for scheduled matches (Phase B).
 schedule_horizon_days: 30

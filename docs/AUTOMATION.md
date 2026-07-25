@@ -190,10 +190,10 @@ See `pipeline/automation/broadcast_matching.py`'s module docstring and
 
 ```bash
 python pipeline/automation/cli.py verify-channels [--json]
-python pipeline/automation/cli.py calendar-dryrun --lookback-days 14
-python pipeline/automation/cli.py broadcast-dryrun --lookback-days 14 [--allow-search-fallback]
-python pipeline/automation/cli.py discover-broadcasts [--dry-run] --lookback-days 14
-python pipeline/automation/cli.py coverage --window 14   # now includes Phase C6 broadcast coverage
+python pipeline/automation/cli.py calendar-dryrun --lookback-days 30
+python pipeline/automation/cli.py broadcast-dryrun --lookback-days 30 [--allow-search-fallback]
+python pipeline/automation/cli.py discover-broadcasts [--dry-run] --lookback-days 30
+python pipeline/automation/cli.py coverage --window 30   # now includes Phase C6 broadcast coverage
 ```
 
 ### Required secrets (updated)
@@ -249,7 +249,7 @@ the only writers, and they only touch the automation DB):
 python pipeline/automation/cli.py init-db          # create/upgrade the job DB
 python pipeline/automation/cli.py config           # resolved operator config
 python pipeline/automation/cli.py registries       # competition/channel registries
-python pipeline/automation/cli.py coverage         # rolling 14-day report (Phase D4)
+python pipeline/automation/cli.py coverage         # rolling completeness report (Phase D4, default 30-day window)
 python pipeline/automation/cli.py coverage --save  # + persist a coverage snapshot
 python pipeline/automation/cli.py status           # job counts by state + locks
 ```

@@ -26,7 +26,7 @@ FACEIT_COMPETITIONS = os.path.join(CONFIG_DIR, "faceit_competitions.json")
 BROADCAST_CHANNELS = os.path.join(CONFIG_DIR, "broadcast_channels.json")
 
 DEFAULTS: dict[str, Any] = {
-    "lookback_days": 14,
+    "lookback_days": 30,
     "schedule_horizon_days": 30,
     "recording_pre_roll_minutes": 15,
     "recording_post_roll_minutes": 30,

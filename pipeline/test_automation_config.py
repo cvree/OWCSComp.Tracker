@@ -44,7 +44,7 @@ class TestYamlSubset(unittest.TestCase):
 class TestConfigLoading(unittest.TestCase):
     def test_real_automation_yml_loads(self):
         c = cfg.load_config()
-        self.assertEqual(c.lookback_days, 14)
+        self.assertEqual(c.lookback_days, 30)
         self.assertEqual(c.schedule_horizon_days, 30)
         self.assertIn("na", c.regions)
         self.assertIn("global", c.regions)

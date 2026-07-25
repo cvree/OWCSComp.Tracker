@@ -1,12 +1,12 @@
 """
-coverage.py — rolling 14-day completeness report (Roadmap Phase D4).
+coverage.py — rolling completeness report (Roadmap Phase D4).
 
 The roadmap's first real target is NOT "record everything": it is to prove that
 "no event can be silently missed." This module produces exactly that proof — a
-per-match capture ledger over the rolling lookback window, plus the summary
-counts the operator dashboard shows:
+per-match capture ledger over the rolling lookback window (default 30 days,
+config `lookback_days`), plus the summary counts the operator dashboard shows:
 
-    14-day professional matches discovered: 42
+    30-day professional matches discovered: 42
     Broadcast located: 39
     Downloaded: 35
     Segmented: 30
