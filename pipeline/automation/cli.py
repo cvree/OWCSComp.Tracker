@@ -8,7 +8,7 @@ package invoked with -m):
   python pipeline/automation/cli.py init-db
   python pipeline/automation/cli.py config
   python pipeline/automation/cli.py registries
-  python pipeline/automation/cli.py coverage [--window 14] [--save]
+  python pipeline/automation/cli.py coverage [--window 30] [--save]
   python pipeline/automation/cli.py status
 
 Everything is offline and read-mostly; `init-db` and `coverage --save` are the
@@ -491,7 +491,7 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("status", help="job counts by state + locks").set_defaults(func=cmd_status)
 
     cvp = sub.add_parser("coverage", help="rolling completeness report (Phase D4)")
-    cvp.add_argument("--window", type=int, default=14, help="lookback days")
+    cvp.add_argument("--window", type=int, default=30, help="lookback days")
     cvp.add_argument("--save", action="store_true", help="persist a coverage snapshot")
     cvp.set_defaults(func=cmd_coverage)
 

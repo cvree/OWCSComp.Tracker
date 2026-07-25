@@ -17,7 +17,7 @@
 # FACEIT_API_KEY / YOUTUBE_API_KEY secrets but never write to the repo:
 #   mode=candidates       list OW2 championships + organizers to confirm ids
 #   mode=verify           verify every ENABLED competition via the FACEIT API
-#   mode=dryrun            rolling 14-day FACEIT+calendar discovery dry-run
+#   mode=dryrun            rolling FACEIT+calendar discovery dry-run (lookback_days input)
 #   mode=verify-channels   verify every configured YouTube channel (C1)
 #   mode=calendar-dryrun   official-calendar dry-run + reconciliation (C7)
 #   mode=broadcast-dryrun  YouTube broadcast discovery + matching, read-only (C3/C4)
@@ -57,7 +57,7 @@ on:
       lookback_days:
         description: "Rolling lookback window (days)"
         required: false
-        default: "14"
+        default: "30"
 
 concurrency:
   group: owcs-discovery
@@ -76,7 +76,7 @@ jobs:
       YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
       MODE: ${{ github.event.inputs.mode || 'sync' }}
       QUERY: ${{ github.event.inputs.query || 'OWCS' }}
-      LOOKBACK: ${{ github.event.inputs.lookback_days || '14' }}
+      LOOKBACK: ${{ github.event.inputs.lookback_days || '30' }}
     steps:
       - name: Check out repo
         uses: actions/checkout@v4
@@ -134,7 +134,7 @@ jobs:
           if [ -z "$FACEIT_API_KEY" ]; then echo "::error::FACEIT_API_KEY not set"; exit 1; fi
           python3 pipeline/automation/cli.py verify-registry
 
-      - name: Rolling 14-day discovery dry-run (mode=dryrun)
+      - name: Rolling discovery dry-run (mode=dryrun)
         if: github.event.inputs.mode == 'dryrun'
         run: |
           if [ -z "$FACEIT_API_KEY" ]; then echo "::error::FACEIT_API_KEY not set"; exit 1; fi
