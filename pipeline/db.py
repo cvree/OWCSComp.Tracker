@@ -100,6 +100,10 @@ def migrate_schema(con: sqlite3.Connection) -> None:
         "lifecycle_status": "TEXT",
         "capture_status": "TEXT",
         "competition_id": "TEXT",
+        # Phase D2.1 match-export repair.
+        "fixture_kind": "TEXT",
+        "lifecycle_source": "TEXT",
+        "lifecycle_repaired_at": "TEXT",
     })
     _add_missing_columns(con, "map_results", {
         "score_a": "INTEGER",

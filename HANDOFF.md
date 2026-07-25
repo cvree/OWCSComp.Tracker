@@ -1,5 +1,90 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
+## CURRENT STATUS (authoritative — 2026-07-25) — Phase D2.1: production team population, verified logos, match export repair
+
+Everything below this section down to the next `## CURRENT STATUS` marker is
+historical context; when it conflicts with this section, this section wins.
+Full detail in `docs/AUTOMATION.md` ("Phase D2.1").
+
+**Match export repair.** Root cause found and fixed: `export_data.py`'s
+`build_public_payload` only surfaced a match via a completed CV ingest run
+or `_discovered_window_matches` (required `competition_id`/`lifecycle_status`
+set AND a spot inside the rolling discovery window) — a real, evidenced
+legacy match with neither (predating the Phase B automation columns) fell
+through and silently vanished from the calendar, match directory,
+tournament pages, team history, search, and stats. New
+`pipeline/automation/match_repair.py` classifies every match's
+`fixture_kind` (production vs the 12 `sample:*` demo rows from
+`pipeline/sample_data.json` — evidence-based, never guessed) and backfills
+`lifecycle_status` only from the match's own pre-existing `status` field
+(`final→finished`/`live→live`/`upcoming→scheduled`; `unknown` stays
+unresolved for a human). The export gate itself is fixed so a concluded
+(`status='final'`) real match is never excluded by the rolling window
+(that window governs discovery recency, not export retention) while
+synthetic rows stay correctly hidden. `m-cr-zeta-krgf` and `m-cr-zeta-ccuf`
+now export; `m01`–`m12` correctly do not. New
+`pipeline/automation/match_export_coverage.py` reports exactly why every
+excluded match isn't public. New CLI: `match-audit`, `match-repair
+[--write] [--coverage]`, `export-coverage`. New `discovery.yml` dispatch
+modes: `match-audit`, `match-repair-dryrun`, `export-dryrun`; the `sync`
+path now always runs `match-repair --write` (needs no API key) before
+regenerating the export. 2 new test suites (`test_automation_match_repair.py`,
+`test_match_export_coverage.py`), 34 new checks, all offline.
+
+**Team population.** Ran live against this repo's real `FACEIT_API_KEY`/
+`YOUTUBE_API_KEY` GitHub Actions secrets via `workflow_dispatch` on this
+phase's branch: 262 real matches exist in the 2 enabled FACEIT competitions
+but 0 fall inside the current 30-day window; the verified YouTube channel's
+recent uploads are all short-form social clips, not match VODs. Honest
+"nothing new today" — no team fabricated to force a different result. The
+existing 9 teams (from earlier CV/manual ingestion) remain the complete,
+evidenced registry.
+
+**First verified logo batch.** Real primary-source candidates found via web
+search (each org's own domain) for the 9 known teams, run through the
+existing `team_assets.py` state machine unmodified. **Published** (official
+site, ≥150px, all variants): Crazy Raccoon, ZETA DIVISION, Team Falcons,
+Spacestation Gaming, Twisted Minds. **Held for a human** (validated but
+below a 150px auto-approve bar): NRG (72px), Al Qadsiah (50px). **No
+candidate found** (needs a human): Gen.G Esports (site only exposed a
+sponsor banner, not their own mark), Quick Esports (rebranded to "Vanir
+Quick", ambiguous current identity — never merged on name similarity).
+Found and fixed two real bugs surfaced only by actually publishing for the
+first time: `build_asset_manifest.py` never recognized a published
+candidate (`team_assets.py` writes `assetCandidates[].state=="published"`,
+the manifest builder read a flat `sourceUrl` field nothing ever wrote), and
+`publish_candidate` wrote Windows backslash paths into `logo_url` — a
+browser can never load `assets\img\teams\x\logo.png` — fixed with a
+`_site_relpath()` helper, regression-tested.
+
+**Team Coverage dashboard**: `team-coverage.html` gained a 16-filter bar
+(needs-review, missing identity/region/FACEIT-id/roster, roster conflict,
+missing/candidate/approved/fallback logo, missing broadcast, no captured
+maps, historical, unsigned, academy, duplicate-name conflict) plus explicit
+FACEIT-id/logo-state columns and a remediation hint per blocking issue.
+
+**Shared asset resolver audit**: confirmed (no changes needed) — a single
+`P.teamPlate()` in `core.js` already renders every team logo, used
+consistently by all 11 public page scripts.
+
+### Honest gaps / next blockers
+- NRG and Al Qadsiah logos need a human to find a higher-resolution
+  official source than their site favicons.
+- Gen.G and Quick Esports need a human to locate/confirm an official mark
+  (Gen.G: find the real brand asset, not a sponsor banner; Quick Esports:
+  resolve the Vanir Quick rebrand before sourcing a logo at all).
+- The team registry's coarse `region` values ("Asia") don't match
+  `config/automation.yml`'s finer regions list (korea/japan/pacific/china) —
+  a pre-existing mismatch (not introduced this pass) that surfaces as
+  `unsupported` in the coverage report for 4 real, active teams. Needs a
+  human to assign each team's correct fine-grained region; not guessed here.
+- Real team/match discovery still finds nothing in-window as of this pass —
+  rerun `match-repair`/discovery dry-runs periodically; the infrastructure
+  is live and will pick up new activity automatically once it falls inside
+  the 30-day window.
+
+---
+
 ## CURRENT STATUS (authoritative — 2026-07-24) — Phase C: YouTube broadcast discovery
 
 Read-only official-schedule + YouTube broadcast discovery, built on the

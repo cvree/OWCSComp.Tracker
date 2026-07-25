@@ -298,7 +298,6 @@ silent omission.
 
 ### Known, documented limitations
 
-- **No real logo was published this pass.** `assets/data/team_asset_sources.json`'s existing entries are prose hints ("verify the org's current press/brand page"), not concrete URLs — there was nothing to safely fetch and approve without guessing. `collect-team-assets` mechanically promotes any FACEIT-sourced avatar/cover URL team_enrichment.py has already recorded (0 promoted this run — none have run live against real FACEIT team data yet in this environment). The full pipeline is built and tested against synthetic fixtures; a human still has to run `approve-team-asset --confirm` before anything ever gets published.
 - **AVIF is not generated.** No AVIF encoder is available without adding a new project dependency, which is out of scope for this stdlib/existing-deps-only automation layer. `publish_candidate`'s output always sets `"avif": null` rather than fabricating a claim.
 - **WebP alpha**: this environment's OpenCV/libwebp binding does not round-trip a WebP's alpha channel (verified — a written RGBA WebP reads back 3-channel). Since transparency is a hard requirement, the square/wide variants are written as PNG; WebP is used only for the dark-safe/light-safe variants, which are always composited onto an opaque backing plate and have no transparency to lose.
 - **`comp_snapshots` vs `hero_stints`**: the content DB has two generations of capture tables. `hero_stints` is what the real, current full-map CV pipeline (and the public export's actual comp data) is built from; `comp_snapshots` is an older, separate path some other tools still write to. `compositionTrackingPending` and the coverage ledger's `composition-captured` state both key off `hero_stints` — using `comp_snapshots` here would have reported the wrong teams as "done."
@@ -333,7 +332,99 @@ preservation, idempotent republish, FACEIT-candidate promotion),
 reflects the most recent match, needs-review/aliases surface honestly,
 GitHub-Pages-safe relative logo paths).
 
-## Publication PR auto-merge (Phase I, partial)
+## Phase D2.1 — production team population, verified logos, match export repair
+
+Turns the Phase D2 architecture into real production coverage. Three parts.
+
+### 1. Match export repair
+
+**Root cause.** `export_data.build_public_payload` only ever surfaced a match
+through two paths: a completed `ingest_runs` CV run, or
+`_discovered_window_matches` (which required `competition_id` OR
+`lifecycle_status` to be set, AND the match to fall inside the rolling
+discovery window). A match entered before the Phase B automation columns
+existed — real, evidenced, but with neither field set — had no path in and
+silently vanished from the calendar, match directory, tournament pages, team
+history, search and stats. Legacy real matches `m-cr-zeta-krgf` and
+`m-cr-zeta-ccuf` hit exactly this gap; the 12 `sample:*`-sourced demo rows
+(`m01`–`m12`, from `pipeline/sample_data.json`) correctly do NOT — they are
+synthetic fixtures, not real matches, and must stay hidden.
+
+| Roadmap item | Where | Status |
+|---|---|---|
+| Evidence-based `fixture_kind` classification (production vs synthetic, never guessed) | `pipeline/automation/match_repair.py` (`classify_fixture_kind` — evidence is the row's own `source_ref`/`faceit_match_id` sample-prefix, never match content) | ✅ |
+| Evidence-based `lifecycle_status` backfill (only from the match's own pre-existing `status`) | `match_repair.infer_lifecycle_status` (`final→finished`, `live→live`, `upcoming→scheduled`; `unknown` has no safe mapping and is left for a human) | ✅ |
+| Idempotent dry-run/write repair, provenance recorded | `match_repair.repair_matches` (+ `lifecycle_source`/`lifecycle_repaired_at` columns) | ✅ |
+| Export-gate fix: a concluded (`status='final'`) real match is never excluded by the rolling discovery window | `export_data._discovered_window_matches` (bypasses the window for `status='final'`, still excludes `fixture_kind='synthetic'`) | ✅ |
+| Match export coverage report (why every excluded match isn't public) | `pipeline/automation/match_export_coverage.py` — computed directly from `export_data.build_public_payload`, never a second opinion | ✅ |
+
+A bare *unconfirmed upcoming* stub (no evidence at all — no `competition_id`,
+no `lifecycle_status`, not concluded) still never appears; only a match with
+real evidence (a completed result, or FACEIT/calendar discovery) gets
+surfaced. `test_automation_calendar_export.py`'s
+`test_undiscovered_match_not_fabricated` pins this down.
+
+```bash
+python pipeline/automation/cli.py match-audit [--json]
+python pipeline/automation/cli.py match-repair [--write] [--coverage] [--json]
+python pipeline/automation/cli.py export-coverage [--json]
+```
+
+New `discovery.yml` `workflow_dispatch` modes: `match-audit`,
+`match-repair-dryrun`, `export-dryrun` (all read-only). The `sync` path now
+always runs `match-repair --write` + regenerates the public export before
+the FACEIT/team-enrichment steps — this needs no API key, so a legacy
+match's export gap never lingers on a schedule with registries disabled.
+
+Tests: `test_automation_match_repair.py`, `test_match_export_coverage.py`.
+
+### 2. Team population from real activity
+
+Ran live against this repo's actual GitHub Actions secrets (workflow_dispatch
+`dryrun`/`broadcast-dryrun`/`calendar-dryrun`/`teams-dryrun` on this phase's
+branch): both `FACEIT_API_KEY` and `YOUTUBE_API_KEY` are live and connected —
+262 real matches exist in the 2 enabled FACEIT competitions, but **0 fall
+inside the current 30-day lookback/horizon window**; the verified YouTube
+channel's recent uploads are all short-form social clips, not match VODs (0
+high-confidence broadcast links). This is an honest "nothing new today"
+result, not a defect — no team was fabricated to produce a different
+outcome. The 9 teams already in the registry (from earlier CV/manual
+ingestion) remain the complete, evidenced set; they already export
+independent of composition capture (Phase D2).
+
+### 3. First verified logo batch
+
+Real primary-source candidates researched (web search → each org's own
+domain) for the 9 known teams, then run through the existing, unmodified
+`team_assets.py` state machine (`candidate → downloaded → validated →
+human-approved → published`) — explicitly user-authorized for this batch to
+self-approve candidates from a team's own primary domain that pass
+validation and clear a 150px minimum-dimension bar (stricter than the
+pipeline's own 48px validity floor).
+
+| Team | Result |
+|---|---|
+| Crazy Raccoon, ZETA DIVISION, Team Falcons, Spacestation Gaming, Twisted Minds | **Published** — official-website source, ≥150px, all variants generated |
+| NRG, Al Qadsiah | Validated, held for a human — official favicon only 72px/50px, below the auto-approve bar |
+| Gen.G Esports | No candidate — site's exposed images were a Shopify sponsor banner, not the team's own mark; needs a human to find the real brand asset |
+| Quick Esports | No candidate — rebranded to "Vanir Quick" per Liquipedia with an ambiguous current roster; identity needs a human decision before sourcing a mark, per the never-merge-on-name-similarity rule |
+
+Two real bugs surfaced and fixed by actually publishing for the first time
+(HANDOFF's Phase D2 pass had never exercised this path end-to-end):
+
+1. **`build_asset_manifest.py` never recognized a published candidate.** It
+   read a flat `sourceUrl` field from `team_asset_sources.json` that nothing
+   in `team_assets.py` ever wrote — the real shape is
+   `assetCandidates[].state == "published"`. Fixed to check for a published
+   candidate first.
+2. **`team_assets.publish_candidate` wrote Windows-style backslash paths**
+   (`os.path.relpath` on Windows) into `variants`/`teams.logo_url` — a
+   browser can never resolve `assets\img\teams\x\logo.png` as a URL, so
+   every published logo silently failed to load. Fixed with a
+   `_site_relpath()` helper that always normalizes to forward slashes;
+   regression-tested (`test_variant_paths_are_github_pages_safe`).
+
+
 
 The hourly `sync` path's data-update PR (calendar + team facts) now merges
 itself once its OWN CI run (`ci.yml`, triggered by the push) goes green —

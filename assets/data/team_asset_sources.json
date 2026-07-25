@@ -5,22 +5,242 @@
    "candidateSources": [
     "Official Al Qadsiah club channels (verify the esports division's current press/brand page before use)",
     "Official OWCS broadcast graphics (crop only with provenance recorded)"
+   ],
+   "assetCandidates": [
+    {
+     "url": "https://storage.googleapis.com/alqadsiah-public-website/main/fav.png",
+     "sourceKind": "official-website",
+     "authorityRank": 1,
+     "note": "alqadsiah.com official site favicon (50x50) \u2014 low-res, human review before approval",
+     "discoveredAt": "2026-07-25T23:31:56+00:00",
+     "state": "validated",
+     "localPath": "C:\\Users\\eppol\\Claude Code\\owcs\\data\\asset_staging\\qadsiah\\d35e679a54257f5b.png",
+     "hash": "d35e679a54257f5b",
+     "byteSize": 763,
+     "downloadedAt": "2026-07-25T23:34:39+00:00",
+     "width": 50,
+     "height": 50,
+     "hasTransparency": true,
+     "aspectRatio": 1.0
+    }
    ]
   },
   "twis": {
    "candidateSources": [
     "Official Twisted Minds channels (verify the org's current press/brand page before use)",
     "Official OWCS broadcast graphics (crop only with provenance recorded)"
+   ],
+   "assetCandidates": [
+    {
+     "url": "https://store.twisminds.gg/cdn/shop/files/Team-Base-Logo_4805b9f2-7535-4e2d-8102-e45d38675108.jpg",
+     "sourceKind": "official-website",
+     "authorityRank": 1,
+     "note": "store.twisminds.gg (Twisted Minds' own storefront subdomain) team logo (256x256)",
+     "discoveredAt": "2026-07-25T23:31:56+00:00",
+     "state": "published",
+     "localPath": "C:\\Users\\eppol\\Claude Code\\owcs\\data\\asset_staging\\twis\\b6b1ca4233e2591f.jpg",
+     "hash": "b6b1ca4233e2591f",
+     "byteSize": 11785,
+     "downloadedAt": "2026-07-25T23:34:38+00:00",
+     "width": 256,
+     "height": 256,
+     "hasTransparency": false,
+     "aspectRatio": 1.0,
+     "approvedBy": "Claude (autonomous session, Phase D2.1, user-authorized batch)",
+     "approvedAt": "2026-07-25T23:34:38+00:00",
+     "publishedAt": "2026-07-25T23:34:38+00:00",
+     "variants": {
+      "original": "assets/img/teams/twis/logo.png",
+      "square": "assets/img/teams/twis/logo-square.png",
+      "wide": "assets/img/teams/twis/logo-wide.png",
+      "dark-safe": "assets/img/teams/twis/logo-dark-safe.webp",
+      "light-safe": "assets/img/teams/twis/logo-light-safe.webp"
+     },
+     "accentColorRgb": [
+      250,
+      107,
+      132
+     ],
+     "avif": null,
+     "effectiveFrom": "2026-07-25"
+    }
    ]
   },
   "cr": {
    "candidateSources": [
     "Official Crazy Raccoon channels (verify current press/brand page before use)"
+   ],
+   "assetCandidates": [
+    {
+     "url": "https://crazyraccoon.jp/wp/wp-content/uploads/2023/04/cropped-logo-192x192.jpg",
+     "sourceKind": "official-website",
+     "authorityRank": 1,
+     "note": "crazyraccoon.jp official site icon (192x192)",
+     "discoveredAt": "2026-07-25T23:31:55+00:00",
+     "state": "published",
+     "localPath": "C:\\Users\\eppol\\Claude Code\\owcs\\data\\asset_staging\\cr\\b0c5f96bf4ba2382.jpg",
+     "hash": "b0c5f96bf4ba2382",
+     "byteSize": 5780,
+     "downloadedAt": "2026-07-25T23:34:38+00:00",
+     "width": 192,
+     "height": 192,
+     "hasTransparency": false,
+     "aspectRatio": 1.0,
+     "approvedBy": "Claude (autonomous session, Phase D2.1, user-authorized batch)",
+     "approvedAt": "2026-07-25T23:34:38+00:00",
+     "publishedAt": "2026-07-25T23:34:38+00:00",
+     "variants": {
+      "original": "assets/img/teams/cr/logo.png",
+      "square": "assets/img/teams/cr/logo-square.png",
+      "wide": "assets/img/teams/cr/logo-wide.png",
+      "dark-safe": "assets/img/teams/cr/logo-dark-safe.webp",
+      "light-safe": "assets/img/teams/cr/logo-light-safe.webp"
+     },
+     "accentColorRgb": [
+      248,
+      205,
+      205
+     ],
+     "avif": null,
+     "effectiveFrom": "2026-07-25"
+    }
    ]
   },
   "zeta": {
    "candidateSources": [
     "Official ZETA DIVISION channels (verify current press/brand page before use)"
+   ],
+   "assetCandidates": [
+    {
+     "url": "https://zetadivision.com/wp-content/themes/zeta_division/assets/img/global/apple-touch-icon-180x180.png",
+     "sourceKind": "official-website",
+     "authorityRank": 1,
+     "note": "zetadivision.com official site icon (180x180)",
+     "discoveredAt": "2026-07-25T23:31:55+00:00",
+     "state": "published",
+     "localPath": "C:\\Users\\eppol\\Claude Code\\owcs\\data\\asset_staging\\zeta\\ec57de0b4f6c2e2c.png",
+     "hash": "ec57de0b4f6c2e2c",
+     "byteSize": 5834,
+     "downloadedAt": "2026-07-25T23:34:38+00:00",
+     "width": 180,
+     "height": 180,
+     "hasTransparency": false,
+     "aspectRatio": 1.0,
+     "approvedBy": "Claude (autonomous session, Phase D2.1, user-authorized batch)",
+     "approvedAt": "2026-07-25T23:34:38+00:00",
+     "publishedAt": "2026-07-25T23:34:38+00:00",
+     "variants": {
+      "original": "assets/img/teams/zeta/logo.png",
+      "square": "assets/img/teams/zeta/logo-square.png",
+      "wide": "assets/img/teams/zeta/logo-wide.png",
+      "dark-safe": "assets/img/teams/zeta/logo-dark-safe.webp",
+      "light-safe": "assets/img/teams/zeta/logo-light-safe.webp"
+     },
+     "accentColorRgb": [
+      202,
+      202,
+      202
+     ],
+     "avif": null,
+     "effectiveFrom": "2026-07-25"
+    }
+   ]
+  },
+  "falcons": {
+   "candidateSources": [],
+   "assetCandidates": [
+    {
+     "url": "https://teamfalcons.sa/images/falcons-logo.png",
+     "sourceKind": "official-website",
+     "authorityRank": 1,
+     "note": "teamfalcons.sa official site logo file (1024x846, alpha)",
+     "discoveredAt": "2026-07-25T23:31:56+00:00",
+     "state": "published",
+     "localPath": "C:\\Users\\eppol\\Claude Code\\owcs\\data\\asset_staging\\falcons\\4a56ebdfbf6d5e19.png",
+     "hash": "4a56ebdfbf6d5e19",
+     "byteSize": 124192,
+     "downloadedAt": "2026-07-25T23:34:38+00:00",
+     "width": 846,
+     "height": 1024,
+     "hasTransparency": true,
+     "aspectRatio": 0.826,
+     "approvedBy": "Claude (autonomous session, Phase D2.1, user-authorized batch)",
+     "approvedAt": "2026-07-25T23:34:38+00:00",
+     "publishedAt": "2026-07-25T23:34:38+00:00",
+     "variants": {
+      "original": "assets/img/teams/falcons/logo.png",
+      "square": "assets/img/teams/falcons/logo-square.png",
+      "wide": "assets/img/teams/falcons/logo-wide.png",
+      "dark-safe": "assets/img/teams/falcons/logo-dark-safe.webp",
+      "light-safe": "assets/img/teams/falcons/logo-light-safe.webp"
+     },
+     "accentColorRgb": [
+      0,
+      188,
+      109
+     ],
+     "avif": null,
+     "effectiveFrom": "2026-07-25"
+    }
+   ]
+  },
+  "ssg": {
+   "candidateSources": [],
+   "assetCandidates": [
+    {
+     "url": "https://cdn.prod.website-files.com/605b56f5941891738ce838c2/6148c1ff3aeb8dd344283bd3_GoldMonoDark.jpg",
+     "sourceKind": "official-website",
+     "authorityRank": 1,
+     "note": "spacestationgaming.com official site apple-touch-icon (256x256)",
+     "discoveredAt": "2026-07-25T23:31:56+00:00",
+     "state": "published",
+     "localPath": "C:\\Users\\eppol\\Claude Code\\owcs\\data\\asset_staging\\ssg\\df55ed8478c98563.jpg",
+     "hash": "df55ed8478c98563",
+     "byteSize": 20237,
+     "downloadedAt": "2026-07-25T23:34:38+00:00",
+     "width": 256,
+     "height": 256,
+     "hasTransparency": false,
+     "aspectRatio": 1.0,
+     "approvedBy": "Claude (autonomous session, Phase D2.1, user-authorized batch)",
+     "approvedAt": "2026-07-25T23:34:38+00:00",
+     "publishedAt": "2026-07-25T23:34:38+00:00",
+     "variants": {
+      "original": "assets/img/teams/ssg/logo.png",
+      "square": "assets/img/teams/ssg/logo-square.png",
+      "wide": "assets/img/teams/ssg/logo-wide.png",
+      "dark-safe": "assets/img/teams/ssg/logo-dark-safe.webp",
+      "light-safe": "assets/img/teams/ssg/logo-light-safe.webp"
+     },
+     "accentColorRgb": [
+      232,
+      227,
+      214
+     ],
+     "avif": null,
+     "effectiveFrom": "2026-07-25"
+    }
+   ]
+  },
+  "nrg": {
+   "candidateSources": [],
+   "assetCandidates": [
+    {
+     "url": "https://www.nrg.gg/cdn/shop/files/NRG-72.72-Sq_96x96.png",
+     "sourceKind": "official-website",
+     "authorityRank": 1,
+     "note": "nrg.gg official site icon (72x72) \u2014 low-res, human review before approval",
+     "discoveredAt": "2026-07-25T23:31:56+00:00",
+     "state": "validated",
+     "localPath": "C:\\Users\\eppol\\Claude Code\\owcs\\data\\asset_staging\\nrg\\d94584884509f315.png",
+     "hash": "d94584884509f315",
+     "byteSize": 928,
+     "downloadedAt": "2026-07-25T23:34:39+00:00",
+     "width": 72,
+     "height": 72,
+     "hasTransparency": false,
+     "aspectRatio": 1.0
+    }
    ]
   }
  }

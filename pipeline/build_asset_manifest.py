@@ -137,20 +137,35 @@ def build() -> dict:
     for tid, t in sorted(all_teams.items()):
         src = team_sources.get(tid, {})
         logo = os.path.join(TEAMS_DIR, tid, "logo.png")
-        if os.path.exists(logo) and src.get("sourceUrl"):
+        # A published candidate (pipeline/automation/team_assets.py's real
+        # candidate -> downloaded -> validated -> human-approved -> published
+        # state machine) is the authoritative source once one exists — its
+        # own recorded url/sourceKind/note/timestamps are real provenance,
+        # not a guess. `sourceUrl` on the team entry itself is kept as a
+        # fallback for any older, flat-shaped registry entry.
+        published = next((c for c in src.get("assetCandidates", [])
+                          if c.get("state") == "published"), None)
+        if os.path.exists(logo) and (published or src.get("sourceUrl")):
             size = _png_size(logo)
+            source_url = published["url"] if published else src["sourceUrl"]
+            source_kind = (published.get("sourceKind") if published
+                          else src.get("sourceKind", "official"))
+            attribution = ((published.get("note") or f"Official {t['name']} mark.")
+                          if published else
+                          src.get("attribution", f"Official {t['name']} mark."))
+            retrieved_at = ((published.get("downloadedAt") or published.get("publishedAt") or now)
+                           if published else src.get("retrievedAt", now))
             teams_out[tid] = {
                 "assetType": "logo",
                 "path": f"assets/img/teams/{tid}/logo.png",
-                "source": src["sourceUrl"],
-                "sourceKind": src.get("sourceKind", "official"),
-                "attribution": src.get("attribution",
-                                       f"Official {t['name']} mark."),
+                "source": source_url,
+                "sourceKind": source_kind,
+                "attribution": attribution,
                 "license": src.get("license",
                                    "Team mark used nominatively to "
                                    "identify the organization in a "
                                    "non-commercial fan project."),
-                "retrievedAt": src.get("retrievedAt", now),
+                "retrievedAt": retrieved_at,
                 "width": size[0] if size else None,
                 "height": size[1] if size else None,
                 "hash": _sha256(logo),
