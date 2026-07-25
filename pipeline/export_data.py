@@ -496,6 +496,54 @@ REGIONS = [
 ]
 
 
+TEAM_ASSET_SOURCES_PATH = os.path.join(db.REPO_ROOT, "assets", "data", "team_asset_sources.json")
+
+
+def _json_list(raw: str | None) -> list[str]:
+    if not raw:
+        return []
+    try:
+        val = json.loads(raw)
+        return val if isinstance(val, list) else []
+    except (TypeError, ValueError):
+        return []
+
+
+def _team_asset_sources(path: str = TEAM_ASSET_SOURCES_PATH) -> dict:
+    if not os.path.exists(path):
+        return {}
+    with open(path, encoding="utf-8") as f:
+        return json.load(f).get("teams", {})
+
+
+def _has_logo_candidate(team_id: str, sources: dict) -> bool:
+    entry = sources.get(team_id, {})
+    return bool(entry.get("candidateSources") or entry.get("assetCandidates"))
+
+
+def _current_roster(con, team_id: str) -> list[dict]:
+    """Players from this team's most recently dated match — the closest
+    thing to a 'current roster' the content DB can state as fact. Empty
+    (never guessed) when the team has no tracked match yet."""
+    m = con.execute(
+        """SELECT id FROM matches WHERE team_a=? OR team_b=?
+           ORDER BY COALESCE(scheduled_at, finished_at, date) DESC LIMIT 1""",
+        (team_id, team_id)).fetchone()
+    if not m:
+        return []
+    return [{"id": p["id"], "handle": p["nickname"], "role": rv(p, "role"),
+             "country": rv(p, "country")}
+            for p in con.execute(
+                """SELECT p.* FROM match_rosters r JOIN players p ON p.id=r.player_id
+                   WHERE r.match_id=? AND r.team_id=?""", (m["id"], team_id))]
+
+
+def _has_table(con, name: str) -> bool:
+    return con.execute(
+        "SELECT 1 FROM sqlite_master WHERE type IN ('table','view') AND name=?",
+        (name,)).fetchone() is not None
+
+
 def _region_id(raw: str | None) -> str:
     r = (raw or "").strip().lower()
     return r if r in {x["id"] for x in REGIONS} else "all"
@@ -1037,6 +1085,18 @@ def build_public_payload(con) -> dict:
     tournaments_out = [dict(t, teamIds=sorted(t["teamIds"]))
                        for t in tournaments_by_id.values()]
 
+    # Phase D2: every team in the canonical registry is a public entity,
+    # independent of whether the vision pipeline has captured any of its
+    # maps yet (teams_needed above still scopes tournament rosters/logos
+    # elsewhere; it never gates WHICH teams the site knows about).
+    asset_sources = _team_asset_sources()
+    # hero_stints is the REAL, current full-map CV pipeline's output (the
+    # Nepal milestone lives here); comp_snapshots is an older, separate
+    # capture path still written by other tools but not what the public
+    # compSnapshots payload above is actually built from — using it here
+    # would call a team's tracking "pending" or "done" on the wrong signal.
+    captured_team_ids = {r["team_id"] for r in con.execute(
+        "SELECT DISTINCT team_id FROM hero_stints")} if _has_table(con, "hero_stints") else set()
     teams = [{"id": r["id"], "name": r["name"], "code": r["code"],
               "region": _region_id(rv(r, "region")),
               "logoUrl": rv(r, "logo_url"),
@@ -1047,9 +1107,24 @@ def build_public_payload(con) -> dict:
               "socials": {k: v for k, v in
                           {"twitter": rv(r, "twitter"), "facebook": rv(r, "facebook")}.items()
                           if v} or None,
-              "memberCount": rv(r, "member_count")}
-             for r in con.execute("SELECT * FROM teams ORDER BY name")
-             if r["id"] in teams_needed]
+              "memberCount": rv(r, "member_count"),
+              # Canonical team registry (Phase D2) — identity/roster facts
+              # and explicit coverage states; never a substitute for actual
+              # capture evidence (compositionTrackingPending says so plainly).
+              "status": rv(r, "status", "active"),
+              "organization": rv(r, "organization"),
+              "aliases": _json_list(rv(r, "aliases")),
+              "previousNames": _json_list(rv(r, "previous_names")),
+              "sourceAuthority": rv(r, "source_authority"),
+              "identityVerifiedAt": rv(r, "identity_verified_at"),
+              "rosterSource": rv(r, "roster_source"),
+              "rosterVerifiedAt": rv(r, "roster_verified_at"),
+              "roster": _current_roster(con, r["id"]),
+              "needsReview": bool(rv(r, "needs_review")),
+              "reviewReason": rv(r, "review_reason"),
+              "hasLogoCandidate": _has_logo_candidate(r["id"], asset_sources),
+              "compositionTrackingPending": r["id"] not in captured_team_ids}
+             for r in con.execute("SELECT * FROM teams ORDER BY name")]
 
     return {
         "meta": {

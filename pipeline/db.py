@@ -66,6 +66,19 @@ def migrate_schema(con: sqlite3.Connection) -> None:
         "member_count": "INTEGER",
         "avatar_source_url": "TEXT",
         "faceit_enriched_at": "TEXT",
+        # Canonical team registry (Phase D2).
+        "aliases": "TEXT",
+        "previous_names": "TEXT",
+        "organization": "TEXT",
+        "status": "TEXT NOT NULL DEFAULT 'active'",
+        "effective_start": "TEXT",
+        "effective_end": "TEXT",
+        "source_authority": "TEXT",
+        "identity_verified_at": "TEXT",
+        "roster_source": "TEXT",
+        "roster_verified_at": "TEXT",
+        "needs_review": "INTEGER NOT NULL DEFAULT 0",
+        "review_reason": "TEXT",
     })
     _add_missing_columns(con, "matches", {
         "faceit_match_id": "TEXT",

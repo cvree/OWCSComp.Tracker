@@ -38,6 +38,8 @@ from automation import faceit_api  # noqa: E402
 from automation import job_store as js  # noqa: E402
 from automation import owcs_calendar  # noqa: E402
 from automation import reconcile as rec  # noqa: E402
+from automation import team_assets as tassets  # noqa: E402
+from automation import team_coverage as tcov  # noqa: E402
 from automation import team_enrichment as tenrich  # noqa: E402
 from automation import youtube_api as yt  # noqa: E402
 
@@ -282,12 +284,111 @@ def cmd_enrich_teams(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_team_coverage(args: argparse.Namespace) -> int:
+    """Per-team coverage ledger (Phase D2): identity/roster/logo/broadcast/
+    capture states, one row per registered team, every gap named."""
+    supported = {r.lower() for r in cfg.load_config().regions} or None
+    report = tcov.build_report(window_days=args.window, automation_db=args.db,
+                               supported_regions=supported)
+    if args.json:
+        print(json.dumps(report, indent=2))
+    else:
+        print(tcov.format_report(report))
+    if args.save:
+        _write_team_coverage_export(window_days=args.window)
+        print(f"\n[automation] wrote {os.path.relpath(TEAM_COVERAGE_EXPORT_PATH, content_db.REPO_ROOT)}")
+    return 0
+
+
+def cmd_collect_team_assets(args: argparse.Namespace) -> int:
+    """Mechanically promote already-recorded FACEIT avatar/cover candidates
+    into the ranked assetCandidates list, then print every team's ranked
+    candidates + pipeline state. Read-only unless --save (only ever adds
+    NEW candidate entries — never approves or publishes anything)."""
+    registry = tassets.load_registry()
+    added = tassets.collect_from_enrichment(registry)
+    print(f"[automation] collect-team-assets: {len(added)} new candidate(s) "
+          f"promoted from FACEIT-sourced avatar/cover URLs")
+    team_ids = args.team_id or sorted(registry.get("teams", {}).keys())
+    for tid in team_ids:
+        cands = tassets.ranked_candidates(registry, tid)
+        if not cands:
+            continue
+        print(f"  {tid}:")
+        for c in cands:
+            print(f"    [{c['state']:<14}] rank={c['authorityRank']} {c['sourceKind']:<16} {c['url']}")
+    if args.save:
+        tassets.save_registry(registry)
+        print(f"[automation] saved {os.path.relpath(tassets.DEFAULT_ASSET_SOURCES, content_db.REPO_ROOT)}")
+    return 0
+
+
+def cmd_approve_team_asset(args: argparse.Namespace) -> int:
+    """The ONE step in the logo pipeline a human must explicitly take.
+    Requires --confirm; there is no default that approves anything."""
+    registry = tassets.load_registry()
+    try:
+        cand = tassets.approve_candidate(
+            registry, args.team_id, args.url,
+            approved_by=args.approved_by, confirm=args.confirm)
+    except (KeyError, ValueError) as exc:
+        print(f"[automation] approve-team-asset FAILED: {exc}")
+        return 1
+    tassets.save_registry(registry)
+    print(f"[automation] {args.team_id}: {args.url} -> human-approved by {args.approved_by}")
+    print(f"  (run publish-team-assets --publish to generate variants and go live)")
+    return 0
+
+
+def cmd_publish_team_assets(args: argparse.Namespace) -> int:
+    """Publish every candidate already in 'human-approved' state (or
+    re-publish an already-'published' one after a rerun). Never approves a
+    new candidate — that gate is approve_candidate()'s alone. Default is a
+    dry-run listing; pass --publish to actually write files + logo_url."""
+    registry = tassets.load_registry()
+    con = _open_content_db()
+    ready = [(tid, c) for tid, entry in registry.get("teams", {}).items()
+             for c in entry.get("assetCandidates", [])
+             if c["state"] in ("human-approved", "published")]
+    print(f"[automation] publish-team-assets: {len(ready)} candidate(s) "
+          f"{'ready to publish' if not args.publish else 'to publish'}")
+    for tid, c in ready:
+        print(f"  {tid}: {c['url']} (state={c['state']})")
+        if args.publish:
+            out = tassets.publish_candidate(con, registry, tid, c["url"])
+            print(f"    -> published: {out['variants']}")
+    if args.publish:
+        tassets.save_registry(registry)
+    else:
+        print("  (dry-run — pass --publish to write variants + set logo_url)")
+    con.close()
+    return 0
+
+
+TEAM_COVERAGE_EXPORT_PATH = os.path.join(
+    content_db.REPO_ROOT, "assets", "data", "team_coverage.v1.json")
+
+
+def _write_team_coverage_export(window_days: int) -> None:
+    """Small, non-sensitive, committed JSON (team names/regions/coverage
+    states/blocking issues — nothing that isn't already public) the static
+    Team Coverage ops page reads. Regenerated as part of the same reviewed
+    export step as the public dataset, never on its own."""
+    report = tcov.build_report(window_days=window_days, automation_db=js.DEFAULT_DB)
+    os.makedirs(os.path.dirname(TEAM_COVERAGE_EXPORT_PATH), exist_ok=True)
+    with open(TEAM_COVERAGE_EXPORT_PATH, "w", encoding="utf-8") as f:
+        json.dump(report, f, indent=1)
+        f.write("\n")
+
+
 def _run_export() -> None:
     """Regenerate the production public export so calendar.html updates."""
     import subprocess
     script = os.path.join(_PIPELINE_DIR, "export_data.py")
     print("[automation] regenerating public export (export_data.py --public)…")
     subprocess.run([sys.executable, script, "--public"], check=False)
+    print("[automation] regenerating team coverage export (assets/data/team_coverage.v1.json)…")
+    _write_team_coverage_export(window_days=cfg.load_config().lookback_days)
 
 
 def cmd_coverage(args: argparse.Namespace) -> int:
@@ -624,6 +725,37 @@ def main(argv: list[str] | None = None) -> int:
     et.add_argument("--export", action="store_true",
                     help="regenerate public_data.v1.js after a live run")
     et.set_defaults(func=cmd_enrich_teams)
+
+    # ---- Phase D2 team coverage + verified logo pipeline -----------------
+    tc_p = sub.add_parser("team-coverage",
+                          help="per-team identity/roster/logo/broadcast/capture ledger (D2)")
+    tc_p.add_argument("--window", type=int, default=30, help="lookback days")
+    tc_p.add_argument("--json", action="store_true")
+    tc_p.add_argument("--save", action="store_true",
+                      help="write assets/data/team_coverage.v1.json")
+    tc_p.set_defaults(func=cmd_team_coverage)
+
+    ca_p = sub.add_parser("collect-team-assets",
+                          help="promote FACEIT-sourced candidate logo URLs into the ranked registry")
+    ca_p.add_argument("--team-id", action="append", default=None)
+    ca_p.add_argument("--save", action="store_true",
+                      help="write assets/data/team_asset_sources.json")
+    ca_p.set_defaults(func=cmd_collect_team_assets)
+
+    aa_p = sub.add_parser("approve-team-asset",
+                          help="explicit human approval of one validated logo candidate")
+    aa_p.add_argument("--team-id", required=True)
+    aa_p.add_argument("--url", required=True)
+    aa_p.add_argument("--approved-by", required=True, help="your name/handle, recorded in the registry")
+    aa_p.add_argument("--confirm", action="store_true",
+                      help="required — there is no default that approves a candidate")
+    aa_p.set_defaults(func=cmd_approve_team_asset)
+
+    pa_p = sub.add_parser("publish-team-assets",
+                          help="publish already human-approved logo candidates")
+    pa_p.add_argument("--publish", action="store_true",
+                      help="actually write variants + set logo_url (default: dry-run listing)")
+    pa_p.set_defaults(func=cmd_publish_team_assets)
 
     args = p.parse_args(argv)
     return args.func(args)

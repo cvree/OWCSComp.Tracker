@@ -57,11 +57,19 @@
     socials.facebook ? { label: "Facebook", href: socials.facebook } : null,
   ].filter(Boolean);
 
+  // Canonical registry facts (Phase D2) — status/organization/aliases are
+  // identity facts, never a substitute for capture evidence below.
+  const statusNote = team.status && team.status !== "active"
+    ? `<span class="chip" data-cap="${team.status === "unsigned" ? "needs-review" : "failed"}">${esc(team.status)}</span>` : "";
+  const aliasNote = (team.previousNames || []).length
+    ? `<span class="faint" title="Previous name(s), preserved on rename">formerly ${esc(team.previousNames.join(", "))}</span>` : "";
+
   P.$("#t-head").innerHTML = `
     <div class="split" style="align-items:center;gap:18px;flex-wrap:wrap">
       <div class="cluster" style="gap:14px">
         ${P.teamPlate(id, { size: "lg" })}
         ${P.badgeRegion(team.region)}
+        ${statusNote}
         ${recencyHtml}
         ${team.memberCount ? `<span class="faint">${esc(String(team.memberCount))} roster spots (FACEIT)</span>` : ""}
       </div>
@@ -70,11 +78,38 @@
           `<a class="chip" href="tournament.html?id=${esc(t.id)}">${esc(t.name)}</a>`).join("")}
       </div>
     </div>
+    ${aliasNote ? `<p class="faint" style="margin-top:6px">${aliasNote}</p>` : ""}
+    ${team.organization && team.organization !== team.name ? `<p class="faint">Organization: ${esc(team.organization)}</p>` : ""}
     ${team.description ? `<p class="lede" style="margin-top:10px">${esc(team.description)}</p>` : ""}
     ${profileLinks.length ? `<div class="cluster" style="gap:8px;margin-top:8px">
         ${profileLinks.map((l) =>
           `<a class="chip" href="${esc(l.href)}" target="_blank" rel="noopener noreferrer">${esc(l.label)}</a>`).join("")}
-      </div>` : ""}`;
+      </div>` : ""}
+    ${team.needsReview ? `<div class="stat-note" style="margin-top:10px"><span aria-hidden="true">⚑</span>
+        <span>Needs review: ${esc(team.reviewReason || "a fact from a second source conflicts with what's on record")}</span></div>` : ""}`;
+
+  /* ---- coverage (Phase D2) ------------------------------------------- */
+  const coverage = [
+    { label: "Identity", ok: !!team.identityVerifiedAt, note: team.identityVerifiedAt ? "verified" : "not yet verified by an automated source" },
+    { label: "Roster", ok: !!(team.rosterVerifiedAt && team.roster.length), note: team.rosterVerifiedAt ? "verified" : "no roster on record" },
+    { label: "Logo", ok: !!team.logoUrl, note: team.logoUrl ? "verified official mark" : (team.hasLogoCandidate ? "candidate awaiting human approval" : "no candidate source yet") },
+    { label: "Broadcast", ok: matches.some((m) => m.streamUrl), note: matches.some((m) => m.streamUrl) ? "located" : "no official broadcast located yet" },
+    { label: "Compositions", ok: !team.compositionTrackingPending, note: team.compositionTrackingPending ? "tracking pending — no maps captured yet" : "captured" },
+  ];
+  P.$("#t-coverage-sec").hidden = false;
+  P.$("#t-coverage").innerHTML = `<div class="cluster" style="gap:10px;flex-wrap:wrap">
+    ${coverage.map((c) => `<span class="chip" data-cap="${c.ok ? "verified" : "needs-review"}" title="${esc(c.note)}">${esc(c.label)}: ${c.ok ? "yes" : "no"}</span>`).join("")}
+  </div>`;
+
+  /* ---- roster (Phase D2) ---------------------------------------------- */
+  if (team.roster && team.roster.length) {
+    P.$("#t-roster-sec").hidden = false;
+    P.$("#t-roster-count").textContent = team.roster.length;
+    if (team.rosterSource === "faceit") P.$("#t-roster-src").hidden = false;
+    P.$("#t-roster").innerHTML = `<div class="cluster" style="gap:8px;flex-wrap:wrap">
+      ${team.roster.map((p) => `<span class="chip">${esc(p.handle)}${p.role ? ` <span class="faint">(${esc(p.role)})</span>` : ""}</span>`).join("")}
+    </div>`;
+  }
 
   /* ---- summary cards ------------------------------------------------ */
   const hs = S.computeHeroStats({ teamId: id });
@@ -97,8 +132,10 @@
   const ROLE_ORDER = ["Tank", "Damage", "Support"];
   function pool(rows) {
     if (!rows.length)
-      return P.emptyState("◈", "No verified comps for this team yet",
-        "The hero pool fills in as this team's maps are ingested and clear review.");
+      return P.emptyState("◈", team.compositionTrackingPending
+          ? "Composition tracking pending" : "No verified comps for this team yet",
+        "The hero pool fills in as this team's maps are ingested and clear review. "
+        + "Identity, roster, and schedule facts above are tracked independently of capture.");
     const byRole = new Map();
     rows.forEach((r) => {
       const role = ROLE_ORDER.includes(r.role) ? r.role : "Other";

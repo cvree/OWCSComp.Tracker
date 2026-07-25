@@ -413,7 +413,8 @@ def main() -> None:
 
     print("old control-room surfaces untouched:")
     for p in ["index.html", "run.html", "runs.html", "sources.html",
-              "admin.html", "team-prep.html", "prep.html", "fact-admin.html"]:
+              "admin.html", "team-prep.html", "prep.html", "fact-admin.html",
+              "team-coverage.html"]:
         h = read(p)
         check(f"{p}: still on the control-room shell",
               "assets/css/style.css" in h and "assets/js/ui.js" in h)

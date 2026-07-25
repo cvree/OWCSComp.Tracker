@@ -1,0 +1,144 @@
+{
+ "window_days": 30,
+ "generated_at": "2026-07-25T22:06:36+00:00",
+ "teams": [
+  {
+   "id": "qadsiah",
+   "name": "Al Qadsiah",
+   "region": "EMEA",
+   "status": "active",
+   "states": [
+    "broadcast-located",
+    "composition-captured",
+    "logo-candidate",
+    "schedule-discovered"
+   ],
+   "matches": 1,
+   "broadcastsLocated": 0,
+   "capturedMaps": 1,
+   "blockingIssue": "no faceit_team_id / official source has verified this identity yet"
+  },
+  {
+   "id": "cr",
+   "name": "Crazy Raccoon",
+   "region": "Asia",
+   "status": "active",
+   "states": [
+    "broadcast-located",
+    "logo-candidate",
+    "schedule-discovered"
+   ],
+   "matches": 1,
+   "broadcastsLocated": 0,
+   "capturedMaps": 0,
+   "blockingIssue": "no faceit_team_id / official source has verified this identity yet"
+  },
+  {
+   "id": "gen",
+   "name": "Gen.G Esports",
+   "region": "Asia",
+   "status": "active",
+   "states": [
+    "schedule-discovered"
+   ],
+   "matches": 0,
+   "broadcastsLocated": 0,
+   "capturedMaps": 0,
+   "blockingIssue": "no faceit_team_id / official source has verified this identity yet"
+  },
+  {
+   "id": "nrg",
+   "name": "NRG Shock",
+   "region": "NA",
+   "status": "active",
+   "states": [
+    "schedule-discovered"
+   ],
+   "matches": 0,
+   "broadcastsLocated": 0,
+   "capturedMaps": 0,
+   "blockingIssue": "no faceit_team_id / official source has verified this identity yet"
+  },
+  {
+   "id": "quick",
+   "name": "Quick Esports",
+   "region": "EMEA",
+   "status": "active",
+   "states": [
+    "schedule-discovered"
+   ],
+   "matches": 0,
+   "broadcastsLocated": 0,
+   "capturedMaps": 0,
+   "blockingIssue": "no faceit_team_id / official source has verified this identity yet"
+  },
+  {
+   "id": "ssg",
+   "name": "Spacestation Gaming",
+   "region": "NA",
+   "status": "active",
+   "states": [
+    "schedule-discovered"
+   ],
+   "matches": 0,
+   "broadcastsLocated": 0,
+   "capturedMaps": 0,
+   "blockingIssue": "no faceit_team_id / official source has verified this identity yet"
+  },
+  {
+   "id": "falcons",
+   "name": "Team Falcons",
+   "region": "Asia",
+   "status": "active",
+   "states": [
+    "schedule-discovered"
+   ],
+   "matches": 0,
+   "broadcastsLocated": 0,
+   "capturedMaps": 0,
+   "blockingIssue": "no faceit_team_id / official source has verified this identity yet"
+  },
+  {
+   "id": "twis",
+   "name": "Twisted Minds",
+   "region": "EMEA",
+   "status": "active",
+   "states": [
+    "broadcast-located",
+    "composition-captured",
+    "logo-candidate",
+    "schedule-discovered"
+   ],
+   "matches": 1,
+   "broadcastsLocated": 0,
+   "capturedMaps": 1,
+   "blockingIssue": "no faceit_team_id / official source has verified this identity yet"
+  },
+  {
+   "id": "zeta",
+   "name": "ZETA Division",
+   "region": "Asia",
+   "status": "active",
+   "states": [
+    "broadcast-located",
+    "logo-candidate",
+    "schedule-discovered"
+   ],
+   "matches": 1,
+   "broadcastsLocated": 0,
+   "capturedMaps": 0,
+   "blockingIssue": "no faceit_team_id / official source has verified this identity yet"
+  }
+ ],
+ "counts": {
+  "schedule_discovered": 9,
+  "identity_verified": 0,
+  "roster_verified": 0,
+  "logo_candidate": 4,
+  "logo_verified": 0,
+  "broadcast_located": 4,
+  "composition_captured": 2,
+  "needs_review": 0,
+  "unsupported": 0
+ }
+}

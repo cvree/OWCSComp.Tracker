@@ -263,6 +263,76 @@ python pipeline/automation/cli.py enrich-teams --dry-run --team-id ssg --team-id
 python pipeline/automation/cli.py enrich-teams --dry-run --fixture-dir pipeline/fixtures/automation
 ```
 
+## Phase D2 — canonical team registry + verified logo pipeline (implemented)
+
+Teams must be a first-class public entity as soon as they are discovered,
+independent of whether the vision pipeline has captured any of their maps.
+The single biggest gap this phase closes: the public export previously only
+included teams reachable from a CV-ingested or in-window match (`teams_needed`
+in `export_data.py`) — orphaning any team whose only match predates the
+rolling window or has no capture yet. It now exports **every** team in the
+registry, with an explicit `compositionTrackingPending` flag instead of
+silent omission.
+
+| Roadmap item | Where | Status |
+|---|---|---|
+| Canonical identity fields (aliases/previous names/organization/status/effective dates/source authority/verification timestamps) | `pipeline/schema.sql` teams columns + `pipeline/db.py` migration | ✅ |
+| Rename-safe identity (never drops history) | `team_registry.upsert_identity` — old name moves to `previous_names`, never overwritten silently | ✅ |
+| Duplicate names across regions never merged | `team_registry.resolve_identity_slug` — region-scoped id when a name collides across regions with no `faceit_team_id` link | ✅ |
+| Conflicting source facts → needs_review, never a silent pick | `upsert_identity`'s region-conflict branch sets `needs_review`/`review_reason`, keeps the original value | ✅ |
+| Unsigned/mix/academy rosters | `team_registry.looks_unsigned` heuristic → `status='unsigned'` | ✅ |
+| Roster provenance | `team_registry.record_roster` — stamps `roster_source`/`roster_verified_at` only when real rows exist | ✅ |
+| Per-team coverage ledger (identity/roster/logo/broadcast/capture, explicit blocking issue) | `team_coverage.py` (`build_report`, `format_report`) | ✅ |
+| Verified logo pipeline: candidate → downloaded → validated → human-approved → published | `team_assets.py` | ✅ (mechanics fully built + tested; **zero real logos published this pass** — no verified official URL was available to approve, see below) |
+| Source-authority ranking (website > social > official OWCS/FACEIT > other) | `team_assets.AUTHORITY_RANK` | ✅ |
+| Reject invalid/tiny/broken/duplicate images | `team_assets.validate_candidate` | ✅ |
+| Transparency preserved | square/wide variants written as PNG (see limitation below) | ✅ |
+| Square/wide + dark-safe/light-safe variants | `team_assets.publish_candidate` (`_square_crop`, `_wide_pad`, `_safe_variant`) | ✅ |
+| Restrained accent color extraction | `team_assets.accent_color` (mean of non-transparent pixels) | ✅ |
+| Historical logo preservation (never overwritten, moved to `history/`) | `publish_candidate` — only when the incoming hash actually differs | ✅ |
+| Human approval is the ONLY non-automatic step | `approve_candidate(..., confirm=True)` — no code path anywhere promotes past `validated` without it | ✅ |
+| Never hotlinked, never guessed | candidates are fetched once into gitignored `data/asset_staging/`; only a published, human-approved asset reaches the committed `assets/img/teams/<id>/` tree | ✅ |
+| Public export independent of composition capture | `export_data.build_public_payload` — teams list is every row in `teams`, not `teams_needed` | ✅ |
+| Team Coverage control-room dashboard | `team-coverage.html` + `assets/js/public/page-team-coverage.js`, reading the small committed `assets/data/team_coverage.v1.json` | ✅ |
+| Idempotent CLI/workflow modes | `cli.py team-coverage` / `collect-team-assets` / `approve-team-asset` / `publish-team-assets`; `discovery.yml` `mode=team-coverage` / `mode=team-assets-dryrun` | ✅ |
+
+### Known, documented limitations
+
+- **No real logo was published this pass.** `assets/data/team_asset_sources.json`'s existing entries are prose hints ("verify the org's current press/brand page"), not concrete URLs — there was nothing to safely fetch and approve without guessing. `collect-team-assets` mechanically promotes any FACEIT-sourced avatar/cover URL team_enrichment.py has already recorded (0 promoted this run — none have run live against real FACEIT team data yet in this environment). The full pipeline is built and tested against synthetic fixtures; a human still has to run `approve-team-asset --confirm` before anything ever gets published.
+- **AVIF is not generated.** No AVIF encoder is available without adding a new project dependency, which is out of scope for this stdlib/existing-deps-only automation layer. `publish_candidate`'s output always sets `"avif": null` rather than fabricating a claim.
+- **WebP alpha**: this environment's OpenCV/libwebp binding does not round-trip a WebP's alpha channel (verified — a written RGBA WebP reads back 3-channel). Since transparency is a hard requirement, the square/wide variants are written as PNG; WebP is used only for the dark-safe/light-safe variants, which are always composited onto an opaque backing plate and have no transparency to lose.
+- **`comp_snapshots` vs `hero_stints`**: the content DB has two generations of capture tables. `hero_stints` is what the real, current full-map CV pipeline (and the public export's actual comp data) is built from; `comp_snapshots` is an older, separate path some other tools still write to. `compositionTrackingPending` and the coverage ledger's `composition-captured` state both key off `hero_stints` — using `comp_snapshots` here would have reported the wrong teams as "done."
+
+### CLI
+
+```bash
+python pipeline/automation/cli.py team-coverage --window 30 [--json] [--save]
+python pipeline/automation/cli.py collect-team-assets [--team-id ssg] [--save]
+python pipeline/automation/cli.py approve-team-asset --team-id ssg --url <verified-url> --approved-by "<you>" --confirm
+python pipeline/automation/cli.py publish-team-assets [--publish]
+```
+
+`team-coverage --save` writes `assets/data/team_coverage.v1.json` (also
+regenerated automatically as part of `--export`/the hourly live-sync step) —
+the same small, non-sensitive JSON `team-coverage.html` reads. `approve-team-asset`
+is the one command a human must run deliberately; nothing else in this pass
+ever calls it.
+
+### Tests
+
+`test_automation_team_registry.py` (renamed/historical teams, duplicate
+names across regions, unsigned rosters, roster-change provenance,
+conflicting source facts → needs_review, idempotent reruns, no
+hero-composition writes, the same scenarios through the real
+`discovery.upsert_match` entry point), `test_automation_team_coverage.py`
+(every coverage state's derivation, blocking-issue priority, `hero_stints`
+vs `comp_snapshots`), `test_automation_team_assets.py` (authority ranking,
+image validation/rejection, approval gate, variant generation, historical
+preservation, idempotent republish, FACEIT-candidate promotion),
+`test_team_export.py` (teams export before composition capture, roster
+reflects the most recent match, needs-review/aliases surface honestly,
+GitHub-Pages-safe relative logo paths).
+
 ## Publication PR auto-merge (Phase I, partial)
 
 The hourly `sync` path's data-update PR (calendar + team facts) now merges

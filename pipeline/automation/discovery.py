@@ -36,6 +36,7 @@ from . import models
 from . import owcs_calendar
 from . import reconcile as rec
 from . import state_machine as sm
+from . import team_registry
 from .job_store import JobStore
 
 
@@ -85,32 +86,19 @@ def content_match_id(faceit_match_id: str) -> str:
 
 
 def resolve_team_id(con, name: str | None, faceit_team_id: str | None,
-                    side: str, faceit_match_id: str) -> str:
-    """Resolve to an existing team by faceit_team_id (alias-safe: a renamed
-    team keeps its row), else a name slug, else a deterministic fallback."""
-    if faceit_team_id:
-        row = con.execute("SELECT id FROM teams WHERE faceit_team_id=?",
-                          (faceit_team_id,)).fetchone()
-        if row:
-            return row["id"]
-    if name:
-        return _slug(name, f"team_{side.lower()}")
-    if faceit_team_id:
-        return f"faceit_{_slug(faceit_team_id, 'team')}"
-    short = re.sub(r"[^a-zA-Z0-9]", "", faceit_match_id)[-8:].lower() or "faceit"
-    return f"faceit_{short}_{side.lower()}"
+                    side: str, faceit_match_id: str, region: str | None = None) -> str:
+    """Resolve to an existing team (alias-safe: a renamed team keeps its
+    row), a region-scoped id when two different regions share a name with
+    no faceit_team_id to link them, else a deterministic fallback. See
+    team_registry.resolve_identity_slug for the full precedence."""
+    return team_registry.resolve_identity_slug(
+        con, name, faceit_team_id, region, side, faceit_match_id, _slug)
 
 
 def _upsert_team(con, tid: str, name: str | None, faceit_team_id: str | None, region: str) -> None:
-    con.execute(
-        """INSERT INTO teams (id, name, region, code, faceit_team_id)
-           VALUES (?,?,?,?,?)
-           ON CONFLICT(id) DO UPDATE SET
-             name=COALESCE(excluded.name, teams.name),
-             region=COALESCE(excluded.region, teams.region),
-             faceit_team_id=COALESCE(excluded.faceit_team_id, teams.faceit_team_id)""",
-        (tid, name or tid, region, (name or tid)[:6].upper().replace(" ", ""),
-         faceit_team_id))
+    team_registry.upsert_identity(
+        con, tid, name=name, region=region, faceit_team_id=faceit_team_id,
+        source_authority="faceit")
 
 
 def _upsert_player(con, nickname: str, faceit_player_id: str | None,
@@ -136,8 +124,8 @@ def upsert_match(con, m: dict, competition: dict) -> dict:
     region = (competition.get("region") or m.get("region") or "Unknown")
 
     tA, tB = m["teams"][0], m["teams"][1]
-    slug_a = resolve_team_id(con, tA["name"], tA["faceitTeamId"], "A", fmid)
-    slug_b = resolve_team_id(con, tB["name"], tB["faceitTeamId"], "B", fmid)
+    slug_a = resolve_team_id(con, tA["name"], tA["faceitTeamId"], "A", fmid, region)
+    slug_b = resolve_team_id(con, tB["name"], tB["faceitTeamId"], "B", fmid, region)
     _upsert_team(con, slug_a, tA["name"], tA["faceitTeamId"], region)
     _upsert_team(con, slug_b, tB["name"], tB["faceitTeamId"], region)
 
@@ -197,6 +185,7 @@ def upsert_match(con, m: dict, competition: dict) -> dict:
             pid = _upsert_player(con, p["nickname"], p.get("faceitPlayerId"), tid, p.get("country"))
             con.execute("INSERT OR REPLACE INTO match_rosters (match_id, team_id, player_id, source) "
                         "VALUES (?,?,?, 'faceit')", (cid, tid, pid))
+        team_registry.record_roster(con, tid, bool(team["players"]), source="faceit")
 
     action = "updated" if existing else "inserted"
     return {"id": cid, "action": action, "rescheduled": rescheduled,

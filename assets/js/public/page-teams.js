@@ -34,13 +34,16 @@
 
   function card(c) {
     const t = c.team;
+    const statusChip = t.status && t.status !== "active"
+      ? `<span class="chip" data-cap="${t.status === "unsigned" ? "needs-review" : "failed"}">${esc(t.status)}</span>` : "";
     return `<a class="card card--link card--spot t-card rv" href="team.html?id=${esc(t.id)}"
         aria-label="Open ${esc(t.name)}">
       <div class="split" style="align-items:center">
         ${P.teamPlate(t.id, { size: "lg" })}
-        ${P.badgeRegion(t.region)}
+        <div class="cluster" style="gap:6px">${P.badgeRegion(t.region)}${statusChip}</div>
       </div>
       ${c.lastPlayed ? `<span class="recency-badge"><span class="rb-dot" aria-hidden="true"></span>Last played ${esc(P.fmtRel(c.lastPlayed))}</span>` : ""}
+      ${t.compositionTrackingPending ? `<span class="faint" style="font-size:11px">Composition tracking pending</span>` : ""}
       <div class="cluster" style="gap:14px;margin-top:4px">
         <span class="mono" style="font-size:12px"><b style="font-size:15px">${c.mw}–${c.ml}</b> maps</span>
         <span class="mono" style="font-size:12px"><b style="font-size:15px">${c.heroes}</b> heroes</span>
