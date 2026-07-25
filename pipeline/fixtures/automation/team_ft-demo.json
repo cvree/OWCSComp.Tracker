@@ -1,0 +1,14 @@
+{
+  "team_id": "ft-demo",
+  "nickname": "Spacestation Gaming",
+  "description": "North American esports organization competing in OWCS.",
+  "website": "https://spacestationgaming.gg",
+  "twitter": "SpacestationGG",
+  "facebook": null,
+  "avatar": "https://distribution.faceit-cdn.net/images/team-avatar-demo.jpg",
+  "cover_image": null,
+  "members": [
+    {"user_id": "p1", "nickname": "Demo1", "country": "us"},
+    {"user_id": "p2", "nickname": "Demo2", "country": "ca"}
+  ]
+}

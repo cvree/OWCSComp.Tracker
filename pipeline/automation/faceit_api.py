@@ -129,6 +129,10 @@ def fixture_transport(fixture_dir: str) -> Transport:
             oid, is_champs = mo.group(1), bool(mo.group(2))
             return _serve(f"organizer_{oid}_championships.json" if is_champs
                           else f"organizer_{oid}.json")
+        # Team profile facts (Phase D team enrichment).
+        mt = re.search(r"/teams/([^/?]+)", url)
+        if mt:
+            return _serve(f"team_{mt.group(1)}.json")
         # Production endpoints.
         m = re.search(r"/championships/([^/?]+)(/matches)?", url)
         if not m:
@@ -249,6 +253,13 @@ class FaceitClient:
                 break
             offset += page_size
         return out
+
+    # -- team profile facts (Phase D — team enrichment) --------------------
+    # Looked up ONLY by a faceit_team_id we already know from an ingested
+    # match roster — never a search. FACEIT is authoritative for the team's
+    # own facts (bio, socials, roster) the same way it is for match facts.
+    def get_team(self, team_id: str) -> dict:
+        return self._get(f"/teams/{team_id}")
 
 
 class FaceitApiError(RuntimeError):
@@ -386,5 +397,38 @@ def normalize_organizer(raw: dict) -> dict:
         "organizerId": _clean(raw.get("organizer_id") or raw.get("id")),
         "name": _clean(raw.get("name")),
         "faceitUrl": _clean(raw.get("faceit_url")),
+        "raw": raw,
+    }
+
+
+# ------------------------------------------------------- team normalizer
+def normalize_team(raw: dict) -> dict:
+    """Normalize a /teams/{id} response into the facts team enrichment
+    records. FACT ONLY — bio/socials/roster, never a hero or a downloaded
+    image. `avatarUrl`/`coverUrl` are CANDIDATE source URLs for the existing
+    human-verified asset workflow (assets/data/team_asset_sources.json); they
+    are never hotlinked and never written to teams.logo_url directly.
+    """
+    members = []
+    for m in raw.get("members") or []:
+        nick = _clean(m.get("nickname"))
+        if not nick:
+            continue
+        members.append({
+            "faceitPlayerId": _clean(m.get("user_id")),
+            "nickname": nick,
+            "country": _clean(m.get("country")),
+        })
+    return {
+        "faceitTeamId": _clean(raw.get("team_id")),
+        "nickname": _clean(raw.get("nickname")),
+        "description": _clean(raw.get("description")),
+        "website": _clean(raw.get("website")),
+        "twitter": _clean(raw.get("twitter")),
+        "facebook": _clean(raw.get("facebook")),
+        "avatarUrl": _clean(raw.get("avatar")),
+        "coverUrl": _clean(raw.get("cover_image")),
+        "members": members,
+        "memberCount": len(members) or None,
         "raw": raw,
     }

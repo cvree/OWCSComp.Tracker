@@ -22,13 +22,22 @@ CREATE TABLE IF NOT EXISTS game_maps (
 );
 
 CREATE TABLE IF NOT EXISTS teams (
-  id             TEXT PRIMARY KEY, -- e.g. 'falcons'
-  name           TEXT NOT NULL,
-  region         TEXT NOT NULL DEFAULT 'Unknown',
-  code           TEXT NOT NULL,    -- short tag, e.g. 'FLC'
-  faceit_team_id TEXT UNIQUE,
-  logo_url       TEXT,
-  prep_notes     TEXT
+  id                 TEXT PRIMARY KEY, -- e.g. 'falcons'
+  name               TEXT NOT NULL,
+  region             TEXT NOT NULL DEFAULT 'Unknown',
+  code               TEXT NOT NULL,    -- short tag, e.g. 'FLC'
+  faceit_team_id     TEXT UNIQUE,
+  logo_url           TEXT,             -- human-verified, downloaded asset only
+  prep_notes         TEXT,
+  -- Team profile enrichment (Phase D team facts, FACEIT /teams/{id} — facts
+  -- only, never a hero or a downloaded image; see team_enrichment.py).
+  description        TEXT,
+  website            TEXT,
+  twitter            TEXT,
+  facebook           TEXT,
+  member_count       INTEGER,
+  avatar_source_url  TEXT,             -- CANDIDATE logo source only; never hotlinked
+  faceit_enriched_at TEXT              -- UTC ISO timestamp of last successful enrichment
 );
 
 -- Core match metadata (FACEIT/results ingest + vision fill this) -------

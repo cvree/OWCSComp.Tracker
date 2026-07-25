@@ -1039,7 +1039,15 @@ def build_public_payload(con) -> dict:
 
     teams = [{"id": r["id"], "name": r["name"], "code": r["code"],
               "region": _region_id(rv(r, "region")),
-              "logoUrl": rv(r, "logo_url")}
+              "logoUrl": rv(r, "logo_url"),
+              # Team profile enrichment (Phase D) — FACEIT facts only, never
+              # a logo (logoUrl above stays the human-verified asset alone).
+              "description": rv(r, "description"),
+              "website": rv(r, "website"),
+              "socials": {k: v for k, v in
+                          {"twitter": rv(r, "twitter"), "facebook": rv(r, "facebook")}.items()
+                          if v} or None,
+              "memberCount": rv(r, "member_count")}
              for r in con.execute("SELECT * FROM teams ORDER BY name")
              if r["id"] in teams_needed]
 
