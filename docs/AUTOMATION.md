@@ -265,13 +265,18 @@ python pipeline/automation/cli.py enrich-teams --dry-run --fixture-dir pipeline/
 
 ## Publication PR auto-merge (Phase I, partial)
 
-The hourly `sync` path's data-update PR (calendar + team facts) now calls
-`gh pr merge --auto --squash` right after opening it. The PR still only
-merges once its OWN CI run (`ci.yml`, triggered by the push) goes green —
-this never bypasses or waits past a check, it just removes the need for a
-human to click merge on a validated, auto-generated data PR. The rest of
-Phase I (confidence-gated staged publication once hero-composition
-processing exists) is still future work.
+The hourly `sync` path's data-update PR (calendar + team facts) now merges
+itself once its OWN CI run (`ci.yml`, triggered by the push) goes green —
+removing the need for a human to click merge on a validated, auto-generated
+data PR. Concretely: `gh pr checks "$BR" --watch --fail-fast` blocks until
+the branch's checks report a result, and the PR is squash-merged only on
+success; a failing or timed-out check leaves it open for a human, never
+force-merged. (GitHub's native `gh pr merge --auto` needs branch protection
+with a required status check configured on `main` to have anything to wait
+on — this repo has none configured, so `--auto` silently no-ops; polling the
+check directly works regardless.) The rest of Phase I (confidence-gated
+staged publication once hero-composition processing exists) is still future
+work.
 
 ## Not yet implemented (later roadmap passes)
 
