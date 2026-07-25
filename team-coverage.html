@@ -21,6 +21,14 @@
   .cov-summary { display: flex; flex-wrap: wrap; gap: 10px 18px; margin-top: 10px; }
   .cov-summary span { font-size: .82rem; color: var(--muted); }
   .cov-summary b { color: var(--text); }
+  .cov-filterbar-wrap { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+  .cov-filterbar { display: flex; flex-wrap: wrap; gap: 6px; }
+  .cov-filter-chip { font-size: .74rem; padding: 4px 10px; border-radius: 999px;
+    border: 1px solid var(--line); background: transparent; color: var(--muted);
+    cursor: pointer; white-space: nowrap; }
+  .cov-filter-chip:hover { color: var(--text); border-color: var(--muted); }
+  .cov-filter-chip.is-active { color: var(--amber); border-color: var(--amber); background: rgba(212,163,71,.08); }
+  .cov-remediation { color: var(--muted); font-size: .74rem; margin-top: 2px; }
 </style>
 </head>
 <body data-page="team-coverage" data-shell="control">

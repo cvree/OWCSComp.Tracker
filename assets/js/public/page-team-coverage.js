@@ -11,22 +11,100 @@
     "broadcast-located", "composition-captured"]);
   const WARN_STATES = new Set(["needs-review", "unsupported", "logo-candidate"]);
 
+  // Remediation hint per blocking-issue shape (section 11/12) — a direct
+  // next action, never a vague "incomplete". Matched by substring against
+  // the server-computed blockingIssue text, falling back to state-derived
+  // hints when there's no blockingIssue (team is fully covered).
+  const REMEDIATION = [
+    [/needs a human look|region conflict/i, "Verify alias/identity conflict"],
+    [/no faceit_team_id/i, "Add an official team source (FACEIT id or verified link)"],
+    [/no matches for this team/i, "Confirm team is still active in the tracked window"],
+    [/no roster on record/i, "Review roster — run team enrichment or record it manually"],
+    [/awaiting human-approved official logo/i, "Approve logo candidate"],
+    [/no candidate logo source/i, "Find an official logo source"],
+    [/no official broadcast located/i, "Locate official broadcast"],
+    [/composition tracking pending/i, "Await composition capture"],
+  ];
+  function remediation(t) {
+    if (!t.blockingIssue) return null;
+    for (const [re, hint] of REMEDIATION) if (re.test(t.blockingIssue)) return hint;
+    return "Review — see blocking issue";
+  }
+
+  // Filter definitions: id -> {label, test(team) -> bool}. Multiple active
+  // filters combine with AND (narrowing), matching typical faceted search.
+  const FILTERS = [
+    ["needs-review", "Needs review", (t) => !!t.needsReview],
+    ["missing-identity", "Missing identity", (t) => !t.states.includes("identity-verified")],
+    ["missing-region", "Missing region", (t) => !t.region || /^unknown$/i.test(t.region)],
+    ["missing-faceit-id", "Missing FACEIT ID", (t) => !t.hasFaceitId],
+    ["missing-roster", "Missing roster", (t) => !t.states.includes("roster-verified")],
+    ["roster-conflict", "Roster conflict", (t) => t.needsReview && /roster/i.test(t.reviewReason || "")],
+    ["missing-logo", "Missing logo", (t) => t.logoState === "none"],
+    ["candidate-logo", "Candidate logo", (t) => t.logoState === "logo-candidate"],
+    ["approved-logo", "Approved logo", (t) => t.logoState === "logo-verified"],
+    ["fallback-logo", "Fallback logo", (t) => t.logoState !== "logo-verified"],
+    ["missing-broadcast", "Missing broadcast", (t) => !t.states.includes("broadcast-located")],
+    ["no-captured-maps", "No captured maps", (t) => !t.states.includes("composition-captured")],
+    ["historical", "Historical", (t) => t.status === "historical"],
+    ["unsigned", "Unsigned", (t) => t.status === "unsigned"],
+    ["academy", "Academy", (t) => /academy/i.test(t.name || "")],
+    ["duplicate-name-conflict", "Duplicate-name conflict",
+      (t) => t.needsReview && /region conflict/i.test(t.reviewReason || "")],
+  ];
+  const active = new Set();
+  let allTeams = [];
+
   function stateChip(s) {
     const cls = OK_STATES.has(s) ? "ok" : WARN_STATES.has(s) ? "warn" : "";
     return `<span class="cov-state ${cls}">${esc(s)}</span>`;
   }
 
+  const LOGO_LABEL = { "logo-verified": "approved", "logo-candidate": "candidate", "none": "fallback" };
+
   function row(t) {
+    const hint = remediation(t);
     return `<tr>
       <td><strong>${esc(t.name)}</strong><div class="muted small">${esc(t.id)}</div></td>
       <td>${esc(t.region)}</td>
       <td>${esc(t.status)}</td>
       <td>${(t.states || []).map(stateChip).join("") || '<span class="cov-none">none</span>'}</td>
+      <td>${esc(t.hasFaceitId ? "yes" : "no")}</td>
+      <td>${esc(LOGO_LABEL[t.logoState] || "fallback")}</td>
       <td>${t.matches}</td>
       <td>${t.broadcastsLocated}</td>
       <td>${t.capturedMaps}</td>
-      <td>${t.blockingIssue ? `<span class="cov-blocking">${esc(t.blockingIssue)}</span>` : '<span class="cov-none">—</span>'}</td>
+      <td>${t.blockingIssue ? `<span class="cov-blocking">${esc(t.blockingIssue)}</span>` : '<span class="cov-none">—</span>'}
+          ${hint ? `<div class="cov-remediation">→ ${esc(hint)}</div>` : ""}</td>
     </tr>`;
+  }
+
+  function applyFilters() {
+    const rows = active.size
+      ? allTeams.filter((t) => FILTERS.every(([id, , test]) => !active.has(id) || test(t)))
+      : allTeams;
+    const tbody = document.getElementById("cov-tbody");
+    if (!tbody) return;
+    tbody.innerHTML = rows.length ? rows.map(row).join("") :
+      `<tr><td colspan="10" class="muted">No teams match the selected filters.</td></tr>`;
+    const count = document.getElementById("cov-filtered-count");
+    if (count) count.textContent = active.size ? `${rows.length} of ${allTeams.length} teams` : "";
+  }
+
+  function renderFilterBar() {
+    const bar = document.getElementById("cov-filters");
+    if (!bar) return;
+    bar.innerHTML = FILTERS.map(([id, label]) =>
+      `<button type="button" class="cov-filter-chip" data-filter="${id}">${esc(label)}</button>`
+    ).join("");
+    bar.addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-filter]");
+      if (!btn) return;
+      const id = btn.dataset.filter;
+      if (active.has(id)) { active.delete(id); btn.classList.remove("is-active"); }
+      else { active.add(id); btn.classList.add("is-active"); }
+      applyFilters();
+    });
   }
 
   function render(report) {
@@ -40,16 +118,25 @@
         `<span><b>${n}</b> ${esc(k.replace(/_/g, "-"))}</span>`),
     ].join("");
 
+    allTeams = report.teams || [];
     const root = document.getElementById("cov-root");
-    if (!report.teams.length) {
+    if (!allTeams.length) {
       root.innerHTML = `<p class="muted">No teams in the registry yet — run a discovery sync first.</p>`;
       return;
     }
-    root.innerHTML = `<table class="cov-tbl">
-      <tr><th>Team</th><th>Region</th><th>Status</th><th>Coverage</th>
-          <th>Matches</th><th>Broadcasts</th><th>Captured maps</th><th>Blocking issue</th></tr>
-      ${report.teams.map(row).join("")}
-    </table>`;
+    root.innerHTML = `
+      <div class="cov-filterbar-wrap">
+        <div class="cov-filterbar" id="cov-filters"></div>
+        <span class="muted small" id="cov-filtered-count"></span>
+      </div>
+      <table class="cov-tbl">
+        <thead><tr><th>Team</th><th>Region</th><th>Identity</th><th>Coverage</th>
+            <th>FACEIT ID</th><th>Logo</th><th>Matches</th><th>Broadcasts</th>
+            <th>Captured maps</th><th>Blocking issue</th></tr></thead>
+        <tbody id="cov-tbody"></tbody>
+      </table>`;
+    renderFilterBar();
+    applyFilters();
   }
 
   fetch("assets/data/team_coverage.v1.json")

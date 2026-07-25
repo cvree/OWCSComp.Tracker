@@ -184,6 +184,14 @@ def build_report(
                 "broadcastsLocated": broadcasts,
                 "capturedMaps": captured_maps,
                 "blockingIssue": _blocking_issue(states, row, len(matches)),
+                # Explicit per-facet fields for the dashboard's filter bar —
+                # cheaper and clearer for the client than re-deriving these
+                # from `states`/`status`/`blockingIssue` text every render.
+                "hasFaceitId": bool(row["faceit_team_id"]),
+                "logoState": logo_state,
+                "hasRoster": has_roster,
+                "needsReview": bool(row["needs_review"]),
+                "reviewReason": row["review_reason"],
             })
     finally:
         con.close()

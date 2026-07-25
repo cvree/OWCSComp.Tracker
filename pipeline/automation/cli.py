@@ -36,6 +36,8 @@ from automation import coverage as cov  # noqa: E402
 from automation import discovery as disc  # noqa: E402
 from automation import faceit_api  # noqa: E402
 from automation import job_store as js  # noqa: E402
+from automation import match_export_coverage as mec  # noqa: E402
+from automation import match_repair as mrepair  # noqa: E402
 from automation import owcs_calendar  # noqa: E402
 from automation import reconcile as rec  # noqa: E402
 from automation import team_assets as tassets  # noqa: E402
@@ -391,6 +393,60 @@ def _run_export() -> None:
     _write_team_coverage_export(window_days=cfg.load_config().lookback_days)
 
 
+def cmd_match_audit(args: argparse.Namespace) -> int:
+    """Read-only per-match audit (Phase D2.1): current fixture_kind/lifecycle
+    state and any proposed repair, with an explicit blocking reason for
+    anything unresolved. Never writes — use `match-repair --write` to apply."""
+    con = _open_content_db()
+    try:
+        report = mrepair.repair_matches(con, write=False)
+    finally:
+        con.close()
+    if args.json:
+        print(json.dumps(report, indent=2))
+    else:
+        print(mrepair.format_repair_report(report))
+    return 0
+
+
+def cmd_match_repair(args: argparse.Namespace) -> int:
+    """Idempotent match-metadata repair (Phase D2.1). Dry-run by default;
+    --write actually backfills fixture_kind/lifecycle_status, and ONLY ever
+    fills a currently-NULL field (never overwrites a value FACEIT sync, a
+    human, or a previous repair run already set)."""
+    con = _open_content_db()
+    try:
+        report = mrepair.repair_matches(con, write=args.write)
+        if args.json:
+            print(json.dumps(report, indent=2))
+        else:
+            print(mrepair.format_repair_report(report))
+        if args.coverage:
+            cov_report = mec.build_coverage_report(
+                con, repaired_this_run=len(report["repaired"]))
+            print()
+            print(mec.format_coverage_report(cov_report))
+    finally:
+        con.close()
+    return 0
+
+
+def cmd_export_coverage(args: argparse.Namespace) -> int:
+    """Match export coverage report (Phase D2.1): exactly why every excluded
+    match didn't reach the public dataset, computed straight from the real
+    exporter (export_data.build_public_payload) — never a second opinion."""
+    con = _open_content_db()
+    try:
+        report = mec.build_coverage_report(con)
+    finally:
+        con.close()
+    if args.json:
+        print(json.dumps(report, indent=2))
+    else:
+        print(mec.format_coverage_report(report))
+    return 0
+
+
 def cmd_coverage(args: argparse.Namespace) -> int:
     report = cov.build_report(window_days=args.window, automation_db=args.db)
     print(cov.format_report(report))
@@ -617,6 +673,26 @@ def main(argv: list[str] | None = None) -> int:
     cvp.add_argument("--window", type=int, default=30, help="lookback days")
     cvp.add_argument("--save", action="store_true", help="persist a coverage snapshot")
     cvp.set_defaults(func=cmd_coverage)
+
+    # ---- Phase D2.1 match export repair ----------------------------------
+    ma_p = sub.add_parser("match-audit",
+                          help="read-only per-match fixture/lifecycle audit (D2.1)")
+    ma_p.add_argument("--json", action="store_true")
+    ma_p.set_defaults(func=cmd_match_audit)
+
+    mr_p = sub.add_parser("match-repair",
+                          help="idempotent match fixture_kind/lifecycle_status repair (D2.1)")
+    mr_p.add_argument("--write", action="store_true",
+                      help="actually backfill (default: dry-run, zero writes)")
+    mr_p.add_argument("--json", action="store_true")
+    mr_p.add_argument("--coverage", action="store_true",
+                      help="also print the match export coverage report afterward")
+    mr_p.set_defaults(func=cmd_match_repair)
+
+    ec_p = sub.add_parser("export-coverage",
+                          help="why every excluded match isn't in the public export (D2.1)")
+    ec_p.add_argument("--json", action="store_true")
+    ec_p.set_defaults(func=cmd_export_coverage)
 
     # ---- Phase B discovery sync commands --------------------------------
     def _add_sync_opts(sp):

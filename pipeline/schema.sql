@@ -77,9 +77,20 @@ CREATE TABLE IF NOT EXISTS matches (
                   CHECK (status IN ('upcoming','live','final','unknown')),
   -- Phase B discovery adds a precise FACEIT lifecycle word and a coarse
   -- capture state alongside the CHECK-constrained `status` above.
-  lifecycle_status TEXT,             -- scheduled/live/finished/cancelled/forfeit/aborted
+  lifecycle_status TEXT,             -- scheduled/live/finished/cancelled/forfeit/
+                                      -- postponed/aborted/needs-review (see
+                                      -- pipeline/automation/match_repair.py)
   capture_status   TEXT,             -- pending / cancelled / ... (discovery-side)
   competition_id   TEXT,             -- FACEIT competition/registry id
+  -- Phase D2.1 match-export repair: distinguishes real production matches
+  -- from hand-authored synthetic/sample fixtures (pipeline/sample_data.json)
+  -- so a repair can never make demo data look like a real result. NULL/absent
+  -- is treated as 'production' (backward compatible with pre-migration rows).
+  fixture_kind          TEXT,             -- production | synthetic
+  -- Provenance for an automated lifecycle_status backfill (never set for a
+  -- value a human/FACEIT already supplied) — see match_repair.repair_matches.
+  lifecycle_source      TEXT,             -- e.g. 'status-field-backfill'
+  lifecycle_repaired_at TEXT,             -- UTC ISO timestamp of the repair run
   team_a          TEXT NOT NULL REFERENCES teams(id),
   team_b          TEXT NOT NULL REFERENCES teams(id),
   score_a         INTEGER DEFAULT 0,

@@ -64,6 +64,13 @@ LIGHT_LUMINANCE_THRESHOLD = 195   # logo lighter than this vanishes on a light b
 Transport = Callable[[str], bytes]
 
 
+def _site_relpath(path: str, start: str = REPO_ROOT) -> str:
+    """Relative path for a committed asset, GitHub-Pages-safe: forward
+    slashes ALWAYS, even on Windows where os.path.relpath emits backslashes
+    (which the browser can never resolve as a URL path separator)."""
+    return os.path.relpath(path, start).replace(os.sep, "/")
+
+
 def _now_iso(now: dt.datetime | None = None) -> str:
     return (now or dt.datetime.now(dt.timezone.utc)).replace(microsecond=0).isoformat()
 
@@ -360,18 +367,18 @@ def publish_candidate(
 
     orig_path = os.path.join(team_dir, "logo.png")
     cv2.imwrite(orig_path, src)
-    variants = {"original": os.path.relpath(orig_path, REPO_ROOT)}
+    variants = {"original": _site_relpath(orig_path)}
 
     for name, im in (("square", _square_crop(src)), ("wide", _wide_pad(src))):
         p = os.path.join(team_dir, f"logo-{name}.png")
         cv2.imwrite(p, im)
-        variants[name] = os.path.relpath(p, REPO_ROOT)
+        variants[name] = _site_relpath(p)
 
     for target in ("dark-safe", "light-safe"):
         safe = _safe_variant(src, "dark" if target == "dark-safe" else "light")
         p = os.path.join(team_dir, f"logo-{target}.webp")
         cv2.imwrite(p, safe, [cv2.IMWRITE_WEBP_QUALITY, 92])
-        variants[target] = os.path.relpath(p, REPO_ROOT)
+        variants[target] = _site_relpath(p)
 
     color = accent_color(src)
     con.execute("UPDATE teams SET logo_url=? WHERE id=?", (variants["original"], team_id))

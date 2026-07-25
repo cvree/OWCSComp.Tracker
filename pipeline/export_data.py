@@ -572,11 +572,41 @@ def _discovery_window_days() -> tuple[int, int]:
         return 14, 30
 
 
+def _fixture_kind(m: Any) -> str:
+    """'production' or 'synthetic' for a matches row (see
+    automation/match_repair.py — evidence is the row's own source_ref/
+    faceit_match_id, never a guess). Falls back to 'production' (never
+    hides a match) if the automation package isn't importable yet."""
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        from automation import match_repair as _mrepair  # noqa: WPS433
+        return _mrepair.classify_fixture_kind(m)
+    except Exception:
+        return "production"
+
+
 def _discovered_window_matches(con) -> list[Any]:
-    """Content-DB matches inside the rolling discovery window, ordered for a
-    stable export. Uses scheduled_at/finished_at/date; a match with no time is
-    kept (never silently dropped). Returns [] on a pre-migration DB that has no
-    discovery columns yet, so the public export never crashes on an older DB."""
+    """Content-DB matches the exporter should surface outside the CV-ingest
+    path, ordered for a stable export.
+
+    Two evidence-based eligibility routes (Phase D2.1):
+      * FACEIT/calendar-discovered (competition_id or lifecycle_status set)
+        — kept only inside the rolling discovery window, as before.
+      * Already-concluded (status='final') — a match that already happened
+        is a historical record, not a discovery-recency question, so it is
+        NEVER excluded by the rolling window; the only thing that can hide
+        it is being a synthetic sample fixture (pipeline/sample_data.json,
+        classified via _fixture_kind). This closes the match-export gap for
+        legacy real matches (e.g. m-cr-zeta-krgf) that predate the Phase B
+        automation columns and would otherwise silently vanish from the
+        calendar, match directory, tournament pages, team history, search
+        and stats despite having real evidence (VODs, map results) on file.
+        A bare *unconfirmed upcoming* stub (status != 'final', no
+        competition_id/lifecycle_status) is still never fabricated onto the
+        calendar — only a concluded match gets this bypass.
+
+    Returns [] on a pre-migration DB that has no discovery columns yet, so
+    the public export never crashes on an older DB."""
     cols = {r["name"] for r in con.execute("PRAGMA table_info(matches)")}
     if not {"competition_id", "lifecycle_status"} <= cols:
         return []
@@ -587,10 +617,16 @@ def _discovered_window_matches(con) -> list[Any]:
     rows = con.execute(
         """SELECT * FROM matches
            WHERE competition_id IS NOT NULL OR lifecycle_status IS NOT NULL
+              OR status='final'
            ORDER BY COALESCE(scheduled_at, finished_at, date), id"""
     ).fetchall()
     out = []
     for m in rows:
+        if _fixture_kind(m) == "synthetic":
+            continue
+        if (m["status"] or "").lower() == "final":
+            out.append(m)
+            continue
         when = (rv(m, "scheduled_at") or rv(m, "finished_at") or m["date"] or "")[:10]
         if not when:
             out.append(m)

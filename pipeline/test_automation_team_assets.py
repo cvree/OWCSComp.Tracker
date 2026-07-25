@@ -230,6 +230,17 @@ class TestVariantsAndHistory(TeamAssetsTestCase):
         out = self._publish()
         self.assertIsNone(out["avif"])
 
+    def test_variant_paths_are_github_pages_safe(self):
+        # Regression: os.path.relpath emits backslashes on Windows, which a
+        # browser can never resolve as a URL path separator — an <img src>
+        # built from one silently fails to load (Phase D2.1 real-world bug).
+        out = self._publish()
+        for name, path in out["variants"].items():
+            self.assertNotIn("\\", path, f"variant {name!r} has a Windows path separator: {path!r}")
+            self.assertFalse(path.startswith("/"), f"variant {name!r} must be relative: {path!r}")
+        row = self.con.execute("SELECT logo_url FROM teams WHERE id='qad'").fetchone()
+        self.assertNotIn("\\", row["logo_url"])
+
     def test_accent_color_is_restrained_mean_not_extreme(self):
         out = self._publish(color=(200, 100, 50))
         r, g, b = out["accentColorRgb"]
