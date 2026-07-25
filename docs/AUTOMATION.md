@@ -232,13 +232,54 @@ plus extensions to `test_automation_schema.py` (new tables),
 `test_automation_config.py` (registry field completeness), and
 `test_automation_coverage.py` (C6 label derivation).
 
+Phase D — `test_automation_team_enrichment.py` (facts-only normalization,
+COALESCE never blanks a known fact, candidate-source auto-population never
+writes a logo, idempotent reruns, one team's API failure never blocks the
+rest, dry-run purity, `--team-id` filtering, teams with no `faceit_team_id`
+never touched, fixture-transport `/teams/{id}` routing).
+
+## Phase D — team profile enrichment (implemented)
+
+Match discovery only ever wrote a team row the minimum it needs to exist
+(name, region, a crude code, `faceit_team_id`). This pass populates the rest
+from FACEIT's own `/teams/{id}` resource — the same authority match facts
+already come from — bio, website, socials, and roster size.
+
+| Roadmap item | Where | Status |
+|---|---|---|
+| Team facts from FACEIT (bio/website/socials/roster) — never a search, only teams discovery already resolved an id for | `faceit_api.get_team` / `normalize_team` + `team_enrichment.enrich_teams` | ✅ |
+| Never writes a logo directly (candidate-source registry only) | `team_enrichment._add_candidate_source` → `assets/data/team_asset_sources.json` (human still verifies + downloads before `logo_url` is ever set) | ✅ |
+| Idempotent (no duplicate candidate-source lines, stable upserts) | `team_enrichment.enrich_teams` | ✅ |
+| A thin/partial API response never blanks a known fact | `_upsert_team_facts` (`COALESCE`) | ✅ |
+| One team's API failure never blocks the rest | per-team try/except in `enrich_teams` | ✅ |
+| Runs live on the hourly schedule (not just a dry-run demo) | `discovery.yml` "Live team enrichment" step, gated on `FACEIT_API_KEY` only (works even with 0 enabled competitions — it enriches teams already known) | ✅ |
+| Read-only dry-run mode | `cli.py enrich-teams --dry-run` / workflow `mode=teams-dryrun` | ✅ |
+| Surfaced on the public site | `export_data.py` teams export + `page-team.js` (description/website/socials/roster count, guarded — absent until enriched) | ✅ |
+
+```bash
+python pipeline/automation/cli.py enrich-teams --dry-run
+python pipeline/automation/cli.py enrich-teams --dry-run --team-id ssg --team-id nrg
+# offline demo against a local fixture (no key, no network):
+python pipeline/automation/cli.py enrich-teams --dry-run --fixture-dir pipeline/fixtures/automation
+```
+
+## Publication PR auto-merge (Phase I, partial)
+
+The hourly `sync` path's data-update PR (calendar + team facts) now calls
+`gh pr merge --auto --squash` right after opening it. The PR still only
+merges once its OWN CI run (`ci.yml`, triggered by the push) goes green —
+this never bypasses or waits past a check, it just removes the need for a
+human to click merge on a validated, auto-generated data PR. The rest of
+Phase I (confidence-gated staged publication once hero-composition
+processing exists) is still future work.
+
 ## Not yet implemented (later roadmap passes)
 
 The self-hosted recording daemon (Phase E), broadcast segmentation
-(Phase F), the detector/layout/template automation (Phase G), and automated
-publication PRs (Phase I). Each plugs into this foundation: they enqueue jobs
-with the deterministic keys above, take a lease before touching a shared
-resource, and transition through the state machine.
+(Phase F), and the detector/layout/template automation (Phase G). Each plugs
+into this foundation: they enqueue jobs with the deterministic keys above,
+take a lease before touching a shared resource, and transition through the
+state machine.
 
 ## Operator CLI
 

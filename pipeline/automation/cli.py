@@ -38,6 +38,7 @@ from automation import faceit_api  # noqa: E402
 from automation import job_store as js  # noqa: E402
 from automation import owcs_calendar  # noqa: E402
 from automation import reconcile as rec  # noqa: E402
+from automation import team_enrichment as tenrich  # noqa: E402
 from automation import youtube_api as yt  # noqa: E402
 
 
@@ -258,6 +259,27 @@ def cmd_verify_registry(args: argparse.Namespace) -> int:
             print(f"  ERR {comp['id']:<26} {cid}  ->  {exc}")
     print(f"[automation] verified {len(comps) - failures}/{len(comps)} enabled competitions")
     return 1 if failures else 0
+
+
+def cmd_enrich_teams(args: argparse.Namespace) -> int:
+    """Populate team FACTS (bio/website/socials/roster size) from the FACEIT
+    team API for every team discovery already resolved a faceit_team_id for.
+    Never searches, never writes a logo — image URLs land only as candidate
+    sources in assets/data/team_asset_sources.json for human verification."""
+    con = _open_content_db()
+    try:
+        client = _build_client(args)
+        summary = tenrich.enrich_teams(
+            con=con, client=client,
+            team_ids=args.team_id or None,
+            dry_run=args.dry_run)
+        print(f"[automation] enrich-teams ({'dry-run' if args.dry_run else 'live'}):")
+        print(tenrich.format_summary(summary))
+        if args.export and not args.dry_run:
+            _run_export()
+    finally:
+        con.close()
+    return 0
 
 
 def _run_export() -> None:
@@ -589,6 +611,19 @@ def main(argv: list[str] | None = None) -> int:
                       help="walk a channel's ENTIRE upload history instead of stopping "
                            "pagination at lookback+buffer (expensive; off by default)")
     db_p.set_defaults(func=cmd_discover_broadcasts)
+
+    # ---- Phase D team profile enrichment -----------------------------
+    et = sub.add_parser("enrich-teams",
+                        help="populate team facts (bio/website/socials/roster) via FACEIT")
+    et.add_argument("--dry-run", action="store_true", help="fetch + score, write nothing")
+    et.add_argument("--team-id", action="append", default=None,
+                    help="limit to this team id (repeatable); default: every team "
+                         "with a known faceit_team_id")
+    et.add_argument("--fixture-dir", default=None,
+                    help="serve FACEIT responses from local fixtures (offline)")
+    et.add_argument("--export", action="store_true",
+                    help="regenerate public_data.v1.js after a live run")
+    et.set_defaults(func=cmd_enrich_teams)
 
     args = p.parse_args(argv)
     return args.func(args)

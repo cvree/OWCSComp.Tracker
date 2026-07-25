@@ -47,18 +47,34 @@
     { label: "Teams", href: "teams.html" },
     { label: team.name },
   ]);
+  // Optional FACEIT-sourced facts (Phase D team enrichment) — description,
+  // website, socials. Absent (null) until a team has been enriched; never a
+  // substitute for the human-verified logo/plate above.
+  const socials = team.socials || {};
+  const profileLinks = [
+    team.website ? { label: "Website", href: team.website } : null,
+    socials.twitter ? { label: "Twitter/X", href: `https://twitter.com/${socials.twitter}` } : null,
+    socials.facebook ? { label: "Facebook", href: socials.facebook } : null,
+  ].filter(Boolean);
+
   P.$("#t-head").innerHTML = `
     <div class="split" style="align-items:center;gap:18px;flex-wrap:wrap">
       <div class="cluster" style="gap:14px">
         ${P.teamPlate(id, { size: "lg" })}
         ${P.badgeRegion(team.region)}
         ${recencyHtml}
+        ${team.memberCount ? `<span class="faint">${esc(String(team.memberCount))} roster spots (FACEIT)</span>` : ""}
       </div>
       <div class="cluster" style="gap:10px">
         ${tournaments.map((t) =>
           `<a class="chip" href="tournament.html?id=${esc(t.id)}">${esc(t.name)}</a>`).join("")}
       </div>
-    </div>`;
+    </div>
+    ${team.description ? `<p class="lede" style="margin-top:10px">${esc(team.description)}</p>` : ""}
+    ${profileLinks.length ? `<div class="cluster" style="gap:8px;margin-top:8px">
+        ${profileLinks.map((l) =>
+          `<a class="chip" href="${esc(l.href)}" target="_blank" rel="noopener noreferrer">${esc(l.label)}</a>`).join("")}
+      </div>` : ""}`;
 
   /* ---- summary cards ------------------------------------------------ */
   const hs = S.computeHeroStats({ teamId: id });

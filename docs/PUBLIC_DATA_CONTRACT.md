@@ -28,7 +28,7 @@ Rules:
 |---|---|---|
 | `meta` | `{schema, demo, generatedAt, note}` | `schema` = `"public.v1"` |
 | `regions` | `[{id, name, short}]` | ids: `all, na, emea, asia, china, pacific` |
-| `teams` | `[{id, name, code, region, logoUrl}]` | `logoUrl:null` → monogram plate fallback |
+| `teams` | `[{id, name, code, region, logoUrl, description, website, socials, memberCount}]` | `logoUrl:null` → monogram plate fallback; `description`/`website`/`socials`/`memberCount` are optional FACEIT-sourced facts (Phase D team enrichment) and are `null` until enriched — never a substitute for `logoUrl`, which stays human-verified only |
 | `players` | `[{id, teamId, handle, role}]` | optional per team; empty roster → empty state |
 | `tournaments` | see below | |
 | `bracketRounds` / `extraRounds` | `[{id, tournamentId, stageId, side, order, name, bestOf}]` | `side`: `upper` / `lower` / `gf` |

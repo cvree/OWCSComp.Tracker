@@ -58,6 +58,14 @@ def migrate_schema(con: sqlite3.Connection) -> None:
         "faceit_team_id": "TEXT",
         "logo_url": "TEXT",
         "prep_notes": "TEXT",
+        # Team profile enrichment (Phase D team facts).
+        "description": "TEXT",
+        "website": "TEXT",
+        "twitter": "TEXT",
+        "facebook": "TEXT",
+        "member_count": "INTEGER",
+        "avatar_source_url": "TEXT",
+        "faceit_enriched_at": "TEXT",
     })
     _add_missing_columns(con, "matches", {
         "faceit_match_id": "TEXT",
