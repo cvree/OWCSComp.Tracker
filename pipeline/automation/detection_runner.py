@@ -29,7 +29,12 @@ _PIPELINE_DIR = os.path.dirname(_HERE)
 if _PIPELINE_DIR not in sys.path:
     sys.path.insert(0, _PIPELINE_DIR)
 
-import ingest_map  # noqa: E402
+# `ingest_map` transitively imports cv2 (via capture.py/detect.py) — NEVER
+# import it at module level. This module must stay importable (and every
+# lightweight CLI command that merely references it must stay runnable) on a
+# machine with no OpenCV installed; only `run_detection`/`commit_approved_
+# detection` actually need it, and only when a detection command is really
+# invoked. See docs/AUTOMATION.md's discovery-workflow-hardening note.
 import db as content_db  # noqa: E402
 
 from . import job_store as js  # noqa: E402
@@ -113,7 +118,7 @@ def classify_detection_error(exc: BaseException) -> tuple[str, str]:
 def run_detection(store: js.JobStore, job: models.Job, segment: dict, *,
                   write: bool = False, every: float = DEFAULT_EVERY_SECONDS,
                   worker_id: str | None = None,
-                  run_fn=ingest_map.run) -> dict:
+                  run_fn=None) -> dict:
     """Automatic detection pass over one approved+extracted segment.
 
     write=False (the default, always run first): produces evidence-backed
@@ -122,8 +127,15 @@ def run_detection(store: js.JobStore, job: models.Job, segment: dict, *,
     `record_attempt(ok=False, ...)` (RETRY_SCHEDULED/FAILED_PERMANENT per the
     existing backoff policy) — the job never silently sits in PROCESSING
     with no trace of what went wrong.
+
+    `run_fn` defaults to `ingest_map.run`, imported lazily here (not at
+    module level) so merely importing `detection_runner` never requires
+    ingest_map's cv2 dependency — only actually calling this function does.
     """
     try:
+        if run_fn is None:
+            import ingest_map
+            run_fn = ingest_map.run
         args = build_ingest_args(job, segment, write=write, every=every)
         result = run_fn(args)
         summary = {
@@ -162,7 +174,7 @@ def commit_approved_detection(store: js.JobStore, job: models.Job,
                               segment: dict, *,
                               every: float = DEFAULT_EVERY_SECONDS,
                               worker_id: str | None = None,
-                              run_fn=ingest_map.run) -> dict:
+                              run_fn=None) -> dict:
     """The write=True pass — ONLY called after a human has approved the
     review (job.state == APPROVED). Idempotent: reruns the exact same
     ingest_id, so re-invoking after a partial failure never double-writes

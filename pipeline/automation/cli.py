@@ -33,7 +33,6 @@ from automation import broadcast_discovery as bdisc  # noqa: E402
 from automation import broadcast_matching as bmatch  # noqa: E402
 from automation import config as cfg  # noqa: E402
 from automation import coverage as cov  # noqa: E402
-from automation import detection_runner as dr  # noqa: E402
 from automation import discovery as disc  # noqa: E402
 from automation import faceit_api  # noqa: E402
 from automation import job_store as js  # noqa: E402
@@ -41,17 +40,29 @@ from automation import locks as lk  # noqa: E402
 from automation import match_export_coverage as mec  # noqa: E402
 from automation import match_repair as mrepair  # noqa: E402
 from automation import models  # noqa: E402
-from automation import ops  # noqa: E402
 from automation import owcs_calendar  # noqa: E402
-from automation import publish as pub  # noqa: E402
 from automation import reconcile as rec  # noqa: E402
-from automation import segmentation as seg  # noqa: E402
 from automation import state_machine as sm  # noqa: E402
 from automation import team_assets as tassets  # noqa: E402
 from automation import team_coverage as tcov  # noqa: E402
 from automation import team_enrichment as tenrich  # noqa: E402
-from automation import worker  # noqa: E402
 from automation import youtube_api as yt  # noqa: E402
+
+# NOT imported at module level, on purpose: `ops`, `worker`, `segmentation`,
+# `detection_runner`, `publish`. Each transitively touches computer-vision /
+# recording / detection code (capture.py/video_ingest.py/ingest_map.py ->
+# cv2), which a lightweight discovery/registry/coverage command never needs
+# and a bare-Python CI runner may not have installed. Every command handler
+# that actually needs one of these imports it locally, right where it's
+# used — see cmd_create_job, cmd_list_jobs, cmd_claim_job, cmd_release_job,
+# cmd_retry_job, cmd_cancel_job, cmd_reset_stale_lock, cmd_resume_job,
+# cmd_run_job, cmd_job_coverage, cmd_worker_doctor, cmd_worker_run,
+# cmd_segment_list, cmd_segment_approve, cmd_segment_reject, cmd_detect_job,
+# cmd_process_approved_job. `python cli.py --help` and every discovery-only
+# command (verify-channels, calendar-dryrun, broadcast-dryrun, discover-
+# broadcasts, coverage, sync-faceit, sync-calendar, sync-all, list-
+# championships, list-organizers, verify-competition, verify-registry) must
+# stay runnable on a machine with no OpenCV installed.
 
 
 def cmd_init_db(args: argparse.Namespace) -> int:
@@ -687,6 +698,7 @@ def _print_job(job: models.Job) -> None:
 
 # ------------------------------------------------------- Phase 1 job spine
 def cmd_create_job(args: argparse.Namespace) -> int:
+    from automation import ops
     store = js.JobStore(args.db)
     try:
         job = ops.create_job_from_broadcast(
@@ -703,6 +715,7 @@ def cmd_create_job(args: argparse.Namespace) -> int:
 
 
 def cmd_list_jobs(args: argparse.Namespace) -> int:
+    from automation import ops
     store = js.JobStore(args.db)
     try:
         jobs = ops.list_jobs(store, state=args.state)
@@ -730,6 +743,7 @@ def cmd_show_job(args: argparse.Namespace) -> int:
 
 
 def cmd_claim_job(args: argparse.Namespace) -> int:
+    from automation import ops
     store = js.JobStore(args.db)
     try:
         locks = lk.LockManager(store.con)
@@ -745,6 +759,7 @@ def cmd_claim_job(args: argparse.Namespace) -> int:
 
 
 def cmd_release_job(args: argparse.Namespace) -> int:
+    from automation import ops
     store = js.JobStore(args.db)
     try:
         locks = lk.LockManager(store.con)
@@ -756,6 +771,7 @@ def cmd_release_job(args: argparse.Namespace) -> int:
 
 
 def cmd_retry_job(args: argparse.Namespace) -> int:
+    from automation import ops
     store = js.JobStore(args.db)
     try:
         job = ops.retry_job(store, args.job, force=args.force)
@@ -769,6 +785,7 @@ def cmd_retry_job(args: argparse.Namespace) -> int:
 
 
 def cmd_cancel_job(args: argparse.Namespace) -> int:
+    from automation import ops
     store = js.JobStore(args.db)
     try:
         locks = lk.LockManager(store.con)
@@ -780,6 +797,7 @@ def cmd_cancel_job(args: argparse.Namespace) -> int:
 
 
 def cmd_reset_stale_lock(args: argparse.Namespace) -> int:
+    from automation import ops
     store = js.JobStore(args.db)
     try:
         locks = lk.LockManager(store.con)
@@ -792,6 +810,7 @@ def cmd_reset_stale_lock(args: argparse.Namespace) -> int:
 
 
 def cmd_resume_job(args: argparse.Namespace) -> int:
+    from automation import ops
     store = js.JobStore(args.db)
     try:
         locks = lk.LockManager(store.con)
@@ -805,16 +824,18 @@ def cmd_resume_job(args: argparse.Namespace) -> int:
 
 
 def cmd_run_job(args: argparse.Namespace) -> int:
+    from automation import ops
     store = js.JobStore(args.db)
-    con = _open_content_db()
     try:
         locks = lk.LockManager(store.con)
-        result = ops.run_one_job(store, locks, con, args.job,
+        # ops.run_one_job's segment lookups (map_segments) live in the
+        # AUTOMATION db — the same store.con already open here, never a
+        # separate content-db connection.
+        result = ops.run_one_job(store, locks, store.con, args.job,
                                  worker_id=args.worker_id)
         print(f"[automation] run-job {args.job}: {result}")
         return 0 if result.get("ok") else 1
     finally:
-        con.close()
         store.close()
 
 
@@ -823,6 +844,7 @@ JOB_COVERAGE_EXPORT_PATH = os.path.join(
 
 
 def cmd_job_coverage(args: argparse.Namespace) -> int:
+    from automation import ops
     store = js.JobStore(args.db)
     try:
         report = ops.build_job_coverage_report(store, window_hours=args.window_hours)
@@ -865,8 +887,10 @@ def cmd_worker_doctor(args: argparse.Namespace) -> int:
     ffprobe + versions, disk space, worker-cache + artifact directory
     writability, gh CLI auth, and API-key presence. Read-only (a self-
     deleting write probe only); never prints or logs a secret value."""
-    report = worker.doctor_report(media_root=args.media_root,
-                                  min_free_gb=args.min_free_gb)
+    from automation import worker
+    media_root = args.media_root if args.media_root is not None else worker.DEFAULT_MEDIA_ROOT
+    min_free_gb = args.min_free_gb if args.min_free_gb is not None else worker.DEFAULT_MIN_FREE_GB
+    report = worker.doctor_report(media_root=media_root, min_free_gb=min_free_gb)
     if args.json:
         print(json.dumps(report, indent=2))
     else:
@@ -880,20 +904,22 @@ def cmd_worker_run(args: argparse.Namespace) -> int:
     identity, run preflight, claim + lock the next eligible job, process it
     one step (download/segment/detect/commit — see ops.run_one_job), release,
     repeat up to --max-jobs times (default: process exactly one and exit)."""
+    from automation import ops
+    from automation import worker
+    media_root = args.media_root if args.media_root is not None else worker.DEFAULT_MEDIA_ROOT
     store = js.JobStore(args.db)
     wid = args.worker_id or worker.worker_identity()
     print(f"[worker] identity: {wid}")
-    report = worker.preflight(media_root=args.media_root)
+    report = worker.preflight(media_root=media_root)
     print(f"[worker] preflight: {report}")
     if not report["ok"]:
         print("[worker] preflight FAILED — fix missing dependencies/disk before running.")
         return 1
     locks = lk.LockManager(store.con)
-    con = _open_content_db()
     try:
         # Recover any job a previous crashed worker left stuck mid-download.
         ops.resume_interrupted_job(store, locks, worker_id=wid,
-                                   media_root=args.media_root)
+                                   media_root=media_root)
         processed = 0
         while processed < args.max_jobs:
             job = ops.claim_next_job(store, locks, wid)
@@ -901,22 +927,30 @@ def cmd_worker_run(args: argparse.Namespace) -> int:
                 print("[worker] no eligible job — nothing to do.")
                 break
             print(f"[worker] processing {job.job_key} ({job.state})")
-            result = ops.run_one_job(store, locks, con, job.job_key,
-                                     worker_id=wid, media_root=args.media_root)
+            # ops.run_one_job's segment lookups (map_segments) live in the
+            # AUTOMATION db — the same store.con, never a separate
+            # content-db connection.
+            result = ops.run_one_job(store, locks, store.con, job.job_key,
+                                     worker_id=wid, media_root=media_root)
             print(f"[worker] result: {result}")
             locks.release(worker.resource_for(job), wid)
             processed += 1
         return 0
     finally:
-        con.close()
         store.close()
 
 
 # --------------------------------------------------------- Phase F segments
+# NOTE: `map_segments` lives in the AUTOMATION database (schema.sql under
+# pipeline/automation/, alongside jobs/locks/publication_runs) — NOT the
+# content database (data/owcs.sqlite, matches/teams/heroes). Every segment
+# command below therefore reuses the already-open JobStore's `.con`, never
+# `_open_content_db()`.
 def cmd_segment_list(args: argparse.Namespace) -> int:
-    con = _open_content_db()
+    from automation import segmentation as seg
+    store = js.JobStore(args.db)
     try:
-        rows = seg.list_segments(con, video_id=args.video_id,
+        rows = seg.list_segments(store.con, video_id=args.video_id,
                                  review_status=args.status)
         if args.json:
             print(json.dumps(rows, indent=2))
@@ -929,14 +963,15 @@ def cmd_segment_list(args: argparse.Namespace) -> int:
                   f"map={r.get('map_name')}")
         return 0
     finally:
-        con.close()
+        store.close()
 
 
 def cmd_segment_approve(args: argparse.Namespace) -> int:
-    con = _open_content_db()
+    from automation import segmentation as seg
+    store = js.JobStore(args.db)
     try:
         row = seg.approve_segment(
-            con, args.segment_id, map_order=args.map_order,
+            store.con, args.segment_id, map_order=args.map_order,
             map_name=args.map_name, map_mode=args.map_mode,
             team_a=args.team_a, team_b=args.team_b,
             side_assignment=args.side, layout_id=args.layout_id,
@@ -945,26 +980,28 @@ def cmd_segment_approve(args: argparse.Namespace) -> int:
               f"({row['team_a']} vs {row['team_b']})")
         return 0
     finally:
-        con.close()
+        store.close()
 
 
 def cmd_segment_reject(args: argparse.Namespace) -> int:
-    con = _open_content_db()
+    from automation import segmentation as seg
+    store = js.JobStore(args.db)
     try:
-        seg.reject_segment(con, args.segment_id, reason=args.reason)
+        seg.reject_segment(store.con, args.segment_id, reason=args.reason)
         print(f"[automation] segment {args.segment_id} rejected: {args.reason}")
         return 0
     finally:
-        con.close()
+        store.close()
 
 
 # ------------------------------------------------------- Phase G/I actions
 def cmd_detect_job(args: argparse.Namespace) -> int:
+    from automation import detection_runner as dr
+    from automation import segmentation as seg
     store = js.JobStore(args.db)
-    con = _open_content_db()
     try:
         job = _job_or_exit(store, args.job)
-        segments = seg.list_segments(con, video_id=job.payload.get("videoId"),
+        segments = seg.list_segments(store.con, video_id=job.payload.get("videoId"),
                                      review_status="approved")
         if not segments:
             print(f"[automation] no approved segment for {args.job}")
@@ -979,7 +1016,6 @@ def cmd_detect_job(args: argparse.Namespace) -> int:
         print(f"[automation] detect-job {args.job}: {result}")
         return 0 if result.get("ok") else 1
     finally:
-        con.close()
         store.close()
 
 
@@ -987,12 +1023,19 @@ def cmd_process_approved_job(args: argparse.Namespace) -> int:
     """`process-approved-job --job <id> [--publish]` — the one supervised
     command that coordinates promotion + export + validation + publication.
     Default is a dry run (validate everything, write/push nothing); pass
-    --publish to actually create + push the publication commit."""
+    --publish to actually create + push the publication commit.
+
+    Two databases, wired deliberately: `seg.list_segments` reads the
+    approved segment from the AUTOMATION db (store.con — map_segments lives
+    there); `pub.publish_job`'s match/team precondition checks need the
+    CONTENT db (con — matches/teams live there)."""
+    from automation import publish as pub
+    from automation import segmentation as seg
     store = js.JobStore(args.db)
     con = _open_content_db()
     try:
         job = _job_or_exit(store, args.job)
-        segments = seg.list_segments(con, video_id=job.payload.get("videoId"),
+        segments = seg.list_segments(store.con, video_id=job.payload.get("videoId"),
                                      review_status="approved")
         if not segments:
             print(f"[automation] no approved segment for {args.job} — refusing.")
@@ -1261,16 +1304,24 @@ def main(argv: list[str] | None = None) -> int:
                       help="write assets/data/job_coverage.v1.json for beta-ops.html")
     jc_p.set_defaults(func=cmd_job_coverage)
 
+    # --media-root/--min-free-gb default to None here (never `worker.X` —
+    # that would force-import worker.py, and transitively cv2, merely to
+    # build the argparse tree for ANY cli.py invocation, not just this
+    # subcommand). The real defaults are resolved lazily inside
+    # cmd_worker_doctor/cmd_worker_run, after `worker` is actually imported.
     wd_p = sub.add_parser("worker-doctor",
                           help="Windows-worker preflight checklist (deps/disk/gh-auth/API-key presence)")
-    wd_p.add_argument("--media-root", default=worker.DEFAULT_MEDIA_ROOT)
-    wd_p.add_argument("--min-free-gb", type=float, default=worker.DEFAULT_MIN_FREE_GB)
+    wd_p.add_argument("--media-root", default=None,
+                      help="worker media cache root (default: data/worker/jobs under the repo)")
+    wd_p.add_argument("--min-free-gb", type=float, default=None,
+                      help="minimum required free disk space in GB (default: 5.0)")
     wd_p.add_argument("--json", action="store_true")
     wd_p.set_defaults(func=cmd_worker_doctor)
 
     wr_p = sub.add_parser("worker-run", help="the self-hosted worker main loop (Phase E)")
     wr_p.add_argument("--worker-id", default=None)
-    wr_p.add_argument("--media-root", default=worker.DEFAULT_MEDIA_ROOT)
+    wr_p.add_argument("--media-root", default=None,
+                      help="worker media cache root (default: data/worker/jobs under the repo)")
     wr_p.add_argument("--max-jobs", type=int, default=1)
     wr_p.set_defaults(func=cmd_worker_run)
 

@@ -270,8 +270,12 @@ def publish_job(store: js.JobStore, con, job: models.Job, segment: dict, *,
             branch, message, files, repo_root=repo_root, runner=runner, push=push)
         result.update(commit_info)
 
+        # publication_runs lives in the AUTOMATION db (schema.sql under
+        # pipeline/automation/), not the content db `con` used above for
+        # match/team lookups — write it through `store.con`, the same
+        # connection every other job-state change in this function uses.
         run_key = models.publish_key(new_hash or "unknown")
-        con.execute(
+        store.con.execute(
             """INSERT INTO publication_runs
                (run_key, db_hash, prev_db_hash, export_hash, prev_export_hash,
                 branch, source_commit, state, created_at)
@@ -283,7 +287,7 @@ def publish_job(store: js.JobStore, con, job: models.Job, segment: dict, *,
              commit_info["commitSha"],
              dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()),
         )
-        con.commit()
+        store.con.commit()
 
         store.record_attempt(job.job_key, ok=True, worker_id=worker_id,
                              diagnostic_path=branch)

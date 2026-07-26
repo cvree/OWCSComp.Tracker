@@ -23,13 +23,17 @@ _PIPELINE_DIR = os.path.dirname(_HERE)
 if _PIPELINE_DIR not in sys.path:
     sys.path.insert(0, _PIPELINE_DIR)
 
-import capture  # noqa: E402  (pipeline/capture.py — layout loading for segmentation)
+# `capture` (pipeline/capture.py) and `segmentation` transitively import cv2.
+# NEVER import them at module level — only `run_one_job`'s DOWNLOADED/
+# READY_FOR_DETECTION/APPROVED branches actually need them, imported lazily
+# right there, so merely `import ops` (and every non-segmentation job
+# action: create/list/show/claim/release/retry/cancel/reset-lock) stays
+# runnable with no OpenCV installed.
 
 from . import detection_runner as dr
 from . import job_store as js
 from . import locks as lk
 from . import models
-from . import segmentation as seg
 from . import state_machine as sm
 from . import worker
 
@@ -124,7 +128,7 @@ def run_one_job(store: js.JobStore, lock_mgr: lk.LockManager, content_con,
                 media_root: str = worker.DEFAULT_MEDIA_ROOT,
                 official_channel_ids: set | None = None,
                 manual_approved_video_ids: set | None = None,
-                segment_interval: int = seg.DEFAULT_INTERVAL_SECONDS) -> dict:
+                segment_interval: int | None = None) -> dict:
     """Advance ONE job by exactly one automatic step, whatever that means for
     its current state. Stops (returns ok=False with a clear reason) whenever
     the next step needs a human — segment/detection review, final approval,
@@ -152,6 +156,9 @@ def run_one_job(store: js.JobStore, lock_mgr: lk.LockManager, content_con,
             return {"ok": False, "reason": "missing downloaded media path or "
                                            "expectedLayoutId — cannot generate "
                                            "segment candidates automatically"}
+        import capture
+        from . import segmentation as seg
+        interval = segment_interval if segment_interval is not None else seg.DEFAULT_INTERVAL_SECONDS
         repo_root = os.path.dirname(_PIPELINE_DIR)
         video_path = os.path.join(repo_root, local_path)
         layout = capture.load_layout(dr.layout_path(layout_id))
@@ -159,7 +166,7 @@ def run_one_job(store: js.JobStore, lock_mgr: lk.LockManager, content_con,
         store.transition(job_key, sm.SEGMENTING)
         try:
             candidates = seg.generate_candidates(
-                video_path, layout, out_dir=thumbs_dir, interval=segment_interval)
+                video_path, layout, out_dir=thumbs_dir, interval=interval)
             seg.store_candidates(content_con, media.get("videoId"),
                                  job.payload.get("matchId"), candidates,
                                  source_job_key=job_key)
@@ -178,6 +185,7 @@ def run_one_job(store: js.JobStore, lock_mgr: lk.LockManager, content_con,
                                        "automatic left to do"}
 
     if job.state == sm.READY_FOR_DETECTION:
+        from . import segmentation as seg
         segments = seg.list_segments(content_con, video_id=job.payload.get("videoId"),
                                      review_status="approved")
         if not segments:
@@ -188,6 +196,7 @@ def run_one_job(store: js.JobStore, lock_mgr: lk.LockManager, content_con,
                                 worker_id=worker_id)
 
     if job.state == sm.APPROVED:
+        from . import segmentation as seg
         segments = seg.list_segments(content_con, video_id=job.payload.get("videoId"),
                                      review_status="approved")
         if not segments:

@@ -90,10 +90,10 @@ jobs:
       LOOKBACK: ${{ github.event.inputs.lookback_days || '30' }}
     steps:
       - name: Check out repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.12"
 
@@ -159,68 +159,153 @@ jobs:
       # reach stdout — see youtube_api.py's URL sanitization) and never
       # writes to the repo; output is captured to a file and uploaded as a
       # workflow artifact in the "Upload sanitized run output" step below.
+      #
+      # Every step here is `shell: bash` with `set -euo pipefail` explicit
+      # (never relying on whatever the runner's implicit default happens to
+      # be) — this is the fix for the discovery #28 false-success incident:
+      # `python3 ... | tee run-output.txt` alone lets `tee`'s own zero exit
+      # status hide a failing `python3` (ModuleNotFoundError: cv2, in that
+      # case), so the step reported green with a ~144-byte artifact. Now:
+      # stdout+stderr are both captured (`2>&1` before the pipe), `pipefail`
+      # makes the pipeline's exit status the FIRST failing command's (i.e.
+      # python3's, not tee's), and `test -s run-output.txt` hard-fails the
+      # step if the report is empty for any other reason. A real failure
+      # here now fails this step, fails the job, and shows red in Actions —
+      # never a silent, near-empty "success".
       - name: Verify configured YouTube channels (mode=verify-channels)
         if: github.event.inputs.mode == 'verify-channels'
+        id: verify_channels
+        shell: bash
         run: |
+          set -euo pipefail
           if [ -z "$YOUTUBE_API_KEY" ]; then echo "::error::YOUTUBE_API_KEY not set"; exit 1; fi
-          python3 pipeline/automation/cli.py verify-channels | tee run-output.txt
+          python3 pipeline/automation/cli.py verify-channels 2>&1 | tee run-output.txt
+          test -s run-output.txt
+          wc -c run-output.txt
 
       - name: Official-calendar dry-run + reconciliation (mode=calendar-dryrun)
         if: github.event.inputs.mode == 'calendar-dryrun'
+        id: calendar_dryrun
+        shell: bash
         run: |
-          python3 pipeline/automation/cli.py calendar-dryrun --lookback-days "$LOOKBACK" | tee run-output.txt
+          set -euo pipefail
+          python3 pipeline/automation/cli.py calendar-dryrun --lookback-days "$LOOKBACK" 2>&1 | tee run-output.txt
+          test -s run-output.txt
+          wc -c run-output.txt
 
       - name: YouTube broadcast discovery + matching, read-only (mode=broadcast-dryrun)
         if: github.event.inputs.mode == 'broadcast-dryrun'
+        id: broadcast_dryrun
+        shell: bash
         run: |
+          set -euo pipefail
           if [ -z "$YOUTUBE_API_KEY" ]; then echo "::error::YOUTUBE_API_KEY not set"; exit 1; fi
-          python3 pipeline/automation/cli.py broadcast-dryrun --lookback-days "$LOOKBACK" | tee run-output.txt
+          python3 pipeline/automation/cli.py broadcast-dryrun --lookback-days "$LOOKBACK" 2>&1 | tee run-output.txt
+          test -s run-output.txt
+          wc -c run-output.txt
 
       - name: Rolling completeness + broadcast coverage (mode=coverage)
         if: github.event.inputs.mode == 'coverage'
+        id: coverage_report
+        shell: bash
         run: |
-          python3 pipeline/automation/cli.py coverage --window "$LOOKBACK" | tee run-output.txt
+          set -euo pipefail
+          python3 pipeline/automation/cli.py coverage --window "$LOOKBACK" 2>&1 | tee run-output.txt
+          test -s run-output.txt
+          wc -c run-output.txt
 
       - name: Team profile enrichment, read-only (mode=teams-dryrun)
         if: github.event.inputs.mode == 'teams-dryrun'
+        id: teams_dryrun
+        shell: bash
         run: |
+          set -euo pipefail
           if [ -z "$FACEIT_API_KEY" ]; then echo "::error::FACEIT_API_KEY not set"; exit 1; fi
-          python3 pipeline/automation/cli.py enrich-teams --dry-run | tee run-output.txt
+          python3 pipeline/automation/cli.py enrich-teams --dry-run 2>&1 | tee run-output.txt
+          test -s run-output.txt
+          wc -c run-output.txt
 
       - name: Team coverage report (mode=team-coverage)
         if: github.event.inputs.mode == 'team-coverage'
+        id: team_coverage
+        shell: bash
         run: |
-          python3 pipeline/automation/cli.py team-coverage --window "$LOOKBACK" | tee run-output.txt
+          set -euo pipefail
+          python3 pipeline/automation/cli.py team-coverage --window "$LOOKBACK" 2>&1 | tee run-output.txt
+          test -s run-output.txt
+          wc -c run-output.txt
 
       - name: Team asset candidate collection, read-only (mode=team-assets-dryrun)
         if: github.event.inputs.mode == 'team-assets-dryrun'
+        id: team_assets_dryrun
+        shell: bash
         run: |
-          python3 pipeline/automation/cli.py collect-team-assets | tee run-output.txt
+          set -euo pipefail
+          python3 pipeline/automation/cli.py collect-team-assets 2>&1 | tee run-output.txt
           echo "" >> run-output.txt
-          python3 pipeline/automation/cli.py publish-team-assets >> run-output.txt
+          python3 pipeline/automation/cli.py publish-team-assets >> run-output.txt 2>&1
+          test -s run-output.txt
+          wc -c run-output.txt
 
       - name: Per-match fixture/lifecycle audit, read-only (mode=match-audit)
         if: github.event.inputs.mode == 'match-audit'
+        id: match_audit
+        shell: bash
         run: |
-          python3 pipeline/automation/cli.py match-audit | tee run-output.txt
+          set -euo pipefail
+          python3 pipeline/automation/cli.py match-audit 2>&1 | tee run-output.txt
+          test -s run-output.txt
+          wc -c run-output.txt
 
       - name: Match repair dry-run report, read-only (mode=match-repair-dryrun)
         if: github.event.inputs.mode == 'match-repair-dryrun'
+        id: match_repair_dryrun
+        shell: bash
         run: |
-          python3 pipeline/automation/cli.py match-repair --coverage | tee run-output.txt
+          set -euo pipefail
+          python3 pipeline/automation/cli.py match-repair --coverage 2>&1 | tee run-output.txt
+          test -s run-output.txt
+          wc -c run-output.txt
 
       - name: Match export coverage report, read-only (mode=export-dryrun)
         if: github.event.inputs.mode == 'export-dryrun'
+        id: export_dryrun
+        shell: bash
         run: |
-          python3 pipeline/automation/cli.py export-coverage | tee run-output.txt
+          set -euo pipefail
+          python3 pipeline/automation/cli.py export-coverage 2>&1 | tee run-output.txt
+          test -s run-output.txt
+          wc -c run-output.txt
+
+      # if: contains(...) carries an IMPLICIT success() — GitHub Actions
+      # only adds that when the expression uses none of always()/failure()/
+      # cancelled(); a plain expression like this one already means "only
+      # if every previous step succeeded". So neither of the two steps below
+      # ever runs (and neither can claim/imply success) after a report step
+      # above has failed — the job simply stays red, with the traceback
+      # visible in that failed step's own log.
+      - name: Append sanitized report to job summary
+        if: contains(fromJSON('["verify-channels","calendar-dryrun","broadcast-dryrun","teams-dryrun","coverage","team-coverage","team-assets-dryrun","match-audit","match-repair-dryrun","export-dryrun"]'), github.event.inputs.mode)
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s run-output.txt
+          {
+            echo "### Discovery report — mode: ${MODE}"
+            echo ""
+            echo '```text'
+            cat run-output.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload sanitized run output
         if: contains(fromJSON('["verify-channels","calendar-dryrun","broadcast-dryrun","teams-dryrun","coverage","team-coverage","team-assets-dryrun","match-audit","match-repair-dryrun","export-dryrun"]'), github.event.inputs.mode)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: discovery-${{ github.event.inputs.mode }}-${{ github.run_id }}
           path: run-output.txt
           retention-days: 30
+          if-no-files-found: error
 
       # -------- default/scheduled SYNC path (unchanged, safe) -------------
       - name: Dry-run health check (sync mode; always safe, writes nothing)
@@ -303,6 +388,17 @@ jobs:
 
       - name: Summary
         if: always()
+        env:
+          # One of these is set when its mode ran; the rest are empty. Never
+          # printed as "success" unless the step itself actually concluded
+          # that way — a failed/cancelled report step shows exactly that.
+          REPORT_STEP_CONCLUSION: >-
+            ${{ steps.verify_channels.conclusion || steps.calendar_dryrun.conclusion
+             || steps.broadcast_dryrun.conclusion || steps.coverage_report.conclusion
+             || steps.teams_dryrun.conclusion || steps.team_coverage.conclusion
+             || steps.team_assets_dryrun.conclusion || steps.match_audit.conclusion
+             || steps.match_repair_dryrun.conclusion || steps.export_dryrun.conclusion
+             || '' }}
         run: |
           {
             echo "### Discovery run — mode: ${MODE}"
@@ -310,6 +406,12 @@ jobs:
             echo "- Enabled competitions: ${{ steps.gate.outputs.enabled_competitions }}"
             echo "- FACEIT key present: ${{ steps.gate.outputs.has_key }}"
             echo "- YouTube key present: ${{ steps.gate.outputs.has_youtube_key }}"
+            if [ -n "$REPORT_STEP_CONCLUSION" ]; then
+              echo "- Report step ($MODE): $REPORT_STEP_CONCLUSION"
+              if [ "$REPORT_STEP_CONCLUSION" != "success" ]; then
+                echo "  **FAILED — see the step log above for the full traceback. No artifact was uploaded.**"
+              fi
+            fi
             echo "- Match metadata repair: ${{ steps.match_repair.conclusion || 'skipped' }}"
             echo "- Team enrichment: ${{ steps.teams.conclusion || 'skipped' }}"
             echo "- Data-update PR: ${{ steps.pr.conclusion || 'skipped' }} (auto-merges once its own CI is green)"
