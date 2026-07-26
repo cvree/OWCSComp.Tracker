@@ -29,7 +29,14 @@
 
   function heroCard(h) {
     const r = statByHero.get(h.id);
-    const face = P.assets ? P.assets.heroFace(h, { px: 52 }) : "";
+    // "Not yet sighted" cards carry no comp/evidence claim, so they show
+    // Blizzard's own official hero art instead of a bare monogram — a
+    // strict readability upgrade with nothing to conflate with evidence.
+    // Live (verified-pick) cards keep the broadcast-crop-or-monogram face
+    // untouched: that face IS part of the evidence story there.
+    const face = P.assets
+      ? (r ? P.assets.heroFace(h, { px: 52 }) : P.assets.heroOfficialFace(h, { px: 52 }))
+      : "";
     const roleIc = P.assets ? P.assets.roleIcon(h.role) : "";
     const stat = r
       ? `<div class="hero-card__stats">
@@ -80,6 +87,7 @@
       `${live.length} in the meta · ${dormant.length} awaiting proof`;
     P.observeReveals && P.observeReveals(document);
     if (window.OWCSMotion) window.OWCSMotion.observe(document);
+    if (P.assets && P.assets.applyHeroOfficial) P.assets.applyHeroOfficial($("#hx-dormant"));
   }
 
   $("#hx-role").addEventListener("change", render);

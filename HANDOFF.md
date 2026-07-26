@@ -1,5 +1,58 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
+## CURRENT STATUS (authoritative — 2026-07-26) — Phase D3: official hero presentation assets
+
+Everything below this section down to the next `## CURRENT STATUS` marker is
+historical context; when it conflicts with this section, this section wins.
+Full detail in `docs/AUTOMATION.md` ("Phase D3").
+
+Every one of the 52 public hero ids now has a real, authoritative portrait,
+full artwork, and icon — sourced from Blizzard's own official hero pages
+(overwatch.blizzard.com/en-us/heroes/<slug>/), never a guess. Separate from
+(and never blended with) the pre-existing evidence-only broadcast-crop
+portraits: those still mean "this hero was actually detected being played
+in a tracked match"; the new official art means "this is what the hero
+looks like," used only on encyclopedia-style surfaces.
+
+**52/52 resolved.** All 52 heroes turned out to be real, currently-live
+Overwatch heroes (the real game kept shipping new heroes past training
+cutoff, through mid-2026) — confirmed live via web search before writing
+any fetch code. Three real naming quirks in Blizzard's own CMS were found
+and handled explicitly (never patched with a blanket guess): CMS revision
+suffixes (`Juno_v2`, `Mei_02` — direct match tried first so a hero whose
+real name itself ends in a number, `Soldier: 76`, is never mistaken for a
+revision-suffixed file), diacritics (`Torbjörn`/`Lúcio` normalize to match
+Blizzard's ASCII filenames), and a pre-release dev codename (Wuyang's asset
+is filed under `Aqua.png`, independently corroborated by outside reporting
+at reveal time — recorded explicitly with full provenance, never silently
+masked).
+
+New: `pipeline/build_hero_official_assets.py` (fetch + portrait/artwork/icon
+generation + WebP, idempotent, `--dry-run`/`--hero-id`/`--force`), a new
+`heroOfficial` section in `asset_manifest.json` (role, curated aliases,
+source, attribution, usage note, dimensions, hash), a new `A.heroOfficialFace`/
+`applyHeroOfficial` resolver in `assets.js` (same monogram placeholder
+`heroFace()` already uses — the intentional unknown-hero fallback — swapped
+for the real portrait once resolved), a new "Official presentation" panel
+on `hero.html`, and official portraits on `heroes.html`'s "not yet sighted"
+cards. `pipeline/test_hero_official_assets.py` (23 checks, offline).
+
+AVIF explicitly `null` (same documented limitation as the Phase D2 team
+logo pipeline — no AVIF encoder in this stdlib/existing-deps environment).
+~11MB of committed image assets (52 heroes × portrait/artwork/icon × PNG/
+JPG/WebP).
+
+### Honest gaps / next blockers
+- No hero currently needs a human review pass (52/52 resolved) — the
+  `KNOWN_CODENAMES` override table exists for the one case (Wuyang) that
+  needed it; a future new hero release may need a similar one-line addition
+  if Blizzard's CMS ever files an asset under an unrevealed codename again.
+- `aliases` is a small, deliberately conservative curated list — most
+  2026-era heroes have no separately-documented civilian name and correctly
+  show an empty aliases list rather than a guessed one.
+
+---
+
 ## CURRENT STATUS (authoritative — 2026-07-25) — Phase D2.1: production team population, verified logos, match export repair
 
 Everything below this section down to the next `## CURRENT STATUS` marker is

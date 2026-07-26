@@ -439,6 +439,75 @@ check directly works regardless.) The rest of Phase I (confidence-gated
 staged publication once hero-composition processing exists) is still future
 work.
 
+## Phase D3 — official hero presentation assets (implemented)
+
+Every one of the 52 public hero ids gets a real, authoritative portrait,
+full artwork, and icon — separate from (and never blended with) the
+evidence-only broadcast-crop portraits Phase A/B/C above are built from.
+
+| Roadmap item | Where | Status |
+|---|---|---|
+| Authoritative per-hero source resolution (Blizzard's own hero pages, never a guess) | `pipeline/build_hero_official_assets.py` (`HERO_SLUGS`, `find_splash_url`) | ✅ 52/52 resolved |
+| Portrait / full artwork / icon generation | `build_hero_official_assets.py` (`_square_crop` + resize; artwork kept as-fetched) | ✅ |
+| Role metadata | content DB `heroes.role` (unchanged; no schema/data migration needed) | ✅ |
+| Aliases (curated, never fabricated) | `pipeline/build_asset_manifest.py`'s `HERO_ALIASES` — this repo's own existing hero-id nicknames + web-search-confirmed civilian names only | ✅ |
+| Authoritative source + attribution + usage notes | `asset_manifest.json`'s new `heroOfficial` section | ✅ |
+| WebP variants; AVIF explicitly null (documented, same limitation as team_assets.py) | `build_hero_official_assets.py` | ✅ |
+| Dimensions + hash recorded | `asset_manifest.json`'s `heroOfficial[<id>].{portrait,artwork,icon}` | ✅ |
+| Intentional unknown-hero fallback | `assets.js`'s `A.heroOfficialFace`/`applyHeroOfficial` (same monogram placeholder `heroFace()` uses, swapped for the real portrait once resolved — stays a monogram forever for an unresolved hero) | ✅ |
+| Validation: all 52 public hero ids resolve correctly | `pipeline/test_hero_official_assets.py` | ✅ 23 checks |
+
+### Root-cause work done to get from "should be easy" to "actually works"
+
+Every hero page on overwatch.blizzard.com carries several GENERIC images
+shared across the whole site (an "Outro" banner, "Origin_Story", "Perks",
+"Related_Heroes" panels — identical content-ids across different heroes'
+pages). The one hero-specific image is found by matching the URL's own
+embedded name against the hero's real name (diacritics stripped, alnum-only)
+— never a positional/first-match guess. Three real naming quirks surfaced
+and were handled explicitly, never patched with a blanket guess:
+
+* **CMS revision suffixes** — Juno's asset is `960_Juno_v2.jpg`, Mei's is
+  `960_Mei_02.jpg`. A direct match is tried first, and only falls back to
+  stripping a trailing `_v2`/`_02`-style suffix if that fails — so a hero
+  whose own real name ends in a number (`Soldier: 76` → `960_Soldier_76.jpg`)
+  is never mistaken for a revision-suffixed file of a different name.
+* **Diacritics** — `Torbjörn`/`Lúcio` normalize (NFKD-strip) to match
+  Blizzard's ASCII filenames (`Torbjorn.jpg`).
+* **Pre-release dev codenames** — Wuyang's asset is filed under `Aqua.png`,
+  his documented pre-reveal codename (independently corroborated by outside
+  reporting at reveal time, not inferred from the page itself). Recorded
+  explicitly in `KNOWN_CODENAMES` with its provenance, and the manifest
+  records `matchedAsCodename` for full auditability — never silently masked.
+
+### Where it's used
+
+`hero.html`'s new "Official presentation" panel (full artwork + source link
++ attribution + aliases) and `heroes.html`'s "not yet sighted" directory
+cards (official portrait instead of a bare monogram — these cards carry no
+comp/evidence claim, so real art is a strict readability upgrade). The
+"in the meta" (verified-pick) cards and the hero dossier's header/portrait-
+provenance section are **completely untouched** — they still show only the
+broadcast-crop-or-monogram evidence face, exactly as before Phase D3.
+
+### CLI
+
+```bash
+python pipeline/build_hero_official_assets.py             # fetch + build all 52
+python pipeline/build_hero_official_assets.py --dry-run   # report only, no writes
+python pipeline/build_hero_official_assets.py --hero-id zarya --force
+python pipeline/build_asset_manifest.py                    # regenerate asset_manifest.json (heroes + heroOfficial + teams)
+```
+
+### Tests
+
+`pipeline/test_hero_official_assets.py` — offline unit tests for the
+matching/normalization logic (synthetic HTML fixtures, no network) plus
+validation of the real, committed manifest: all 52 hero ids present,
+GitHub-Pages-safe paths, files exist on disk, WebP present + AVIF explicitly
+null, dimensions/hash recorded, source/attribution present, aliases match
+the curated (never-fabricated) table.
+
 ## Not yet implemented (later roadmap passes)
 
 The self-hosted recording daemon (Phase E), broadcast segmentation

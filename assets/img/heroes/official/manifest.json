@@ -1,0 +1,1515 @@
+{
+ "note": "Official Blizzard hero presentation art (portrait/artwork/icon), distinct from the broadcast-crop evidence portraits in assets/img/heroes/manifest.json. Source: overwatch.blizzard.com, Blizzard's own official hero pages. Non-commercial fan use per Blizzard's Fan Content Policy; Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc.",
+ "generatedAt": "2026-07-26T01:15:38+00:00",
+ "heroes": {
+  "ana": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/ana/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt49f84cd5568be8e4/631a8bab1566e20e82f3028c/960_Ana.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Support",
+   "artwork": {
+    "path": "assets/img/heroes/official/ana/artwork.jpg",
+    "webp": "assets/img/heroes/official/ana/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "dc85a265d0f262da",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/ana/portrait.png",
+    "webp": "assets/img/heroes/official/ana/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/ana/icon.png",
+    "webp": "assets/img/heroes/official/ana/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "anran": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/anran/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt29c0e19b94b52ecb/69d6e1158d465d0cc14c5e9a/960_Anran.png",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Damage",
+   "artwork": {
+    "path": "assets/img/heroes/official/anran/artwork.jpg",
+    "webp": "assets/img/heroes/official/anran/artwork.webp",
+    "width": 1920,
+    "height": 1332,
+    "hash": "32d08da11e45516f",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/anran/portrait.png",
+    "webp": "assets/img/heroes/official/anran/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/anran/icon.png",
+    "webp": "assets/img/heroes/official/anran/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "ashe": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/ashe/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt173466454e650e25/631a8ba085af980dae7a2ef6/960_Ashe.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Damage",
+   "artwork": {
+    "path": "assets/img/heroes/official/ashe/artwork.jpg",
+    "webp": "assets/img/heroes/official/ashe/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "40b434363d934d78",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/ashe/portrait.png",
+    "webp": "assets/img/heroes/official/ashe/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/ashe/icon.png",
+    "webp": "assets/img/heroes/official/ashe/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "ball": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/wrecking-ball/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/bltdfd1b674f6751714/631a8a69e7bdcf0dd996c8c5/960_Wrecking_Ball.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Tank",
+   "artwork": {
+    "path": "assets/img/heroes/official/ball/artwork.jpg",
+    "webp": "assets/img/heroes/official/ball/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "626e51e8bc0e4813",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/ball/portrait.png",
+    "webp": "assets/img/heroes/official/ball/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/ball/icon.png",
+    "webp": "assets/img/heroes/official/ball/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "bap": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/baptiste/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blta1f7e2dac43adcd6/631a8b99636d390da7825ded/960_Baptiste.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Support",
+   "artwork": {
+    "path": "assets/img/heroes/official/bap/artwork.jpg",
+    "webp": "assets/img/heroes/official/bap/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "cd313dd869572f9f",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/bap/portrait.png",
+    "webp": "assets/img/heroes/official/bap/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/bap/icon.png",
+    "webp": "assets/img/heroes/official/bap/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "bastion": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/bastion/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blte23b91958a7479bf/631a8b92251b540e0aea78ac/960_Bastion.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Damage",
+   "artwork": {
+    "path": "assets/img/heroes/official/bastion/artwork.jpg",
+    "webp": "assets/img/heroes/official/bastion/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "bd7da633e8b8b5be",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/bastion/portrait.png",
+    "webp": "assets/img/heroes/official/bastion/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/bastion/icon.png",
+    "webp": "assets/img/heroes/official/bastion/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "brig": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/brigitte/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/bltdfffd38a34aa21c6/631a8b7f3ab6f40dd2a906ad/960_Brigitte.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Support",
+   "artwork": {
+    "path": "assets/img/heroes/official/brig/artwork.jpg",
+    "webp": "assets/img/heroes/official/brig/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "d3ad1f42c9f698a4",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/brig/portrait.png",
+    "webp": "assets/img/heroes/official/brig/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/brig/icon.png",
+    "webp": "assets/img/heroes/official/brig/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "cass": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/cassidy/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/bltadb0bb2e726bee08/631a8b79be2fcf0db5eea4c8/960_Cassidy.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Damage",
+   "artwork": {
+    "path": "assets/img/heroes/official/cass/artwork.jpg",
+    "webp": "assets/img/heroes/official/cass/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "b2c3690bbc2fb0ee",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/cass/portrait.png",
+    "webp": "assets/img/heroes/official/cass/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/cass/icon.png",
+    "webp": "assets/img/heroes/official/cass/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "domina": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/domina/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt5d5a10fcc1c2cf0e/698175214b9b3531bf4c75c4/960_Domina.png",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Tank",
+   "artwork": {
+    "path": "assets/img/heroes/official/domina/artwork.jpg",
+    "webp": "assets/img/heroes/official/domina/artwork.webp",
+    "width": 1920,
+    "height": 1332,
+    "hash": "dc196da9afe52b6c",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/domina/portrait.png",
+    "webp": "assets/img/heroes/official/domina/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/domina/icon.png",
+    "webp": "assets/img/heroes/official/domina/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "doomfist": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/doomfist/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blte260937b4372f79d/631a8b6beef3ae0e03c743b2/960_Doomfist.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Tank",
+   "artwork": {
+    "path": "assets/img/heroes/official/doomfist/artwork.jpg",
+    "webp": "assets/img/heroes/official/doomfist/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "513f613bc74b94f3",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/doomfist/portrait.png",
+    "webp": "assets/img/heroes/official/doomfist/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/doomfist/icon.png",
+    "webp": "assets/img/heroes/official/doomfist/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "dva": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/dva/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt263fecc338db9cc3/631a8b650e1b4f0e7b89a534/960_Dva.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Tank",
+   "artwork": {
+    "path": "assets/img/heroes/official/dva/artwork.jpg",
+    "webp": "assets/img/heroes/official/dva/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "580b5bbbe8ba121b",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/dva/portrait.png",
+    "webp": "assets/img/heroes/official/dva/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/dva/icon.png",
+    "webp": "assets/img/heroes/official/dva/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "echo": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/echo/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt49673b3031ff12a8/631a98f5636d390da7825df9/960_Echo.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Damage",
+   "artwork": {
+    "path": "assets/img/heroes/official/echo/artwork.jpg",
+    "webp": "assets/img/heroes/official/echo/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "d2f056eb01d1296b",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/echo/portrait.png",
+    "webp": "assets/img/heroes/official/echo/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/echo/icon.png",
+    "webp": "assets/img/heroes/official/echo/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "emre": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/emre/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt3db2aaac9a964593/698cfe7e52000362be036c58/960_Emre.png",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Damage",
+   "artwork": {
+    "path": "assets/img/heroes/official/emre/artwork.jpg",
+    "webp": "assets/img/heroes/official/emre/artwork.webp",
+    "width": 1920,
+    "height": 1332,
+    "hash": "adfa4eefd1ee2ff7",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/emre/portrait.png",
+    "webp": "assets/img/heroes/official/emre/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/emre/icon.png",
+    "webp": "assets/img/heroes/official/emre/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "freja": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/freja/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt99473ade3e098485/67ec5f33544f976fc8cfeec6/960_Freja.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Damage",
+   "artwork": {
+    "path": "assets/img/heroes/official/freja/artwork.jpg",
+    "webp": "assets/img/heroes/official/freja/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "4823224971861dce",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/freja/portrait.png",
+    "webp": "assets/img/heroes/official/freja/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/freja/icon.png",
+    "webp": "assets/img/heroes/official/freja/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "genji": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/genji/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt662cec43713c06e7/631a8b57a0ff920e11e791c0/960_Genji.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Damage",
+   "artwork": {
+    "path": "assets/img/heroes/official/genji/artwork.jpg",
+    "webp": "assets/img/heroes/official/genji/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "cb2921bc598fe950",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/genji/portrait.png",
+    "webp": "assets/img/heroes/official/genji/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/genji/icon.png",
+    "webp": "assets/img/heroes/official/genji/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "hanzo": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/hanzo/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/bltc0d234821924210d/631a8b503ab6f40dd2a906a9/960_Hanzo.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Damage",
+   "artwork": {
+    "path": "assets/img/heroes/official/hanzo/artwork.jpg",
+    "webp": "assets/img/heroes/official/hanzo/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "d49b5e8542687bbb",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/hanzo/portrait.png",
+    "webp": "assets/img/heroes/official/hanzo/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/hanzo/icon.png",
+    "webp": "assets/img/heroes/official/hanzo/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "hazard": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/hazard/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt79de5f3ff6334ac8/671ac1994cf974058fea6a2d/960_Hazard.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Tank",
+   "artwork": {
+    "path": "assets/img/heroes/official/hazard/artwork.jpg",
+    "webp": "assets/img/heroes/official/hazard/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "84650a93d55c94b0",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/hazard/portrait.png",
+    "webp": "assets/img/heroes/official/hazard/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/hazard/icon.png",
+    "webp": "assets/img/heroes/official/hazard/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "hog": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/roadhog/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt7db55f62dcd18e20/631a8ae55f39a30d9cedbaba/960_Roadhog.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Tank",
+   "artwork": {
+    "path": "assets/img/heroes/official/hog/artwork.jpg",
+    "webp": "assets/img/heroes/official/hog/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "8a8f0214f58b4cf1",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/hog/portrait.png",
+    "webp": "assets/img/heroes/official/hog/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/hog/icon.png",
+    "webp": "assets/img/heroes/official/hog/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "illari": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/illari/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt025e154d24282801/64c03bd5b73a2ac1729ef62a/960_Illari.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Support",
+   "artwork": {
+    "path": "assets/img/heroes/official/illari/artwork.jpg",
+    "webp": "assets/img/heroes/official/illari/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "c486a90ea8f8cd77",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/illari/portrait.png",
+    "webp": "assets/img/heroes/official/illari/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/illari/icon.png",
+    "webp": "assets/img/heroes/official/illari/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "jetcat": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/jetpack-cat/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt5163ca056043552e/6998f153fa5dc9268389032d/960_Jetpack_Cat.png",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Support",
+   "artwork": {
+    "path": "assets/img/heroes/official/jetcat/artwork.jpg",
+    "webp": "assets/img/heroes/official/jetcat/artwork.webp",
+    "width": 1920,
+    "height": 1332,
+    "hash": "a96d6fe64c31c791",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/jetcat/portrait.png",
+    "webp": "assets/img/heroes/official/jetcat/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/jetcat/icon.png",
+    "webp": "assets/img/heroes/official/jetcat/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "jq": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/junker-queen/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt9f8bc17eedec0bcd/631a8b49636d390da7825de9/960_Junker_Queen.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Tank",
+   "artwork": {
+    "path": "assets/img/heroes/official/jq/artwork.jpg",
+    "webp": "assets/img/heroes/official/jq/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "9d45925b7f63a120",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/jq/portrait.png",
+    "webp": "assets/img/heroes/official/jq/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/jq/icon.png",
+    "webp": "assets/img/heroes/official/jq/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "junkrat": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/junkrat/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt63b2615b5000de03/631a8b43eef3ae0e03c743a6/960_Junkrat.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Damage",
+   "artwork": {
+    "path": "assets/img/heroes/official/junkrat/artwork.jpg",
+    "webp": "assets/img/heroes/official/junkrat/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "591b9081ec112738",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/junkrat/portrait.png",
+    "webp": "assets/img/heroes/official/junkrat/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/junkrat/icon.png",
+    "webp": "assets/img/heroes/official/junkrat/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "juno": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/juno/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt7e4477830e3fd772/668db075c02e3c1d615743f7/960_Juno_v2.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Support",
+   "artwork": {
+    "path": "assets/img/heroes/official/juno/artwork.jpg",
+    "webp": "assets/img/heroes/official/juno/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "99cdb4ca7a7743fe",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/juno/portrait.png",
+    "webp": "assets/img/heroes/official/juno/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/juno/icon.png",
+    "webp": "assets/img/heroes/official/juno/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "kiriko": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/kiriko/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/bltdc3f2925ed4c0f75/631a8b34e7bdcf0dd996c8d9/960_Kiriko.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Support",
+   "artwork": {
+    "path": "assets/img/heroes/official/kiriko/artwork.jpg",
+    "webp": "assets/img/heroes/official/kiriko/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "9cf457330a5dc0f6",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/kiriko/portrait.png",
+    "webp": "assets/img/heroes/official/kiriko/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/kiriko/icon.png",
+    "webp": "assets/img/heroes/official/kiriko/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "lucio": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/lucio/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/bltf8492e5a8bdf6506/631a8b2b636d390da7825de3/960_Lucio.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Support",
+   "artwork": {
+    "path": "assets/img/heroes/official/lucio/artwork.jpg",
+    "webp": "assets/img/heroes/official/lucio/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "1dce93b0161ed2a4",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/lucio/portrait.png",
+    "webp": "assets/img/heroes/official/lucio/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/lucio/icon.png",
+    "webp": "assets/img/heroes/official/lucio/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "lw": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/lifeweaver/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blte81e6a0bdf89e1b5/641243e43df55e65c02aa4ff/960_Lifeweaver.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Support",
+   "artwork": {
+    "path": "assets/img/heroes/official/lw/artwork.jpg",
+    "webp": "assets/img/heroes/official/lw/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "9091c23eb0725534",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/lw/portrait.png",
+    "webp": "assets/img/heroes/official/lw/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/lw/icon.png",
+    "webp": "assets/img/heroes/official/lw/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "mauga": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/mauga/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/bltea0399f52dd896e8/654d7cf1a4897a72b5fe9e5f/960_Mauga.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Tank",
+   "artwork": {
+    "path": "assets/img/heroes/official/mauga/artwork.jpg",
+    "webp": "assets/img/heroes/official/mauga/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "79bd2d35def4923a",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/mauga/portrait.png",
+    "webp": "assets/img/heroes/official/mauga/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/mauga/icon.png",
+    "webp": "assets/img/heroes/official/mauga/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "mei": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/mei/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt1c1f2c3b841d26d9/633773a6e3c2a2741688cb8d/960_Mei_02.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Damage",
+   "artwork": {
+    "path": "assets/img/heroes/official/mei/artwork.jpg",
+    "webp": "assets/img/heroes/official/mei/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "a058e8b338a8cd25",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/mei/portrait.png",
+    "webp": "assets/img/heroes/official/mei/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/mei/icon.png",
+    "webp": "assets/img/heroes/official/mei/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "mercy": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/mercy/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/bltf9b8b0fcedec1140/631a8b1ee337fa0dc7263be3/960_Mercy.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Support",
+   "artwork": {
+    "path": "assets/img/heroes/official/mercy/artwork.jpg",
+    "webp": "assets/img/heroes/official/mercy/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "c9144428fccebcc1",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/mercy/portrait.png",
+    "webp": "assets/img/heroes/official/mercy/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/mercy/icon.png",
+    "webp": "assets/img/heroes/official/mercy/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "mizuki": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/mizuki/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blte97dbd90214fb80c/698e312ba9cfc4eee3232eb4/960_Mizuki.png",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Support",
+   "artwork": {
+    "path": "assets/img/heroes/official/mizuki/artwork.jpg",
+    "webp": "assets/img/heroes/official/mizuki/artwork.webp",
+    "width": 1920,
+    "height": 1332,
+    "hash": "a515e6ffd8214586",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/mizuki/portrait.png",
+    "webp": "assets/img/heroes/official/mizuki/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/mizuki/icon.png",
+    "webp": "assets/img/heroes/official/mizuki/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "moira": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/moira/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt23efc7fdd3e6d665/631a8b17636d390da7825ddf/960_Moira.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Support",
+   "artwork": {
+    "path": "assets/img/heroes/official/moira/artwork.jpg",
+    "webp": "assets/img/heroes/official/moira/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "6969633c442d11f9",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/moira/portrait.png",
+    "webp": "assets/img/heroes/official/moira/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/moira/icon.png",
+    "webp": "assets/img/heroes/official/moira/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "orisa": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/orisa/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/bltf59086751daa9e60/631a8b0bbe2fcf0db5eea4b8/960_Orisa.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Tank",
+   "artwork": {
+    "path": "assets/img/heroes/official/orisa/artwork.jpg",
+    "webp": "assets/img/heroes/official/orisa/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "0d3efa549fe7b684",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/orisa/portrait.png",
+    "webp": "assets/img/heroes/official/orisa/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/orisa/icon.png",
+    "webp": "assets/img/heroes/official/orisa/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "pharah": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/pharah/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blte946dafed9d03733/631a8af2a633280e74dc25bd/960_Pharah.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Damage",
+   "artwork": {
+    "path": "assets/img/heroes/official/pharah/artwork.jpg",
+    "webp": "assets/img/heroes/official/pharah/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "8cb8727aeeda2cb1",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/pharah/portrait.png",
+    "webp": "assets/img/heroes/official/pharah/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/pharah/icon.png",
+    "webp": "assets/img/heroes/official/pharah/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "ram": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/ramattra/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/bltf07c6a3a672c8580/637da2d0bbfd340e8ad2e310/960_Ramattra.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Tank",
+   "artwork": {
+    "path": "assets/img/heroes/official/ram/artwork.jpg",
+    "webp": "assets/img/heroes/official/ram/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "af9876b6ea22b0f6",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/ram/portrait.png",
+    "webp": "assets/img/heroes/official/ram/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/ram/icon.png",
+    "webp": "assets/img/heroes/official/ram/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "reaper": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/reaper/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/bltb40d1a0523b8c7be/631a8af9f581050de0035dea/960_Reaper.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Damage",
+   "artwork": {
+    "path": "assets/img/heroes/official/reaper/artwork.jpg",
+    "webp": "assets/img/heroes/official/reaper/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "4502cfbbd499bdfc",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/reaper/portrait.png",
+    "webp": "assets/img/heroes/official/reaper/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/reaper/icon.png",
+    "webp": "assets/img/heroes/official/reaper/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "rein": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/reinhardt/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/bltd56f6208dd1b6903/631a8b031613910e6926bfcc/960_Reinhardt.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Tank",
+   "artwork": {
+    "path": "assets/img/heroes/official/rein/artwork.jpg",
+    "webp": "assets/img/heroes/official/rein/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "8afe907c8da0952e",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/rein/portrait.png",
+    "webp": "assets/img/heroes/official/rein/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/rein/icon.png",
+    "webp": "assets/img/heroes/official/rein/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "shion": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/shion/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt056203a7089a4f39/6a28a8edbf530332a91d93e7/960_Shion.png",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Damage",
+   "artwork": {
+    "path": "assets/img/heroes/official/shion/artwork.jpg",
+    "webp": "assets/img/heroes/official/shion/artwork.webp",
+    "width": 1920,
+    "height": 1332,
+    "hash": "fa76c701222fcb85",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/shion/portrait.png",
+    "webp": "assets/img/heroes/official/shion/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/shion/icon.png",
+    "webp": "assets/img/heroes/official/shion/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "sierra": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/sierra/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/bltd29dca64048cc464/69d6dac5e8f9c31251800436/960_Sierra.png",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Damage",
+   "artwork": {
+    "path": "assets/img/heroes/official/sierra/artwork.jpg",
+    "webp": "assets/img/heroes/official/sierra/artwork.webp",
+    "width": 1920,
+    "height": 1332,
+    "hash": "5aa7bdc8b51d552f",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/sierra/portrait.png",
+    "webp": "assets/img/heroes/official/sierra/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/sierra/icon.png",
+    "webp": "assets/img/heroes/official/sierra/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "sigma": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/sigma/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt3c29d0c0b1288686/631a8adb1566e20e82f30284/960_Sigma.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Tank",
+   "artwork": {
+    "path": "assets/img/heroes/official/sigma/artwork.jpg",
+    "webp": "assets/img/heroes/official/sigma/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "357c83409bc7e001",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/sigma/portrait.png",
+    "webp": "assets/img/heroes/official/sigma/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/sigma/icon.png",
+    "webp": "assets/img/heroes/official/sigma/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "sojourn": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/sojourn/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt9ea7d16534d358bb/631a8ad33ab6f40dd2a906a1/960_Sojourn.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Damage",
+   "artwork": {
+    "path": "assets/img/heroes/official/sojourn/artwork.jpg",
+    "webp": "assets/img/heroes/official/sojourn/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "674944234cabd5c4",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/sojourn/portrait.png",
+    "webp": "assets/img/heroes/official/sojourn/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/sojourn/icon.png",
+    "webp": "assets/img/heroes/official/sojourn/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "soldier": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/soldier-76/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blta1a1abfb07e6e62a/631a8ac9e337fa0dc7263bdf/960_Soldier_76.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Damage",
+   "artwork": {
+    "path": "assets/img/heroes/official/soldier/artwork.jpg",
+    "webp": "assets/img/heroes/official/soldier/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "4bf1ec5cc5c42e01",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/soldier/portrait.png",
+    "webp": "assets/img/heroes/official/soldier/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/soldier/icon.png",
+    "webp": "assets/img/heroes/official/soldier/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "sombra": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/sombra/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt06507cbf45c4f3e6/631a8ac16d5f7a0df8d92788/960_Sombra.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Damage",
+   "artwork": {
+    "path": "assets/img/heroes/official/sombra/artwork.jpg",
+    "webp": "assets/img/heroes/official/sombra/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "86e0871984e7ebba",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/sombra/portrait.png",
+    "webp": "assets/img/heroes/official/sombra/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/sombra/icon.png",
+    "webp": "assets/img/heroes/official/sombra/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "sym": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/symmetra/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/bltb5b0588bd3ff325a/631a8ab93ab6f40dd2a9069d/960_Symmetra.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Damage",
+   "artwork": {
+    "path": "assets/img/heroes/official/sym/artwork.jpg",
+    "webp": "assets/img/heroes/official/sym/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "71d874f0f3442bb1",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/sym/portrait.png",
+    "webp": "assets/img/heroes/official/sym/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/sym/icon.png",
+    "webp": "assets/img/heroes/official/sym/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "torb": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/torbjorn/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt17918bfe68f54687/631a8ab1636d390da7825dcf/960_Torbjorn.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Damage",
+   "artwork": {
+    "path": "assets/img/heroes/official/torb/artwork.jpg",
+    "webp": "assets/img/heroes/official/torb/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "e97bd3d643280d9f",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/torb/portrait.png",
+    "webp": "assets/img/heroes/official/torb/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/torb/icon.png",
+    "webp": "assets/img/heroes/official/torb/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "tracer": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/tracer/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt83c088dfb1a3ef00/631a8aab0e1b4f0e7b89a524/960_Tracer.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:15:38+00:00",
+   "role": "Damage",
+   "artwork": {
+    "path": "assets/img/heroes/official/tracer/artwork.jpg",
+    "webp": "assets/img/heroes/official/tracer/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "6eccafe42e9f5cdc",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/tracer/portrait.png",
+    "webp": "assets/img/heroes/official/tracer/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/tracer/icon.png",
+    "webp": "assets/img/heroes/official/tracer/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "vendetta": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/vendetta/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt2158c4ef60904ca5/692f5b036da53018ad07b253/960_Vendetta.png",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Damage",
+   "artwork": {
+    "path": "assets/img/heroes/official/vendetta/artwork.jpg",
+    "webp": "assets/img/heroes/official/vendetta/artwork.webp",
+    "width": 1920,
+    "height": 1332,
+    "hash": "ac0d62eaeca91515",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/vendetta/portrait.png",
+    "webp": "assets/img/heroes/official/vendetta/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/vendetta/icon.png",
+    "webp": "assets/img/heroes/official/vendetta/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "venture": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/venture/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/bltc4f331704d90ef3c/65e7a1207a7fb4e370804d18/960_Venture.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Damage",
+   "artwork": {
+    "path": "assets/img/heroes/official/venture/artwork.jpg",
+    "webp": "assets/img/heroes/official/venture/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "bd73e19d27cb13fb",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/venture/portrait.png",
+    "webp": "assets/img/heroes/official/venture/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/venture/icon.png",
+    "webp": "assets/img/heroes/official/venture/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "widow": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/widowmaker/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt9cff21d35d3ad3ec/631a8a98e7bdcf0dd996c8cd/960_Widowmaker.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Damage",
+   "artwork": {
+    "path": "assets/img/heroes/official/widow/artwork.jpg",
+    "webp": "assets/img/heroes/official/widow/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "3e5890a333d32313",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/widow/portrait.png",
+    "webp": "assets/img/heroes/official/widow/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/widow/icon.png",
+    "webp": "assets/img/heroes/official/widow/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "winston": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/winston/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt6482549151a3575a/631a8aa4a0ff920e11e791a8/960_Winston.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Tank",
+   "artwork": {
+    "path": "assets/img/heroes/official/winston/artwork.jpg",
+    "webp": "assets/img/heroes/official/winston/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "cac284408d66775b",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/winston/portrait.png",
+    "webp": "assets/img/heroes/official/winston/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/winston/icon.png",
+    "webp": "assets/img/heroes/official/winston/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "wuyang": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/wuyang/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt8ff800ddc2fdd20c/689bc8eead861a4de27201d3/960_Aqua.png",
+   "matchedAsCodename": "Aqua",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Support",
+   "artwork": {
+    "path": "assets/img/heroes/official/wuyang/artwork.jpg",
+    "webp": "assets/img/heroes/official/wuyang/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "10b6a3fac6bad44b",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/wuyang/portrait.png",
+    "webp": "assets/img/heroes/official/wuyang/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/wuyang/icon.png",
+    "webp": "assets/img/heroes/official/wuyang/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "zarya": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/zarya/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt260ef18603418d84/631a8a603ab6f40dd2a90695/960_Zarya.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Tank",
+   "artwork": {
+    "path": "assets/img/heroes/official/zarya/artwork.jpg",
+    "webp": "assets/img/heroes/official/zarya/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "71fc069f6823ae61",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/zarya/portrait.png",
+    "webp": "assets/img/heroes/official/zarya/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/zarya/icon.png",
+    "webp": "assets/img/heroes/official/zarya/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  },
+  "zen": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/zenyatta/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/bltcf559d3f2feb6c6e/631a8a5785af980dae7a2ee6/960_Zenyatta.jpg",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "role": "Support",
+   "artwork": {
+    "path": "assets/img/heroes/official/zen/artwork.jpg",
+    "webp": "assets/img/heroes/official/zen/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "6e836cc9288771e8",
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/zen/portrait.png",
+    "webp": "assets/img/heroes/official/zen/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/zen/icon.png",
+    "webp": "assets/img/heroes/official/zen/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   }
+  }
+ },
+ "unresolved": []
+}

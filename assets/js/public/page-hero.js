@@ -171,7 +171,29 @@
       </dl>`;
     }
   };
-  if (P.assets && P.assets.loadManifest) P.assets.loadManifest(renderProv);
+  /* ---- official presentation art (Phase D3) — a separate reference
+     panel, never blended with the evidence-only header/provenance above.
+     Absent entirely for a hero with no resolved official source (the
+     intentional unknown-hero fallback: the section just stays hidden). */
+  const renderOfficial = (man) => {
+    const ho = man && man.heroOfficial ? man.heroOfficial[heroId] : null;
+    const sec = $("#hero-official-section");
+    if (!ho || !ho.artwork || !ho.artwork.path) { sec.hidden = true; return; }
+    sec.hidden = false;
+    $("#hero-official").innerHTML = `
+      <img src="${esc(ho.artwork.path)}" alt="" loading="lazy"
+        width="${ho.artwork.width}" height="${ho.artwork.height}"
+        style="width:100%;height:auto;border-radius:8px;display:block">
+      <dl class="ev-kv" style="margin-top:12px">
+        <dt>Source</dt><dd><a href="${esc(ho.sourceUrl)}" rel="noopener noreferrer" target="_blank">overwatch.blizzard.com</a></dd>
+        <dt>Attribution</dt><dd style="font-family:var(--font-body)">${esc(ho.attribution)}</dd>
+        ${ho.aliases && ho.aliases.length ? `<dt>Also known as</dt><dd>${esc(ho.aliases.join(", "))}</dd>` : ""}
+      </dl>`;
+  };
+  if (P.assets && P.assets.loadManifest) P.assets.loadManifest((man) => {
+    renderProv(man);
+    renderOfficial(man);
+  });
   else renderProv(null);
 
   P.observeReveals && P.observeReveals(document);
