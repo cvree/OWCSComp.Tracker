@@ -18,6 +18,7 @@ from __future__ import annotations
 import datetime as dt
 import hashlib
 import os
+import re
 import shutil
 import socket
 import subprocess
@@ -363,6 +364,142 @@ def download_job(store: js.JobStore, lock_mgr: lk.LockManager, job: models.Job,
         lock_mgr.release(resource, worker_id)
         log(f"{job.job_key}: FAILED [{code}] {message}")
         return {"ok": False, "errorCode": code, "errorMessage": message}
+
+
+# --------------------------------------------------------------- doctor
+# Presence-only — the doctor NEVER reads, logs, or returns the value of any
+# of these, only whether they're set (Windows worker prep, "never print or
+# reveal any secret").
+REQUIRED_API_KEYS = ("FACEIT_API_KEY", "YOUTUBE_API_KEY")
+
+_SECRET_LIKE = [
+    re.compile(r"gh[pousr]_[A-Za-z0-9]{20,}"),
+    re.compile(r"AKIA[0-9A-Z]{16}"),
+    re.compile(r"-----BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY-----"),
+]
+
+
+def _redact(text: str) -> str:
+    """Defense in depth: even though `gh auth status` never prints a token,
+    strip anything token-shaped before it's ever surfaced in a report/log."""
+    out = text
+    for pat in _SECRET_LIKE:
+        out = pat.sub("[REDACTED]", out)
+    return out
+
+
+def check_python() -> dict:
+    return {"version": sys.version.split()[0], "executable": sys.executable}
+
+
+def check_repo_dependencies() -> dict:
+    """requirements.txt's real deps are importable. Reports only package
+    name + public version string — never anything secret."""
+    report: dict[str, str | None] = {}
+    for mod, name in (("cv2", "opencv-python-headless"), ("numpy", "numpy")):
+        try:
+            m = __import__(mod)
+            report[name] = getattr(m, "__version__", "unknown")
+        except ImportError:
+            report[name] = None
+    return report
+
+
+def check_writable(path: str) -> tuple[bool, str]:
+    """True if `path` (created if missing) accepts a real write + delete.
+    Never raises; returns (ok, reason)."""
+    try:
+        os.makedirs(path, exist_ok=True)
+        probe = os.path.join(path, ".owcs_write_probe")
+        with open(probe, "w", encoding="utf-8") as f:
+            f.write("ok")
+        os.remove(probe)
+        return True, "writable"
+    except OSError as e:
+        return False, str(e)
+
+
+def check_gh_auth(*, runner=subprocess, which=shutil.which) -> dict:
+    """GitHub CLI authentication status. `gh auth status` itself never
+    prints a token; output is still redacted defensively before being
+    surfaced anywhere (report/log/JSON)."""
+    if not which("gh"):
+        return {"installed": False, "authenticated": False,
+                "detail": "gh CLI not found on PATH"}
+    try:
+        res = runner.run(["gh", "auth", "status"], capture_output=True,
+                         text=True, timeout=15)
+        text = _redact((res.stdout or "") + (res.stderr or ""))
+        return {"installed": True, "authenticated": res.returncode == 0,
+                "detail": text.strip()[:500]}
+    except (subprocess.TimeoutExpired, OSError) as e:
+        return {"installed": True, "authenticated": False,
+                "detail": f"{type(e).__name__}: {e}"}
+
+
+def check_api_keys_present(names: tuple[str, ...] = REQUIRED_API_KEYS) -> dict[str, bool]:
+    """{"FACEIT_API_KEY": True, ...} — presence only, value NEVER read into
+    the report. A missing key here just means discovery/broadcast-matching
+    stays read-only; the worker itself needs no API key (only yt-dlp/ffmpeg)."""
+    return {name: bool(os.environ.get(name)) for name in names}
+
+
+def doctor_report(*, media_root: str = DEFAULT_MEDIA_ROOT,
+                  min_free_gb: float = DEFAULT_MIN_FREE_GB,
+                  which=shutil.which, runner=subprocess) -> dict:
+    """The Windows-worker preflight checklist in one call: Python, repo
+    Python deps, yt-dlp/ffmpeg/ffprobe + versions, disk space, worker cache
+    + artifact/evidence directory writability, `gh` auth, and API-key
+    presence (never value). Safe to run any number of times — read-only
+    except for a self-deleting write probe in each directory it checks."""
+    deps = check_dependencies(which=which)
+    versions = {tool: tool_version(tool, runner=runner)
+               for tool in REQUIRED_TOOLS if deps.get(tool)}
+    disk_ok, free_gb = check_disk_space(media_root, min_free_gb)
+    cache_ok, cache_reason = check_writable(media_root)
+    reports_dir = os.path.join(os.path.dirname(_PIPELINE_DIR), "reports")
+    evidence_ok, evidence_reason = check_writable(reports_dir)
+    report = {
+        "python": check_python(),
+        "repoDependencies": check_repo_dependencies(),
+        "tools": deps,
+        "toolVersions": versions,
+        "missingTools": missing_dependencies(deps),
+        "disk": {"ok": disk_ok, "freeGb": free_gb, "minFreeGb": min_free_gb,
+                 "path": media_root},
+        "workerCacheWritable": {"ok": cache_ok, "reason": cache_reason,
+                               "path": media_root},
+        "artifactDirWritable": {"ok": evidence_ok, "reason": evidence_reason,
+                                "path": reports_dir},
+        "githubCli": check_gh_auth(runner=runner, which=which),
+        "apiKeysPresent": check_api_keys_present(),
+    }
+    report["ok"] = (not report["missingTools"] and disk_ok
+                    and cache_ok and evidence_ok)
+    return report
+
+
+def format_doctor_report(report: dict) -> str:
+    lines = [f"  python           : {report['python']['version']}"]
+    for name, ver in report["repoDependencies"].items():
+        lines.append(f"  {name:<26}: {'OK ' + str(ver) if ver else 'MISSING'}")
+    for tool, path in report["tools"].items():
+        ver = report["toolVersions"].get(tool)
+        lines.append(f"  {tool:<26}: {('OK ' + ver if ver else 'OK') if path else 'MISSING'}")
+    d = report["disk"]
+    lines.append(f"  disk free        : {d['freeGb']}GB (need >= {d['minFreeGb']}GB) — "
+                f"{'OK' if d['ok'] else 'LOW'}")
+    c = report["workerCacheWritable"]
+    lines.append(f"  worker cache dir : {'OK' if c['ok'] else 'NOT WRITABLE — ' + c['reason']} ({c['path']})")
+    a = report["artifactDirWritable"]
+    lines.append(f"  artifact dir     : {'OK' if a['ok'] else 'NOT WRITABLE — ' + a['reason']} ({a['path']})")
+    gh = report["githubCli"]
+    lines.append("  gh CLI           : NOT INSTALLED" if not gh["installed"]
+                else f"  gh CLI auth      : {'OK' if gh['authenticated'] else 'NOT AUTHENTICATED'}")
+    for key, present in report["apiKeysPresent"].items():
+        lines.append(f"  {key:<26}: {'present' if present else 'missing'} (value never shown)")
+    lines.append(f"  OVERALL          : {'READY' if report['ok'] else 'NOT READY — see above'}")
+    return "\n".join(lines)
 
 
 def resume_interrupted(store: js.JobStore, lock_mgr: lk.LockManager, *,
