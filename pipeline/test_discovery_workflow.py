@@ -125,9 +125,9 @@ class TestWorkflowYamlValid(unittest.TestCase):
         data = _load_yaml()
         steps = data["jobs"]["discover"]["steps"]
         uses = {s["uses"].split("@")[0]: s["uses"] for s in steps if "uses" in s}
-        self.assertEqual(uses["actions/checkout"], "actions/checkout@v5")
+        self.assertEqual(uses["actions/checkout"], "actions/checkout@v6")
         self.assertEqual(uses["actions/setup-python"], "actions/setup-python@v6")
-        self.assertEqual(uses["actions/upload-artifact"], "actions/upload-artifact@v5")
+        self.assertEqual(uses["actions/upload-artifact"], "actions/upload-artifact@v6")
         # No actions/download-artifact is used in this workflow today; if one
         # is ever added it must be pinned the same way — not asserted here
         # since there is nothing to pin yet.
