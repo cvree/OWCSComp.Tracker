@@ -327,6 +327,131 @@ class TestErrorClassification(unittest.TestCase):
             self.assertEqual(code, expected, exc)
 
 
+class _FakeCompletedProcess:
+    def __init__(self, returncode=0, stdout="", stderr=""):
+        self.returncode = returncode
+        self.stdout = stdout
+        self.stderr = stderr
+
+
+class _FakeRunner:
+    def __init__(self, results):
+        self.results = results  # cmd[0] -> _FakeCompletedProcess or Exception
+
+    def run(self, cmd, **kw):
+        res = self.results.get(cmd[0])
+        if isinstance(res, Exception):
+            raise res
+        return res or _FakeCompletedProcess()
+
+
+class TestDoctor(unittest.TestCase):
+    def test_check_python_reports_version(self):
+        info = worker.check_python()
+        self.assertIn("version", info)
+        self.assertTrue(info["version"][0].isdigit())
+
+    def test_check_repo_dependencies_detects_installed_packages(self):
+        report = worker.check_repo_dependencies()
+        self.assertIn("opencv-python-headless", report)
+        self.assertIn("numpy", report)
+
+    def test_check_writable_true_for_new_and_existing_dir(self):
+        with tempfile.TemporaryDirectory() as d:
+            sub = os.path.join(d, "cache", "jobs")
+            ok, reason = worker.check_writable(sub)
+            self.assertTrue(ok, reason)
+            self.assertTrue(os.path.isdir(sub))
+            # probe file must be cleaned up, not left behind
+            self.assertEqual(os.listdir(sub), [])
+
+    def test_check_writable_false_for_unwritable_path(self):
+        with tempfile.TemporaryDirectory() as d:
+            locked = os.path.join(d, "locked")
+            os.makedirs(locked)
+            os.chmod(locked, 0o500)
+            try:
+                if os.access(locked, os.W_OK):
+                    self.skipTest("running as a user that bypasses directory permissions")
+                ok, reason = worker.check_writable(os.path.join(locked, "x"))
+                self.assertFalse(ok)
+            finally:
+                os.chmod(locked, 0o700)
+
+    def test_check_gh_auth_not_installed(self):
+        report = worker.check_gh_auth(runner=_FakeRunner({}), which=_fake_which(set()))
+        self.assertFalse(report["installed"])
+        self.assertFalse(report["authenticated"])
+
+    def test_check_gh_auth_authenticated(self):
+        runner = _FakeRunner({"gh": _FakeCompletedProcess(0, "Logged in to github.com account x", "")})
+        report = worker.check_gh_auth(runner=runner, which=_fake_which({"gh"}))
+        self.assertTrue(report["installed"])
+        self.assertTrue(report["authenticated"])
+
+    def test_check_gh_auth_not_authenticated(self):
+        runner = _FakeRunner({"gh": _FakeCompletedProcess(1, "", "not logged in")})
+        report = worker.check_gh_auth(runner=runner, which=_fake_which({"gh"}))
+        self.assertTrue(report["installed"])
+        self.assertFalse(report["authenticated"])
+
+    def test_check_gh_auth_redacts_token_shaped_strings(self):
+        leaked = "token: ghp_abcdefghijklmnopqrstuvwxyz0123456789"
+        runner = _FakeRunner({"gh": _FakeCompletedProcess(0, leaked, "")})
+        report = worker.check_gh_auth(runner=runner, which=_fake_which({"gh"}))
+        self.assertNotIn("ghp_abcdefghijklmnopqrstuvwxyz0123456789", report["detail"])
+        self.assertIn("[REDACTED]", report["detail"])
+
+    def test_api_keys_present_never_leaks_value(self):
+        os.environ["FACEIT_API_KEY"] = "super-secret-value-should-never-appear"
+        try:
+            result = worker.check_api_keys_present(("FACEIT_API_KEY", "YOUTUBE_API_KEY"))
+            self.assertTrue(result["FACEIT_API_KEY"])
+            self.assertFalse(result["YOUTUBE_API_KEY"])
+            self.assertNotIn("super-secret-value-should-never-appear", json_dump_safe(result))
+        finally:
+            del os.environ["FACEIT_API_KEY"]
+
+    def test_doctor_report_shape_and_ready_when_everything_ok(self):
+        report = worker.doctor_report(
+            media_root=tempfile.mkdtemp(),
+            which=_fake_which({"ffmpeg", "ffprobe", "yt-dlp"}),
+            runner=_FakeRunner({
+                "yt-dlp": _FakeCompletedProcess(0, "2026.07.04", ""),
+                "ffmpeg": _FakeCompletedProcess(0, "ffmpeg version 6.1.1", ""),
+                "ffprobe": _FakeCompletedProcess(0, "ffprobe version 6.1.1", ""),
+                "gh": _FakeCompletedProcess(0, "Logged in", ""),
+            }))
+        self.assertTrue(report["ok"], report)
+        self.assertEqual(report["missingTools"], [])
+        self.assertIn("apiKeysPresent", report)
+
+    def test_doctor_report_not_ok_when_tool_missing(self):
+        report = worker.doctor_report(
+            media_root=tempfile.mkdtemp(),
+            which=_fake_which({"ffmpeg"}),
+            runner=_FakeRunner({}))
+        self.assertFalse(report["ok"])
+        self.assertIn("yt-dlp", report["missingTools"])
+
+    def test_format_doctor_report_never_contains_env_values(self):
+        os.environ["FACEIT_API_KEY"] = "should-never-print"
+        try:
+            report = worker.doctor_report(
+                media_root=tempfile.mkdtemp(),
+                which=_fake_which({"ffmpeg", "ffprobe", "yt-dlp"}),
+                runner=_FakeRunner({}))
+            text = worker.format_doctor_report(report)
+            self.assertNotIn("should-never-print", text)
+        finally:
+            del os.environ["FACEIT_API_KEY"]
+
+
+def json_dump_safe(d):
+    import json
+    return json.dumps(d)
+
+
 class TestWorkerIdentity(unittest.TestCase):
     def test_identity_is_stable_shape_and_unique(self):
         a = worker.worker_identity()

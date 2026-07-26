@@ -553,7 +553,8 @@ SCHEDULED` = "retryable"), because an equivalent already existed.
 | `publication_runs` recorded (Phase I table — previously schema-only) | `publish.publish_job` inserts `db_hash`/`export_hash`/`branch`/`source_commit`/`state` | ✅ |
 | Operator command: `process-approved-job --job <id> [--publish]` | `cli.py cmd_process_approved_job` — dry-run by default, `--publish` to actually commit + push | ✅ |
 | Beta ops dashboard (Phase 7) | `beta-ops.html` + `assets/js/public/page-beta-ops.js`, fed by `cli.py job-coverage --save` -> `assets/data/job_coverage.v1.json` — read-only (GitHub Pages has no server); every row names the exact CLI command to run next | ✅ |
-| New CLI surface | `create-job`, `list-jobs`, `show-job`, `claim-job`, `release-job`, `retry-job`, `cancel-job`, `reset-stale-lock`, `resume-job`, `run-job`, `job-coverage [--save]`, `worker-run`, `segment-list`, `segment-approve`, `segment-reject`, `detect-job [--write]`, `process-approved-job [--publish]` | ✅ |
+| New CLI surface | `create-job`, `list-jobs`, `show-job`, `claim-job`, `release-job`, `retry-job`, `cancel-job`, `reset-stale-lock`, `resume-job`, `run-job`, `job-coverage [--save]`, `worker-run`, `worker-doctor`, `segment-list`, `segment-approve`, `segment-reject`, `detect-job [--write]`, `process-approved-job [--publish]` | ✅ |
+| Windows-worker preflight checklist (Python, repo deps, tool versions, disk, cache/artifact-dir writability, `gh` auth, API-key presence — value NEVER read into the report) | `worker.doctor_report` / `cli.py worker-doctor` | ✅ |
 
 ### Honest environment limitation (this pass)
 

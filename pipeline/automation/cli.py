@@ -843,6 +843,21 @@ def cmd_job_coverage(args: argparse.Namespace) -> int:
         store.close()
 
 
+def cmd_worker_doctor(args: argparse.Namespace) -> int:
+    """Windows-worker preflight checklist: Python, repo deps, yt-dlp/ffmpeg/
+    ffprobe + versions, disk space, worker-cache + artifact directory
+    writability, gh CLI auth, and API-key presence. Read-only (a self-
+    deleting write probe only); never prints or logs a secret value."""
+    report = worker.doctor_report(media_root=args.media_root,
+                                  min_free_gb=args.min_free_gb)
+    if args.json:
+        print(json.dumps(report, indent=2))
+    else:
+        print("[worker] doctor:")
+        print(worker.format_doctor_report(report))
+    return 0 if report["ok"] else 1
+
+
 def cmd_worker_run(args: argparse.Namespace) -> int:
     """The self-hosted worker's main entry point (Phase E): register an
     identity, run preflight, claim + lock the next eligible job, process it
@@ -1228,6 +1243,13 @@ def main(argv: list[str] | None = None) -> int:
     jc_p.add_argument("--save", action="store_true",
                       help="write assets/data/job_coverage.v1.json for beta-ops.html")
     jc_p.set_defaults(func=cmd_job_coverage)
+
+    wd_p = sub.add_parser("worker-doctor",
+                          help="Windows-worker preflight checklist (deps/disk/gh-auth/API-key presence)")
+    wd_p.add_argument("--media-root", default=worker.DEFAULT_MEDIA_ROOT)
+    wd_p.add_argument("--min-free-gb", type=float, default=worker.DEFAULT_MIN_FREE_GB)
+    wd_p.add_argument("--json", action="store_true")
+    wd_p.set_defaults(func=cmd_worker_doctor)
 
     wr_p = sub.add_parser("worker-run", help="the self-hosted worker main loop (Phase E)")
     wr_p.add_argument("--worker-id", default=None)
