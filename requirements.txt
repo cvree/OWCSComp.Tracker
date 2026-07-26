@@ -6,3 +6,10 @@ numpy>=1.26
 # VOD download for the ingestion front-end (invoked as the `yt-dlp` binary,
 # not imported). ffmpeg must also be on PATH (system package, not pip).
 yt-dlp>=2024.1
+
+# Workflow/test tooling — NOT required by the pipeline itself. Only used by
+# pipeline/test_discovery_workflow.py to parse and validate
+# .github/workflows/discovery.yml. The pipeline's own config loader
+# (pipeline/automation/config.py) deliberately avoids this dependency for
+# the lightweight discovery path; this entry does not change that.
+pyyaml

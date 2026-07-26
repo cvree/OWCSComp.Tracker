@@ -139,8 +139,14 @@ class TestRunOneJob(OpsTestBase):
             "media": {"localPath": "data/worker/jobs/x/media/clip.mp4",
                       "videoId": "vid1"},
         })
-        with mock.patch("automation.ops.capture.load_layout") as load_layout, \
-             mock.patch("automation.ops.seg.generate_candidates") as gen:
+        # ops.py imports `capture`/`segmentation` LAZILY inside run_one_job
+        # (never at module level — see the cv2-import-isolation fix), so
+        # there is no `automation.ops.capture`/`automation.ops.seg`
+        # attribute to patch. Patch the real source modules instead; the
+        # lazy `import capture` / `from . import segmentation as seg`
+        # inside run_one_job resolve to these same sys.modules entries.
+        with mock.patch("capture.load_layout") as load_layout, \
+             mock.patch("automation.segmentation.generate_candidates") as gen:
             load_layout.return_value = {"frame_width": 1920, "frame_height": 1080}
             gen.return_value = [{"start_time": 0.0, "end_time": 60.0,
                                 "confidence": 0.8, "signals": {}}]

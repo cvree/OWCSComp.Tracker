@@ -31,8 +31,12 @@ _PIPELINE_DIR = os.path.dirname(_HERE)
 if _PIPELINE_DIR not in sys.path:
     sys.path.insert(0, _PIPELINE_DIR)
 
-import download_vod_clip as dvc  # noqa: E402  (pipeline/download_vod_clip.py)
-import video_ingest as vi  # noqa: E402  (pipeline/video_ingest.py)
+# `video_ingest`/`download_vod_clip` transitively import cv2 (via
+# capture.py). NEVER import them at module level — this module must stay
+# importable, and every lightweight CLI command that merely references
+# worker.* constants must stay runnable, on a machine with no OpenCV
+# installed. Only `download_job` (and `classify_download_error`, best-
+# effort) actually need them, lazily, only when a real download runs.
 
 from . import job_store as js
 from . import locks as lk
@@ -190,9 +194,17 @@ def classify_download_error(exc: BaseException) -> tuple[str, str]:
     sprint's worker spec calls out gets an explicit, stable code."""
     if isinstance(exc, FileNotFoundError):
         return "missing_dependency", str(exc)
-    if isinstance(exc, vi.InvalidClip):
+    if isinstance(exc, ModuleNotFoundError):
+        # e.g. cv2/opencv not installed on this machine, so video_ingest
+        # itself couldn't be imported — same remedy as a missing binary.
+        return "missing_dependency", str(exc)
+    try:
+        import video_ingest as vi
+    except ImportError:
+        vi = None
+    if vi is not None and isinstance(exc, vi.InvalidClip):
         return "corrupt_media", str(exc)
-    if isinstance(exc, vi.StallTimeout):
+    if vi is not None and isinstance(exc, vi.StallTimeout):
         return "network_stall", str(exc)
     if isinstance(exc, SourceValidationError):
         return "invalid_source", str(exc)
@@ -287,9 +299,9 @@ def download_job(store: js.JobStore, lock_mgr: lk.LockManager, job: models.Job,
                  min_free_gb: float = DEFAULT_MIN_FREE_GB,
                  official_channel_ids: set | None = None,
                  manual_approved_video_ids: set | None = None,
-                 probe_fn=vi.probe_vod,
-                 download_clip_fn=dvc.download_clip,
-                 resolution_fn=vi.probe_clip_resolution,
+                 probe_fn=None,
+                 download_clip_fn=None,
+                 resolution_fn=None,
                  height: int = 1080,
                  which=shutil.which, runner=subprocess,
                  now: dt.datetime | None = None) -> dict:
@@ -298,6 +310,12 @@ def download_job(store: js.JobStore, lock_mgr: lk.LockManager, job: models.Job,
     `video_ingest.py`'s yt-dlp/ffmpeg machinery) — this function only adds
     job-state bookkeeping, source validation, and metadata capture around it.
 
+    `probe_fn`/`download_clip_fn`/`resolution_fn` default to `video_ingest`/
+    `download_vod_clip`'s real functions, imported lazily below (never at
+    module level — see the module docstring) so a missing cv2 only ever
+    surfaces as a classified failure of THIS call, never an import crash at
+    CLI startup.
+
     On any failure the job is routed through `record_attempt(ok=False, ...)`
     (RETRY_SCHEDULED or FAILED_PERMANENT per the existing backoff/ceiling
     policy) and the lock is released so a retry can reclaim it. Returns
@@ -305,6 +323,15 @@ def download_job(store: js.JobStore, lock_mgr: lk.LockManager, job: models.Job,
     """
     resource = resource_for(job)
     try:
+        import video_ingest as vi
+        import download_vod_clip as dvc
+        if probe_fn is None:
+            probe_fn = vi.probe_vod
+        if download_clip_fn is None:
+            download_clip_fn = dvc.download_clip
+        if resolution_fn is None:
+            resolution_fn = vi.probe_clip_resolution
+
         preflight_report = preflight(media_root, min_free_gb, which=which)
         if preflight_report["missing"]:
             raise FileNotFoundError(
