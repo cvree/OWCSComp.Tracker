@@ -66,6 +66,22 @@ image, never hotlinked art. Candidate official sources for team marks are
 documented in `assets/data/team_asset_sources.json` for a network-enabled
 fetch + review pass.
 
+**Official hero presentation art** (Phase D3, `pipeline/build_hero_official_assets.py`,
+`assets/img/heroes/official/<id>/`): separate from the evidence-only
+broadcast-crop portraits above. Every one of the 52 public hero ids resolves
+to real portrait/artwork/icon assets fetched from Blizzard's own official
+hero pages (overwatch.blizzard.com) — the one hero-specific image is matched
+by its own embedded name against the hero's real name, never a guess from a
+generic shared page image — or an intentional "no official source resolved"
+fallback otherwise. WebP variants ship alongside; AVIF is explicitly `null`
+(no encoder in this stdlib/existing-deps environment) rather than a
+fabricated claim. Used only on encyclopedia-style surfaces (the hero
+dossier's "Official presentation" panel, the hero directory's "not yet
+sighted" cards) — never blended with the evidence-only portrait/provenance
+used anywhere a verified comp pick is being shown. Non-commercial fan use
+per Blizzard's Fan Content Policy; validated by
+`pipeline/test_hero_official_assets.py`.
+
 **Motion**: one Lenis instance driven by one GSAP ticker loop
 (`assets/js/motion.js`), ScrollTrigger synced from Lenis' scroll event,
 native touch scrolling, and a complete static experience under

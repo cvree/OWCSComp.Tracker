@@ -124,4 +124,54 @@
   };
   A.heroProvenance = (heroId) =>
     A.manifest && A.manifest.heroes ? A.manifest.heroes[heroId] || null : null;
+
+  /* ---- official hero presentation art (Phase D3) ----------------------
+     Separate from heroFace()/heroProvenance() above on purpose: those are
+     the EVIDENCE path (a real broadcast crop, or an honest "not proven yet"
+     monogram) used anywhere a comp/pick is being shown. This is the
+     REFERENCE path — "what does this hero actually look like", sourced from
+     Blizzard's own official hero pages — used only on encyclopedia-style
+     surfaces (the hero dossier banner, the "not yet sighted" directory
+     cards) where showing real art carries no claim about match evidence.
+     Manifest loads async, so this renders the SAME monogram placeholder
+     heroFace() would (zero layout shift), then applyHeroOfficial() swaps
+     in the real image once assets/data/asset_manifest.json resolves — a
+     hero with no resolved official source keeps the monogram forever,
+     which IS the intentional unknown-hero fallback, never a broken image. */
+  A.heroOfficialFace = (hero, opt) => {
+    opt = opt || {};
+    const px = opt.px || 96;
+    const hue = A.roleHue(hero && hero.role);
+    return `<span class="hero-mono" data-hero-official="${esc(hero ? hero.id : "")}"
+      data-hero-official-px="${px}" style="--mono-h:${hue}"
+      aria-hidden="true">${esc(A.heroInitials(hero))}</span>`;
+  };
+
+  A.heroOfficial = (heroId) =>
+    A.manifest && A.manifest.heroOfficial ? A.manifest.heroOfficial[heroId] || null : null;
+
+  A.applyHeroOfficial = function (root, cb) {
+    root = root || document;
+    A.loadManifest((man) => {
+      const ho = man && man.heroOfficial;
+      if (ho) {
+        root.querySelectorAll("[data-hero-official]").forEach((el) => {
+          const id = el.getAttribute("data-hero-official");
+          const e = ho[id];
+          if (!e || !e.portrait || !e.portrait.path) return;
+          const px = el.getAttribute("data-hero-official-px") || 96;
+          const img = document.createElement("img");
+          img.src = e.portrait.path;
+          img.alt = "";
+          img.loading = "lazy";
+          img.width = px;
+          img.height = px;
+          img.title = e.attribution || "";
+          img.setAttribute("data-img-fallback", A.heroInitials({ name: id }));
+          el.replaceWith(img);
+        });
+      }
+      cb && cb(man);
+    });
+  };
 })();

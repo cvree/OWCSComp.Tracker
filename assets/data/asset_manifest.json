@@ -1,7 +1,7 @@
 {
  "meta": {
   "schema": "assets.v1",
-  "generatedAt": "2026-07-25T23:34:43.035117+00:00",
+  "generatedAt": "2026-07-26T01:19:29.748204+00:00",
   "note": "Audited registry of public team/hero imagery. Entries with reviewStatus starting with 'fallback' are INTENTIONAL designed fallbacks — the site never shows a broken or guessed image."
  },
  "heroes": {
@@ -12,7 +12,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -25,7 +25,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -38,7 +38,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -51,7 +51,7 @@
    "sourceKind": "broadcast-crop",
    "attribution": "Cropped from an official OWCS broadcast frame by this repo's CV pipeline; hero identity evidenced in the labeling log.",
    "license": "Broadcast-derived thumbnail used for identification in a non-commercial fan project; Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc.",
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": 96,
    "height": 96,
    "hash": "2d3d170201b4035f",
@@ -64,7 +64,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -77,7 +77,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -90,7 +90,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -103,7 +103,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -116,7 +116,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -129,7 +129,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -142,7 +142,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -155,7 +155,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -168,7 +168,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -181,7 +181,7 @@
    "sourceKind": "broadcast-crop",
    "attribution": "Cropped from an official OWCS broadcast frame by this repo's CV pipeline; hero identity evidenced in the labeling log.",
    "license": "Broadcast-derived thumbnail used for identification in a non-commercial fan project; Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc.",
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": 96,
    "height": 96,
    "hash": "d33d35573a3b6198",
@@ -194,7 +194,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -207,7 +207,7 @@
    "sourceKind": "broadcast-crop",
    "attribution": "Cropped from an official OWCS broadcast frame by this repo's CV pipeline; hero identity evidenced in the labeling log.",
    "license": "Broadcast-derived thumbnail used for identification in a non-commercial fan project; Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc.",
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": 96,
    "height": 96,
    "hash": "091723449553f304",
@@ -220,7 +220,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -233,7 +233,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -246,7 +246,7 @@
    "sourceKind": "broadcast-crop",
    "attribution": "Cropped from an official OWCS broadcast frame by this repo's CV pipeline; hero identity evidenced in the labeling log.",
    "license": "Broadcast-derived thumbnail used for identification in a non-commercial fan project; Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc.",
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": 96,
    "height": 96,
    "hash": "80be7d44b2a1e6d5",
@@ -259,7 +259,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -272,7 +272,7 @@
    "sourceKind": "broadcast-crop",
    "attribution": "Cropped from an official OWCS broadcast frame by this repo's CV pipeline; hero identity evidenced in the labeling log.",
    "license": "Broadcast-derived thumbnail used for identification in a non-commercial fan project; Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc.",
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": 96,
    "height": 96,
    "hash": "0776930afad2946a",
@@ -285,7 +285,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -298,7 +298,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -311,7 +311,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -324,7 +324,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -337,7 +337,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -350,7 +350,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -363,7 +363,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -376,7 +376,7 @@
    "sourceKind": "broadcast-crop",
    "attribution": "Cropped from an official OWCS broadcast frame by this repo's CV pipeline; hero identity evidenced in the labeling log.",
    "license": "Broadcast-derived thumbnail used for identification in a non-commercial fan project; Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc.",
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": 96,
    "height": 96,
    "hash": "51b655a080d02ba3",
@@ -389,7 +389,7 @@
    "sourceKind": "broadcast-crop",
    "attribution": "Cropped from an official OWCS broadcast frame by this repo's CV pipeline; hero identity evidenced in the labeling log.",
    "license": "Broadcast-derived thumbnail used for identification in a non-commercial fan project; Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc.",
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": 96,
    "height": 96,
    "hash": "d6722f2a7d171df1",
@@ -402,7 +402,7 @@
    "sourceKind": "broadcast-crop",
    "attribution": "Cropped from an official OWCS broadcast frame by this repo's CV pipeline; hero identity evidenced in the labeling log.",
    "license": "Broadcast-derived thumbnail used for identification in a non-commercial fan project; Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc.",
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": 96,
    "height": 96,
    "hash": "ebb8ad77742885d1",
@@ -415,7 +415,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -428,7 +428,7 @@
    "sourceKind": "broadcast-crop",
    "attribution": "Cropped from an official OWCS broadcast frame by this repo's CV pipeline; hero identity evidenced in the labeling log.",
    "license": "Broadcast-derived thumbnail used for identification in a non-commercial fan project; Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc.",
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": 96,
    "height": 96,
    "hash": "f06076796dea5d03",
@@ -441,7 +441,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -454,7 +454,7 @@
    "sourceKind": "broadcast-crop",
    "attribution": "Cropped from an official OWCS broadcast frame by this repo's CV pipeline; hero identity evidenced in the labeling log.",
    "license": "Broadcast-derived thumbnail used for identification in a non-commercial fan project; Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc.",
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": 96,
    "height": 96,
    "hash": "24fa6b3715573ad0",
@@ -467,7 +467,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -480,7 +480,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -493,7 +493,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -506,7 +506,7 @@
    "sourceKind": "broadcast-crop",
    "attribution": "Cropped from an official OWCS broadcast frame by this repo's CV pipeline; hero identity evidenced in the labeling log.",
    "license": "Broadcast-derived thumbnail used for identification in a non-commercial fan project; Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc.",
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": 96,
    "height": 96,
    "hash": "cbc1fc4a9157bd09",
@@ -519,7 +519,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -532,7 +532,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -545,7 +545,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -558,7 +558,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -571,7 +571,7 @@
    "sourceKind": "broadcast-crop",
    "attribution": "Cropped from an official OWCS broadcast frame by this repo's CV pipeline; hero identity evidenced in the labeling log.",
    "license": "Broadcast-derived thumbnail used for identification in a non-commercial fan project; Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc.",
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": 96,
    "height": 96,
    "hash": "acd2c49f71821fab",
@@ -584,7 +584,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -597,7 +597,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -610,7 +610,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -623,7 +623,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -636,7 +636,7 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -649,7 +649,7 @@
    "sourceKind": "broadcast-crop",
    "attribution": "Cropped from an official OWCS broadcast frame by this repo's CV pipeline; hero identity evidenced in the labeling log.",
    "license": "Broadcast-derived thumbnail used for identification in a non-commercial fan project; Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc.",
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": 96,
    "height": 96,
    "hash": "cb5e58268b88fb26",
@@ -662,7 +662,7 @@
    "sourceKind": "broadcast-crop",
    "attribution": "Cropped from an official OWCS broadcast frame by this repo's CV pipeline; hero identity evidenced in the labeling log.",
    "license": "Broadcast-derived thumbnail used for identification in a non-commercial fan project; Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc.",
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": 96,
    "height": 96,
    "hash": "bcf0c5ed8968300a",
@@ -675,11 +675,1747 @@
    "sourceKind": "designed-fallback",
    "attribution": "Intentional designed monogram — no verified real portrait has been harvested for this hero yet.",
    "license": null,
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
    "reviewStatus": "fallback-monogram"
+  }
+ },
+ "heroOfficial": {
+  "ana": {
+   "role": "Support",
+   "aliases": [
+    "Ana Amari"
+   ],
+   "portrait": {
+    "path": "assets/img/heroes/official/ana/portrait.png",
+    "webp": "assets/img/heroes/official/ana/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/ana/artwork.jpg",
+    "webp": "assets/img/heroes/official/ana/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "dc85a265d0f262da",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/ana/icon.png",
+    "webp": "assets/img/heroes/official/ana/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/ana/",
+   "matchedAsCodename": null,
+   "attribution": "Official Ana hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "anran": {
+   "role": "Damage",
+   "aliases": [
+    "Anran Ye"
+   ],
+   "portrait": {
+    "path": "assets/img/heroes/official/anran/portrait.png",
+    "webp": "assets/img/heroes/official/anran/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/anran/artwork.jpg",
+    "webp": "assets/img/heroes/official/anran/artwork.webp",
+    "width": 1920,
+    "height": 1332,
+    "hash": "32d08da11e45516f",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/anran/icon.png",
+    "webp": "assets/img/heroes/official/anran/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/anran/",
+   "matchedAsCodename": null,
+   "attribution": "Official Anran hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "ashe": {
+   "role": "Damage",
+   "aliases": [
+    "Elizabeth Caledonia Ashe"
+   ],
+   "portrait": {
+    "path": "assets/img/heroes/official/ashe/portrait.png",
+    "webp": "assets/img/heroes/official/ashe/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/ashe/artwork.jpg",
+    "webp": "assets/img/heroes/official/ashe/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "40b434363d934d78",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/ashe/icon.png",
+    "webp": "assets/img/heroes/official/ashe/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/ashe/",
+   "matchedAsCodename": null,
+   "attribution": "Official Ashe hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "ball": {
+   "role": "Tank",
+   "aliases": [
+    "Ball",
+    "Hammond"
+   ],
+   "portrait": {
+    "path": "assets/img/heroes/official/ball/portrait.png",
+    "webp": "assets/img/heroes/official/ball/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/ball/artwork.jpg",
+    "webp": "assets/img/heroes/official/ball/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "626e51e8bc0e4813",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/ball/icon.png",
+    "webp": "assets/img/heroes/official/ball/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/wrecking-ball/",
+   "matchedAsCodename": null,
+   "attribution": "Official Wrecking Ball hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "bap": {
+   "role": "Support",
+   "aliases": [
+    "Bap",
+    "Jean-Baptiste Augustin"
+   ],
+   "portrait": {
+    "path": "assets/img/heroes/official/bap/portrait.png",
+    "webp": "assets/img/heroes/official/bap/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/bap/artwork.jpg",
+    "webp": "assets/img/heroes/official/bap/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "cd313dd869572f9f",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/bap/icon.png",
+    "webp": "assets/img/heroes/official/bap/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/baptiste/",
+   "matchedAsCodename": null,
+   "attribution": "Official Baptiste hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "bastion": {
+   "role": "Damage",
+   "aliases": [],
+   "portrait": {
+    "path": "assets/img/heroes/official/bastion/portrait.png",
+    "webp": "assets/img/heroes/official/bastion/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/bastion/artwork.jpg",
+    "webp": "assets/img/heroes/official/bastion/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "bd7da633e8b8b5be",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/bastion/icon.png",
+    "webp": "assets/img/heroes/official/bastion/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/bastion/",
+   "matchedAsCodename": null,
+   "attribution": "Official Bastion hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "brig": {
+   "role": "Support",
+   "aliases": [
+    "Brig"
+   ],
+   "portrait": {
+    "path": "assets/img/heroes/official/brig/portrait.png",
+    "webp": "assets/img/heroes/official/brig/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/brig/artwork.jpg",
+    "webp": "assets/img/heroes/official/brig/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "d3ad1f42c9f698a4",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/brig/icon.png",
+    "webp": "assets/img/heroes/official/brig/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/brigitte/",
+   "matchedAsCodename": null,
+   "attribution": "Official Brigitte hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "cass": {
+   "role": "Damage",
+   "aliases": [
+    "Cass",
+    "Jesse McCree"
+   ],
+   "portrait": {
+    "path": "assets/img/heroes/official/cass/portrait.png",
+    "webp": "assets/img/heroes/official/cass/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/cass/artwork.jpg",
+    "webp": "assets/img/heroes/official/cass/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "b2c3690bbc2fb0ee",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/cass/icon.png",
+    "webp": "assets/img/heroes/official/cass/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/cassidy/",
+   "matchedAsCodename": null,
+   "attribution": "Official Cassidy hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "domina": {
+   "role": "Tank",
+   "aliases": [
+    "Vaira Singhania"
+   ],
+   "portrait": {
+    "path": "assets/img/heroes/official/domina/portrait.png",
+    "webp": "assets/img/heroes/official/domina/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/domina/artwork.jpg",
+    "webp": "assets/img/heroes/official/domina/artwork.webp",
+    "width": 1920,
+    "height": 1332,
+    "hash": "dc196da9afe52b6c",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/domina/icon.png",
+    "webp": "assets/img/heroes/official/domina/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/domina/",
+   "matchedAsCodename": null,
+   "attribution": "Official Domina hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "doomfist": {
+   "role": "Tank",
+   "aliases": [
+    "Akande Ogundimu"
+   ],
+   "portrait": {
+    "path": "assets/img/heroes/official/doomfist/portrait.png",
+    "webp": "assets/img/heroes/official/doomfist/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/doomfist/artwork.jpg",
+    "webp": "assets/img/heroes/official/doomfist/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "513f613bc74b94f3",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/doomfist/icon.png",
+    "webp": "assets/img/heroes/official/doomfist/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/doomfist/",
+   "matchedAsCodename": null,
+   "attribution": "Official Doomfist hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "dva": {
+   "role": "Tank",
+   "aliases": [],
+   "portrait": {
+    "path": "assets/img/heroes/official/dva/portrait.png",
+    "webp": "assets/img/heroes/official/dva/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/dva/artwork.jpg",
+    "webp": "assets/img/heroes/official/dva/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "580b5bbbe8ba121b",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/dva/icon.png",
+    "webp": "assets/img/heroes/official/dva/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/dva/",
+   "matchedAsCodename": null,
+   "attribution": "Official D.Va hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "echo": {
+   "role": "Damage",
+   "aliases": [],
+   "portrait": {
+    "path": "assets/img/heroes/official/echo/portrait.png",
+    "webp": "assets/img/heroes/official/echo/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/echo/artwork.jpg",
+    "webp": "assets/img/heroes/official/echo/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "d2f056eb01d1296b",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/echo/icon.png",
+    "webp": "assets/img/heroes/official/echo/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/echo/",
+   "matchedAsCodename": null,
+   "attribution": "Official Echo hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "emre": {
+   "role": "Damage",
+   "aliases": [],
+   "portrait": {
+    "path": "assets/img/heroes/official/emre/portrait.png",
+    "webp": "assets/img/heroes/official/emre/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/emre/artwork.jpg",
+    "webp": "assets/img/heroes/official/emre/artwork.webp",
+    "width": 1920,
+    "height": 1332,
+    "hash": "adfa4eefd1ee2ff7",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/emre/icon.png",
+    "webp": "assets/img/heroes/official/emre/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/emre/",
+   "matchedAsCodename": null,
+   "attribution": "Official Emre hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "freja": {
+   "role": "Damage",
+   "aliases": [],
+   "portrait": {
+    "path": "assets/img/heroes/official/freja/portrait.png",
+    "webp": "assets/img/heroes/official/freja/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/freja/artwork.jpg",
+    "webp": "assets/img/heroes/official/freja/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "4823224971861dce",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/freja/icon.png",
+    "webp": "assets/img/heroes/official/freja/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/freja/",
+   "matchedAsCodename": null,
+   "attribution": "Official Freja hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "genji": {
+   "role": "Damage",
+   "aliases": [
+    "Genji Shimada"
+   ],
+   "portrait": {
+    "path": "assets/img/heroes/official/genji/portrait.png",
+    "webp": "assets/img/heroes/official/genji/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/genji/artwork.jpg",
+    "webp": "assets/img/heroes/official/genji/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "cb2921bc598fe950",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/genji/icon.png",
+    "webp": "assets/img/heroes/official/genji/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/genji/",
+   "matchedAsCodename": null,
+   "attribution": "Official Genji hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "hanzo": {
+   "role": "Damage",
+   "aliases": [
+    "Hanzo Shimada"
+   ],
+   "portrait": {
+    "path": "assets/img/heroes/official/hanzo/portrait.png",
+    "webp": "assets/img/heroes/official/hanzo/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/hanzo/artwork.jpg",
+    "webp": "assets/img/heroes/official/hanzo/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "d49b5e8542687bbb",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/hanzo/icon.png",
+    "webp": "assets/img/heroes/official/hanzo/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/hanzo/",
+   "matchedAsCodename": null,
+   "attribution": "Official Hanzo hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "hazard": {
+   "role": "Tank",
+   "aliases": [],
+   "portrait": {
+    "path": "assets/img/heroes/official/hazard/portrait.png",
+    "webp": "assets/img/heroes/official/hazard/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/hazard/artwork.jpg",
+    "webp": "assets/img/heroes/official/hazard/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "84650a93d55c94b0",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/hazard/icon.png",
+    "webp": "assets/img/heroes/official/hazard/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/hazard/",
+   "matchedAsCodename": null,
+   "attribution": "Official Hazard hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "hog": {
+   "role": "Tank",
+   "aliases": [
+    "Hog"
+   ],
+   "portrait": {
+    "path": "assets/img/heroes/official/hog/portrait.png",
+    "webp": "assets/img/heroes/official/hog/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/hog/artwork.jpg",
+    "webp": "assets/img/heroes/official/hog/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "8a8f0214f58b4cf1",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/hog/icon.png",
+    "webp": "assets/img/heroes/official/hog/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/roadhog/",
+   "matchedAsCodename": null,
+   "attribution": "Official Roadhog hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "illari": {
+   "role": "Support",
+   "aliases": [],
+   "portrait": {
+    "path": "assets/img/heroes/official/illari/portrait.png",
+    "webp": "assets/img/heroes/official/illari/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/illari/artwork.jpg",
+    "webp": "assets/img/heroes/official/illari/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "c486a90ea8f8cd77",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/illari/icon.png",
+    "webp": "assets/img/heroes/official/illari/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/illari/",
+   "matchedAsCodename": null,
+   "attribution": "Official Illari hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "jetcat": {
+   "role": "Support",
+   "aliases": [
+    "Fika"
+   ],
+   "portrait": {
+    "path": "assets/img/heroes/official/jetcat/portrait.png",
+    "webp": "assets/img/heroes/official/jetcat/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/jetcat/artwork.jpg",
+    "webp": "assets/img/heroes/official/jetcat/artwork.webp",
+    "width": 1920,
+    "height": 1332,
+    "hash": "a96d6fe64c31c791",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/jetcat/icon.png",
+    "webp": "assets/img/heroes/official/jetcat/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/jetpack-cat/",
+   "matchedAsCodename": null,
+   "attribution": "Official Jetpack Cat hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "jq": {
+   "role": "Tank",
+   "aliases": [
+    "JQ"
+   ],
+   "portrait": {
+    "path": "assets/img/heroes/official/jq/portrait.png",
+    "webp": "assets/img/heroes/official/jq/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/jq/artwork.jpg",
+    "webp": "assets/img/heroes/official/jq/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "9d45925b7f63a120",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/jq/icon.png",
+    "webp": "assets/img/heroes/official/jq/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/junker-queen/",
+   "matchedAsCodename": null,
+   "attribution": "Official Junker Queen hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "junkrat": {
+   "role": "Damage",
+   "aliases": [],
+   "portrait": {
+    "path": "assets/img/heroes/official/junkrat/portrait.png",
+    "webp": "assets/img/heroes/official/junkrat/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/junkrat/artwork.jpg",
+    "webp": "assets/img/heroes/official/junkrat/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "591b9081ec112738",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/junkrat/icon.png",
+    "webp": "assets/img/heroes/official/junkrat/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/junkrat/",
+   "matchedAsCodename": null,
+   "attribution": "Official Junkrat hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "juno": {
+   "role": "Support",
+   "aliases": [],
+   "portrait": {
+    "path": "assets/img/heroes/official/juno/portrait.png",
+    "webp": "assets/img/heroes/official/juno/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/juno/artwork.jpg",
+    "webp": "assets/img/heroes/official/juno/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "99cdb4ca7a7743fe",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/juno/icon.png",
+    "webp": "assets/img/heroes/official/juno/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/juno/",
+   "matchedAsCodename": null,
+   "attribution": "Official Juno hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "kiriko": {
+   "role": "Support",
+   "aliases": [
+    "Kiriko Kamori"
+   ],
+   "portrait": {
+    "path": "assets/img/heroes/official/kiriko/portrait.png",
+    "webp": "assets/img/heroes/official/kiriko/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/kiriko/artwork.jpg",
+    "webp": "assets/img/heroes/official/kiriko/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "9cf457330a5dc0f6",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/kiriko/icon.png",
+    "webp": "assets/img/heroes/official/kiriko/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/kiriko/",
+   "matchedAsCodename": null,
+   "attribution": "Official Kiriko hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "lucio": {
+   "role": "Support",
+   "aliases": [],
+   "portrait": {
+    "path": "assets/img/heroes/official/lucio/portrait.png",
+    "webp": "assets/img/heroes/official/lucio/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/lucio/artwork.jpg",
+    "webp": "assets/img/heroes/official/lucio/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "1dce93b0161ed2a4",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/lucio/icon.png",
+    "webp": "assets/img/heroes/official/lucio/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/lucio/",
+   "matchedAsCodename": null,
+   "attribution": "Official Lúcio hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "lw": {
+   "role": "Support",
+   "aliases": [
+    "LW"
+   ],
+   "portrait": {
+    "path": "assets/img/heroes/official/lw/portrait.png",
+    "webp": "assets/img/heroes/official/lw/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/lw/artwork.jpg",
+    "webp": "assets/img/heroes/official/lw/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "9091c23eb0725534",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/lw/icon.png",
+    "webp": "assets/img/heroes/official/lw/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/lifeweaver/",
+   "matchedAsCodename": null,
+   "attribution": "Official Lifeweaver hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "mauga": {
+   "role": "Tank",
+   "aliases": [
+    "Mauga Nguyen"
+   ],
+   "portrait": {
+    "path": "assets/img/heroes/official/mauga/portrait.png",
+    "webp": "assets/img/heroes/official/mauga/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/mauga/artwork.jpg",
+    "webp": "assets/img/heroes/official/mauga/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "79bd2d35def4923a",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/mauga/icon.png",
+    "webp": "assets/img/heroes/official/mauga/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/mauga/",
+   "matchedAsCodename": null,
+   "attribution": "Official Mauga hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "mei": {
+   "role": "Damage",
+   "aliases": [],
+   "portrait": {
+    "path": "assets/img/heroes/official/mei/portrait.png",
+    "webp": "assets/img/heroes/official/mei/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/mei/artwork.jpg",
+    "webp": "assets/img/heroes/official/mei/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "a058e8b338a8cd25",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/mei/icon.png",
+    "webp": "assets/img/heroes/official/mei/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/mei/",
+   "matchedAsCodename": null,
+   "attribution": "Official Mei hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "mercy": {
+   "role": "Support",
+   "aliases": [
+    "Angela Ziegler"
+   ],
+   "portrait": {
+    "path": "assets/img/heroes/official/mercy/portrait.png",
+    "webp": "assets/img/heroes/official/mercy/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/mercy/artwork.jpg",
+    "webp": "assets/img/heroes/official/mercy/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "c9144428fccebcc1",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/mercy/icon.png",
+    "webp": "assets/img/heroes/official/mercy/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/mercy/",
+   "matchedAsCodename": null,
+   "attribution": "Official Mercy hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "mizuki": {
+   "role": "Support",
+   "aliases": [],
+   "portrait": {
+    "path": "assets/img/heroes/official/mizuki/portrait.png",
+    "webp": "assets/img/heroes/official/mizuki/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/mizuki/artwork.jpg",
+    "webp": "assets/img/heroes/official/mizuki/artwork.webp",
+    "width": 1920,
+    "height": 1332,
+    "hash": "a515e6ffd8214586",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/mizuki/icon.png",
+    "webp": "assets/img/heroes/official/mizuki/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/mizuki/",
+   "matchedAsCodename": null,
+   "attribution": "Official Mizuki hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "moira": {
+   "role": "Support",
+   "aliases": [
+    "Moira O'Deorain"
+   ],
+   "portrait": {
+    "path": "assets/img/heroes/official/moira/portrait.png",
+    "webp": "assets/img/heroes/official/moira/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/moira/artwork.jpg",
+    "webp": "assets/img/heroes/official/moira/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "6969633c442d11f9",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/moira/icon.png",
+    "webp": "assets/img/heroes/official/moira/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/moira/",
+   "matchedAsCodename": null,
+   "attribution": "Official Moira hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "orisa": {
+   "role": "Tank",
+   "aliases": [],
+   "portrait": {
+    "path": "assets/img/heroes/official/orisa/portrait.png",
+    "webp": "assets/img/heroes/official/orisa/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/orisa/artwork.jpg",
+    "webp": "assets/img/heroes/official/orisa/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "0d3efa549fe7b684",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/orisa/icon.png",
+    "webp": "assets/img/heroes/official/orisa/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/orisa/",
+   "matchedAsCodename": null,
+   "attribution": "Official Orisa hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "pharah": {
+   "role": "Damage",
+   "aliases": [
+    "Fareeha Amari"
+   ],
+   "portrait": {
+    "path": "assets/img/heroes/official/pharah/portrait.png",
+    "webp": "assets/img/heroes/official/pharah/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/pharah/artwork.jpg",
+    "webp": "assets/img/heroes/official/pharah/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "8cb8727aeeda2cb1",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/pharah/icon.png",
+    "webp": "assets/img/heroes/official/pharah/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/pharah/",
+   "matchedAsCodename": null,
+   "attribution": "Official Pharah hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "ram": {
+   "role": "Tank",
+   "aliases": [
+    "Ram"
+   ],
+   "portrait": {
+    "path": "assets/img/heroes/official/ram/portrait.png",
+    "webp": "assets/img/heroes/official/ram/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/ram/artwork.jpg",
+    "webp": "assets/img/heroes/official/ram/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "af9876b6ea22b0f6",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/ram/icon.png",
+    "webp": "assets/img/heroes/official/ram/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/ramattra/",
+   "matchedAsCodename": null,
+   "attribution": "Official Ramattra hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "reaper": {
+   "role": "Damage",
+   "aliases": [
+    "Gabriel Reyes"
+   ],
+   "portrait": {
+    "path": "assets/img/heroes/official/reaper/portrait.png",
+    "webp": "assets/img/heroes/official/reaper/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/reaper/artwork.jpg",
+    "webp": "assets/img/heroes/official/reaper/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "4502cfbbd499bdfc",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/reaper/icon.png",
+    "webp": "assets/img/heroes/official/reaper/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/reaper/",
+   "matchedAsCodename": null,
+   "attribution": "Official Reaper hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "rein": {
+   "role": "Tank",
+   "aliases": [
+    "Rein",
+    "Reinhardt Wilhelm"
+   ],
+   "portrait": {
+    "path": "assets/img/heroes/official/rein/portrait.png",
+    "webp": "assets/img/heroes/official/rein/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/rein/artwork.jpg",
+    "webp": "assets/img/heroes/official/rein/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "8afe907c8da0952e",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/rein/icon.png",
+    "webp": "assets/img/heroes/official/rein/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/reinhardt/",
+   "matchedAsCodename": null,
+   "attribution": "Official Reinhardt hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "shion": {
+   "role": "Damage",
+   "aliases": [],
+   "portrait": {
+    "path": "assets/img/heroes/official/shion/portrait.png",
+    "webp": "assets/img/heroes/official/shion/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/shion/artwork.jpg",
+    "webp": "assets/img/heroes/official/shion/artwork.webp",
+    "width": 1920,
+    "height": 1332,
+    "hash": "fa76c701222fcb85",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/shion/icon.png",
+    "webp": "assets/img/heroes/official/shion/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/shion/",
+   "matchedAsCodename": null,
+   "attribution": "Official Shion hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "sierra": {
+   "role": "Damage",
+   "aliases": [],
+   "portrait": {
+    "path": "assets/img/heroes/official/sierra/portrait.png",
+    "webp": "assets/img/heroes/official/sierra/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/sierra/artwork.jpg",
+    "webp": "assets/img/heroes/official/sierra/artwork.webp",
+    "width": 1920,
+    "height": 1332,
+    "hash": "5aa7bdc8b51d552f",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/sierra/icon.png",
+    "webp": "assets/img/heroes/official/sierra/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/sierra/",
+   "matchedAsCodename": null,
+   "attribution": "Official Sierra hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "sigma": {
+   "role": "Tank",
+   "aliases": [],
+   "portrait": {
+    "path": "assets/img/heroes/official/sigma/portrait.png",
+    "webp": "assets/img/heroes/official/sigma/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/sigma/artwork.jpg",
+    "webp": "assets/img/heroes/official/sigma/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "357c83409bc7e001",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/sigma/icon.png",
+    "webp": "assets/img/heroes/official/sigma/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/sigma/",
+   "matchedAsCodename": null,
+   "attribution": "Official Sigma hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "sojourn": {
+   "role": "Damage",
+   "aliases": [
+    "Vivian Chase"
+   ],
+   "portrait": {
+    "path": "assets/img/heroes/official/sojourn/portrait.png",
+    "webp": "assets/img/heroes/official/sojourn/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/sojourn/artwork.jpg",
+    "webp": "assets/img/heroes/official/sojourn/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "674944234cabd5c4",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/sojourn/icon.png",
+    "webp": "assets/img/heroes/official/sojourn/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/sojourn/",
+   "matchedAsCodename": null,
+   "attribution": "Official Sojourn hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "soldier": {
+   "role": "Damage",
+   "aliases": [
+    "Soldier",
+    "76",
+    "Jack Morrison"
+   ],
+   "portrait": {
+    "path": "assets/img/heroes/official/soldier/portrait.png",
+    "webp": "assets/img/heroes/official/soldier/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/soldier/artwork.jpg",
+    "webp": "assets/img/heroes/official/soldier/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "4bf1ec5cc5c42e01",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/soldier/icon.png",
+    "webp": "assets/img/heroes/official/soldier/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/soldier-76/",
+   "matchedAsCodename": null,
+   "attribution": "Official Soldier: 76 hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "sombra": {
+   "role": "Damage",
+   "aliases": [
+    "Olivia Colomar"
+   ],
+   "portrait": {
+    "path": "assets/img/heroes/official/sombra/portrait.png",
+    "webp": "assets/img/heroes/official/sombra/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/sombra/artwork.jpg",
+    "webp": "assets/img/heroes/official/sombra/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "86e0871984e7ebba",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/sombra/icon.png",
+    "webp": "assets/img/heroes/official/sombra/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/sombra/",
+   "matchedAsCodename": null,
+   "attribution": "Official Sombra hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "sym": {
+   "role": "Damage",
+   "aliases": [
+    "Sym",
+    "Satya Vaswani"
+   ],
+   "portrait": {
+    "path": "assets/img/heroes/official/sym/portrait.png",
+    "webp": "assets/img/heroes/official/sym/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/sym/artwork.jpg",
+    "webp": "assets/img/heroes/official/sym/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "71d874f0f3442bb1",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/sym/icon.png",
+    "webp": "assets/img/heroes/official/sym/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/symmetra/",
+   "matchedAsCodename": null,
+   "attribution": "Official Symmetra hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "torb": {
+   "role": "Damage",
+   "aliases": [
+    "Torb",
+    "Torbjörn Lindholm"
+   ],
+   "portrait": {
+    "path": "assets/img/heroes/official/torb/portrait.png",
+    "webp": "assets/img/heroes/official/torb/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/torb/artwork.jpg",
+    "webp": "assets/img/heroes/official/torb/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "e97bd3d643280d9f",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/torb/icon.png",
+    "webp": "assets/img/heroes/official/torb/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/torbjorn/",
+   "matchedAsCodename": null,
+   "attribution": "Official Torbjörn hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "tracer": {
+   "role": "Damage",
+   "aliases": [],
+   "portrait": {
+    "path": "assets/img/heroes/official/tracer/portrait.png",
+    "webp": "assets/img/heroes/official/tracer/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/tracer/artwork.jpg",
+    "webp": "assets/img/heroes/official/tracer/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "6eccafe42e9f5cdc",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/tracer/icon.png",
+    "webp": "assets/img/heroes/official/tracer/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/tracer/",
+   "matchedAsCodename": null,
+   "attribution": "Official Tracer hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:15:38+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "vendetta": {
+   "role": "Damage",
+   "aliases": [],
+   "portrait": {
+    "path": "assets/img/heroes/official/vendetta/portrait.png",
+    "webp": "assets/img/heroes/official/vendetta/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/vendetta/artwork.jpg",
+    "webp": "assets/img/heroes/official/vendetta/artwork.webp",
+    "width": 1920,
+    "height": 1332,
+    "hash": "ac0d62eaeca91515",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/vendetta/icon.png",
+    "webp": "assets/img/heroes/official/vendetta/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/vendetta/",
+   "matchedAsCodename": null,
+   "attribution": "Official Vendetta hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "venture": {
+   "role": "Damage",
+   "aliases": [],
+   "portrait": {
+    "path": "assets/img/heroes/official/venture/portrait.png",
+    "webp": "assets/img/heroes/official/venture/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/venture/artwork.jpg",
+    "webp": "assets/img/heroes/official/venture/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "bd73e19d27cb13fb",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/venture/icon.png",
+    "webp": "assets/img/heroes/official/venture/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/venture/",
+   "matchedAsCodename": null,
+   "attribution": "Official Venture hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "widow": {
+   "role": "Damage",
+   "aliases": [
+    "Widow",
+    "Amélie Lacroix"
+   ],
+   "portrait": {
+    "path": "assets/img/heroes/official/widow/portrait.png",
+    "webp": "assets/img/heroes/official/widow/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/widow/artwork.jpg",
+    "webp": "assets/img/heroes/official/widow/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "3e5890a333d32313",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/widow/icon.png",
+    "webp": "assets/img/heroes/official/widow/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/widowmaker/",
+   "matchedAsCodename": null,
+   "attribution": "Official Widowmaker hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "winston": {
+   "role": "Tank",
+   "aliases": [],
+   "portrait": {
+    "path": "assets/img/heroes/official/winston/portrait.png",
+    "webp": "assets/img/heroes/official/winston/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/winston/artwork.jpg",
+    "webp": "assets/img/heroes/official/winston/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "cac284408d66775b",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/winston/icon.png",
+    "webp": "assets/img/heroes/official/winston/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/winston/",
+   "matchedAsCodename": null,
+   "attribution": "Official Winston hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "wuyang": {
+   "role": "Support",
+   "aliases": [],
+   "portrait": {
+    "path": "assets/img/heroes/official/wuyang/portrait.png",
+    "webp": "assets/img/heroes/official/wuyang/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/wuyang/artwork.jpg",
+    "webp": "assets/img/heroes/official/wuyang/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "10b6a3fac6bad44b",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/wuyang/icon.png",
+    "webp": "assets/img/heroes/official/wuyang/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/wuyang/",
+   "matchedAsCodename": "Aqua",
+   "attribution": "Official Wuyang hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "zarya": {
+   "role": "Tank",
+   "aliases": [],
+   "portrait": {
+    "path": "assets/img/heroes/official/zarya/portrait.png",
+    "webp": "assets/img/heroes/official/zarya/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/zarya/artwork.jpg",
+    "webp": "assets/img/heroes/official/zarya/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "71fc069f6823ae61",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/zarya/icon.png",
+    "webp": "assets/img/heroes/official/zarya/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/zarya/",
+   "matchedAsCodename": null,
+   "attribution": "Official Zarya hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
+  },
+  "zen": {
+   "role": "Support",
+   "aliases": [
+    "Zen",
+    "Tekhartha Zenyatta"
+   ],
+   "portrait": {
+    "path": "assets/img/heroes/official/zen/portrait.png",
+    "webp": "assets/img/heroes/official/zen/portrait.webp",
+    "width": 256,
+    "height": 256,
+    "avif": null
+   },
+   "artwork": {
+    "path": "assets/img/heroes/official/zen/artwork.jpg",
+    "webp": "assets/img/heroes/official/zen/artwork.webp",
+    "width": 960,
+    "height": 666,
+    "hash": "6e836cc9288771e8",
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/zen/icon.png",
+    "webp": "assets/img/heroes/official/zen/icon.webp",
+    "width": 64,
+    "height": 64,
+    "avif": null
+   },
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/zenyatta/",
+   "matchedAsCodename": null,
+   "attribution": "Official Zenyatta hero art, Blizzard Entertainment.",
+   "usageNote": "Official Overwatch hero art, Blizzard Entertainment. Used under Blizzard's Fan Content Policy (non-commercial fan use, attribution retained); Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc. This is presentational reference art, not evidence that a hero was played in any tracked match — see assets/img/heroes/ for the separate, broadcast-crop evidence portraits.",
+   "retrievedAt": "2026-07-26T01:14:28+00:00",
+   "reviewStatus": "official-blizzard-source"
   }
  },
  "teams": {
@@ -717,7 +2453,7 @@
    "attribution": "Intentional designed crest (team code monogram) — no verified official mark has been retrieved and reviewed yet. Never a guessed logo.",
    "license": null,
    "candidateSources": [],
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -731,7 +2467,7 @@
    "attribution": "Intentional designed crest (team code monogram) — no verified official mark has been retrieved and reviewed yet. Never a guessed logo.",
    "license": null,
    "candidateSources": [],
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -748,7 +2484,7 @@
     "Official Al Qadsiah club channels (verify the esports division's current press/brand page before use)",
     "Official OWCS broadcast graphics (crop only with provenance recorded)"
    ],
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,
@@ -762,7 +2498,7 @@
    "attribution": "Intentional designed crest (team code monogram) — no verified official mark has been retrieved and reviewed yet. Never a guessed logo.",
    "license": null,
    "candidateSources": [],
-   "retrievedAt": "2026-07-25T23:34:43.035117+00:00",
+   "retrievedAt": "2026-07-26T01:19:29.748204+00:00",
    "width": null,
    "height": null,
    "hash": null,

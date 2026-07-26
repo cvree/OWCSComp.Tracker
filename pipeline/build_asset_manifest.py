@@ -34,10 +34,62 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HEROES_DIR = os.path.join(ROOT, "assets", "img", "heroes")
 TEAMS_DIR = os.path.join(ROOT, "assets", "img", "teams")
+HERO_OFFICIAL_MANIFEST = os.path.join(HEROES_DIR, "official", "manifest.json")
 OUT_PATH = os.path.join(ROOT, "assets", "data", "asset_manifest.json")
 SOURCES_PATH = os.path.join(ROOT, "assets", "data", "team_asset_sources.json")
 PUBLIC_DATA = os.path.join(ROOT, "assets", "data", "public_data.v1.js")
 FIXTURE_DATA = os.path.join(ROOT, "assets", "data", "public_fixture.v1.js")
+
+# Known aliases per hero id (Phase D3). Two evidence classes only, never a
+# guess: (1) this repo's OWN internal hero id, when it is itself already a
+# real, commonly-used short-form nickname distinct from the full name (cass,
+# widow, rein, hog, ball, zen, sym, torb, bap, brig, lw, jq, ram, soldier) —
+# these already appear throughout this codebase's own ban lists/casting
+# terminology; (2) a hero's separately-documented real/civilian name, but
+# ONLY where well-established (pre-2026 cast) or explicitly confirmed this
+# session via web search for a 2026-era hero (Domina, Jetpack Cat, Anran,
+# Wrecking Ball's pilot). Left empty/absent — never invented — for every
+# hero with no separately-documented civilian name.
+HERO_ALIASES: dict[str, list[str]] = {
+    "cass": ["Cass", "Jesse McCree"],
+    "soldier": ["Soldier", "76", "Jack Morrison"],
+    "sym": ["Sym", "Satya Vaswani"],
+    "torb": ["Torb", "Torbjörn Lindholm"],
+    "widow": ["Widow", "Amélie Lacroix"],
+    "bap": ["Bap", "Jean-Baptiste Augustin"],
+    "brig": ["Brig"],
+    "lw": ["LW"],
+    "zen": ["Zen", "Tekhartha Zenyatta"],
+    "jq": ["JQ"],
+    "ram": ["Ram"],
+    "rein": ["Rein", "Reinhardt Wilhelm"],
+    "hog": ["Hog"],
+    "ball": ["Ball", "Hammond"],
+    "ana": ["Ana Amari"],
+    "pharah": ["Fareeha Amari"],
+    "reaper": ["Gabriel Reyes"],
+    "sombra": ["Olivia Colomar"],
+    "ashe": ["Elizabeth Caledonia Ashe"],
+    "doomfist": ["Akande Ogundimu"],
+    "genji": ["Genji Shimada"],
+    "hanzo": ["Hanzo Shimada"],
+    "mercy": ["Angela Ziegler"],
+    "moira": ["Moira O'Deorain"],
+    "sojourn": ["Vivian Chase"],
+    "mauga": ["Mauga Nguyen"],
+    "kiriko": ["Kiriko Kamori"],
+    "domina": ["Vaira Singhania"],
+    "jetcat": ["Fika"],
+    "anran": ["Anran Ye"],
+}
+
+HERO_ASSET_USAGE_NOTE = (
+    "Official Overwatch hero art, Blizzard Entertainment. Used under "
+    "Blizzard's Fan Content Policy (non-commercial fan use, attribution "
+    "retained); Overwatch and its heroes are trademarks of Blizzard "
+    "Entertainment, Inc. This is presentational reference art, not evidence "
+    "that a hero was played in any tracked match — see assets/img/heroes/ "
+    "for the separate, broadcast-crop evidence portraits.")
 
 
 def _load_public(path: str) -> dict:
@@ -190,6 +242,47 @@ def build() -> dict:
                 "reviewStatus": "fallback-crest",
             }
 
+    # ---- hero official presentation assets (Phase D3) --------------------
+    hero_official_src: dict = {}
+    if os.path.exists(HERO_OFFICIAL_MANIFEST):
+        with open(HERO_OFFICIAL_MANIFEST, encoding="utf-8") as f:
+            hero_official_src = json.load(f).get("heroes", {})
+
+    db_heroes = {h["id"]: h for h in prod.get("heroes", [])}
+    for h in fixture.get("heroes", []):
+        db_heroes.setdefault(h["id"], h)
+
+    hero_official_out = {}
+    for hid, h in sorted(db_heroes.items()):
+        src = hero_official_src.get(hid)
+        if src and src.get("artwork") and os.path.exists(os.path.join(ROOT, src["artwork"]["path"])):
+            hero_official_out[hid] = {
+                "role": h.get("role"),
+                "aliases": HERO_ALIASES.get(hid, []),
+                "portrait": src["portrait"],
+                "artwork": src["artwork"],
+                "icon": src["icon"],
+                "sourceUrl": src["sourceUrl"],
+                "matchedAsCodename": src.get("matchedAsCodename"),
+                "attribution": f"Official {h['name']} hero art, Blizzard Entertainment.",
+                "usageNote": HERO_ASSET_USAGE_NOTE,
+                "retrievedAt": src.get("retrievedAt", now),
+                "reviewStatus": "official-blizzard-source",
+            }
+        else:
+            hero_official_out[hid] = {
+                "role": h.get("role"),
+                "aliases": HERO_ALIASES.get(hid, []),
+                "portrait": None, "artwork": None, "icon": None,
+                "sourceUrl": None,
+                "attribution": ("Intentional designed fallback — no official "
+                               "source has been resolved for this hero id "
+                               "yet. Never a guessed picture."),
+                "usageNote": None,
+                "retrievedAt": now,
+                "reviewStatus": "fallback-unknown-hero",
+            }
+
     return {
         "meta": {
             "schema": "assets.v1",
@@ -200,6 +293,7 @@ def build() -> dict:
                      "shows a broken or guessed image."),
         },
         "heroes": heroes_out,
+        "heroOfficial": hero_official_out,
         "teams": teams_out,
     }
 
