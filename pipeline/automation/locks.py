@@ -122,3 +122,22 @@ class LockManager:
         )
         self.con.commit()
         return cur.rowcount
+
+    def reset_stale(self, resource: str, *, now: dt.datetime | None = None) -> bool:
+        """The "Reset stale lock" operator action for ONE named resource.
+
+        Deletes the lease only if it has actually expired — an operator can
+        never force-steal a live lock this way (that would break the mutual-
+        exclusion guarantee this module exists to provide); use `acquire`'s
+        normal steal-on-expiry path for that. Returns True if a stale lease
+        was found and cleared, False if the resource was already free or its
+        lease is still live."""
+        now = now or _utcnow()
+        row = self.con.execute(
+            "SELECT expires_at FROM locks WHERE resource = ?", (resource,)
+        ).fetchone()
+        if row is None or row["expires_at"] > _iso(now):
+            return False
+        self.con.execute("DELETE FROM locks WHERE resource = ?", (resource,))
+        self.con.commit()
+        return True

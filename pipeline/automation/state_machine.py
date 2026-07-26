@@ -21,12 +21,14 @@ AWAITING_BROADCAST = "AWAITING_BROADCAST"
 LIVE = "LIVE"
 RECORDING = "RECORDING"
 ARCHIVED = "ARCHIVED"
+DOWNLOADING = "DOWNLOADING"
 DOWNLOADED = "DOWNLOADED"
 SEGMENTING = "SEGMENTING"
 PROCESSING = "PROCESSING"
 NEEDS_LAYOUT = "NEEDS_LAYOUT"
 NEEDS_TEMPLATES = "NEEDS_TEMPLATES"
 NEEDS_REVIEW = "NEEDS_REVIEW"
+READY_FOR_DETECTION = "READY_FOR_DETECTION"
 APPROVED = "APPROVED"
 PUBLISHED = "PUBLISHED"
 PARTIAL = "PARTIAL"
@@ -34,24 +36,37 @@ FAILED = "FAILED"
 RETRY_SCHEDULED = "RETRY_SCHEDULED"
 FAILED_PERMANENT = "FAILED_PERMANENT"
 IGNORED = "IGNORED"
+CANCELLED = "CANCELLED"
+
+# Beta-sprint aliases: the closed-loop spec (see docs/AUTOMATION.md "Phase
+# E/F/G/I") names states DISCOVERED/BROADCAST_LINKED/READY/.../RETRYABLE.
+# Rather than run a second vocabulary alongside this one, the spec's states
+# map onto the ones already established here (ARCHIVED == a linked official
+# VOD ready to claim/download i.e. "READY"; RETRY_SCHEDULED == "RETRYABLE").
+# Only three genuinely new nodes were missing and are added above:
+# DOWNLOADING (visible in-progress download, resumable after a crash),
+# READY_FOR_DETECTION (a segment has been human-approved and is queued for
+# automatic detection), and CANCELLED (an explicit operator cancel, distinct
+# from IGNORED which means "the system decided not to pursue this").
 
 ALL_STATES = frozenset({
     DISCOVERED, SCHEDULED, AWAITING_BROADCAST, LIVE, RECORDING, ARCHIVED,
-    DOWNLOADED, SEGMENTING, PROCESSING, NEEDS_LAYOUT, NEEDS_TEMPLATES,
-    NEEDS_REVIEW, APPROVED, PUBLISHED, PARTIAL, FAILED, RETRY_SCHEDULED,
-    FAILED_PERMANENT, IGNORED,
+    DOWNLOADING, DOWNLOADED, SEGMENTING, PROCESSING, NEEDS_LAYOUT,
+    NEEDS_TEMPLATES, NEEDS_REVIEW, READY_FOR_DETECTION, APPROVED, PUBLISHED,
+    PARTIAL, FAILED, RETRY_SCHEDULED, FAILED_PERMANENT, IGNORED, CANCELLED,
 })
 
 # States that mean "this job is done and should not be picked up again".
-TERMINAL_STATES = frozenset({PUBLISHED, FAILED_PERMANENT, IGNORED})
+TERMINAL_STATES = frozenset({PUBLISHED, FAILED_PERMANENT, IGNORED, CANCELLED})
 
 # States a claimable worker may pick up (open work or a scheduled retry).
 CLAIMABLE_STATES = frozenset({
-    DISCOVERED, SCHEDULED, AWAITING_BROADCAST, ARCHIVED, DOWNLOADED,
-    SEGMENTING, PROCESSING, APPROVED, RETRY_SCHEDULED,
+    DISCOVERED, SCHEDULED, AWAITING_BROADCAST, ARCHIVED, DOWNLOADING,
+    DOWNLOADED, SEGMENTING, PROCESSING, READY_FOR_DETECTION, APPROVED,
+    RETRY_SCHEDULED,
 })
 
-# Forward happy-path edges. Failure/retry/ignore edges are added below for
+# Forward happy-path edges. Failure/retry/cancel edges are added below for
 # every non-terminal state so we don't have to repeat them by hand.
 _FORWARD: dict[str, set[str]] = {
     DISCOVERED: {SCHEDULED, IGNORED},
@@ -59,18 +74,25 @@ _FORWARD: dict[str, set[str]] = {
     AWAITING_BROADCAST: {LIVE, RECORDING, ARCHIVED},
     LIVE: {RECORDING, ARCHIVED},
     RECORDING: {ARCHIVED, DOWNLOADED, PARTIAL},
-    ARCHIVED: {DOWNLOADED},
+    ARCHIVED: {DOWNLOADING},
+    DOWNLOADING: {DOWNLOADED, PARTIAL},
     DOWNLOADED: {SEGMENTING},
     SEGMENTING: {PROCESSING, NEEDS_REVIEW, PARTIAL},
     PROCESSING: {NEEDS_LAYOUT, NEEDS_TEMPLATES, NEEDS_REVIEW, APPROVED, PARTIAL},
     NEEDS_LAYOUT: {PROCESSING, NEEDS_REVIEW},
     NEEDS_TEMPLATES: {PROCESSING, NEEDS_REVIEW},
-    NEEDS_REVIEW: {APPROVED, PARTIAL, IGNORED},
+    # A segment-review approval routes to READY_FOR_DETECTION (the segment is
+    # ready for automatic detection); a composition/detection-review approval
+    # routes straight to APPROVED (ready to publish). Both are legal exits of
+    # the one generic review state — review_tasks.kind tells them apart.
+    NEEDS_REVIEW: {APPROVED, READY_FOR_DETECTION, PARTIAL, IGNORED},
+    READY_FOR_DETECTION: {PROCESSING},
     APPROVED: {PUBLISHED},
     PARTIAL: {PROCESSING, NEEDS_REVIEW, PUBLISHED},
     PUBLISHED: set(),
     FAILED_PERMANENT: set(),
     IGNORED: set(),
+    CANCELLED: set(),
 }
 
 
@@ -81,12 +103,16 @@ def _build_transitions() -> dict[str, frozenset[str]]:
             continue
         # Anything active can fail, and a failure can be rescheduled or given up.
         graph[state].add(FAILED)
+        # Anything active can be explicitly cancelled by an operator — distinct
+        # from IGNORED (the system's own "not pursuing this" verdict).
+        graph[state].add(CANCELLED)
     # Failure lifecycle.
-    graph[FAILED] |= {RETRY_SCHEDULED, FAILED_PERMANENT, IGNORED}
+    graph[FAILED] |= {RETRY_SCHEDULED, FAILED_PERMANENT, IGNORED, CANCELLED}
     # A rescheduled retry re-enters the pipeline from the front of active work.
     graph[RETRY_SCHEDULED] |= {
         DISCOVERED, SCHEDULED, AWAITING_BROADCAST, RECORDING, ARCHIVED,
-        DOWNLOADED, SEGMENTING, PROCESSING, FAILED, FAILED_PERMANENT, IGNORED,
+        DOWNLOADING, DOWNLOADED, SEGMENTING, PROCESSING, READY_FOR_DETECTION,
+        FAILED, FAILED_PERMANENT, IGNORED,
     }
     return {s: frozenset(t) for s, t in graph.items()}
 

@@ -508,13 +508,105 @@ GitHub-Pages-safe paths, files exist on disk, WebP present + AVIF explicitly
 null, dimensions/hash recorded, source/attribution present, aliases match
 the curated (never-fabricated) table.
 
+## Beta Sprint — Phases E/F/G/I: the closed-loop worker, segmentation,
+## detection wiring, and publication (implemented)
+
+The "one real match, one official VOD, one approved map, closed loop to a
+live page" beta. **One job travels the whole loop** (not a separate job per
+phase): `ARCHIVED` ("ready" — broadcast linked, download not started) ->
+`DOWNLOADING` -> `DOWNLOADED` -> `SEGMENTING` -> `NEEDS_REVIEW` (segment
+review) -> `READY_FOR_DETECTION` -> `PROCESSING` -> `NEEDS_REVIEW`
+(detection/swap review) -> `APPROVED` -> `PUBLISHED`. `CANCELLED` is a new
+terminal state (an explicit operator stop, distinct from the system's own
+`IGNORED` verdict); `RETRY_SCHEDULED`/`FAILED`/`FAILED_PERMANENT` are the
+existing Phase A failure lifecycle, unchanged. Only `DOWNLOADING` and
+`READY_FOR_DETECTION` are genuinely new states — everything else reuses the
+Phase A graph's established vocabulary (`ARCHIVED` = "ready", `RETRY_
+SCHEDULED` = "retryable"), because an equivalent already existed.
+
+| Roadmap item | Where | Status |
+|---|---|---|
+| Job creation from a matched broadcast (idempotent) | `ops.create_job_from_broadcast` (`models.record_key` dedup) | ✅ |
+| List/show/claim/release/retry/cancel/reset-stale-lock/resume | `ops.py` (thin, safe wrappers over `job_store.py`/`locks.py`) | ✅ |
+| Dead-letter re-open is explicit, never silent | `job_store.retry_job(force=True)` — re-enters via `RETRY_SCHEDULED`, keeps full attempt history | ✅ |
+| Same-state publish refusals never strand an APPROVED job | `job_store.record_error` (records the error, does NOT transition state — distinct from `record_attempt`'s retry/backoff lifecycle) | ✅ |
+| Worker identity, dependency + disk preflight | `worker.py` (`worker_identity`, `check_dependencies`, `check_disk_space`) | ✅ |
+| Official-source-only validation (domain allowlist, channel registry, manual-approval override, authority-conflict rejection) | `worker.validate_source` | ✅ |
+| Claim + lease in one step (never two workers on one resource) | `worker.claim_and_lock` | ✅ |
+| Download reuses the EXISTING yt-dlp/ffmpeg machinery, never reimplemented | `worker.download_job` calls `download_vod_clip.download_clip` (built on `video_ingest.py`) | ✅ |
+| Full metadata capture (hash/duration/resolution/codec/sizes/tool versions) | `worker.download_job` -> `job_store.update_payload(..., {"media": {...}})` | ✅ |
+| Every required failure mode classified (never a bare crash) | `worker.classify_download_error` (missing_dependency/corrupt_media/network_stall/invalid_source/insufficient_disk/download_failed/timeout/unknown) | ✅ |
+| Resume after a crash mid-download | `worker.resume_interrupted` (stale-lease detection + `download_vod_clip`'s own cache-reuse makes re-entry safe) | ✅ |
+| Media/caches/thumbnails never enter git | `data/worker/` gitignored; `.gitignore` extended with `.mov/.avi/.ts/.m3u8` | ✅ |
+| Assisted segmentation: candidate generation reuses the EXISTING HUD-anchor/reject-marker classifier | `segmentation.generate_candidates` (calls `capture.py`'s `is_gameplay`/`_load_template`/`_load_reject_markers` — no new CV code) | ✅ |
+| Candidate grouping + configurable pre/post-roll + flicker tolerance | `segmentation._group_candidates` (pure, independently tested) | ✅ |
+| Segment storage + review actions (approve/reject/split/merge/adjust/mark-invalid) | `segmentation.py` against `map_segments` (Phase F table — previously schema-only, zero writers; `job_store._migrate` added the review/team/extraction columns it actually needs) | ✅ |
+| Segment extraction reuses the EXISTING ffmpeg cut helper (local file, not just URL) | `segmentation.extract_segment_clip` calls `video_ingest._ffmpeg_cut_from_url` (works identically against a local path) | ✅ |
+| Detection wiring reuses `ingest_map.py` UNCHANGED — no CV reimplementation | `detection_runner.build_ingest_args`/`run_detection` build the exact `argparse.Namespace` `ingest_map.run()` expects from an approved+extracted segment | ✅ |
+| Two-phase detection: automatic dry-run review pass, then an explicit human-approved write pass | `detection_runner.run_detection(write=False)` -> `NEEDS_REVIEW`; `commit_approved_detection` only runs when `job.state == APPROVED` | ✅ |
+| Idempotent detection reruns | `detection_runner.ingest_id_for` — stable per (job, segment), so `ingest_map.write_db` only ever replaces its own rows | ✅ |
+| Every Phase 4 failure state classified (layout mismatch, no valid frames, missing templates, ...) | `detection_runner.classify_detection_error` | ✅ |
+| Composition stints + swap proposals | **Already built** — `ingest_map.py`'s existing temporal-consensus/hysteresis swap detector, unchanged; this phase only wires an approved segment into it automatically | ✅ (reused, not rebuilt) |
+| Human-gated promotion, export regeneration + validation, packaging check, secret scan, no-media-staged check | `publish.py` (`check_preconditions`, `regenerate_and_validate_export`, `run_packaging_check`, `scan_for_secrets`, `staged_media_files`) | ✅ |
+| Refuses publication for every named reason (review incomplete, match/map/team identity unresolved, layout mismatch, evidence missing, export/test failure) | `publish.PublishRefusal` + `check_preconditions` | ✅ |
+| Scoped publication commit + push, never touching main directly | `publish.create_publication_commit` (fresh branch only; PR open/CI wait/merge/Pages stay the existing, already-working human/CI flow — not reimplemented) | ✅ |
+| `publication_runs` recorded (Phase I table — previously schema-only) | `publish.publish_job` inserts `db_hash`/`export_hash`/`branch`/`source_commit`/`state` | ✅ |
+| Operator command: `process-approved-job --job <id> [--publish]` | `cli.py cmd_process_approved_job` — dry-run by default, `--publish` to actually commit + push | ✅ |
+| Beta ops dashboard (Phase 7) | `beta-ops.html` + `assets/js/public/page-beta-ops.js`, fed by `cli.py job-coverage --save` -> `assets/data/job_coverage.v1.json` — read-only (GitHub Pages has no server); every row names the exact CLI command to run next | ✅ |
+| New CLI surface | `create-job`, `list-jobs`, `show-job`, `claim-job`, `release-job`, `retry-job`, `cancel-job`, `reset-stale-lock`, `resume-job`, `run-job`, `job-coverage [--save]`, `worker-run`, `segment-list`, `segment-approve`, `segment-reject`, `detect-job [--write]`, `process-approved-job [--publish]` | ✅ |
+
+### Honest environment limitation (this pass)
+
+This pass was built and fully tested in a sandboxed remote session whose
+egress policy explicitly denies `www.youtube.com` (confirmed via the agent
+proxy's own diagnostics: `403` "policy denial" on the CONNECT, not a
+transient failure) and ships no `ffmpeg`/`yt-dlp`/`opencv` pre-installed
+(all three were pip/apt-installed for this session only, to run the offline
+test suite — `ffmpeg` in particular made `segmentation.py`'s real-cut test
+pass against a real synthetic clip). **No real YouTube VOD was downloaded
+in this session** — that requires the self-hosted Windows worker machine
+this repo's own docs already point at for every prior real-VOD ingestion
+(`docs/WINDOWS_WORKFLOW.md`, `HANDOFF.md`'s "machine quirks" sections). The
+closed-loop code above is complete and offline-tested end-to-end (`worker-
+run` was smoke-tested live through the real CLI against a real `yt-dlp`
+binary, real `ffmpeg`, and a real automation DB — it correctly reached the
+network boundary, failed safely, and recorded a classified error); the
+`--publish` git/PR/CI/Pages leg was exercised against an isolated throwaway
+git repo (never this session's own working tree). Running one real match
+through the loop end-to-end is the next action on a machine with YouTube
+access — see the completion report for exact commands.
+
+### Tests
+
+`test_automation_worker.py` (27 checks: preflight, source validation incl.
+unofficial/shell-string/authority-conflict rejection, claim+lock, every
+required download failure mode, resume-after-crash, unicode-safe logs),
+`test_automation_segmentation.py` (21 checks: candidate grouping incl. gap
+tolerance/pre-post-roll/confidence, full review-action CRUD, extraction incl.
+one real-ffmpeg end-to-end cut), `test_automation_detection_runner.py` (12
+checks: arg construction from an approved segment, idempotent ingest ids,
+dry-run-then-commit two-phase flow, every Phase 4 failure classification),
+`test_automation_publish.py` (14 checks: every named refusal reason, secret
+scan, real-git-repo commit/push/no-media-staged/no-empty-commit/no-
+republish-without-reapproval), `test_automation_ops.py` (20 checks:
+idempotent job creation, claim/release/retry/cancel/reset-lock, `run_one_job`
+dispatch for every state, coverage-report shape). Plus extensions to
+`test_automation_state_machine.py` (the new states/edges), `test_automation_
+job_store.py` (`update_payload`/`cancel`/`retry_job`/`record_error`),
+`test_automation_locks.py` (`reset_stale`), and `test_public_site.py`
+(`beta-ops.html` stays on the control-room shell). All offline, no network/
+key required — fixtures/mocked transports throughout, exactly like every
+other automation suite.
+
 ## Not yet implemented (later roadmap passes)
 
-The self-hosted recording daemon (Phase E), broadcast segmentation
-(Phase F), and the detector/layout/template automation (Phase G). Each plugs
-into this foundation: they enqueue jobs with the deterministic keys above,
-take a lease before touching a shared resource, and transition through the
-state machine.
+A graphical segment-review timeline (scrubbing/thumbnail scrubbing UI) —
+this pass's segment review is CLI-driven (`segment-list`/`segment-approve`/
+`segment-reject`), which already satisfies "operate without editing the
+database," but a browser timeline is a real usability upgrade for a human
+reviewer. Multi-worker/multi-job-at-once, live-stream recording, and
+automatic map/team identification remain explicitly out of this sprint's
+scope per the roadmap.
 
 ## Operator CLI
 

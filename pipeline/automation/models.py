@@ -90,6 +90,13 @@ def map_key(match_id: str, map_order: int | str) -> str:
     return f"map:{slug(match_id)}:{slug(map_order)}"
 
 
+def segment_key(video_id: str, candidate_map_order: int | str) -> str:
+    """One key per (video, candidate map order) segmentation job — Phase F.
+    A single VOD can hold several map candidates; the pair is what must stay
+    unique so re-running segmentation never enqueues duplicate work."""
+    return f"segment:{slug(video_id)}:{slug(candidate_map_order)}"
+
+
 def publish_key(database_hash: str) -> str:
     return f"publish:{slug(database_hash)}"
 

@@ -33,16 +33,24 @@ from automation import broadcast_discovery as bdisc  # noqa: E402
 from automation import broadcast_matching as bmatch  # noqa: E402
 from automation import config as cfg  # noqa: E402
 from automation import coverage as cov  # noqa: E402
+from automation import detection_runner as dr  # noqa: E402
 from automation import discovery as disc  # noqa: E402
 from automation import faceit_api  # noqa: E402
 from automation import job_store as js  # noqa: E402
+from automation import locks as lk  # noqa: E402
 from automation import match_export_coverage as mec  # noqa: E402
 from automation import match_repair as mrepair  # noqa: E402
+from automation import models  # noqa: E402
+from automation import ops  # noqa: E402
 from automation import owcs_calendar  # noqa: E402
+from automation import publish as pub  # noqa: E402
 from automation import reconcile as rec  # noqa: E402
+from automation import segmentation as seg  # noqa: E402
+from automation import state_machine as sm  # noqa: E402
 from automation import team_assets as tassets  # noqa: E402
 from automation import team_coverage as tcov  # noqa: E402
 from automation import team_enrichment as tenrich  # noqa: E402
+from automation import worker  # noqa: E402
 from automation import youtube_api as yt  # noqa: E402
 
 
@@ -641,6 +649,331 @@ def cmd_discover_broadcasts(args: argparse.Namespace) -> int:
     return _run_broadcast_discovery(args)
 
 
+def _job_or_exit(store: "js.JobStore", job_key: str) -> models.Job:
+    job = store.get(job_key)
+    if job is None:
+        raise SystemExit(f"[automation] no such job: {job_key}")
+    return job
+
+
+def _print_job(job: models.Job) -> None:
+    print(f"  job_key      : {job.job_key}")
+    print(f"  kind/state   : {job.kind} / {job.state}")
+    print(f"  worker_id    : {job.worker_id}")
+    print(f"  attempts     : {job.attempts} (max {job.max_attempts})")
+    print(f"  last_error   : [{job.last_error_code}] {job.last_error_message}")
+    print(f"  next_retry_at: {job.next_retry_at}")
+    print(f"  source_url   : {job.source_url}")
+    print(f"  updated_at   : {job.updated_at}")
+    print(f"  payload      : {json.dumps(job.payload, indent=2)}")
+
+
+# ------------------------------------------------------- Phase 1 job spine
+def cmd_create_job(args: argparse.Namespace) -> int:
+    store = js.JobStore(args.db)
+    try:
+        job = ops.create_job_from_broadcast(
+            store, match_id=args.match, video_id=args.video_id,
+            source_url=args.source_url, channel_id=args.channel_id,
+            team_a=args.team_a, team_b=args.team_b,
+            tournament_id=args.tournament, region=args.region,
+            language=args.language, broadcast_authority=args.channel_id,
+            expected_layout_id=args.layout_id)
+        print(f"[automation] job ready: {job.job_key} (state={job.state})")
+        return 0
+    finally:
+        store.close()
+
+
+def cmd_list_jobs(args: argparse.Namespace) -> int:
+    store = js.JobStore(args.db)
+    try:
+        jobs = ops.list_jobs(store, state=args.state)
+        if args.json:
+            print(json.dumps([j.__dict__ for j in jobs], indent=2, default=str))
+            return 0
+        print(f"[automation] {len(jobs)} job(s)"
+              + (f" in state {args.state}" if args.state else ""))
+        for j in jobs:
+            print(f"  {j.job_key:<40} {j.state:<20} worker={j.worker_id} "
+                  f"attempts={j.attempts} next_action={ops.recommended_next_action(j)}")
+        return 0
+    finally:
+        store.close()
+
+
+def cmd_show_job(args: argparse.Namespace) -> int:
+    store = js.JobStore(args.db)
+    try:
+        job = _job_or_exit(store, args.job)
+        _print_job(job)
+        return 0
+    finally:
+        store.close()
+
+
+def cmd_claim_job(args: argparse.Namespace) -> int:
+    store = js.JobStore(args.db)
+    try:
+        locks = lk.LockManager(store.con)
+        job = ops.claim_next_job(store, locks, args.worker_id)
+        if job is None:
+            print("[automation] no eligible job to claim.")
+            return 0
+        print(f"[automation] claimed {job.job_key} (state={job.state}) "
+              f"for worker {args.worker_id}")
+        return 0
+    finally:
+        store.close()
+
+
+def cmd_release_job(args: argparse.Namespace) -> int:
+    store = js.JobStore(args.db)
+    try:
+        locks = lk.LockManager(store.con)
+        ops.release_job(store, locks, args.job, args.worker_id)
+        print(f"[automation] released {args.job}")
+        return 0
+    finally:
+        store.close()
+
+
+def cmd_retry_job(args: argparse.Namespace) -> int:
+    store = js.JobStore(args.db)
+    try:
+        job = ops.retry_job(store, args.job, force=args.force)
+        print(f"[automation] {args.job} -> {job.state} (next_retry_at={job.next_retry_at})")
+        return 0
+    except (KeyError, ValueError) as exc:
+        print(f"[automation] retry-job FAILED: {exc}")
+        return 1
+    finally:
+        store.close()
+
+
+def cmd_cancel_job(args: argparse.Namespace) -> int:
+    store = js.JobStore(args.db)
+    try:
+        locks = lk.LockManager(store.con)
+        job = ops.cancel_job(store, locks, args.job, reason=args.reason)
+        print(f"[automation] {args.job} -> {job.state}")
+        return 0
+    finally:
+        store.close()
+
+
+def cmd_reset_stale_lock(args: argparse.Namespace) -> int:
+    store = js.JobStore(args.db)
+    try:
+        locks = lk.LockManager(store.con)
+        cleared = ops.reset_stale_lock(store, locks, args.job)
+        print(f"[automation] {args.job}: "
+              f"{'stale lock cleared' if cleared else 'no stale lock found'}")
+        return 0
+    finally:
+        store.close()
+
+
+def cmd_resume_job(args: argparse.Namespace) -> int:
+    store = js.JobStore(args.db)
+    try:
+        locks = lk.LockManager(store.con)
+        results = ops.resume_interrupted_job(store, locks, worker_id=args.worker_id)
+        print(f"[automation] resumed {len(results)} interrupted job(s)")
+        for r in results:
+            print(f"  {r}")
+        return 0
+    finally:
+        store.close()
+
+
+def cmd_run_job(args: argparse.Namespace) -> int:
+    store = js.JobStore(args.db)
+    con = _open_content_db()
+    try:
+        locks = lk.LockManager(store.con)
+        result = ops.run_one_job(store, locks, con, args.job,
+                                 worker_id=args.worker_id)
+        print(f"[automation] run-job {args.job}: {result}")
+        return 0 if result.get("ok") else 1
+    finally:
+        con.close()
+        store.close()
+
+
+JOB_COVERAGE_EXPORT_PATH = os.path.join(
+    content_db.REPO_ROOT, "assets", "data", "job_coverage.v1.json")
+
+
+def cmd_job_coverage(args: argparse.Namespace) -> int:
+    store = js.JobStore(args.db)
+    try:
+        report = ops.build_job_coverage_report(store, window_hours=args.window_hours)
+        # every job in the report, with the dashboard's recommended next action
+        report["jobs"] = [
+            dict(jobKey=j.job_key, kind=j.kind, state=j.state,
+                workerId=j.worker_id, attempts=j.attempts,
+                lastErrorCode=j.last_error_code,
+                lastErrorMessage=j.last_error_message,
+                updatedAt=j.updated_at,
+                match=j.payload.get("matchId"), teamA=j.payload.get("teamA"),
+                teamB=j.payload.get("teamB"), videoId=j.payload.get("videoId"),
+                nextAction=ops.recommended_next_action(j))
+            for j in store.list_jobs()
+        ]
+        if args.json:
+            print(json.dumps(report, indent=2))
+        else:
+            print(f"[automation] job coverage (last {report['windowHours']}h):")
+            print(f"  total jobs      : {report['totalJobs']}")
+            print(f"  recently updated: {report['recentlyUpdated']}")
+            print(f"  by state        : {report['countsByState']}")
+            print(f"  blocked         : {len(report['blocked'])}")
+            for b in report["blocked"]:
+                print(f"    {b['jobKey']:<40} [{b['state']}] {b['issue']}")
+        if args.save:
+            os.makedirs(os.path.dirname(JOB_COVERAGE_EXPORT_PATH), exist_ok=True)
+            with open(JOB_COVERAGE_EXPORT_PATH, "w", encoding="utf-8") as f:
+                json.dump(report, f, indent=1)
+                f.write("\n")
+            print(f"\n[automation] wrote "
+                  f"{os.path.relpath(JOB_COVERAGE_EXPORT_PATH, content_db.REPO_ROOT)}")
+        return 0
+    finally:
+        store.close()
+
+
+def cmd_worker_run(args: argparse.Namespace) -> int:
+    """The self-hosted worker's main entry point (Phase E): register an
+    identity, run preflight, claim + lock the next eligible job, process it
+    one step (download/segment/detect/commit — see ops.run_one_job), release,
+    repeat up to --max-jobs times (default: process exactly one and exit)."""
+    store = js.JobStore(args.db)
+    wid = args.worker_id or worker.worker_identity()
+    print(f"[worker] identity: {wid}")
+    report = worker.preflight(media_root=args.media_root)
+    print(f"[worker] preflight: {report}")
+    if not report["ok"]:
+        print("[worker] preflight FAILED — fix missing dependencies/disk before running.")
+        return 1
+    locks = lk.LockManager(store.con)
+    con = _open_content_db()
+    try:
+        # Recover any job a previous crashed worker left stuck mid-download.
+        ops.resume_interrupted_job(store, locks, worker_id=wid,
+                                   media_root=args.media_root)
+        processed = 0
+        while processed < args.max_jobs:
+            job = ops.claim_next_job(store, locks, wid)
+            if job is None:
+                print("[worker] no eligible job — nothing to do.")
+                break
+            print(f"[worker] processing {job.job_key} ({job.state})")
+            result = ops.run_one_job(store, locks, con, job.job_key,
+                                     worker_id=wid, media_root=args.media_root)
+            print(f"[worker] result: {result}")
+            locks.release(worker.resource_for(job), wid)
+            processed += 1
+        return 0
+    finally:
+        con.close()
+        store.close()
+
+
+# --------------------------------------------------------- Phase F segments
+def cmd_segment_list(args: argparse.Namespace) -> int:
+    con = _open_content_db()
+    try:
+        rows = seg.list_segments(con, video_id=args.video_id,
+                                 review_status=args.status)
+        if args.json:
+            print(json.dumps(rows, indent=2))
+            return 0
+        print(f"[automation] {len(rows)} segment(s)")
+        for r in rows:
+            print(f"  #{r['id']:<4} {r['video_id']:<15} "
+                  f"[{r['start_time']:.0f}-{r['end_time']:.0f}] "
+                  f"conf={r['confidence']:.2f} status={r['review_status']} "
+                  f"map={r.get('map_name')}")
+        return 0
+    finally:
+        con.close()
+
+
+def cmd_segment_approve(args: argparse.Namespace) -> int:
+    con = _open_content_db()
+    try:
+        row = seg.approve_segment(
+            con, args.segment_id, map_order=args.map_order,
+            map_name=args.map_name, map_mode=args.map_mode,
+            team_a=args.team_a, team_b=args.team_b,
+            side_assignment=args.side, layout_id=args.layout_id,
+            reviewer_note=args.note)
+        print(f"[automation] segment {args.segment_id} approved: {row['map_name']} "
+              f"({row['team_a']} vs {row['team_b']})")
+        return 0
+    finally:
+        con.close()
+
+
+def cmd_segment_reject(args: argparse.Namespace) -> int:
+    con = _open_content_db()
+    try:
+        seg.reject_segment(con, args.segment_id, reason=args.reason)
+        print(f"[automation] segment {args.segment_id} rejected: {args.reason}")
+        return 0
+    finally:
+        con.close()
+
+
+# ------------------------------------------------------- Phase G/I actions
+def cmd_detect_job(args: argparse.Namespace) -> int:
+    store = js.JobStore(args.db)
+    con = _open_content_db()
+    try:
+        job = _job_or_exit(store, args.job)
+        segments = seg.list_segments(con, video_id=job.payload.get("videoId"),
+                                     review_status="approved")
+        if not segments:
+            print(f"[automation] no approved segment for {args.job}")
+            return 1
+        if job.state == sm.READY_FOR_DETECTION:
+            store.transition(job.job_key, sm.PROCESSING)
+            job = store.get(job.job_key)
+        if args.write:
+            result = dr.commit_approved_detection(store, job, segments[0])
+        else:
+            result = dr.run_detection(store, job, segments[0], write=False)
+        print(f"[automation] detect-job {args.job}: {result}")
+        return 0 if result.get("ok") else 1
+    finally:
+        con.close()
+        store.close()
+
+
+def cmd_process_approved_job(args: argparse.Namespace) -> int:
+    """`process-approved-job --job <id> [--publish]` — the one supervised
+    command that coordinates promotion + export + validation + publication.
+    Default is a dry run (validate everything, write/push nothing); pass
+    --publish to actually create + push the publication commit."""
+    store = js.JobStore(args.db)
+    con = _open_content_db()
+    try:
+        job = _job_or_exit(store, args.job)
+        segments = seg.list_segments(con, video_id=job.payload.get("videoId"),
+                                     review_status="approved")
+        if not segments:
+            print(f"[automation] no approved segment for {args.job} — refusing.")
+            return 1
+        result = pub.publish_job(store, con, job, segments[0],
+                                 dry_run=not args.publish)
+        print(f"[automation] process-approved-job {args.job}: {result}")
+        return 0 if result.get("ok") else 1
+    finally:
+        con.close()
+        store.close()
+
+
 def cmd_status(args: argparse.Namespace) -> int:
     store = js.JobStore(args.db)
     try:
@@ -832,6 +1165,114 @@ def main(argv: list[str] | None = None) -> int:
     pa_p.add_argument("--publish", action="store_true",
                       help="actually write variants + set logo_url (default: dry-run listing)")
     pa_p.set_defaults(func=cmd_publish_team_assets)
+
+    # ---- Beta closed-loop: Phase 1 job spine + Phase E worker ------------
+    cj_p = sub.add_parser("create-job", help="create a processing job from a matched official broadcast")
+    cj_p.add_argument("--match", required=True, help="internal match id (must already exist)")
+    cj_p.add_argument("--video-id", required=True)
+    cj_p.add_argument("--source-url", required=True)
+    cj_p.add_argument("--channel-id", required=True, help="the verified official channel id")
+    cj_p.add_argument("--team-a", required=True)
+    cj_p.add_argument("--team-b", required=True)
+    cj_p.add_argument("--tournament", default=None)
+    cj_p.add_argument("--region", default=None)
+    cj_p.add_argument("--language", default=None)
+    cj_p.add_argument("--layout-id", default=None, help="expected broadcast layout id")
+    cj_p.set_defaults(func=cmd_create_job)
+
+    lj_p = sub.add_parser("list-jobs", help="list processing jobs")
+    lj_p.add_argument("--state", default=None)
+    lj_p.add_argument("--json", action="store_true")
+    lj_p.set_defaults(func=cmd_list_jobs)
+
+    sj_p = sub.add_parser("show-job", help="show one job's full state/payload")
+    sj_p.add_argument("job")
+    sj_p.set_defaults(func=cmd_show_job)
+
+    clj_p = sub.add_parser("claim-job", help="claim the next eligible job for a worker")
+    clj_p.add_argument("--worker-id", required=True)
+    clj_p.set_defaults(func=cmd_claim_job)
+
+    rj_p = sub.add_parser("release-job", help="release a claimed job back to the pool")
+    rj_p.add_argument("job")
+    rj_p.add_argument("--worker-id", required=True)
+    rj_p.set_defaults(func=cmd_release_job)
+
+    rt_p = sub.add_parser("retry-job", help="retry a failed/retry-scheduled job")
+    rt_p.add_argument("job")
+    rt_p.add_argument("--force", action="store_true",
+                      help="explicitly re-open a FAILED_PERMANENT (dead-lettered) job")
+    rt_p.set_defaults(func=cmd_retry_job)
+
+    ca_p = sub.add_parser("cancel-job", help="explicitly cancel a job")
+    ca_p.add_argument("job")
+    ca_p.add_argument("--reason", default=None)
+    ca_p.set_defaults(func=cmd_cancel_job)
+
+    rsl_p = sub.add_parser("reset-stale-lock", help="clear a job's lock if its lease has expired")
+    rsl_p.add_argument("job")
+    rsl_p.set_defaults(func=cmd_reset_stale_lock)
+
+    res_p = sub.add_parser("resume-job", help="resume any job interrupted mid-download")
+    res_p.add_argument("--worker-id", default=None)
+    res_p.set_defaults(func=cmd_resume_job)
+
+    runj_p = sub.add_parser("run-job", help="advance one job by exactly one automatic step")
+    runj_p.add_argument("job")
+    runj_p.add_argument("--worker-id", default=None)
+    runj_p.set_defaults(func=cmd_run_job)
+
+    jc_p = sub.add_parser("job-coverage", help="rolling job-health report (Phase 7)")
+    jc_p.add_argument("--window-hours", type=int, default=24)
+    jc_p.add_argument("--json", action="store_true")
+    jc_p.add_argument("--save", action="store_true",
+                      help="write assets/data/job_coverage.v1.json for beta-ops.html")
+    jc_p.set_defaults(func=cmd_job_coverage)
+
+    wr_p = sub.add_parser("worker-run", help="the self-hosted worker main loop (Phase E)")
+    wr_p.add_argument("--worker-id", default=None)
+    wr_p.add_argument("--media-root", default=worker.DEFAULT_MEDIA_ROOT)
+    wr_p.add_argument("--max-jobs", type=int, default=1)
+    wr_p.set_defaults(func=cmd_worker_run)
+
+    # ---- Phase F assisted segmentation -----------------------------------
+    sl_p = sub.add_parser("segment-list", help="list candidate/reviewed map segments")
+    sl_p.add_argument("--video-id", default=None)
+    sl_p.add_argument("--status", default=None)
+    sl_p.add_argument("--json", action="store_true")
+    sl_p.set_defaults(func=cmd_segment_list)
+
+    sa_p = sub.add_parser("segment-approve", help="approve a candidate map segment")
+    sa_p.add_argument("segment_id", type=int)
+    sa_p.add_argument("--map-order", type=int, required=True)
+    sa_p.add_argument("--map-name", required=True)
+    sa_p.add_argument("--map-mode", required=True)
+    sa_p.add_argument("--team-a", required=True)
+    sa_p.add_argument("--team-b", required=True)
+    sa_p.add_argument("--side", required=True, help="e.g. team_a_left")
+    sa_p.add_argument("--layout-id", required=True)
+    sa_p.add_argument("--note", default=None)
+    sa_p.set_defaults(func=cmd_segment_approve)
+
+    sr_p = sub.add_parser("segment-reject", help="reject a candidate map segment")
+    sr_p.add_argument("segment_id", type=int)
+    sr_p.add_argument("--reason", required=True)
+    sr_p.set_defaults(func=cmd_segment_reject)
+
+    # ---- Phase G detection + Phase I publication -------------------------
+    dj_p = sub.add_parser("detect-job", help="run detection on a job's approved segment")
+    dj_p.add_argument("job")
+    dj_p.add_argument("--write", action="store_true",
+                      help="commit to production (requires job state APPROVED)")
+    dj_p.set_defaults(func=cmd_detect_job)
+
+    paj_p = sub.add_parser("process-approved-job",
+                           help="the supervised publication command: promote, export, "
+                                "validate, and (with --publish) commit + push")
+    paj_p.add_argument("--job", required=True)
+    paj_p.add_argument("--publish", action="store_true",
+                       help="actually commit + push (default: dry-run validation only)")
+    paj_p.set_defaults(func=cmd_process_approved_job)
 
     args = p.parse_args(argv)
     return args.func(args)
