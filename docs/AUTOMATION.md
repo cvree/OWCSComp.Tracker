@@ -186,6 +186,39 @@ See `pipeline/automation/broadcast_matching.py`'s module docstring and
 `test_automation_broadcast_matching.py` / `test_automation_broadcast_discovery.py`
 / `test_automation_youtube_api.py` for the full pinned behavior.
 
+### Phase C broadcast-classification refinement (2026-07-24)
+
+The corrected dry-run above found 7 real in-window videos and scored all 7
+— but classified **all seven as `event-level-candidate`**, including six
+that were plainly short-form promotional/instructional uploads (a 6-second
+lootbox promo; several 1.5–2.5 minute tips/perk/patch videos). Root cause:
+`score_candidate`'s flat **+40 official-channel** bonus plus a region-match
+bonus outweighed the lone **−15 short-duration** penalty, so almost any
+upload from the verified channel cleared `MEDIUM_THRESHOLD`.
+
+**Fix:** `broadcast_matching.broadcast_likeness(video)` — a new pre-filter
+stage that runs BEFORE any target/event scoring, using several independent
+generic signals (livestream metadata, duration, tournament/broadcast
+terminology, match/series formatting vs. instructional keywords — never a
+single duration cutoff, never a hard-coded title). A video scored
+`"unlikely"` is classified `unrelated-official-upload` immediately and is
+never scored against any target at all (zero candidate pairs spent on it);
+a `"likely"` video proceeds through matching exactly as before. See
+`docs/YOUTUBE-DISCOVERY.md`'s "Broadcast-likeness pre-filter" section for
+the full signal table and the worked example against the real 7 videos.
+
+Also fixed, from the same real run: the report conflated candidate PAIR
+counts with distinct VIDEO counts (e.g. printing "21" when that was 7 videos
+× 3 targets, not 21 videos). `match_broadcasts` now returns
+`totalCandidatePairsEvaluated` (pairs) separately from
+`distinctVideos: {high, mediumOrReview, rejectedOrUnrelated}` (videos), and
+every per-video result carries `reasons` (likeness signals + the
+best-scoring target's signals, always populated) and `targetsFiltered`
+(which loaded targets were excluded for THIS video and why — outside its
+time window, or never evaluated because it failed the likeness gate). The
+CLI report labels every number so a pair count can never be misread as a
+video count.
+
 ### CLI
 
 ```bash

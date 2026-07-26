@@ -599,19 +599,29 @@ def _run_broadcast_discovery(args: argparse.Namespace) -> int:
             store, videos=disc_summary["videos"], dry_run=args.dry_run)
         print("[automation] broadcast matching:")
         t = match_summary["targetsLoaded"]
-        print(f"  matching targets    : {t['matches']} FACEIT match(es), "
-              f"{t['sourceEvents']} source_event(s), {t['calendarEvents']} calendar event(s)")
-        print(f"  videos scored       : {match_summary['videosScored']}")
-        print(f"  linked (high)       : {match_summary['linked']}")
-        print(f"  review (medium)     : {match_summary['reviewed']}")
-        print(f"  rejected (low)      : {match_summary['rejected']}")
-        print("  classifications     :")
+        total_targets = t["matches"] + t["sourceEvents"] + t["calendarEvents"]
+        print(f"  matching targets loaded : {total_targets} total "
+              f"({t['matches']} FACEIT match(es), {t['sourceEvents']} source_event(s), "
+              f"{t['calendarEvents']} calendar event(s))")
+        print(f"  videos scored            : {match_summary['videosScored']} "
+              f"(every in-window video — a distinct-video count)")
+        print(f"  candidate pairs evaluated: {match_summary['totalCandidatePairsEvaluated']} total "
+              f"(video x target comparisons — NOT a video count; one video can pair with several targets)")
+        print(f"    high-confidence pairs  : {match_summary['linked']}")
+        print(f"    medium-confidence pairs: {match_summary['reviewed']}")
+        print(f"    low-confidence pairs   : {match_summary['rejected']} (not stored)")
+        dv = match_summary["distinctVideos"]
+        print("  distinct videos by classification:")
+        print(f"    high                     : {dv['high']}")
+        print(f"    medium / review          : {dv['mediumOrReview']}")
+        print(f"    rejected / unrelated     : {dv['rejectedOrUnrelated']}")
+        print("  full classification breakdown:")
         for label in bmatch.ALL_CLASSIFICATIONS:
             n = match_summary["classifications"].get(label, 0)
             if n:
                 print(f"    {label:<28}: {n}")
         accounted = sum(match_summary["classifications"].values())
-        print(f"  videos accounted    : {accounted} / {disc_summary['inWindow']} in-window "
+        print(f"  videos accounted         : {accounted} / {disc_summary['inWindow']} in-window "
               f"({'OK — every video classified' if accounted == disc_summary['inWindow'] else 'MISMATCH'})")
 
         if disc_summary["videos"]:
@@ -625,8 +635,15 @@ def _run_broadcast_discovery(args: argparse.Namespace) -> int:
                 print(f"      actualStartAt   : {v.get('actualStartAt')}")
                 print(f"      actualEndAt     : {v.get('actualEndAt')}")
                 print(f"      durationSeconds : {v.get('durationSeconds')}")
-                print(f"      classification  : {r['classification']} "
-                      f"(targets considered: {r['targetsConsidered']})")
+                print(f"      classification  : {r['classification']}")
+                print("      reasons         :")
+                for reason in r["reasons"]:
+                    print(f"        - {reason}")
+                print(f"      targets considered: {r['targetsConsidered']}"
+                      + (f"  ({len(r['targetsFiltered'])} filtered out — see below)"
+                         if r["targetsFiltered"] else ""))
+                for f in r["targetsFiltered"][:10]:
+                    print(f"        filtered {f['kind']} '{f['targetId']}': {f['reason']}")
 
         if client.quota_used or client.cache_hits:
             print(f"  quota used          : {client.quota_used} units {dict(client.quota_by_endpoint)}")
