@@ -51,6 +51,16 @@ work/
 *.part
 *.ytdl
 *.f4v
+*.mov
+*.avi
+*.ts
+*.m3u8
+
+# --- Beta closed-loop worker media (Phase E): downloaded VODs, extracted
+#     segment clips, and generated thumbnails. Never committed — only the
+#     automation DB's metadata (hash/duration/resolution/path) references
+#     these files; the files themselves stay local to the worker machine. ---
+data/worker/
 
 # --- SQLite transient sidecars (the .sqlite itself IS committed) ---
 data/owcs.sqlite-wal

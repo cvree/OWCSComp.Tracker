@@ -21,8 +21,8 @@ class TestStateMachine(unittest.TestCase):
     def test_happy_path_is_walkable(self):
         path = [
             sm.DISCOVERED, sm.SCHEDULED, sm.AWAITING_BROADCAST, sm.RECORDING,
-            sm.ARCHIVED, sm.DOWNLOADED, sm.SEGMENTING, sm.PROCESSING,
-            sm.APPROVED, sm.PUBLISHED,
+            sm.ARCHIVED, sm.DOWNLOADING, sm.DOWNLOADED, sm.SEGMENTING,
+            sm.PROCESSING, sm.APPROVED, sm.PUBLISHED,
         ]
         for a, b in zip(path, path[1:]):
             self.assertTrue(sm.can_transition(a, b), f"{a} -> {b} should be legal")

@@ -158,6 +158,101 @@ class TestJobStore(unittest.TestCase):
         finally:
             s.close()
 
+    def test_update_payload_merges_not_replaces(self):
+        s = self.store()
+        try:
+            k = models.record_key("vid")
+            s.enqueue(models.KIND_RECORD, k, payload={"videoId": "vid"})
+            j = s.update_payload(k, {"sha256": "abc", "durationSeconds": 90})
+            self.assertEqual(j.payload["videoId"], "vid")
+            self.assertEqual(j.payload["sha256"], "abc")
+            j2 = s.update_payload(k, {"sha256": "def"})
+            self.assertEqual(j2.payload["sha256"], "def")
+            self.assertEqual(j2.payload["durationSeconds"], 90)
+        finally:
+            s.close()
+
+    def test_clear_worker_releases_to_pool(self):
+        s = self.store()
+        try:
+            k = models.record_key("vid")
+            s.enqueue(models.KIND_RECORD, k, state=sm.ARCHIVED)
+            s.claim_next([models.KIND_RECORD], "worker-1")
+            self.assertEqual(s.get(k).worker_id, "worker-1")
+            s.clear_worker(k)
+            self.assertIsNone(s.get(k).worker_id)
+        finally:
+            s.close()
+
+    def test_cancel_from_active_state_is_terminal(self):
+        s = self.store()
+        try:
+            k = models.record_key("vid")
+            s.enqueue(models.KIND_RECORD, k, state=sm.DOWNLOADING)
+            j = s.cancel(k, reason="operator stop")
+            self.assertEqual(j.state, sm.CANCELLED)
+            self.assertEqual(j.last_error_message, "operator stop")
+            # idempotent: cancelling an already-cancelled job is a no-op
+            j2 = s.cancel(k)
+            self.assertEqual(j2.state, sm.CANCELLED)
+            # a cancelled job is never claimable again
+            self.assertIsNone(s.claim_next([models.KIND_RECORD], "worker-2"))
+        finally:
+            s.close()
+
+    def test_retry_job_expedites_scheduled_retry(self):
+        s = self.store(config=_cfg(retry_backoff_minutes=[720]))
+        try:
+            k = models.match_key("flaky")
+            s.enqueue(models.KIND_DISCOVERY, k)
+            now = dt.datetime(2026, 7, 24, tzinfo=dt.timezone.utc)
+            s.record_attempt(k, ok=False, error_code="E1", now=now)
+            self.assertIsNone(s.claim_next([models.KIND_DISCOVERY], "w",
+                                           now=now + dt.timedelta(minutes=5)))
+            s.retry_job(k, now=now + dt.timedelta(minutes=5))
+            claimed = s.claim_next([models.KIND_DISCOVERY], "w",
+                                   now=now + dt.timedelta(minutes=5))
+            self.assertEqual(claimed.job_key, k)
+        finally:
+            s.close()
+
+    def test_retry_job_refuses_dead_letter_without_force(self):
+        s = self.store(config=_cfg(max_discovery_retries=1))
+        try:
+            k = models.match_key("dead")
+            s.enqueue(models.KIND_DISCOVERY, k)
+            s.record_attempt(k, ok=False, error_code="E1")
+            self.assertEqual(s.get(k).state, sm.FAILED_PERMANENT)
+            with self.assertRaises(ValueError):
+                s.retry_job(k)
+            j = s.retry_job(k, force=True)
+            self.assertEqual(j.state, sm.RETRY_SCHEDULED)
+        finally:
+            s.close()
+
+    def test_record_error_preserves_state(self):
+        s = self.store()
+        try:
+            k = models.record_key("vid")
+            s.enqueue(models.KIND_RECORD, k, state=sm.APPROVED)
+            j = s.record_error(k, error_code="evidence_missing",
+                              error_message="no committed detection")
+            self.assertEqual(j.state, sm.APPROVED)
+            self.assertEqual(j.last_error_code, "evidence_missing")
+            self.assertEqual(j.attempts, 0)
+        finally:
+            s.close()
+
+    def test_retry_job_wrong_state_raises(self):
+        s = self.store()
+        try:
+            k = models.record_key("vid")
+            s.enqueue(models.KIND_RECORD, k, state=sm.DOWNLOADED)
+            with self.assertRaises(ValueError):
+                s.retry_job(k)
+        finally:
+            s.close()
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

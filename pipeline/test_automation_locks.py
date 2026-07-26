@@ -70,6 +70,20 @@ class TestLocks(unittest.TestCase):
         reaped = self.lm.clear_expired(now=T0 + dt.timedelta(seconds=400))
         self.assertEqual(reaped, 2)
 
+    def test_reset_stale_only_clears_expired(self):
+        self.lm.acquire("record:vid", "w1", now=T0)
+        # Still live: reset_stale must refuse (never force-steals a live lease).
+        self.assertFalse(self.lm.reset_stale("record:vid", now=T0 + dt.timedelta(seconds=60)))
+        self.assertIsNotNone(self.lm.holder("record:vid", now=T0 + dt.timedelta(seconds=60)))
+        # Past the TTL: reset_stale clears it and a new worker can acquire.
+        later = T0 + dt.timedelta(seconds=400)
+        self.assertTrue(self.lm.reset_stale("record:vid", now=later))
+        self.assertIsNone(self.lm.holder("record:vid", now=later))
+        self.assertTrue(self.lm.acquire("record:vid", "w2", now=later))
+
+    def test_reset_stale_missing_resource_is_false(self):
+        self.assertFalse(self.lm.reset_stale("nope", now=T0))
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

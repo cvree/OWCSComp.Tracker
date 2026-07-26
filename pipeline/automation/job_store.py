@@ -59,7 +59,36 @@ class JobStore:
     def init_db(self) -> None:
         with open(SCHEMA_PATH, "r", encoding="utf-8") as f:
             self.con.executescript(f.read())
+        self._migrate()
         self.con.commit()
+
+    def _migrate(self) -> None:
+        """Small additive migrations (mirrors pipeline/db.py's own pattern) —
+        `map_segments` (Phase F) shipped schema-only with no writers; these
+        are the fields a real assisted-segmentation workflow needs. The
+        automation DB is gitignored/regenerable, but existing() guards keep
+        `init_db()` safe to run against an already-migrated file too."""
+        existing = {row["name"] for row in
+                   self.con.execute("PRAGMA table_info(map_segments)")}
+        additions = {
+            "updated_at": "TEXT",
+            "duration_seconds": "REAL",
+            "map_name": "TEXT",
+            "map_mode": "TEXT",
+            "team_a": "TEXT",
+            "team_b": "TEXT",
+            "side_assignment": "TEXT",
+            "layout_id": "TEXT",
+            "reviewer_note": "TEXT",
+            "source_job_key": "TEXT",
+            "extracted_path": "TEXT",
+            "extracted_hash": "TEXT",
+            "extracted_width": "INTEGER",
+            "extracted_height": "INTEGER",
+        }
+        for name, decl in additions.items():
+            if name not in existing:
+                self.con.execute(f"ALTER TABLE map_segments ADD COLUMN {name} {decl}")
 
     def close(self) -> None:
         self.con.close()
@@ -277,3 +306,131 @@ class JobStore:
             "SELECT * FROM job_attempts WHERE job_key = ? ORDER BY attempt ASC",
             (job_key,),
         ))
+
+    # ------------------------------------------------------- payload/worker
+    def update_payload(self, job_key: str, patch: dict[str, Any]) -> models.Job:
+        """Merge `patch` into the job's JSON payload (shallow update — a key
+        in `patch` overwrites the same key in the stored payload, everything
+        else is kept). This is how a worker records download/segmentation/
+        detection metadata onto the job without a schema migration per field.
+        """
+        job = self.get(job_key)
+        if job is None:
+            raise KeyError(f"no such job: {job_key}")
+        merged = dict(job.payload)
+        merged.update(patch)
+        self.con.execute(
+            "UPDATE jobs SET payload = ?, updated_at = ? WHERE job_key = ?",
+            (json.dumps(merged), _iso(_utcnow()), job_key),
+        )
+        self.con.commit()
+        return self.get(job_key)  # type: ignore[return-value]
+
+    def clear_worker(self, job_key: str) -> models.Job:
+        """Release a job back to the claimable pool (the "Release job"
+        operator action). Does not touch state or the job's lock row — call
+        `locks.LockManager.release` separately for the underlying resource."""
+        job = self.get(job_key)
+        if job is None:
+            raise KeyError(f"no such job: {job_key}")
+        self.con.execute(
+            "UPDATE jobs SET worker_id = NULL, updated_at = ? WHERE job_key = ?",
+            (_iso(_utcnow()), job_key),
+        )
+        self.con.commit()
+        return self.get(job_key)  # type: ignore[return-value]
+
+    def record_error(self, job_key: str, *, error_code: str,
+                     error_message: str) -> models.Job:
+        """Record a same-state validation/gate rejection (e.g. a publish
+        precondition refusal) WITHOUT touching state, attempts, or the retry
+        timer. Distinct from `record_attempt`: that method drives the
+        worker retry-with-backoff lifecycle (download/detection failures,
+        which legitimately move a job to RETRY_SCHEDULED/FAILED_PERMANENT).
+        A publish refusal is a human-fixable gate a job can simply be
+        re-submitted against from the SAME state — nothing here should ever
+        strand an APPROVED job somewhere RETRY_SCHEDULED can't return it to.
+        """
+        job = self.get(job_key)
+        if job is None:
+            raise KeyError(f"no such job: {job_key}")
+        self.con.execute(
+            """UPDATE jobs SET last_error_code = ?, last_error_message = ?,
+                   updated_at = ? WHERE job_key = ?""",
+            (error_code, error_message, _iso(_utcnow()), job_key),
+        )
+        self.con.commit()
+        return self.get(job_key)  # type: ignore[return-value]
+
+    def cancel(self, job_key: str, *, reason: str | None = None) -> models.Job:
+        """Explicit operator cancel (distinct from IGNORED, the system's own
+        "not pursuing this" verdict). Legal from any non-terminal state; a
+        no-op if the job is already CANCELLED. Never deletes the row."""
+        job = self.get(job_key)
+        if job is None:
+            raise KeyError(f"no such job: {job_key}")
+        if job.state == sm.CANCELLED:
+            return job
+        sm.assert_transition(job.state, sm.CANCELLED)
+        now = _iso(_utcnow())
+        self.con.execute(
+            """UPDATE jobs SET state = ?, last_error_code = ?,
+                   last_error_message = ?, updated_at = ? WHERE job_key = ?""",
+            (sm.CANCELLED, "cancelled", reason or "cancelled by operator",
+             now, job_key),
+        )
+        self.con.commit()
+        return self.get(job_key)  # type: ignore[return-value]
+
+    def retry_job(self, job_key: str, *, force: bool = False,
+                  now: dt.datetime | None = None) -> models.Job:
+        """The "Retry failed job" operator action.
+
+        - RETRY_SCHEDULED: expedites the existing backoff timer to now, so
+          claim_next picks it up immediately instead of waiting.
+        - FAILED: advances it into RETRY_SCHEDULED (a legal edge already) with
+          next_retry_at = now.
+        - FAILED_PERMANENT: refuses by default (it is a deliberate dead
+          letter — "still visible, still actionable", not silently revived).
+          `force=True` is the one explicit operator override: it does NOT
+          bypass the graph silently — it re-enters through RETRY_SCHEDULED
+          (a state every kind already knows how to resume from) and keeps
+          the full attempt history untouched. Any other state raises, since
+          "retry" only makes sense for a job that has actually failed.
+        """
+        job = self.get(job_key)
+        if job is None:
+            raise KeyError(f"no such job: {job_key}")
+        now = now or _utcnow()
+        now_iso = _iso(now)
+        if job.state == sm.RETRY_SCHEDULED:
+            self.con.execute(
+                "UPDATE jobs SET next_retry_at = ?, updated_at = ? WHERE job_key = ?",
+                (now_iso, now_iso, job_key),
+            )
+            self.con.commit()
+            return self.get(job_key)  # type: ignore[return-value]
+        if job.state == sm.FAILED:
+            sm.assert_transition(job.state, sm.RETRY_SCHEDULED)
+            self.con.execute(
+                """UPDATE jobs SET state = ?, next_retry_at = ?, updated_at = ?
+                       WHERE job_key = ?""",
+                (sm.RETRY_SCHEDULED, now_iso, now_iso, job_key),
+            )
+            self.con.commit()
+            return self.get(job_key)  # type: ignore[return-value]
+        if job.state == sm.FAILED_PERMANENT:
+            if not force:
+                raise ValueError(
+                    f"{job_key} is FAILED_PERMANENT (dead-lettered after "
+                    f"{job.attempts} attempt(s): {job.last_error_message}). "
+                    "Pass force=True to explicitly re-open it.")
+            self.con.execute(
+                """UPDATE jobs SET state = ?, next_retry_at = ?, updated_at = ?
+                       WHERE job_key = ?""",
+                (sm.RETRY_SCHEDULED, now_iso, now_iso, job_key),
+            )
+            self.con.commit()
+            return self.get(job_key)  # type: ignore[return-value]
+        raise ValueError(
+            f"{job_key} is {job.state}, not a failed/retryable state")

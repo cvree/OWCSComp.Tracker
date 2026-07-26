@@ -1,5 +1,58 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
+## CURRENT STATUS (authoritative — 2026-07-26) — Closed-loop beta: worker, segmentation, detection wiring, publication (Phases E/F/G/I)
+
+Everything below this section down to the next `## CURRENT STATUS` marker is
+historical context; when it conflicts with this section, this section wins.
+Full detail in `docs/AUTOMATION.md`'s "Beta Sprint — Phases E/F/G/I" section.
+
+Built the remaining pieces the prior Phase A-D3 passes explicitly deferred:
+the self-hosted worker (download + metadata capture, reusing `video_ingest.py`/
+`download_vod_clip.py` unchanged), assisted map segmentation (candidate
+generation reusing `capture.py`'s existing HUD-anchor classifier, full
+review-action CRUD, ffmpeg extraction), wiring an approved segment into the
+existing `ingest_map.py` detector/swap system (unchanged — this pass only
+drives it automatically), and human-gated publication (`process-approved-job
+--publish`: promote, regenerate + validate the export, packaging/secret/
+media checks, a scoped commit + push — PR/CI/merge/Pages stay the existing
+flow). One job now travels the whole loop: `ARCHIVED` ("ready") ->
+`DOWNLOADING` -> `DOWNLOADED` -> `SEGMENTING` -> `NEEDS_REVIEW` ->
+`READY_FOR_DETECTION` -> `PROCESSING` -> `NEEDS_REVIEW` -> `APPROVED` ->
+`PUBLISHED`, plus a new explicit `CANCELLED` terminal state. New CLI:
+`create-job`, `list-jobs`, `show-job`, `claim-job`, `release-job`,
+`retry-job [--force]`, `cancel-job`, `reset-stale-lock`, `resume-job`,
+`run-job`, `job-coverage [--save]`, `worker-run`, `segment-list`,
+`segment-approve`, `segment-reject`, `detect-job [--write]`,
+`process-approved-job [--publish]`. New read-only ops dashboard:
+`beta-ops.html` (fed by `assets/data/job_coverage.v1.json`). 94 new offline
+checks across 5 new test suites + extensions to 5 existing ones — see
+`docs/AUTOMATION.md` for the full list.
+
+### Honest gap — no real match was processed end-to-end this pass
+
+This session's sandboxed environment has an egress policy that explicitly
+denies `www.youtube.com` (confirmed via the proxy's own diagnostics — a
+policy `403`, not a flaky network) and ships no `ffmpeg`/`yt-dlp`/`opencv`
+by default (installed for this session only, to run the tests). Every piece
+above is built and offline-tested — `worker-run` was smoke-tested live
+through the real CLI with a real `yt-dlp`/`ffmpeg`, hit the real network
+boundary, and failed safely with a classified error — but **no real VOD was
+downloaded and no real match went through the loop**. That needs the
+self-hosted Windows worker machine this repo's docs already point at for
+every prior real-VOD ingestion. Next session, on that machine:
+
+```
+python pipeline/automation/cli.py create-job --match <id> --video-id <id> \
+    --source-url <official-vod-url> --channel-id UCiAInBL9kUzz1XRxk66v-gw \
+    --team-a <id> --team-b <id> --layout-id <layout-id>
+python pipeline/automation/cli.py worker-run --worker-id <name> --max-jobs 1
+# repeat worker-run / run-job as the job advances through SEGMENTING,
+# review with segment-list / segment-approve, detect-job, detect-job --write,
+# then: python pipeline/automation/cli.py process-approved-job --job <id> --publish
+```
+
+---
+
 ## CURRENT STATUS (authoritative — 2026-07-26) — Phase D3: official hero presentation assets
 
 Everything below this section down to the next `## CURRENT STATUS` marker is
