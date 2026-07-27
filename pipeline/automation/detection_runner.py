@@ -48,7 +48,7 @@ LAYOUTS_DIR = os.path.join(content_db.REPO_ROOT, "layouts")
 def layout_path(layout_id: str) -> str:
     """Accepts either a bare layout id ('owcs_jksix_qwc') or an already-
     qualified path/filename — never guesses a DIFFERENT layout than named."""
-    if os.path.isabs(layout_id) or os.path.sep in layout_id:
+    if os.path.isabs(layout_id) or "/" in layout_id or "\\" in layout_id:
         return layout_id
     name = layout_id if layout_id.endswith(".json") else f"{layout_id}.json"
     return os.path.join(LAYOUTS_DIR, name)

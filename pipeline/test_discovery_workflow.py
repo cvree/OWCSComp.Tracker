@@ -20,6 +20,7 @@ Run: python3 pipeline/test_discovery_workflow.py
 """
 from __future__ import annotations
 import os
+import shlex
 import subprocess
 import sys
 import tempfile
@@ -28,6 +29,20 @@ import unittest
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.dirname(HERE)
 WORKFLOW_PATH = os.path.join(REPO_ROOT, ".github", "workflows", "discovery.yml")
+
+
+def _sh(path: str) -> str:
+    """Make a path safe to interpolate into a `bash -c` string.
+
+    On Windows, os.path.join gives backslash separators; bash's word
+    parser treats an unquoted backslash as an escape character and
+    silently drops it, mangling the path (e.g. `C:\\Users\\x` becomes
+    `C:Usersx`). Forward slashes are accepted by both native bash and
+    Windows' own APIs, so they're safe on every platform this suite runs.
+    shlex.quote then guards against spaces in the path (this repo's own
+    checkout dir has one) breaking bash's word-splitting."""
+    return shlex.quote(path.replace(os.sep, "/"))
+
 
 REPORT_MODES = [
     "verify-channels", "calendar-dryrun", "broadcast-dryrun", "coverage",
@@ -144,7 +159,7 @@ class TestPipefailMechanism(unittest.TestCase):
             out = os.path.join(d, "run-output.txt")
             res = subprocess.run(
                 ["bash", "-c", f"python3 -c 'import sys; print(\"partial\"); "
-                              f"sys.exit(1)' | tee {out}"],
+                              f"sys.exit(1)' | tee {_sh(out)}"],
                 capture_output=True, text=True)
             self.assertEqual(res.returncode, 0,
                             "this is the bug: tee's exit code hides the "
@@ -158,7 +173,7 @@ class TestPipefailMechanism(unittest.TestCase):
             out = os.path.join(d, "run-output.txt")
             res = subprocess.run(
                 ["bash", "-c", f"set -euo pipefail; python3 -c 'import sys; "
-                              f"print(\"partial\"); sys.exit(1)' 2>&1 | tee {out}"],
+                              f"print(\"partial\"); sys.exit(1)' 2>&1 | tee {_sh(out)}"],
                 capture_output=True, text=True)
             self.assertNotEqual(res.returncode, 0,
                                "pipefail must surface the real python failure")
@@ -170,7 +185,7 @@ class TestPipefailMechanism(unittest.TestCase):
                 ["bash", "-c",
                  f"set -euo pipefail; "
                  f"(python3 -c 'import sys; print(\"to stderr\", file=sys.stderr)'; true) "
-                 f"2>&1 | tee {out}"],
+                 f"2>&1 | tee {_sh(out)}"],
                 capture_output=True, text=True)
             with open(out) as f:
                 content = f.read()
@@ -180,7 +195,7 @@ class TestPipefailMechanism(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             out = os.path.join(d, "run-output.txt")
             open(out, "w").close()  # empty file
-            res = subprocess.run(["bash", "-c", f"test -s {out}"])
+            res = subprocess.run(["bash", "-c", f"test -s {_sh(out)}"])
             self.assertNotEqual(res.returncode, 0)
 
     def test_nonempty_report_passes_validation(self):
@@ -188,7 +203,7 @@ class TestPipefailMechanism(unittest.TestCase):
             out = os.path.join(d, "run-output.txt")
             with open(out, "w") as f:
                 f.write("some real discovery output\n")
-            res = subprocess.run(["bash", "-c", f"test -s {out}"])
+            res = subprocess.run(["bash", "-c", f"test -s {_sh(out)}"])
             self.assertEqual(res.returncode, 0)
 
     def test_a_real_successful_dry_run_produces_a_nonempty_report(self):
@@ -197,10 +212,11 @@ class TestPipefailMechanism(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             db_path = os.path.join(d, "automation.sqlite")
             out = os.path.join(d, "run-output.txt")
+            cli_path = os.path.join(HERE, "automation", "cli.py")
             script = (f"set -euo pipefail; "
-                     f"python3 {os.path.join(HERE, 'automation', 'cli.py')} "
-                     f"--db {db_path} coverage --window 1 2>&1 | tee {out}; "
-                     f"test -s {out}")
+                     f"python3 {_sh(cli_path)} "
+                     f"--db {_sh(db_path)} coverage --window 1 2>&1 | tee {_sh(out)}; "
+                     f"test -s {_sh(out)}")
             res = subprocess.run(["bash", "-c", script], cwd=REPO_ROOT,
                                 capture_output=True, text=True)
             self.assertEqual(res.returncode, 0, res.stderr)
