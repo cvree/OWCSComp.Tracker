@@ -85,6 +85,13 @@ class JobStore:
             "extracted_hash": "TEXT",
             "extracted_width": "INTEGER",
             "extracted_height": "INTEGER",
+            # Phase 3/4: reviewer-facing evidence and automatic identity
+            # proposals, kept beside the human's confirmed values so an
+            # operator can always see what the machine proposed vs what was
+            # accepted (`proposals` is never read as truth by publication).
+            "thumbnails": "TEXT",
+            "proposals": "TEXT",
+            "identity_status": "TEXT",
         }
         for name, decl in additions.items():
             if name not in existing:

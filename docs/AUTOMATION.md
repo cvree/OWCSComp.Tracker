@@ -12,6 +12,93 @@ Everything here is **stdlib-only** (sqlite3 + a tiny dependency-free YAML
 parser), so it runs in exactly the offline environment CI and the site build
 already use — no new dependencies, no secrets.
 
+## Real-host validation — the exact Windows commands (2026-07-27)
+
+Everything in the URL-only pipeline is implemented and offline-tested, but a
+sandbox that denies `www.youtube.com` cannot prove a real download. Run these
+on the Windows worker, in order. Each one stops on its own gate rather than
+guessing, so it is safe to run them one at a time and read the output.
+
+```powershell
+# 0. One-time: confirm the machine can do the work at all.
+python pipeline\automation\cli.py worker-doctor
+#    Needs: python, opencv-python-headless, numpy, ffmpeg, ffprobe, yt-dlp,
+#    free disk, a writable worker cache + reports dir. Fix anything MISSING
+#    before continuing — every later step depends on it.
+
+# 1. Paste the broadcast link. This is the whole intake.
+$env:YOUTUBE_API_KEY = "<your key>"   # needed to read the source's channel
+python pipeline\automation\cli.py ingest-link --url "<youtube-url>" --requested-by "<your name>"
+#    -> prints the video id, canonical URL, deterministic job key, job state,
+#       whether the source was auto-approved (verified official channel) or
+#       needs you, any broadcast-likeness warning, and the next command.
+#    Re-run it with the same link (any spelling) to prove idempotency: it must
+#    say "duplicate link - attached to the existing job", never create a second.
+
+# 2. Only if the source was NOT auto-approved (not a registry channel, or
+#    metadata was unavailable). This is audited: your name is recorded.
+python pipeline\automation\cli.py approve-source --job <job-key> --approved-by "<your name>" --confirm
+
+# 3. Download the whole VOD once + build the 360p scan proxy.
+#    Refuses BEFORE downloading if the estimated footprint will not fit.
+python pipeline\automation\cli.py worker-run --max-jobs 1
+#    A killed download RESUMES: interrupt this with Ctrl-C mid-download, then
+#    re-run it and confirm the log says "RESUMING partial download".
+
+# 4. Resolve the broadcast layout from evidence.
+python pipeline\automation\cli.py resolve-layout --job <job-key>
+#    Either reuses a committed layout (prints per-candidate scores) or
+#    calibrates a NEW one and stops for approval. If it calibrated one, review
+#    reports\layout\<video-id>\calibration\sheet.png, then:
+python pipeline\automation\cli.py approve-layout --job <job-key> --approved-by "<your name>" --confirm
+
+# 5. Propose every gameplay/map window (reads the proxy) and review it.
+python pipeline\automation\cli.py worker-run --max-jobs 1
+python pipeline\automation\cli.py segment-list --video-id <video-id>
+
+# 6. Check hero-template coverage for this broadcast package BEFORE detecting.
+#    Uncovered heroes will read UNKNOWN — this tells you the real ceiling.
+python pipeline\template_bootstrap.py --layout layouts\<layout-id>.json
+
+# 7. Propose map / mode / teams / sides / order / players, with evidence.
+python pipeline\automation\cli.py propose-identity --job <job-key>
+
+# 8. Render the operator review panel, then open intake.html in a browser.
+python pipeline\automation\cli.py intake-export --save
+
+# 9. Approve each real map segment. Either accept the proposal wholesale:
+python pipeline\automation\cli.py accept-proposed --segment <segment-id>
+#    ...or correct it by hand, or fix the window first:
+python pipeline\automation\cli.py segment-split <segment-id> --at <seconds>
+python pipeline\automation\cli.py segment-merge <segment-id> <other-id>
+python pipeline\automation\cli.py segment-reject <segment-id> --reason "desk segment"
+
+# 10. Detect compositions + swaps. DRY RUN FIRST — writes nothing.
+python pipeline\automation\cli.py detect-job <job-key>
+#     Read reports\ingest\<ingest-id>\report.html and review.html, then commit:
+python pipeline\automation\cli.py detect-job <job-key> --write
+
+# 11. Promote, export, validate, publish. Dry run first (zero git writes).
+python pipeline\automation\cli.py process-approved-job --job <job-key>
+python pipeline\automation\cli.py process-approved-job --job <job-key> --publish
+#     Then the existing flow, unchanged: open the PR, wait for CI, merge,
+#     confirm the Pages deploy and the live match page.
+
+# 12. Repeat steps 1-11 with a SECOND broadcast to prove layout reuse: step 4
+#     should now REUSE the layout automatically instead of calibrating.
+```
+
+**What to capture as evidence for each step:** the command's stdout, the job
+payload (`show-job <job-key>`), and the generated paths it names —
+`reports\layout\<video-id>\`, `reports\identity\<video-id>\`,
+`reports\ingest\<ingest-id>\report.html` + `review.html` + `evidence\`,
+`assets\data\intake.v1.json`, `assets\data\public_data.v1.js`.
+
+**If a step refuses, that is the system working.** Every refusal names its
+reason and the recorded blocking condition; `link-status --job <job-key>`
+always prints the current stage, every blocker, and the exact next command.
+
+
 ## What's implemented
 
 | Roadmap item | Where | Status |

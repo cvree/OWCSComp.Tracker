@@ -24,7 +24,8 @@
   "notes, enabled, sampleIntervalSeconds, layout. These are ingestion-only",
   "until a later step pairs their frames to a FACEIT match/map.",
   "",
-  "This file is committed so GitHub Actions can run without secrets."
+  "This file is committed so GitHub Actions can run without secrets.",
+  "PLACEHOLDER ENTRIES ARE NOT ALLOWED HERE. A 'REPLACE_WITH_...' row used to sit in this list; it could never resolve to a real match or VOD, it made every dry-run report a phantom skipped source, and it invited someone to fill in half of it. Add a source only once its match exists in the DB and its layout is calibrated. Enforced by pipeline/test_release_reproducibility.py."
  ],
  "sources": [
   {
@@ -35,16 +36,6 @@
    "streamOffsetSeconds": 0,
    "mode": "demo",
    "notes": "Self-contained offline demo. Synthetic frames + fixture templates; proves ingest->filter->detect->snapshots without any network or real VOD."
-  },
-  {
-   "match": "REPLACE_WITH_INTERNAL_MATCH_ID",
-   "faceitMatchId": "REPLACE_WITH_FACEIT_MATCH_ID",
-   "layout": "layouts/owcs-demo.json",
-   "vodUrl": "https://www.youtube.com/watch?v=REPLACE_ME",
-   "sampleIntervalSeconds": 60,
-   "streamOffsetSeconds": null,
-   "mode": "production",
-   "notes": "Placeholder production entry. Ingest FACEIT facts for this match first, calibrate a layout + hero templates, then set vodUrl. Skipped until the match exists in the DB and templates are built."
   },
   {
    "id": "owcs-afcxdimpsle",

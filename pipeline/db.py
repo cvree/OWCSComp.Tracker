@@ -127,7 +127,73 @@ def migrate_schema(con: sqlite3.Connection) -> None:
         "calibration_health": "TEXT",
         "calibration_status": "TEXT DEFAULT 'ok'",
     })
+    _widen_ingest_findings(con)
     con.commit()
+
+
+# Kinds/statuses schema.sql's CHECK constraints must allow. Kept here as the
+# single list the migration below compares against, so adding one is a
+# two-line change in two places that cannot drift apart silently (the
+# assertion in pipeline/test_ingest_findings_migration.py enforces it).
+FINDING_KINDS = ("team_identity", "ban_candidate", "event_metadata",
+                 "calibration_health", "segment_identity", "map_identity",
+                 "player_identity", "score_candidate", "winner_candidate",
+                 "series_candidate")
+FINDING_STATUSES = ("candidate", "confirmed", "rejected", "unknown", "proposed")
+
+
+def _widen_ingest_findings(con: sqlite3.Connection) -> None:
+    """Rebuild `ingest_findings` when its CHECK constraints predate the Phase
+    4/6 finding kinds.
+
+    SQLite cannot ALTER a CHECK constraint, so an existing database has to be
+    migrated by rebuild: create the new table, copy every row across, swap.
+    Done inside one transaction and only when needed, so it is safe to run on
+    every connect (which `init_schema` does) and is a no-op on a fresh DB
+    created straight from schema.sql.
+
+    No row is dropped or rewritten — this widens what is ALLOWED, it never
+    reinterprets existing data.
+    """
+    row = con.execute(
+        "SELECT sql FROM sqlite_master WHERE type='table' AND name='ingest_findings'"
+    ).fetchone()
+    if row is None:
+        return                                  # table not created yet
+    ddl = row["sql"] if isinstance(row, sqlite3.Row) else row[0]
+    if all(k in ddl for k in ("segment_identity", "score_candidate")) \
+            and "'unknown'" in ddl:
+        return                                  # already migrated
+    cols = [r["name"] for r in con.execute("PRAGMA table_info(ingest_findings)")]
+    kinds = ",".join(f"'{k}'" for k in FINDING_KINDS)
+    statuses = ",".join(f"'{s}'" for s in FINDING_STATUSES)
+    con.executescript(f"""
+        PRAGMA foreign_keys = OFF;
+        BEGIN;
+        CREATE TABLE ingest_findings__new (
+          id          INTEGER PRIMARY KEY AUTOINCREMENT,
+          ingest_id   TEXT NOT NULL REFERENCES ingest_runs(id) ON DELETE CASCADE,
+          kind        TEXT NOT NULL CHECK (kind IN ({kinds})),
+          field       TEXT,
+          raw_text    TEXT,
+          value       TEXT,
+          confidence  REAL,
+          method      TEXT,
+          evidence_path TEXT,
+          status      TEXT NOT NULL DEFAULT 'candidate'
+                      CHECK (status IN ({statuses})),
+          notes       TEXT,
+          created_at  TEXT DEFAULT CURRENT_TIMESTAMP
+        );
+        INSERT INTO ingest_findings__new ({','.join(cols)})
+          SELECT {','.join(cols)} FROM ingest_findings;
+        DROP TABLE ingest_findings;
+        ALTER TABLE ingest_findings__new RENAME TO ingest_findings;
+        CREATE INDEX IF NOT EXISTS idx_findings_ingest
+          ON ingest_findings(ingest_id);
+        COMMIT;
+        PRAGMA foreign_keys = ON;
+    """)
 
 
 def init_schema(con: sqlite3.Connection) -> None:
