@@ -27,6 +27,15 @@ os.environ["OWCS_DB"] = os.path.join(ROOT, "work", "test_trial", "test.sqlite")
 import video_ingest as vi  # noqa: E402
 import run_capture_trial as rct  # noqa: E402
 
+# ISOLATION: run_capture_trial writes its report to reports/capture_trial/,
+# which is COMMITTED fixture evidence that public_fixture.v1.js links to and
+# check_packaging.py verifies. Running this test used to overwrite it with a
+# fresh timestamp, so simply running the suite left the repo dirty and a
+# release archive shipped test output as evidence. Redirect the trial's output
+# under work/ (gitignored) for the duration of this test instead.
+rct.TRIAL_DIR = os.path.join(ROOT, "work", "test_trial", "capture_trial")
+os.makedirs(rct.TRIAL_DIR, exist_ok=True)
+
 SOURCES = os.path.join(ROOT, "data", "sources", "video_sources.json")
 META = os.path.join(HERE, "fixtures", "video", "vod_meta_sample.json")
 FIXFRAME = os.path.join(HERE, "fixtures", "video", "demo_match", "frames",

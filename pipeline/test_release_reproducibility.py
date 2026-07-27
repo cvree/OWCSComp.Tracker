@@ -461,6 +461,93 @@ class TestNoPlaceholderSources(unittest.TestCase):
                                 f"{ch.get('id')} enabled with no channelId")
 
 
+@unittest.skipUnless(HAVE_GIT, "needs git")
+class TestTheSuiteLeavesTheTreeClean(unittest.TestCase):
+    """Running the tests must not modify a single COMMITTED file.
+
+    This is not pedantry. Two suites used to rewrite committed production
+    assets — `test_pipeline_synthetic.py` replaced every `templates/*.png`
+    with synthetic icons and overwrote `layouts/owcs-demo.json`, and
+    `test_capture_trial.py` regenerated the committed
+    `reports/capture_trial/` fixture evidence. The consequences were real:
+    the packaging gate and the hero-template coverage report measured test
+    noise instead of the real broadcast package, a release archive shipped
+    test output as evidence, and every test run produced a diff an operator
+    had to decide whether to commit.
+    """
+
+    PROTECTED = ("templates", "layouts", "reports", "assets/data",
+                 "config", "data/sources", "data/owcs.sqlite")
+
+    def _dirty(self) -> list[str]:
+        res = subprocess.run(["git", "status", "--porcelain", "--"]
+                             + list(self.PROTECTED),
+                             cwd=REPO, capture_output=True, text=True)
+        return [ln for ln in (res.stdout or "").splitlines() if ln.strip()]
+
+    def test_the_working_tree_is_clean_before_and_after_a_test_run(self):
+        before = self._dirty()
+        if before:
+            self.skipTest(f"tree already dirty before this check: {before} "
+                          f"— commit or revert, then re-run")
+        # Run the two suites that historically wrote into committed paths.
+        for name in ("test_pipeline_synthetic.py", "test_capture_trial.py"):
+            script = os.path.join(HERE, name)
+            if not os.path.exists(script):
+                continue
+            res = subprocess.run([sys.executable, script], cwd=REPO,
+                                 capture_output=True, text=True)
+            self.assertEqual(res.returncode, 0,
+                             f"{name} failed:\n{(res.stdout + res.stderr)[-2000:]}")
+        after = self._dirty()
+        self.assertEqual(after, [],
+                         f"running the test suite modified committed file(s): "
+                         f"{after}")
+
+    # A call that WRITES, and the committed asset dirs it must never write to.
+    # Reads are fine and common — several suites legitimately load the shipped
+    # layouts as regression fixtures — so this looks for a write call whose
+    # own argument list names a committed directory.
+    WRITERS = ("cv2.imwrite", "shutil.rmtree", "os.remove", "os.unlink",
+               "shutil.move")
+    COMMITTED_DIRS = ('"templates"', '"layouts"', '"reports"')
+
+    def test_no_test_writes_into_a_committed_asset_directory(self):
+        """A static guard, so the next test added can't reintroduce this.
+
+        Deliberately narrow: it flags a WRITE whose argument list builds a
+        path into templates/, layouts/ or reports/, not the many legitimate
+        reads of those same shipped assets.
+        """
+        offenders = []
+        for name in sorted(os.listdir(HERE)):
+            if not (name.startswith("test_") and name.endswith(".py")):
+                continue
+            if name == os.path.basename(__file__):
+                continue
+            with open(os.path.join(HERE, name), encoding="utf-8") as f:
+                text = f.read()
+            for writer in self.WRITERS:
+                for m in re.finditer(re.escape(writer) + r"\(", text):
+                    # The call's own arguments: up to the first blank line or
+                    # 240 chars, whichever comes first.
+                    args = text[m.end():m.end() + 240].split("\n\n")[0]
+                    args = args.split(")\n")[0]
+                    if not any(d in args for d in self.COMMITTED_DIRS):
+                        continue
+                    # A path under work/ that merely mentions "templates" as a
+                    # leaf name is fine — the isolated-dir pattern.
+                    if '"work"' in args or "TEST_DIR" in args \
+                            or "TEMPLATES_DIR" in args or "tmp" in args.lower():
+                        continue
+                    line = text[:m.start()].count("\n") + 1
+                    offenders.append(f"{name}:{line} {writer}(… {args[:70]}…")
+        self.assertEqual(
+            offenders, [],
+            "a test WRITES into a COMMITTED asset directory; write under "
+            "work/ (gitignored) instead: " + " | ".join(offenders))
+
+
 class TestGitignoreProtections(unittest.TestCase):
     def test_gitignore_covers_media_runtime_state_and_secrets(self):
         with open(os.path.join(REPO, ".gitignore"), encoding="utf-8") as f:
