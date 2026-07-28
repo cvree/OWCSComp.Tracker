@@ -37,7 +37,15 @@ import map_sync  # noqa: E402
 import init_db  # noqa: E402
 
 TEST_DIR = os.path.join(ROOT, "work", "test")
-LAYOUT_PATH = os.path.join(ROOT, "layouts", "owcs-demo.json")
+# ISOLATION: this suite's synthetic layout + hero templates live entirely
+# under work/ (gitignored), never in the repo's committed layouts/ or
+# templates/. It used to overwrite layouts/owcs-demo.json and every
+# templates/*.png with synthetic icons, so simply RUNNING the test suite
+# dirtied committed production assets — the packaging gate, the hero-template
+# coverage report and any release archive then measured test noise instead of
+# the real broadcast package. Nothing here writes outside work/ any more.
+LAYOUT_PATH = os.path.join(TEST_DIR, "owcs-demo-synthetic.json")
+TEMPLATES_DIR = os.path.join(TEST_DIR, "templates")
 
 W, H = 1280, 720
 SLOT_W, SLOT_H = 64, 64
@@ -108,12 +116,18 @@ def check(name, cond):
         sys.exit(1)
 
 
+def _rel(path: str) -> str:
+    """Repo-relative, forward-slashed — the form capture._load_template
+    resolves (it joins a relative template path onto REPO_ROOT)."""
+    return os.path.relpath(path, ROOT).replace("\\", "/")
+
+
 def main() -> None:
     shutil.rmtree(TEST_DIR, ignore_errors=True)
     os.makedirs(TEST_DIR, exist_ok=True)
 
-    # ---- layout + reference templates -------------------------------
-    os.makedirs(os.path.join(ROOT, "layouts"), exist_ok=True)
+    # ---- layout + reference templates (all under work/, never the repo) ---
+    os.makedirs(TEMPLATES_DIR, exist_ok=True)
     anchor_tpl = make_frame([], [], gameplay=True)[
         ANCHOR_RECT[1]+6:ANCHOR_RECT[1]+ANCHOR_RECT[3]-6,
         ANCHOR_RECT[0]+6:ANCHOR_RECT[0]+ANCHOR_RECT[2]-6]
@@ -121,30 +135,32 @@ def main() -> None:
     replay_tpl = replay_frame[
         REPLAY_RECT[1]+6:REPLAY_RECT[1]+REPLAY_RECT[3]-6,
         REPLAY_RECT[0]+6:REPLAY_RECT[0]+REPLAY_RECT[2]-6]
-    cv2.imwrite(os.path.join(ROOT, "layouts", "demo-anchor.png"),
-                cv2.cvtColor(anchor_tpl, cv2.COLOR_BGR2GRAY))
-    cv2.imwrite(os.path.join(ROOT, "layouts", "demo-replay.png"),
-                cv2.cvtColor(replay_tpl, cv2.COLOR_BGR2GRAY))
+    anchor_path = os.path.join(TEST_DIR, "demo-anchor.png")
+    replay_path = os.path.join(TEST_DIR, "demo-replay.png")
+    cv2.imwrite(anchor_path, cv2.cvtColor(anchor_tpl, cv2.COLOR_BGR2GRAY))
+    cv2.imwrite(replay_path, cv2.cvtColor(replay_tpl, cv2.COLOR_BGR2GRAY))
     layout = {
         "frame_width": W, "frame_height": H,
         "sample_interval_seconds": 300,
-        "anchor": {"rect": ANCHOR_RECT, "template": "layouts/demo-anchor.png",
-                   "min_score": 0.7},
-        "replay": {"rect": REPLAY_RECT, "template": "layouts/demo-replay.png",
-                   "min_score": 0.7},
+        # capture._load_template resolves a relative template against
+        # REPO_ROOT, so these stay repo-relative — and point into work/,
+        # which is gitignored.
+        "anchor": {"rect": ANCHOR_RECT,
+                   "template": _rel(anchor_path), "min_score": 0.7},
+        "replay": {"rect": REPLAY_RECT,
+                   "template": _rel(replay_path), "min_score": 0.7},
         "slots_a": SLOTS_A, "slots_b": SLOTS_B,
         "match_threshold": 0.6,
+        "templates_dir": os.path.relpath(TEMPLATES_DIR, ROOT).replace("\\", "/"),
     }
     with open(LAYOUT_PATH, "w") as f:
         json.dump(layout, f, indent=1)
 
-    # hero templates (as if cropped from broadcast frames).
-    # ONLY the root-level synthetic set is replaced — per-source template
-    # directories (templates/owcs_*/) are real calibration assets and
-    # must survive test runs (a wholesale rmtree here is what silently
-    # deleted templates/owcs_8c105lnzlam from earlier release zips).
-    tdir = os.path.join(ROOT, "templates")
-    os.makedirs(tdir, exist_ok=True)
+    # Synthetic hero templates (as if cropped from broadcast frames), written
+    # to this suite's OWN directory under work/. The repo's committed
+    # templates/ — both the shared set and every per-source package — is
+    # never touched.
+    tdir = TEMPLATES_DIR
     for fn in os.listdir(tdir):
         p = os.path.join(tdir, fn)
         if os.path.isfile(p) and fn.endswith(".png"):
@@ -200,7 +216,7 @@ def main() -> None:
     cv2.imwrite(os.path.join(frames_dir, "000900.png"),
                 make_frame([], [], gameplay=True))
 
-    lib = detect.load_templates()
+    lib = detect.load_templates(TEMPLATES_DIR)
     detect.process_match(con, "t01", frames_dir, lay, lib)
 
     snaps = con.execute("SELECT COUNT(*) c FROM comp_snapshots "

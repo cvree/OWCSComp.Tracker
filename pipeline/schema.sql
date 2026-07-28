@@ -253,7 +253,12 @@ CREATE TABLE IF NOT EXISTS ingest_findings (
   ingest_id   TEXT NOT NULL REFERENCES ingest_runs(id) ON DELETE CASCADE,
   kind        TEXT NOT NULL CHECK (kind IN
               ('team_identity','ban_candidate','event_metadata',
-               'calibration_health')),
+               'calibration_health',
+               -- Phase 4 segment-identity proposals and Phase 6 match facts.
+               -- Every inferred field lands here with its source, confidence
+               -- and evidence before any human accepts it.
+               'segment_identity','map_identity','player_identity',
+               'score_candidate','winner_candidate','series_candidate')),
   field       TEXT,                       -- e.g. 'a' / 'b' side, or 'event_name'
   raw_text    TEXT,                       -- what OCR actually read
   value       TEXT,                       -- resolved value (team_id, hero_id, ...)
@@ -261,7 +266,12 @@ CREATE TABLE IF NOT EXISTS ingest_findings (
   method      TEXT,                       -- exact | fuzzy | ambiguous | ...
   evidence_path TEXT,
   status      TEXT NOT NULL DEFAULT 'candidate'
-              CHECK (status IN ('candidate','confirmed','rejected')),
+              -- 'unknown' is a real, first-class outcome: a signal the
+              -- pipeline looked for and honestly could not read. It is NOT
+              -- the same as an absent row (never looked) or a 'candidate'
+              -- (read, awaiting a human).
+              CHECK (status IN ('candidate','confirmed','rejected','unknown',
+                                'proposed')),
   notes       TEXT,
   created_at  TEXT DEFAULT CURRENT_TIMESTAMP
 );

@@ -135,9 +135,24 @@ class TestRunOneJob(OpsTestBase):
         job = self.create()
         self.store.transition(job.job_key, sm.DOWNLOADING)
         self.store.transition(job.job_key, sm.DOWNLOADED)
+        # A real 360p scan proxy must exist ON DISK: scanning reads the proxy
+        # and NEVER falls back to the full-resolution source (Phase 2), so a
+        # missing proxy is a refusal, not a silent downgrade. Create one under
+        # the repo-relative path the payload advertises.
+        proxy_rel = "data/worker/jobs/x/media/vid1.proxy360p.mp4"
+        proxy_abs = os.path.join(os.path.dirname(HERE), proxy_rel)
+        os.makedirs(os.path.dirname(proxy_abs), exist_ok=True)
+        with open(proxy_abs, "wb") as f:
+            f.write(b"\x00" * 8192)
+        self.addCleanup(lambda: os.path.exists(proxy_abs)
+                        and os.remove(proxy_abs))
         self.store.update_payload(job.job_key, {
             "media": {"localPath": "data/worker/jobs/x/media/clip.mp4",
-                      "videoId": "vid1"},
+                      "videoId": "vid1",
+                      "proxy": {"localPath": proxy_rel, "height": 360}},
+            # A layout is normally resolved automatically (Phase 3); this test
+            # is about segmentation, so it pins one and asserts segmentation.
+            "expectedLayoutId": "owcs_jksix_qwc",
         })
         # ops.py imports `capture`/`segmentation` LAZILY inside run_one_job
         # (never at module level — see the cv2-import-isolation fix), so
@@ -156,6 +171,22 @@ class TestRunOneJob(OpsTestBase):
         self.assertEqual(result["candidates"], 1)
         self.assertEqual(self.store.get(job.job_key).state, sm.NEEDS_REVIEW)
         self.assertEqual(len(seg.list_segments(self.con, video_id="vid1")), 1)
+
+    def test_downloaded_state_without_a_scan_proxy_refuses(self):
+        """Scanning must never quietly fall back to the full-resolution VOD:
+        a missing proxy is a visible, recoverable refusal."""
+        job = self.create()
+        self.store.transition(job.job_key, sm.DOWNLOADING)
+        self.store.transition(job.job_key, sm.DOWNLOADED)
+        self.store.update_payload(job.job_key, {
+            "media": {"localPath": "data/worker/jobs/x/media/clip.mp4",
+                      "videoId": "vid1"},
+            "expectedLayoutId": "owcs_jksix_qwc",
+        })
+        result = ops.run_one_job(self.store, self.locks, self.con,
+                                 job.job_key, worker_id="w1")
+        self.assertFalse(result["ok"])
+        self.assertIn("scan proxy", result["reason"])
 
     def test_downloaded_state_without_media_refuses(self):
         job = self.create()

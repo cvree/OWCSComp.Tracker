@@ -23,7 +23,7 @@ on:
         default: ""
 
 concurrency:
-  group: owcs-update-data
+  group: owcs-generated-data
   cancel-in-progress: false
 
 permissions:

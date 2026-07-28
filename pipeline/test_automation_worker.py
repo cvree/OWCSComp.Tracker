@@ -34,14 +34,28 @@ def _fake_probe(title="Test Match VOD", duration=120):
     return _probe
 
 
-def _fake_download_clip_ok(size_bytes=65536):
-    def _dl(url, start, end, out, height=1080, **kw):
+def _fake_download_full_ok(size_bytes=65536):
+    """Stands in for video_ingest.download_full_video: writes one whole
+    source file and reports the resumable-download result shape."""
+    def _dl(url, out, height=720, **kw):
         os.makedirs(os.path.dirname(out), exist_ok=True)
         with open(out, "wb") as f:
             f.write(b"\x00" * size_bytes)
-        return {"path": out, "reused": False, "sizeBytes": size_bytes,
-                "attempts": [], "resolution": None}
+        return {"path": out, "reused": False, "resumed": False,
+                "sizeBytes": size_bytes, "format": f"bestvideo[height<={height}]",
+                "partialBytesBefore": 0}
     return _dl
+
+
+def _fake_proxy_ok(height=360):
+    """Stands in for video_ingest.make_scan_proxy."""
+    def _proxy(src, out, height=height, **kw):
+        os.makedirs(os.path.dirname(out), exist_ok=True)
+        with open(out, "wb") as f:
+            f.write(b"\x01" * 2048)
+        return {"path": out, "width": 640, "height": height,
+                "sizeBytes": 2048, "reused": False}
+    return _proxy
 
 
 def _fake_resolution(width=1920, height=1080, codec="h264", duration=120.0):
@@ -177,7 +191,8 @@ class TestDownloadJob(WorkerTestBase):
         kw = dict(
             worker_id="w1", media_root=self.media_root,
             official_channel_ids={"UCofficial"},
-            probe_fn=_fake_probe(), download_clip_fn=_fake_download_clip_ok(),
+            probe_fn=_fake_probe(), download_full_fn=_fake_download_full_ok(),
+            proxy_fn=_fake_proxy_ok(),
             resolution_fn=_fake_resolution(),
             which=_fake_which({"ffmpeg", "ffprobe", "yt-dlp"}),
         )
@@ -227,7 +242,7 @@ class TestDownloadJob(WorkerTestBase):
         def _stall(*a, **kw):
             raise vi.StallTimeout(["yt-dlp"], 30.0, "no bytes")
         job = self.make_job()
-        result = self._run(job, download_clip_fn=_stall)
+        result = self._run(job, download_full_fn=_stall)
         self.assertFalse(result["ok"])
         self.assertEqual(result["errorCode"], "network_stall")
         self.assertEqual(self.store.get(job.job_key).state, sm.RETRY_SCHEDULED)
@@ -236,7 +251,7 @@ class TestDownloadJob(WorkerTestBase):
         def _corrupt(*a, **kw):
             raise vi.InvalidClip("clip too small")
         job = self.make_job()
-        result = self._run(job, download_clip_fn=_corrupt)
+        result = self._run(job, download_full_fn=_corrupt)
         self.assertEqual(result["errorCode"], "corrupt_media")
 
     def test_permanent_failure_after_ceiling(self):
@@ -255,8 +270,8 @@ class TestDownloadJob(WorkerTestBase):
             result = worker.download_job(
                 store, self.locks, job, worker_id="w1",
                 media_root=self.media_root, official_channel_ids={"UCofficial"},
-                probe_fn=_fake_probe(), download_clip_fn=_boom,
-                resolution_fn=_fake_resolution(),
+                probe_fn=_fake_probe(), download_full_fn=_boom,
+                proxy_fn=_fake_proxy_ok(), resolution_fn=_fake_resolution(),
                 which=_fake_which({"ffmpeg", "ffprobe", "yt-dlp"}))
             self.assertFalse(result["ok"])
             self.assertEqual(store.get(job.job_key).state, sm.FAILED_PERMANENT)
@@ -266,16 +281,16 @@ class TestDownloadJob(WorkerTestBase):
     def test_cached_clip_is_reused_not_redownloaded(self):
         calls = {"n": 0}
 
-        def _dl(url, start, end, out, height=1080, **kw):
+        def _dl(url, out, height=720, **kw):
             calls["n"] += 1
             os.makedirs(os.path.dirname(out), exist_ok=True)
             with open(out, "wb") as f:
                 f.write(b"\x00" * 4096)
-            return {"path": out, "reused": calls["n"] > 1, "sizeBytes": 4096,
-                    "attempts": [], "resolution": None}
+            return {"path": out, "reused": calls["n"] > 1, "resumed": False,
+                    "sizeBytes": 4096, "format": "f", "partialBytesBefore": 0}
 
         job = self.make_job()
-        self._run(job, download_clip_fn=_dl)
+        self._run(job, download_full_fn=_dl)
         # Resume-style rerun against the same job/state must not explode —
         # download_vod_clip's own cache logic decides reuse; here we only
         # check the worker records whatever it's told.
@@ -294,7 +309,8 @@ class TestResumeInterrupted(WorkerTestBase):
         results = worker.resume_interrupted(
             self.store, self.locks, worker_id="w-resume",
             media_root=self.media_root, official_channel_ids={"UCofficial"},
-            probe_fn=_fake_probe(), download_clip_fn=_fake_download_clip_ok(),
+            probe_fn=_fake_probe(), download_full_fn=_fake_download_full_ok(),
+            proxy_fn=_fake_proxy_ok(),
             resolution_fn=_fake_resolution(),
             which=_fake_which({"ffmpeg", "ffprobe", "yt-dlp"}))
         self.assertEqual(len(results), 1)
