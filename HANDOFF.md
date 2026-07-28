@@ -190,6 +190,52 @@ calibration and evidence only — **zero comps written**. The two bug fixes
 below are in shared code (`capture.py`, `frame_filter.py`) and therefore
 apply to the `ingest-link` path above as well.
 
+#### The load-bearing lesson: an anchor must be match-state INVARIANT
+
+Worth reading before calibrating any future broadcast, because it is silent
+when you get it wrong. The first anchor cut for this layout was the centre
+round-state row, which on the calibration frame reads `0  0%  <lock>  0%  0`
+(Control map, 0-0, pre-unlock). That readout **is match state** — on an
+Escort map mid-series the same region reads `STOP THE PAYLOAD … 1 / 2`.
+Tested against a genuine full-HUD frame from a *different match* ~1h20m
+later in the same VOD, the anchor scored **-0.15** and `frame_filter`
+rejected real gameplay as `no-hud`. Nothing errored; the run just reported
+0 crops, which reads exactly like "that window wasn't gameplay".
+
+It was only caught by deliberately testing the layout against a **different
+match in the same VOD** rather than the one it was calibrated on. Do that
+every time.
+
+The anchor is now the persistent broadcast chyron
+`OWCS 2026 | STAGE 2 | PLAYOFFS`. Measured across 15 real frames spanning
+four broadcast states:
+
+| frame state | score | verdict |
+|---|---|---|
+| live gameplay, Control map 1 | 0.92 – 1.00 | accept |
+| live gameplay, Escort map 4 (1-2) | 0.82 | accept (**was -0.15**) |
+| intro / map-pick card | -0.10 – 0.17 | reject |
+| post-event champions graphic | -0.03 | reject |
+| team WIN card | -0.01 | reject |
+| REPLAY | 0.06 | reject |
+
+`min_score` 0.55 sits in the gap. Rejecting replays matters — a replay
+renders a full HUD showing a **past** comp.
+
+Consequence: because the anchor is production-level rather than
+match-level, `layouts/owcs_nd5lllwdky0.json` is **reusable for every match
+in this VOD and for other VODs from the same OWCS 2026 Stage 2 Playoffs
+production**. A new broadcast from that production needs only a new source
+row, not a fresh calibration. `test_owcs_nd5lllwdky0_source.py` now asserts
+the anchor stays off the centre HUD, sits in the upper chrome band, and
+keeps a wide margin, so an over-fitted anchor cannot quietly return.
+
+Also corrected by this: live gameplay starts ~**0:40:30**, not after
+0:40:50 — the old anchor was rejecting real gameplay and made the intro
+look longer than it is. `--fast` caps the window to 30s, so
+`--start 0:40:00 --fast` samples only intro frames and honestly reports 0
+crops; use `0:41:00` for a window that lands on play.
+
 Added a new real broadcast as a saved automation-capture/calibration target
 and ran the full capture → filter → layout-debug → crop-evidence pipeline
 against it live on this machine (real `yt-dlp`/`ffmpeg`, real network —
