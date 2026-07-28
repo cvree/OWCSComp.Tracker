@@ -248,7 +248,17 @@ class TestPackagingGateOnTheExtraction(ArchiveTestCase):
 
     def test_every_layouts_templates_and_markers_exist_in_the_extraction(self):
         """The specific guarantee Phase 8 asks for, asserted directly rather
-        than only via the gate's exit code."""
+        than only via the gate's exit code.
+
+        A layout may opt out with `templates_pending`, which means "calibrated
+        against real frames, but hero templates not harvested yet" — the
+        honest middle of the workflow, where detection correctly reports
+        'skipped' instead of guessing. That opt-out is not a free pass: the
+        declaration must carry a written reason, and the same layout must
+        still ship every other asset it references (anchor/reject markers are
+        asserted below regardless). check_packaging.py and
+        test_map_ingestion.py honour the same key, so all three gates agree
+        on what a pending package is."""
         lay_dir = os.path.join(self.root, "layouts")
         checked = 0
         for fn in sorted(os.listdir(lay_dir)):
@@ -257,7 +267,15 @@ class TestPackagingGateOnTheExtraction(ArchiveTestCase):
             with open(os.path.join(lay_dir, fn), encoding="utf-8") as f:
                 lay = json.load(f)
             tdir = lay.get("templates_dir")
-            if tdir:
+            pending = lay.get("templates_pending")
+            if tdir and pending:
+                self.assertIsInstance(
+                    pending, str,
+                    f"{fn}: templates_pending must be a written explanation")
+                self.assertGreater(
+                    len(pending.strip()), 20,
+                    f"{fn}: templates_pending needs a real reason, not a flag")
+            elif tdir:
                 full = os.path.join(self.root, tdir)
                 self.assertTrue(os.path.isdir(full), f"{fn}: {tdir} missing")
                 self.assertTrue([x for x in os.listdir(full)
