@@ -475,8 +475,9 @@ def resolve_layout(store: js.JobStore, job: models.Job, *,
             "confidence": best["fingerprint"]["score"],
         })
         if harvest:
+            reused_layout = capture.load_layout(best["path"])
             record["markers"] = harvest_markers(
-                frames, best["layout"], os.path.join(work_dir, "markers"))
+                frames, reused_layout, os.path.join(work_dir, "markers"))
         store.update_payload(job.job_key, {
             "layout": record, "expectedLayoutId": best["layoutId"]})
         log(f"{job.job_key}: reusing committed layout {best['layoutId']} "

@@ -330,6 +330,24 @@ class TestResolveLayout(ResolverJobBase):
         # State unchanged — an automatic reuse needs no human gate.
         self.assertEqual(job.state, sm.DOWNLOADED)
 
+    def test_reuse_with_harvest_enabled_does_not_crash(self):
+        """Regression: the reuse path's marker harvest referenced a key
+        (best["layout"]) that only exists on the CANDIDATE list, not on the
+        scored/ranked list resolve_layout actually holds at that point — so
+        harvest=True (the real default every caller but the unit tests uses)
+        raised a KeyError on every automatic reuse. Caught by the end-to-end
+        offline suite, not by this file, because every test here happened to
+        pass harvest=False."""
+        self.write_layout("owcs_test_package")
+        job = self.make_job()
+        res = lr.resolve_layout(
+            self.store, job, layouts_dir=self.layouts_dir,
+            reports_dir=self.reports_dir, harvest=True,
+            frames=self.frame_files([gameplay_frame(self.layout)] * 6))
+        self.assertTrue(res["ok"], res)
+        self.assertIn("markers", res["record"])
+        self.assertIn("gameplay", res["record"]["markers"]["harvested"])
+
     def test_the_full_decision_is_recorded_for_audit(self):
         self.write_layout("right_one")
         self.write_layout("wrong_one",
