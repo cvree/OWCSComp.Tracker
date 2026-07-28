@@ -90,13 +90,21 @@ def check_layouts(root: str) -> None:
         # The starter youtube layout intentionally points at the shared
         # root templates/ dir; per-source layouts get their own dir.
         if tdir:
-            full = os.path.join(root, tdir)
-            pngs = ([x for x in os.listdir(full) if x.endswith(".png")]
-                    if os.path.isdir(full) else [])
-            if pngs:
-                ok(f"{fn}: templates_dir '{tdir}' has {len(pngs)} templates")
+            if lay.get("templates_pending"):
+                # Explicit, self-documented "not harvested yet" state (a
+                # capture/calibration-only pass) — not a packaging bug.
+                warn(f"{fn}: templates_dir '{tdir}' intentionally empty — "
+                     "templates_pending is set (capture/calibration-only "
+                     "pass, detection honestly reports 'skipped')")
             else:
-                bad(f"{fn}: templates_dir '{tdir}' missing or empty")
+                full = os.path.join(root, tdir)
+                pngs = ([x for x in os.listdir(full) if x.endswith(".png")]
+                        if os.path.isdir(full) else [])
+                if pngs:
+                    ok(f"{fn}: templates_dir '{tdir}' has {len(pngs)} "
+                       "templates")
+                else:
+                    bad(f"{fn}: templates_dir '{tdir}' missing or empty")
         # anchor / replay templates are OPTIONAL: layouts document them as
         # placeholders and the gameplay filter honestly falls back to the
         # structural chip probe when they are absent. Missing -> warn, not

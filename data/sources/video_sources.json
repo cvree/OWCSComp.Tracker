@@ -71,6 +71,18 @@
    "layout": "layouts/owcs_8c105lnzlam.json"
   },
   {
+   "id": "owcs-nd5lllwdky0",
+   "title": "OWCS 2026 | NA/EMEA | Stage 2 Playoffs Day 3 (nD5lLLWDkY0)",
+   "url": "https://www.youtube.com/watch?v=nD5lLLWDkY0",
+   "platform": "youtube",
+   "date": "TBD",
+   "region": "NA/EMEA",
+   "notes": "CALIBRATED. t=0:40:00-~0:40:50 is match intro / map-pick (Geekay Esports left vs a Twisted Minds-style pink-fist logo right, Lower Final, FT3, pick/ban icons) — confirmed not gameplay. First confirmed live-HUD gameplay window: 0:41:00-0:41:30 (Twisted Minds vs Geekay Esports, Control, First to 3); layouts/owcs_nd5lllwdky0.json's slots_a/slots_b/anchor are calibrated against that window's real frames (30/30 crops, 3/3 frames pass the gameplay filter). Only the 640x360 progressive format section-downloads for this VOD (DASH formats stall/403). Smoke test: run_owcs_auto.py --source owcs-nd5lllwdky0 --start 0:40:00 --end 0:40:40 --every 10 --fast --force. Calibration-quality test: --start 0:40:00 --end 0:41:00 --every 10 --height 1080 --force (still lands on 640x360 — see layout notes). Hero templates not yet harvested; detection stays honestly 'skipped'. Comps come later via CV evidence + review, never assumed from the broadcast.",
+   "enabled": true,
+   "sampleIntervalSeconds": 10,
+   "layout": "layouts/owcs_nd5lllwdky0.json"
+  },
+  {
    "id": "owcs-is7ehd0nf84",
    "url": "https://www.youtube.com/watch?v=is7eHd0nf84",
    "platform": "youtube",

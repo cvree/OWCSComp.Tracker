@@ -222,6 +222,40 @@ def main() -> int:
     check("without 'reject', the banner frame passes as gameplay",
           set(res_off["kept"]) == {"000000.png", "000300.png"})
 
+    print("region_score: a template cut LARGER than the rect it's matched "
+          "against (e.g. cut from a higher-resolution capture of this "
+          "source than a later run's yt-dlp fallback format landed on --"
+          "854x480 one run, 640x360 the next, same source) is resized DOWN "
+          "and still scored, never a silent 0.0 -- same fix already applied "
+          "to hero templates in detect.match_slot_ranked. A template cut "
+          "SMALLER than its rect (the normal alignment-tolerance case, "
+          "exercised throughout this file's anchor/replay/highlight "
+          "markers above) keeps using matchTemplate's own sliding search, "
+          "unchanged:")
+    ax, ay, aw, ah = ANCHOR_RECT
+    # a template cut at 1.5x this rect's own native scale (as if harvested
+    # from a higher-resolution capture of the same broadcast)
+    big_rect = [round(v * 1.5) for v in ANCHOR_RECT]
+    bx, by, bw, bh = big_rect
+    big_source = np.zeros((int(H * 1.5), int(W * 1.5), 3), dtype=np.uint8)
+    big_source[by:by + bh, bx:bx + bw] = cv2.resize(
+        make_frame(anchor=True)[ay:ay + ah, ax:ax + aw], (bw, bh))
+    tpl_oversized = {"img": cv2.cvtColor(
+        big_source[by:by + bh, bx:bx + bw], cv2.COLOR_BGR2GRAY),
+        "rect": ANCHOR_RECT, "min_score": 0.5}
+    check("template is genuinely larger than the rect it's about to score",
+          tpl_oversized["img"].shape[0] > ah
+          and tpl_oversized["img"].shape[1] > aw)
+    gray_normal = cv2.cvtColor(make_frame(anchor=True), cv2.COLOR_BGR2GRAY)
+    score = capture.region_score(gray_normal, tpl_oversized)
+    check(f"oversized template -> resized down + scored, never a silent "
+          f"0.0 (score={score})", score > 0.5)
+    # degenerate case: rect maps to a 0-pixel crop (e.g. a bad/unscaled
+    # rect entirely outside the frame) must still return 0.0, not crash.
+    oob_tpl = dict(tpl_oversized, rect=[W + 100, H + 100, 10, 10])
+    check("fully out-of-frame rect -> 0.0, no crash",
+          capture.region_score(gray_normal, oob_tpl) == 0.0)
+
     if _fails:
         print(f"\n{_fails} CHECK(S) FAILED")
         return 1

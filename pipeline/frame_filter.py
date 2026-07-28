@@ -56,12 +56,29 @@ def filter_frames(in_dir: str, out_dir: str, layout: dict,
         os.makedirs(out_dir, exist_ok=True)
 
     kept, rejected = [], []
+    # Anchor/replay/reject rects are stored at the layout's native frame
+    # size — a capture that fell back to a lower resolution (--fast, or a
+    # stalled/403'd DASH format forcing the ladder down) needs those rects
+    # scaled down first, same as automation/segmentation.py already does,
+    # or every score is computed against the wrong region (crop smaller
+    # than the template -> a silent 0.0, never a real "no-hud" read).
+    # Frames in one run share a resolution, so this only needs to happen
+    # once, off the first readable frame.
+    scaled = False
     for fn in sorted(f for f in os.listdir(in_dir) if f.endswith(".png")):
         fp = os.path.join(in_dir, fn)
         frame = cv2.imread(fp)
         if frame is None:
             rejected.append((fn, "unreadable"))
             continue
+        if not scaled:
+            fh, fw = frame.shape[:2]
+            scaled_layout, _info = capture.scale_layout_to_frame(
+                layout, fw, fh)
+            anchor = capture._load_template(scaled_layout, "anchor") or anchor
+            replay = capture._load_template(scaled_layout, "replay")
+            rejects = capture._load_reject_markers(scaled_layout)
+            scaled = True
         ok, reason, _score = capture.is_gameplay(
             frame, anchor, replay, rejects)
         if ok:

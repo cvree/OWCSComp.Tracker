@@ -180,6 +180,26 @@ def main() -> None:
               and isinstance(_json.load(open(os.path.join(ROOT, s["layout"]))),
                              dict))
 
+    print("OWCS 2026 NA/EMEA Stage 2 Playoffs Day 3 calibration source "
+          "is registered (run.html dropdown / sources.html / export):")
+    check("owcs-nd5lllwdky0 source exists", "owcs-nd5lllwdky0" in by_id)
+    if "owcs-nd5lllwdky0" in by_id:
+        s2 = by_id["owcs-nd5lllwdky0"]
+        check("VOD source points at the right video + layout + enabled",
+              "nD5lLLWDkY0" in (s2.get("url") or "")
+              and s2.get("layout") == "layouts/owcs_nd5lllwdky0.json"
+              and s2.get("enabled") is True)
+        check("VOD layout file exists + is valid json",
+              os.path.exists(os.path.join(ROOT, s2["layout"]))
+              and isinstance(_json.load(open(os.path.join(ROOT, s2["layout"]))),
+                             dict))
+    import export_data as _ed
+    exported_ids = {e["id"] for e in _ed.load_video_sources(
+        os.path.join(ROOT, "data", "sources", "video_sources.json"))}
+    check("owcs-nd5lllwdky0 present in the exported videoSources feeding "
+          "the run.html dropdown + sources.html",
+          "owcs-nd5lllwdky0" in exported_ids)
+
     print("run report shows the gated comp-promotion path:")
     html_det = roa.build_report_html(
         {"run": "r", "steps": [], "ok": True,

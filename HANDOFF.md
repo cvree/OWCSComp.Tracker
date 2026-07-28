@@ -1,5 +1,147 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
+## CURRENT STATUS (authoritative — 2026-07-27) — New calibration target: OWCS 2026 NA/EMEA Stage 2 Playoffs Day 3
+
+Everything below this section down to the next `## CURRENT STATUS` marker is
+historical context; when it conflicts with this section, this section wins.
+
+Added a new real broadcast as a saved automation-capture/calibration target
+and ran the full capture → filter → layout-debug → crop-evidence pipeline
+against it live on this machine (real `yt-dlp`/`ffmpeg`, real network —
+this session's environment could reach YouTube, unlike some prior
+sandboxed sessions noted below). **No hero comps were written — capture,
+calibration, and evidence only, as scoped.**
+
+**Source slug**: `owcs-nd5lllwdky0` — `data/sources/video_sources.json`,
+VOD `https://www.youtube.com/watch?v=nD5lLLWDkY0` ("OWCS 2026 | NA/EMEA |
+Stage 2 Playoffs Day 3"). Shows up in `sources.html`, the `run.html`
+source dropdown (verified live in a real browser against
+`pipeline/serve.py`), and the exported `assets/js/data.js` /
+`OWCS_DATA.videoSources` — confirmed both by an offline test and by
+inspecting the live DOM.
+
+**Exact test commands** (both run clean on this Windows machine):
+```
+python pipeline/run_owcs_auto.py --source owcs-nd5lllwdky0 --start 0:40:00 --end 0:40:40 --every 10 --fast --force
+python pipeline/run_owcs_auto.py --source owcs-nd5lllwdky0 --start 0:40:00 --end 0:41:00 --every 10 --height 1080 --force
+```
+
+**40:00 was honestly intro, not gameplay.** At ~40:24 the broadcast is on
+the match intro / map-pick screen (Geekay Esports left, a Twisted
+Minds-style pink-fist logo right, "Lower Final", "FT3", 0-0, pick/ban
+icons) — confirmed by actually viewing the extracted frame. The smoke-test
+run over 0:40:00-0:40:30 correctly produced **0 crops**: the (now-real,
+see below) anchor template rejected all 3 frames with `no-hud`, and the
+report says so plainly rather than fabricating hero-slot evidence.
+
+**First usable gameplay HUD window: 0:41:00-0:41:30.** Tried the exact
+nearby windows the brief suggested; frames at 41:00/41:10/41:20 all show
+both team HUD rows (Twisted Minds vs Geekay Esports, Control map, "First
+to 3") with all 10 hero portraits. That run: **3/3 frames pass the
+gameplay filter, 30/30 crops produced, 0 skipped.**
+
+**Layout status: calibrated, not placeholder.** `layouts/owcs_nd5lllwdky0.json`
+started from `layouts/owcs_jksix_qwc.json`'s geometry (same event, Stage 2
+Playoffs Day 2 — a same-production seed, not a blind guess) but
+`slots_a`/`slots_b`/`anchor` were then measured against this VOD's own
+real frames: chip/portrait cell edges located by HSV color-cluster
+detection on the ability-charge chips, cross-checked against one
+distinctively-colored (saturated yellow) portrait, iterated visually via
+`build_layout_debug.py` + `build_crop_report.py` against the real captured
+frame until every box hugs a portrait. `hud_probe` is still the unverified
+`owcs_jksix_qwc` seed (round-tracking geometry) — out of scope for this
+pass, called out explicitly in the layout's own `_comments`.
+
+**Crops: verified, by eye, not just by count.** Reviewed enlarged montages
+of all 10 slots across all 3 frames. Team A boxes are clean throughout.
+Team B boxes at the very start of the window (t=41:00/41:10) catch a
+sliver of the neighboring ability-charge-percentage chip text along with
+the portrait — a real, honestly-observed imprecision at this VOD's ceiling
+resolution (640x360 — see below), not hidden. Boxes stay in bounds after
+scaling at 640x360, 854x480 (both real fallback resolutions this VOD
+actually returned across runs), and native 1920x1080 — covered by an
+offline test.
+
+**Detection: did not run — templates don't exist yet.** Every report
+honestly shows `detect: skipped — no hero templates for layout`. Building
+`templates/owcs_nd5lllwdky0/` is out of scope for this pass (capture/
+calibration/evidence only, per the brief).
+
+**A real, load-bearing capture-reliability finding for this VOD**: its
+DASH video-only formats (h264 135/298/299, VP9, AV1 — itags that flow fine
+for other sources per this file's own prior notes) either **stall** or
+**403** on `--download-sections` for this specific video, confirmed by
+probing formats 135/298/299 directly. Only the muxed 640x360 progressive
+format (itag 18) reliably section-downloads. `run_owcs_auto.py`'s existing
+fallback ladder already handles this correctly and honestly — `--height
+1080` still lands on 640x360, and the run report says so explicitly
+(`requested <=1080p · actual 640x360 ⚠ lower than requested`), with every
+attempted format + outcome in the "Capture attempts" table. This is a
+property of the VOD/account, not a bug — nothing needed fixing there.
+
+**Two real bugs were found and fixed** while getting the anchor template
+to actually work at this VOD's resolution (both affect every source, not
+just this one):
+* `pipeline/frame_filter.py`'s `filter_frames` never scaled the layout to
+  the frame's actual size before scoring the anchor/replay/reject
+  templates — it used the layout's native-1920x1080 rect directly against
+  whatever resolution the clip actually downloaded at (640x360, 854x480,
+  ...), so any anchor always scored ~0 the moment a capture fell back to a
+  lower resolution (which `--fast` always does, and any stalled/403'd DASH
+  rung also does). `pipeline/automation/segmentation.py` already had the
+  right pattern (`capture.scale_layout_to_frame` once off the first
+  frame); `frame_filter.py` now does the same.
+* `pipeline/capture.py`'s `region_score` never resized the template image
+  itself to match a differently-sized crop — only `detect.py`'s hero-slot
+  matching already did that ("templates cut at one capture resolution
+  match at any other"). The same fix now applies to anchor/replay/reject
+  templates: `region_score` resizes the template to the crop's exact size
+  before `matchTemplate`, a no-op when they already match. Verified live:
+  the same real anchor template scored 0.00 against an 854x480 frame
+  before the fix (this VOD's format ladder genuinely returned 640x360 on
+  one run and 854x480 on the next) and 0.62-1.0 after.
+
+**Tests**: new `pipeline/test_owcs_nd5lllwdky0_source.py` (30 checks —
+source registration + export, layout structural validity + in-bounds
+scaling at 640x360/854x480/1920x1080, 30-crop fixture-frame evidence, real
+anchor template honesty on synthetic gameplay-vs-intro-shaped frames, the
+region_score cross-resolution regression, and both documented CLI
+commands parsing/resolving correctly). Extended `test_static_pages.py`
+(source registered + exported, mirroring the existing owcs-8c105lnzlam
+check) and `test_frame_filter_highlight.py` (generic region_score resize
+regression, independent of this one source). All pre-existing suites still
+pass (see "Package cleanly" below).
+
+**Browser-verified live** against `pipeline/serve.py`: `owcs-nd5lllwdky0`
+appears in the `run.html` source dropdown, preflight reports "Ready", a
+fast capture launched from the browser streamed its log to completion
+without hanging, the report/layout/crops links all opened cleanly, and
+`runs.html` links `layout.html` + `crops.html` for every real run. No
+console errors on `run.html`/`runs.html`/`sources.html`. One stale
+`data/auto_runs.json` record (from an exploratory window whose report
+folder was deleted during cleanup) was found and removed so `runs.html`
+never links a dead report.
+
+### Honest gaps / next blockers
+- Hero templates for this source (`templates/owcs_nd5lllwdky0/`) don't
+  exist yet — detection stays `skipped` until a human harvests them from
+  the now-calibrated crops (`build_hero_templates.py`), same workflow as
+  every other calibrated source in this repo.
+- `hud_probe` is still the unverified `owcs_jksix_qwc` seed, not
+  re-measured for this broadcast — fine for `run_owcs_auto.py` (doesn't
+  use it) but round-tracking (`ingest_map.py`) for this source shouldn't
+  be trusted yet.
+- The team-B ability-charge-chip text bleed at the very start of the
+  gameplay window (t=41:00/41:10) is a real, small imprecision at this
+  VOD's 640x360 capture ceiling — acceptable for calibration evidence, but
+  worth another pass if a higher-resolution capture of this VOD ever
+  becomes downloadable (it currently isn't: DASH formats stall/403 for
+  this specific video).
+- No match/team pairing, no `ingest_map.py --write`, no comps — entirely
+  out of scope for this pass by design.
+
+---
+
 ## CURRENT STATUS (authoritative — 2026-07-26) — Closed-loop beta: worker, segmentation, detection wiring, publication (Phases E/F/G/I)
 
 Everything below this section down to the next `## CURRENT STATUS` marker is

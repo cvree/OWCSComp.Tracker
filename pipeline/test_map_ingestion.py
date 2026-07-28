@@ -377,11 +377,18 @@ def test_packaging() -> None:
             lay = json.load(f)
         tdir = lay.get("templates_dir")
         if tdir and not tdir.startswith("templates/owcs-demo"):
-            full = os.path.join(REPO, tdir)
-            pngs = ([x for x in os.listdir(full) if x.endswith(".png")]
-                    if os.path.isdir(full) else [])
-            check(f"{fn}: templates_dir {tdir} exists with templates",
-                  len(pngs) > 0, f"{full} missing/empty")
+            if lay.get("templates_pending"):
+                # Explicit, self-documented "not harvested yet" state (a
+                # capture/calibration-only pass) — not a packaging bug, so
+                # it's reported, not silently skipped or hard-failed.
+                print(f"  SKIP  {fn}: templates_dir {tdir} intentionally "
+                      f"empty — templates_pending is set")
+            else:
+                full = os.path.join(REPO, tdir)
+                pngs = ([x for x in os.listdir(full) if x.endswith(".png")]
+                        if os.path.isdir(full) else [])
+                check(f"{fn}: templates_dir {tdir} exists with templates",
+                      len(pngs) > 0, f"{full} missing/empty")
         for marker in (lay.get("reject") or []):
             tpath = marker.get("template")
             if tpath:

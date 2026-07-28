@@ -212,13 +212,36 @@ def reject_reason(frame_gray, markers: list) -> str | None:
 
 # ------------------------------------------------------------ classifier
 def region_score(frame_gray, tpl) -> float:
-    """Best match score of tpl['img'] inside tpl['rect'] of the frame."""
+    """Best match score of tpl['img'] inside tpl['rect'] of the frame.
+
+    The rect is already scaled to the frame's actual size by the caller
+    (scale_layout_to_frame), but the template IMAGE stays whatever pixel
+    size it was cut at. Two different things can make template and crop
+    sizes disagree, and they need different handling:
+
+    * template cut SMALLER than its rect on purpose (a few px inset, so
+      matchTemplate can slide and tolerate a bit of misalignment) — the
+      normal case, crop >= template, handled by matchTemplate's own
+      sliding search exactly as before.
+    * template LARGER than the crop — e.g. cut against a higher-resolution
+      capture of this source than a later run's fallback format landed on
+      (yt-dlp's format ladder can return 640x360 on one run and 854x480 on
+      the next for the same source) — matchTemplate requires template <=
+      crop in both dimensions or it raises/returns nothing useful, so this
+      used to be a hard 0.0 no matter how well the region actually matches.
+      Resize the template DOWN to the crop's exact size instead (same idea
+      detect.match_slot_ranked already applies to hero templates: 'templates
+      cut at one capture resolution match at any other')."""
     x, y, w, h = tpl["rect"]
     crop = frame_gray[y:y + h, x:x + w]
-    if (crop.shape[0] < tpl["img"].shape[0]
-            or crop.shape[1] < tpl["img"].shape[1]):
+    if crop.shape[0] < 1 or crop.shape[1] < 1:
         return 0.0
-    res = cv2.matchTemplate(crop, tpl["img"], cv2.TM_CCOEFF_NORMED)
+    timg = tpl["img"]
+    if timg.shape[0] > crop.shape[0] or timg.shape[1] > crop.shape[1]:
+        if crop.shape[0] < 2 or crop.shape[1] < 2:
+            return 0.0
+        timg = cv2.resize(timg, (crop.shape[1], crop.shape[0]))
+    res = cv2.matchTemplate(crop, timg, cv2.TM_CCOEFF_NORMED)
     return float(res.max())
 
 

@@ -1,0 +1,196 @@
+{
+  "_comments": [
+    "CALIBRATED against REAL captured frames of OWCS 2026 | NA/EMEA | Stage 2",
+    "Playoffs Day 3, YouTube VOD nD5lLLWDkY0 (source id owcs-nd5lllwdky0).",
+    "At ~40:24 the broadcast is on a match intro / map-pick screen (Geekay",
+    "Esports left vs a Twisted Minds-style pink-fist logo right, 'Lower",
+    "Final', 'FT3', pick/ban icons) \u2014 confirmed NOT live gameplay. The first",
+    "confirmed live-HUD gameplay window found is 0:41:00\u20130:41:30 (frames at",
+    "41:00, 41:10, 41:20 all show both team HUD rows with all 10 hero",
+    "portraits) \u2014 slots_a/slots_b below are calibrated from that window.",
+    "",
+    "This VOD only reliably section-downloads as the 640x360 progressive",
+    "format (itag 18) \u2014 the h264/VP9/AV1 DASH video-only formats (itags",
+    "135/298/299/etc.) either stall or 403 on --download-sections for this",
+    "video specifically (confirmed by direct probing), so run_owcs_auto.py's",
+    "fallback ladder always lands on 640x360 here even with --height 1080.",
+    "Slot boxes were therefore measured in 640x360 pixel space (chip/portrait",
+    "cell edges located by HSV color-cluster detection on the ability-charge",
+    "chips + a distinctive saturated-yellow portrait used as a cross-check",
+    "anchor) and stored below at an exact 3x scale (1920x1080), so",
+    "scale_layout_to_frame maps them back to 640x360 losslessly at runtime.",
+    "Given the source resolution, boxes are a close hug on each portrait but",
+    "not sub-pixel precise \u2014 re-verify if a higher-resolution capture of this",
+    "VOD ever becomes downloadable.",
+    "",
+    "anchor is a REAL crop (layouts/owcs_nd5lllwdky0-anchor.png) of the",
+    "persistent round-state row ('0  0%  \ud83d\udd12  0%  0') that is present during",
+    "live play and absent during the map-pick intro \u2014 verified: scores",
+    "0.62-1.0 on the three confirmed gameplay frames (41:00/41:10/41:20) vs",
+    "0.13-0.22 on the three intro-window frames (40:00/40:10/40:20).",
+    "",
+    "templates_dir points at this source's own (currently empty) template",
+    "set \u2014 detection stays honestly 'skipped' until templates are harvested",
+    "(out of scope for this capture/calibration pass)."
+  ],
+  "frame_width": 1920,
+  "frame_height": 1080,
+  "sample_interval_seconds": 10,
+  "hud_probe": {
+    "_adjust": "STILL SEEDED from owcs_jksix_qwc.json's chip geometry, not yet re-measured for this broadcast (out of scope for this pass \u00e2\u20ac\u201d only slots_a/slots_b/anchor were calibrated against real frames). Re-verify sat_min/val_min/chip rects against this VOD's own chip pixels before relying on hud_probe-based round tracking (ingest_map.py) for this source.",
+    "chips_a": [
+      [
+        45,
+        116,
+        76,
+        76
+      ],
+      [
+        150,
+        116,
+        76,
+        76
+      ],
+      [
+        256,
+        116,
+        76,
+        76
+      ],
+      [
+        363,
+        116,
+        76,
+        76
+      ],
+      [
+        468,
+        116,
+        76,
+        76
+      ]
+    ],
+    "chips_b": [
+      [
+        1396,
+        116,
+        51,
+        51
+      ],
+      [
+        1503,
+        116,
+        51,
+        51
+      ],
+      [
+        1608,
+        116,
+        51,
+        51
+      ],
+      [
+        1713,
+        116,
+        51,
+        51
+      ],
+      [
+        1820,
+        116,
+        51,
+        51
+      ]
+    ],
+    "sat_min": 110,
+    "val_min": 90,
+    "min_chips_per_side": 4
+  },
+  "anchor": {
+    "_adjust": "REAL crop of the round-state row ('0  0%  lock  0%  0' below the team nameplates), cut from the confirmed-gameplay frame at t=41:00 (640x360 native, stored at its native pixel size; rect below is at 1920x1080-equivalent scale so scale_layout_to_frame maps it back to 640x360 exactly). min_score 0.55 gives a wide margin: 0.62-1.0 on real gameplay frames vs 0.13-0.22 on intro-window frames.",
+    "rect": [
+      735,
+      132,
+      420,
+      48
+    ],
+    "template": "layouts/owcs_nd5lllwdky0-anchor.png",
+    "min_score": 0.55
+  },
+  "score_map": {
+    "rect": [
+      812,
+      8,
+      296,
+      96
+    ]
+  },
+  "slots_a": [
+    [
+      111,
+      102,
+      54,
+      72
+    ],
+    [
+      216,
+      102,
+      54,
+      72
+    ],
+    [
+      321,
+      102,
+      54,
+      72
+    ],
+    [
+      426,
+      102,
+      54,
+      72
+    ],
+    [
+      531,
+      102,
+      54,
+      72
+    ]
+  ],
+  "slots_b": [
+    [
+      1362,
+      102,
+      54,
+      72
+    ],
+    [
+      1467,
+      102,
+      54,
+      72
+    ],
+    [
+      1572,
+      102,
+      54,
+      72
+    ],
+    [
+      1677,
+      102,
+      54,
+      72
+    ],
+    [
+      1782,
+      102,
+      54,
+      72
+    ]
+  ],
+  "match_threshold": 0.6,
+  "templates_dir": "templates/owcs_nd5lllwdky0",
+  "templates_pending": "This pass is capture/calibration/evidence only (by design, per the ingestion brief) — no hero templates have been harvested yet, so templates/owcs_nd5lllwdky0/ does not exist and detection honestly reports 'skipped'. Harvest with build_hero_templates.py from the calibrated crops once ready, then remove this key.",
+  "notes": "OWCS 2026 NA/EMEA Stage 2 Playoffs Day 3, VOD nD5lLLWDkY0. 0:40:00-~0:40:50 is match intro / map-pick (Geekay Esports vs Twisted Minds-style logo, Lower Final, FT3, 0-0) \u2014 not gameplay. First confirmed live-HUD gameplay window: 0:41:00-0:41:30 (Twisted Minds vs Geekay Esports, Control map, First to 3). slots_a/slots_b/anchor calibrated against that window's real frames; hud_probe is still an unverified seed from owcs_jksix_qwc.json. Only the 640x360 progressive format section-downloads for this VOD (DASH formats stall/403); layout is native 1920x1080 and auto-scales down exactly 3x."
+}
