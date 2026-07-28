@@ -76,8 +76,13 @@ _FORWARD: dict[str, set[str]] = {
     RECORDING: {ARCHIVED, DOWNLOADED, PARTIAL},
     ARCHIVED: {DOWNLOADING},
     DOWNLOADING: {DOWNLOADED, PARTIAL},
-    DOWNLOADED: {SEGMENTING},
-    SEGMENTING: {PROCESSING, NEEDS_REVIEW, PARTIAL},
+    # Layout resolution (Phase 3) runs immediately after download, BEFORE
+    # segmentation — it is what tells segmentation where the HUD is. So a
+    # freshly-downloaded job can legitimately land in NEEDS_LAYOUT (a new
+    # broadcast package was calibrated and awaits approval, or calibration
+    # was refused) without ever having segmented anything.
+    DOWNLOADED: {SEGMENTING, NEEDS_LAYOUT},
+    SEGMENTING: {PROCESSING, NEEDS_LAYOUT, NEEDS_REVIEW, PARTIAL},
     PROCESSING: {NEEDS_LAYOUT, NEEDS_TEMPLATES, NEEDS_REVIEW, APPROVED, PARTIAL},
     NEEDS_LAYOUT: {PROCESSING, NEEDS_REVIEW},
     NEEDS_TEMPLATES: {PROCESSING, NEEDS_REVIEW},

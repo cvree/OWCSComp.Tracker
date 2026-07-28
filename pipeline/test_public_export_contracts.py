@@ -1,0 +1,463 @@
+#!/usr/bin/env python3
+"""
+test_public_export_contracts.py — Phase 7 production export contracts.
+
+Two layers, both offline:
+
+  * pure-function tests of every derived aggregate, driven with small
+    hand-built payloads so the arithmetic is checkable by eye;
+  * contract tests against the REAL committed production export, so a future
+    change that drops a key or lets a provisional match leak is caught.
+
+Covered behaviors:
+  * every contract key the public pages and docs require is present
+  * aggregates are computed only from APPROVED comp snapshots
+  * an unreviewed / needs-review match is WITHHELD, with the reason recorded
+  * a withheld match contributes to no aggregate
+  * win rate is None (unknown) rather than 0 when nothing is decided
+  * fixture-to-production switching: the production file assigns
+    OWCS_PUBLIC unconditionally; the fixture only fills in
+"""
+from __future__ import annotations
+
+import json
+import os
+import re
+import sqlite3
+import sys
+import tempfile
+import unittest
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+REPO = os.path.dirname(HERE)
+
+import db as content_db  # noqa: E402
+import export_data as ex  # noqa: E402
+
+# Every key the Phase 7 contract requires the production export to carry.
+REQUIRED_KEYS = (
+    "regions", "teams", "players", "tournaments", "bracketRounds",
+    "bracketMatches", "matches", "mapResults", "compSnapshots", "heroStints",
+    "heroSwaps", "rejectedSwaps", "heroBans", "captureRuns", "vodSources",
+    "heroes", "mapsCatalog", "patches", "compFrequency", "compWinRate",
+    "heroPickRates", "teamHeroPools", "teamMapRecords", "mapStats",
+    "modeStats",
+)
+
+
+def load_public(fname: str) -> dict:
+    path = os.path.join(REPO, "assets", "data", fname)
+    with open(path, encoding="utf-8") as f:
+        src = f.read()
+    m = re.search(r"window\.OWCS_PUBLIC\s*=\s*(?:window\.OWCS_PUBLIC\s*\|\|\s*)?", src)
+    body = re.sub(r"/\*.*?\*/", "", src[m.end():], flags=re.S).strip().rstrip(";")
+    return json.loads(body)
+
+
+def snap(sid, match, map_id, team, heroes, *, status="auto-high",
+         source="cv", overrides=None):
+    return {"id": sid, "matchId": match, "mapId": map_id, "teamId": team,
+            "heroes": list(heroes), "reviewStatus": status, "source": source,
+            "overridesId": overrides}
+
+
+def match(mid, team_a, team_b, maps):
+    return {"id": mid, "teamA": team_a, "teamB": team_b, "maps": maps}
+
+
+def game(map_pub_id, map_id, winner, *, mode="Control", rounds=3):
+    return {"id": map_pub_id, "map": map_id, "winner": winner, "mode": mode,
+            "roundCount": rounds}
+
+
+FIVE_A = ["dva", "sojourn", "tracer", "lucio", "kiriko"]
+FIVE_B = ["rein", "ashe", "genji", "ana", "mercy"]
+
+
+class TestApprovedSnapshotGate(unittest.TestCase):
+    def test_only_approved_review_states_count(self):
+        rows = [snap("s1", "m1", "m1-m1", "a", FIVE_A, status="auto-high"),
+                snap("s2", "m1", "m1-m1", "b", FIVE_B, status="reviewed"),
+                snap("s3", "m1", "m1-m1", "b", FIVE_B, status="needs-review"),
+                snap("s4", "m1", "m1-m1", "b", FIVE_B, status="rejected")]
+        self.assertEqual([s["id"] for s in ex.approved_snapshots(rows)],
+                         ["s1", "s2"])
+
+    def test_faceit_sourced_snapshots_can_never_supply_comps(self):
+        rows = [snap("s1", "m1", "m1-m1", "a", FIVE_A, source="faceit")]
+        self.assertEqual(ex.approved_snapshots(rows), [])
+
+    def test_a_manual_override_excludes_the_cv_row_it_corrects(self):
+        rows = [snap("cv1", "m1", "m1-m1", "a", FIVE_A),
+                snap("man1", "m1", "m1-m1", "a", FIVE_B, source="manual",
+                     status="reviewed", overrides="cv1")]
+        kept = [s["id"] for s in ex.approved_snapshots(rows)]
+        self.assertEqual(kept, ["man1"])
+
+
+class TestCompStats(unittest.TestCase):
+    def setUp(self):
+        self.matches = [
+            match("m1", "a", "b", [game("m1-m1", "nepal", "a")]),
+            match("m2", "a", "b", [game("m2-m1", "busan", "b")]),
+        ]
+        # Team a fields the same comp twice (one win, one loss); team b
+        # fields a different comp twice (one loss, one win).
+        self.snaps = [
+            snap("s1", "m1", "m1-m1", "a", FIVE_A),
+            snap("s2", "m1", "m1-m1", "b", FIVE_B),
+            snap("s3", "m2", "m2-m1", "a", FIVE_A),
+            snap("s4", "m2", "m2-m1", "b", FIVE_B),
+        ]
+
+    def test_a_comp_is_counted_once_per_map_and_team(self):
+        """Two snapshots of the same team on the same map are ONE appearance —
+        otherwise a densely-sampled map would look twice as popular."""
+        snaps = self.snaps + [snap("s1b", "m1", "m1-m1", "a", FIVE_A)]
+        freq, _ = ex.build_comp_stats(snaps, self.matches)
+        by_id = {r["id"]: r for r in freq}
+        self.assertEqual(by_id[ex.comp_key(FIVE_A)]["appearances"], 2)
+
+    def test_frequency_sums_to_one_across_all_comps(self):
+        freq, _ = ex.build_comp_stats(self.snaps, self.matches)
+        self.assertAlmostEqual(sum(r["frequency"] for r in freq), 1.0, places=4)
+
+    def test_win_rate_counts_only_decided_maps(self):
+        _freq, winrate = ex.build_comp_stats(self.snaps, self.matches)
+        by_id = {r["id"]: r for r in winrate}
+        row = by_id[ex.comp_key(FIVE_A)]
+        self.assertEqual((row["wins"], row["losses"]), (1, 1))
+        self.assertEqual(row["winRate"], 0.5)
+
+    def test_an_undecided_map_gives_a_null_win_rate_not_zero(self):
+        matches = [match("m1", "a", "b", [game("m1-m1", "nepal", None)])]
+        snaps = [snap("s1", "m1", "m1-m1", "a", FIVE_A)]
+        _freq, winrate = ex.build_comp_stats(snaps, matches)
+        self.assertIsNone(winrate[0]["winRate"])
+        self.assertEqual(winrate[0]["decidedMaps"], 0)
+        self.assertIn("unknown, not zero", winrate[0]["note"])
+
+    def test_a_partial_comp_is_never_counted_as_a_composition(self):
+        snaps = [snap("s1", "m1", "m1-m1", "a", FIVE_A[:3])]
+        freq, _ = ex.build_comp_stats(snaps, self.matches)
+        self.assertEqual(freq, [])
+
+    def test_comp_identity_is_order_independent(self):
+        self.assertEqual(ex.comp_key(FIVE_A), ex.comp_key(list(reversed(FIVE_A))))
+
+    def test_every_comp_row_carries_its_evidence(self):
+        freq, _ = ex.build_comp_stats(self.snaps, self.matches)
+        for row in freq:
+            self.assertTrue(row["evidence"])
+            for e in row["evidence"]:
+                self.assertIn("matchId", e)
+                self.assertIn("snapshotIds", e)
+
+
+class TestHeroRates(unittest.TestCase):
+    def setUp(self):
+        self.matches = [match("m1", "a", "b", [game("m1-m1", "nepal", "a")]),
+                        match("m2", "a", "b", [game("m2-m1", "busan", None)])]
+        self.snaps = [snap("s1", "m1", "m1-m1", "a", FIVE_A),
+                      snap("s2", "m1", "m1-m1", "b", FIVE_B),
+                      snap("s3", "m2", "m2-m1", "a", FIVE_A)]
+
+    def test_pick_rate_is_appearances_over_total_appearances(self):
+        rows = {r["hero"]: r for r in
+                ex.build_hero_rates(self.snaps, [], self.matches)}
+        self.assertEqual(rows["dva"]["picks"], 2)
+        self.assertAlmostEqual(rows["dva"]["pickRate"], 2 / 3, places=4)
+        self.assertEqual(rows["rein"]["picks"], 1)
+
+    def test_win_rate_ignores_the_undecided_map(self):
+        rows = {r["hero"]: r for r in
+                ex.build_hero_rates(self.snaps, [], self.matches)}
+        self.assertEqual((rows["dva"]["wins"], rows["dva"]["losses"]), (1, 0))
+        self.assertEqual(rows["dva"]["winRate"], 1.0)
+        self.assertEqual(rows["rein"]["winRate"], 0.0)
+
+    def test_only_confirmed_swaps_count_toward_swap_rate(self):
+        swaps = [{"status": "confirmed", "fromHero": "lucio", "toHero": "kiriko"},
+                 {"status": "rejected", "fromHero": "dva", "toHero": "rein"}]
+        rows = {r["hero"]: r for r in
+                ex.build_hero_rates(self.snaps, swaps, self.matches)}
+        self.assertEqual(rows["lucio"]["swappedFrom"], 1)
+        self.assertEqual(rows["kiriko"]["swappedTo"], 1)
+        self.assertEqual(rows["dva"]["swappedFrom"], 0)
+
+    def test_a_hero_that_only_appears_in_a_swap_still_gets_a_row(self):
+        swaps = [{"status": "confirmed", "fromHero": "juno", "toHero": "lucio"}]
+        rows = {r["hero"]: r for r in
+                ex.build_hero_rates(self.snaps, swaps, self.matches)}
+        self.assertIn("juno", rows)
+        self.assertEqual(rows["juno"]["picks"], 0)
+        self.assertIsNone(rows["juno"]["swapRate"])   # no picks -> unknown
+
+
+class TestTeamAggregates(unittest.TestCase):
+    def setUp(self):
+        self.matches = [
+            match("m1", "a", "b", [game("m1-m1", "nepal", "a"),
+                                   game("m1-m2", "busan", "b")]),
+        ]
+        self.snaps = [snap("s1", "m1", "m1-m1", "a", FIVE_A),
+                      snap("s2", "m1", "m1-m2", "a", FIVE_B)]
+
+    def test_team_hero_pool_lists_verified_play_only(self):
+        pools = {t["teamId"]: t for t in
+                 ex.build_team_hero_pools(self.snaps, self.matches)}
+        self.assertEqual(sorted(pools), ["a"])       # team b has no snapshots
+        pool = pools["a"]
+        self.assertEqual(pool["appearances"], 2)
+        self.assertEqual(pool["poolSize"], 10)
+        heroes = {h["hero"]: h for h in pool["heroes"]}
+        self.assertEqual(heroes["dva"]["maps"], ["nepal"])
+        self.assertEqual(heroes["dva"]["winRate"], 1.0)
+        self.assertEqual(heroes["rein"]["winRate"], 0.0)
+
+    def test_team_map_records_count_both_sides(self):
+        recs = {t["teamId"]: t for t in ex.build_team_map_records(self.matches)}
+        self.assertEqual(sorted(recs), ["a", "b"])
+        a_maps = {m["map"]: m for m in recs["a"]["maps"]}
+        self.assertEqual((a_maps["nepal"]["wins"], a_maps["nepal"]["losses"]),
+                         (1, 0))
+        self.assertEqual((a_maps["busan"]["wins"], a_maps["busan"]["losses"]),
+                         (0, 1))
+        b_maps = {m["map"]: m for m in recs["b"]["maps"]}
+        self.assertEqual(b_maps["nepal"]["losses"], 1)
+
+    def test_an_undecided_map_is_undecided_not_a_loss(self):
+        matches = [match("m1", "a", "b", [game("m1-m1", "nepal", None)])]
+        recs = {t["teamId"]: t for t in ex.build_team_map_records(matches)}
+        row = recs["a"]["maps"][0]
+        self.assertEqual((row["wins"], row["losses"], row["undecided"]),
+                         (0, 0, 1))
+        self.assertIsNone(row["winRate"])
+
+
+class TestMapAndModeStats(unittest.TestCase):
+    CATALOG = [{"id": "nepal", "name": "Nepal", "mode": "Control"},
+               {"id": "busan", "name": "Busan", "mode": "Control"},
+               {"id": "kingsrow", "name": "King's Row", "mode": "Hybrid"}]
+
+    def test_every_catalog_map_appears_even_with_zero_plays(self):
+        stats, _ = ex.build_map_mode_stats([], self.CATALOG)
+        self.assertEqual(len(stats), 3)
+        self.assertTrue(all(r["played"] == 0 for r in stats))
+
+    def test_plays_and_decided_counts(self):
+        matches = [match("m1", "a", "b", [game("m1-m1", "nepal", "a"),
+                                          game("m1-m2", "busan", None)])]
+        stats, modes = ex.build_map_mode_stats(matches, self.CATALOG)
+        by_map = {r["map"]: r for r in stats}
+        self.assertEqual((by_map["nepal"]["played"], by_map["nepal"]["decided"]),
+                         (1, 1))
+        self.assertEqual((by_map["busan"]["played"], by_map["busan"]["decided"]),
+                         (1, 0))
+        by_mode = {r["mode"]: r for r in modes}
+        self.assertEqual(by_mode["Control"]["played"], 2)
+        self.assertEqual(by_mode["Control"]["mapsPlayed"], 2)
+        self.assertEqual(by_mode["Hybrid"]["played"], 0)
+
+    def test_round_counts_accumulate(self):
+        matches = [match("m1", "a", "b",
+                         [game("m1-m1", "nepal", "a", rounds=3)]),
+                   match("m2", "a", "b",
+                         [game("m2-m1", "nepal", "b", rounds=2)])]
+        stats, _ = ex.build_map_mode_stats(matches, self.CATALOG)
+        by_map = {r["map"]: r for r in stats}
+        self.assertEqual(by_map["nepal"]["roundCount"], 5)
+
+
+class TestProvisionalBlocking(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.con = content_db.connect(os.path.join(self.tmp.name, "owcs.sqlite"))
+        content_db.init_schema(self.con)
+        self.con.execute(
+            "INSERT INTO teams (id,name,code,region) VALUES ('a','A','A','emea')")
+        self.con.execute(
+            "INSERT INTO teams (id,name,code,region) VALUES ('b','B','B','emea')")
+        self.con.execute(
+            """INSERT INTO matches (id,date,team_a,team_b,event_name)
+               VALUES ('m1','2026-07-20','a','b','OWCS Test')""")
+        self.con.commit()
+
+    def tearDown(self):
+        self.con.close()
+        self.tmp.cleanup()
+
+    def _run(self, run_id, status):
+        self.con.execute(
+            """INSERT INTO ingest_runs (id, source_id, match_id,
+                   detector_version, status)
+               VALUES (?, 'src', 'm1', 'det-test', ?)""", (run_id, status))
+        self.con.commit()
+
+    def test_a_clean_match_is_not_provisional(self):
+        self._run("r1", "complete")
+        self.assertEqual(ex.provisional_reasons(self.con, "m1"), [])
+
+    def test_an_incomplete_ingest_run_makes_a_match_provisional(self):
+        self._run("r1", "complete")
+        self._run("r2", "running")
+        reasons = ex.provisional_reasons(self.con, "m1")
+        self.assertEqual(len(reasons), 1)
+        self.assertIn("r2", reasons[0])
+        self.assertIn("not complete", reasons[0])
+
+    def test_a_failed_ingest_is_provisional(self):
+        self._run("r1", "failed")
+        self.assertTrue(ex.provisional_reasons(self.con, "m1"))
+
+    def test_an_in_progress_ingest_is_provisional(self):
+        """`ingest_runs.status` is CHECK-constrained to running/complete/failed
+        — anything but 'complete' means the detection has not been reviewed
+        and committed, so its match must not publish maps."""
+        self._run("r1", "running")
+        self.assertTrue(ex.provisional_reasons(self.con, "m1"))
+
+    def test_a_nonexistent_match_is_reported(self):
+        reasons = ex.provisional_reasons(self.con, "does-not-exist")
+        self.assertTrue(any("does not exist" in r for r in reasons))
+
+    def test_a_match_with_no_ingest_runs_at_all_is_publishable(self):
+        """A calendar-only match (discovered, never captured) is not
+        provisional — it publishes its schedule facts and no maps."""
+        self.assertEqual(ex.provisional_reasons(self.con, "m1"), [])
+
+
+class TestProductionExportContracts(unittest.TestCase):
+    """Contract tests against the REAL committed export."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.data = load_public("public_data.v1.js")
+
+    def test_every_required_contract_key_is_present(self):
+        for key in REQUIRED_KEYS:
+            self.assertIn(key, self.data, key)
+
+    def test_the_export_is_marked_production_not_demo(self):
+        self.assertIs(self.data["meta"]["demo"], False)
+        self.assertEqual(self.data["meta"]["schema"], "public.v1")
+
+    def test_publication_provenance_is_recorded_in_meta(self):
+        meta = self.data["meta"]
+        self.assertIn("withheldMatches", meta)
+        self.assertIn("withheldCount", meta)
+        self.assertEqual(meta["withheldCount"], len(meta["withheldMatches"]))
+        self.assertEqual(sorted(meta["approvedReviewStates"]),
+                         sorted(ex.APPROVED_REVIEW_STATES))
+
+    def test_no_withheld_match_appears_in_any_aggregate(self):
+        withheld = {b["matchId"] for b in self.data["meta"]["withheldMatches"]}
+        if not withheld:
+            self.skipTest("nothing is currently withheld")
+        for key in ("compSnapshots", "heroSwaps", "heroStints", "captureRuns"):
+            for row in self.data[key]:
+                self.assertNotIn(row.get("matchId"), withheld, key)
+        for row in self.data["compFrequency"]:
+            for e in row["evidence"]:
+                self.assertNotIn(e["matchId"], withheld)
+
+    def test_every_published_comp_snapshot_is_in_an_approved_state(self):
+        for c in self.data["compSnapshots"]:
+            self.assertIn(c["reviewStatus"], ex.APPROVED_REVIEW_STATES, c["id"])
+            self.assertIn(c["source"], ("cv", "manual"), c["id"])
+
+    def test_every_published_hero_stint_is_in_an_approved_state(self):
+        for s in self.data["heroStints"]:
+            self.assertIn(s["reviewStatus"], ex.APPROVED_REVIEW_STATES, s["id"])
+
+    def test_the_rejected_swap_ledger_holds_only_non_confirmed_swaps(self):
+        for s in self.data["rejectedSwaps"]:
+            self.assertNotEqual(s["status"], "confirmed")
+            self.assertTrue(s.get("reason"),
+                            "a rejected swap must carry the reason it was thrown out")
+
+    def test_confirmed_swaps_carry_before_and_after_evidence(self):
+        confirmed = [s for s in self.data["heroSwaps"]
+                     if s["status"] == "confirmed"]
+        self.assertTrue(confirmed, "the verified milestone has confirmed swaps")
+        for s in confirmed:
+            for key in ("evidenceBefore", "evidenceAfter"):
+                self.assertTrue(s[key], f"{s['id']} missing {key}")
+                self.assertTrue(os.path.exists(os.path.join(REPO, s[key])),
+                                f"{s['id']} {key} does not resolve")
+
+    def test_aggregates_are_consistent_with_the_snapshots_in_this_file(self):
+        """Recomputing from the file's own rows must reproduce its aggregates —
+        this is what stops an aggregate from drifting away from its evidence."""
+        freq, winrate = ex.build_comp_stats(self.data["compSnapshots"],
+                                           self.data["matches"])
+        self.assertEqual(freq, self.data["compFrequency"])
+        self.assertEqual(winrate, self.data["compWinRate"])
+        rates = ex.build_hero_rates(self.data["compSnapshots"],
+                                    self.data["heroSwaps"],
+                                    self.data["matches"])
+        self.assertEqual(rates, self.data["heroPickRates"])
+
+    def test_map_results_mirror_the_maps_inside_matches(self):
+        inline = [(m["id"], g["id"]) for m in self.data["matches"]
+                  for g in m["maps"]]
+        flat = [(r["matchId"], r["id"]) for r in self.data["mapResults"]]
+        self.assertEqual(sorted(inline), sorted(flat))
+
+    def test_the_verified_milestone_is_still_published(self):
+        """The one genuinely CV-verified match must survive every filter."""
+        m = next((x for x in self.data["matches"]
+                  if x["id"] == "m-qad-twis-s2po"), None)
+        self.assertIsNotNone(m, "the Nepal milestone match must be exported")
+        self.assertTrue(m["maps"], "its map must not be withheld")
+        self.assertEqual(m["maps"][0]["winner"], "twis")
+        self.assertTrue([c for c in self.data["compSnapshots"]
+                         if c["matchId"] == "m-qad-twis-s2po"])
+
+    def test_every_hero_and_map_referenced_by_an_aggregate_exists(self):
+        hero_ids = {h["id"] for h in self.data["heroes"]}
+        map_ids = {m["id"] for m in self.data["mapsCatalog"]}
+        for row in self.data["heroPickRates"]:
+            self.assertIn(row["hero"], hero_ids, row["hero"])
+        for row in self.data["compFrequency"]:
+            for h in row["heroes"]:
+                self.assertIn(h, hero_ids, h)
+        for row in self.data["mapStats"]:
+            self.assertIn(row["map"], map_ids, row["map"])
+
+
+class TestFixtureToProductionSwitching(unittest.TestCase):
+    def test_production_assigns_unconditionally_and_fixture_only_fills_in(self):
+        prod = open(os.path.join(REPO, "assets", "data", "public_data.v1.js"),
+                    encoding="utf-8").read()
+        fix = open(os.path.join(REPO, "assets", "data", "public_fixture.v1.js"),
+                   encoding="utf-8").read()
+        self.assertRegex(prod, r"window\.OWCS_PUBLIC\s*=\s*\{")
+        self.assertNotIn("window.OWCS_PUBLIC || ", prod)
+        self.assertRegex(fix, r"window\.OWCS_PUBLIC\s*=\s*window\.OWCS_PUBLIC\s*\|\|")
+
+    def test_the_fixture_is_marked_demo_and_production_is_not(self):
+        self.assertIs(load_public("public_fixture.v1.js")["meta"]["demo"], True)
+        self.assertIs(load_public("public_data.v1.js")["meta"]["demo"], False)
+
+    def test_every_public_page_loads_production_before_the_fixture(self):
+        pages = [p for p in os.listdir(REPO) if p.endswith(".html")]
+        checked = 0
+        for page in sorted(pages):
+            src = open(os.path.join(REPO, page), encoding="utf-8").read()
+            if "public_fixture.v1.js" not in src:
+                continue
+            i_prod = src.find("public_data.v1.js")
+            i_fix = src.find("public_fixture.v1.js")
+            self.assertNotEqual(i_prod, -1,
+                                f"{page} loads the fixture but not production")
+            self.assertLess(i_prod, i_fix,
+                            f"{page} loads the fixture before production — real "
+                            f"data would be shadowed by demo data")
+            checked += 1
+        self.assertGreater(checked, 5, "expected several public pages")
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)

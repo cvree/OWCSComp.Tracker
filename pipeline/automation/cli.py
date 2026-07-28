@@ -36,6 +36,7 @@ from automation import coverage as cov  # noqa: E402
 from automation import discovery as disc  # noqa: E402
 from automation import faceit_api  # noqa: E402
 from automation import job_store as js  # noqa: E402
+from automation import link_intake as li  # noqa: E402
 from automation import locks as lk  # noqa: E402
 from automation import match_export_coverage as mec  # noqa: E402
 from automation import match_repair as mrepair  # noqa: E402
@@ -677,6 +678,264 @@ def cmd_discover_broadcasts(args: argparse.Namespace) -> int:
     return _run_broadcast_discovery(args)
 
 
+# ----------------------------------------------- Phase 1 URL-only intake
+def cmd_ingest_link(args: argparse.Namespace) -> int:
+    """`ingest-link --url "<youtube-url>"` — THE operator entry point. One
+    pasted broadcast URL becomes exactly one deterministic job; pasting it
+    again (in any spelling) attaches to the same job. Never downloads
+    anything: it records the link, retrieves public metadata, and either
+    auto-approves a verified official channel or blocks on manual
+    approval."""
+    config = cfg.load_config()
+    store = js.JobStore(args.db, config=config)
+    try:
+        client = None if args.no_metadata else _build_youtube_client(
+            args, store=None if args.dry_run else store)
+        try:
+            result = li.ingest_link(
+                store, args.url, client=client, dry_run=args.dry_run,
+                requested_by=args.requested_by)
+        except li.LinkIntakeError as exc:
+            print(f"[intake] REFUSED [{exc.code}] {exc}")
+            return 1
+        if args.json:
+            print(json.dumps(result, indent=2))
+            return 0
+        mode = "dry-run — nothing written" if args.dry_run else (
+            "new job created" if result["created"] else
+            "duplicate link — attached to the existing job")
+        print(f"[intake] {mode}")
+        print(f"  video id     : {result['videoId']}")
+        print(f"  canonical url: {result['canonicalUrl']}")
+        print(f"  job key      : {result['jobKey']}")
+        print(f"  job state    : {result['state']}")
+        src = result["source"]
+        print(f"  source       : {src['state']} "
+              f"({'automatic' if src['autoApproved'] else 'needs a human'})")
+        print(f"    reason     : [{src['reasonCode']}] {src['reason']}")
+        meta = result["metadata"]
+        if meta.get("status") == "ok":
+            print(f"  title        : {meta.get('title')}")
+            print(f"  channel      : {meta.get('channelTitle')} ({meta.get('channelId')})")
+            print(f"  duration     : {meta.get('durationSeconds')}s "
+                  f"[{meta.get('liveBroadcastStatus')}]")
+        else:
+            print(f"  metadata     : {meta.get('status')} "
+                  f"[{meta.get('errorCode')}] {meta.get('error')}")
+        if result.get("likeness"):
+            lk_ = result["likeness"]
+            print(f"  broadcast-likeness: {lk_['confidence']} (score {lk_['score']})")
+        for w in result["warnings"]:
+            print(f"  WARNING      : {w}")
+        print(f"  next command : {result['nextCommand']}")
+        return 0
+    finally:
+        store.close()
+
+
+def cmd_link_status(args: argparse.Namespace) -> int:
+    """`link-status [--job <key> | --video-id <id> | --url <url>]` — the
+    operator's read-only view of every pasted link: stage, source
+    authorization, warnings, every blocking reason, and the exact next
+    command."""
+    store = js.JobStore(args.db)
+    try:
+        try:
+            rows = li.link_status(store, job_key=args.job,
+                                  video_id=args.video_id, url=args.url)
+        except li.LinkIntakeError as exc:
+            print(f"[intake] link-status FAILED [{exc.code}] {exc}")
+            return 1
+        if args.json:
+            print(json.dumps(rows, indent=2))
+            return 0
+        print(f"[intake] {len(rows)} link job(s):")
+        print(li.format_status(rows))
+        return 0
+    finally:
+        store.close()
+
+
+def cmd_approve_source(args: argparse.Namespace) -> int:
+    """`approve-source --job <key> --approved-by <name> --confirm` — the one
+    audited human gate for a source that is not on a verified official
+    channel. `--reject` records an explicit refusal instead."""
+    store = js.JobStore(args.db)
+    try:
+        try:
+            result = li.approve_source(
+                store, args.job, approved_by=args.approved_by,
+                reason=args.reason, confirm=args.confirm, reject=args.reject)
+        except li.LinkIntakeError as exc:
+            print(f"[intake] approve-source FAILED [{exc.code}] {exc}")
+            return 1
+        verb = "REJECTED" if args.reject else "APPROVED"
+        print(f"[intake] {args.job}: source {verb} by {args.approved_by}")
+        print(f"  job state   : {result['state']}")
+        print(f"  reason      : {result['source']['reason']}")
+        print(f"  next command: {result['nextCommand']}")
+        return 0
+    finally:
+        store.close()
+
+
+# --------------------------------------------- Phase 3 layout resolution
+def cmd_resolve_layout(args: argparse.Namespace) -> int:
+    """`resolve-layout --job <id>` — fingerprint the broadcast against every
+    committed layout and either reuse the matching one automatically or
+    calibrate a NEW one for human approval. Reads the 360p scan proxy."""
+    from automation import layout_resolver as lr
+    store = js.JobStore(args.db)
+    try:
+        job = _job_or_exit(store, args.job)
+        channels = {c.get("channelId"): c for c in cfg.load_all_channels()}
+        preferred = ((channels.get(job.payload.get("channelId")) or {})
+                     .get("preferredLayout"))
+        try:
+            result = lr.resolve_layout(
+                store, job, preferred_layout=preferred,
+                sample_count=args.samples, harvest=not args.no_harvest)
+        except lr.LayoutRefusal as exc:
+            print(f"[layout] REFUSED [{exc.code}] {exc}")
+            return 1
+        if args.json:
+            print(json.dumps(result, indent=2))
+            return 0
+        print(f"[layout] resolve-layout {args.job}:")
+        print(lr.format_resolution(result["record"]))
+        return 0 if result.get("ok") else 1
+    finally:
+        store.close()
+
+
+def cmd_approve_layout(args: argparse.Namespace) -> int:
+    """`approve-layout --job <id> --confirm` — promote a generated layout
+    into layouts/ after reviewing its sheet. Never approves a calibration
+    the calibrator itself refused."""
+    from automation import layout_resolver as lr
+    store = js.JobStore(args.db)
+    try:
+        try:
+            result = lr.approve_layout(store, args.job, confirm=args.confirm,
+                                       approved_by=args.approved_by)
+        except lr.LayoutRefusal as exc:
+            print(f"[layout] approve-layout FAILED [{exc.code}] {exc}")
+            return 1
+        print(f"[layout] {args.job}: layout {result.get('layoutId')} approved")
+        if result.get("layoutPath"):
+            print(f"  layout file : {result['layoutPath']}")
+        if result.get("templatesDir"):
+            print(f"  templates   : {result['templatesDir']} "
+                  f"(run template-coverage next)")
+        if result.get("note"):
+            print(f"  note        : {result['note']}")
+        return 0
+    finally:
+        store.close()
+
+
+# ------------------------------------------------ Phase 4 segment identity
+def cmd_propose_identity(args: argparse.Namespace) -> int:
+    """`propose-identity --job <id>` — read map, mode, teams, sides, order and
+    player nameplates off the broadcast for every pending segment, store the
+    proposals with evidence, and name every disagreement as a review task.
+    Writes proposals only; never confirms anything."""
+    from automation import segment_identity as si
+    from automation import segmentation as seg
+    import capture
+    import ocr_hud
+    from automation import worker as wk
+    store = js.JobStore(args.db)
+    con = _open_content_db()
+    try:
+        job = _job_or_exit(store, args.job)
+        video_id = job.payload.get("videoId")
+        layout_id = job.payload.get("expectedLayoutId")
+        if not layout_id:
+            print(f"[identity] {args.job} has no resolved layout — "
+                  f"run resolve-layout first")
+            return 1
+        scan_path = wk.scan_path_for(job)
+        if not scan_path or not os.path.exists(scan_path):
+            print(f"[identity] {args.job} has no 360p scan proxy on disk — "
+                  f"re-run the worker")
+            return 1
+        from automation import detection_runner as dr
+        layout = capture.load_layout(dr.layout_path(layout_id))
+        segments = [s for s in seg.list_segments(store.con, video_id=video_id)
+                    if s["review_status"] in ("pending", "approved")]
+        if args.segment_id:
+            segments = [s for s in segments if s["id"] == args.segment_id]
+        if not segments:
+            print(f"[identity] no pending/approved segment for {args.job}")
+            return 1
+        read_fn = ocr_hud.make_reader(args.ocr_engine)
+        rc = 0
+        for s in segments:
+            frames = si_sample_frames(scan_path, s, args.samples)
+            proposal = si.propose_identity(
+                store.con, con, s, layout=layout, frames=frames,
+                read_fn=read_fn, match_id=job.payload.get("matchId"))
+            si.store_proposals(store.con, s["id"], proposal)
+            print(f"[identity] segment #{s['id']} "
+                  f"[{s['start_time']:.0f}-{s['end_time']:.0f}]:")
+            print(si.format_proposal(proposal))
+            if proposal["identityStatus"] == "blocked":
+                rc = 1
+        return rc
+    finally:
+        con.close()
+        store.close()
+
+
+def si_sample_frames(scan_path: str, segment: dict, count: int
+                     ) -> list[tuple[float, str]]:
+    """Sample frames from INSIDE one segment window, on the scan proxy."""
+    from automation import layout_resolver as lr
+    import subprocess
+    start, end = float(segment["start_time"]), float(segment["end_time"])
+    span = max(end - start, 1.0)
+    out_dir = os.path.join(content_db.REPO_ROOT, "reports", "identity",
+                           str(segment["video_id"]), f"seg{segment['id']}")
+    os.makedirs(out_dir, exist_ok=True)
+    step = span / (count + 1)
+    frames: list[tuple[float, str]] = []
+    for i in range(count):
+        t = start + step * (i + 1)
+        path = os.path.join(out_dir, f"frame_{int(t):08d}.png")
+        cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+               "-ss", str(t), "-i", scan_path, "-frames:v", "1", path]
+        try:
+            subprocess.run(cmd, check=True, capture_output=True, text=True)
+        except Exception:  # noqa: BLE001 — one bad seek is not fatal
+            continue
+        if os.path.exists(path):
+            frames.append((t, path))
+    return frames
+
+
+def cmd_accept_proposed(args: argparse.Namespace) -> int:
+    """`accept-proposed --segment <id>` — approve a segment using the values
+    the machine proposed. Refuses a proposal with any blocking review task or
+    any still-UNKNOWN required field."""
+    from automation import segment_identity as si
+    store = js.JobStore(args.db)
+    try:
+        try:
+            row = si.accept_proposed(store.con, args.segment,
+                                     reviewer_note=args.note,
+                                     layout_id=args.layout_id)
+        except ValueError as exc:
+            print(f"[identity] accept-proposed REFUSED: {exc}")
+            return 1
+        print(f"[identity] segment {args.segment} approved from proposal: "
+              f"{row['map_name']} ({row['map_mode']}) map {row['candidate_map_order']}, "
+              f"{row['team_a']} vs {row['team_b']}, side={row['side_assignment']}")
+        return 0
+    finally:
+        store.close()
+
+
 def _job_or_exit(store: "js.JobStore", job_key: str) -> models.Job:
     job = store.get(job_key)
     if job is None:
@@ -994,6 +1253,69 @@ def cmd_segment_reject(args: argparse.Namespace) -> int:
         store.close()
 
 
+def cmd_segment_split(args: argparse.Namespace) -> int:
+    """Replace one candidate with two, at `--at` seconds. The original row is
+    kept (marked 'split') so its confidence provenance survives."""
+    from automation import segmentation as seg
+    store = js.JobStore(args.db)
+    try:
+        first, second = seg.split_segment(store.con, args.segment_id,
+                                          split_time=args.at)
+        print(f"[automation] segment {args.segment_id} split at {args.at}s -> "
+              f"#{first['id']} [{first['start_time']:.0f}-{first['end_time']:.0f}] "
+              f"and #{second['id']} [{second['start_time']:.0f}-{second['end_time']:.0f}]")
+        return 0
+    except (ValueError, seg.SegmentNotFound) as exc:
+        print(f"[automation] segment-split FAILED: {exc}")
+        return 1
+    finally:
+        store.close()
+
+
+def cmd_segment_merge(args: argparse.Namespace) -> int:
+    """Replace two candidates with one covering their union. Both originals
+    are kept (marked 'merged')."""
+    from automation import segmentation as seg
+    store = js.JobStore(args.db)
+    try:
+        merged = seg.merge_segments(store.con, args.segment_id, args.other)
+        print(f"[automation] merged {args.segment_id}+{args.other} -> "
+              f"#{merged['id']} [{merged['start_time']:.0f}-{merged['end_time']:.0f}]")
+        return 0
+    except (ValueError, seg.SegmentNotFound) as exc:
+        print(f"[automation] segment-merge FAILED: {exc}")
+        return 1
+    finally:
+        store.close()
+
+
+INTAKE_EXPORT_PATH = os.path.join(
+    content_db.REPO_ROOT, "assets", "data", "intake.v1.json")
+
+
+def cmd_intake_export(args: argparse.Namespace) -> int:
+    """`intake-export [--save]` — the operator review panel's data source:
+    every pasted link's stage, next command, blockers, segment timeline,
+    thumbnails and proposed identity. Read-only; `--save` writes the small,
+    non-sensitive JSON `intake.html` reads."""
+    store = js.JobStore(args.db)
+    try:
+        report = li.build_intake_report(store, job_key=args.job)
+        if args.json or not args.save:
+            print(json.dumps(report, indent=1))
+        if args.save:
+            os.makedirs(os.path.dirname(INTAKE_EXPORT_PATH), exist_ok=True)
+            with open(INTAKE_EXPORT_PATH, "w", encoding="utf-8") as f:
+                json.dump(report, f, indent=1)
+                f.write("\n")
+            print(f"[intake] wrote "
+                  f"{os.path.relpath(INTAKE_EXPORT_PATH, content_db.REPO_ROOT)} "
+                  f"({len(report['jobs'])} job(s))")
+        return 0
+    finally:
+        store.close()
+
+
 # ------------------------------------------------------- Phase G/I actions
 def cmd_detect_job(args: argparse.Namespace) -> int:
     from automation import detection_runner as dr
@@ -1241,6 +1563,44 @@ def main(argv: list[str] | None = None) -> int:
                       help="actually write variants + set logo_url (default: dry-run listing)")
     pa_p.set_defaults(func=cmd_publish_team_assets)
 
+    # ---- Phase 1: URL-only operator intake --------------------------------
+    il_p = sub.add_parser("ingest-link",
+                          help="THE entry point: paste one OWCS broadcast URL")
+    il_p.add_argument("--url", required=True,
+                      help="a YouTube broadcast link in any spelling "
+                           "(watch?v=, youtu.be/, /live/, with timestamps)")
+    il_p.add_argument("--dry-run", action="store_true",
+                      help="parse + fetch metadata + report the decision, write nothing")
+    il_p.add_argument("--requested-by", default=None,
+                      help="your name/handle, recorded on the intake record")
+    il_p.add_argument("--no-metadata", action="store_true",
+                      help="skip the YouTube metadata call (offline); the source "
+                           "then cannot be auto-approved")
+    il_p.add_argument("--fixture-dir", default=None,
+                      help="serve YouTube responses from local fixtures (offline)")
+    il_p.add_argument("--json", action="store_true")
+    il_p.set_defaults(func=cmd_ingest_link)
+
+    ls_p = sub.add_parser("link-status",
+                          help="stage/authorization/blockers/next command per pasted link")
+    ls_p.add_argument("--job", default=None)
+    ls_p.add_argument("--video-id", default=None)
+    ls_p.add_argument("--url", default=None)
+    ls_p.add_argument("--json", action="store_true")
+    ls_p.set_defaults(func=cmd_link_status)
+
+    as_p = sub.add_parser("approve-source",
+                          help="audited manual approval of a non-registry source")
+    as_p.add_argument("--job", required=True)
+    as_p.add_argument("--approved-by", required=True,
+                      help="your name/handle — recorded in the audit trail")
+    as_p.add_argument("--reason", default=None)
+    as_p.add_argument("--reject", action="store_true",
+                      help="record an explicit refusal instead of an approval")
+    as_p.add_argument("--confirm", action="store_true",
+                      help="required — there is no default that approves a source")
+    as_p.set_defaults(func=cmd_approve_source)
+
     # ---- Beta closed-loop: Phase 1 job spine + Phase E worker ------------
     cj_p = sub.add_parser("create-job", help="create a processing job from a matched official broadcast")
     cj_p.add_argument("--match", required=True, help="internal match id (must already exist)")
@@ -1325,6 +1685,25 @@ def main(argv: list[str] | None = None) -> int:
     wr_p.add_argument("--max-jobs", type=int, default=1)
     wr_p.set_defaults(func=cmd_worker_run)
 
+    # ---- Phase 3 layout resolution ---------------------------------------
+    rl_p = sub.add_parser("resolve-layout",
+                          help="fingerprint the broadcast and reuse or calibrate a layout")
+    rl_p.add_argument("--job", required=True)
+    rl_p.add_argument("--samples", type=int, default=24,
+                      help="representative frames to fingerprint against")
+    rl_p.add_argument("--no-harvest", action="store_true",
+                      help="skip marker harvesting")
+    rl_p.add_argument("--json", action="store_true")
+    rl_p.set_defaults(func=cmd_resolve_layout)
+
+    al_p = sub.add_parser("approve-layout",
+                          help="promote a generated layout into layouts/ (human gate)")
+    al_p.add_argument("--job", required=True)
+    al_p.add_argument("--approved-by", default=None)
+    al_p.add_argument("--confirm", action="store_true",
+                      help="required — a generated layout is never auto-approved")
+    al_p.set_defaults(func=cmd_approve_layout)
+
     # ---- Phase F assisted segmentation -----------------------------------
     sl_p = sub.add_parser("segment-list", help="list candidate/reviewed map segments")
     sl_p.add_argument("--video-id", default=None)
@@ -1348,6 +1727,43 @@ def main(argv: list[str] | None = None) -> int:
     sr_p.add_argument("segment_id", type=int)
     sr_p.add_argument("--reason", required=True)
     sr_p.set_defaults(func=cmd_segment_reject)
+
+    # ---- Phase 4 automatic segment identity ------------------------------
+    pi_p = sub.add_parser("propose-identity",
+                          help="propose map/mode/teams/sides/order/players with evidence")
+    pi_p.add_argument("--job", required=True)
+    pi_p.add_argument("--segment-id", type=int, default=None,
+                      help="limit to one segment (default: every pending one)")
+    pi_p.add_argument("--samples", type=int, default=8,
+                      help="frames to sample inside each segment window")
+    pi_p.add_argument("--ocr-engine", default="easyocr")
+    pi_p.set_defaults(func=cmd_propose_identity)
+
+    ap_p = sub.add_parser("accept-proposed",
+                          help="approve a segment using the proposed identity")
+    ap_p.add_argument("--segment", type=int, required=True)
+    ap_p.add_argument("--layout-id", default=None)
+    ap_p.add_argument("--note", default=None)
+    ap_p.set_defaults(func=cmd_accept_proposed)
+
+    ss_p = sub.add_parser("segment-split", help="split one candidate into two")
+    ss_p.add_argument("segment_id", type=int)
+    ss_p.add_argument("--at", type=float, required=True,
+                      help="split point in VOD seconds (must be inside the window)")
+    ss_p.set_defaults(func=cmd_segment_split)
+
+    smg_p = sub.add_parser("segment-merge", help="merge two candidates into one")
+    smg_p.add_argument("segment_id", type=int)
+    smg_p.add_argument("other", type=int)
+    smg_p.set_defaults(func=cmd_segment_merge)
+
+    ie_p = sub.add_parser("intake-export",
+                          help="operator review-panel snapshot (intake.html)")
+    ie_p.add_argument("--job", default=None, help="limit to one job key")
+    ie_p.add_argument("--save", action="store_true",
+                      help="write assets/data/intake.v1.json")
+    ie_p.add_argument("--json", action="store_true")
+    ie_p.set_defaults(func=cmd_intake_export)
 
     # ---- Phase G detection + Phase I publication -------------------------
     dj_p = sub.add_parser("detect-job", help="run detection on a job's approved segment")

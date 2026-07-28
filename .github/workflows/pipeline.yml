@@ -9,9 +9,13 @@
 # $0 by design: public-repo Actions minutes, no server, no secrets
 # beyond the default GITHUB_TOKEN.
 #
-# Before the first useful run you must commit:
-#   - layouts/<your-layout>.json  (+ anchor/replay reference crops)
-#   - templates/<hero_id>.png      (see pipeline/README.md calibration)
+# Before the first useful run you must commit, for the broadcast package
+# being processed:
+#   - layouts/<your-layout>.json  — a CALIBRATED profile (real hud_probe chip
+#     geometry from pipeline/calibrate_source.py), not the placeholder starter
+#   - templates/<package>/<hero_id>.png — that package's own hero templates
+#     (check coverage with pipeline/template_bootstrap.py --all-layouts;
+#     uncovered heroes are reported UNKNOWN, never guessed)
 # Until then, runs are graceful no-ops.
 # =====================================================================
 
@@ -29,7 +33,13 @@ on:
       layout:
         description: "Calibrated layout json to process with"
         required: false
-        default: "layouts/owcs_youtube_2026.json"
+        # owcs_jksix_qwc is the only CALIBRATED, verified broadcast package in
+        # the repo (real chip geometry + a per-source template set + a
+        # calibration sheet). The previous default, owcs_youtube_2026, is an
+        # explicitly-labelled PLACEHOLDER whose rectangles are guesses and
+        # which carries no hud_probe — dispatching with it produced garbage
+        # slot reads rather than an honest failure.
+        default: "layouts/owcs_jksix_qwc.json"
       match_id:
         description: "Process only this match id (debugging)"
         required: false
@@ -39,18 +49,23 @@ on:
         required: false
         default: "2"
 
-# Never let two runs touch the DB/repo at once; queue instead of cancel
-# so a manual debug run still happens after the scheduled one.
+# Every workflow that mutates the SAME generated files — data/owcs.sqlite,
+# assets/js/data.js, assets/data/public_data.v1.js — shares ONE concurrency
+# group. Previously each had its own group, so `discovery`, `pipeline` and
+# `update-data` could run simultaneously and race on those files: two runs
+# would export from different DB states and the second commit would silently
+# clobber the first. Queue instead of cancel, so a manual run still happens
+# after a scheduled one rather than being dropped.
 concurrency:
-  group: owcs-pipeline
+  group: owcs-generated-data
   cancel-in-progress: false
 
 permissions:
   contents: write   # commit the updated DB + data.js
 
 env:
-  # Chosen at dispatch time; defaults to the committed starter layout.
-  LAYOUT: ${{ github.event.inputs.layout || 'layouts/owcs_youtube_2026.json' }}
+  # Chosen at dispatch time; defaults to the one CALIBRATED, verified package.
+  LAYOUT: ${{ github.event.inputs.layout || 'layouts/owcs_jksix_qwc.json' }}
 
 jobs:
   run:

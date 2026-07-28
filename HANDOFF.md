@@ -1,6 +1,186 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
-## CURRENT STATUS (authoritative — 2026-07-26) — Closed-loop beta: worker, segmentation, detection wiring, publication (Phases E/F/G/I)
+## CURRENT STATUS (authoritative — 2026-07-27) — URL-only intake to audited public data (Phases 1-8)
+
+> **This is the ONLY authoritative status section.** Every `## HISTORICAL
+> (superseded — …)` section below is kept for context and is out of date
+> wherever it conflicts with this one. When the code and any document
+> disagree, the code wins.
+
+### The headline: an operator now pastes ONE link
+
+```powershell
+python pipeline/automation/cli.py ingest-link --url "<youtube-url>"
+```
+
+That is the whole intake. No match id, channel id, video id, team names or
+layout id from the operator — every one of those is either derived from the
+URL and its public metadata, resolved automatically from evidence later, or
+left honestly `UNKNOWN` for a human to fill in with a named reason.
+
+### What was built this pass
+
+**Phase 1 — URL intake + authorization** (`pipeline/automation/link_intake.py`)
+Canonical parsing of every YouTube spelling (`watch?v=`, `youtu.be/`,
+`/live/`, `/embed/`, `/shorts/`, `/v/`, `youtube-nocookie`, `?t=`/`#t=`
+timestamps, playlist + tracking params) down to ONE video id, ONE canonical
+URL and ONE deterministic job key. Pasting the same broadcast in five
+spellings attaches to the same job and records each paste in an audit
+history — it never creates a second job. YouTube metadata retrieval;
+automatic approval only for a channel in the VERIFIED
+`config/broadcast_channels.json` registry; everything else blocks on
+`approve-source --confirm`, which records who approved it, when and why. A
+metadata failure (no key, quota, network, deleted video) still records the
+link and refuses auto-approval — evidence you don't have can't authorize
+anything. Broadcast-likeness warnings reuse the existing tuned
+`broadcast_matching.broadcast_likeness` gate, so a promo/guide/Shorts upload
+is flagged even on the official channel.
+
+**Phase 2 — full-VOD acquisition + 360p scan proxy** (`worker.py`,
+`video_ingest.py`)
+Duration is probed BEFORE any bytes are fetched, then a duration-aware disk
+preflight refuses up front when the estimated 720p footprint (bitrate ×
+duration × 1.5 safety, including the proxy) will not fit — with the numbers
+behind the refusal recorded on the job. One resumable 720p download
+(`--continue`, ONE pinned format so a resume stays valid; a killed download
+resumes rather than restarts). Full media metadata: sha256, duration,
+resolution, codec, container, source URL, format selector, yt-dlp/ffmpeg
+versions, timestamps. Then ONE local 360p scan proxy: every scanning pass
+(gameplay classification, OCR, layout fingerprinting, segmentation) reads the
+proxy; detection and clip extraction read the full-resolution original and
+`extract_segment_clip` REFUSES a proxy path outright. A proxy failure never
+loses a good multi-hour download — it is recorded as a classified proxy error
+and `scan_path_for` returns `None` rather than silently downgrading.
+
+**Phase 3 — layout resolution + honest segmentation**
+(`pipeline/automation/layout_resolver.py`)
+Broadcast fingerprinting across representative frames, scored with the SAME
+structural HUD probe (`gameplay_state.probe_hud`) production detection
+trusts: a layout that belongs to this broadcast reproduces its own chip-row +
+portrait geometry, a foreign one scores 0. Automatic reuse of a committed
+layout above the score bar and with a clear margin; ambiguity between two
+equally-good layouts goes to a human instead of a coin flip; no match at all
+falls through to `calibrate_source.py`, whose OWN confidence floor is
+enforced unchanged — below it, a HARD refusal, and `approve-layout` will not
+publish a calibration the calibrator itself refused. Marker harvesting saves
+a representative frame per broadcast state; `round_emblem`/`highlight` have
+no automatic classifier and are always reported missing rather than
+fabricated. **A real defect was fixed here**: segmentation required an
+`anchor` template, and the one fully-proven layout (`owcs_jksix_qwc`) has
+none — so it could not segment its own broadcast at all. It now prefers the
+structural probe (matching `ingest_map.py`) and falls back to the anchor
+template, strengthening rather than loosening the gameplay-state rules.
+Candidates carry three spread thumbnails and a per-reason rejection tally.
+
+**Phase 4 — automatic segment identity** (`map_identify.py`,
+`player_identify.py`, `pipeline/automation/segment_identity.py`, `intake.html`)
+Map name by OCR consensus against the catalog, with mode taken FROM the
+catalog rather than OCR'd independently (a second weaker signal could only
+disagree with itself); team consensus per side; side continuity tracked by
+chip-row hue so a mid-window side swap is DETECTED and blocks the side
+assignment; chronological map order; nameplate OCR against the match roster.
+A nameplate matching nobody becomes a recorded CANDIDATE — there is no code
+path that creates a `players` row. Ten slots hold ten distinct people, so a
+duplicate makes BOTH slots `UNKNOWN`. Every signal carries
+`{value, source, confidence, reason, evidence}`, is mirrored into
+`ingest_findings`, and every disagreement becomes a named review task.
+`accept-proposed` approves a segment from its proposal in one action, through
+the SAME `approve_segment` gate, and refuses a blocked or incomplete
+proposal. `intake.html` is the read-only operator panel: stage, exact next
+command, segment timeline, thumbnails, proposed vs human-confirmed values,
+blocking reasons, and the accept/edit/split/merge/reject commands.
+
+**Phase 5 — template coverage, honestly** (`pipeline/template_bootstrap.py`)
+Coverage is measured against the FULL roster, not against what happens to
+exist. The real numbers today: `templates/owcs_jksix_qwc` covers **8 of 52
+heroes (15.4%)**, `templates/owcs_8c105lnzlam` 7/52, the shared
+`templates/` 17/52. Every uncovered hero is named; detection reports UNKNOWN
+for them and never guesses. Existing sets are REUSED, never re-harvested.
+Official hero art is used ONLY to propose a cluster label — never written
+into a template set, because an official render is not a broadcast HUD
+portrait. Low-margin clusters are surfaced for human review. Provenance is
+recorded per template file. Packaging now HARD-FAILS a detection-capable
+layout with no resolvable `templates_dir`, and hard-fails a template
+filename matching no hero id (detection would load it as a phantom hero).
+
+**Phase 6 — supporting match facts** (`pipeline/score_read.py`)
+Map scores read as a PAIR under temporal consensus and a monotonicity rule
+(a score never decreases; a read that would is discarded with its reason).
+Winners DERIVED from the final score, never OCR'd separately; a level score
+yields no winner. Series score read from the between-maps card and
+cross-checked against established map winners — a contradiction is reported,
+not resolved. Best-of inferred only when the evidence forces it. Map order
+and VOD timestamps from segment windows. `operator_value` records a
+human-supplied fact as `source='operator'` with their name, so it can never
+be mistaken for a measurement.
+
+**Phase 7 — production export completeness** (`pipeline/export_data.py`)
+The production export now carries every contract the pages and docs require:
+`mapResults`, `heroStints`, `rejectedSwaps`, `compFrequency`, `compWinRate`,
+`heroPickRates` (pick/win/swap), `teamHeroPools`, `teamMapRecords`,
+`mapStats`, `modeStats`. Every aggregate is computed from the approved comp
+snapshots IN THAT FILE, after provisional blocking, so it can never include a
+withheld match — and a test recomputes them from the file's own rows to catch
+drift. `provisional_reasons` is the explicit gate: a match with an
+incomplete ingest run publishes its calendar facts and NO maps,
+compositions, swaps or bans, with the reason recorded in
+`meta.withheldMatches`. Win rates are `null` (unknown) rather than `0` when
+nothing is decided. Production/fixture switching was already correct and is
+now test-enforced across every public page.
+
+**Phase 8 — workflow + release reliability**
+`discovery`, `pipeline` and `update-data` all write `data/owcs.sqlite`,
+`assets/js/data.js` and `assets/data/public_data.v1.js` but used THREE
+different concurrency groups, so they could race and clobber each other's
+commits — they now share one `owcs-generated-data` group. `pipeline.yml`'s
+layout default was the explicitly-labelled PLACEHOLDER starter profile
+(guessed rectangles, no `hud_probe`), which produced confident-looking
+garbage; it now defaults to the one calibrated package. The
+`REPLACE_WITH_INTERNAL_MATCH_ID` placeholder video source is gone, and a test
+stops another from being committed. `test_release_reproducibility.py` builds
+a fresh `git archive`, extracts it to a different path, runs the packaging
+gate + worker diagnostics + the CLI there, verifies no absolute path or drive
+letter is baked into any committed artifact, verifies every layout's
+templates and markers exist in the extraction, and re-runs a known detection
+from the clean extraction.
+
+### Two real bugs fixed along the way
+
+* **Segmentation could not run on the only proven layout** (Phase 3, above).
+* **Publication was permanently blocked by its own gate.** `publish.py` ran
+  `validate_data.py --strict`, which treats WARNINGS as failures — and this
+  project's warnings are its normal steady state ("10 map(s) have replay
+  codes but no tracker comp yet (these are the manual-correction queue)").
+  Publication was therefore impossible for as long as any map was
+  un-processed, i.e. always, and a real error could not be distinguished from
+  the backlog. Errors still refuse publication; warnings are surfaced in the
+  result.
+
+### Honest gap — no real VOD was downloaded this pass
+
+The environment's egress policy denies `www.youtube.com` (a policy `403`, not
+a flaky network). Everything above is implemented and offline-tested, and the
+calibration→approval path, the detection regression, and the packaging gate
+all run for real. **No real YouTube VOD was fetched and no new match went
+through the loop end to end.** The exact Windows commands to finish that
+validation on a real host are in `docs/AUTOMATION.md` under "Real-host
+validation".
+
+### Database migration
+
+`ingest_findings` is rebuilt in place (SQLite cannot ALTER a CHECK
+constraint) to widen its `kind` and `status` vocabularies for the Phase 4/6
+findings. Additive, idempotent, no row rewritten — see
+`db._widen_ingest_findings`.
+
+### New CLI commands
+
+`ingest-link`, `link-status`, `approve-source`, `resolve-layout`,
+`approve-layout`, `propose-identity`, `accept-proposed`, `segment-split`,
+`segment-merge`, `intake-export`.
+
+
+## HISTORICAL (superseded — 2026-07-26) — Closed-loop beta: worker, segmentation, detection wiring, publication (Phases E/F/G/I)
 
 Everything below this section down to the next `## CURRENT STATUS` marker is
 historical context; when it conflicts with this section, this section wins.
@@ -53,7 +233,7 @@ python pipeline/automation/cli.py worker-run --worker-id <name> --max-jobs 1
 
 ---
 
-## CURRENT STATUS (authoritative — 2026-07-26) — Phase D3: official hero presentation assets
+## HISTORICAL (superseded — 2026-07-26) — Phase D3: official hero presentation assets
 
 Everything below this section down to the next `## CURRENT STATUS` marker is
 historical context; when it conflicts with this section, this section wins.
@@ -106,7 +286,7 @@ JPG/WebP).
 
 ---
 
-## CURRENT STATUS (authoritative — 2026-07-25) — Phase D2.1: production team population, verified logos, match export repair
+## HISTORICAL (superseded — 2026-07-25) — Phase D2.1: production team population, verified logos, match export repair
 
 Everything below this section down to the next `## CURRENT STATUS` marker is
 historical context; when it conflicts with this section, this section wins.
@@ -191,7 +371,7 @@ consistently by all 11 public page scripts.
 
 ---
 
-## CURRENT STATUS (authoritative — 2026-07-24) — Phase C: YouTube broadcast discovery
+## HISTORICAL (superseded — 2026-07-24) — Phase C: YouTube broadcast discovery
 
 Read-only official-schedule + YouTube broadcast discovery, built on the
 Phase A/B spine. Never downloads video, never records, never writes hero
@@ -519,7 +699,7 @@ MODIFIED: `export_data.py` (portraitUrl), `serve.py` (2 endpoints),
 ---
 
 
-## CURRENT STATUS (authoritative — 2026-07-19)
+## HISTORICAL (superseded — 2026-07-19)
 
 **Repo is pushed and in sync with GitHub** (`origin/main` ==
 local `main`, nothing uncommitted). A fresh clone gets everything below.
@@ -1126,7 +1306,7 @@ preservation). Fixture demo verified.
 
 ---
 
-## THIS SESSION (latest) — control-room redesign + YouTube stall fix
+## HISTORICAL (superseded) — control-room redesign + YouTube stall fix
 
 Two things landed on top of the previous control-room build:
 

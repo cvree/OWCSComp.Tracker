@@ -783,6 +783,330 @@ def calibration_summary(source_id: str | None, roster: int) -> dict | None:
     }
 
 
+# =====================================================================
+# Derived public aggregates (Phase 7)
+# ---------------------------------------------------------------------
+# The public pages have always computed pick/win rates in the browser from
+# `compSnapshots` (see assets/js/public/stats.js). These functions compute
+# the SAME aggregates server-side, from the SAME approved inputs and the same
+# credibility rules, so the export can carry them for consumers that don't
+# run the page's JS — and so the numbers can be validated in a test rather
+# than only eyeballed in a browser.
+#
+# THE RULE, identical to stats.js's: only comp snapshots whose reviewStatus
+# is 'reviewed' or 'auto-high' and whose source is 'cv' or 'manual' count. A
+# manual snapshot overrides the cv one it corrects. Anything else — including
+# every unreviewed detection — contributes to nothing.
+# =====================================================================
+APPROVED_REVIEW_STATES = ("reviewed", "auto-high")
+
+
+def approved_snapshots(snapshots: list[dict]) -> list[dict]:
+    """The publishable subset — the one gate every aggregate below shares."""
+    overridden = {c["overridesId"] for c in snapshots if c.get("overridesId")}
+    return [c for c in snapshots
+            if c.get("reviewStatus") in APPROVED_REVIEW_STATES
+            and c.get("source") in ("cv", "manual")
+            and c["id"] not in overridden]
+
+
+def _map_index(matches: list[dict]) -> dict[str, dict]:
+    """{public map id -> {match, mapRow}} for result/mode lookups."""
+    out = {}
+    for m in matches:
+        for g in m.get("maps") or []:
+            out[g["id"]] = {"match": m, "map": g}
+    return out
+
+
+def _appearances(snapshots: list[dict], matches: list[dict]) -> list[dict]:
+    """One appearance per (map, team): the five heroes that team fielded, and
+    whether they won that map. This is the unit every rate below divides by —
+    matching stats.js exactly, so a page and the export can never disagree
+    about a denominator."""
+    idx = _map_index(matches)
+    by_key: dict[str, dict] = {}
+    for c in approved_snapshots(snapshots):
+        key = f"{c['mapId']}|{c['teamId']}"
+        entry = by_key.get(key)
+        if entry is None:
+            info = idx.get(c["mapId"]) or {}
+            map_row = info.get("map") or {}
+            winner = map_row.get("winner")
+            entry = {
+                "mapId": c["mapId"], "matchId": c["matchId"],
+                "teamId": c["teamId"], "map": map_row.get("map"),
+                "mode": map_row.get("mode"),
+                # A live/unscored map counts PICKS but never a win or a loss.
+                "result": (None if not winner else
+                           ("win" if winner == c["teamId"] else "loss")),
+                "heroes": {}, "snapshotIds": [],
+            }
+            by_key[key] = entry
+        entry["snapshotIds"].append(c["id"])
+        for h in c.get("heroes") or []:
+            entry["heroes"].setdefault(h, []).append(c["id"])
+    return list(by_key.values())
+
+
+def comp_key(heroes) -> str:
+    """A composition's stable identity: its five hero ids, sorted. Sorting is
+    what makes the same five heroes one comp regardless of slot order."""
+    return "+".join(sorted(set(heroes)))
+
+
+def build_comp_stats(snapshots: list[dict], matches: list[dict]) -> tuple[list, list]:
+    """(compFrequency, compWinRate).
+
+    A comp is counted once per (map, team) appearance, not once per snapshot —
+    otherwise a map sampled ten times would look ten times as popular.
+    `winRate` is None (not 0) when no appearance of that comp is on a decided
+    map: no evidence is not a 0% win rate.
+    """
+    apps = _appearances(snapshots, matches)
+    total = len(apps)
+    buckets: dict[str, dict] = {}
+    for a in apps:
+        heroes = sorted(a["heroes"])
+        if len(heroes) != 5:
+            continue          # a partial read is never a composition
+        key = comp_key(heroes)
+        b = buckets.setdefault(key, {
+            "id": key, "heroes": heroes, "appearances": 0, "wins": 0,
+            "losses": 0, "teamIds": [], "evidence": []})
+        b["appearances"] += 1
+        if a["result"] == "win":
+            b["wins"] += 1
+        elif a["result"] == "loss":
+            b["losses"] += 1
+        if a["teamId"] not in b["teamIds"]:
+            b["teamIds"].append(a["teamId"])
+        b["evidence"].append({"matchId": a["matchId"], "mapId": a["mapId"],
+                              "teamId": a["teamId"], "result": a["result"],
+                              "snapshotIds": a["snapshotIds"]})
+    freq, winrate = [], []
+    for b in sorted(buckets.values(),
+                    key=lambda x: (-x["appearances"], x["id"])):
+        decided = b["wins"] + b["losses"]
+        freq.append({"id": b["id"], "heroes": b["heroes"],
+                     "appearances": b["appearances"],
+                     "frequency": round(b["appearances"] / total, 5) if total else 0,
+                     "teamIds": sorted(b["teamIds"]),
+                     "evidence": b["evidence"]})
+        winrate.append({"id": b["id"], "heroes": b["heroes"],
+                        "wins": b["wins"], "losses": b["losses"],
+                        "decidedMaps": decided,
+                        "winRate": (round(b["wins"] / decided, 5)
+                                    if decided else None),
+                        "note": (None if decided else
+                                 "no decided map for this comp yet — win rate "
+                                 "is unknown, not zero")})
+    return freq, winrate
+
+
+def build_hero_rates(snapshots: list[dict], swaps: list[dict],
+                     matches: list[dict]) -> list[dict]:
+    """heroPickRates: pick rate, win rate and swap rate per hero.
+
+    `swapRate` counts CONFIRMED swaps only — a rejected swap candidate is
+    evidence the detector threw something out, never a hero behavior.
+    """
+    apps = _appearances(snapshots, matches)
+    total = len(apps)
+    rows: dict[str, dict] = {}
+    for a in apps:
+        for hero, snap_ids in a["heroes"].items():
+            r = rows.setdefault(hero, {"hero": hero, "picks": 0, "wins": 0,
+                                       "losses": 0, "swappedFrom": 0,
+                                       "swappedTo": 0, "evidence": []})
+            r["picks"] += 1
+            if a["result"] == "win":
+                r["wins"] += 1
+            elif a["result"] == "loss":
+                r["losses"] += 1
+            r["evidence"].append({"matchId": a["matchId"], "mapId": a["mapId"],
+                                  "teamId": a["teamId"], "result": a["result"],
+                                  "snapshotIds": snap_ids})
+    confirmed = [s for s in swaps if s.get("status") == "confirmed"]
+    for s in confirmed:
+        if s.get("fromHero"):
+            rows.setdefault(s["fromHero"], {
+                "hero": s["fromHero"], "picks": 0, "wins": 0, "losses": 0,
+                "swappedFrom": 0, "swappedTo": 0, "evidence": []})
+            rows[s["fromHero"]]["swappedFrom"] += 1
+        if s.get("toHero"):
+            rows.setdefault(s["toHero"], {
+                "hero": s["toHero"], "picks": 0, "wins": 0, "losses": 0,
+                "swappedFrom": 0, "swappedTo": 0, "evidence": []})
+            rows[s["toHero"]]["swappedTo"] += 1
+    out = []
+    for r in rows.values():
+        decided = r["wins"] + r["losses"]
+        out.append({
+            "hero": r["hero"], "picks": r["picks"],
+            "pickRate": round(r["picks"] / total, 5) if total else 0,
+            "wins": r["wins"], "losses": r["losses"],
+            "winRate": round(r["wins"] / decided, 5) if decided else None,
+            "swappedFrom": r["swappedFrom"], "swappedTo": r["swappedTo"],
+            "swapRate": (round((r["swappedFrom"] + r["swappedTo"]) / r["picks"], 5)
+                         if r["picks"] else None),
+            "evidence": r["evidence"],
+        })
+    out.sort(key=lambda r: (-r["picks"], r["hero"]))
+    return out
+
+
+def build_team_hero_pools(snapshots: list[dict], matches: list[dict]) -> list[dict]:
+    """teamHeroPools: which heroes each team has actually been seen on, with
+    how often and on which maps. Only approved snapshots contribute, so a
+    pool is a record of verified play rather than a guess at a preference."""
+    apps = _appearances(snapshots, matches)
+    teams: dict[str, dict] = {}
+    for a in apps:
+        t = teams.setdefault(a["teamId"], {"teamId": a["teamId"],
+                                           "appearances": 0, "heroes": {}})
+        t["appearances"] += 1
+        for hero, snap_ids in a["heroes"].items():
+            h = t["heroes"].setdefault(hero, {"hero": hero, "picks": 0,
+                                              "wins": 0, "losses": 0,
+                                              "maps": [], "snapshotIds": []})
+            h["picks"] += 1
+            if a["result"] == "win":
+                h["wins"] += 1
+            elif a["result"] == "loss":
+                h["losses"] += 1
+            if a["map"] and a["map"] not in h["maps"]:
+                h["maps"].append(a["map"])
+            h["snapshotIds"].extend(snap_ids)
+    out = []
+    for t in teams.values():
+        heroes = []
+        for h in t["heroes"].values():
+            decided = h["wins"] + h["losses"]
+            heroes.append(dict(h, maps=sorted(h["maps"]),
+                               pickRate=(round(h["picks"] / t["appearances"], 5)
+                                         if t["appearances"] else 0),
+                               winRate=(round(h["wins"] / decided, 5)
+                                        if decided else None)))
+        heroes.sort(key=lambda h: (-h["picks"], h["hero"]))
+        out.append({"teamId": t["teamId"], "appearances": t["appearances"],
+                    "poolSize": len(heroes), "heroes": heroes})
+    out.sort(key=lambda t: t["teamId"])
+    return out
+
+
+def build_team_map_records(matches: list[dict]) -> list[dict]:
+    """teamMapRecords: per-team win/loss per map, from DECIDED maps only. An
+    undecided map appears in `undecided` rather than being counted as a loss."""
+    teams: dict[str, dict] = {}
+    for m in matches:
+        for g in m.get("maps") or []:
+            for team, opponent in ((m.get("teamA"), m.get("teamB")),
+                                   (m.get("teamB"), m.get("teamA"))):
+                if not team or not g.get("map"):
+                    continue
+                t = teams.setdefault(team, {"teamId": team, "maps": {}})
+                row = t["maps"].setdefault(g["map"], {
+                    "map": g["map"], "mode": g.get("mode"), "wins": 0,
+                    "losses": 0, "undecided": 0, "matchIds": []})
+                if m["id"] not in row["matchIds"]:
+                    row["matchIds"].append(m["id"])
+                if not g.get("winner"):
+                    row["undecided"] += 1
+                elif g["winner"] == team:
+                    row["wins"] += 1
+                else:
+                    row["losses"] += 1
+                _ = opponent
+    out = []
+    for t in teams.values():
+        rows = []
+        for row in t["maps"].values():
+            decided = row["wins"] + row["losses"]
+            rows.append(dict(row, played=decided + row["undecided"],
+                             winRate=(round(row["wins"] / decided, 5)
+                                      if decided else None)))
+        rows.sort(key=lambda r: (-r["played"], r["map"]))
+        out.append({"teamId": t["teamId"], "maps": rows})
+    out.sort(key=lambda t: t["teamId"])
+    return out
+
+
+def build_map_mode_stats(matches: list[dict],
+                         maps_catalog: list[dict]) -> tuple[list, list]:
+    """(mapStats, modeStats): how much verified play each map and each mode
+    actually has. These are the numbers that make coverage gaps visible —
+    a map with 0 plays should read as 0, never be omitted."""
+    mode_of = {c["id"]: c.get("mode") for c in maps_catalog}
+    per_map: dict[str, dict] = {c["id"]: {
+        "map": c["id"], "name": c["name"], "mode": c.get("mode"),
+        "played": 0, "decided": 0, "matchIds": [], "roundCount": 0}
+        for c in maps_catalog}
+    for m in matches:
+        for g in m.get("maps") or []:
+            mid = g.get("map")
+            if not mid:
+                continue
+            row = per_map.setdefault(mid, {
+                "map": mid, "name": mid, "mode": mode_of.get(mid),
+                "played": 0, "decided": 0, "matchIds": [], "roundCount": 0})
+            row["played"] += 1
+            row["roundCount"] += int(g.get("roundCount") or 0)
+            if g.get("winner"):
+                row["decided"] += 1
+            if m["id"] not in row["matchIds"]:
+                row["matchIds"].append(m["id"])
+    map_stats = sorted(per_map.values(),
+                       key=lambda r: (-r["played"], r["map"]))
+    modes: dict[str, dict] = {}
+    for row in map_stats:
+        mode = row["mode"] or "Unknown"
+        mo = modes.setdefault(mode, {"mode": mode, "maps": 0, "mapsPlayed": 0,
+                                     "played": 0, "decided": 0})
+        mo["maps"] += 1
+        mo["played"] += row["played"]
+        mo["decided"] += row["decided"]
+        if row["played"]:
+            mo["mapsPlayed"] += 1
+    mode_stats = sorted(modes.values(), key=lambda r: (-r["played"], r["mode"]))
+    return map_stats, mode_stats
+
+
+# --------------------------------------------------- provisional blocking
+def provisional_reasons(con, match_id: str) -> list[str]:
+    """Why a match must NOT reach the public site yet, if any.
+
+    A "provisional" match is one carrying CV output that no human has signed
+    off. The export already only reads `ingest_runs` with status='complete'
+    and only emits comp snapshots in an approved review state — this function
+    is the explicit, testable statement of that rule, and it closes the two
+    ways a provisional row could still slip through:
+
+      * an ingest run that exists but is not complete (a dry run, a crash, a
+        detection awaiting review) — its map must publish no compositions;
+      * a match flagged `needs_review` / a non-final lifecycle while carrying
+        map results.
+
+    Returns [] when the match is safe to publish.
+    """
+    reasons: list[str] = []
+    runs = list(con.execute(
+        "SELECT id, status FROM ingest_runs WHERE match_id=?", (match_id,)))
+    incomplete = [r["id"] for r in runs if (r["status"] or "") != "complete"]
+    if incomplete:
+        reasons.append(
+            f"ingest run(s) {', '.join(incomplete)} are not complete — their "
+            f"detections have not been reviewed and committed")
+    row = con.execute("SELECT * FROM matches WHERE id=?", (match_id,)).fetchone()
+    if row is None:
+        reasons.append(f"match {match_id} does not exist in the content DB")
+        return reasons
+    cols = row.keys()
+    if "needs_review" in cols and rv(row, "needs_review"):
+        reasons.append("match is flagged needs_review")
+    return reasons
+
+
 def build_public_payload(con) -> dict:
     """The production public.v1 dataset, built ONLY from reviewed/staged
     DB state: matches, map_results, hero_stints (approved statuses),
@@ -806,6 +1130,10 @@ def build_public_payload(con) -> dict:
     teams_needed: set[str] = set()
     matches_out, runs_out, snaps_out, players_out = [], [], [], []
     swaps_out: list[dict] = []
+    # Phase 7 contract: the hero-stint timeline itself, not only the comp
+    # snapshots derived from it. Only APPROVED stints are emitted — the same
+    # 'auto-high'/'reviewed' gate every other public number uses.
+    hero_stints_out: list[dict] = []
     vod_out: dict[str, dict] = {}
     tournaments_by_id: dict[str, dict] = {}
 
@@ -824,6 +1152,31 @@ def build_public_payload(con) -> dict:
                 """SELECT * FROM map_rounds WHERE map_result_id=?
                    ORDER BY round_index""", (mr["id"],)).fetchall()
             stints = _stints_for_map(con, mr["id"])
+            map_pub_id_for_stints = f"{mid}-m{mr['map_order']}"
+            for st in stints:
+                if rv(st, "status") not in APPROVED_REVIEW_STATES:
+                    continue
+                evs, eve = rv(st, "evidence_start"), rv(st, "evidence_end")
+                hero_stints_out.append({
+                    "id": (f"hs-{map_pub_id_for_stints}-{st['team_id']}-"
+                           f"{st['slot']}-{st['start_offset']}"),
+                    "matchId": mid, "mapId": map_pub_id_for_stints,
+                    "teamId": st["team_id"], "side": rv(st, "side"),
+                    "slot": rv(st, "slot"), "hero": st["hero_id"],
+                    "start": rv(st, "start_offset"), "end": rv(st, "end_offset"),
+                    "observations": rv(st, "n_obs"),
+                    "meanConfidence": rv(st, "mean_conf"),
+                    "minConfidence": rv(st, "min_conf"),
+                    "reviewStatus": rv(st, "status"),
+                    "source": ("manual" if rv(st, "manual_override") else
+                               rv(st, "source", "cv")),
+                    "detectorVersion": rv(st, "detector_version"),
+                    "evidenceStart": evs if evs and os.path.exists(
+                        os.path.join(db.REPO_ROOT, evs)) else None,
+                    "evidenceEnd": eve if eve and os.path.exists(
+                        os.path.join(db.REPO_ROOT, eve)) else None,
+                    "ingestId": rv(st, "ingest_id"),
+                })
             run = next((r for r in ingest_rows
                         if r["match_id"] == mid
                         and r["map_order"] == mr["map_order"]), None)
@@ -1162,6 +1515,44 @@ def build_public_payload(con) -> dict:
               "compositionTrackingPending": r["id"] not in captured_team_ids}
              for r in con.execute("SELECT * FROM teams ORDER BY name")]
 
+    # ---- provisional blocking (Phase 7) ---------------------------------
+    # A match carrying unreviewed CV output must not reach the public site.
+    # Its calendar facts (teams, schedule, status) are safe and stay; its
+    # MAPS and every composition/swap/ban derived from them are withheld,
+    # with the reason recorded in meta so the withholding is visible rather
+    # than looking like missing data.
+    blocked: list[dict] = []
+    for mo in matches_out:
+        reasons = provisional_reasons(con, mo["id"])
+        if not reasons:
+            continue
+        blocked.append({"matchId": mo["id"], "reasons": reasons})
+        mo["maps"] = []
+        mo["captureStatus"] = "needs-review"
+        mo["summary"] = ("Withheld from publication: "
+                         + "; ".join(reasons)
+                         + ". Calendar facts only — no composition, swap or "
+                           "score from this match is published until review "
+                           "is complete.")
+    blocked_ids = {b["matchId"] for b in blocked}
+    if blocked_ids:
+        snaps_out = [s for s in snaps_out if s["matchId"] not in blocked_ids]
+        swaps_out = [s for s in swaps_out if s["matchId"] not in blocked_ids]
+        hero_bans_out = [b for b in hero_bans_out
+                         if b["matchId"] not in blocked_ids]
+        runs_out = [r for r in runs_out if r["matchId"] not in blocked_ids]
+        hero_stints_out = [s_ for s_ in hero_stints_out
+                           if s_["matchId"] not in blocked_ids]
+
+    # ---- derived aggregates (Phase 7) -----------------------------------
+    # Computed AFTER provisional blocking, from exactly the rows that will
+    # actually ship, so no aggregate can ever include a withheld match.
+    comp_frequency, comp_win_rate = build_comp_stats(snaps_out, matches_out)
+    hero_rates = build_hero_rates(snaps_out, swaps_out, matches_out)
+    team_pools = build_team_hero_pools(snaps_out, matches_out)
+    team_map_records = build_team_map_records(matches_out)
+    map_stats, mode_stats = build_map_mode_stats(matches_out, maps_catalog)
+
     return {
         "meta": {
             "schema": "public.v1",
@@ -1170,6 +1561,17 @@ def build_public_payload(con) -> dict:
             "note": ("Production export from data/owcs.sqlite — only "
                      "captured, staged and reviewed data; no invented "
                      "values."),
+            # Publication provenance: what was withheld and why, so a gap on
+            # the site is always explainable from the export itself.
+            "withheldMatches": blocked,
+            "withheldCount": len(blocked),
+            "approvedReviewStates": list(APPROVED_REVIEW_STATES),
+            "aggregatesNote": ("compFrequency/compWinRate/heroPickRates/"
+                               "teamHeroPools/teamMapRecords/mapStats/"
+                               "modeStats are derived from the approved comp "
+                               "snapshots in THIS file, after provisional "
+                               "matches were withheld — they can never "
+                               "include a withheld match."),
         },
         "regions": REGIONS,
         "teams": teams,
@@ -1179,14 +1581,26 @@ def build_public_payload(con) -> dict:
         "extraRounds": [],
         "bracketMatches": [],
         "matches": matches_out,
+        "mapResults": [dict(g, matchId=mo["id"])
+                       for mo in matches_out for g in (mo.get("maps") or [])],
         "heroBans": hero_bans_out,
         "heroSwaps": swaps_out,
+        "rejectedSwaps": [s for s in swaps_out if s.get("status") != "confirmed"],
+        "heroStints": hero_stints_out,
         "captureRuns": runs_out,
         "compSnapshots": snaps_out,
         "vodSources": list(vod_out.values()),
         "heroes": heroes,
         "mapsCatalog": maps_catalog,
         "patches": [],
+        # ---- derived aggregates -----------------------------------------
+        "compFrequency": comp_frequency,
+        "compWinRate": comp_win_rate,
+        "heroPickRates": hero_rates,
+        "teamHeroPools": team_pools,
+        "teamMapRecords": team_map_records,
+        "mapStats": map_stats,
+        "modeStats": mode_stats,
     }
 
 

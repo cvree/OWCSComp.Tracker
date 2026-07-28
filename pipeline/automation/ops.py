@@ -122,6 +122,81 @@ def resume_interrupted_job(store: js.JobStore, lock_mgr: lk.LockManager, *,
                                      **worker_kwargs)
 
 
+# ------------------------------------------------- layout + segmentation step
+def _resolve_and_segment(store: js.JobStore, content_con, job: models.Job, *,
+                         worker_id: str, media_root: str,
+                         segment_interval: int | None = None) -> dict:
+    """Resolve the broadcast layout (automatically, Phase 3) and propose every
+    gameplay/map window from the 360p SCAN PROXY (Phase 3 segmentation).
+
+    Called for a DOWNLOADED job, and again for a PROCESSING job whose
+    freshly-calibrated layout a human has just approved. Idempotent in the
+    sense that matters: it refuses rather than guesses whenever the evidence
+    it needs (proxy on disk, a resolved layout) is missing.
+    """
+    job_key = job.job_key
+    media = job.payload.get("media") or {}
+    if not media.get("localPath"):
+        return {"ok": False, "reason": "no downloaded media on this job — "
+                                       "run the worker's download step first"}
+    # SCANNING always reads the 360p proxy, never the full-resolution source
+    # (worker.scan_path_for returns None rather than silently falling back, so
+    # a missing proxy stays a visible, recoverable failure).
+    scan_path = worker.scan_path_for(job)
+    if not scan_path or not os.path.exists(scan_path):
+        proxy_err = (media.get("proxy") or {}).get("error")
+        return {"ok": False, "reason": (
+            "no 360p scan proxy on disk"
+            + (f" ({proxy_err})" if proxy_err else "")
+            + " — re-run the worker to regenerate it; scanning never falls "
+              "back to the full-resolution VOD")}
+
+    layout_id = job.payload.get("expectedLayoutId")
+    if not layout_id:
+        from . import layout_resolver as lr
+        try:
+            res = lr.resolve_layout(store, job, scan_path=scan_path,
+                                    worker_id=worker_id)
+        except lr.LayoutRefusal as exc:
+            store.record_error(job_key, error_code=exc.code,
+                               error_message=str(exc))
+            return {"ok": False, "stage": "layout",
+                    "reason": f"[{exc.code}] {exc}"}
+        if not res.get("ok") or res.get("needsApproval"):
+            return {"ok": False, "stage": "layout",
+                    "reason": (res.get("reason")
+                               or "a NEW layout was calibrated and needs "
+                                  "`approve-layout --job <id> --confirm`"),
+                    "record": res.get("record")}
+        job = store.get(job_key)
+        layout_id = job.payload.get("expectedLayoutId")
+
+    import capture
+    from . import segmentation as seg
+    interval = (segment_interval if segment_interval is not None
+                else seg.DEFAULT_INTERVAL_SECONDS)
+    layout = capture.load_layout(dr.layout_path(layout_id))
+    thumbs_dir = os.path.join(media_root, job_key.replace(":", "_"), "thumbs")
+    if sm.can_transition(job.state, sm.SEGMENTING):
+        store.transition(job_key, sm.SEGMENTING)
+    try:
+        candidates = seg.generate_candidates(
+            scan_path, layout, out_dir=thumbs_dir, interval=interval)
+        ids = seg.store_candidates(content_con, media.get("videoId"),
+                                   job.payload.get("matchId"), candidates,
+                                   source_job_key=job_key)
+        store.transition(job_key, sm.NEEDS_REVIEW)
+        store.record_attempt(job_key, ok=True, worker_id=worker_id)
+        return {"ok": True, "candidates": len(candidates), "segmentIds": ids,
+                "layoutId": layout_id,
+                "scannedProxy": os.path.basename(scan_path)}
+    except Exception as exc:  # noqa: BLE001
+        store.record_attempt(job_key, ok=False, worker_id=worker_id,
+                             error_code="segmentation_failed",
+                             error_message=f"{type(exc).__name__}: {exc}")
+        return {"ok": False, "reason": str(exc)}
+
+
 # --------------------------------------------------------- automatic driver
 def run_one_job(store: js.JobStore, lock_mgr: lk.LockManager, content_con,
                 job_key: str, *, worker_id: str,
@@ -149,40 +224,38 @@ def run_one_job(store: js.JobStore, lock_mgr: lk.LockManager, content_con,
                                        "(or crashed — try resume_interrupted_job)"}
 
     if job.state == sm.DOWNLOADED:
-        media = job.payload.get("media") or {}
-        local_path = media.get("localPath")
-        layout_id = job.payload.get("expectedLayoutId")
-        if not local_path or not layout_id:
-            return {"ok": False, "reason": "missing downloaded media path or "
-                                           "expectedLayoutId — cannot generate "
-                                           "segment candidates automatically"}
-        import capture
-        from . import segmentation as seg
-        interval = segment_interval if segment_interval is not None else seg.DEFAULT_INTERVAL_SECONDS
-        repo_root = os.path.dirname(_PIPELINE_DIR)
-        video_path = os.path.join(repo_root, local_path)
-        layout = capture.load_layout(dr.layout_path(layout_id))
-        thumbs_dir = os.path.join(media_root, job_key.replace(":", "_"), "thumbs")
-        store.transition(job_key, sm.SEGMENTING)
-        try:
-            candidates = seg.generate_candidates(
-                video_path, layout, out_dir=thumbs_dir, interval=interval)
-            seg.store_candidates(content_con, media.get("videoId"),
-                                 job.payload.get("matchId"), candidates,
-                                 source_job_key=job_key)
-            store.transition(job_key, sm.NEEDS_REVIEW)
-            store.record_attempt(job_key, ok=True, worker_id=worker_id)
-            return {"ok": True, "candidates": len(candidates)}
-        except Exception as exc:  # noqa: BLE001
-            store.record_attempt(job_key, ok=False, worker_id=worker_id,
-                                 error_code="segmentation_failed",
-                                 error_message=f"{type(exc).__name__}: {exc}")
-            return {"ok": False, "reason": str(exc)}
+        return _resolve_and_segment(store, content_con, job,
+                                    worker_id=worker_id, media_root=media_root,
+                                    segment_interval=segment_interval)
+
+    if job.state == sm.NEEDS_LAYOUT:
+        return {"ok": False, "reason": "a calibrated layout is awaiting human "
+                                       "approval — run `approve-layout --job "
+                                       "<id> --confirm` (or fix the refusal "
+                                       "recorded on the job)"}
 
     if job.state == sm.NEEDS_REVIEW:
         return {"ok": False, "reason": "waiting on human review "
                                        "(segment or detection) — nothing "
                                        "automatic left to do"}
+
+    if job.state == sm.PROCESSING:
+        # PROCESSING is reached two ways: detection is running (nothing to do
+        # here), or a human just approved a freshly-calibrated layout via
+        # `approve-layout`, which is exactly the moment segmentation becomes
+        # possible. Distinguish them by whether this video has any candidate
+        # segment yet — never by guessing.
+        from . import segmentation as seg
+        existing = seg.list_segments(content_con,
+                                     video_id=job.payload.get("videoId"))
+        if existing:
+            return {"ok": False, "reason": "detection in progress — wait, or "
+                                           "use detect-job for this stage"}
+        if not job.payload.get("expectedLayoutId"):
+            return {"ok": False, "reason": "no layout resolved for this job yet"}
+        return _resolve_and_segment(store, content_con, job,
+                                    worker_id=worker_id, media_root=media_root,
+                                    segment_interval=segment_interval)
 
     if job.state == sm.READY_FOR_DETECTION:
         from . import segmentation as seg

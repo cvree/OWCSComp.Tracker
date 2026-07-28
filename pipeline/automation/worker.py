@@ -112,6 +112,83 @@ def check_disk_space(path: str, min_free_gb: float = DEFAULT_MIN_FREE_GB
     return free_gb >= min_free_gb, round(free_gb, 2)
 
 
+# ------------------------------------------------- disk space estimation (P2)
+# Observed video-only bitrates for YouTube VOD renditions, bits/second. These
+# are deliberately GENEROUS (the high end of what a 60fps esports broadcast
+# with a busy HUD actually produces) because the failure mode we must avoid is
+# starting a multi-hour download that runs the disk out mid-way. A refusal
+# before downloading is cheap; a full disk halfway through is not.
+ESTIMATED_BITRATE_BPS: dict[int, int] = {
+    360: 1_000_000,
+    480: 2_000_000,
+    720: 5_000_000,
+    1080: 9_000_000,
+    1440: 20_000_000,
+    2160: 45_000_000,
+}
+# Multiply the estimate by this before comparing against free space: container
+# overhead, a bitrate spike, and the scan proxy (~1/5 of the source) all have
+# to fit alongside the source file.
+DISK_SAFETY_FACTOR = 1.5
+# Never let an estimate claim a broadcast needs less than this.
+MIN_ESTIMATED_BYTES = 64 * 1024 * 1024
+
+
+def estimated_bitrate_bps(height: int) -> int:
+    """Bits/second for the nearest known rendition at or above `height`."""
+    for h in sorted(ESTIMATED_BITRATE_BPS):
+        if height <= h:
+            return ESTIMATED_BITRATE_BPS[h]
+    return ESTIMATED_BITRATE_BPS[max(ESTIMATED_BITRATE_BPS)]
+
+
+def estimate_download_bytes(duration_seconds: float | None, height: int = 720,
+                            *, safety_factor: float = DISK_SAFETY_FACTOR
+                            ) -> int | None:
+    """Bytes a full download of `duration_seconds` at `height` is expected to
+    need, including the safety factor and the scan proxy. Returns None when
+    the duration is unknown — the caller must then treat the requirement as
+    UNKNOWN rather than assume it fits."""
+    if not duration_seconds or duration_seconds <= 0:
+        return None
+    raw = (estimated_bitrate_bps(height) / 8.0) * float(duration_seconds)
+    return int(max(raw * safety_factor, MIN_ESTIMATED_BYTES))
+
+
+def disk_preflight(media_root: str, *, duration_seconds: float | None,
+                   height: int = 720, min_free_gb: float = DEFAULT_MIN_FREE_GB,
+                   safety_factor: float = DISK_SAFETY_FACTOR) -> dict:
+    """Decide, BEFORE a single byte is fetched, whether this broadcast fits.
+
+    Returns a report dict with `ok` plus every number behind the decision, so
+    a refusal is explainable ("4.2GB needed for 4h12m at 720p, 1.8GB free")
+    rather than a bare failure. An UNKNOWN duration is not treated as "fits":
+    it falls back to the flat `min_free_gb` floor and says so.
+    """
+    free_ok, free_gb = check_disk_space(media_root, min_free_gb)
+    needed = estimate_download_bytes(duration_seconds, height,
+                                     safety_factor=safety_factor)
+    needed_gb = round(needed / (1024 ** 3), 2) if needed else None
+    if needed is None:
+        return {
+            "ok": free_ok, "freeGb": free_gb, "neededGb": None,
+            "minFreeGb": min_free_gb, "durationSeconds": duration_seconds,
+            "height": height, "safetyFactor": safety_factor,
+            "reason": (f"duration unknown — could only check the flat "
+                       f"{min_free_gb}GB floor ({free_gb}GB free)"),
+        }
+    ok = free_gb >= max(needed_gb, min_free_gb)
+    return {
+        "ok": ok, "freeGb": free_gb, "neededGb": needed_gb,
+        "minFreeGb": min_free_gb, "durationSeconds": duration_seconds,
+        "height": height, "safetyFactor": safety_factor,
+        "reason": (f"{needed_gb}GB estimated for {int(duration_seconds)}s at "
+                   f"{height}p (x{safety_factor} safety incl. scan proxy), "
+                   f"{free_gb}GB free at {media_root}"
+                   + ("" if ok else " — REFUSING before download")),
+    }
+
+
 # ------------------------------------------------------------ source safety
 class SourceValidationError(ValueError):
     """A job's declared source is not an approved official broadcast. Raised
@@ -294,27 +371,44 @@ def media_dir_for(job: models.Job, media_root: str = DEFAULT_MEDIA_ROOT) -> str:
     return os.path.join(media_root, safe_id, "media")
 
 
+DEFAULT_SOURCE_HEIGHT = 720   # the acquisition target: one 720p source file
+DEFAULT_PROXY_HEIGHT = 360    # the local scan proxy every scanning pass reads
+
+
 def download_job(store: js.JobStore, lock_mgr: lk.LockManager, job: models.Job,
                  *, worker_id: str, media_root: str = DEFAULT_MEDIA_ROOT,
                  min_free_gb: float = DEFAULT_MIN_FREE_GB,
                  official_channel_ids: set | None = None,
                  manual_approved_video_ids: set | None = None,
                  probe_fn=None,
-                 download_clip_fn=None,
+                 download_full_fn=None,
+                 proxy_fn=None,
                  resolution_fn=None,
-                 height: int = 1080,
+                 height: int = DEFAULT_SOURCE_HEIGHT,
+                 proxy_height: int = DEFAULT_PROXY_HEIGHT,
+                 make_proxy: bool = True,
                  which=shutil.which, runner=subprocess,
                  now: dt.datetime | None = None) -> dict:
     """Drive one ARCHIVED (broadcast linked, ready) job through DOWNLOADING
-    to DOWNLOADED. Reuses `download_vod_clip.download_clip` (itself built on
-    `video_ingest.py`'s yt-dlp/ffmpeg machinery) — this function only adds
-    job-state bookkeeping, source validation, and metadata capture around it.
+    to DOWNLOADED, acquiring the WHOLE broadcast once.
 
-    `probe_fn`/`download_clip_fn`/`resolution_fn` default to `video_ingest`/
-    `download_vod_clip`'s real functions, imported lazily below (never at
-    module level — see the module docstring) so a missing cv2 only ever
-    surfaces as a classified failure of THIS call, never an import crash at
-    CLI startup.
+    Order of operations, each step a hard gate before the next:
+      1. tool + flat-disk preflight (unchanged)
+      2. source validation — never an unapproved/unofficial URL
+      3. duration probe FIRST (`video_ingest.probe_vod`), before any bytes
+      4. duration-aware disk preflight — refuses up front when the estimated
+         720p footprint (plus safety factor and proxy) will not fit
+      5. ONE resumable 720p full download (`video_ingest.download_full_video`,
+         `--continue`; a killed download resumes, never restarts)
+      6. real media metadata: sha256, duration, resolution, codec, container,
+         source URL, tool versions, timestamps
+      7. ONE local 360p scan proxy (`video_ingest.make_scan_proxy`) that every
+         later scanning pass reads instead of the full-resolution source
+
+    `probe_fn`/`download_full_fn`/`proxy_fn`/`resolution_fn` default to
+    `video_ingest`'s real functions, imported lazily below (never at module
+    level — see the module docstring) so a missing cv2 only ever surfaces as
+    a classified failure of THIS call, never an import crash at CLI startup.
 
     On any failure the job is routed through `record_attempt(ok=False, ...)`
     (RETRY_SCHEDULED or FAILED_PERMANENT per the existing backoff/ceiling
@@ -324,11 +418,12 @@ def download_job(store: js.JobStore, lock_mgr: lk.LockManager, job: models.Job,
     resource = resource_for(job)
     try:
         import video_ingest as vi
-        import download_vod_clip as dvc
         if probe_fn is None:
             probe_fn = vi.probe_vod
-        if download_clip_fn is None:
-            download_clip_fn = dvc.download_clip
+        if download_full_fn is None:
+            download_full_fn = vi.download_full_video
+        if proxy_fn is None:
+            proxy_fn = vi.make_scan_proxy
         if resolution_fn is None:
             resolution_fn = vi.probe_clip_resolution
 
@@ -344,38 +439,77 @@ def download_job(store: js.JobStore, lock_mgr: lk.LockManager, job: models.Job,
             job.payload, official_channel_ids=official_channel_ids,
             manual_approved_video_ids=manual_approved_video_ids)
 
-        store.transition(job.job_key, sm.DOWNLOADING)
         url = job.payload.get("sourceUrl") or job.payload.get("videoUrl")
+        # Duration BEFORE the download, so the space check below is real.
         meta = probe_fn(url)
+        duration = int(meta.get("duration") or 0)
+        disk = disk_preflight(media_root, duration_seconds=duration or None,
+                              height=height, min_free_gb=min_free_gb)
+        store.update_payload(job.job_key, {"diskPreflight": disk})
+        if not disk["ok"]:
+            raise OSError(28, f"insufficient disk space: {disk['reason']}")
 
+        store.transition(job.job_key, sm.DOWNLOADING)
         out_dir = media_dir_for(job, media_root)
         os.makedirs(out_dir, exist_ok=True)
         out_path = os.path.join(out_dir, f"{video_id}.mp4")
-        duration = int(meta.get("duration") or 0)
-        dres = download_clip_fn(url, 0, duration or 1, out_path, height=height)
+        dres = download_full_fn(url, out_path, height=height)
 
         digest = sha256_file(dres["path"])
         res_info = resolution_fn(dres["path"]) or {}
+        repo_root = os.path.dirname(_PIPELINE_DIR)
         media = {
             "videoId": video_id,
             "channelId": job.payload.get("channelId"),
             "originalTitle": meta.get("title"),
+            "sourceUrl": url,
             "downloadedAt": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat(),
             "durationSeconds": duration or res_info.get("duration"),
+            "requestedHeight": height,
             "width": res_info.get("width"),
             "height": res_info.get("height"),
             "codec": res_info.get("codec"),
             "fileSizeBytes": dres.get("sizeBytes"),
             "sha256": digest,
-            "localPath": _site_relpath(dres["path"], os.path.dirname(_PIPELINE_DIR)),
-            "reusedCache": dres.get("reused", False),
+            "localPath": _site_relpath(dres["path"], repo_root),
+            "reusedCache": bool(dres.get("reused", False)),
+            "resumed": bool(dres.get("resumed", False)),
+            "partialBytesBefore": dres.get("partialBytesBefore"),
+            "formatSelector": dres.get("format"),
             "audioAvailable": None,  # video-only download by design (frame extraction never needs audio)
             "container": os.path.splitext(dres["path"])[1].lstrip("."),
             "workerVersion": WORKER_VERSION,
             "workerId": worker_id,
             "ytDlpVersion": tool_version("yt-dlp", runner=runner),
             "ffmpegVersion": tool_version("ffmpeg", runner=runner),
+            "diskPreflight": disk,
         }
+
+        # The scan proxy: a proxy FAILURE must not lose a good multi-hour
+        # download, so it is recorded as an explicit proxy error on the job
+        # and the source file stays. Segmentation refuses to run without a
+        # proxy, which keeps the failure visible and recoverable.
+        if make_proxy:
+            proxy_path = os.path.join(out_dir, f"{video_id}.proxy{proxy_height}p.mp4")
+            try:
+                pres = proxy_fn(dres["path"], proxy_path, height=proxy_height)
+                media["proxy"] = {
+                    "localPath": _site_relpath(pres["path"], repo_root),
+                    "width": pres.get("width"), "height": pres.get("height"),
+                    "sizeBytes": pres.get("sizeBytes"),
+                    "reused": bool(pres.get("reused", False)),
+                    "sha256": sha256_file(pres["path"]),
+                    "purpose": ("scanning/OCR/layout-matching/segmentation only "
+                                "— detection and clip cuts use the full-resolution "
+                                "source"),
+                }
+            except Exception as exc:  # noqa: BLE001
+                code, message = classify_download_error(exc)
+                media["proxy"] = {"error": message, "errorCode": code,
+                                  "localPath": None}
+                log(f"{job.job_key}: proxy generation FAILED [{code}] {message} "
+                    f"— the full download is intact; re-run to retry the proxy")
+
         store.update_payload(job.job_key, {"media": media})
         store.record_attempt(job.job_key, ok=True, worker_id=worker_id,
                              diagnostic_path=out_path, now=now)
@@ -391,6 +525,35 @@ def download_job(store: js.JobStore, lock_mgr: lk.LockManager, job: models.Job,
         lock_mgr.release(resource, worker_id)
         log(f"{job.job_key}: FAILED [{code}] {message}")
         return {"ok": False, "errorCode": code, "errorMessage": message}
+
+
+def scan_path_for(job: models.Job, *, repo_root: str | None = None) -> str | None:
+    """The path every SCANNING pass must read for this job: the 360p proxy
+    when one exists, else None.
+
+    Returning None rather than silently falling back to the full-resolution
+    source is deliberate — a missing proxy is a visible, recoverable failure,
+    not something to paper over with a slower scan that behaves differently
+    from every other run.
+    """
+    media = job.payload.get("media") or {}
+    proxy = media.get("proxy") or {}
+    rel = proxy.get("localPath")
+    if not rel:
+        return None
+    root = repo_root or os.path.dirname(_PIPELINE_DIR)
+    return os.path.join(root, rel)
+
+
+def source_path_for(job: models.Job, *, repo_root: str | None = None) -> str | None:
+    """The full-resolution source path — what DETECTION and clip extraction
+    must use (never the proxy)."""
+    media = job.payload.get("media") or {}
+    rel = media.get("localPath")
+    if not rel:
+        return None
+    root = repo_root or os.path.dirname(_PIPELINE_DIR)
+    return os.path.join(root, rel)
 
 
 # --------------------------------------------------------------- doctor

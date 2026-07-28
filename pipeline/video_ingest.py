@@ -907,6 +907,150 @@ def probe_clip_resolution(path: str, runner=subprocess) -> dict | None:
         return None
 
 
+# =====================================================================
+# Full-VOD acquisition (Phase 2) — ONE resumable source file per broadcast
+# ---------------------------------------------------------------------
+# The clip path above (`_download_youtube_clip`) fetches a WINDOW and
+# deliberately deletes partials when it walks its format ladder, because a
+# stalled 15-minute window is cheaper to restart than to salvage. A full
+# multi-hour broadcast is the opposite: a killed download must RESUME, so
+# these functions never delete a `.part` file, pin ONE format for the whole
+# download (a mid-download format change would invalidate the partial), and
+# pass yt-dlp `--continue`.
+# =====================================================================
+FULL_VOD_STALL_TIMEOUT = 300.0  # 5 min with zero bytes = a real stall
+
+
+def full_vod_format(height: int = 720) -> str:
+    """One pinned -f selector for a resumable full download.
+
+    Deliberately NOT the ladder `clip_format_ladder` builds: resuming a
+    partial only works while the format stays identical between runs, so a
+    full-VOD download commits to one selector and reports honestly if it
+    cannot be satisfied. Video-only — frame extraction never needs audio,
+    and skipping audio halves the bytes on disk.
+    """
+    return (f"bestvideo[height<={height}][ext=mp4]/"
+            f"bestvideo[height<={height}]/best[height<={height}]/best")
+
+
+def download_full_video(url: str, out_path: str, *, height: int = 720,
+                        runner=subprocess,
+                        stall_timeout: float | None = FULL_VOD_STALL_TIMEOUT,
+                        fmt: str | None = None) -> dict:
+    """Download the COMPLETE video at `url` to `out_path`, resuming any
+    partial from a previous interrupted run.
+
+    Returns {"path", "resumed", "sizeBytes", "format", "partialBytesBefore"}.
+    Raises the same exceptions the clip path does (CalledProcessError,
+    StallTimeout, FileNotFoundError) so `worker.classify_download_error`
+    keeps classifying every failure exactly as before.
+
+    A COMPLETE, valid file already at `out_path` is reused untouched — that,
+    plus `--continue` over a `.part`, is what makes re-running the worker
+    against the same job idempotent instead of re-downloading hours of video.
+    """
+    out_dir = os.path.dirname(out_path)
+    if out_dir:
+        os.makedirs(out_dir, exist_ok=True)
+    part = out_path + ".part"
+    partial_before = os.path.getsize(part) if os.path.exists(part) else 0
+    selector = fmt or full_vod_format(height)
+
+    if os.path.exists(out_path):
+        ok, reason = probe_clip_valid(out_path, runner=runner)
+        if ok:
+            size = os.path.getsize(out_path)
+            log(f"full-vod: REUSING complete download ({size} bytes) -> {out_path}")
+            return {"path": out_path, "resumed": False, "sizeBytes": size,
+                    "format": selector, "partialBytesBefore": partial_before,
+                    "reused": True}
+        log(f"full-vod: existing file invalid ({reason}) — deleting and "
+            f"re-downloading {out_path}")
+        try:
+            os.remove(out_path)
+        except OSError as e:
+            log(f"full-vod: could not delete {out_path} ({e}) — continuing")
+
+    if partial_before:
+        log(f"full-vod: RESUMING partial download "
+            f"({partial_before} bytes already on disk) -> {part}")
+    cmd = ["yt-dlp", *js_runtime_args(), "-f", selector,
+           "--no-playlist", "--continue", "--no-overwrites",
+           "--retries", "10", "--fragment-retries", "10",
+           "--newline", "--progress", "-o", out_path, url]
+    log(f"full-vod: {'resuming' if partial_before else 'downloading'} the whole "
+        f"broadcast (<={height}p, video-only) -> {out_path}")
+    res = _run_live(cmd, "[yt-dlp]", runner, idle_msg="still downloading",
+                    stall_timeout=stall_timeout)
+    if _saw_js_runtime_warning(getattr(res, "output", "") or ""):
+        log(_JS_RUNTIME_HINT)
+    if not os.path.exists(out_path):
+        raise FileNotFoundError(
+            f"yt-dlp exited 0 but produced no file at {out_path} "
+            f"(format {selector!r})")
+    ok, reason = probe_clip_valid(out_path, runner=runner)
+    if not ok:
+        raise InvalidClip(f"downloaded full VOD is invalid — {reason} ({out_path})")
+    size = os.path.getsize(out_path)
+    log(f"full-vod: OK — {size} bytes at {out_path}")
+    return {"path": out_path, "resumed": bool(partial_before),
+            "sizeBytes": size, "format": selector,
+            "partialBytesBefore": partial_before, "reused": False}
+
+
+DEFAULT_PROXY_HEIGHT = 360
+PROXY_CRF = "30"          # scanning quality: HUD anchors/chips survive this
+PROXY_PRESET = "veryfast"
+
+
+def make_scan_proxy(source_path: str, out_path: str, *,
+                    height: int = DEFAULT_PROXY_HEIGHT,
+                    runner=subprocess, force: bool = False) -> dict:
+    """Transcode a LOCAL full-resolution VOD down to a small scan proxy.
+
+    The proxy is what every scanning pass reads (gameplay classification,
+    OCR, layout fingerprinting, segmentation): it is ~10x smaller and decodes
+    several times faster, and every one of those passes works on layout
+    fractions rather than absolute pixels (`capture.scale_layout_to_frame`),
+    so a lower-resolution copy changes speed, not correctness.
+
+    Detection and clip extraction NEVER use the proxy — they cut from the
+    original file (see `segmentation.extract_segment_clip`), because hero
+    portrait template matching does need real pixels.
+
+    Returns {"path", "width", "height", "sizeBytes", "reused", "sourceHash"}.
+    Reuses an existing valid proxy unless `force=True`.
+    """
+    if not os.path.exists(source_path):
+        raise FileNotFoundError(f"cannot build a scan proxy: {source_path} missing")
+    os.makedirs(os.path.dirname(os.path.abspath(out_path)), exist_ok=True)
+    if os.path.exists(out_path) and not force:
+        ok, _reason = probe_clip_valid(out_path, runner=runner)
+        if ok:
+            res = probe_clip_resolution(out_path, runner=runner) or {}
+            log(f"proxy: REUSING existing scan proxy -> {out_path}")
+            return {"path": out_path, "width": res.get("width"),
+                    "height": res.get("height"),
+                    "sizeBytes": os.path.getsize(out_path), "reused": True}
+    cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+           "-i", source_path,
+           "-vf", f"scale=-2:{height}",
+           "-c:v", "libx264", "-preset", PROXY_PRESET, "-crf", PROXY_CRF,
+           "-an", "-sn", out_path]
+    log(f"proxy: building {height}p scan proxy from {source_path}")
+    _run_live(cmd, "[ffmpeg]", runner, idle_msg="still transcoding")
+    ok, reason = probe_clip_valid(out_path, runner=runner)
+    if not ok:
+        raise InvalidClip(f"generated scan proxy is invalid — {reason} ({out_path})")
+    res = probe_clip_resolution(out_path, runner=runner) or {}
+    size = os.path.getsize(out_path)
+    log(f"proxy: OK — {res.get('width')}x{res.get('height')}, {size} bytes "
+        f"-> {out_path}")
+    return {"path": out_path, "width": res.get("width"),
+            "height": res.get("height"), "sizeBytes": size, "reused": False}
+
+
 def _extract_frame_local(clip_path: str, offset: int, clip_start: int,
                          out_path: str, runner=subprocess) -> bool:
     """Grab one frame from an already-downloaded local clip at `offset`.

@@ -87,16 +87,30 @@ def check_layouts(root: str) -> None:
         with open(os.path.join(lay_dir, fn), encoding="utf-8") as f:
             lay = json.load(f)
         tdir = lay.get("templates_dir")
-        # The starter youtube layout intentionally points at the shared
-        # root templates/ dir; per-source layouts get their own dir.
+        # A layout that can actually drive detection — one with a calibrated
+        # `hud_probe` chip geometry AND portrait slots — MUST resolve a real
+        # template directory. Without one, `ingest_map` raises at run time on
+        # a KeyError/FileNotFoundError instead of failing here, where it is
+        # cheap to see. Layouts that only exist as OCR/diagnostic fixtures
+        # (no hud_probe) are exempt and reported as a warning.
+        probe = lay.get("hud_probe") or {}
+        detection_capable = bool(probe.get("chips_a") and probe.get("chips_b")
+                                 and lay.get("slots_a") and lay.get("slots_b"))
         if tdir:
             full = os.path.join(root, tdir)
-            pngs = ([x for x in os.listdir(full) if x.endswith(".png")]
+            pngs = ([x for x in os.listdir(full)
+                     if x.endswith(".png") and not x.startswith("_")]
                     if os.path.isdir(full) else [])
             if pngs:
                 ok(f"{fn}: templates_dir '{tdir}' has {len(pngs)} templates")
             else:
                 bad(f"{fn}: templates_dir '{tdir}' missing or empty")
+        elif detection_capable:
+            bad(f"{fn}: declares a calibrated hud_probe + portrait slots but no "
+                f"'templates_dir' — detection cannot run against it")
+        else:
+            warn(f"{fn}: no templates_dir (diagnostic/fixture layout only — "
+                 f"not usable for hero detection)")
         # anchor / replay templates are OPTIONAL: layouts document them as
         # placeholders and the gameplay filter honestly falls back to the
         # structural chip probe when they are absent. Missing -> warn, not
@@ -117,6 +131,62 @@ def check_layouts(root: str) -> None:
                     ok(f"{fn}: reject '{marker.get('label')}' asset ok")
                 else:
                     bad(f"{fn}: reject asset '{tpath}' missing")
+
+
+def check_template_coverage(root: str) -> None:
+    """Report each detection-capable package's hero coverage against the FULL
+    roster. Deliberately informational (a warning, never a failure): low
+    coverage is an honest, visible ceiling — heroes without a template read
+    UNKNOWN — not a broken package. What WOULD be a failure is a template
+    filename that matches no hero id, since detection would load it as a
+    phantom hero, so that is reported as a hard problem."""
+    print("hero-template coverage (the real detection ceiling):")
+    dbp = os.path.join(root, "data", "owcs.sqlite")
+    if not os.path.exists(dbp):
+        warn("data/owcs.sqlite missing — cannot measure roster coverage")
+        return
+    con = sqlite3.connect(dbp)
+    con.row_factory = sqlite3.Row
+    try:
+        roster = {r["id"] for r in con.execute("SELECT id FROM heroes")}
+    finally:
+        con.close()
+    if not roster:
+        warn("heroes table is empty — cannot measure roster coverage")
+        return
+    lay_dir = os.path.join(root, "layouts")
+    if not os.path.isdir(lay_dir):
+        return
+    seen: set[str] = set()
+    for fn in sorted(os.listdir(lay_dir)):
+        if not fn.endswith(".json"):
+            continue
+        with open(os.path.join(lay_dir, fn), encoding="utf-8") as f:
+            tdir = (json.load(f) or {}).get("templates_dir")
+        if not tdir or tdir in seen:
+            continue
+        seen.add(tdir)
+        full = os.path.join(root, tdir)
+        if not os.path.isdir(full):
+            continue
+        heroes: dict[str, int] = {}
+        for name in os.listdir(full):
+            if not name.lower().endswith(".png") or name.startswith("_"):
+                continue
+            hero_id = name[:-4].split(".")[0]
+            heroes[hero_id] = heroes.get(hero_id, 0) + 1
+        covered = sorted(set(heroes) & roster)
+        phantom = sorted(set(heroes) - roster)
+        pct = round(100.0 * len(covered) / len(roster), 1)
+        ok(f"{tdir}: {len(covered)}/{len(roster)} heroes ({pct}%), "
+           f"{sum(heroes[h] for h in covered)} template file(s)")
+        if len(covered) < len(roster):
+            warn(f"{tdir}: {len(roster) - len(covered)} hero(es) uncovered — "
+                 f"detection reports UNKNOWN for them (run "
+                 f"pipeline/template_bootstrap.py --all-layouts for the list)")
+        if phantom:
+            bad(f"{tdir}: template file(s) matching no hero id: "
+                f"{', '.join(phantom)} — detection would load them as heroes")
 
 
 def check_db(root: str) -> None:
@@ -246,6 +316,7 @@ def main(argv=None) -> int:
     root = os.path.abspath(args.root)
     print(f"packaging check on {root}\n")
     check_layouts(root)
+    check_template_coverage(root)
     check_db(root)
     check_public_export(root)
     check_fixture(root)
