@@ -177,7 +177,8 @@ def main() -> None:
               and s.get("layout") == "layouts/owcs_8c105lnzlam.json")
         check("VOD layout file exists + is valid json",
               os.path.exists(os.path.join(ROOT, s["layout"]))
-              and isinstance(_json.load(open(os.path.join(ROOT, s["layout"]))),
+              and isinstance(_json.load(open(os.path.join(ROOT, s["layout"]),
+                              encoding="utf-8")),
                              dict))
 
     print("OWCS 2026 NA/EMEA Stage 2 Playoffs Day 3 calibration source "
@@ -191,7 +192,8 @@ def main() -> None:
               and s2.get("enabled") is True)
         check("VOD layout file exists + is valid json",
               os.path.exists(os.path.join(ROOT, s2["layout"]))
-              and isinstance(_json.load(open(os.path.join(ROOT, s2["layout"]))),
+              and isinstance(_json.load(open(os.path.join(ROOT, s2["layout"]),
+                              encoding="utf-8")),
                              dict))
     import export_data as _ed
     exported_ids = {e["id"] for e in _ed.load_video_sources(

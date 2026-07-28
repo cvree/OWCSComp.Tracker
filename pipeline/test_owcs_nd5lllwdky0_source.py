@@ -12,8 +12,16 @@ No network, no yt-dlp, no ffmpeg. Covers:
   * build_crop_report produces exactly 30 crops (3 fixture frames x 10
     slots), none skipped, from this layout
   * the real committed anchor template honestly tells gameplay-shaped
-    frames apart from frames without the round-state HUD (the intro /
-    map-pick screen never has it) — never a silent guess
+    frames apart from frames without it (intro / map-pick cards, post-event
+    graphics, replays) — never a silent guess
+  * the anchor is MATCH-STATE INVARIANT. Regression for a real defect: the
+    first anchor cut for this broadcast was the centre round-state row,
+    which reads "0 0% <lock> 0% 0" on a Control map at 0-0 but "STOP THE
+    PAYLOAD ... 1 / 2" on an Escort map mid-series. It scored -0.15 on a
+    genuine full-HUD Escort frame from another match in the same VOD and
+    the filter silently threw real gameplay away. The anchor is now the
+    broadcast chyron, and these tests assert it stays off the centre HUD,
+    in the upper chrome band, with a wide gameplay/non-gameplay margin
   * the capture.region_score cross-resolution fix: a template cut at one
     frame size still scores correctly against a differently-sized frame
     (the exact bug this source's real anchor tripped over: 640x360 vs
@@ -150,7 +158,8 @@ def main() -> int:
     check("no slots skipped", res["skipped"] == [])
     check("crops.html written", os.path.exists(res["html"]))
 
-    print("real anchor template: gameplay vs intro/map-pick honesty:")
+    print("real anchor template (broadcast chyron): gameplay vs "
+          "intro/map-pick honesty:")
     anchor_tpl = capture._load_template(layout, "anchor")
     ax, ay, aw, ah = anchor_tpl["rect"]
     # a synthetic "gameplay-shaped" frame: paste the REAL anchor crop where
@@ -169,13 +178,41 @@ def main() -> int:
         gameplay_frame, anchor_scaled, None, [])
     ok_i, reason_i, score_i = capture.is_gameplay(
         intro_frame, anchor_scaled, None, [])
-    check("frame carrying the real round-state row -> gameplay",
+    check("frame carrying the real broadcast chyron -> gameplay",
           ok_g is True, f"reason={reason_g} score={score_g}")
     check("frame without it (intro/map-pick shape) -> honestly rejected",
           ok_i is False and reason_i.startswith("no-hud"),
           f"reason={reason_i}")
     check("gameplay score comfortably clears min_score",
           score_g >= anchor_scaled["min_score"])
+
+    print("anchor is MATCH-STATE INVARIANT, not over-fitted to one frame:")
+    # Regression for a real defect caught on this broadcast. The first anchor
+    # cut here was the centre round-state row, which reads "0 0% <lock> 0% 0"
+    # on a Control map at 0-0 but "STOP THE PAYLOAD ... 1 / 2" on an Escort
+    # map mid-series -- it scored -0.15 on a genuine full-HUD Escort frame and
+    # the filter silently discarded real gameplay. The anchor must therefore
+    # sit on broadcast furniture that does not change with map/mode/score.
+    ax, ay, aw, ah = layout["anchor"]["rect"]
+    cx = ax + aw / 2.0
+    fw_native = layout["frame_width"]
+    check("anchor is not parked on the centre round-state/score readout "
+          f"(rect x-centre {cx:.0f} of {fw_native})",
+          not (0.40 * fw_native < cx < 0.60 * fw_native),
+          "a centre-HUD anchor tracks match state and rejects real gameplay "
+          "on other maps/modes")
+    check("anchor sits in the upper broadcast chrome (chyron band)",
+          ay + ah <= 0.15 * layout["frame_height"])
+    # The template must still actually discriminate: rebuild the same
+    # gameplay-shaped vs bare-background comparison used above, but assert the
+    # MARGIN is wide, not merely that it passes the floor.
+    margin = score_g - score_i
+    check(f"gameplay-vs-non-gameplay margin is wide ({margin:.2f})",
+          margin > 0.5, f"gameplay {score_g:.2f} vs non-gameplay {score_i:.2f}")
+    check("min_score sits between the two, with headroom on both sides",
+          score_i + 0.15 < layout["anchor"]["min_score"] < score_g - 0.15,
+          f"min_score={layout['anchor']['min_score']}, "
+          f"non-gameplay={score_i:.2f}, gameplay={score_g:.2f}")
 
     print("frame_filter.filter_frames applies the same scaling end to end:")
     in_dir = os.path.join(TMP, "filt_in")
