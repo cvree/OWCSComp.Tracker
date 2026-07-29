@@ -1,6 +1,85 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
-## CURRENT STATUS (authoritative — 2026-07-29, fourth pass) — one portal + the auto match finder
+## CURRENT STATUS (authoritative — 2026-07-29, fifth pass) — making the finder actually work
+
+> Additive to the fourth pass below. The fourth pass BUILT the match
+> finder; this pass made it work in the two places it didn't.
+
+### 1. The live site could never populate itself
+
+The finder wrote `assets/data/matchfinder.v1.json`, but nothing refreshed
+it, so a visitor to the Pages site would forever see "No broadcasts
+discovered yet" unless the operator scanned locally and committed. New
+**`.github/workflows/match-finder.yml`** runs `find-matches` every 6 hours
+(`43 */6 * * *`) plus `workflow_dispatch`, and commits the snapshot when it
+changes. A GitHub-hosted runner is also the only place in this system with
+real YouTube egress, which is exactly what the finder needs.
+
+Safety: it installs `yt-dlp` for the metadata-only `--flat-playlist` dump
+and stages **only** the snapshot — never the DB, the public dataset or a
+layout. `--queue-likely` is deliberately NOT used in CI (the job DB is
+gitignored runtime state that does not exist on a runner, so queueing there
+would write jobs nowhere and imply an approval the workflow has no business
+granting). It shares the `owcs-generated-data` concurrency group with
+discovery/pipeline/update-data, and validates (`test_match_finder.py` +
+packaging) before committing.
+
+### 2. Three real defects the first version had
+
+* **The streams URL was wrong for the one real channel.** The registry's
+  `sourceUrl` for `ow_esports_global` is a legacy custom URL
+  (`youtube.com/OW_Esports`), and appending `/streams` to that is not the
+  canonical form. `channel_streams_url()` now builds
+  `/channel/<channelId>/streams` from the confirmed id, which always
+  resolves; the sourceUrl is a fallback only.
+* **CI would have reset the archive every 6 hours.** The ledger is
+  gitignored, so a runner starts with none — every scheduled scan would
+  have re-stamped `firstSeenAt` and forgotten every broadcast that had
+  scrolled out of the RSS window. `load_ledger()` now falls back to the
+  committed snapshot, stripping the per-candidate `job` field (live intake
+  state joined at report time; a stale copy must never be re-published).
+* **A dead automation DB could have published an EMPTY snapshot over every
+  broadcast ever found.** `build_report`'s `JobStore(db_path)` was outside
+  the inner guard, so an open failure hit the outer handler and returned
+  zero candidates — which the workflow would then commit. The intake-state
+  join is optional enrichment now: a store failure costs the `job` field,
+  is reported in `sourceErrors`, and never the candidate list.
+
+The test written for that third fix initially passed for the wrong reason
+(`JobStore` creates missing parent dirs, so the "unopenable" path opened
+fine). It now uses a directory as the DB path, which sqlite genuinely
+cannot open — so the guard is actually exercised.
+
+### 3. An always-failing VOD source (found from the operator's Run page)
+
+`owcs-is7ehd0nf84` (CR vs ZETA Korea GF, ObsSojourn POV) was committed
+`enabled: true` pointing at `layouts/obssojourn_pov.json`, **which was
+never calibrated**. It appeared in the Run dropdown and died at preflight
+with "layout not found" on every single run. It is now `enabled: false`
+with a `disabledReason` naming the exact `calibrate_source.py` command from
+`docs/INGEST-CR-ZETA-KRGF.md` that would enable it.
+
+New packaging check **`check_video_sources`**: an ENABLED source whose
+layout file is missing is a HARD FAIL; a disabled one must say why. Proven
+to bite — flipping that source back to `enabled: true` fails the gate with
+the remedy. This is why the gate is now 31 checks, not 27.
+
+### Pasting a specific broadcast — verified end to end (offline)
+
+`https://www.youtube.com/live/2NE1nq75sv8?si=…` parses to video id
+`2NE1nq75sv8`, canonical `watch?v=2NE1nq75sv8`, job
+`record:2ne1nq75sv8:source`; every alternate spelling collapses to that one
+job and the `si=` tracking param is dropped with a recorded warning. A real
+`ingest-link` run stops at `pending-approval` with the exact
+`approve-source` command. **The download is NOT refused for a fresh link**:
+`check_detection_assets` returns `checked=False` when there is no
+`expectedLayoutId`, and layout resolution runs after the download by
+design — so template coverage is the ceiling on what detection can NAME,
+not a gate on whether the broadcast can be processed at all.
+
+---
+
+## HISTORICAL (superseded — 2026-07-29, fourth pass) — one portal + the auto match finder
 
 > Additive to the three passes below, which remain accurate.
 

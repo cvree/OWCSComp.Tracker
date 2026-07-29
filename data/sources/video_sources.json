@@ -84,7 +84,8 @@
    "channel": "ObsSojourn",
    "layout": "layouts/obssojourn_pov.json",
    "notes": "Player-POV upload. Calibrate the ObsSojourn top-bar layout ONCE (layouts/obssojourn_pov.json), then reuse for every video from this channel. Map windows come from the description; multiple POVs of one match share signature crazyraccoon--zetadivision--2026-07-12 and must merge, not duplicate.",
-   "enabled": true
+   "enabled": false,
+   "disabledReason": "layouts/obssojourn_pov.json has never been calibrated, so this source was registered ahead of its layout and every run stops at preflight with 'layout not found'. To enable it, calibrate the layout once (docs/INGEST-CR-ZETA-KRGF.md): python pipeline/calibrate_source.py --clip work/clips/krgf.mp4 --times 120,400,900,1500,2000,3000 --source-id owcs-is7ehd0nf84 --out layouts/obssojourn_pov.json — then set enabled back to true."
   }
  ]
 }

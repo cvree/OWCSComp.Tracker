@@ -317,6 +317,21 @@ class TestReportAndSnapshot(unittest.TestCase):
         self.assertEqual(report["summary"]["total"], 3)
         self.assertEqual(report["summary"]["likely"], 2)
 
+    def test_an_unopenable_db_still_reports_every_candidate(self):
+        """The guard that stops a scheduled scan from committing an empty
+        snapshot over every broadcast ever found: the intake-state join is
+        optional enrichment, so a dead DB costs the `job` field and nothing
+        else."""
+        # A DIRECTORY as the DB path: sqlite cannot open it. (A path inside a
+        # missing directory would NOT work here — JobStore creates parents.)
+        report = mf.build_report(self._tmp.name, ledger=self._ledger())
+        self.assertEqual(report["summary"]["total"], 3)
+        self.assertEqual(report["summary"]["tracked"], 0)
+        self.assertTrue(all(c["job"] is None for c in report["candidates"]))
+        self.assertTrue(any("join unavailable" in e
+                            for e in report["sourceErrors"]),
+                        "a degraded join must be reported, not hidden")
+
     def test_report_never_raises(self):
         # even a hostile ledger shape produces a valid empty report
         report = mf.build_report(ledger={"candidates": None}, store=self.store)
@@ -342,6 +357,106 @@ class TestReportAndSnapshot(unittest.TestCase):
         self.assertIn("convert-link", text)
         self.assertIn("bcast001AAA", text)
         self.assertIn("likely", text)
+
+
+class TestStreamsUrlResolution(unittest.TestCase):
+    """The /streams URL must be built from the confirmed channelId. The
+    real registry's sourceUrl is a legacy custom URL
+    (youtube.com/OW_Esports) whose /streams sub-path is not the canonical
+    form; /channel/<id>/streams always resolves."""
+
+    def test_channel_id_wins_over_a_legacy_custom_url(self):
+        url = mf.channel_streams_url(
+            {"channelId": "UCabc", "sourceUrl": "https://www.youtube.com/OW_Esports"})
+        self.assertEqual(url, "https://www.youtube.com/channel/UCabc/streams")
+
+    def test_falls_back_to_source_url_without_a_channel_id(self):
+        url = mf.channel_streams_url(
+            {"channelId": None, "sourceUrl": "https://www.youtube.com/@x"})
+        self.assertEqual(url, "https://www.youtube.com/@x")
+        self.assertIsNone(mf.channel_streams_url({}))
+
+    def test_scan_scans_the_canonical_streams_url(self):
+        runner = FakeRunner(stdout=json.dumps(FLAT_FIXTURE))
+        with tempfile.TemporaryDirectory() as tmp:
+            old = mf.LEDGER_REL
+            mf.LEDGER_REL = os.path.relpath(
+                os.path.join(tmp, "l.json"), mf._repo_root())
+            try:
+                mf.scan([CHANNEL], fetch=lambda u: RSS_FIXTURE, runner=runner,
+                        now="2026-07-25T00:00:00+00:00")
+            finally:
+                mf.LEDGER_REL = old
+        self.assertIn("https://www.youtube.com/channel/UCtest/streams",
+                      runner.cmds[0])
+
+    def test_the_real_registry_channel_resolves_canonically(self):
+        for ch in mf.scan_channels():
+            self.assertRegex(mf.channel_streams_url(ch),
+                             r"^https://www\.youtube\.com/channel/UC[\w-]+/streams$")
+
+
+class TestLedgerSnapshotFallback(unittest.TestCase):
+    """The ledger is gitignored operator state, so a CI runner starts every
+    scan without one. Falling back to the COMMITTED snapshot is what keeps
+    firstSeenAt and the archive intact across scheduled runs."""
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.ledger = os.path.join(self._tmp.name, "absent.json")
+        self.snap = os.path.join(self._tmp.name, "snapshot.json")
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def _write_snapshot(self, candidates):
+        with open(self.snap, "w", encoding="utf-8") as f:
+            json.dump({"schema": mf.SCHEMA,
+                       "generatedAt": "2026-07-25T00:00:00+00:00",
+                       "candidates": candidates}, f)
+
+    def test_missing_ledger_recovers_the_archive_from_the_snapshot(self):
+        self._write_snapshot([{"videoId": "bcast001AAA",
+                               "firstSeenAt": "2026-07-20T00:00:00+00:00"}])
+        led = mf.load_ledger(self.ledger, snapshot=self.snap)
+        self.assertEqual(led["candidates"][0]["firstSeenAt"],
+                         "2026-07-20T00:00:00+00:00")
+
+    def test_stale_job_state_never_survives_into_the_ledger(self):
+        self._write_snapshot([{"videoId": "bcast001AAA",
+                               "job": {"state": "PUBLISHED"}}])
+        led = mf.load_ledger(self.ledger, snapshot=self.snap)
+        self.assertNotIn("job", led["candidates"][0])
+
+    def test_a_present_ledger_is_preferred_over_the_snapshot(self):
+        self._write_snapshot([{"videoId": "from-snapshot"}])
+        with open(self.ledger, "w", encoding="utf-8") as f:
+            json.dump({"schema": mf.SCHEMA,
+                       "candidates": [{"videoId": "from-ledger"}]}, f)
+        led = mf.load_ledger(self.ledger, snapshot=self.snap)
+        self.assertEqual(led["candidates"][0]["videoId"], "from-ledger")
+
+    def test_neither_file_yields_a_valid_empty_ledger(self):
+        led = mf.load_ledger(self.ledger,
+                             snapshot=os.path.join(self._tmp.name, "nope.json"))
+        self.assertEqual(led["candidates"], [])
+        self.assertEqual(led["schema"], mf.SCHEMA)
+
+    def test_a_rescan_after_recovery_keeps_the_original_first_seen(self):
+        """The property the whole fallback exists for: the scheduled CI run
+        must not reset firstSeenAt every 6 hours."""
+        self._write_snapshot([{"videoId": "bcast001AAA",
+                               "firstSeenAt": "2026-07-20T00:00:00+00:00",
+                               "publishedAt": "2026-07-20T17:00:00+00:00"}])
+        recovered = mf.load_ledger(self.ledger, snapshot=self.snap)
+        merged = mf.merge_ledger(
+            recovered,
+            mf.merge_channel_entries(CHANNEL, mf.parse_rss(RSS_FIXTURE), []),
+            channels=[CHANNEL], source_errors=[],
+            now="2026-07-29T00:00:00+00:00")
+        row = {c["videoId"]: c for c in merged["candidates"]}["bcast001AAA"]
+        self.assertEqual(row["firstSeenAt"], "2026-07-20T00:00:00+00:00")
+        self.assertEqual(row["lastSeenAt"], "2026-07-29T00:00:00+00:00")
 
 
 class TestChannelAuthority(unittest.TestCase):

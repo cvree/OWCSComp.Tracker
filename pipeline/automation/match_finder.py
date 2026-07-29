@@ -96,6 +96,21 @@ def scan_channels(channels: list[dict] | None = None) -> list[dict]:
     return sorted(out, key=lambda c: str(c.get("id")))
 
 
+def channel_streams_url(channel: dict) -> str | None:
+    """The /streams URL to scan for one channel.
+
+    Built from the confirmed `channelId` whenever there is one:
+    `/channel/<id>/streams` is the canonical form that always resolves,
+    whereas a registry `sourceUrl` may be a legacy custom URL
+    (youtube.com/OW_Esports) whose /streams sub-path does not. Falls back
+    to the recorded sourceUrl only when no channelId exists — which, for a
+    registry channel, `scan_channels` has already ruled out."""
+    cid = channel.get("channelId")
+    if cid:
+        return f"https://www.youtube.com/channel/{cid}/streams"
+    return channel.get("sourceUrl") or None
+
+
 # ------------------------------------------------------------------ RSS
 def _http_fetch(url: str, timeout: float = FETCH_TIMEOUT) -> bytes:
     req = urllib.request.Request(url, headers={
@@ -251,15 +266,38 @@ def merge_channel_entries(channel: dict, rss: list[dict],
 
 
 # --------------------------------------------------------------- ledger
-def load_ledger(path: str | None = None) -> dict:
-    path = path or ledger_path()
+def _read_candidates_file(path: str) -> dict | None:
     try:
         with open(path, "r", encoding="utf-8") as f:
             data = json.load(f)
-        if isinstance(data, dict) and isinstance(data.get("candidates"), list):
-            return data
     except (OSError, ValueError):
-        pass
+        return None
+    if isinstance(data, dict) and isinstance(data.get("candidates"), list):
+        return data
+    return None
+
+
+def load_ledger(path: str | None = None,
+                snapshot: str | None = None) -> dict:
+    """The accumulated candidate archive.
+
+    Falls back to the COMMITTED snapshot when the local ledger file is
+    absent, because the ledger is gitignored operator state: a CI runner
+    starts every scan with no ledger at all, and without this fallback each
+    scheduled run would reset `firstSeenAt` and forget every broadcast that
+    has scrolled out of the feed window. The snapshot's per-candidate `job`
+    field is dropped — that is live intake state joined at report time, not
+    ledger data, and a stale copy must never be re-published."""
+    data = _read_candidates_file(path or ledger_path())
+    if data is None:
+        data = _read_candidates_file(snapshot or snapshot_path())
+        if data is not None:
+            data = dict(data)
+            data["candidates"] = [
+                {k: v for k, v in c.items() if k != "job"}
+                for c in data["candidates"] if isinstance(c, dict)]
+    if data is not None:
+        return data
     return {"schema": SCHEMA, "generatedAt": None, "channels": [],
             "candidates": [], "sourceErrors": []}
 
@@ -308,13 +346,16 @@ def scan(channels: list[dict] | None = None, *, limit: int = DEFAULT_LIMIT,
     errors: list[str] = []
     candidates: list[dict] = []
     for ch in chans:
-        rss_entries, err = fetch_rss_channel(ch["channelId"], fetch=fetch)
-        if err:
-            errors.append(err)
+        rss_entries: list[dict] = []
+        if ch.get("channelId"):
+            rss_entries, err = fetch_rss_channel(ch["channelId"], fetch=fetch)
+            if err:
+                errors.append(err)
         streams_entries: list[dict] = []
-        if ch.get("sourceUrl"):
+        streams_url = channel_streams_url(ch)
+        if streams_url:
             streams_entries, err2 = fetch_streams_tab(
-                ch["sourceUrl"], limit=limit, runner=runner)
+                streams_url, limit=limit, runner=runner)
             if err2:
                 errors.append(err2)
         candidates.extend(merge_channel_entries(ch, rss_entries,
@@ -340,16 +381,22 @@ def build_report(db_path: str | None = None, *,
     returns."""
     try:
         led = ledger if ledger is not None else load_ledger()
+        # The job join is OPTIONAL enrichment; the candidate list is the
+        # payload. Opening the automation DB must therefore never be able to
+        # fail the whole report — on a CI runner the DB is gitignored and
+        # absent, and if a store failure emptied the report the caller would
+        # commit that empty snapshot over every broadcast ever found.
         own_store = False
-        if store is None and db_path is not None:
-            store = js.JobStore(db_path)
-            own_store = True
-        elif store is None:
+        join_error: str | None = None
+        if store is None:
             try:
-                store = js.JobStore(js.DEFAULT_DB)
+                store = js.JobStore(db_path or js.DEFAULT_DB)
                 own_store = True
-            except Exception:  # noqa: BLE001 — report survives a missing DB
+            except Exception as exc:  # noqa: BLE001
                 store = None
+                join_error = (f"intake-state join unavailable "
+                              f"({type(exc).__name__}: {exc}) — candidates "
+                              f"are still complete")
         rows = []
         tracked = 0
         try:
@@ -374,9 +421,12 @@ def build_report(db_path: str | None = None, *,
                 store.close()
         likely = sum(1 for r in rows
                      if (r.get("likeness") or {}).get("confidence") == "likely")
+        errors = list(led.get("sourceErrors") or [])
+        if join_error:
+            errors.append(join_error)
         return {"schema": SCHEMA, "generatedAt": led.get("generatedAt"),
                 "channels": led.get("channels") or [],
-                "sourceErrors": led.get("sourceErrors") or [],
+                "sourceErrors": errors,
                 "candidates": rows,
                 "summary": {"total": len(rows), "likely": likely,
                             "tracked": tracked}}

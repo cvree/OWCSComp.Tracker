@@ -1,0 +1,165 @@
+# =====================================================================
+# OWCS Comp Tracker — auto match finder ($0, no secrets, no API key)
+# ---------------------------------------------------------------------
+# Scans every VERIFIED broadcast channel for OWCS broadcasts on two
+# permanently free sources and commits the refreshed public snapshot
+# (assets/data/matchfinder.v1.json), which is what the portal renders on
+# static hosting. Without this workflow the live site can only ever show
+# whatever a human last scanned locally — this is what makes the finder
+# work for a visitor rather than only for the operator.
+#
+# The two sources (see pipeline/automation/match_finder.py):
+#   * the channel's public RSS feed (stdlib urllib; no key, no quota)
+#   * the channel's /streams tab via `yt-dlp --flat-playlist` (metadata
+#     only — the `-J` dump, never a media download)
+#
+# Cost: $0. No FACEIT key, no YOUTUBE_API_KEY, no cookies, no login.
+# GitHub-hosted runners can reach YouTube, which is the whole reason this
+# runs here: the finder is the one part of the system that needs real
+# egress, and a scheduled runner provides it for free.
+#
+# Safety — this workflow CANNOT publish a composition:
+#   * `find-matches` never downloads video, never runs detection, never
+#     writes a hero comp, and never approves a source. It writes exactly
+#     two artifacts: the ledger (gitignored) and the public snapshot.
+#   * --queue-likely is deliberately NOT used here. Registering intake
+#     jobs is an operator action against the operator's own job DB (which
+#     is gitignored runtime state and does not exist on a runner), so
+#     doing it in CI would write jobs nowhere and imply approval this
+#     workflow has no business granting.
+#   * Only assets/data/matchfinder.v1.json is ever staged, so a scan can
+#     never touch the DB, the public dataset, or a layout.
+#   * The snapshot carries public broadcast metadata only (video ids,
+#     titles, channel ids, durations, likeness verdicts + reasons). A test
+#     asserts no credential-shaped key can appear in it.
+# =====================================================================
+name: match-finder
+
+on:
+  schedule:
+    # Every 6 hours at :43 — OWCS broadcasts land in bursts on match days
+    # and a VOD stays findable indefinitely, so polling harder buys
+    # nothing. Off the top of the hour to dodge runner congestion.
+    - cron: "43 */6 * * *"
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "Max videos per channel from the streams tab"
+        required: false
+        default: "60"
+      dry_run:
+        description: "Scan and report without committing (true|false)"
+        required: false
+        default: "false"
+
+# Shares the ONE generated-data group with discovery/pipeline/update-data:
+# all four commit to the same branch, and separate groups are exactly how
+# two runs end up clobbering each other's commits.
+concurrency:
+  group: owcs-generated-data
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  find:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      LIMIT: ${{ github.event.inputs.limit || '60' }}
+      DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      # The finder is stdlib-only for RSS; yt-dlp is what reads the
+      # /streams tab. No opencv, no ffmpeg — nothing here decodes video.
+      - name: Install yt-dlp
+        run: python3 -m pip install --upgrade yt-dlp
+
+      # `set -euo pipefail` + a non-empty report assertion, for the same
+      # reason discovery.yml does it: a `python3 ... | tee` pipeline lets
+      # tee's zero exit hide a failing python3, which is how a workflow
+      # reports green with an empty artifact.
+      - name: Scan verified channels for OWCS broadcasts
+        id: scan
+        shell: bash
+        run: |
+          set -euo pipefail
+          ARGS=(--limit "$LIMIT")
+          if [ "$DRY_RUN" = "true" ]; then ARGS+=(--dry-run); fi
+          python3 pipeline/automation/cli.py find-matches "${ARGS[@]}" 2>&1 | tee run-output.txt
+          test -s run-output.txt
+
+      # The finder reports a dead source as data rather than crashing, so a
+      # green scan step does NOT by itself mean both sources worked. Surface
+      # that explicitly instead of letting a silently-empty result look like
+      # "no broadcasts exist".
+      - name: Report source health
+        id: health
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY' | tee -a "$GITHUB_STEP_SUMMARY"
+          import json, sys
+          with open("assets/data/matchfinder.v1.json", encoding="utf-8") as f:
+              r = json.load(f)
+          s = r.get("summary") or {}
+          errs = r.get("sourceErrors") or []
+          print("### Auto match finder")
+          print()
+          print(f"- Candidates known: **{s.get('total', 0)}**")
+          print(f"- Likely broadcasts: **{s.get('likely', 0)}**")
+          print(f"- Channels scanned: {len(r.get('channels') or [])}")
+          print(f"- Last scan: {r.get('generatedAt')}")
+          if errs:
+              print(f"- Source errors: **{len(errs)}**")
+              for e in errs:
+                  print(f"  - `{e}`")
+          else:
+              print("- Source errors: none")
+          PY
+          ERRS=$(python3 -c "import json;print(len(json.load(open('assets/data/matchfinder.v1.json')).get('sourceErrors') or []))")
+          echo "source_errors=$ERRS" >> "$GITHUB_OUTPUT"
+          if [ "$ERRS" != "0" ]; then
+            echo "::warning::$ERRS source error(s) this scan — the snapshot still holds every previously-found broadcast (the ledger is an archive, not a window)."
+          fi
+
+      - name: Validate the snapshot before committing
+        if: env.DRY_RUN != 'true'
+        run: |
+          python3 pipeline/test_match_finder.py
+          python3 pipeline/check_packaging.py
+
+      - name: Commit the refreshed snapshot if it changed
+        if: env.DRY_RUN != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name  "owcs-matchfinder[bot]"
+          git config user.email "actions@users.noreply.github.com"
+          # ONLY the snapshot. Never the DB, the public dataset or a layout:
+          # a discovery scan has no business touching any of those.
+          git add assets/data/matchfinder.v1.json
+          if git diff --cached --quiet; then
+            echo "No new broadcasts and no changed metadata this scan."
+            exit 0
+          fi
+          git commit -m "data: auto match finder snapshot ($(date -u +'%Y-%m-%d %H:%M') UTC)"
+          git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+
+      - name: Upload scan output
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: match-finder-${{ github.run_id }}
+          path: run-output.txt
+          retention-days: 30
+          if-no-files-found: warn

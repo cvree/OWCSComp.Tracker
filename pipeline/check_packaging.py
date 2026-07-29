@@ -9,6 +9,8 @@ dangling references. Runs offline, no deps beyond the stdlib + the repo.
 Checks:
   1. every layout's templates_dir exists and holds >=1 template PNG
   2. every layout reject-marker / anchor / replay template file exists
+  2b. every ENABLED video source's layout file exists (a source registered
+     ahead of its layout dies at preflight on every run)
   3. the SQLite DB exists and carries the ingested Nepal milestone
      (map_result winner=twis, hero_stints, confirmed hero_swaps)
   4. the production public export exists, is non-demo, and its evidence
@@ -73,6 +75,48 @@ def load_public(root: str, fname: str) -> dict | None:
         return json.loads(body)
     except json.JSONDecodeError:
         return None
+
+
+def check_video_sources(root: str) -> None:
+    """An ENABLED video source must reference a layout that exists.
+
+    A source registered ahead of its layout looks fine in the committed
+    JSON but appears in the Run dropdown and dies at preflight with
+    "layout not found" every single time — a dead end the operator can
+    only diagnose by running it. An enabled source with a missing layout
+    is therefore a hard failure; a DISABLED one is fine as long as it says
+    why it is disabled, so the gap is recorded rather than silent."""
+    print("video sources -> layout files resolve:")
+    p = os.path.join(root, "data", "sources", "video_sources.json")
+    if not os.path.exists(p):
+        warn("data/sources/video_sources.json missing (no saved VOD sources)")
+        return
+    try:
+        with open(p, encoding="utf-8") as f:
+            sources = json.load(f).get("sources") or []
+    except (OSError, ValueError) as exc:
+        bad(f"data/sources/video_sources.json unreadable: {exc}")
+        return
+    for s in sources:
+        sid, layout = s.get("id"), s.get("layout")
+        if not sid or not layout:
+            continue
+        exists = os.path.exists(os.path.join(root, layout))
+        if s.get("enabled") is False:
+            if exists:
+                ok(f"{sid}: disabled, layout present")
+            elif s.get("disabledReason"):
+                ok(f"{sid}: disabled with a recorded reason "
+                   f"(layout {layout} absent, as explained)")
+            else:
+                bad(f"{sid}: layout {layout} missing AND no disabledReason — "
+                    f"record why this source cannot run, or remove it")
+        elif exists:
+            ok(f"{sid}: layout {layout}")
+        else:
+            bad(f"{sid} is ENABLED but its layout {layout} does not exist — "
+                f"every run stops at preflight. Calibrate the layout, fix the "
+                f"path, or set enabled=false with a disabledReason")
 
 
 def check_layouts(root: str) -> None:
@@ -329,6 +373,7 @@ def main(argv=None) -> int:
     root = os.path.abspath(args.root)
     print(f"packaging check on {root}\n")
     check_layouts(root)
+    check_video_sources(root)
     check_template_coverage(root)
     check_db(root)
     check_public_export(root)

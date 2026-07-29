@@ -147,7 +147,27 @@ this command (`POST /api/action {action: "find-matches"}`).
 
 Only channels from `config/broadcast_channels.json` that are enabled,
 verified and carry a confirmed `channelId` are scanned — the finder never
-guesses a handle. `--channel-url <url>` scans one extra channel ad hoc.
+guesses a handle. The `/streams` URL is built as
+`/channel/<channelId>/streams` (the canonical form that always resolves),
+not by appending `/streams` to a registry `sourceUrl`, which for
+`ow_esports_global` is a legacy custom URL. `--channel-url <url>` scans one
+extra channel ad hoc.
+
+**The live site keeps itself current** via
+`.github/workflows/match-finder.yml`: every 6 hours (plus
+`workflow_dispatch`) it scans and commits `assets/data/matchfinder.v1.json`
+when it changes. Without it the Pages site could only ever show whatever
+was last scanned locally. A GitHub runner is also the only place in this
+system with real YouTube egress. The workflow stages **only** the snapshot,
+and does not use `--queue-likely` — the job DB is gitignored runtime state
+that does not exist on a runner.
+
+Because the ledger is gitignored operator state, `load_ledger()` falls back
+to the committed snapshot when it is absent; without that, each scheduled
+CI run would reset `firstSeenAt` and forget every broadcast that had
+scrolled out of the RSS window. The snapshot's per-candidate `job` field is
+dropped on the way back in — that is live intake state, joined at report
+time, and a stale copy must never be re-published.
 
 ## Match-day runbook — the free-agent loop (2026-07-29)
 
