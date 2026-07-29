@@ -246,6 +246,13 @@ class TestWholeLoopOffline(unittest.TestCase):
             media_root=media_root, min_free_gb=0.001,
             official_channel_ids={CHANNEL_ID},
             probe_fn=lambda u: {"title": "OWCS E2E", "duration": 350},
+            # The real-media probe is stubbed for the same reason the
+            # download is: this test proves the LOOP works offline. The
+            # probe's own ladder is covered by test_download_resilience.py.
+            probe_media_fn=lambda url, height=720, **kw: {
+                "ok": True, "rung": "normal", "bytes": 32768, "format": "f",
+                "width": 1280, "height": 720, "qualityDowngrade": False,
+                "attempts": []},
             download_full_fn=fake_fetch)          # proxy_fn stays REAL ffmpeg
         self.assertTrue(dl["ok"], dl)
         job = store.get(job_key)

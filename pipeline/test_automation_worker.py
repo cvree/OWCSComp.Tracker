@@ -47,6 +47,17 @@ def _fake_download_full_ok(size_bytes=65536):
     return _dl
 
 
+def _fake_media_probe_ok(rung="normal", size_bytes=32768):
+    """Stands in for video_ingest.media_download_probe — the short REAL
+    media download that must prove bytes flow before a multi-hour VOD is
+    committed to. Reports the ladder rung that worked."""
+    def _probe(url, height=720, **kw):
+        return {"ok": True, "rung": rung, "bytes": size_bytes,
+                "format": f"bestvideo[height<={height}]", "width": 1280,
+                "height": 720, "qualityDowngrade": False, "attempts": []}
+    return _probe
+
+
 def _fake_proxy_ok(height=360):
     """Stands in for video_ingest.make_scan_proxy."""
     def _proxy(src, out, height=height, **kw):
@@ -192,6 +203,7 @@ class TestDownloadJob(WorkerTestBase):
             worker_id="w1", media_root=self.media_root,
             official_channel_ids={"UCofficial"},
             probe_fn=_fake_probe(), download_full_fn=_fake_download_full_ok(),
+            probe_media_fn=_fake_media_probe_ok(),
             proxy_fn=_fake_proxy_ok(),
             resolution_fn=_fake_resolution(),
             which=_fake_which({"ffmpeg", "ffprobe", "yt-dlp"}),
@@ -310,6 +322,7 @@ class TestResumeInterrupted(WorkerTestBase):
             self.store, self.locks, worker_id="w-resume",
             media_root=self.media_root, official_channel_ids={"UCofficial"},
             probe_fn=_fake_probe(), download_full_fn=_fake_download_full_ok(),
+            probe_media_fn=_fake_media_probe_ok(),
             proxy_fn=_fake_proxy_ok(),
             resolution_fn=_fake_resolution(),
             which=_fake_which({"ffmpeg", "ffprobe", "yt-dlp"}))

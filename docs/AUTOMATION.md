@@ -12,6 +12,68 @@ Everything here is **stdlib-only** (sqlite3 + a tiny dependency-free YAML
 parser), so it runs in exactly the offline environment CI and the site build
 already use — no new dependencies, no secrets.
 
+## YouTube download authentication + the fallback ladder (2026-07-29)
+
+YouTube refuses media URLs for several unrelated reasons that need
+different fixes. `pipeline/ytdlp_opts.py` owns the policy; the downloader
+walks a **bounded six-rung ladder**, each rung tried at most once:
+
+| # | rung | what it changes | needs config? |
+|---|---|---|---|
+| 1 | `normal` | the configured baseline | no |
+| 2 | `refresh-signed-url` | `--no-cache-dir`: fresh player extraction, fresh signed URL | no |
+| 3 | `force-ipv4` | `--force-ipv4` (YouTube 403s some IPv6 ranges) | no |
+| 4 | `browser-cookies` | `--cookies-from-browser` | **yes** |
+| 5 | `browser-cookies+impersonate` | + `--impersonate` (needs `curl_cffi`) | **yes** |
+| 6 | `alternate-format` | plainer ≤720p progressive stream; marked a quality downgrade | no |
+
+**Browser-cookie access is off by default.** Rungs 4 and 5 stay inert —
+and are recorded as explicit skips — until an operator opts in:
+
+```powershell
+# PowerShell, current session only (nothing is written to disk):
+$env:OWCS_YTDLP_COOKIES_FROM_BROWSER = "chrome"   # or edge / firefox
+$env:OWCS_YTDLP_BROWSER_PROFILE      = "Default"  # optional
+$env:OWCS_YTDLP_FORCE_IPV4           = "1"        # optional
+$env:OWCS_YTDLP_IMPERSONATE          = "chrome"   # optional, needs curl_cffi
+$env:OWCS_YTDLP_EXTRA_ARGS           = "--sleep-requests 2"   # allowlisted flags only
+```
+
+This project **never creates a cookies.txt** and never copies, prints or
+commits cookies: yt-dlp reads them from the browser at request time. Cookie
+sources, profile paths, signed googlevideo URLs and token-shaped values are
+redacted from every log line, job payload, export and API response.
+
+Check the resolved configuration any time — it never prints a value:
+
+```powershell
+python pipeline\automation\cli.py download-status
+python pipeline\automation\cli.py worker-doctor
+```
+
+**Prove bytes actually download before committing to a multi-hour VOD.**
+Metadata extraction succeeding does not mean the media URL will serve
+anything (that is exactly the 403 this project hit):
+
+```powershell
+python pipeline\automation\cli.py media-probe --url "<youtube-url>"
+```
+
+It pulls a few real seconds through the same signed-URL path, validates it
+with ffprobe, and reports which rung worked — the full download then starts
+there. `worker-run`/`autopilot` run this probe automatically.
+
+**Detection assets are checked BEFORE the download.** A layout with no
+hero templates, or a declared-but-absent / placeholder HUD anchor, can
+never produce a composition, so the download is refused with the exact
+harvest command instead of failing hours later. Because templates can only
+be cut from the broadcast's own frames, `--for-harvest` is the one explicit
+opt-out (recorded on the job, never the default).
+
+```powershell
+python pipeline\detection_assets.py            # per-layout verdict + remedies
+```
+
 ## Match-day runbook — the free-agent loop (2026-07-29)
 
 The 12-step checklist below ("Real-host validation") is still the

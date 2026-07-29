@@ -458,6 +458,68 @@ class TestFixtureToProductionSwitching(unittest.TestCase):
             checked += 1
         self.assertGreater(checked, 5, "expected several public pages")
 
+    def test_the_fixture_never_overwrites_a_defined_production_dataset(self):
+        """The guard that makes "production preferred" actually work: the
+        fixture must assign with `window.OWCS_PUBLIC || {...}`, so a page
+        that already loaded production keeps it. Without this, every page
+        would silently render demo data over a real conversion."""
+        src = open(os.path.join(REPO, "assets", "data",
+                                "public_fixture.v1.js"), encoding="utf-8").read()
+        self.assertIn("window.OWCS_PUBLIC = window.OWCS_PUBLIC ||", src)
+        prod = open(os.path.join(REPO, "assets", "data",
+                                 "public_data.v1.js"), encoding="utf-8").read()
+        self.assertIn("window.OWCS_PUBLIC = {", prod,
+                      "production must assign unconditionally so it wins")
+
+    def test_fixture_fallback_engages_when_production_is_absent(self):
+        """Simulate both load orders the way a browser sees them, so the
+        fallback is proven rather than assumed."""
+        prod = load_public("public_data.v1.js")
+        fixture = load_public("public_fixture.v1.js")
+        # production present -> production wins (fixture's `||` is a no-op)
+        window = {}
+        window["OWCS_PUBLIC"] = prod
+        window["OWCS_PUBLIC"] = window.get("OWCS_PUBLIC") or fixture
+        self.assertIs(window["OWCS_PUBLIC"]["meta"]["demo"], False)
+        # production absent -> the fixture supplies the demo dataset
+        window = {}
+        window["OWCS_PUBLIC"] = window.get("OWCS_PUBLIC") or fixture
+        self.assertIs(window["OWCS_PUBLIC"]["meta"]["demo"], True)
+
+    def test_production_export_publishes_only_approved_records(self):
+        """Nothing candidate/rejected/low-confidence/unapproved may appear
+        in the committed production dataset."""
+        data = load_public("public_data.v1.js")
+        for snap in data.get("compSnapshots", []):
+            self.assertIn(snap.get("reviewStatus"), ("reviewed", "auto-high"),
+                          f"unapproved snapshot published: {snap}")
+            self.assertIn(snap.get("source"), ("cv", "manual"),
+                          f"a non-CV/manual source supplied a comp: {snap}")
+            # docs/PUBLIC_DATA_CONTRACT.md: every published comp links back
+            # to the capture run and the frame it was read from.
+            self.assertTrue(snap.get("evidenceRunId"),
+                            f"a published comp carries no evidence run: {snap}")
+            self.assertTrue(snap.get("evidenceFrame"),
+                            f"a published comp carries no evidence frame: {snap}")
+        for swap in data.get("heroSwaps", []):
+            self.assertNotEqual(swap.get("verdict"), "rejected",
+                                "a rejected swap must never publish as real")
+
+    def test_an_incomplete_ingest_run_withholds_its_match(self):
+        """The provisional gate: a match whose detections are not reviewed
+        and committed publishes calendar facts and NO comps, with the
+        reason recorded."""
+        data = load_public("public_data.v1.js")
+        withheld = (data["meta"].get("withheldMatches") or {})
+        published_match_ids = {m.get("id") for m in data.get("matches", [])}
+        for match_id, reasons in withheld.items():
+            self.assertTrue(reasons, f"{match_id} withheld with no reason")
+            for snap in data.get("compSnapshots", []):
+                self.assertNotEqual(
+                    snap.get("matchId"), match_id,
+                    f"withheld match {match_id} still published a comp")
+        self.assertIsInstance(published_match_ids, set)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

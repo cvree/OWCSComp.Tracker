@@ -92,8 +92,47 @@ def release_job(store: js.JobStore, lock_mgr: lk.LockManager,
     return store.clear_worker(job_key)
 
 
-def retry_job(store: js.JobStore, job_key: str, *, force: bool = False) -> models.Job:
-    return store.retry_job(job_key, force=force)
+def retry_job(store: js.JobStore, job_key: str, *, force: bool = False
+              ) -> models.Job:
+    """Retry a failed job AND restore it to the stage it can actually run
+    from.
+
+    `store.retry_job` only clears the backoff timer, leaving the job in
+    RETRY_SCHEDULED — a state no automatic step knows how to advance, so
+    the loop dead-ended after every retry. Here the job is additionally
+    moved back to the `resumeState` recorded when it failed (default:
+    ARCHIVED, the front of the automatic work).
+
+    The audited human decisions are NOT re-opened: source approval lives on
+    the payload, not in the state, so restoring the download stage never
+    asks for a second approval — and this refuses to rewind a job whose
+    source is not (still) approved.
+    """
+    job = store.retry_job(job_key, force=force)
+    return resume_after_retry(store, job.job_key)
+
+
+def resume_after_retry(store: js.JobStore, job_key: str) -> models.Job:
+    """Move a RETRY_SCHEDULED job to its recorded resume stage.
+
+    A no-op for any other state. Returns the job either way.
+    """
+    from . import link_intake as li
+    job = store.get(job_key)
+    if job is None:
+        raise KeyError(f"no such job: {job_key}")
+    if job.state != sm.RETRY_SCHEDULED:
+        return job
+    source = job.payload.get("source") or {}
+    if source.get("state") != li.SOURCE_APPROVED:
+        # Never hand an unapproved source back to the downloader.
+        return job
+    target = job.payload.get("resumeState") or sm.ARCHIVED
+    if not sm.can_transition(job.state, target):
+        target = sm.ARCHIVED
+    if not sm.can_transition(job.state, target):
+        return job
+    return store.transition(job_key, target)
 
 
 def cancel_job(store: js.JobStore, lock_mgr: lk.LockManager, job_key: str, *,
@@ -203,7 +242,8 @@ def run_one_job(store: js.JobStore, lock_mgr: lk.LockManager, content_con,
                 media_root: str = worker.DEFAULT_MEDIA_ROOT,
                 official_channel_ids: set | None = None,
                 manual_approved_video_ids: set | None = None,
-                segment_interval: int | None = None) -> dict:
+                segment_interval: int | None = None,
+                for_harvest: bool = False) -> dict:
     """Advance ONE job by exactly one automatic step, whatever that means for
     its current state. Stops (returns ok=False with a clear reason) whenever
     the next step needs a human — segment/detection review, final approval,
@@ -217,7 +257,8 @@ def run_one_job(store: js.JobStore, lock_mgr: lk.LockManager, content_con,
         return worker.download_job(
             store, lock_mgr, job, worker_id=worker_id, media_root=media_root,
             official_channel_ids=official_channel_ids,
-            manual_approved_video_ids=manual_approved_video_ids)
+            manual_approved_video_ids=manual_approved_video_ids,
+            for_harvest=for_harvest)
 
     if job.state == sm.DOWNLOADING:
         return {"ok": False, "reason": "download already in progress "

@@ -672,6 +672,18 @@ def link_status(store: js.JobStore, *, job_key: str | None = None,
             "downloaded": bool(media.get("localPath")),
             "proxyPath": (media.get("proxy") or {}).get("localPath"),
             "layout": j.payload.get("layout"),
+            # Download diagnostics. Everything here was already sanitized
+            # by ytdlp_opts before being written to the payload (signed
+            # URLs, cookie sources and profile paths are redacted at the
+            # source), so it is safe to export and to render in a browser.
+            "mediaProbe": j.payload.get("mediaProbe"),
+            "downloadAttempts": j.payload.get("downloadAttempts") or [],
+            "detectionAssets": j.payload.get("detectionAssets"),
+            "lastFailure": j.payload.get("lastFailure"),
+            "resumeState": j.payload.get("resumeState"),
+            "nextRetryAt": j.next_retry_at,
+            "qualityDowngrade": (media.get("qualityDowngrade")
+                                 if isinstance(media, dict) else None),
             "blocking": blocking_reasons(j),
             "nextCommand": next_command(j),
         })

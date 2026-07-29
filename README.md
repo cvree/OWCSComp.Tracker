@@ -206,9 +206,32 @@ exact next command. After clearing a gate, `autopilot --job <key>`
 re-enters the loop; `--auto-accept` additionally accepts clean machine
 identity proposals through the same `accept-proposed` gate a human uses.
 
-The same flow runs from the browser: `python pipeline/serve.py`, open
-`intake.html`, paste the link, watch the live log. On static hosting the
-page stays read-only and only builds the command for you to copy. See the
+**The whole pipeline runs from the browser**: `python pipeline/serve.py`,
+open `intake.html`, paste the link, watch the live log — then drive every
+stage from the page itself (retry, autopilot, approve source, approve
+layout, propose/accept identity, detect, publish, export). Audited
+approvals require a typed name and a confirm; nothing is ever approved
+automatically. The page also carries a **download-authentication panel**
+(yt-dlp version, cookie mode, JS runtime, `curl_cffi`, API-key presence,
+last probe result, live fallback rung, per-layout detection readiness) —
+without exposing a single secret value. On static hosting it stays
+read-only and only builds the command for you to copy.
+
+### When YouTube refuses the download
+
+```bash
+python pipeline/automation/cli.py download-status   # stack + auth + ladder
+python pipeline/automation/cli.py media-probe --url "<youtube-url>"
+```
+
+Downloads walk a bounded six-rung fallback ladder (normal → refresh signed
+URL → force IPv4 → browser cookies → cookies+impersonation → alternate
+≤720p format). **Browser-cookie access is off by default**; enable rungs
+4–5 with `OWCS_YTDLP_COOKIES_FROM_BROWSER=chrome|edge|firefox`. Cookies are
+read from the browser at request time — this project never writes, copies,
+prints or commits a cookie file, and redacts signed media URLs, cookie
+sources and profile paths from every log and export. Full details in
+[`docs/AUTOMATION.md`](docs/AUTOMATION.md). See the
 **Match-day runbook** in [`docs/AUTOMATION.md`](docs/AUTOMATION.md) and
 the **CURRENT STATUS** section of [`HANDOFF.md`](HANDOFF.md) for the
 step-by-step and the exact download strategy that works around googlevideo
