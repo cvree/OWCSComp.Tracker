@@ -77,6 +77,20 @@ def log(msg: str) -> None:
     print(f"[autopilot] {msg}", flush=True)
 
 
+def _retry_due(job) -> bool:
+    """True when a RETRY_SCHEDULED job's backoff has elapsed.
+
+    Taking a retry early would hammer the same expired signed URL — the
+    exact spin the backoff exists to prevent — so the loop waits and says
+    so instead."""
+    import datetime as _dt
+    when = getattr(job, "next_retry_at", None)
+    if not when:
+        return True
+    now = _dt.datetime.now(_dt.timezone.utc).replace(microsecond=0).isoformat()
+    return str(when) <= now
+
+
 # ------------------------------------------------------------ default hooks
 def _sample_segment_frames(scan_path: str, segment: dict, count: int
                            ) -> list[tuple[float, str]]:
@@ -196,6 +210,7 @@ def run_autopilot(store: js.JobStore, lock_mgr: lk.LockManager,
                   media_root: str | None = None,
                   auto_accept: bool = False,
                   accepted_by: str | None = None,
+                  for_harvest: bool = False,
                   max_steps: int = DEFAULT_MAX_STEPS,
                   official_channel_ids: set | None = None,
                   manual_approved_video_ids: set | None = None,
@@ -289,6 +304,29 @@ def run_autopilot(store: js.JobStore, lock_mgr: lk.LockManager,
                           "resume-job recovers a stale one")
                 break
 
+            # A retry that has come due is automatic work, not a dead end.
+            # Before this, `run_one_job` had no branch for RETRY_SCHEDULED
+            # and every retried job stopped with "no automatic action".
+            if state == sm.RETRY_SCHEDULED:
+                if not _retry_due(job):
+                    stop = STOP_BLOCKED
+                    detail = (f"a retry is scheduled for "
+                              f"{job.next_retry_at} — run `retry-job "
+                              f"{job_key}` to take it now")
+                    break
+                resumed = ops.resume_after_retry(store, job_key)
+                if resumed.state == sm.RETRY_SCHEDULED:
+                    stop = STOP_BLOCKED
+                    detail = ("retry is due but the job could not be "
+                              "restored to a runnable stage — check "
+                              f"`show-job {job_key}`")
+                    break
+                _step(steps, state, "resume-after-retry", True,
+                      f"restored to {resumed.state} "
+                      f"(attempt {resumed.attempts + 1}; source approval "
+                      f"untouched)")
+                continue
+
             if state == sm.NEEDS_REVIEW:
                 verdict, why = _handle_review(
                     store, job, steps, auto_accept=auto_accept,
@@ -309,7 +347,8 @@ def run_autopilot(store: js.JobStore, lock_mgr: lk.LockManager,
             result = run_one(store, lock_mgr, store.con, job_key,
                              worker_id=worker_id, media_root=media_root,
                              official_channel_ids=official_channel_ids,
-                             manual_approved_video_ids=manual_approved_video_ids)
+                             manual_approved_video_ids=manual_approved_video_ids,
+                             for_harvest=for_harvest)
             _step(steps, before, "run-one-job", bool(result.get("ok")),
                   _summarize(result))
             # worker.download_job releases the resource lock itself when its

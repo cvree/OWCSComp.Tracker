@@ -143,7 +143,17 @@ class AcquisitionJobBase(unittest.TestCase):
         kw = dict(worker_id="w1", media_root=self.media_root,
                   official_channel_ids={"UCofficial"},
                   which=lambda t: f"/usr/bin/{t}",
-                  min_free_gb=0.0001)
+                  min_free_gb=0.0001,
+                  # The short REAL-media probe that now gates every full
+                  # download (it is what turns a 403 into a refusal BEFORE
+                  # hours of video). Stubbed here: these tests are about the
+                  # acquisition bookkeeping, and the probe + its fallback
+                  # ladder have their own suite
+                  # (test_download_resilience.py).
+                  probe_media_fn=lambda url, height=720, **kw2: {
+                      "ok": True, "rung": "normal", "bytes": 32768,
+                      "format": "f", "width": 1280, "height": 720,
+                      "qualityDowngrade": False, "attempts": []})
         kw.update(overrides)
         return worker.download_job(self.store, self.locks, job, **kw)
 

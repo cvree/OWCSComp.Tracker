@@ -280,6 +280,100 @@ def main() -> int:
     check("autoAccept opts in via API", "--auto-accept" in fr.cmds[1])
     serve.AUTOMATION_DB = None
 
+    print("control-room actions (the website drives the whole pipeline):")
+    reset_state()
+    serve.AUTOMATION_DB = os.path.join(TMP, "automation.sqlite")
+    fr = FakeRunner()
+    serve.RUNNER = fr
+    # Refusals first — nothing may launch on bad input.
+    bad_actions = [
+        ({"action": "nope", "job": "record:x:source"}, "unknown action"),
+        ({"action": "retry"}, "job key"),
+        ({"action": "retry", "job": "bad key with spaces"}, "job key"),
+        ({"action": "approve-source", "job": "record:x:source"}, "name is required"),
+        ({"action": "approve-source", "job": "record:x:source", "who": "!!"},
+         "name is required"),
+        ({"action": "accept-proposed", "job": "record:x:source", "segment": "x"},
+         "segment id"),
+    ]
+    all_bad = True
+    for body, needle in bad_actions:
+        code, j = api(port, "/api/action", body)
+        if code != 400 or needle not in j.get("error", ""):
+            all_bad = False
+            print(f"    unexpected: {body} -> {code} {j}")
+    check("6 invalid actions rejected with a named reason", all_bad)
+    check("no process launched for invalid actions", fr.cmds == [])
+    # A valid action builds the exact CLI argv (this is the contract that
+    # regressed once: the label used to be returned in the error slot, so
+    # EVERY action 400'd).
+    code, j = api(port, "/api/action",
+                  {"action": "retry", "job": "record:abc:source"})
+    wait_idle(port)
+    check("retry action starts and reports no error",
+          code == 200 and j["started"] is True and j.get("error") is None)
+    check("retry argv is `cli.py retry-job <job>` on the test DB",
+          fr.cmds[0][1].endswith(os.path.join("pipeline", "automation", "cli.py"))
+          and "retry-job" in fr.cmds[0] and "record:abc:source" in fr.cmds[0]
+          and "--db" in fr.cmds[0] and "--force" not in fr.cmds[0])
+    reset_state()
+    code, j = api(port, "/api/action",
+                  {"action": "approve-source", "job": "record:abc:source",
+                   "who": "Connor"})
+    wait_idle(port)
+    check("audited approval passes --approved-by and --confirm",
+          code == 200 and "--approved-by" in fr.cmds[1]
+          and "Connor" in fr.cmds[1] and "--confirm" in fr.cmds[1])
+    reset_state()
+    api(port, "/api/action", {"action": "autopilot", "job": "record:abc:source",
+                              "forHarvest": True, "autoAccept": True,
+                              "who": "Connor"})
+    wait_idle(port)
+    check("autopilot forwards --for-harvest and --auto-accept",
+          "--for-harvest" in fr.cmds[2] and "--auto-accept" in fr.cmds[2]
+          and "--accepted-by" in fr.cmds[2])
+    reset_state()
+    api(port, "/api/action", {"action": "export-public"})
+    wait_idle(port)
+    check("export-public runs the production exporter",
+          fr.cmds[3][1].endswith("export_data.py") and "--public" in fr.cmds[3])
+    # No control-room action may ever carry a credential flag.
+    joined = " ".join(" ".join(c) for c in fr.cmds)
+    check("no action ever passes a cookie/credential flag",
+          "--cookies" not in joined and "--password" not in joined
+          and "--netrc" not in joined)
+
+    print("download-status endpoint (no secrets reach the browser):")
+    os.environ["OWCS_YTDLP_COOKIES_FROM_BROWSER"] = "chrome"
+    os.environ["OWCS_YTDLP_BROWSER_PROFILE"] = "SuperSecretProfile"
+    try:
+        code, j = api(port, "/api/download-status")
+        check("returns dependencies, auth, ladder and detection assets",
+              code == 200 and "dependencies" in j and "auth" in j
+              and "ladder" in j and "detectionAssets" in j)
+        check("cookie BROWSER is shown (an operator must see it)",
+              j["auth"]["cookiesFromBrowser"] == "chrome"
+              and j["auth"]["cookiesConfigured"] is True)
+        blob = json.dumps(j)
+        check("the profile VALUE never reaches the browser",
+              "SuperSecretProfile" not in blob
+              and j["auth"]["browserProfileConfigured"] is True)
+        check("API keys are reported as presence only",
+              set(j["apiKeys"]) == {"YOUTUBE_API_KEY", "FACEIT_API_KEY"}
+              and all(isinstance(v, bool) for v in j["apiKeys"].values()))
+        check("the ladder names all six rungs in order",
+              [r["rung"] for r in j["ladder"]]
+              == ["normal", "refresh-signed-url", "force-ipv4",
+                  "browser-cookies", "browser-cookies+impersonate",
+                  "alternate-format"])
+        check("detection readiness is reported per layout",
+              any(a["layoutId"] == "owcs_jksix_qwc" and a["ok"]
+                  for a in j["detectionAssets"]))
+    finally:
+        os.environ.pop("OWCS_YTDLP_COOKIES_FROM_BROWSER", None)
+        os.environ.pop("OWCS_YTDLP_BROWSER_PROFILE", None)
+    serve.AUTOMATION_DB = None
+
     print("evidence regeneration job:")
     reset_state()
     fr = FakeRunner()

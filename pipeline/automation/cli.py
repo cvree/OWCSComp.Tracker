@@ -1395,6 +1395,7 @@ def _run_autopilot(store: "js.JobStore", args: argparse.Namespace,
         media_root=args.media_root or None,
         auto_accept=args.auto_accept,
         accepted_by=args.accepted_by or args.worker_id,
+        for_harvest=getattr(args, "for_harvest", False),
         max_steps=args.max_steps or ap.DEFAULT_MAX_STEPS,
         samples=args.samples, ocr_engine=args.ocr_engine)
     if not args.no_export:
@@ -1467,6 +1468,95 @@ def cmd_convert_link(args: argparse.Namespace) -> int:
         return 0 if result["ok"] else 1
     finally:
         store.close()
+
+
+def cmd_media_probe(args: argparse.Namespace) -> int:
+    """`media-probe --url <url>` — prove REAL video bytes can be downloaded
+    before committing to a multi-hour broadcast, and report which fallback
+    rung worked. Metadata extraction alone is not proof and is not used."""
+    import video_ingest as vi
+    import ytdlp_opts as yo
+    url = args.url
+    if not url and args.job:
+        store = js.JobStore(args.db)
+        try:
+            job = _job_or_exit(store, args.job)
+            url = job.payload.get("sourceUrl")
+        finally:
+            store.close()
+    if not url:
+        print("[probe] provide --url or --job")
+        return 1
+    try:
+        result = vi.media_download_probe(url, height=args.height,
+                                         seconds=args.seconds)
+    except vi.MediaDownloadError as exc:
+        payload = {"ok": False, "errorCode": exc.code,
+                   "errorMessage": yo.redact_text(str(exc)),
+                   "remedy": exc.remedy, "attempts": exc.attempts}
+        if args.json:
+            print(json.dumps(payload, indent=2))
+        else:
+            print(f"[probe] FAILED [{exc.code}] {yo.redact_text(str(exc))}")
+            if exc.remedy:
+                print(f"  remedy: {exc.remedy}")
+            print("  attempts:")
+            for a in exc.attempts:
+                mark = "ok" if a.get("ok") else (
+                    "skip" if a.get("note") == "skipped" else "FAIL")
+                print(f"    [{mark:>4}] {a.get('rung'):<28} "
+                      f"{a.get('errorCode') or a.get('errorMessage') or ''}")
+        return 1
+    if args.json:
+        print(json.dumps(result, indent=2))
+    else:
+        print(f"[probe] OK via rung {result['rung']} — {result['bytes']} bytes, "
+              f"{result.get('width')}x{result.get('height')}")
+        if result.get("qualityDowngrade"):
+            print("  WARNING: quality downgrade — no working stream at the "
+                  "requested height")
+    # Record the verdict on the job when we were given one.
+    if args.job:
+        store = js.JobStore(args.db)
+        try:
+            store.update_payload(args.job, {"mediaProbe": {
+                "ok": True, "rung": result["rung"],
+                "bytes": result.get("bytes"),
+                "width": result.get("width"), "height": result.get("height"),
+                "qualityDowngrade": result.get("qualityDowngrade"),
+                "attempts": result.get("attempts") or [],
+                "checkedAt": dt.datetime.now(dt.timezone.utc)
+                    .replace(microsecond=0).isoformat()}})
+        finally:
+            store.close()
+    return 0
+
+
+def cmd_download_status(args: argparse.Namespace) -> int:
+    """`download-status` — the download stack + resolved auth config + the
+    fallback ladder + which layouts can actually detect. Read-only; never
+    installs anything and never prints a secret."""
+    import ytdlp_opts as yo
+    import detection_assets as da
+    report = yo.dependency_report()
+    auth = yo.load_auth_config()
+    ladder = [r.describe() for r in yo.build_ladder(auth)]
+    assets = da.audit_all_layouts()
+    payload = {"download": report, "ladder": ladder,
+               "detectionAssets": assets}
+    if args.json:
+        print(json.dumps(payload, indent=2))
+        return 0 if report["ok"] else 1
+    print("[download] stack:")
+    print(yo.format_dependency_report(report))
+    print("\n[download] fallback ladder:")
+    for i, rung in enumerate(ladder, start=1):
+        state = "ready" if rung["runnable"] else f"SKIP — {rung['skipReason']}"
+        print(f"  {i}. {rung['rung']:<28} {state}")
+    print("\n[download] detection assets:")
+    for a in assets:
+        print(da.format_report(a))
+    return 0 if report["ok"] else 1
 
 
 def cmd_status(args: argparse.Namespace) -> int:
@@ -1898,6 +1988,11 @@ def main(argv: list[str] | None = None) -> int:
         sp.add_argument("--samples", type=int, default=8,
                         help="frames sampled per segment for identity proposals")
         sp.add_argument("--ocr-engine", default="easyocr")
+        sp.add_argument("--for-harvest", action="store_true",
+                        help="download this broadcast even though its layout "
+                             "has no hero templates / a placeholder anchor — "
+                             "the explicit escape hatch for harvesting those "
+                             "assets FROM this VOD. Never the default.")
         sp.add_argument("--no-export", action="store_true",
                         help="skip refreshing assets/data/intake.v1.json")
         sp.add_argument("--json", action="store_true")
@@ -1925,6 +2020,24 @@ def main(argv: list[str] | None = None) -> int:
                           help="or the pasted URL (resolves to the same job)")
     _add_autopilot_args(ap_run_p)
     ap_run_p.set_defaults(func=cmd_autopilot)
+
+    mp_p = sub.add_parser("media-probe",
+                          help="prove real video BYTES download (not just "
+                               "metadata) and report the working rung")
+    mp_p.add_argument("--url", default=None)
+    mp_p.add_argument("--job", default=None,
+                      help="take the URL from this job and record the verdict")
+    mp_p.add_argument("--height", type=int, default=720)
+    mp_p.add_argument("--seconds", type=int, default=6,
+                      help="seconds of real media to pull (default 6)")
+    mp_p.add_argument("--json", action="store_true")
+    mp_p.set_defaults(func=cmd_media_probe)
+
+    ds_p = sub.add_parser("download-status",
+                          help="download stack + auth config + fallback "
+                               "ladder + per-layout detection readiness")
+    ds_p.add_argument("--json", action="store_true")
+    ds_p.set_defaults(func=cmd_download_status)
 
     args = p.parse_args(argv)
     return args.func(args)

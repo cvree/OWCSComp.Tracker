@@ -19,10 +19,19 @@ API (all JSON):
   GET  /api/intake          LIVE intake report (same shape as
                             assets/data/intake.v1.json, straight from the
                             automation DB — never 500s)
+  GET  /api/download-status yt-dlp/ffmpeg/JS-runtime/ejs/curl_cffi status,
+                            resolved download-auth config (never values),
+                            the fallback ladder, per-layout detection
+                            readiness, API-key presence
   POST /api/run             start run_owcs_auto with validated params
   POST /api/intake/link     {url, autoAccept?} validate the pasted URL
                             offline, then launch `cli.py convert-link` (the
                             one match-day command) as the current job
+  POST /api/action          {action, job, ...} run ONE allowlisted pipeline
+                            action (retry / autopilot / approve-source /
+                            approve-layout / accept-proposed / detect /
+                            publish / media-probe / export-public). Audited
+                            approvals additionally require a typed name.
   POST /api/evidence        {run} re-run layout.html + crops.html for a run
                             from its already-extracted frames (no download)
   POST /api/test            run every pipeline/test_*.py suite in order
@@ -306,6 +315,123 @@ def build_run_cmd(p: dict) -> tuple[list[str] | None, str | None]:
     return cmd, None
 
 
+def _cli(*args: str) -> list[str]:
+    """argv for this repo's automation CLI, honouring the test DB override."""
+    cmd = [sys.executable, os.path.join("pipeline", "automation", "cli.py")]
+    if AUTOMATION_DB:
+        cmd += ["--db", AUTOMATION_DB]
+    return cmd + list(args)
+
+
+# Every action the control room may launch, as a table rather than a chain
+# of `if`s: name -> (argv builder, human label, job kind, timeout).
+# A browser can therefore only ever start one of THESE, with arguments this
+# module validated — never an arbitrary command line.
+_JOB_KEY_RE = re.compile(r"^[A-Za-z0-9_.:\-]{1,120}$")
+_NAME_RE = re.compile(r"^[\w .,'\-]{1,60}$")
+
+
+def _job_key(p: dict) -> str | None:
+    key = str(p.get("job") or "").strip()
+    return key if key and _JOB_KEY_RE.match(key) else None
+
+
+def build_action_cmd(action: str, p: dict
+                     ) -> tuple[list[str] | None, str | None, str, float | None]:
+    """Validate a control-room action -> (argv, error, label, timeout).
+
+    `error` is None on success; the caller must not treat the label as an
+    error (an earlier revision did exactly that and 400'd every action).
+
+    Human gates are deliberately INCLUDED here (approve-source,
+    approve-layout, accept-proposed, detect --write, publish): the point is
+    that a person clicks them, in a local browser, on their own machine —
+    which is the same audited human decision as typing the command, and it
+    is recorded with their name either way. What is NOT here is anything
+    that would let the page approve on its own: every one of these requires
+    an explicit click plus, for the irreversible ones, a typed name.
+    """
+    job = _job_key(p)
+    needs_job = {"retry", "autopilot", "approve-source", "reject-source",
+                 "approve-layout", "resolve-layout", "propose-identity",
+                 "detect", "detect-write", "publish-dry", "publish",
+                 "media-probe", "show"}
+    if action in needs_job and not job:
+        return None, "a valid job key is required", "", None
+    who = str(p.get("who") or "").strip()
+    if action in ("approve-source", "reject-source", "approve-layout",
+                  "publish") and not _NAME_RE.match(who or ""):
+        return None, ("your name is required for an audited approval "
+                      "(letters, spaces, . , ' - only)"), "", None
+
+    if action == "retry":
+        # retry-job restores the recorded resume stage; --force is the
+        # explicit dead-letter override and must be asked for.
+        args = ["retry-job", job] + (["--force"] if p.get("force") else [])
+        return _cli(*args), None, f"retry {job}", JOB_TIMEOUT
+    if action == "autopilot":
+        args = ["autopilot", "--job", job]
+        if p.get("autoAccept"):
+            args += ["--auto-accept", "--accepted-by",
+                     who or "control-room"]
+        if p.get("forHarvest"):
+            args += ["--for-harvest"]
+        return _cli(*args), None, f"autopilot {job}", INTAKE_TIMEOUT
+    if action == "approve-source":
+        return _cli("approve-source", "--job", job, "--approved-by", who,
+                    "--confirm",
+                    *(["--reason", str(p["reason"])[:200]]
+                      if p.get("reason") else [])), None, \
+            f"approve source {job}", JOB_TIMEOUT
+    if action == "reject-source":
+        return _cli("approve-source", "--job", job, "--approved-by", who,
+                    "--confirm", "--reject",
+                    *(["--reason", str(p["reason"])[:200]]
+                      if p.get("reason") else [])), None, \
+            f"reject source {job}", JOB_TIMEOUT
+    if action == "resolve-layout":
+        return _cli("resolve-layout", "--job", job), None, \
+            f"resolve layout {job}", INTAKE_TIMEOUT
+    if action == "approve-layout":
+        return _cli("approve-layout", "--job", job, "--approved-by", who,
+                    "--confirm"), None, f"approve layout {job}", JOB_TIMEOUT
+    if action == "propose-identity":
+        return _cli("propose-identity", "--job", job), None, \
+            f"propose identity {job}", INTAKE_TIMEOUT
+    if action == "accept-proposed":
+        try:
+            seg = int(p.get("segment"))
+        except (TypeError, ValueError):
+            return None, "a numeric segment id is required", "", None
+        return _cli("accept-proposed", "--segment", str(seg),
+                    *(["--note", str(p["note"])[:200]]
+                      if p.get("note") else [])), None, \
+            f"accept segment {seg}", JOB_TIMEOUT
+    if action == "detect":
+        return _cli("detect-job", job), None, f"detect (dry run) {job}", INTAKE_TIMEOUT
+    if action == "detect-write":
+        # The write pass is refused by detection_runner unless the job is
+        # APPROVED — the gate stays exactly where it was.
+        return _cli("detect-job", job, "--write"), None, \
+            f"commit detection {job}", INTAKE_TIMEOUT
+    if action == "publish-dry":
+        return _cli("process-approved-job", "--job", job), None, \
+            f"publish dry-run {job}", INTAKE_TIMEOUT
+    if action == "publish":
+        return _cli("process-approved-job", "--job", job, "--publish"), None, \
+            f"PUBLISH {job}", INTAKE_TIMEOUT
+    if action == "media-probe":
+        return _cli("media-probe", "--job", job, "--json"), None, \
+            f"media probe {job}", JOB_TIMEOUT
+    if action == "export-public":
+        return ([sys.executable, os.path.join("pipeline", "export_data.py"),
+                 "--public"], None, "export public data", JOB_TIMEOUT)
+    if action == "intake-export":
+        return _cli("intake-export", "--save"), None, \
+            "refresh intake panel", JOB_TIMEOUT
+    return None, f"unknown action: {action}", "", None
+
+
 def build_intake_cmd(p: dict) -> tuple[list[str] | None, str | None, dict | None]:
     """Validate browser params -> exact `cli.py convert-link` argv (no shell).
 
@@ -477,6 +603,39 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                     "error": f"{type(e).__name__}: {e}",
                     "note": "live intake report unavailable — the static "
                             "assets/data/intake.v1.json snapshot still works"})
+        if path == "/api/download-status":
+            # The download-authentication panel's data source. Everything
+            # here is non-secret BY CONSTRUCTION: ytdlp_opts.describe()
+            # reports whether a cookie source/profile is configured and
+            # never its value, and API keys are reported as present/absent
+            # only. A status read must never 500.
+            try:
+                sys.path.insert(0, PIPE_DIR)
+                import ytdlp_opts as yo
+                import detection_assets as da
+                auth = yo.load_auth_config()
+                deps = yo.dependency_report()
+                payload = {
+                    "ok": deps["ok"],
+                    "dependencies": deps["entries"],
+                    "requiredMissing": deps["requiredMissing"],
+                    "optionalMissing": deps["optionalMissing"],
+                    "auth": auth.describe(),
+                    "ladder": [r.describe() for r in yo.build_ladder(auth)],
+                    "detectionAssets": da.audit_all_layouts(),
+                    "apiKeys": {
+                        # presence only — the value is never read into the
+                        # response, so it cannot reach the browser
+                        "YOUTUBE_API_KEY": bool(os.environ.get("YOUTUBE_API_KEY")),
+                        "FACEIT_API_KEY": bool(os.environ.get("FACEIT_API_KEY")),
+                    },
+                }
+                return self._json(200, payload)
+            except Exception as e:
+                return self._json(200, {
+                    "ok": False, "error": f"{type(e).__name__}: {e}",
+                    "dependencies": [], "auth": {}, "ladder": [],
+                    "detectionAssets": [], "apiKeys": {}})
         if path == "/api/latest-run":
             try:
                 with open(AUTO_RUNS_PATH, "r", encoding="utf-8") as f:
@@ -550,6 +709,21 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             return self._json(200 if ok else 409,
                               {"started": ok, "error": err, "job": job,
                                "cmd": " ".join(cmd), **info})
+        if self.path == "/api/action":
+            p = self._read_body()
+            if p is None:
+                return self._json(400, {"error": "bad JSON body"})
+            action = str(p.get("action") or "")
+            cmd, err, label, timeout = build_action_cmd(action, p)
+            if err:
+                return self._json(400, {"error": err})
+            ok, err = launch([cmd], action, label, timeout=timeout)
+            with LOCK:
+                job = STATE["job"]
+            return self._json(200 if ok else 409,
+                              {"started": ok, "error": err, "job": job,
+                               "action": action,
+                               "cmd": " ".join(cmd)})
         if self.path == "/api/cancel":
             with LOCK:
                 running, job = STATE["running"], STATE["job"]

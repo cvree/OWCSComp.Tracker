@@ -38,12 +38,35 @@ if _PIPELINE_DIR not in sys.path:
 # installed. Only `download_job` (and `classify_download_error`, best-
 # effort) actually need them, lazily, only when a real download runs.
 
+import ytdlp_opts  # noqa: E402  (stdlib-only: auth/redaction/classification)
+
 from . import job_store as js
 from . import locks as lk
 from . import models
 from . import state_machine as sm
 
-WORKER_VERSION = "1.0.0"
+WORKER_VERSION = "1.1.0"
+
+# The state a job must return to when a retry is taken, keyed by the state
+# it failed in. Recorded on the job at failure time (`resumeState`) so
+# `retry-job` restores the RIGHT stage instead of guessing — and never
+# rewinds past an audited human decision such as source approval.
+RESUME_TARGETS: dict[str, str] = {
+    sm.ARCHIVED: sm.ARCHIVED,
+    sm.DOWNLOADING: sm.ARCHIVED,      # re-enter the download stage
+    sm.DOWNLOADED: sm.DOWNLOADED,
+    sm.SEGMENTING: sm.DOWNLOADED,     # re-segment from the downloaded media
+    sm.PROCESSING: sm.READY_FOR_DETECTION,
+    sm.READY_FOR_DETECTION: sm.READY_FOR_DETECTION,
+    sm.APPROVED: sm.APPROVED,
+}
+
+
+def resume_target_for(state: str) -> str:
+    """Where a job in `state` should resume after a retry. Defaults to
+    ARCHIVED (the front of the automatic work) only for states that
+    precede the download; anything else keeps its own stage."""
+    return RESUME_TARGETS.get(state, sm.ARCHIVED)
 
 # Only these domains are ever accepted as an "official" broadcast source —
 # never an arbitrary URL, never a shell string, never an unofficial mirror.
@@ -268,7 +291,24 @@ def validate_source(payload: dict, *, official_channel_ids: set | None = None,
 # --------------------------------------------------------------- error taxonomy
 def classify_download_error(exc: BaseException) -> tuple[str, str]:
     """(error_code, message) for record_attempt — every failure mode the
-    sprint's worker spec calls out gets an explicit, stable code."""
+    sprint's worker spec calls out gets an explicit, stable code.
+
+    A YouTube media 403 resolves to `youtube_media_forbidden`, NOT the
+    generic `download_failed`: the two have completely different remedies
+    (refresh the signed URL / force IPv4 / supply browser cookies vs.
+    "look at the logs"), and an opaque code is what made the previous
+    failure un-actionable. Codes come from `ytdlp_opts.classify_ytdlp_error`
+    so the downloader, the worker and the control room all agree.
+    """
+    # The ladder already classified this precisely — never re-guess it.
+    code = getattr(exc, "code", None)
+    if code and isinstance(code, str):
+        return code, ytdlp_opts.redact_text(str(exc))
+    text = (getattr(exc, "output", "") or getattr(exc, "stderr", "")
+            or str(exc))
+    classified, _remedy = ytdlp_opts.classify_ytdlp_error(text)
+    if classified:
+        return classified, ytdlp_opts.redact_text(str(exc))
     if isinstance(exc, FileNotFoundError):
         return "missing_dependency", str(exc)
     if isinstance(exc, ModuleNotFoundError):
@@ -349,6 +389,80 @@ class WorkerPreflightError(RuntimeError):
     """Dependency/disk check failed before any job-specific work started."""
 
 
+class DetectionAssetsMissing(RuntimeError):
+    """The job's layout cannot detect: no hero templates, or a declared-but-
+    absent / placeholder HUD anchor.
+
+    Raised BEFORE the download so a multi-hour broadcast is not fetched only
+    to report `detect: skipped — no hero templates` at the end. Carries the
+    stable code `detection_assets_missing`, which is deliberately NOT
+    retryable — retrying changes nothing; a human must harvest the assets.
+    """
+    code = "detection_assets_missing"
+
+    def __init__(self, message: str, *, report: dict | None = None):
+        self.report = report or {}
+        super().__init__(message)
+
+
+def check_detection_assets(job: models.Job, *, allow_missing: bool = False
+                           ) -> dict:
+    """Is this job's resolved layout actually able to produce compositions?
+
+    Returns {"checked", "ok", "layoutId", "failed", "checks", "reason"}.
+    `checked=False` when the job has no layout yet — layout resolution runs
+    AFTER the download by design, so there is nothing to verify at that
+    point and this reports so honestly instead of inventing a verdict.
+    """
+    layout_id = job.payload.get("expectedLayoutId")
+    if not layout_id:
+        return {"checked": False, "ok": True, "layoutId": None,
+                "failed": [], "checks": [],
+                "reason": ("no layout resolved yet — layout resolution runs "
+                           "after the download, so detection assets cannot "
+                           "be verified at this point")}
+    import detection_assets as da
+    report = da.check_layout_assets(layout_id)
+    return {"checked": True, "ok": report["ok"] or allow_missing,
+            "hardOk": report["ok"], "layoutId": layout_id,
+            "failed": report["failed"], "checks": report["checks"],
+            "reason": ("detection assets present" if report["ok"] else
+                       "; ".join(f"{c['name']}: {c['detail']}"
+                                 for c in report["checks"]
+                                 if c["status"] == da.FAIL))}
+
+
+def assert_detection_assets(job: models.Job, *, allow_missing: bool = False
+                            ) -> dict:
+    """Raise DetectionAssetsMissing unless this job can actually detect.
+
+    `allow_missing=True` is the deliberate harvest escape hatch: hero
+    templates and anchor crops can only be cut FROM this broadcast's own
+    frames, so demanding them before the download would be an unresolvable
+    chicken-and-egg. The opt-out is explicit, recorded on the job, and never
+    the default.
+    """
+    report = check_detection_assets(job, allow_missing=allow_missing)
+    if not report["checked"] or report.get("hardOk", True):
+        return report
+    if allow_missing:
+        log(f"{job.job_key}: PROCEEDING WITHOUT DETECTION ASSETS "
+            f"(--for-harvest): {report['reason']}")
+        return report
+    remedies = "\n    ".join(
+        c["remedy"] for c in report["checks"]
+        if c.get("remedy") and c["status"] == "fail")
+    raise DetectionAssetsMissing(
+        f"layout {report['layoutId']!r} cannot detect "
+        f"({', '.join(report['failed'])}): {report['reason']}\n"
+        f"  Fix it before downloading hours of video:\n    {remedies}\n"
+        f"  Or, if you are downloading this broadcast IN ORDER to harvest "
+        f"those assets from it, say so explicitly:\n"
+        f"    python pipeline/automation/cli.py autopilot --job "
+        f"{job.job_key} --for-harvest",
+        report=report)
+
+
 def preflight(media_root: str = DEFAULT_MEDIA_ROOT,
              min_free_gb: float = DEFAULT_MIN_FREE_GB,
              which=shutil.which) -> dict:
@@ -382,11 +496,13 @@ def download_job(store: js.JobStore, lock_mgr: lk.LockManager, job: models.Job,
                  manual_approved_video_ids: set | None = None,
                  probe_fn=None,
                  download_full_fn=None,
+                 probe_media_fn=None,
                  proxy_fn=None,
                  resolution_fn=None,
                  height: int = DEFAULT_SOURCE_HEIGHT,
                  proxy_height: int = DEFAULT_PROXY_HEIGHT,
                  make_proxy: bool = True,
+                 for_harvest: bool = False,
                  which=shutil.which, runner=subprocess,
                  now: dt.datetime | None = None) -> dict:
     """Drive one ARCHIVED (broadcast linked, ready) job through DOWNLOADING
@@ -422,6 +538,8 @@ def download_job(store: js.JobStore, lock_mgr: lk.LockManager, job: models.Job,
             probe_fn = vi.probe_vod
         if download_full_fn is None:
             download_full_fn = vi.download_full_video
+        if probe_media_fn is None:
+            probe_media_fn = vi.media_download_probe
         if proxy_fn is None:
             proxy_fn = vi.make_scan_proxy
         if resolution_fn is None:
@@ -439,6 +557,17 @@ def download_job(store: js.JobStore, lock_mgr: lk.LockManager, job: models.Job,
             job.payload, official_channel_ids=official_channel_ids,
             manual_approved_video_ids=manual_approved_video_ids)
 
+        # Detection-asset gate BEFORE any bytes: a layout with no hero
+        # templates (or a placeholder anchor) can never produce a comp, and
+        # discovering that after a multi-hour download is the expensive way
+        # to learn it.
+        assets = assert_detection_assets(job, allow_missing=for_harvest)
+        store.update_payload(job.job_key, {"detectionAssets": {
+            **{k: assets.get(k) for k in
+               ("checked", "ok", "hardOk", "layoutId", "failed", "reason")},
+            "forHarvest": bool(for_harvest),
+        }})
+
         url = job.payload.get("sourceUrl") or job.payload.get("videoUrl")
         # Duration BEFORE the download, so the space check below is real.
         meta = probe_fn(url)
@@ -449,11 +578,48 @@ def download_job(store: js.JobStore, lock_mgr: lk.LockManager, job: models.Job,
         if not disk["ok"]:
             raise OSError(28, f"insufficient disk space: {disk['reason']}")
 
+        # A short REAL media probe before committing to hours of download:
+        # metadata succeeding proves nothing about whether the signed media
+        # URL will serve bytes (the exact 403 this pipeline hit). The probe
+        # also reports which ladder rung works, so the full download starts
+        # there instead of re-walking the failures.
+        probe_report: dict | None = None
+        proven_rung: str | None = None
+        if probe_media_fn is not None:
+            try:
+                probe_report = probe_media_fn(url, height=height)
+                proven_rung = probe_report.get("rung")
+                store.update_payload(job.job_key, {"mediaProbe": {
+                    "ok": True, "rung": proven_rung,
+                    "bytes": probe_report.get("bytes"),
+                    "width": probe_report.get("width"),
+                    "height": probe_report.get("height"),
+                    "format": probe_report.get("format"),
+                    "qualityDowngrade": probe_report.get("qualityDowngrade"),
+                    "attempts": probe_report.get("attempts") or [],
+                    "checkedAt": dt.datetime.now(dt.timezone.utc)
+                        .replace(microsecond=0).isoformat(),
+                }})
+            except Exception as exc:  # noqa: BLE001 — classified below
+                code, message = classify_download_error(exc)
+                store.update_payload(job.job_key, {"mediaProbe": {
+                    "ok": False, "errorCode": code,
+                    "errorMessage": ytdlp_opts.redact_text(message)[:600],
+                    "attempts": getattr(exc, "attempts", []),
+                    "checkedAt": dt.datetime.now(dt.timezone.utc)
+                        .replace(microsecond=0).isoformat(),
+                }})
+                # Re-raise so the normal failure path records the attempt,
+                # sets resumeState and schedules the retry — refusing here
+                # is the whole point: no multi-hour download on a dead URL.
+                raise
+
         store.transition(job.job_key, sm.DOWNLOADING)
         out_dir = media_dir_for(job, media_root)
         os.makedirs(out_dir, exist_ok=True)
         out_path = os.path.join(out_dir, f"{video_id}.mp4")
-        dres = download_full_fn(url, out_path, height=height)
+        dres = download_full_fn(url, out_path, height=height,
+                                start_rung=proven_rung)
 
         digest = sha256_file(dres["path"])
         res_info = resolution_fn(dres["path"]) or {}
@@ -520,11 +686,36 @@ def download_job(store: js.JobStore, lock_mgr: lk.LockManager, job: models.Job,
         return {"ok": True, "path": out_path, "metadata": media}
     except Exception as exc:  # noqa: BLE001 — every failure must be classified, never silently swallowed
         code, message = classify_download_error(exc)
+        message = ytdlp_opts.redact_text(message)
+        # Record WHERE to resume before the state moves to FAILED/
+        # RETRY_SCHEDULED, so `retry-job` restores the right stage instead
+        # of guessing — and never rewinds past the audited source approval.
+        failed_in = (store.get(job.job_key) or job).state
+        patch: dict = {
+            "resumeState": resume_target_for(failed_in),
+            "failedInState": failed_in,
+            "lastFailure": {
+                "errorCode": code, "errorMessage": message[:600],
+                "remedy": getattr(exc, "remedy", "") or
+                          ytdlp_opts.classify_ytdlp_error(message)[1],
+                "at": dt.datetime.now(dt.timezone.utc)
+                    .replace(microsecond=0).isoformat(),
+            },
+        }
+        attempts = getattr(exc, "attempts", None)
+        if attempts:
+            patch["downloadAttempts"] = attempts
+        store.update_payload(job.job_key, patch)
         store.record_attempt(job.job_key, ok=False, worker_id=worker_id,
                              error_code=code, error_message=message, now=now)
         lock_mgr.release(resource, worker_id)
         log(f"{job.job_key}: FAILED [{code}] {message}")
-        return {"ok": False, "errorCode": code, "errorMessage": message}
+        remedy = patch["lastFailure"]["remedy"]
+        if remedy:
+            log(f"{job.job_key}: remedy — {remedy}")
+        return {"ok": False, "errorCode": code, "errorMessage": message,
+                "remedy": remedy, "resumeState": patch["resumeState"],
+                "attempts": attempts or []}
 
 
 def scan_path_for(job: models.Job, *, repo_root: str | None = None) -> str | None:
@@ -664,8 +855,29 @@ def doctor_report(*, media_root: str = DEFAULT_MEDIA_ROOT,
         "githubCli": check_gh_auth(runner=runner, which=which),
         "apiKeysPresent": check_api_keys_present(),
     }
+    # The download stack (yt-dlp version + PATH/interpreter agreement,
+    # ffmpeg/ffprobe, JS runtime, yt-dlp-ejs, curl_cffi) and the resolved
+    # download-auth configuration. Detection only — never installs.
+    report["download"] = ytdlp_opts.dependency_report(which=which,
+                                                      runner=runner)
+    # Which broadcast packages can actually detect, so an operator learns
+    # this BEFORE match day rather than after a multi-hour download.
+    try:
+        import detection_assets as da
+        audits = da.audit_all_layouts()
+        report["detectionAssets"] = {
+            "ready": [a["layoutId"] for a in audits if a["ok"]],
+            "notReady": [{"layoutId": a["layoutId"], "failed": a["failed"],
+                          "remedies": [c["remedy"] for c in a["checks"]
+                                       if c["status"] == da.FAIL and c["remedy"]]}
+                         for a in audits if not a["ok"]],
+        }
+    except Exception as exc:  # noqa: BLE001 — a doctor must never crash
+        report["detectionAssets"] = {"error": f"{type(exc).__name__}: {exc}",
+                                     "ready": [], "notReady": []}
     report["ok"] = (not report["missingTools"] and disk_ok
-                    and cache_ok and evidence_ok)
+                    and cache_ok and evidence_ok
+                    and report["download"]["ok"])
     return report
 
 
@@ -688,6 +900,19 @@ def format_doctor_report(report: dict) -> str:
                 else f"  gh CLI auth      : {'OK' if gh['authenticated'] else 'NOT AUTHENTICATED'}")
     for key, present in report["apiKeysPresent"].items():
         lines.append(f"  {key:<26}: {'present' if present else 'missing'} (value never shown)")
+    if report.get("download"):
+        lines.append("  --- download stack ---")
+        lines.append(ytdlp_opts.format_dependency_report(report["download"]))
+    assets = report.get("detectionAssets") or {}
+    if assets.get("ready") or assets.get("notReady"):
+        lines.append("  --- detection assets ---")
+        lines.append(f"    detection-ready layouts : "
+                     f"{', '.join(assets['ready']) if assets['ready'] else 'NONE'}")
+        for row in assets.get("notReady", []):
+            lines.append(f"    NOT READY {row['layoutId']:<22} "
+                         f"({', '.join(row['failed'])})")
+            for remedy in row["remedies"]:
+                lines.append(f"      -> {remedy}")
     lines.append(f"  OVERALL          : {'READY' if report['ok'] else 'NOT READY — see above'}")
     return "\n".join(lines)
 

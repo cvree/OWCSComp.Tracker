@@ -493,6 +493,12 @@ REGIONS = [
     {"id": "asia", "name": "Asia", "short": "ASIA"},
     {"id": "china", "name": "China", "short": "CN"},
     {"id": "pacific", "name": "Pacific", "short": "PAC"},
+    # The official calendar names these regions too. Without them a region
+    # badge falls back to the raw id ("korea"), which is how the calendar's
+    # event bands were rendering before.
+    {"id": "korea", "name": "Korea", "short": "KR"},
+    {"id": "japan", "name": "Japan", "short": "JP"},
+    {"id": "global", "name": "Global", "short": "GLOBAL"},
 ]
 
 
@@ -1107,6 +1113,54 @@ def provisional_reasons(con, match_id: str) -> list[str]:
     return reasons
 
 
+# --------------------------------------------------------- official calendar
+# The season's EVENT structure (regional stage windows, major events, their
+# official broadcast destinations) lives in config/owcs_calendar.json and was
+# reaching the automation DB's `source_events` ledger and stopping there —
+# nothing exported it, so the public calendar could only ever show matches
+# that had already been ingested. It had no idea a stage was even running.
+#
+# Exported straight from the committed config (not the automation DB) on
+# purpose: the config is the source of truth, it is offline, and the public
+# build must not require the operator's private job database.
+CALENDAR_CONFIG = os.path.join(db.REPO_ROOT, "config", "owcs_calendar.json")
+
+
+def build_calendar_events(path: str = CALENDAR_CONFIG) -> list[dict]:
+    """Official-calendar events for the public dataset.
+
+    `verified` is carried through UNCHANGED. Every event in the committed
+    seed is currently `verified: false` (the official schedule site was not
+    reachable when it was written), and the site is required to say so
+    rather than present placeholder dates as fact.
+    """
+    if not os.path.exists(path):
+        return []
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            raw = json.load(f)
+    except (OSError, ValueError):
+        return []
+    out = []
+    for e in raw.get("events", []) or []:
+        eid = e.get("id")
+        if not eid or not e.get("startDate"):
+            continue        # an event with no id or no start cannot be placed
+        out.append({
+            "id": eid,
+            "name": e.get("name") or eid,
+            "region": (e.get("region") or "global").lower(),
+            "stage": e.get("stage"),
+            "startDate": e.get("startDate"),
+            "endDate": e.get("endDate") or e.get("startDate"),
+            "verified": bool(e.get("verified")),
+            "broadcastChannels": list(e.get("broadcastChannels") or []),
+            "faceitCompetitionId": e.get("faceitCompetitionId"),
+        })
+    out.sort(key=lambda e: (e["startDate"], e["id"]))
+    return out
+
+
 def build_public_payload(con) -> dict:
     """The production public.v1 dataset, built ONLY from reviewed/staged
     DB state: matches, map_results, hero_stints (approved statuses),
@@ -1363,7 +1417,14 @@ def build_public_payload(con) -> dict:
             "teamA": m["team_a"],
             "teamB": m["team_b"],
             "bestOf": 5,
-            "scheduledAt": f"{m['date']}T00:00:00+00:00",
+            # `scheduled_at` is a real start instant; `date` is a day with no
+            # time. Deriving midnight from a date and publishing it as
+            # `scheduledAt` is fine for placing the match on a calendar, but
+            # the UI must not render 00:00 UTC as if it were a kickoff time —
+            # hence the explicit flag rather than a magic-value convention.
+            "scheduledAt": (rv(m, "scheduled_at")
+                            or f"{m['date']}T00:00:00+00:00"),
+            "timeKnown": bool(rv(m, "scheduled_at")),
             "status": "completed",
             "scoreA": rv(m, "score_a") or None,
             "scoreB": rv(m, "score_b") or None,
@@ -1437,6 +1498,9 @@ def build_public_payload(con) -> dict:
             "bestOf": 5,
             "scheduledAt": (rv(m, "scheduled_at")
                             or f"{m['date']}T00:00:00+00:00"),
+            # See the note on the other match builder: midnight derived from
+            # a bare date must never render as a real kickoff time.
+            "timeKnown": bool(rv(m, "scheduled_at")),
             "status": _public_match_status(m),
             "scoreA": rv(m, "score_a") or None,
             "scoreB": rv(m, "score_b") or None,
@@ -1577,6 +1641,10 @@ def build_public_payload(con) -> dict:
         "teams": teams,
         "players": players_out,
         "tournaments": tournaments_out,
+        # The official season structure — stage windows and their broadcast
+        # destinations. Carries `verified` unchanged so the calendar can be
+        # explicit about which dates are confirmed and which are a seed.
+        "calendarEvents": build_calendar_events(),
         "bracketRounds": [],
         "extraRounds": [],
         "bracketMatches": [],

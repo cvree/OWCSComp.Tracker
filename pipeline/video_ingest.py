@@ -62,6 +62,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import db  # noqa: E402
 import capture  # noqa: E402
 import json  # noqa: E402
+import ytdlp_opts as yo  # noqa: E402  (stdlib-only auth/redaction/ladder policy)
 
 DEFAULT_SOURCES = os.path.join(db.REPO_ROOT, "data", "sources", "video_sources.json")
 WORK_DIR = capture.WORK_DIR
@@ -470,6 +471,11 @@ def _run_live(cmd: list[str], prefix: str, runner=subprocess,
             break
         line = line.rstrip()
         if line:
+            # Redact BEFORE printing: yt-dlp echoes the signed googlevideo
+            # URL (a time-limited credential) on several code paths, and
+            # this output is streamed straight into operator logs and the
+            # control-room browser tail.
+            line = yo.redact_text(line)
             print(f"{prefix} {line}", flush=True)
             tail.append(line)
             if len(tail) > 30:
@@ -934,28 +940,286 @@ def full_vod_format(height: int = 720) -> str:
             f"bestvideo[height<={height}]/best[height<={height}]/best")
 
 
+class MediaDownloadError(RuntimeError):
+    """Every ladder rung failed. Carries the classified `code` of the LAST
+    meaningful failure (e.g. `youtube_media_forbidden`), the operator
+    `remedy` for it, and the sanitized per-rung `attempts` record, so the
+    state machine gets a precise retryable code instead of an opaque one."""
+
+    def __init__(self, code: str, message: str, *, remedy: str = "",
+                 attempts: list[dict] | None = None):
+        self.code = code or "download_failed"
+        self.remedy = remedy
+        self.attempts = list(attempts or [])
+        super().__init__(message)
+
+
+# The probe downloads this many seconds of real media. Long enough that
+# bytes genuinely flow through the same signed-URL path a full download
+# uses, short enough to cost nothing.
+PROBE_SECONDS = 6
+PROBE_STALL_TIMEOUT = 90.0
+# A probe clip below this is not proof of anything.
+PROBE_MIN_BYTES = 16 * 1024
+
+
+def _sidecar_format_path(out_path: str) -> str:
+    """Where the format selector used for an in-flight `.part` is recorded.
+
+    yt-dlp's `--continue` only produces a valid file when the resumed bytes
+    came from the SAME format. Resuming a 398 partial with a 136 selector
+    yields a corrupt file that only fails much later, at detection. Writing
+    the selector next to the partial is what lets a rung change discard the
+    partial deliberately rather than silently corrupt it.
+    """
+    return out_path + ".fmt"
+
+
+def _read_partial_format(out_path: str) -> str | None:
+    try:
+        with open(_sidecar_format_path(out_path), "r", encoding="utf-8") as f:
+            return f.read().strip() or None
+    except OSError:
+        return None
+
+
+def _write_partial_format(out_path: str, selector: str) -> None:
+    try:
+        with open(_sidecar_format_path(out_path), "w", encoding="utf-8") as f:
+            f.write(selector)
+    except OSError:
+        pass
+
+
+def _clear_partial(out_path: str, why: str) -> int:
+    """Delete ONLY incomplete/temporary artifacts (`.part`, `.ytdl`, the
+    format sidecar) — never a complete, valid download. Returns the bytes
+    discarded so the operator log can say what was thrown away and why."""
+    discarded = 0
+    for suffix in (".part", ".ytdl", ".part-Frag0", ".fmt"):
+        path = out_path + suffix
+        if os.path.exists(path):
+            try:
+                discarded += os.path.getsize(path)
+                os.remove(path)
+            except OSError:
+                pass
+    if discarded:
+        log(f"full-vod: discarded {discarded} bytes of incomplete download "
+            f"({why})")
+    return discarded
+
+
+def _ytdlp_base_cmd(selector: str, out_path: str, url: str,
+                    extra: list[str]) -> list[str]:
+    return ["yt-dlp", *js_runtime_args(), *extra, "-f", selector,
+            "--no-playlist", "--continue", "--no-overwrites",
+            "--retries", "10", "--fragment-retries", "10",
+            "--newline", "--progress", "-o", out_path, url]
+
+
+def _attempt_record(rung, ok: bool, *, code: str = "", message: str = "",
+                    seconds: float = 0.0, note: str = "",
+                    cmd: list[str] | None = None) -> dict:
+    """One sanitized ladder attempt, safe to log, store on a job, and send
+    to the browser."""
+    rec = rung.describe()
+    rec.update({
+        "ok": ok, "errorCode": code or None,
+        "errorMessage": yo.redact_text(message)[:600] or None,
+        "seconds": round(seconds, 1), "note": note,
+    })
+    if cmd:
+        rec["command"] = yo.format_argv(cmd)
+    return rec
+
+
+def _walk_ladder(url: str, *, height: int, auth, attempt_fn,
+                 what: str, start_rung: str | None = None
+                 ) -> tuple[dict, list[dict]]:
+    """Run `attempt_fn(rung)` down the bounded ladder.
+
+    Returns (successful_result, attempts). Raises MediaDownloadError when
+    every runnable rung failed. `attempt_fn` raises on failure; anything it
+    returns is treated as success.
+
+    Every rung is attempted AT MOST ONCE — there is no inner retry loop, by
+    design: re-requesting the same expired signed URL is exactly the
+    behaviour that turns a 403 into an endless spin.
+
+    `start_rung` (a rung a probe already proved) skips the cheaper rungs
+    before it — recorded explicitly as skips, never silently dropped.
+    """
+    ladder = yo.build_ladder(auth, height=height)
+    attempts: list[dict] = []
+    last_code, last_msg, last_remedy = "", "", ""
+    floor = _rung_index(start_rung) if start_rung else -1
+    for i, rung in enumerate(ladder, start=1):
+        if floor > _rung_index(rung.name):
+            attempts.append(_attempt_record(
+                rung, False, note="skipped",
+                message=(f"the media probe already proved rung "
+                         f"{start_rung!r} works — not retrying a cheaper "
+                         f"rung that would only fail again")))
+            continue
+        if not rung.runnable:
+            attempts.append(_attempt_record(rung, False, note="skipped",
+                                            message=rung.skip_reason or ""))
+            log(f"{what}: [{i}/{len(ladder)}] {rung.name} — SKIPPED: "
+                f"{rung.skip_reason}")
+            continue
+        log(f"{what}: [{i}/{len(ladder)}] {rung.name} — {rung.why}")
+        started = time.monotonic()
+        try:
+            result = attempt_fn(rung)
+        except (subprocess.CalledProcessError, StallTimeout, InvalidClip,
+                FileNotFoundError, OSError, ValueError) as exc:
+            output = (getattr(exc, "output", "") or getattr(exc, "stderr", "")
+                      or str(exc))
+            code, remedy = yo.classify_ytdlp_error(output)
+            if not code:
+                code = ("network_stall" if isinstance(exc, StallTimeout)
+                        else "corrupt_media" if isinstance(exc, InvalidClip)
+                        else "download_failed")
+            last_code, last_remedy = code, remedy
+            last_msg = yo.redact_text(str(output))[-400:]
+            attempts.append(_attempt_record(
+                rung, False, code=code, message=str(output),
+                seconds=time.monotonic() - started))
+            log(f"{what}: {rung.name} FAILED [{code}] — "
+                f"{'trying the next rung' if i < len(ladder) else 'ladder exhausted'}")
+            if remedy:
+                log(f"{what}: remedy — {remedy}")
+            # A permanently-unavailable video is not worth walking further:
+            # every remaining rung would fail identically.
+            if not yo.is_retryable(code) and code:
+                attempts.append({"rung": "(ladder stopped)", "ok": False,
+                                 "errorCode": code, "runnable": False,
+                                 "skipReason": (
+                                     "remaining rungs skipped — "
+                                     f"{code} is not fixable by retrying")})
+                break
+            continue
+        attempts.append(_attempt_record(
+            rung, True, seconds=time.monotonic() - started,
+            note=("QUALITY DOWNGRADE — no working stream at the requested "
+                  "height; fell back to a lower rendition"
+                  if rung.downgrade else "")))
+        log(f"{what}: {rung.name} SUCCEEDED")
+        result["rung"] = rung.name
+        result["qualityDowngrade"] = bool(rung.downgrade)
+        result["attempts"] = attempts
+        return result, attempts
+    raise MediaDownloadError(
+        last_code or "download_failed",
+        f"every download rung failed for {url} "
+        f"(last: [{last_code or 'unknown'}] {last_msg or 'no output'})",
+        remedy=last_remedy, attempts=attempts)
+
+
+def media_download_probe(url: str, *, height: int = 720,
+                         seconds: int = PROBE_SECONDS,
+                         out_dir: str | None = None,
+                         runner=subprocess, auth=None,
+                         stall_timeout: float | None = PROBE_STALL_TIMEOUT
+                         ) -> dict:
+    """Prove that real VIDEO BYTES can be downloaded, before committing to
+    a multi-hour broadcast.
+
+    Metadata extraction deliberately does NOT count: `--dump-single-json`
+    succeeds against videos whose media URLs then 403, which is exactly the
+    failure this project hit. The probe pulls a few real seconds through
+    the same signed-URL path a full download uses, validates the result
+    with ffprobe, and reports WHICH ladder rung worked — so the full
+    download can start there instead of re-discovering it.
+
+    Returns {"ok", "rung", "bytes", "format", "width", "height",
+             "seconds", "attempts", "qualityDowngrade"}.
+    Raises MediaDownloadError when no rung produced bytes.
+    """
+    auth = auth or yo.load_auth_config()
+    out_dir = out_dir or os.path.join(db.REPO_ROOT, "work", "probe")
+    os.makedirs(out_dir, exist_ok=True)
+    safe = re.sub(r"[^A-Za-z0-9_.-]", "_", url)[-40:]
+    out_path = os.path.join(out_dir, f"probe_{safe}.mp4")
+    section = f"*0-{max(2, int(seconds))}"
+
+    def attempt(rung) -> dict:
+        # Always start the probe from clean state: a probe that "passed"
+        # because a stale file was lying around proves nothing.
+        for p in (out_path, out_path + ".part"):
+            if os.path.exists(p):
+                try:
+                    os.remove(p)
+                except OSError:
+                    pass
+        selector = rung.format_override or full_vod_format(height)
+        cmd = ["yt-dlp", *js_runtime_args(), *rung.args, "-f", selector,
+               "--no-playlist", "--download-sections", section,
+               "--newline", "--progress", "--no-part",
+               "-o", out_path, url]
+        _run_live(cmd, "[probe]", runner, idle_msg="still probing",
+                  stall_timeout=stall_timeout)
+        produced = out_path
+        if not os.path.exists(produced):
+            # yt-dlp sometimes lands a differently-suffixed file for a
+            # section cut; accept any sibling it actually produced.
+            siblings = sorted(glob.glob(out_path.rsplit(".", 1)[0] + "*"))
+            produced = siblings[0] if siblings else out_path
+        if not os.path.exists(produced):
+            raise FileNotFoundError(
+                f"probe exited 0 but produced no media file ({selector!r})")
+        size = os.path.getsize(produced)
+        if size < PROBE_MIN_BYTES:
+            raise InvalidClip(
+                f"probe produced only {size} bytes — no real media flowed")
+        ok, reason = probe_clip_valid(produced, runner=runner)
+        if not ok:
+            raise InvalidClip(f"probe clip is not decodable — {reason}")
+        res = probe_clip_resolution(produced, runner=runner) or {}
+        return {"ok": True, "bytes": size, "format": selector,
+                "path": produced, "width": res.get("width"),
+                "height": res.get("height"), "seconds": seconds}
+
+    log(f"probe: proving real media bytes download for {url} "
+        f"({seconds}s at <={height}p)")
+    result, attempts = _walk_ladder(url, height=height, auth=auth,
+                                    attempt_fn=attempt, what="probe")
+    log(f"probe: OK via rung {result['rung']} — {result['bytes']} bytes, "
+        f"{result.get('width')}x{result.get('height')}")
+    return result
+
+
 def download_full_video(url: str, out_path: str, *, height: int = 720,
                         runner=subprocess,
                         stall_timeout: float | None = FULL_VOD_STALL_TIMEOUT,
-                        fmt: str | None = None) -> dict:
-    """Download the COMPLETE video at `url` to `out_path`, resuming any
-    partial from a previous interrupted run.
+                        fmt: str | None = None, auth=None,
+                        start_rung: str | None = None) -> dict:
+    """Download the COMPLETE video at `url` to `out_path`, walking the
+    bounded fallback ladder and resuming any valid partial.
 
-    Returns {"path", "resumed", "sizeBytes", "format", "partialBytesBefore"}.
-    Raises the same exceptions the clip path does (CalledProcessError,
-    StallTimeout, FileNotFoundError) so `worker.classify_download_error`
-    keeps classifying every failure exactly as before.
+    Returns {"path", "resumed", "sizeBytes", "format", "partialBytesBefore",
+             "rung", "attempts", "qualityDowngrade"}.
+    Raises MediaDownloadError (carrying a precise, classified `code` such as
+    `youtube_media_forbidden`) when every rung fails.
 
-    A COMPLETE, valid file already at `out_path` is reused untouched — that,
-    plus `--continue` over a `.part`, is what makes re-running the worker
-    against the same job idempotent instead of re-downloading hours of video.
+    Preservation rules, in order of importance:
+      * a COMPLETE, valid file at `out_path` is reused untouched;
+      * a `.part` whose recorded format matches the rung's selector is
+        RESUMED (`--continue`);
+      * a `.part` from a DIFFERENT format is discarded before the attempt,
+        because resuming across formats silently corrupts the output;
+      * nothing else on disk is ever deleted.
+
+    `start_rung` (from a successful `media_download_probe`) skips straight
+    to the rung already known to work, so the probe's evidence is not
+    thrown away.
     """
+    auth = auth or yo.load_auth_config()
     out_dir = os.path.dirname(out_path)
     if out_dir:
         os.makedirs(out_dir, exist_ok=True)
     part = out_path + ".part"
-    partial_before = os.path.getsize(part) if os.path.exists(part) else 0
-    selector = fmt or full_vod_format(height)
 
     if os.path.exists(out_path):
         ok, reason = probe_clip_valid(out_path, runner=runner)
@@ -963,8 +1227,11 @@ def download_full_video(url: str, out_path: str, *, height: int = 720,
             size = os.path.getsize(out_path)
             log(f"full-vod: REUSING complete download ({size} bytes) -> {out_path}")
             return {"path": out_path, "resumed": False, "sizeBytes": size,
-                    "format": selector, "partialBytesBefore": partial_before,
-                    "reused": True}
+                    "format": fmt or full_vod_format(height),
+                    "partialBytesBefore": (os.path.getsize(part)
+                                           if os.path.exists(part) else 0),
+                    "reused": True, "rung": "cached",
+                    "attempts": [], "qualityDowngrade": False}
         log(f"full-vod: existing file invalid ({reason}) — deleting and "
             f"re-downloading {out_path}")
         try:
@@ -972,31 +1239,75 @@ def download_full_video(url: str, out_path: str, *, height: int = 720,
         except OSError as e:
             log(f"full-vod: could not delete {out_path} ({e}) — continuing")
 
-    if partial_before:
-        log(f"full-vod: RESUMING partial download "
-            f"({partial_before} bytes already on disk) -> {part}")
-    cmd = ["yt-dlp", *js_runtime_args(), "-f", selector,
-           "--no-playlist", "--continue", "--no-overwrites",
-           "--retries", "10", "--fragment-retries", "10",
-           "--newline", "--progress", "-o", out_path, url]
-    log(f"full-vod: {'resuming' if partial_before else 'downloading'} the whole "
-        f"broadcast (<={height}p, video-only) -> {out_path}")
-    res = _run_live(cmd, "[yt-dlp]", runner, idle_msg="still downloading",
-                    stall_timeout=stall_timeout)
-    if _saw_js_runtime_warning(getattr(res, "output", "") or ""):
-        log(_JS_RUNTIME_HINT)
-    if not os.path.exists(out_path):
-        raise FileNotFoundError(
-            f"yt-dlp exited 0 but produced no file at {out_path} "
-            f"(format {selector!r})")
-    ok, reason = probe_clip_valid(out_path, runner=runner)
-    if not ok:
-        raise InvalidClip(f"downloaded full VOD is invalid — {reason} ({out_path})")
-    size = os.path.getsize(out_path)
-    log(f"full-vod: OK — {size} bytes at {out_path}")
-    return {"path": out_path, "resumed": bool(partial_before),
-            "sizeBytes": size, "format": selector,
-            "partialBytesBefore": partial_before, "reused": False}
+    def attempt(rung) -> dict:
+        selector = rung.format_override or fmt or full_vod_format(height)
+        prior_fmt = _read_partial_format(out_path)
+        partial_before = os.path.getsize(part) if os.path.exists(part) else 0
+        default_selector = fmt or full_vod_format(height)
+        if partial_before and prior_fmt and prior_fmt != selector:
+            _clear_partial(out_path,
+                           f"format changed {prior_fmt!r} -> {selector!r}; "
+                           f"a cross-format resume corrupts the file")
+            partial_before = 0
+        elif partial_before and not prior_fmt and selector != default_selector:
+            # No sidecar (a partial from before this bookkeeping existed, or
+            # from another tool) AND this rung is overriding the format. We
+            # cannot prove the bytes match, and splicing two formats
+            # produces a file that only fails much later, at detection.
+            _clear_partial(out_path,
+                           f"partial has no recorded format and this rung "
+                           f"overrides the selector ({selector!r}) — cannot "
+                           f"prove the bytes match")
+            partial_before = 0
+        elif partial_before:
+            # Either the sidecar agrees, or there is no sidecar and this
+            # rung uses the SAME pinned selector a previous run of this
+            # pipeline would have used — so resuming is safe. Preserving
+            # these bytes is the whole point of `--continue`: a killed
+            # multi-hour download must resume, never restart.
+            log(f"full-vod: RESUMING partial download ({partial_before} "
+                f"bytes already on disk, same format) -> {part}")
+        _write_partial_format(out_path, selector)
+        cmd = _ytdlp_base_cmd(selector, out_path, url, rung.args)
+        res = _run_live(cmd, "[yt-dlp]", runner,
+                        idle_msg="still downloading",
+                        stall_timeout=stall_timeout)
+        if _saw_js_runtime_warning(getattr(res, "output", "") or ""):
+            log(_JS_RUNTIME_HINT)
+        if not os.path.exists(out_path):
+            raise FileNotFoundError(
+                f"yt-dlp exited 0 but produced no file at {out_path} "
+                f"(format {selector!r})")
+        ok, reason = probe_clip_valid(out_path, runner=runner)
+        if not ok:
+            # A corrupt result is exactly the case where the partial must
+            # go — keeping it would poison the next rung's resume too.
+            _clear_partial(out_path, f"download invalid: {reason}")
+            raise InvalidClip(
+                f"downloaded full VOD is invalid — {reason} ({out_path})")
+        _clear_partial(out_path, "download complete")
+        size = os.path.getsize(out_path)
+        log(f"full-vod: OK — {size} bytes at {out_path}")
+        return {"path": out_path, "resumed": bool(partial_before),
+                "sizeBytes": size, "format": selector,
+                "partialBytesBefore": partial_before, "reused": False}
+
+    if start_rung:
+        log(f"full-vod: starting at rung {start_rung!r} "
+            f"(proven by the media probe)")
+    log(f"full-vod: downloading the whole broadcast (<={height}p, "
+        f"video-only) -> {out_path}")
+    result, _attempts = _walk_ladder(url, height=height, auth=auth,
+                                     attempt_fn=attempt, what="full-vod",
+                                     start_rung=start_rung)
+    return result
+
+
+def _rung_index(name: str) -> int:
+    try:
+        return yo.LADDER_ORDER.index(name)
+    except ValueError:
+        return -1
 
 
 DEFAULT_PROXY_HEIGHT = 360

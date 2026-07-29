@@ -1,6 +1,232 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
-## CURRENT STATUS (authoritative — 2026-07-29) — match-day autofill: the free-agent autopilot + browser link intake
+## CURRENT STATUS (authoritative — 2026-07-29, third pass) — the calendar system
+
+> Additive to the two passes below, which remain accurate.
+
+### What was actually broken
+
+`calendar.html` rendered fine — grid, agenda, navigation and URL state all
+worked. The break was upstream, and in two places:
+
+1. **The official calendar never reached the site.**
+   `config/owcs_calendar.json` (4 season events with stage windows) was
+   loaded by `sync-calendar` into the automation DB's `source_events`
+   ledger — and stopped there. `export_data.py --public` had no
+   `calendarEvents` key at all, so the public calendar could only show
+   matches that had *already been ingested*. It had no idea a stage was
+   even running: an August with three live stage windows rendered
+   identically to an empty month in 2027.
+2. **Every match time was a fabrication.** `matches.scheduled_at` is NULL
+   for all 15 rows; the exporter derived `"{date}T00:00:00+00:00"` and
+   published it as `scheduledAt` with nothing marking it as derived. The
+   UI could not tell a real midnight kickoff from an unknown time.
+
+(The 12 matches missing from the public export are *correct* — they are
+synthetic sample fixtures, excluded deliberately. `export-coverage` names
+each one.)
+
+### What was built
+
+* **`calendarEvents` in the public dataset** — exported straight from the
+  committed config (not the operator's job DB, so a public build never
+  needs it), sorted by start date, with `verified` carried through
+  **unchanged**. Every current event is `verified: false`, and the site
+  now says so on each band rather than laundering seed dates into fact.
+* **`timeKnown` on every match** — false when the instant was derived from
+  a bare date. The calendar renders "time TBA"; populate `scheduled_at`
+  and it becomes a real time automatically.
+* **`korea` / `japan` / `global` added to the regions catalog and the
+  region-badge CSS.** The official calendar uses regions the match dataset
+  never did, so the Korea band was rendering its raw id as a label and
+  falling back to an untinted grey.
+* **`calendar.html` is now a schedule, not an archive**: official event
+  bands per month (with "running now"), a day tint across each stage
+  window, upcoming/live/past match states, a **Next up** block, a
+  **Today** button distinct from "Latest match", and a default view that
+  opens on the current month when the season is live around now.
+* **An empty month inside a stage window now says something different**
+  from an empty month outside one — "Stage running, nothing tracked yet,
+  paste a link in the control room to start one" vs. the flat "no tracked
+  matches".
+
+### Verified in a browser (real Chromium, live `serve.py`)
+
+July 2026: 3 event bands, all "running now", all flagged unverified; 31
+in-window day tints; today marked; 2 tracked matches; "time TBA" on both
+(neither has a real start time). August 2026: "3 official event windows, no
+tracked matches yet" + the stage-running empty state. March 2027: the plain
+empty state, no bands. With a live + two future matches injected, **Next
+up** listed 3 in the right order (live first), rendered real times
+(`12:00 PM`, `05:30 PM`) and "time TBA" for the date-only one. No console
+errors. 86 suites green; 7 new calendar contract tests.
+
+### Still true
+
+Match *times* remain unknown until something populates `scheduled_at`
+(FACEIT sync or the official calendar adapter), and the four event windows
+stay `verified: false` until confirmed against the official Overwatch
+Esports schedule — which was not reachable from this environment.
+
+---
+
+## HISTORICAL (2026-07-29, second pass) — YouTube ingestion resilience + full browser control
+
+> Supersedes the "match-day autofill" section below, which is still
+> accurate about the autopilot loop; this pass fixed what happened when the
+> loop actually hit a real YouTube download failure.
+
+### The blocker, precisely diagnosed
+
+`record:nd5lllwdky0:source` failed with `yt-dlp` picking format 398 and
+getting `HTTP Error 403: Forbidden`. Three separate defects turned that
+into a dead end rather than a retry:
+
+1. **The error was opaque.** `classify_download_error` produced
+   `unknown_error` for a media 403, so nothing downstream could tell "the
+   signed URL expired" (fixable: refresh / IPv4 / cookies) from "the video
+   is gone" (not fixable).
+2. **`retry-job` did not restore a runnable state.** It cleared the
+   backoff timer and left the job in `RETRY_SCHEDULED` — a state
+   `ops.run_one_job` has no branch for. Every retry then reported "no
+   automatic action defined", forever.
+3. **Nothing proved media bytes could be downloaded** before committing to
+   a multi-hour VOD, and nothing checked that the layout could detect at
+   all. `templates/owcs_nd5lllwdky0/` **does not exist**, so that job could
+   never have produced a composition even with a perfect download.
+
+### What was built
+
+**`pipeline/ytdlp_opts.py`** (new, stdlib-only) owns yt-dlp policy:
+
+* **Explicit local auth.** `OWCS_YTDLP_COOKIES_FROM_BROWSER` (chrome/edge/
+  firefox + 4 more, allowlisted), `OWCS_YTDLP_BROWSER_PROFILE`,
+  `OWCS_YTDLP_FORCE_IPV4`, `OWCS_YTDLP_IMPERSONATE`, `OWCS_YTDLP_EXTRA_ARGS`.
+  **Browser-cookie access is OFF by default** and there is no code path in
+  this repo that writes a `cookies.txt` — cookies are read directly from
+  the browser by yt-dlp, or not at all. Extra args go through a safe
+  allowlist; `--cookies`, `--exec`, `-o`, credential flags etc. are refused
+  by name with a reason.
+* **Redaction.** Signed googlevideo URLs (a time-limited credential),
+  `sig`/`pot`/`token`/`ip` params, cookie specs, browser profile paths and
+  every sensitive flag value are stripped before anything is logged,
+  written to a job payload, exported, or sent to the browser.
+  `video_ingest._run_live` now redacts each child line *before printing it*.
+* **Dependency detection with exact remediation** — yt-dlp version **and
+  whether the PATH binary matches this interpreter's `yt_dlp`** (the most
+  confusing Windows failure: you "update yt-dlp" and nothing changes),
+  ffmpeg, ffprobe, JS runtime, `yt-dlp-ejs`, `curl_cffi`. Detection never
+  installs or upgrades anything; it prints the command.
+* **Classification.** `youtube_media_forbidden`, `youtube_bot_check`,
+  `youtube_rate_limited`, `youtube_video_unavailable`, `proxy_blocked`, …
+  each with its own remedy, and a `RETRYABLE_CODES` set so an unavailable
+  video stops the ladder instead of walking six rungs to the same answer.
+
+**The bounded fallback ladder** (`video_ingest.py`), six rungs, each tried
+at most once — no inner retry loop, because re-requesting the same expired
+signed URL is exactly how a queue wedges:
+`normal` → `refresh-signed-url` (`--no-cache-dir`, forces a fresh player
+extraction) → `force-ipv4` → `browser-cookies` → `browser-cookies+
+impersonate` → `alternate-format` (≤720p progressive, marked as a quality
+downgrade). Rungs 4/5 are inert unless configured, and appear in the record
+as explicit **skips** rather than silent absences.
+
+**`media_download_probe`** pulls a few seconds of REAL media through the
+same signed-URL path a full download uses and validates it with ffprobe.
+Metadata succeeding proves nothing — that is precisely the failure mode
+here. The probe reports which rung worked, and `download_full_video`
+starts there.
+
+**Partial-file safety.** A `.part` is resumed only when its recorded format
+matches (a sidecar `.fmt` file); a rung that overrides the selector
+discards unprovable bytes first, because splicing two formats produces a
+file that only fails later, at detection. A **complete, valid** download is
+never deleted, and `_clear_partial` only ever touches `.part`/`.ytdl`/
+`.fmt`.
+
+**State machine.** Failures now record `resumeState`/`failedInState` and
+the sanitized `downloadAttempts` ladder; `ops.retry_job` restores the
+recorded stage (ARCHIVED for a download failure) **without re-opening the
+audited source approval**, and refuses to make an unapproved source
+downloadable. The autopilot handles `RETRY_SCHEDULED` itself when the
+backoff is due. `link_status` reports the real state — a retry-scheduled
+job is never mislabelled ARCHIVED.
+
+**`pipeline/detection_assets.py`** (new) answers "can this layout actually
+detect?" BEFORE a byte is downloaded, and `worker.assert_detection_assets`
+refuses the download when it cannot. The honest current answer:
+
+| layout | verdict |
+|---|---|
+| `owcs_jksix_qwc` | **ready** (40 templates, structural `hud_probe`) |
+| `owcs_nd5lllwdky0` | templates dir does not exist |
+| `owcs_8c105lnzlam` (CR–ZETA) | 21 templates, but the anchor is a self-declared PLACEHOLDER and its PNG is absent |
+| `owcs_youtube_2026` | anchor declared but not on disk |
+| `owcs-demo` | no `templates_dir` |
+
+Because templates can only be cut FROM the broadcast's own frames, a hard
+refusal would be an unresolvable chicken-and-egg — so there is exactly one
+explicit escape hatch, `--for-harvest`, which is recorded on the job and is
+never the default.
+
+**The website now drives everything.** `POST /api/action` runs one
+allowlisted CLI action (retry / autopilot / approve-source / reject-source
+/ resolve-layout / approve-layout / propose-identity / accept-proposed /
+detect / detect --write / publish dry-run / publish / media-probe /
+export-public / intake-export), with a typed name required for every
+audited approval and a browser confirm on the irreversible ones.
+`GET /api/download-status` feeds a **download-authentication panel**:
+yt-dlp version + install match, cookie mode configured or not, JS runtime,
+`yt-dlp-ejs`/`curl_cffi`, API-key **presence**, last probe result, live
+fallback rung, and per-layout detection readiness. No secret reaches the
+browser — a test asserts the profile value never appears in the response.
+
+**A real bug found by testing in a browser rather than assuming:**
+`build_action_cmd` returned its label in the tuple slot the handler read as
+an *error*, so every single action 400'd. Fixed, and `test_serve.py` now
+pins the contract.
+
+### Acceptance run (2026-07-29)
+
+* Full offline suite: **86 suites, 0 failures.** `check_packaging.py` OK
+  (27 checks, 8 warnings). `test_release_reproducibility.py` OK.
+* `worker-doctor`: **READY** — and now also prints the download stack, the
+  resolved auth config and per-layout detection readiness.
+* **Real media probe: PASSED** against a reachable host — real `yt-dlp
+  2026.07.04` + real `ffmpeg`, 192,962 bytes of genuine 1280×720 media,
+  ffprobe-validated, rung `normal`. The full `download_full_video` path was
+  also exercised for real (933,136 bytes, then a second call correctly
+  REUSED it instead of re-downloading).
+* **The probe against `nD5lLLWDkY0` itself: FAILED, environmentally.**
+  This container's egress gateway answers **403 to `CONNECT
+  www.youtube.com:443`** (`curl "$HTTPS_PROXY/__agentproxy/status"` →
+  `connect_rejected`, "policy denial"). That is the environment's network
+  policy, not yt-dlp and not the pipeline; it is classified honestly as
+  `proxy_blocked` (a distinct code from `youtube_media_forbidden`) with the
+  remedy "this host cannot reach YouTube media at all". **No real YouTube
+  VOD was downloaded in this environment, and none of the above claims
+  otherwise.**
+* `retry-job record:nd5lllwdky0:source` → **ARCHIVED** (downloadable stage
+  restored), source still `approved` by `connor`, `resumeState=ARCHIVED`,
+  1 attempt recorded, `lastErrorCode=proxy_blocked`. The job is
+  **recoverable**: on a host that can reach YouTube, `autopilot --job
+  record:nd5lllwdky0:source` resumes from exactly there.
+
+### What a real host needs to do next
+
+1. `python pipeline\automation\cli.py worker-doctor` — expect READY.
+2. `python pipeline\automation\cli.py media-probe --url "https://www.youtube.com/watch?v=nD5lLLWDkY0"`.
+   If it reports `youtube_media_forbidden` or `youtube_bot_check`, set
+   `OWCS_YTDLP_COOKIES_FROM_BROWSER=chrome` (or `edge`) and re-run — the
+   ladder's rungs 4/5 activate automatically.
+3. **Harvest `templates/owcs_nd5lllwdky0/`** — until then that layout is
+   correctly refused, and `--for-harvest` is how you download the VOD in
+   order to cut them.
+4. `retry-job` then `autopilot --job record:nd5lllwdky0:source`.
+
+---
+
+## HISTORICAL (2026-07-29, first pass) — match-day autofill: the free-agent autopilot + browser link intake
 
 > **This is the ONLY authoritative status section.** Every `## HISTORICAL
 > (superseded — …)` section below is kept for context and is out of date

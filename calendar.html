@@ -16,16 +16,24 @@
   <div class="page-head rv">
     <span class="ph-eyebrow">Match schedule</span>
     <h1>Calendar</h1>
-    <p class="lede">Every tracked OWCS match, laid out by day. Days glow when the vision pipeline has verified compositions for a match — click through for the receipts.</p>
+    <p class="lede">The OWCS season by day: official stage windows, every tracked match, and what is coming next. Days glow when the vision pipeline has verified compositions for a match — click through for the receipts.</p>
   </div>
+
+  <section class="section rv" id="cal-next-up-wrap" hidden aria-label="Next up">
+    <h2>Next up <span class="h-count" id="cal-next-count"></span></h2>
+    <div class="stack-sm" id="cal-next-up"></div>
+  </section>
 
   <div class="cal-toolbar rv" role="group" aria-label="Calendar month navigation">
     <button class="btn" id="cal-prev" aria-label="Previous month">‹</button>
     <span class="cal-month" id="cal-title" aria-live="polite"></span>
     <button class="btn" id="cal-next" aria-label="Next month">›</button>
+    <button class="btn btn--ghost" id="cal-now">Today</button>
     <button class="btn btn--ghost" id="cal-today">Latest match</button>
     <div class="filter-summary" id="cal-summary" style="margin-left:auto"></div>
   </div>
+
+  <div class="cal-events rv" id="cal-events" aria-label="Official events this month"></div>
 
   <section class="section" aria-label="Month grid">
     <div class="cal-grid-wrap rv">

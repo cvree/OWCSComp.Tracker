@@ -65,6 +65,34 @@
   .ik-form-note { font-size: .78rem; color: var(--muted); margin: 6px 0 0; }
   .ik-form-note.bad { color: var(--loss, #e15b5b); }
   .ik-form-note.ok { color: var(--win, #46d68c); }
+  .ik-panel { border: 1px solid var(--line); border-radius: 12px; padding: 14px 18px; margin: 18px 0; }
+  .ik-panel h2 { font-size: 1.02rem; margin: 0 0 8px; }
+  .ik-stat { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 8px 18px; }
+  .ik-stat > div { font-size: .8rem; }
+  .ik-stat .k { color: var(--muted); text-transform: uppercase; letter-spacing: .04em;
+    font-size: .66rem; display: block; }
+  .ik-stat .v { font-weight: 600; }
+  .ik-stat .v.good { color: var(--win, #46d68c); }
+  .ik-stat .v.bad { color: var(--loss, #e15b5b); }
+  .ik-stat .v.warn { color: var(--amber); }
+  .ik-ladder { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 0; }
+  .ik-rung { font-size: .7rem; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line);
+    color: var(--muted); }
+  .ik-rung.on { border-color: var(--win, #46d68c); color: var(--win, #46d68c); }
+  .ik-rung.active { border-color: var(--amber); color: var(--amber); font-weight: 700; }
+  .ik-btns { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 0; }
+  .ik-btns button { padding: 6px 12px; border-radius: 7px; border: 1px solid var(--line);
+    background: rgba(255,255,255,.06); color: var(--text); font: inherit; font-size: .76rem;
+    font-weight: 600; cursor: pointer; }
+  .ik-btns button:hover:not(:disabled) { background: rgba(255,255,255,.12); }
+  .ik-btns button:disabled { opacity: .4; cursor: not-allowed; }
+  .ik-btns button.danger { border-color: var(--loss, #e15b5b); color: var(--loss, #e15b5b); }
+  .ik-btns button.go { border-color: var(--win, #46d68c); color: var(--win, #46d68c); }
+  .ik-who { padding: 6px 10px; border-radius: 7px; border: 1px solid var(--line);
+    background: rgba(255,255,255,.05); color: var(--text); font: inherit; font-size: .76rem;
+    max-width: 190px; }
+  .ik-remedy { font-size: .74rem; color: var(--amber); margin: 4px 0; }
+  .ik-remedy code { color: var(--text); }
   #ik-live-log { max-height: 260px; overflow: auto; background: rgba(0,0,0,.35);
     border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; margin: 10px 0 0;
     font-family: ui-monospace, "SF Mono", Consolas, monospace; font-size: .72rem;
@@ -111,9 +139,25 @@
         <span>auto-accept clean identity proposals (segment review only — a proposal with a
         blocking task or an UNKNOWN field is still refused and left for a human)</span></label>
     </form>
+    <div class="ik-form-row" style="margin-top:4px">
+      <label class="ik-form-opt" style="margin:0">your name
+        <input class="ik-who" id="ik-who" placeholder="for audited approvals"
+               autocomplete="off" /></label>
+    </div>
     <p class="ik-form-note" id="ik-note">checking for the local control room…</p>
     <code class="ik-cmd" id="ik-cmd-preview" hidden></code>
     <pre id="ik-live-log" hidden></pre>
+  </section>
+
+  <section class="ik-panel" id="ik-dl">
+    <h2>Download authentication &amp; readiness</h2>
+    <p class="muted" style="font-size:.78rem;margin:0 0 10px">
+      Read-only status. Cookie access is OFF unless you configure it in the
+      environment; this panel shows <em>whether</em> a source is configured, never
+      its value, never a profile path, never a key.</p>
+    <div class="ik-stat" id="ik-dl-stat"><span class="muted">loading…</span></div>
+    <div class="ik-ladder" id="ik-dl-ladder"></div>
+    <div id="ik-dl-assets"></div>
   </section>
 </div>
 

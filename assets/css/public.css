@@ -56,6 +56,11 @@
   --rg-asia: #ff6b8b;
   --rg-china: #f5a524;
   --rg-pacific: #2fd1b0;
+  /* Regions the official calendar uses that the match dataset did not:
+     without these the event bands fell back to an untinted grey. */
+  --rg-korea: #ff6b8b;
+  --rg-japan: #f472b6;
+  --rg-global: #7dd3fc;
 
   /* sources */
   --src-faceit: #ff7a45;
@@ -295,6 +300,9 @@ body.pub {
 .badge--region[data-region="asia"]    { color: var(--rg-asia);    border-color: color-mix(in srgb, var(--rg-asia) 45%, transparent); }
 .badge--region[data-region="china"]   { color: var(--rg-china);   border-color: color-mix(in srgb, var(--rg-china) 45%, transparent); }
 .badge--region[data-region="pacific"] { color: var(--rg-pacific); border-color: color-mix(in srgb, var(--rg-pacific) 45%, transparent); }
+.badge--region[data-region="korea"]   { color: var(--rg-korea);   border-color: color-mix(in srgb, var(--rg-korea) 45%, transparent); }
+.badge--region[data-region="japan"]   { color: var(--rg-japan);   border-color: color-mix(in srgb, var(--rg-japan) 45%, transparent); }
+.badge--region[data-region="global"]  { color: var(--rg-global);  border-color: color-mix(in srgb, var(--rg-global) 45%, transparent); }
 .badge--tier[data-tier="S"] { color: var(--tier-s); border-color: color-mix(in srgb, var(--tier-s) 50%, transparent); }
 .badge--tier[data-tier="A"] { color: var(--tier-a); border-color: color-mix(in srgb, var(--tier-a) 50%, transparent); }
 .badge--tier[data-tier="B"] { color: var(--tier-b); border-color: color-mix(in srgb, var(--tier-b) 50%, transparent); }
@@ -1063,6 +1071,24 @@ button.meta-card:focus-visible { outline: 2px solid var(--gold); outline-offset:
 .cal-ev:hover { background: var(--surface-2); border-color: var(--line-strong); color: var(--tx-1); }
 .cal-ev .ce-teams { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .cal-ev .ce-meta { font-family: var(--font-mono); font-size: 10px; color: var(--tx-3); display: flex; gap: 6px; align-items: center; }
+/* Official event (stage-window) bands above the grid, and the matching
+   tint on every day the window covers, so a month reads as "this stage is
+   running" even before a single match has been ingested. */
+.cal-events { display: grid; gap: 6px; margin: var(--sp-3) 0 0; }
+.cal-eband {
+  display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline;
+  padding: 8px 12px; border: 1px solid var(--line);
+  border-left: 3px solid var(--rg, var(--line-strong));
+  border-radius: var(--r-2); background: var(--surface-1); font-size: 13px;
+}
+.cal-eband__name { font-weight: 600; color: var(--tx-1); }
+.cal-eband__win { font-family: var(--font-mono); font-size: 11px; color: var(--tx-3); }
+.cal-eband__note { font-family: var(--font-mono); font-size: 10.5px; color: var(--amber, #f5a524); }
+.cal-cell--inevent { background: color-mix(in srgb, var(--rg, var(--line-strong)) 6%, var(--surface-0)); }
+.cal-cell--past { opacity: .82; }
+.cal-day--tba { font-family: var(--font-mono); font-size: 10px; color: var(--tx-3); }
+.cal-ev--upcoming { border-style: dashed; }
+.cal-ev--live { border-color: var(--rg-asia, #ff6b8b); box-shadow: 0 0 0 1px color-mix(in srgb, var(--rg-asia, #ff6b8b) 40%, transparent); }
 .cal-agenda { display: grid; gap: var(--sp-3); }
 .cal-agenda__day { display: grid; grid-template-columns: 88px 1fr; gap: var(--sp-4); align-items: start; }
 .cal-agenda__date { font-family: var(--font-display); text-transform: uppercase; color: var(--tx-2); font-size: 14px;

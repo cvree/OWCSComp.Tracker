@@ -96,3 +96,11 @@ reports/ingest/*
 !reports/calibration/
 reports/calibration/*
 !reports/calibration/owcs-jksix-qwc/
+
+# Operator runtime snapshot for intake.html. Regenerated on every
+# `intake-export --save` / `convert-link` run and specific to whoever is
+# operating (their job queue, pasted URLs, local media paths), so it is
+# deliberately NOT committed. intake.html degrades to its documented
+# "generate one with ..." message when the file is absent, and the local
+# control room serves the LIVE report from /api/intake instead.
+assets/data/intake.v1.json
