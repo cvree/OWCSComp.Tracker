@@ -27,11 +27,15 @@ API (all JSON):
   POST /api/intake/link     {url, autoAccept?} validate the pasted URL
                             offline, then launch `cli.py convert-link` (the
                             one match-day command) as the current job
+  GET  /api/matchfinder     LIVE auto-match-finder report: every discovered
+                            OWCS broadcast + its intake job state (same
+                            shape as assets/data/matchfinder.v1.json)
   POST /api/action          {action, job, ...} run ONE allowlisted pipeline
                             action (retry / autopilot / approve-source /
                             approve-layout / accept-proposed / detect /
-                            publish / media-probe / export-public). Audited
-                            approvals additionally require a typed name.
+                            publish / media-probe / find-matches /
+                            export-public). Audited approvals additionally
+                            require a typed name.
   POST /api/evidence        {run} re-run layout.html + crops.html for a run
                             from its already-extracted frames (no download)
   POST /api/test            run every pipeline/test_*.py suite in order
@@ -423,6 +427,11 @@ def build_action_cmd(action: str, p: dict
     if action == "media-probe":
         return _cli("media-probe", "--job", job, "--json"), None, \
             f"media probe {job}", JOB_TIMEOUT
+    if action == "find-matches":
+        # The auto match finder: scan verified channels on the free
+        # sources, refresh the ledger + static snapshot. Read-mostly (never
+        # downloads video, never approves anything), so no name required.
+        return _cli("find-matches"), None, "scan for OWCS matches", JOB_TIMEOUT
     if action == "export-public":
         return ([sys.executable, os.path.join("pipeline", "export_data.py"),
                  "--public"], None, "export public data", JOB_TIMEOUT)
@@ -603,6 +612,20 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                     "error": f"{type(e).__name__}: {e}",
                     "note": "live intake report unavailable — the static "
                             "assets/data/intake.v1.json snapshot still works"})
+        if path == "/api/matchfinder":
+            # LIVE match-finder report: the ledger of every discovered
+            # OWCS broadcast joined with each one's intake job state.
+            # Read-only; a status read must never 500 (build_report catches
+            # everything and reports errors as data).
+            try:
+                from automation import match_finder as mf
+                return self._json(200, mf.build_report(AUTOMATION_DB))
+            except Exception as e:
+                return self._json(200, {
+                    "schema": "matchfinder.v1", "candidates": [],
+                    "channels": [], "sourceErrors":
+                    [f"{type(e).__name__}: {e}"],
+                    "summary": {"total": 0, "likely": 0, "tracked": 0}})
         if path == "/api/download-status":
             # The download-authentication panel's data source. Everything
             # here is non-secret BY CONSTRUCTION: ytdlp_opts.describe()

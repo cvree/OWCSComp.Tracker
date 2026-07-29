@@ -45,7 +45,7 @@ plain HTML/CSS/JS, still GitHub-Pages-safe, still evidence-first. Pages:
 
 | page | what it shows |
 |---|---|
-| `index.html` | cinematic homepage hero that replays the **real** detection story: the actual Nepal frame (39:54), the autocalibrated slot rectangles, the confirmed ZOX Juno→Lúcio swap crops, consensus 0.817, verified seal |
+| `index.html` | **the portal** — the paste-a-link box front and center, the auto match finder (every OWCS broadcast, one click to ingest), the live pipeline with every human gate as a button, and links to the result pages. One site, one flow. |
 | `tournaments.html` / `tournament.html` | events, brackets, standings |
 | `calendar.html` | the season by day: official stage windows (from `config/owcs_calendar.json`, with their unverified-dates status shown honestly), the month grid of tracked matches, a "next up" list, and "time TBA" wherever only a date is known |
 | `matches.html` / `match.html` | schedule and the match page with comps, **confirmed swaps with before/after crops**, bans, evidence chain, review queue |
@@ -206,8 +206,16 @@ exact next command. After clearing a gate, `autopilot --job <key>`
 re-enters the loop; `--auto-accept` additionally accepts clean machine
 identity proposals through the same `accept-proposed` gate a human uses.
 
+Don't have a link? The **auto match finder** finds one for you, on
+permanently free sources (channel RSS + the streams tab — no API key, no
+quota): `python pipeline/automation/cli.py find-matches`, or the "Scan for
+new matches" button on the portal. `--queue-likely` is the agentic mode:
+every likely broadcast is registered through the same intake gate as a
+pasted URL, metadata only, nothing downloaded or approved.
+
 **The whole pipeline runs from the browser**: `python pipeline/serve.py`,
-open `intake.html`, paste the link, watch the live log — then drive every
+open `index.html` (the portal), paste the link or click **Ingest** on a
+found match, watch the live log — then drive every
 stage from the page itself (retry, autopilot, approve source, approve
 layout, propose/accept identity, detect, publish, export). Audited
 approvals require a typed name and a confirm; nothing is ever approved

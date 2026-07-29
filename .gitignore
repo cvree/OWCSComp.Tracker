@@ -73,6 +73,11 @@ data/automation.sqlite-wal
 data/automation.sqlite-shm
 data/raw/
 
+# --- Auto match finder ledger (operator-local discovery archive; the
+#     publishable snapshot is assets/data/matchfinder.v1.json, which IS
+#     committed) ---
+data/match_finder.json
+
 # --- Team logo pipeline staging (Phase D2): transient downloaded candidate
 #     images before human approval + variant generation. Never committed —
 #     only a PUBLISHED, human-approved asset reaches assets/img/teams/. ---

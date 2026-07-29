@@ -21,25 +21,23 @@
     document.head.appendChild(l);
   }
 
+  /* One site, one nav: the five result surfaces people actually open.
+     Everything else (tournaments, comps, swaps, maps) stays one click away
+     in the footer — heavily simplified on purpose. */
   const NAV = [
-    { href: "tournaments.html", label: "Tournaments" },
-    { href: "calendar.html", label: "Calendar" },
     { href: "matches.html", label: "Matches" },
+    { href: "calendar.html", label: "Calendar" },
     { href: "teams.html", label: "Teams" },
     { href: "heroes.html", label: "Heroes" },
-    { href: "comps.html", label: "Comps" },
-    { href: "swaps.html", label: "Swaps" },
-    { href: "maps.html", label: "Maps" },
     { href: "stats.html", label: "Stats" },
   ];
   const ADMIN = [
-    { href: "index.html", label: "Control room" },
-    { href: "runs.html", label: "Vision lab" },
+    { href: "index.html", label: "Portal" },
   ];
 
   /* ---- header ------------------------------------------------------ */
   function buildHeader() {
-    const here = location.pathname.split("/").pop() || "tournaments.html";
+    const here = location.pathname.split("/").pop() || "index.html";
     const link = (n, cls) => {
       const cur = here === n.href || (here === "tournament.html" && n.href === "tournaments.html") ||
         (here === "match.html" && n.href === "matches.html") ||
@@ -51,10 +49,10 @@
     header.className = "pub-header";
     header.innerHTML = `
       <div class="pub-header__inner">
-        <a class="pub-brand" href="tournaments.html" aria-label="OWCS Comp Tracker home">
+        <a class="pub-brand" href="index.html" aria-label="OWCS Comp Tracker home">
           <span class="pub-brand__mark" aria-hidden="true">CT</span>
           <span>OWCS Comp Tracker</span>
-          <span class="pub-brand__tag">every comp, with receipts</span>
+          <span class="pub-brand__tag">paste a link, get the comps</span>
         </a>
         <button class="pub-nav-toggle" aria-expanded="false" aria-controls="pub-nav">Menu</button>
         <nav class="pub-nav" id="pub-nav" aria-label="Primary">
@@ -108,21 +106,18 @@
           </p>
         </div>
         <div>
-          <h3>Explore</h3>
+          <h3>More data</h3>
           <ul>
             <li><a href="tournaments.html">Tournaments</a></li>
-            <li><a href="calendar.html">Calendar</a></li>
-            <li><a href="matches.html">Matches</a></li>
-            <li><a href="heroes.html">Hero analytics</a></li>
             <li><a href="comps.html">Compositions</a></li>
             <li><a href="swaps.html">Swap intelligence</a></li>
-            <li><a href="stats.html">Statistics</a></li>
+            <li><a href="maps.html">Maps</a></li>
           </ul>
         </div>
         <div>
           <h3>Behind the data</h3>
           <ul>
-            <li><a href="index.html">Control room</a></li>
+            <li><a href="index.html">Portal (paste a link)</a></li>
             <li><a href="runs.html">Vision lab (runs)</a></li>
             <li><a href="sources.html">Sources</a></li>
             <li><a href="admin.html">Review &amp; corrections</a></li>

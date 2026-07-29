@@ -1,0 +1,422 @@
+"""
+match_finder.py — automatic OWCS broadcast discovery on permanently free
+sources (the "match finder").
+
+Two no-key, no-quota, $0 sources, merged per verified channel:
+
+  * The channel's public RSS feed
+    (https://www.youtube.com/feeds/videos.xml?channel_id=...) — stdlib
+    urllib + xml.etree. Free forever, no API key, no quota, ~15 newest
+    videos with title/published/description.
+  * `yt-dlp --flat-playlist` on the channel's /streams tab — no key, no
+    login, reaches the full livestream archive (bounded by --limit) and
+    carries the duration + live status the RSS feed lacks.
+
+Only channels from the VERIFIED registry (config/broadcast_channels.json,
+enabled + confirmed channelId) are scanned — the same authority rule the
+intake path enforces. Every candidate is scored with the SAME tuned
+broadcast-likeness gate production intake trusts
+(broadcast_matching.broadcast_likeness): a promo/guide/Shorts upload is
+labeled "unlikely" WITH its reasons, never silently dropped and never
+silently included.
+
+Hard guarantees (match the rest of the automation layer):
+  * Never downloads video, never writes comps, never approves anything.
+    Queueing a candidate goes through the SAME `link_intake.ingest_link`
+    gate as a hand-pasted URL — one deterministic job per video, source
+    approval rules unchanged.
+  * Idempotent ledger (data/match_finder.json): re-scanning never
+    duplicates a candidate and never loses `firstSeen`.
+  * A source failure is recorded as a named error in the report; the other
+    source still contributes. A status/report read never raises.
+  * No credential anywhere: both sources are public and unauthenticated.
+"""
+from __future__ import annotations
+
+import datetime as dt
+import json
+import os
+import subprocess
+import urllib.request
+import xml.etree.ElementTree as ET
+from typing import Callable
+
+from . import broadcast_matching as bmatch
+from . import config as cfg
+from . import link_intake as li
+from . import job_store as js
+
+SCHEMA = "matchfinder.v1"
+RSS_URL = "https://www.youtube.com/feeds/videos.xml?channel_id={cid}"
+DEFAULT_LIMIT = 60
+FETCH_TIMEOUT = 20
+# Repo-relative artifact paths (resolved against config repo root).
+LEDGER_REL = os.path.join("data", "match_finder.json")
+SNAPSHOT_REL = os.path.join("assets", "data", "matchfinder.v1.json")
+
+_ATOM = "{http://www.w3.org/2005/Atom}"
+_YT = "{http://www.youtube.com/xml/schemas/2015}"
+_MEDIA = "{http://search.yahoo.com/mrss/}"
+
+# yt-dlp flat-playlist live_status -> the liveBroadcastStatus vocabulary
+# broadcast_likeness was tuned on (youtube_api normalization).
+_LIVE_STATUS = {"was_live": "completed", "is_live": "live",
+                "post_live": "completed", "is_upcoming": "upcoming"}
+
+
+def _utcnow_iso() -> str:
+    return dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
+
+
+def _repo_root() -> str:
+    return cfg.REPO_ROOT
+
+
+def ledger_path() -> str:
+    return os.path.join(_repo_root(), LEDGER_REL)
+
+
+def snapshot_path() -> str:
+    return os.path.join(_repo_root(), SNAPSHOT_REL)
+
+
+# ------------------------------------------------------------- channels
+def scan_channels(channels: list[dict] | None = None) -> list[dict]:
+    """Verified + enabled registry channels with a confirmed channelId —
+    the only channels the finder will scan (never a guessed handle)."""
+    idx = li.registry_channel_index(channels)
+    out = []
+    for cid, ch in idx.items():
+        out.append({
+            "id": ch.get("id"),
+            "channelId": cid,
+            "title": ch.get("title") or ch.get("id"),
+            "sourceUrl": ch.get("sourceUrl"),
+        })
+    return sorted(out, key=lambda c: str(c.get("id")))
+
+
+# ------------------------------------------------------------------ RSS
+def _http_fetch(url: str, timeout: float = FETCH_TIMEOUT) -> bytes:
+    req = urllib.request.Request(url, headers={
+        "User-Agent": "owcs-comp-tracker/1.0 (match finder; free RSS poll)"})
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
+        return resp.read()
+
+
+def parse_rss(xml_bytes: bytes) -> list[dict]:
+    """YouTube channel Atom feed -> normalized entries. Malformed entries
+    are skipped individually; a malformed document raises ValueError for
+    the caller to record as a source error."""
+    try:
+        root = ET.fromstring(xml_bytes)
+    except ET.ParseError as exc:
+        raise ValueError(f"unparseable RSS feed: {exc}") from exc
+    out = []
+    for entry in root.findall(f"{_ATOM}entry"):
+        vid_el = entry.find(f"{_YT}videoId")
+        vid = vid_el.text.strip() if vid_el is not None and vid_el.text else None
+        if not vid:
+            continue
+        title_el = entry.find(f"{_ATOM}title")
+        pub_el = entry.find(f"{_ATOM}published")
+        desc = None
+        group = entry.find(f"{_MEDIA}group")
+        if group is not None:
+            d = group.find(f"{_MEDIA}description")
+            desc = d.text if d is not None else None
+        author = entry.find(f"{_ATOM}author/{_ATOM}name")
+        out.append({
+            "videoId": vid,
+            "title": title_el.text if title_el is not None else None,
+            "publishedAt": pub_el.text if pub_el is not None else None,
+            "description": desc,
+            "channelTitle": author.text if author is not None else None,
+            "durationSeconds": None,       # the RSS feed does not carry it
+            "liveBroadcastStatus": None,   # nor this
+        })
+    return out
+
+
+def fetch_rss_channel(channel_id: str,
+                      fetch: Callable[[str], bytes] = _http_fetch
+                      ) -> tuple[list[dict], str | None]:
+    """(entries, error). Never raises — a feed failure is a recorded error,
+    not a crash, so the streams-tab source can still contribute."""
+    url = RSS_URL.format(cid=channel_id)
+    try:
+        return parse_rss(fetch(url)), None
+    except Exception as exc:  # noqa: BLE001 — every failure becomes a report row
+        return [], f"rss {channel_id}: {type(exc).__name__}: {exc}"
+
+
+# ---------------------------------------------------------- streams tab
+def fetch_streams_tab(channel_url: str, limit: int = DEFAULT_LIMIT,
+                      runner=subprocess) -> tuple[list[dict], str | None]:
+    """One `yt-dlp --flat-playlist -J` metadata dump of the channel's
+    /streams tab. (entries, error); never raises."""
+    url = channel_url.rstrip("/")
+    if not url.endswith("/streams"):
+        url += "/streams"
+    cmd = ["yt-dlp", "--flat-playlist", "--playlist-end", str(limit),
+           "-J", "--no-warnings", url]
+    try:
+        res = runner.run(cmd, capture_output=True, text=True, timeout=120)
+    except FileNotFoundError:
+        return [], "streams-tab: yt-dlp not found on PATH"
+    except Exception as exc:  # noqa: BLE001
+        return [], f"streams-tab: {type(exc).__name__}: {exc}"
+    if res.returncode != 0:
+        tail = (res.stderr or "").strip()[-300:]
+        return [], f"streams-tab: yt-dlp exit {res.returncode}: {tail}"
+    try:
+        payload = json.loads(res.stdout or "{}")
+    except ValueError:
+        return [], "streams-tab: unparseable yt-dlp JSON"
+    out = []
+    for e in payload.get("entries") or []:
+        vid = e.get("id")
+        if not vid:
+            continue
+        dur = e.get("duration")
+        ts = e.get("timestamp")
+        published = None
+        if isinstance(ts, (int, float)) and ts > 0:
+            published = dt.datetime.fromtimestamp(
+                ts, dt.timezone.utc).replace(microsecond=0).isoformat()
+        out.append({
+            "videoId": vid,
+            "title": e.get("title"),
+            "publishedAt": published,
+            "description": e.get("description"),
+            "channelTitle": e.get("channel") or e.get("uploader"),
+            "durationSeconds": int(dur) if isinstance(dur, (int, float)) else None,
+            "liveBroadcastStatus": _LIVE_STATUS.get(e.get("live_status")),
+        })
+    return out, None
+
+
+# ---------------------------------------------------------------- merge
+def merge_channel_entries(channel: dict, rss: list[dict],
+                          streams: list[dict]) -> list[dict]:
+    """Merge both sources for one channel into scored candidates. The
+    streams tab wins for duration/live status (RSS has neither); RSS wins
+    for published time when both exist. The full description is used for
+    likeness scoring and then DROPPED — the ledger stores the verdict and
+    its reasons, not kilobytes of marketing copy."""
+    by_id: dict[str, dict] = {}
+    for src_name, entries in (("rss", rss), ("streams", streams)):
+        for e in entries:
+            vid = e["videoId"]
+            cur = by_id.setdefault(vid, {
+                "videoId": vid, "title": None, "publishedAt": None,
+                "description": None, "durationSeconds": None,
+                "liveBroadcastStatus": None, "channelTitle": None,
+                "sources": []})
+            if src_name not in cur["sources"]:
+                cur["sources"].append(src_name)
+            for k in ("title", "publishedAt", "description",
+                      "durationSeconds", "liveBroadcastStatus",
+                      "channelTitle"):
+                if cur.get(k) is None and e.get(k) is not None:
+                    cur[k] = e[k]
+            # streams tab carries the authoritative duration/live status
+            if src_name == "streams":
+                if e.get("durationSeconds") is not None:
+                    cur["durationSeconds"] = e["durationSeconds"]
+                if e.get("liveBroadcastStatus") is not None:
+                    cur["liveBroadcastStatus"] = e["liveBroadcastStatus"]
+    out = []
+    for vid, c in by_id.items():
+        likeness = bmatch.broadcast_likeness({
+            "title": c.get("title"),
+            "description": c.get("description"),
+            "durationSeconds": c.get("durationSeconds"),
+            "liveBroadcastStatus": c.get("liveBroadcastStatus"),
+        })
+        out.append({
+            "videoId": vid,
+            "url": li.canonical_url(vid),
+            "title": c.get("title"),
+            "publishedAt": c.get("publishedAt"),
+            "durationSeconds": c.get("durationSeconds"),
+            "liveBroadcastStatus": c.get("liveBroadcastStatus"),
+            "channelRegistryId": channel.get("id"),
+            "channelId": channel.get("channelId"),
+            "channelTitle": c.get("channelTitle") or channel.get("title"),
+            "sources": sorted(c["sources"]),
+            "likeness": likeness,
+        })
+    return out
+
+
+# --------------------------------------------------------------- ledger
+def load_ledger(path: str | None = None) -> dict:
+    path = path or ledger_path()
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        if isinstance(data, dict) and isinstance(data.get("candidates"), list):
+            return data
+    except (OSError, ValueError):
+        pass
+    return {"schema": SCHEMA, "generatedAt": None, "channels": [],
+            "candidates": [], "sourceErrors": []}
+
+
+def merge_ledger(ledger: dict, scanned: list[dict], *,
+                 channels: list[dict], source_errors: list[str],
+                 now: str | None = None) -> dict:
+    """Idempotent merge: a re-scan updates fields and lastSeenAt but never
+    duplicates a video and never loses firstSeenAt. Candidates that fell
+    out of the feed window are kept — the ledger is the accumulating
+    archive of every broadcast the finder has ever seen."""
+    now = now or _utcnow_iso()
+    by_id = {c["videoId"]: dict(c) for c in ledger.get("candidates") or []}
+    for cand in scanned:
+        prev = by_id.get(cand["videoId"])
+        row = dict(cand)
+        row["firstSeenAt"] = prev.get("firstSeenAt", now) if prev else now
+        row["lastSeenAt"] = now
+        by_id[cand["videoId"]] = row
+    # newest first; unknown published dates sink to the end
+    rows = sorted(by_id.values(),
+                  key=lambda c: c.get("publishedAt") or "", reverse=True)
+    rows.sort(key=lambda c: c.get("publishedAt") is None)
+    return {"schema": SCHEMA, "generatedAt": now,
+            "channels": channels, "candidates": rows,
+            "sourceErrors": source_errors}
+
+
+def save_ledger(ledger: dict, path: str | None = None) -> str:
+    path = path or ledger_path()
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(ledger, f, indent=2, sort_keys=True)
+        f.write("\n")
+    return path
+
+
+# ----------------------------------------------------------------- scan
+def scan(channels: list[dict] | None = None, *, limit: int = DEFAULT_LIMIT,
+         fetch: Callable[[str], bytes] = _http_fetch, runner=subprocess,
+         extra_channel_urls: list[str] | None = None,
+         now: str | None = None) -> dict:
+    """Scan every verified channel on both free sources and return the
+    merged, scored ledger (not yet saved — the caller decides)."""
+    chans = scan_channels() if channels is None else channels
+    errors: list[str] = []
+    candidates: list[dict] = []
+    for ch in chans:
+        rss_entries, err = fetch_rss_channel(ch["channelId"], fetch=fetch)
+        if err:
+            errors.append(err)
+        streams_entries: list[dict] = []
+        if ch.get("sourceUrl"):
+            streams_entries, err2 = fetch_streams_tab(
+                ch["sourceUrl"], limit=limit, runner=runner)
+            if err2:
+                errors.append(err2)
+        candidates.extend(merge_channel_entries(ch, rss_entries,
+                                                streams_entries))
+    for url in extra_channel_urls or []:
+        pseudo = {"id": url, "channelId": None, "title": url,
+                  "sourceUrl": url}
+        entries, err3 = fetch_streams_tab(url, limit=limit, runner=runner)
+        if err3:
+            errors.append(err3)
+        candidates.extend(merge_channel_entries(pseudo, [], entries))
+    return merge_ledger(load_ledger(), candidates, channels=chans,
+                        source_errors=errors, now=now)
+
+
+# --------------------------------------------------------------- report
+def build_report(db_path: str | None = None, *,
+                 ledger: dict | None = None,
+                 store: "js.JobStore | None" = None) -> dict:
+    """The ledger joined with the live intake job for each candidate, so
+    one glance answers "which broadcasts exist, and where is each one in
+    the pipeline?". Must never raise — the portal renders whatever this
+    returns."""
+    try:
+        led = ledger if ledger is not None else load_ledger()
+        own_store = False
+        if store is None and db_path is not None:
+            store = js.JobStore(db_path)
+            own_store = True
+        elif store is None:
+            try:
+                store = js.JobStore(js.DEFAULT_DB)
+                own_store = True
+            except Exception:  # noqa: BLE001 — report survives a missing DB
+                store = None
+        rows = []
+        tracked = 0
+        try:
+            for cand in led.get("candidates") or []:
+                row = dict(cand)
+                job = None
+                if store is not None:
+                    try:
+                        j = store.get(li.job_key_for(cand["videoId"]))
+                    except Exception:  # noqa: BLE001
+                        j = None
+                    if j is not None:
+                        source = (j.payload.get("source") or {})
+                        job = {"jobKey": j.job_key, "state": j.state,
+                               "sourceState": source.get("state"),
+                               "nextCommand": li.next_command(j)}
+                        tracked += 1
+                row["job"] = job
+                rows.append(row)
+        finally:
+            if own_store and store is not None:
+                store.close()
+        likely = sum(1 for r in rows
+                     if (r.get("likeness") or {}).get("confidence") == "likely")
+        return {"schema": SCHEMA, "generatedAt": led.get("generatedAt"),
+                "channels": led.get("channels") or [],
+                "sourceErrors": led.get("sourceErrors") or [],
+                "candidates": rows,
+                "summary": {"total": len(rows), "likely": likely,
+                            "tracked": tracked}}
+    except Exception as exc:  # noqa: BLE001 — a status read must never 500
+        return {"schema": SCHEMA, "generatedAt": None, "channels": [],
+                "sourceErrors": [f"report: {type(exc).__name__}: {exc}"],
+                "candidates": [],
+                "summary": {"total": 0, "likely": 0, "tracked": 0}}
+
+
+def export_snapshot(report: dict, path: str | None = None) -> str:
+    """Write the static snapshot GitHub Pages serves (read-only mirror of
+    the live /api/matchfinder report)."""
+    path = path or snapshot_path()
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(report, f, indent=2, sort_keys=True)
+        f.write("\n")
+    return path
+
+
+def format_report(report: dict) -> str:
+    """Terminal rendering of the report (the CLI's output)."""
+    lines = []
+    s = report.get("summary") or {}
+    lines.append(f"[match-finder] {s.get('total', 0)} candidate(s) — "
+                 f"{s.get('likely', 0)} likely broadcast(s), "
+                 f"{s.get('tracked', 0)} already in the pipeline")
+    for err in report.get("sourceErrors") or []:
+        lines.append(f"  SOURCE ERROR: {err}")
+    for c in report.get("candidates") or []:
+        lk = c.get("likeness") or {}
+        job = c.get("job")
+        state = job["state"] if job else "not queued"
+        dur = c.get("durationSeconds")
+        dur_s = f"{dur // 3600}h{(dur % 3600) // 60:02d}m" if dur else "?"
+        lines.append(f"  [{lk.get('confidence', '?'):8}] {c['videoId']} "
+                     f"{(c.get('publishedAt') or '')[:10]:10} {dur_s:>7}  "
+                     f"{(c.get('title') or '')[:70]}")
+        lines.append(f"             state: {state} · "
+                     f"queue: python pipeline/automation/cli.py "
+                     f"convert-link --url \"{c['url']}\"")
+    return "\n".join(lines)

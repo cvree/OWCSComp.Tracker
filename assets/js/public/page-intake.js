@@ -391,6 +391,131 @@
     }
   }
 
+  /* ---- auto match finder ----------------------------------------------
+     Renders /api/matchfinder (control room) or the committed
+     assets/data/matchfinder.v1.json snapshot (static hosting): every
+     broadcast discovered on the free sources (channel RSS + streams tab),
+     its likeness verdict WITH reasons, and where it already is in the
+     pipeline. "Ingest" feeds the exact same paste-link flow — no separate
+     code path, no separate trust model. */
+  function fmtDur(s) {
+    if (s == null) return "duration ?";
+    const h = Math.floor(s / 3600), m = Math.round((s % 3600) / 60);
+    return h ? `${h}h${String(m).padStart(2, "0")}m` : `${m}m`;
+  }
+
+  function mfCandidate(c) {
+    const lk = c.likeness || {};
+    const likely = lk.confidence === "likely";
+    const why = (lk.reasons || []).join("\n");
+    const job = c.job;
+    let action;
+    if (job) {
+      action = `${stateChip(job.state)}`;
+    } else if (apiMode) {
+      action = `<div class="ik-btns" style="margin:0">
+        <button class="go mf-ingest" data-url="${esc(c.url)}">Ingest</button></div>`;
+    } else {
+      action = `<div class="ik-btns" style="margin:0">
+        <button class="mf-cmd" data-url="${esc(c.url)}">Show command</button></div>`;
+    }
+    return `<div class="mf-cand">
+      <span class="ik-chip likeness-why ${likely ? "ok" : "warn"}"
+        title="${esc(why)}">${likely ? "likely broadcast" : "unlikely"}</span>
+      <div class="t">
+        <b>${esc(c.title || c.videoId)}</b>
+        <span>${esc((c.publishedAt || "").slice(0, 10) || "date ?")} ·
+          ${esc(fmtDur(c.durationSeconds))} ·
+          ${esc(c.channelTitle || "")} ·
+          via ${esc((c.sources || []).join("+") || "?")}</span>
+      </div>
+      ${action}
+    </div>`;
+  }
+
+  function renderMatchFinder(report) {
+    const root = document.getElementById("mf-root");
+    if (!root) return;
+    const cands = (report && report.candidates) || [];
+    const errs = (report && report.sourceErrors) || [];
+    const s = (report && report.summary) || {};
+    const head = report && report.generatedAt
+      ? `<p class="ik-warn">last scan ${esc(report.generatedAt)} —
+          <b>${esc(s.total || 0)}</b> found ·
+          <b>${esc(s.likely || 0)}</b> likely broadcasts ·
+          <b>${esc(s.tracked || 0)}</b> already in the pipeline</p>`
+      : "";
+    const errHtml = errs.map((e) => `<p class="mf-err">source error: ${esc(e)}</p>`).join("");
+    if (!cands.length) {
+      root.innerHTML = head + errHtml
+        + `<p class="muted" style="font-size:.82rem">No broadcasts discovered yet`
+        + (apiMode
+          ? " — click “Scan for new matches”.</p>"
+          : " — run this in your terminal, then refresh:</p>"
+            + `<code class="ik-cmd">python pipeline/automation/cli.py find-matches</code>`);
+      return;
+    }
+    /* likely + untracked first, then likely tracked, then the rest */
+    const rank = (c) => (c.likeness && c.likeness.confidence === "likely" ? 0 : 2)
+      + (c.job ? 1 : 0);
+    const rows = cands.slice().sort((a, b) => rank(a) - rank(b));
+    root.innerHTML = head + errHtml + rows.map(mfCandidate).join("");
+  }
+
+  function loadMatchFinder() {
+    const root = document.getElementById("mf-root");
+    if (!root) return Promise.resolve();
+    const src = apiMode ? "/api/matchfinder" : "assets/data/matchfinder.v1.json";
+    return fetch(src, { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
+      .then(renderMatchFinder)
+      .catch(() => renderMatchFinder(null));
+  }
+
+  function mfSetNote(text, cls) {
+    const n = document.getElementById("mf-note");
+    if (n) { n.textContent = text; n.className = `ik-form-note ${cls || ""}`; }
+  }
+
+  document.addEventListener("click", (ev) => {
+    const scan = ev.target.closest && ev.target.closest("#mf-scan");
+    if (scan) {
+      ev.preventDefault();
+      if (!apiMode) {
+        mfSetNote("static hosting — run this yourself: "
+          + "python pipeline/automation/cli.py find-matches", "bad");
+        return;
+      }
+      setBusy(true);
+      mfSetNote("scanning verified channels (RSS + streams tab)…");
+      fetch("/api/action", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "find-matches" }),
+      })
+        .then((r) => r.json().then((j) => ({ status: r.status, j })))
+        .then(({ status, j }) => {
+          if (status === 200 && j.started) { tailJob(0, "match scan"); }
+          else { mfSetNote(j.error || `refused (HTTP ${status})`, "bad"); setBusy(false); }
+        })
+        .catch((err) => { mfSetNote(`control room unreachable: ${err.message}`, "bad"); setBusy(false); });
+      return;
+    }
+    const ingest = ev.target.closest && ev.target.closest(".mf-ingest, .mf-cmd");
+    if (ingest) {
+      ev.preventDefault();
+      const url = ingest.getAttribute("data-url");
+      if (urlBox) {
+        urlBox.value = url;
+        urlBox.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+      if (ingest.classList.contains("mf-ingest")) {
+        submitLink(new Event("submit"));
+      } else {
+        previewCommand();
+      }
+    }
+  });
+
   let lastProbe = null;
   let currentAttempt = null;
 
@@ -536,6 +661,7 @@
         setBusy(false);
         reload();
         loadDownloadStatus();
+        loadMatchFinder();
       })
       .catch(() => { setTimeout(tick, 2000); });
     tick();
@@ -641,5 +767,6 @@
       if (goBtn) { goBtn.disabled = false; goBtn.textContent = "Show command"; }
     })
     .then(reload)
-    .then(loadDownloadStatus);
+    .then(loadDownloadStatus)
+    .then(loadMatchFinder);
 })();

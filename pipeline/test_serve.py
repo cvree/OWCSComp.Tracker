@@ -337,11 +337,25 @@ def main() -> int:
     wait_idle(port)
     check("export-public runs the production exporter",
           fr.cmds[3][1].endswith("export_data.py") and "--public" in fr.cmds[3])
+    reset_state()
+    api(port, "/api/action", {"action": "find-matches"})
+    wait_idle(port)
+    check("find-matches action runs the auto match finder CLI on the test DB",
+          fr.cmds[4][1].endswith(os.path.join("pipeline", "automation", "cli.py"))
+          and "find-matches" in fr.cmds[4] and "--db" in fr.cmds[4])
     # No control-room action may ever carry a credential flag.
     joined = " ".join(" ".join(c) for c in fr.cmds)
     check("no action ever passes a cookie/credential flag",
           "--cookies" not in joined and "--password" not in joined
           and "--netrc" not in joined)
+
+    print("match-finder endpoint (read-only, never 500s):")
+    code, j = api(port, "/api/matchfinder")
+    check("live matchfinder report has the matchfinder.v1 shape",
+          code == 200 and j.get("schema") == "matchfinder.v1"
+          and isinstance(j.get("candidates"), list)
+          and isinstance(j.get("summary"), dict)
+          and {"total", "likely", "tracked"} <= set(j["summary"]))
 
     print("download-status endpoint (no secrets reach the browser):")
     os.environ["OWCS_YTDLP_COOKIES_FROM_BROWSER"] = "chrome"

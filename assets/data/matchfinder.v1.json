@@ -1,0 +1,12 @@
+{
+  "candidates": [],
+  "channels": [],
+  "generatedAt": null,
+  "schema": "matchfinder.v1",
+  "sourceErrors": [],
+  "summary": {
+    "likely": 0,
+    "total": 0,
+    "tracked": 0
+  }
+}

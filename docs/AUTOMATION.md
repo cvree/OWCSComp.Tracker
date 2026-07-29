@@ -109,6 +109,46 @@ opt-out (recorded on the job, never the default).
 python pipeline\detection_assets.py            # per-layout verdict + remedies
 ```
 
+## The auto match finder (2026-07-29)
+
+Finding the next broadcast no longer requires opening YouTube. The match
+finder scans every VERIFIED broadcast channel on two **permanently free,
+no-key** sources and keeps an idempotent ledger of every OWCS broadcast it
+has ever seen:
+
+* **The channel's public RSS feed**
+  (`https://www.youtube.com/feeds/videos.xml?channel_id=…`) — stdlib HTTP +
+  XML, no API key, no quota, free forever. Carries the ~15 newest videos.
+* **The channel's `/streams` tab via `yt-dlp --flat-playlist`** — no key,
+  no login, reaches the full livestream archive (bounded by `--limit`) and
+  carries the duration + live status the RSS feed lacks.
+
+Every video is scored with the SAME tuned broadcast-likeness gate the
+intake path trusts (`broadcast_matching.broadcast_likeness`) — a
+promo/guide/Shorts upload shows up labeled `unlikely` *with its reasons*,
+never silently dropped, never silently ingested.
+
+```powershell
+python pipeline/automation/cli.py find-matches              # scan + save
+python pipeline/automation/cli.py find-matches --dry-run    # scan, write nothing
+python pipeline/automation/cli.py find-matches --queue-likely  # agentic mode:
+#   every likely broadcast not yet in the pipeline is registered through the
+#   SAME ingest_link gate as a hand-pasted URL. Metadata only — nothing is
+#   downloaded and nothing is approved; source authorization rules unchanged.
+```
+
+Artifacts: `data/match_finder.json` (the accumulating ledger — a broadcast
+that leaves the feed window is kept) and `assets/data/matchfinder.v1.json`
+(the static snapshot the portal renders on GitHub Pages). In the control
+room the portal front page (`index.html`) shows the live report
+(`GET /api/matchfinder`) with an **Ingest** button per candidate that feeds
+the exact paste-link flow, and a **Scan for new matches** button that runs
+this command (`POST /api/action {action: "find-matches"}`).
+
+Only channels from `config/broadcast_channels.json` that are enabled,
+verified and carry a confirmed `channelId` are scanned — the finder never
+guesses a handle. `--channel-url <url>` scans one extra channel ad hoc.
+
 ## Match-day runbook — the free-agent loop (2026-07-29)
 
 The 12-step checklist below ("Real-host validation") is still the

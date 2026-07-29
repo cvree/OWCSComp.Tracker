@@ -326,8 +326,11 @@ def main() -> None:
           "heroBans" in pmaps and "Bans" in pmaps)
     check("maps page links to the full per-map stats table",
           "stats.html?map=" in pmaps)
-    check("Maps is in the public nav",
-          '{ href: "maps.html", label: "Maps" }' in read("assets/js/public/shell.js"))
+    # The 2026-07-29 simplification pass deliberately trimmed the top nav to
+    # the five primary result surfaces; Maps stays one click away in the
+    # shell footer — reachable from every public page, just not headline nav.
+    check("Maps stays reachable from the shell footer",
+          'href="maps.html"' in read("assets/js/public/shell.js"))
     # the enriched PRODUCTION export must carry the story fields (honest:
     # real numbers or null/empty, never invented). Loaded separately from
     # the demo fixture above.

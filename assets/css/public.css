@@ -210,7 +210,13 @@ body.pub {
   text-shadow: 0 0 18px color-mix(in srgb, var(--gold) 55%, transparent);
 }
 .pub-nav .nav-sep { width: 1px; height: 18px; background: var(--line-strong); margin: 0 6px; }
-.pub-nav .nav-admin { color: var(--tx-3); font-size: 12px; }
+/* the Portal link (paste-a-link operator surface) stays visible at every
+   width — the simplified nav is 5 result pages + this one entry */
+.pub-nav .nav-admin {
+  color: var(--gold); font-size: 12.5px;
+  border: 1px solid color-mix(in srgb, var(--gold) 45%, transparent);
+  border-radius: 999px; padding: 6px 12px;
+}
 .pub-header__status {
   margin-left: auto; display: flex; align-items: center; gap: 8px;
   color: var(--tx-3); font-family: var(--font-mono); font-size: 11.5px; white-space: nowrap;
@@ -226,9 +232,9 @@ body.pub {
 }
 .pub-brand__tag { display: none; }
 @media (min-width: 1560px) { .pub-brand__tag { display: inline; } }
-/* admin surfaces live in the mobile menu + footer; the desktop bar stays
-   a clean fan-facing rail that can never overflow the shell */
-@media (min-width: 1081px) { .pub-nav .nav-admin, .pub-nav .nav-sep { display: none; } }
+/* the simplified nav (5 result pages + Portal) fits every width; only the
+   thin separator is dropped on desktop where the pill provides contrast */
+@media (min-width: 1081px) { .pub-nav .nav-sep { display: none; } }
 @media (max-width: 1240px) { .pub-header__status { display: none; } }
 @media (max-width: 1080px) {
   .pub-nav-toggle { display: inline-flex; align-items: center; gap: 8px; }

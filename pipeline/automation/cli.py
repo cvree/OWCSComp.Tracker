@@ -1470,6 +1470,69 @@ def cmd_convert_link(args: argparse.Namespace) -> int:
         store.close()
 
 
+def cmd_find_matches(args: argparse.Namespace) -> int:
+    """`find-matches` — the free auto match finder. Scans every VERIFIED
+    broadcast channel on two permanently-free, no-key sources (the
+    channel's public RSS feed + its /streams tab via yt-dlp), scores every
+    video with the SAME tuned broadcast-likeness gate intake trusts, and
+    keeps an idempotent ledger of every OWCS broadcast ever seen
+    (data/match_finder.json) plus the static portal snapshot
+    (assets/data/matchfinder.v1.json). Never downloads video, never
+    approves anything. --queue-likely registers likely broadcasts through
+    the SAME ingest_link gate as a hand-pasted URL — source approval rules
+    unchanged."""
+    from automation import match_finder as mf
+    chans = mf.scan_channels()
+    if not chans and not args.channel_url:
+        print("[match-finder] no verified+enabled channel with a confirmed "
+              "channelId in config/broadcast_channels.json — run "
+              "verify-channels first, or pass --channel-url")
+        return 1
+    ledger = mf.scan(
+        chans, limit=args.limit,
+        extra_channel_urls=[args.channel_url] if args.channel_url else None)
+    if not args.dry_run:
+        mf.save_ledger(ledger)
+    queued: list[dict] = []
+    if args.queue_likely:
+        config = cfg.load_config()
+        store = js.JobStore(args.db, config=config)
+        try:
+            client = None if args.no_metadata else _build_youtube_client(
+                args, store=None if args.dry_run else store)
+            for cand in ledger["candidates"]:
+                if (cand.get("likeness") or {}).get("confidence") != "likely":
+                    continue
+                if store.get(li.job_key_for(cand["videoId"])) is not None:
+                    continue
+                try:
+                    res = li.ingest_link(
+                        store, cand["url"], client=client,
+                        dry_run=args.dry_run,
+                        requested_by=args.requested_by or "match-finder")
+                    queued.append({"videoId": cand["videoId"],
+                                   "jobKey": res["jobKey"],
+                                   "sourceState": res["source"]["state"]})
+                except li.LinkIntakeError as exc:
+                    print(f"[match-finder] queue refused {cand['videoId']} "
+                          f"[{exc.code}] {exc}")
+        finally:
+            store.close()
+    report = mf.build_report(args.db, ledger=ledger)
+    if not args.dry_run:
+        mf.export_snapshot(report)
+    if args.json:
+        print(json.dumps({"report": report, "queued": queued}, indent=2))
+        return 0
+    print(mf.format_report(report))
+    for q in queued:
+        print(f"[match-finder] queued {q['videoId']} -> {q['jobKey']} "
+              f"(source {q['sourceState']})")
+    if args.dry_run:
+        print("[match-finder] dry run — nothing written")
+    return 0
+
+
 def cmd_media_probe(args: argparse.Namespace) -> int:
     """`media-probe --url <url>` — prove REAL video bytes can be downloaded
     before committing to a multi-hour broadcast, and report which fallback
@@ -2020,6 +2083,33 @@ def main(argv: list[str] | None = None) -> int:
                           help="or the pasted URL (resolves to the same job)")
     _add_autopilot_args(ap_run_p)
     ap_run_p.set_defaults(func=cmd_autopilot)
+
+    fm_p = sub.add_parser("find-matches",
+                          help="auto match finder: scan verified channels on "
+                               "free sources (RSS + streams tab), score "
+                               "broadcast-likeness, keep the ledger")
+    fm_p.add_argument("--limit", type=int, default=60,
+                      help="max videos per channel from the streams tab "
+                           "(default %(default)s)")
+    fm_p.add_argument("--channel-url", default=None,
+                      help="scan one extra channel URL (in addition to the "
+                           "verified registry)")
+    fm_p.add_argument("--queue-likely", action="store_true",
+                      help="register likely broadcasts through the same "
+                           "ingest_link gate as a pasted URL (metadata only "
+                           "— never downloads, never approves)")
+    fm_p.add_argument("--requested-by", default=None,
+                      help="name recorded on queued intake records "
+                           "(default: match-finder)")
+    fm_p.add_argument("--no-metadata", action="store_true",
+                      help="with --queue-likely: skip the YouTube metadata "
+                           "call (offline); sources then cannot auto-approve")
+    fm_p.add_argument("--fixture-dir", default=None,
+                      help="serve YouTube responses from local fixtures (offline)")
+    fm_p.add_argument("--dry-run", action="store_true",
+                      help="scan and print, write nothing")
+    fm_p.add_argument("--json", action="store_true")
+    fm_p.set_defaults(func=cmd_find_matches)
 
     mp_p = sub.add_parser("media-probe",
                           help="prove real video BYTES download (not just "

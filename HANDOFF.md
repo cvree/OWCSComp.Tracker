@@ -1,6 +1,95 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
-## CURRENT STATUS (authoritative — 2026-07-29, third pass) — the calendar system
+## CURRENT STATUS (authoritative — 2026-07-29, fourth pass) — one portal + the auto match finder
+
+> Additive to the three passes below, which remain accurate.
+
+### What this pass was for
+
+The site felt like two websites in one: a marketing landing (`index.html`
+with its own nav), a public results site (`shell.js` with a nine-item nav),
+and ten operator/lab pages with a third nav. And finding the next broadcast
+still meant opening YouTube yourself. This pass collapsed all of it into
+**one site with one flow — paste a YouTube link (or click one the finder
+found) → calibrated, reviewed comps** — and added a $0 auto match finder.
+
+### The auto match finder (`pipeline/automation/match_finder.py`, new)
+
+Two **permanently free, no-key, no-quota** sources per VERIFIED registry
+channel, merged:
+
+* the channel's public RSS feed
+  (`https://www.youtube.com/feeds/videos.xml?channel_id=…`) — stdlib
+  urllib + xml.etree; ~15 newest videos with title/published/description;
+* the channel's `/streams` tab via `yt-dlp --flat-playlist -J` — the full
+  livestream archive (bounded by `--limit`), carrying the duration + live
+  status RSS lacks.
+
+Every video is scored with the SAME tuned `broadcast_likeness` gate intake
+trusts; a promo/guide shows up labeled `unlikely` WITH reasons, never
+silently dropped or ingested. The ledger (`data/match_finder.json`,
+gitignored operator state) is idempotent and accumulative: re-scans never
+duplicate, `firstSeenAt` is never lost, and a broadcast that leaves the
+feed window is kept. The static snapshot
+(`assets/data/matchfinder.v1.json`, committed) is what GitHub Pages
+renders. A dead source is a **recorded** `sourceErrors` row — the other
+source still contributes, and the report builder never raises.
+
+Surfaces: `cli.py find-matches [--dry-run|--limit|--channel-url|--json]`;
+`--queue-likely` is the agentic mode — every likely broadcast not yet in
+the pipeline is registered through the SAME `ingest_link` gate as a pasted
+URL (metadata only; nothing downloaded, nothing approved). serve.py adds
+`GET /api/matchfinder` (read-only, never 500s) and the allowlisted
+`find-matches` action. Only registry channels that are enabled + verified
+with a confirmed `channelId` are scanned; `scan_channels()` enforces it.
+
+### The one-portal simplification
+
+* **`index.html` is now the portal**: paste box front and center → auto
+  match finder (one **Ingest** button per candidate feeds the exact same
+  paste flow — no second code path) → the live pipeline with every human
+  gate as a button → links to the result pages. The old marketing landing
+  (fake pillars, donation tier, FAQ) is gone.
+* **`intake.html` is a redirect stub** to `index.html#pipeline` so old
+  bookmarks and printed commands keep working.
+* **`shell.js` nav trimmed to 5 result pages + Portal** (Matches,
+  Calendar, Teams, Heroes, Stats); Tournaments/Comps/Swaps/Maps moved to
+  the shell footer ("More data"). `public.css` no longer hides the admin
+  nav entry on desktop — the Portal pill is visible at every width.
+  `test_public_site.py`'s "Maps is in the public nav" check was updated to
+  "reachable from the shell footer" (deliberate demotion, noted inline).
+* The lab pages (run/runs/calibration/sources/admin/…) are untouched and
+  reachable from the portal footer under "Advanced tools".
+
+### Verified in a real browser (Chromium + live serve.py, this pass)
+
+18/18 checks: paste box + control-room detection; match finder renders a
+seeded 3-candidate ledger with likely/unlikely chips (reasons in the
+tooltip), rank order (likely+untracked first), Ingest buttons; **Scan for
+new matches** launches the real `find-matches` job from the page, and —
+with this sandbox's YouTube egress blocked — the re-rendered panel shows
+both source errors verbatim while the ledger keeps its candidates (archive
+semantics); pipeline summary + download-auth panel populate; intake.html
+redirects; public nav shows exactly MATCHES/CALENDAR/TEAMS/HEROES/STATS/
+PORTAL; no real console errors (the only failures are fonts.googleapis.com,
+blocked in this sandbox). Full suite: **87 suites green** (86 + new
+`test_match_finder.py`, 19 tests) + packaging gate.
+
+### Still true / unchanged
+
+Human gates unchanged everywhere (source, layout, detection review,
+publication; `--auto-accept` covers segment identity only). The three open
+blockers from the second pass are untouched: harvest
+`templates/owcs_nd5lllwdky0/`, fix the CR–ZETA/`owcs_youtube_2026`
+placeholder anchors, populate `matches.scheduled_at` (the calendar shows
+"time TBA" until then). YouTube egress is still blocked in this sandbox, so
+the finder has never been run against the real feed from here — first run
+on the operator's machine is `python pipeline/automation/cli.py
+find-matches --dry-run`.
+
+---
+
+## HISTORICAL (superseded — 2026-07-29, third pass) — the calendar system
 
 > Additive to the two passes below, which remain accurate.
 
