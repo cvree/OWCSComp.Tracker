@@ -182,17 +182,31 @@ class TestMergeAndLikeness(unittest.TestCase):
 
 
 class TestLedger(unittest.TestCase):
+    """NOTE: every load_ledger() call here pins BOTH `path` and `snapshot`
+    to files inside a fresh temp dir. `load_ledger` falls back to the
+    COMMITTED assets/data/matchfinder.v1.json when `path` is missing/corrupt
+    and no explicit `snapshot` is given (see TestLedgerSnapshotFallback for
+    that feature) — in CI the real find-matches step runs before these
+    tests and legitimately populates that file with real broadcasts, so a
+    test that omitted `snapshot=` would silently inherit production data
+    instead of the empty ledger it assumes. This bit exactly once, in the
+    first live CI run of this workflow."""
+
     def setUp(self):
         self._tmp = tempfile.TemporaryDirectory()
         self.path = os.path.join(self._tmp.name, "match_finder.json")
+        self.snap = os.path.join(self._tmp.name, "never-written-snapshot.json")
 
     def tearDown(self):
         self._tmp.cleanup()
 
+    def _load(self):
+        return mf.load_ledger(self.path, snapshot=self.snap)
+
     def _scan_once(self, now):
         rss = mf.parse_rss(RSS_FIXTURE)
         cands = mf.merge_channel_entries(CHANNEL, rss, [])
-        ledger = mf.merge_ledger(mf.load_ledger(self.path), cands,
+        ledger = mf.merge_ledger(self._load(), cands,
                                  channels=[CHANNEL], source_errors=[],
                                  now=now)
         mf.save_ledger(ledger, self.path)
@@ -209,7 +223,7 @@ class TestLedger(unittest.TestCase):
     def test_candidates_that_leave_the_feed_are_kept(self):
         self._scan_once("2026-07-25T00:00:00+00:00")
         ledger = mf.merge_ledger(
-            mf.load_ledger(self.path), [], channels=[CHANNEL],
+            self._load(), [], channels=[CHANNEL],
             source_errors=["rss UCtest: down"],
             now="2026-07-27T00:00:00+00:00")
         self.assertEqual(len(ledger["candidates"]), 2)  # archive, not window
@@ -220,7 +234,7 @@ class TestLedger(unittest.TestCase):
         flat, _ = mf.fetch_streams_tab(
             "https://x", runner=FakeRunner(stdout=json.dumps(FLAT_FIXTURE)))
         ledger = mf.merge_ledger(
-            mf.load_ledger(self.path),
+            self._load(),
             mf.merge_channel_entries(CHANNEL, rss, flat),
             channels=[CHANNEL], source_errors=[], now="2026-07-25T00:00:00+00:00")
         ids = [c["videoId"] for c in ledger["candidates"]]
@@ -232,11 +246,18 @@ class TestLedger(unittest.TestCase):
     def test_corrupt_ledger_file_resets_cleanly(self):
         with open(self.path, "w", encoding="utf-8") as f:
             f.write("{corrupt json")
-        led = mf.load_ledger(self.path)
+        led = self._load()
         self.assertEqual(led["candidates"], [])
 
 
 class TestScanOrchestration(unittest.TestCase):
+    """scan() calls load_ledger() with no arguments, which resolves BOTH
+    LEDGER_REL and SNAPSHOT_REL against the repo root — so a test that
+    swaps only LEDGER_REL still falls back to the COMMITTED
+    assets/data/matchfinder.v1.json the instant its own tmp ledger doesn't
+    exist yet (every case here). Both must be swapped, or these tests only
+    pass by luck of an empty snapshot ever having been committed."""
+
     def test_scan_uses_injected_fetchers_only(self):
         runner = FakeRunner(stdout=json.dumps(FLAT_FIXTURE))
         fetches = []
@@ -245,16 +266,20 @@ class TestScanOrchestration(unittest.TestCase):
             fetches.append(url)
             return RSS_FIXTURE
         with tempfile.TemporaryDirectory() as tmp:
-            old = mf.LEDGER_REL
-            # keep the real ledger untouched: point the module at the tmp dir
+            old_ledger, old_snap = mf.LEDGER_REL, mf.SNAPSHOT_REL
+            # keep the real ledger + snapshot untouched: point the module at
+            # a tmp dir for both, so no committed production data can leak in
             mf.LEDGER_REL = os.path.relpath(
                 os.path.join(tmp, "match_finder.json"), mf._repo_root())
+            mf.SNAPSHOT_REL = os.path.relpath(
+                os.path.join(tmp, "never-written-snapshot.json"),
+                mf._repo_root())
             try:
                 ledger = mf.scan([CHANNEL], limit=5, fetch=fake_fetch,
                                  runner=runner,
                                  now="2026-07-25T00:00:00+00:00")
             finally:
-                mf.LEDGER_REL = old
+                mf.LEDGER_REL, mf.SNAPSHOT_REL = old_ledger, old_snap
         self.assertEqual(len(fetches), 1)
         self.assertIn("UCtest", fetches[0])
         self.assertEqual(len(ledger["candidates"]), 3)
@@ -263,15 +288,18 @@ class TestScanOrchestration(unittest.TestCase):
     def test_one_dead_source_still_yields_the_other(self):
         runner = FakeRunner(stdout=json.dumps(FLAT_FIXTURE))
         with tempfile.TemporaryDirectory() as tmp:
-            old = mf.LEDGER_REL
+            old_ledger, old_snap = mf.LEDGER_REL, mf.SNAPSHOT_REL
             mf.LEDGER_REL = os.path.relpath(
                 os.path.join(tmp, "match_finder.json"), mf._repo_root())
+            mf.SNAPSHOT_REL = os.path.relpath(
+                os.path.join(tmp, "never-written-snapshot.json"),
+                mf._repo_root())
             try:
                 ledger = mf.scan([CHANNEL], fetch=_no_network_soft,
                                  runner=runner,
                                  now="2026-07-25T00:00:00+00:00")
             finally:
-                mf.LEDGER_REL = old
+                mf.LEDGER_REL, mf.SNAPSHOT_REL = old_ledger, old_snap
         self.assertEqual(len(ledger["sourceErrors"]), 1)
         self.assertIn("rss", ledger["sourceErrors"][0])
         self.assertEqual(len(ledger["candidates"]), 3)  # streams still there

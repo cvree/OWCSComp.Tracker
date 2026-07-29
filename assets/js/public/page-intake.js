@@ -409,15 +409,21 @@
     const likely = lk.confidence === "likely";
     const why = (lk.reasons || []).join("\n");
     const job = c.job;
+    /* A static-hosting visitor has no server to ingest through — so the
+       ONE thing that must always work here is a link to actually watch the
+       broadcast. Ingest/command stays a secondary, smaller action next to
+       it rather than the only thing offered. */
+    const watch = `<a class="mf-watch" href="${esc(c.url)}" target="_blank"
+      rel="noopener noreferrer">Watch ↗</a>`;
     let action;
     if (job) {
-      action = `${stateChip(job.state)}`;
+      action = `${watch} ${stateChip(job.state)}`;
     } else if (apiMode) {
       action = `<div class="ik-btns" style="margin:0">
-        <button class="go mf-ingest" data-url="${esc(c.url)}">Ingest</button></div>`;
+        ${watch}<button class="go mf-ingest" data-url="${esc(c.url)}">Ingest</button></div>`;
     } else {
       action = `<div class="ik-btns" style="margin:0">
-        <button class="mf-cmd" data-url="${esc(c.url)}">Show command</button></div>`;
+        ${watch}<button class="mf-cmd" data-url="${esc(c.url)}">Copy command</button></div>`;
     }
     return `<div class="mf-cand">
       <span class="ik-chip likeness-why ${likely ? "ok" : "warn"}"
@@ -451,8 +457,11 @@
         + `<p class="muted" style="font-size:.82rem">No broadcasts discovered yet`
         + (apiMode
           ? " — click “Scan for new matches”.</p>"
-          : " — run this in your terminal, then refresh:</p>"
-            + `<code class="ik-cmd">python pipeline/automation/cli.py find-matches</code>`);
+          : (" — this runs automatically every ~6 hours "
+             + "(<a href=\"https://github.com/cvree/OWCSComp.Tracker/actions/workflows/match-finder.yml\" "
+             + "target=\"_blank\" rel=\"noopener noreferrer\">see the schedule</a>). "
+             + "Click “Check for updates”, or if you have the repo cloned:</p>"
+             + `<code class="ik-cmd">python pipeline/automation/cli.py find-matches</code>`));
       return;
     }
     /* likely + untracked first, then likely tracked, then the rest */
@@ -482,8 +491,15 @@
     if (scan) {
       ev.preventDefault();
       if (!apiMode) {
-        mfSetNote("static hosting — run this yourself: "
-          + "python pipeline/automation/cli.py find-matches", "bad");
+        /* Static hosting has no server to run a live scan on — but the
+           GitHub Actions workflow (match-finder.yml) already refreshes the
+           committed snapshot every ~6 hours, so the useful, honest action
+           here is to re-fetch it rather than dead-end on a CLI command. */
+        mfSetNote("checking for a newer automated scan…");
+        loadMatchFinder().then(() => {
+          mfSetNote("showing the latest automated scan (runs every ~6h via "
+            + "GitHub Actions — nothing to run yourself).", "ok");
+        });
         return;
       }
       setBusy(true);
@@ -765,6 +781,11 @@
       setNote("static hosting — no server here, so this form only builds the exact "
         + "command to copy into your own terminal.");
       if (goBtn) { goBtn.disabled = false; goBtn.textContent = "Show command"; }
+      /* No server here to launch a live scan either — but GitHub Actions
+         already refreshes the committed snapshot on a schedule, so relabel
+         honestly rather than leaving a button that implies it'll scan now. */
+      const scanBtn = document.getElementById("mf-scan");
+      if (scanBtn) scanBtn.textContent = "Check for updates";
     })
     .then(reload)
     .then(loadDownloadStatus)
