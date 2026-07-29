@@ -169,6 +169,17 @@ scrolled out of the RSS window. The snapshot's per-candidate `job` field is
 dropped on the way back in — that is live intake state, joined at report
 time, and a stale copy must never be re-published.
 
+The workflow's own commit uses the default `GITHUB_TOKEN`, and GitHub
+deliberately does not let a `GITHUB_TOKEN`-authored push trigger other
+workflows (the anti-recursion safeguard on `push`/`pull_request` events) —
+so without an explicit nudge, `pages.yml` would never redeploy on a
+scheduled scan and the live site would only ever update when a human
+happened to push something else. `match-finder.yml` closes that loop
+itself: after a real commit, it calls `gh workflow run pages.yml` (an
+explicit `workflow_dispatch` API call, which IS exempt from that
+safeguard), gated on the commit step's own `committed` output so an
+empty scan never triggers a needless redeploy.
+
 ## Match-day runbook — the free-agent loop (2026-07-29)
 
 The 12-step checklist below ("Real-host validation") is still the

@@ -61,6 +61,7 @@ concurrency:
 
 permissions:
   contents: write
+  actions: write  # to dispatch pages.yml after a real commit (see below)
 
 jobs:
   find:
@@ -138,6 +139,7 @@ jobs:
           python3 pipeline/check_packaging.py
 
       - name: Commit the refreshed snapshot if it changed
+        id: commit
         if: env.DRY_RUN != 'true'
         shell: bash
         run: |
@@ -149,11 +151,28 @@ jobs:
           git add assets/data/matchfinder.v1.json
           if git diff --cached --quiet; then
             echo "No new broadcasts and no changed metadata this scan."
+            echo "committed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git commit -m "data: auto match finder snapshot ($(date -u +'%Y-%m-%d %H:%M') UTC)"
           git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
           git push origin "HEAD:${GITHUB_REF_NAME}"
+          echo "committed=true" >> "$GITHUB_OUTPUT"
+
+      # A push made with the default GITHUB_TOKEN deliberately does NOT
+      # trigger other workflows (GitHub's anti-recursion safeguard on
+      # push/pull_request events) — so without this step, every scheduled
+      # scan could commit real broadcasts forever and pages.yml would never
+      # redeploy, leaving the live site stuck on whatever a HUMAN last
+      # pushed. workflow_dispatch called explicitly via the API is exempt
+      # from that safeguard, so triggering it here (only when something
+      # actually changed) is what makes "the site updates itself" real
+      # rather than aspirational.
+      - name: Trigger a Pages redeploy
+        if: env.DRY_RUN != 'true' && steps.commit.outputs.committed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run pages.yml --ref "${GITHUB_REF_NAME}"
 
       - name: Upload scan output
         if: always()
