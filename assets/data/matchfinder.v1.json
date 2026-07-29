@@ -1,12 +1,1819 @@
 {
-  "candidates": [],
-  "channels": [],
-  "generatedAt": null,
+  "candidates": [
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "Overwatch Esports",
+      "durationSeconds": 40894,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (40894s)",
+          "+15 tournament/broadcast terminology in title/description",
+          "-30 instructional/promotional-title signal"
+        ],
+        "score": 30
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": "2026-07-29T21:40:28+00:00",
+      "sources": [
+        "rss",
+        "streams"
+      ],
+      "title": "[DROPS] OWCS 2026 | Midseason Championship Day 1",
+      "url": "https://www.youtube.com/watch?v=2NE1nq75sv8",
+      "videoId": "2NE1nq75sv8"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "Overwatch Esports",
+      "durationSeconds": null,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "unlikely",
+        "reasons": [
+          "-10 no livestream timing metadata",
+          "-10 no team/competition relationship signal"
+        ],
+        "score": -20
+      },
+      "liveBroadcastStatus": null,
+      "publishedAt": "2026-07-29T17:19:52+00:00",
+      "sources": [
+        "rss"
+      ],
+      "title": "The Midseason Championship at @e@ewcs underway! \ud83c\udfc6\u200b @playoverwatch #OWCS #OWCSMSC",
+      "url": "https://www.youtube.com/watch?v=UzJu7ep6EWY",
+      "videoId": "UzJu7ep6EWY"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "Overwatch Esports",
+      "durationSeconds": null,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "unlikely",
+        "reasons": [
+          "-10 no livestream timing metadata",
+          "-10 no team/competition relationship signal"
+        ],
+        "score": -20
+      },
+      "liveBroadcastStatus": null,
+      "publishedAt": "2026-07-28T18:33:28+00:00",
+      "sources": [
+        "rss"
+      ],
+      "title": "#OWCSMSC starts soon! \ud83d\udde3\ufe0f Here\u2019s everything you need to know \ud83d\udc40 #OWCS #overwatch #esports",
+      "url": "https://www.youtube.com/watch?v=omNH468l1PM",
+      "videoId": "omNH468l1PM"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "Overwatch Esports",
+      "durationSeconds": null,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "unlikely",
+        "reasons": [
+          "-10 no livestream timing metadata",
+          "-10 no team/competition relationship signal",
+          "-30 instructional/promotional-title signal"
+        ],
+        "score": -50
+      },
+      "liveBroadcastStatus": null,
+      "publishedAt": "2026-07-23T18:49:43+00:00",
+      "sources": [
+        "rss"
+      ],
+      "title": "You can earn up to TEN lootboxes over the course of #OWCSMSC \ud83d\udd25 #OWCS #overwatch #lootbox",
+      "url": "https://www.youtube.com/watch?v=iPBSEp85UjM",
+      "videoId": "iPBSEp85UjM"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "Overwatch Esports",
+      "durationSeconds": null,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "unlikely",
+        "reasons": [
+          "-10 no livestream timing metadata",
+          "-10 no team/competition relationship signal",
+          "-30 instructional/promotional-title signal"
+        ],
+        "score": -50
+      },
+      "liveBroadcastStatus": null,
+      "publishedAt": "2026-07-22T19:23:45+00:00",
+      "sources": [
+        "rss"
+      ],
+      "title": "Part 2 for all of our DPS mains out there \ud83e\udef6 #overwatch #OWCS #overwatchtips #dpsmain",
+      "url": "https://www.youtube.com/watch?v=Ohze03nEupU",
+      "videoId": "Ohze03nEupU"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "Overwatch Esports",
+      "durationSeconds": null,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "unlikely",
+        "reasons": [
+          "-10 no livestream timing metadata",
+          "-10 no team/competition relationship signal",
+          "-30 instructional/promotional-title signal"
+        ],
+        "score": -50
+      },
+      "liveBroadcastStatus": null,
+      "publishedAt": "2026-07-20T19:36:51+00:00",
+      "sources": [
+        "rss"
+      ],
+      "title": "Need help deciding which Perks to pick? We\u2019ve got you! \ud83d\udd25#overwatch #overwatchtips #OWCS #DPS",
+      "url": "https://www.youtube.com/watch?v=uLb1Jo1-7MY",
+      "videoId": "uLb1Jo1-7MY"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "Overwatch Esports",
+      "durationSeconds": null,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "unlikely",
+        "reasons": [
+          "-10 no livestream timing metadata",
+          "-10 no team/competition relationship signal",
+          "-30 instructional/promotional-title signal"
+        ],
+        "score": -50
+      },
+      "liveBroadcastStatus": null,
+      "publishedAt": "2026-07-16T21:01:19+00:00",
+      "sources": [
+        "rss"
+      ],
+      "title": "Part 2 of our Support Perks guide brought to you by #OWCS players \ud83d\udd25 #overwatch #overwatchtips",
+      "url": "https://www.youtube.com/watch?v=rZDrP56JSlY",
+      "videoId": "rZDrP56JSlY"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "Overwatch Esports",
+      "durationSeconds": null,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "unlikely",
+        "reasons": [
+          "-10 no livestream timing metadata",
+          "-10 no team/competition relationship signal",
+          "-30 instructional/promotional-title signal"
+        ],
+        "score": -50
+      },
+      "liveBroadcastStatus": null,
+      "publishedAt": "2026-07-14T23:23:50+00:00",
+      "sources": [
+        "rss"
+      ],
+      "title": "Get a full breakdown of today\u2019s Midseason Patch RIGHT HERE \ud83d\udd25 #OWCS #overwatch #patchnotes",
+      "url": "https://www.youtube.com/watch?v=nlMxSttfEEs",
+      "videoId": "nlMxSttfEEs"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "Overwatch Esports",
+      "durationSeconds": null,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "unlikely",
+        "reasons": [
+          "-10 no livestream timing metadata",
+          "-10 no team/competition relationship signal",
+          "-30 instructional/promotional-title signal"
+        ],
+        "score": -50
+      },
+      "liveBroadcastStatus": null,
+      "publishedAt": "2026-07-14T18:40:46+00:00",
+      "sources": [
+        "rss"
+      ],
+      "title": "#OWCS Support Players share their thoughts on which Perks you should take! #Overwatch #overwatchtips",
+      "url": "https://www.youtube.com/watch?v=gxD5zyLwAqU",
+      "videoId": "gxD5zyLwAqU"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "Overwatch Esports",
+      "durationSeconds": 2502,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (2502s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": "2026-07-14T18:32:11+00:00",
+      "sources": [
+        "rss",
+        "streams"
+      ],
+      "title": "OWWC Group Draw",
+      "url": "https://www.youtube.com/watch?v=_lCIzOn4Z34",
+      "videoId": "_lCIzOn4Z34"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "Overwatch Esports",
+      "durationSeconds": null,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (upcoming)",
+          "+15 tournament/broadcast terminology in title/description",
+          "-30 instructional/promotional-title signal"
+        ],
+        "score": 10
+      },
+      "liveBroadcastStatus": "upcoming",
+      "publishedAt": "2026-07-10T18:09:26+00:00",
+      "sources": [
+        "rss",
+        "streams"
+      ],
+      "title": "[DROPS] OWCS 2026 | Midseason Championship Day 5",
+      "url": "https://www.youtube.com/watch?v=3eRcSk9b2L8",
+      "videoId": "3eRcSk9b2L8"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "Overwatch Esports",
+      "durationSeconds": null,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (upcoming)",
+          "+15 tournament/broadcast terminology in title/description",
+          "-30 instructional/promotional-title signal"
+        ],
+        "score": 10
+      },
+      "liveBroadcastStatus": "upcoming",
+      "publishedAt": "2026-07-10T18:06:59+00:00",
+      "sources": [
+        "rss",
+        "streams"
+      ],
+      "title": "[DROPS] OWCS 2026 | Midseason Championship Day 4",
+      "url": "https://www.youtube.com/watch?v=-8v_Ob1Fc88",
+      "videoId": "-8v_Ob1Fc88"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "Overwatch Esports",
+      "durationSeconds": null,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (upcoming)",
+          "+15 tournament/broadcast terminology in title/description",
+          "-30 instructional/promotional-title signal"
+        ],
+        "score": 10
+      },
+      "liveBroadcastStatus": "upcoming",
+      "publishedAt": "2026-07-10T18:06:13+00:00",
+      "sources": [
+        "rss",
+        "streams"
+      ],
+      "title": "[DROPS] OWCS 2026 | Midseason Championship Day 3",
+      "url": "https://www.youtube.com/watch?v=1maoxsSkDGo",
+      "videoId": "1maoxsSkDGo"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "Overwatch Esports",
+      "durationSeconds": null,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (upcoming)",
+          "+15 tournament/broadcast terminology in title/description",
+          "-30 instructional/promotional-title signal"
+        ],
+        "score": 10
+      },
+      "liveBroadcastStatus": "upcoming",
+      "publishedAt": "2026-07-10T18:05:24+00:00",
+      "sources": [
+        "rss",
+        "streams"
+      ],
+      "title": "[DROPS] OWCS 2026 | Midseason Championship Day 2",
+      "url": "https://www.youtube.com/watch?v=h3pgxhsUCt0",
+      "videoId": "h3pgxhsUCt0"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "Overwatch Esports",
+      "durationSeconds": null,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "unlikely",
+        "reasons": [
+          "-10 no livestream timing metadata",
+          "-10 no team/competition relationship signal",
+          "-30 instructional/promotional-title signal"
+        ],
+        "score": -50
+      },
+      "liveBroadcastStatus": null,
+      "publishedAt": "2026-07-09T20:32:05+00:00",
+      "sources": [
+        "rss"
+      ],
+      "title": "For all you Shion mains out there \ud83d\udc40 #OWCS Players talk perks for the newest #Overwatch Hero! #Shion",
+      "url": "https://www.youtube.com/watch?v=zm5y6vtrlTI",
+      "videoId": "zm5y6vtrlTI"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 34113,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (34113s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "OWCS 2026 | NA/EMEA | Stage 2 Playoffs Day 3",
+      "url": "https://www.youtube.com/watch?v=nD5lLLWDkY0",
+      "videoId": "nD5lLLWDkY0"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 24414,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (24414s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "OWCS 2026 | NA/EMEA | Stage 2 Playoffs Day 2",
+      "url": "https://www.youtube.com/watch?v=jkSiX___Qwc",
+      "videoId": "jkSiX___Qwc"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 20606,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (20606s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "OWCS 2026 | NA/EMEA | Stage 2 Playoffs Day 1",
+      "url": "https://www.youtube.com/watch?v=AfCXDIMPsLE",
+      "videoId": "AfCXDIMPsLE"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 28383,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (28383s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "OWCS 2026 | NA/EMEA | Stage 2 Week 3 Day 2",
+      "url": "https://www.youtube.com/watch?v=tm8tcr2UUJM",
+      "videoId": "tm8tcr2UUJM"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 25657,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (25657s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "OWCS 2026 | NA/EMEA | Stage 2 Week 3 Day 1",
+      "url": "https://www.youtube.com/watch?v=d9uylXw_-dE",
+      "videoId": "d9uylXw_-dE"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 27361,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (27361s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "OWCS 2026 | NA/EMEA | Stage 2 Week 2 Day 2",
+      "url": "https://www.youtube.com/watch?v=SA72IfyTpkE",
+      "videoId": "SA72IfyTpkE"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 28697,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (28697s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "OWCS 2026 | NA/EMEA | Stage 2 Week 2 Day 1",
+      "url": "https://www.youtube.com/watch?v=nHLa2dANVVE",
+      "videoId": "nHLa2dANVVE"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 28455,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (28455s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "OWCS 2026 | NA/EMEA | Stage 2 Week 1 Day 2",
+      "url": "https://www.youtube.com/watch?v=Z2hQctC7Jzw",
+      "videoId": "Z2hQctC7Jzw"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 25714,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (25714s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "OWCS 2026 | NA/EMEA | Stage 2 Opening Day",
+      "url": "https://www.youtube.com/watch?v=uEtw5nhdk_Q",
+      "videoId": "uEtw5nhdk_Q"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 42373,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (42373s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "OWWC 2026 | Online Qualifiers Day 5: EMEA/AMER",
+      "url": "https://www.youtube.com/watch?v=SrVV_lrHSHI",
+      "videoId": "SrVV_lrHSHI"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 42899,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (42899s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "OWWC 2026 | Online Qualifiers Day 4: EMEA/AMER",
+      "url": "https://www.youtube.com/watch?v=WeRIASu3eIA",
+      "videoId": "WeRIASu3eIA"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 37659,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (37659s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "OWWC 2026 | Online Qualifiers Day 3",
+      "url": "https://www.youtube.com/watch?v=8G52yz1iXsQ",
+      "videoId": "8G52yz1iXsQ"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 20974,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (20974s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "OWWC 2026 | Online Qualifiers Day 3",
+      "url": "https://www.youtube.com/watch?v=fEye24gKxVw",
+      "videoId": "fEye24gKxVw"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 42899,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (42899s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "OWWC 2026 | Online Qualifiers Day 2",
+      "url": "https://www.youtube.com/watch?v=WP8Hhfx7jDQ",
+      "videoId": "WP8Hhfx7jDQ"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 20389,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (20389s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "OWWC 2026 | Online Qualifiers Day 1",
+      "url": "https://www.youtube.com/watch?v=V2EbSwDME8M",
+      "videoId": "V2EbSwDME8M"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 33100,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (33100s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "[DROPS] OWCS 2026 | Champions Clash Day 3",
+      "url": "https://www.youtube.com/watch?v=jS8r0kqgoV4",
+      "videoId": "jS8r0kqgoV4"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 35152,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (35152s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "[DROPS] OWCS 2026 | Champions Clash Day 2",
+      "url": "https://www.youtube.com/watch?v=2eaD-hKLacU",
+      "videoId": "2eaD-hKLacU"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 26826,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (26826s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "[DROPS] OWCS 2026 | Champions Clash Day 1",
+      "url": "https://www.youtube.com/watch?v=m_nGAbgpHi8",
+      "videoId": "m_nGAbgpHi8"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 23139,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (23139s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "Overwatch Collegiate Championship | Finals",
+      "url": "https://www.youtube.com/watch?v=IiySuNpNFhU",
+      "videoId": "IiySuNpNFhU"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 35667,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (35667s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "Overwatch Collegiate Championship | Day 1",
+      "url": "https://www.youtube.com/watch?v=QDDVIxCS3Mc",
+      "videoId": "QDDVIxCS3Mc"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 24335,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (24335s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "[DROPS] OWCS 2026 | NA/EMEA | Stage 1 Playoffs Day 3",
+      "url": "https://www.youtube.com/watch?v=Q998tVE7B-w",
+      "videoId": "Q998tVE7B-w"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 22581,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (22581s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "[DROPS] OWCS 2026 | NA/EMEA | Stage 1 Playoffs Day 2",
+      "url": "https://www.youtube.com/watch?v=HnFJBXRmXLk",
+      "videoId": "HnFJBXRmXLk"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 24105,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (24105s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "[DROPS] OWCS 2026 | NA/EMEA | Stage 1 Playoffs Day 1",
+      "url": "https://www.youtube.com/watch?v=E0xzLwD9sS0",
+      "videoId": "E0xzLwD9sS0"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 28484,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (28484s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "[DROPS] OWCS 2026 | NA/EMEA | Stage 1 Week 3 Day 2",
+      "url": "https://www.youtube.com/watch?v=4UUdEv86ky8",
+      "videoId": "4UUdEv86ky8"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 29782,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (29782s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "[DROPS] OWCS 2026 | NA/EMEA | Stage 1 Week 3 Day 1",
+      "url": "https://www.youtube.com/watch?v=NkhPh-56KFI",
+      "videoId": "NkhPh-56KFI"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 26566,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (26566s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "[DROPS] OWCS 2026 | NA/EMEA | Stage 1 Week 2 Day 2",
+      "url": "https://www.youtube.com/watch?v=WBv1DiynaOQ",
+      "videoId": "WBv1DiynaOQ"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 26418,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (26418s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "[DROPS] OWCS 2026 | NA/EMEA | Stage 1 Week 2 Day 1",
+      "url": "https://www.youtube.com/watch?v=8hgnhV9lqCA",
+      "videoId": "8hgnhV9lqCA"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 26540,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (26540s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "[DROPS] OWCS 2026 | NA/EMEA | Stage 1 Day 2",
+      "url": "https://www.youtube.com/watch?v=KCoiZ7xO1ao",
+      "videoId": "KCoiZ7xO1ao"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 29536,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (29536s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "[DROPS] OWCS 2026 | NA/EMEA | Stage 1 Opening Day",
+      "url": "https://www.youtube.com/watch?v=tObGLXuxF34",
+      "videoId": "tObGLXuxF34"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 21470,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (21470s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "Overwatch Collegiate Spring Season Playoffs 2026 Day 3",
+      "url": "https://www.youtube.com/watch?v=3fcZy0ToP8s",
+      "videoId": "3fcZy0ToP8s"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 21281,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (21281s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "Overwatch Collegiate Spring Season Playoffs 2026 Day 2",
+      "url": "https://www.youtube.com/watch?v=aNHUebYwOHo",
+      "videoId": "aNHUebYwOHo"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 13430,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (13430s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "Overwatch Collegiate Spring Season Playoffs 2026 [Day 1]",
+      "url": "https://www.youtube.com/watch?v=6FNhfLsKyMI",
+      "videoId": "6FNhfLsKyMI"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 29771,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (29771s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "2026 OWCS Pre-Season Bootcamp Day-3",
+      "url": "https://www.youtube.com/watch?v=9DCg7_mbC4c",
+      "videoId": "9DCg7_mbC4c"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 32256,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (32256s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "2026 OWCS Pre-Season Bootcamp Day-2",
+      "url": "https://www.youtube.com/watch?v=J9g82a93O8Y",
+      "videoId": "J9g82a93O8Y"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 27641,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (27641s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "2026 OWCS Pre-Season Bootcamp Day-1",
+      "url": "https://www.youtube.com/watch?v=ly-JP0ayjdU",
+      "videoId": "ly-JP0ayjdU"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 35937,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (35937s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "[DROPS] FACEIT League Season 7 - Master Division Playoffs",
+      "url": "https://www.youtube.com/watch?v=uXYKInwf1z4",
+      "videoId": "uXYKInwf1z4"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 20453,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (20453s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "Calling All Heroes 2025: Championship | Finals",
+      "url": "https://www.youtube.com/watch?v=0ewSCtCYSNY",
+      "videoId": "0ewSCtCYSNY"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 17370,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (17370s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "Calling All Heroes 2025: Championship | Day 3",
+      "url": "https://www.youtube.com/watch?v=XY77sT0Cc2s",
+      "videoId": "XY77sT0Cc2s"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 20197,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (20197s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "Calling All Heroes 2025: Championship | Day 2",
+      "url": "https://www.youtube.com/watch?v=aJZEKFUXYlM",
+      "videoId": "aJZEKFUXYlM"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 5058,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (5058s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "Calling All Heroes 2025: Championship | Day 1",
+      "url": "https://www.youtube.com/watch?v=LZhD2lp6Hgg",
+      "videoId": "LZhD2lp6Hgg"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 20937,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (20937s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "Calling All Heroes 2025: Championship | Day 1",
+      "url": "https://www.youtube.com/watch?v=68h59ArOiXo",
+      "videoId": "68h59ArOiXo"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 27485,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (27485s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "[DROPS] [REBROADCAST] 2025 OWCS World Finals - Day 5",
+      "url": "https://www.youtube.com/watch?v=51QZTfBduSY",
+      "videoId": "51QZTfBduSY"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 27492,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (27492s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "[DROPS] OWCS 2025 | World Finals | Day 5",
+      "url": "https://www.youtube.com/watch?v=oWNXeN_erD0",
+      "videoId": "oWNXeN_erD0"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 33613,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (33613s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "[DROPS] [REBROADCAST] 2025 OWCS World Finals - Day 4",
+      "url": "https://www.youtube.com/watch?v=ZbfgFp8mi-s",
+      "videoId": "ZbfgFp8mi-s"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 33495,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (33495s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "[DROPS] OWCS 2025 | World Finals | Day 4",
+      "url": "https://www.youtube.com/watch?v=m-tlVHvl15E",
+      "videoId": "m-tlVHvl15E"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 29919,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (29919s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "[DROPS] [REBROADCAST] 2025 OWCS World Finals - Day 3",
+      "url": "https://www.youtube.com/watch?v=_D2MNjrkPVQ",
+      "videoId": "_D2MNjrkPVQ"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 29877,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (29877s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "[DROPS] OWCS 2025 | World Finals | Day 3",
+      "url": "https://www.youtube.com/watch?v=MLg4m1hwWrs",
+      "videoId": "MLg4m1hwWrs"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 26562,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (26562s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "[DROPS] [REBROADCAST] 2025 OWCS World Finals - Day 2",
+      "url": "https://www.youtube.com/watch?v=Y5FqtpdEwjc",
+      "videoId": "Y5FqtpdEwjc"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 26283,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (26283s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "[DROPS] 2025 OWCS World Finals - Day 2",
+      "url": "https://www.youtube.com/watch?v=oPmT0PIFlZ0",
+      "videoId": "oPmT0PIFlZ0"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 20697,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (20697s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "[DROPS] 2025 OWCS World Finals - Day 1",
+      "url": "https://www.youtube.com/watch?v=-HFNCpEMXcU",
+      "videoId": "-HFNCpEMXcU"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 22819,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (22819s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "Overwatch Collegiate Homecoming 2025 [FINALS]",
+      "url": "https://www.youtube.com/watch?v=k7Wa3FaIH_Q",
+      "videoId": "k7Wa3FaIH_Q"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 22024,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (22024s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "Overwatch Collegiate Homecoming 2025 [Day 3]",
+      "url": "https://www.youtube.com/watch?v=JNQhY0nODqY",
+      "videoId": "JNQhY0nODqY"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 24828,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (24828s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "Overwatch Collegiate Homecoming 2025 [Day 2]",
+      "url": "https://www.youtube.com/watch?v=DaafD8PMpio",
+      "videoId": "DaafD8PMpio"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 23736,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-07-29T23:14:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (23736s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": null,
+      "sources": [
+        "streams"
+      ],
+      "title": "Overwatch Collegiate Homecoming 2025 [Day 1]",
+      "url": "https://www.youtube.com/watch?v=wRLVFGV5f6s",
+      "videoId": "wRLVFGV5f6s"
+    }
+  ],
+  "channels": [
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "id": "ow_esports_global",
+      "sourceUrl": "https://www.youtube.com/OW_Esports",
+      "title": "ow_esports_global"
+    }
+  ],
+  "generatedAt": "2026-07-29T23:14:15+00:00",
   "schema": "matchfinder.v1",
   "sourceErrors": [],
   "summary": {
-    "likely": 0,
-    "total": 0,
+    "likely": 60,
+    "total": 69,
     "tracked": 0
   }
 }
