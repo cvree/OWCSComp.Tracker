@@ -1,11 +1,131 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
-## CURRENT STATUS (authoritative — 2026-07-27) — URL-only intake to audited public data (Phases 1-8)
+## CURRENT STATUS (authoritative — 2026-07-29) — match-day autofill: the free-agent autopilot + browser link intake
 
 > **This is the ONLY authoritative status section.** Every `## HISTORICAL
 > (superseded — …)` section below is kept for context and is out of date
 > wherever it conflicts with this one. When the code and any document
 > disagree, the code wins.
+
+### The decision this pass had to make (and why)
+
+The brief offered a choice: **finish the `owcs-nd5lllwdky0` calibration**
+(harvest + label hero templates, re-measure `hud_probe`) **or build the
+agentic free-agent workflow**. This environment denies `www.youtube.com`
+egress (policy 403, same as the 2026-07-27 pass) and template harvesting
+requires real VOD frames — so finishing that calibration here was
+*physically impossible*, not merely deprioritized. The agentic workflow was
+the only option that is both implementable offline and what match day
+actually needs: with it, tomorrow's operator pastes one link per finished
+broadcast and the machine does everything that doesn't require human
+judgment. The nd5lllwdky0 template harvest remains the top real-host TODO
+(unchanged instructions in the 2026-07-27 addendum below) — and because
+that layout's anchor is production-level, it covers every Stage 2 Playoffs
+broadcast once done.
+
+### What was built — one paste now runs to the first human gate
+
+```powershell
+python pipeline/automation/cli.py convert-link --url "<youtube-url>" --requested-by "<you>"
+```
+
+**`pipeline/automation/autopilot.py` — the free-agent loop.**
+`ops.run_one_job` (2026-07-27) advanced a job by exactly one step and left
+the "repeatedly" to an operator retyping `run-job`. `run_autopilot` is that
+loop, holding the job's resource lease for the whole pass (re-entrant with
+`worker.download_job`'s own acquire/release, never stealing a live lock),
+with a no-progress guard and a `--max-steps` cap so it can never spin. It
+also closes **two genuine gaps that made URL→comps impossible without a
+Python console**, found by walking the state machine end to end:
+
+* **Nothing ever called `segmentation.extract_segment_clip`.** Detection
+  hard-requires `extracted_path` (`build_ingest_args` raises "run
+  segmentation.extract_segment_clip first"), and no CLI command, worker
+  branch, or ops step ran it. The autopilot now extracts every approved
+  segment's clip (from the full-resolution source; the proxy refusal is
+  unchanged) before attempting detection.
+* **Nothing advanced NEEDS_REVIEW → READY_FOR_DETECTION.** After
+  `accept-proposed`/`segment-approve`, `run-job` still reported "waiting on
+  human review". The autopilot advances when the review is actually done
+  (>=1 approved segment, none pending) — a legal edge the state machine
+  already declared.
+
+**The human gates are unchanged and test-enforced.** The autopilot stops,
+names the gate, and prints the exact next command at: source approval,
+layout approval, segment review (without `--auto-accept`), detection
+review (**always** — comps never reach production automatically, flag or
+no flag), and publication. `--auto-accept` covers exactly one gate
+(segment identity): it runs the proposer and accepts through the SAME
+`segment_identity.accept_proposed` completeness/blocking gate a human
+uses, recording `--accepted-by` in every reviewer note; a refusal there
+stops the loop for a human. Nothing got looser — a person just stops
+retyping values the machine already proved.
+
+**New CLI commands** (`pipeline/automation/cli.py`): `convert-link --url`
+(ingest + autopilot + intake-export refresh in one command — THE match-day
+entry point) and `autopilot --job|--url` (re-enter the loop after clearing
+a gate). Both import-light (no cv2 at argparse time), both refresh
+`assets/data/intake.v1.json` unless `--no-export`, both end with the same
+honest summary (`state / outcome / steps / BLOCKED / next command`).
+
+**`intake.html` is now the site prototype that takes new links.** With the
+local control room (`pipeline/serve.py`) the page detects the API, enables
+a paste form, POSTs `/api/intake/link`, tails the convert log live from
+`/api/status`, and re-renders from the new `GET /api/intake` (the LIVE
+report built by the same `build_intake_report` the CLI uses, so page and
+CLI can never disagree). On static hosting (GitHub Pages) it stays
+read-only by construction: the form only builds the exact `convert-link`
+command to copy, and the committed `intake.v1.json` snapshot renders as
+before. New serve endpoints: `GET /api/intake` (never 500s) and
+`POST /api/intake/link` (offline URL validation via the SAME
+`link_intake.parse_link` — a bad paste is refused with its stable code and
+nothing launches; intake jobs get a 4-hour timeout instead of the default
+30 minutes because a full-VOD download is legitimate work).
+
+**Verified in a real browser this pass** (Playwright/Chromium against a
+live `serve.py`): control-room mode detected, form enabled, a real POST
+launched `convert-link`, the live log streamed to completion, the panel
+re-rendered with the job at its honest gate; static mode (plain
+`http.server`) showed the read-only fallback and the correct command
+preview. Also verified end-to-end offline via CLI: paste → DISCOVERED →
+approve-source → ARCHIVED → download attempt → classified network failure
+(this sandbox's 403) → RETRY_SCHEDULED with `retry-job` as next command.
+
+### Tests
+
+New `pipeline/test_automation_autopilot.py` (23 tests: every human gate
+stops the loop — including detection review WITH `--auto-accept`; stage
+chaining; auto-accept propose→accept→advance and gate-held refusal;
+extraction runs once and its failure is a visible blocker; no-progress
+guard; live locks never stolen; CLI wiring via real subprocesses).
+`pipeline/test_serve.py` extended (live report shape; refused pastes launch
+nothing; canonical-URL argv; `--auto-accept` opt-in; intake timeout). Full
+suite green: **85 suites** + `check_packaging.py`.
+
+### Honest gaps / next blockers (match day, 2026-07-30)
+
+* **Hero templates for `owcs_nd5lllwdky0` still don't exist** — detection
+  on Stage 2 Playoffs broadcasts will honestly report
+  `NEEDS_TEMPLATES`/UNKNOWN slots until a human harvests + labels them on
+  the real host (`build_hero_templates.py`, ~30 min with the calibrated
+  crops). Do this BEFORE the matches if comp autofill is wanted same-day.
+* **No real download ran here** (egress-denied sandbox, again). The loop
+  downstream of the download is offline-proven; the Windows worker
+  validation steps in `docs/AUTOMATION.md` are unchanged.
+* `--auto-accept` still requires the identity proposer to succeed (OCR
+  consensus, roster match); a blocked/incomplete proposal stops for a
+  human by design.
+* Detection review and publication remain manual by design — the autofill
+  ceiling is "evidence-backed candidates ready for one human yes".
+
+---
+
+## HISTORICAL (superseded — 2026-07-27) — URL-only intake to audited public data (Phases 1-8)
+
+> Superseded only in its "next steps": the Phases 1-8 architecture below is
+> still exactly what runs — the 2026-07-29 pass added the autopilot loop,
+> the `convert-link`/`autopilot` commands and the browser link intake ON
+> TOP of it, and closed the extraction/review-advance gaps it left.
 
 ### The headline: an operator now pastes ONE link
 

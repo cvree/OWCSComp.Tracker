@@ -16,7 +16,13 @@ API (all JSON):
   GET  /api/ping            {ok, running}
   GET  /api/sources         saved youtube sources for the run form
   GET  /api/status?since=N  job state + log lines from index N (live tail)
+  GET  /api/intake          LIVE intake report (same shape as
+                            assets/data/intake.v1.json, straight from the
+                            automation DB — never 500s)
   POST /api/run             start run_owcs_auto with validated params
+  POST /api/intake/link     {url, autoAccept?} validate the pasted URL
+                            offline, then launch `cli.py convert-link` (the
+                            one match-day command) as the current job
   POST /api/evidence        {run} re-run layout.html + crops.html for a run
                             from its already-extracted frames (no download)
   POST /api/test            run every pipeline/test_*.py suite in order
@@ -58,7 +64,13 @@ _HC_ACT_RE = re.compile(
     r"^/api/runs/([A-Za-z0-9_.\-]+)/hero-crops/([A-Za-z0-9_\-]+)/(label|reject)$")
 
 JOB_TIMEOUT = 30 * 60        # wall-clock seconds before a job is killed
+# An intake conversion may legitimately download a multi-hour VOD — give it
+# its own, much longer leash instead of raising the default for everything.
+INTAKE_TIMEOUT = 4 * 60 * 60
 HEARTBEAT_EVERY = 10.0       # seconds of silence before a heartbeat line
+
+# Automation job DB override for tests; None = automation.job_store.DEFAULT_DB.
+AUTOMATION_DB: str | None = None
 
 # status: idle | running | ok | partial | failed | canceled | timeout
 STATE: dict = {"running": False, "status": "idle", "job": 0, "kind": None,
@@ -294,6 +306,34 @@ def build_run_cmd(p: dict) -> tuple[list[str] | None, str | None]:
     return cmd, None
 
 
+def build_intake_cmd(p: dict) -> tuple[list[str] | None, str | None, dict | None]:
+    """Validate browser params -> exact `cli.py convert-link` argv (no shell).
+
+    The URL is canonicalized OFFLINE by the same parser intake itself uses
+    (link_intake.parse_link), so a bad paste is refused here with its stable
+    code and nothing launches; the video id / deterministic job key are known
+    before the job even starts and are returned to the page immediately."""
+    from automation import link_intake as ali
+    url = p.get("url")
+    if not isinstance(url, str) or not url.strip():
+        return None, "url is required", None
+    try:
+        parsed = ali.parse_link(url)
+    except ali.LinkIntakeError as e:
+        return None, f"[{e.code}] {e}", None
+    cmd = [sys.executable, os.path.join("pipeline", "automation", "cli.py")]
+    if AUTOMATION_DB:
+        cmd += ["--db", AUTOMATION_DB]
+    cmd += ["convert-link", "--url", parsed["canonicalUrl"],
+            "--requested-by", "control-room"]
+    if p.get("autoAccept"):
+        cmd += ["--auto-accept", "--accepted-by", "control-room"]
+    info = {"videoId": parsed["videoId"],
+            "jobKey": ali.job_key_for(parsed["videoId"]),
+            "canonicalUrl": parsed["canonicalUrl"]}
+    return cmd, None, info
+
+
 def find_run(run_name: str) -> dict | None:
     try:
         with open(AUTO_RUNS_PATH, "r", encoding="utf-8") as f:
@@ -418,6 +458,25 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                                 "remedy": "run `python pipeline/preflight.py`"
                                           " in a terminal for details"}]})
             return self._json(200, res)
+        if path == "/api/intake":
+            # LIVE intake report — same builder the CLI's intake-export
+            # uses, straight from the automation DB, so the page can never
+            # disagree with the command line. Read-only, and a status read
+            # must never 500.
+            try:
+                from automation import job_store as ajs
+                from automation import link_intake as ali
+                store = ajs.JobStore(AUTOMATION_DB or ajs.DEFAULT_DB)
+                try:
+                    return self._json(200, ali.build_intake_report(store))
+                finally:
+                    store.close()
+            except Exception as e:
+                return self._json(200, {
+                    "schema": "intake.v1", "jobs": [],
+                    "error": f"{type(e).__name__}: {e}",
+                    "note": "live intake report unavailable — the static "
+                            "assets/data/intake.v1.json snapshot still works"})
         if path == "/api/latest-run":
             try:
                 with open(AUTO_RUNS_PATH, "r", encoding="utf-8") as f:
@@ -477,6 +536,20 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             return self._json(200 if ok else 409,
                               {"started": ok, "error": err, "job": job,
                                "cmd": " ".join(cmd)})
+        if self.path == "/api/intake/link":
+            p = self._read_body()
+            if p is None:
+                return self._json(400, {"error": "bad JSON body"})
+            cmd, err, info = build_intake_cmd(p)
+            if err:
+                return self._json(400, {"error": err})
+            ok, err = launch([cmd], "intake", info["videoId"],
+                             timeout=INTAKE_TIMEOUT)
+            with LOCK:
+                job = STATE["job"]
+            return self._json(200 if ok else 409,
+                              {"started": ok, "error": err, "job": job,
+                               "cmd": " ".join(cmd), **info})
         if self.path == "/api/cancel":
             with LOCK:
                 running, job = STATE["running"], STATE["job"]

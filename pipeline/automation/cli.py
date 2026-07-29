@@ -1293,6 +1293,21 @@ INTAKE_EXPORT_PATH = os.path.join(
     content_db.REPO_ROOT, "assets", "data", "intake.v1.json")
 
 
+def _save_intake_export(store: "js.JobStore",
+                        job_key: str | None = None) -> None:
+    """Write assets/data/intake.v1.json (what intake.html renders) — shared
+    by intake-export --save, convert-link and autopilot so the panel is
+    never stale after an automatic pass."""
+    report = li.build_intake_report(store, job_key=job_key)
+    os.makedirs(os.path.dirname(INTAKE_EXPORT_PATH), exist_ok=True)
+    with open(INTAKE_EXPORT_PATH, "w", encoding="utf-8") as f:
+        json.dump(report, f, indent=1)
+        f.write("\n")
+    print(f"[intake] wrote "
+          f"{os.path.relpath(INTAKE_EXPORT_PATH, content_db.REPO_ROOT)} "
+          f"({len(report['jobs'])} job(s))")
+
+
 def cmd_intake_export(args: argparse.Namespace) -> int:
     """`intake-export [--save]` — the operator review panel's data source:
     every pasted link's stage, next command, blockers, segment timeline,
@@ -1304,13 +1319,7 @@ def cmd_intake_export(args: argparse.Namespace) -> int:
         if args.json or not args.save:
             print(json.dumps(report, indent=1))
         if args.save:
-            os.makedirs(os.path.dirname(INTAKE_EXPORT_PATH), exist_ok=True)
-            with open(INTAKE_EXPORT_PATH, "w", encoding="utf-8") as f:
-                json.dump(report, f, indent=1)
-                f.write("\n")
-            print(f"[intake] wrote "
-                  f"{os.path.relpath(INTAKE_EXPORT_PATH, content_db.REPO_ROOT)} "
-                  f"({len(report['jobs'])} job(s))")
+            _save_intake_export(store, job_key=args.job)
         return 0
     finally:
         store.close()
@@ -1368,6 +1377,95 @@ def cmd_process_approved_job(args: argparse.Namespace) -> int:
         return 0 if result.get("ok") else 1
     finally:
         con.close()
+        store.close()
+
+
+# ------------------------------------------------- autopilot / convert-link
+def _run_autopilot(store: "js.JobStore", args: argparse.Namespace,
+                   job_key: str) -> dict:
+    """Shared driver for `autopilot` and `convert-link`: run the free-agent
+    loop, then refresh the intake panel export so intake.html is never
+    stale after an automatic pass."""
+    from automation import autopilot as ap
+    from automation import worker
+    locks = lk.LockManager(store.con)
+    wid = args.worker_id or worker.worker_identity("autopilot")
+    result = ap.run_autopilot(
+        store, locks, job_key, worker_id=wid,
+        media_root=args.media_root or None,
+        auto_accept=args.auto_accept,
+        accepted_by=args.accepted_by or args.worker_id,
+        max_steps=args.max_steps or ap.DEFAULT_MAX_STEPS,
+        samples=args.samples, ocr_engine=args.ocr_engine)
+    if not args.no_export:
+        _save_intake_export(store)
+    return result
+
+
+def cmd_autopilot(args: argparse.Namespace) -> int:
+    """`autopilot --job <key> | --url <url>` — advance an EXISTING intake job
+    through every automatic stage in one command, stopping honestly at the
+    first human gate (source/layout/detection review, publication)."""
+    store = js.JobStore(args.db)
+    try:
+        if bool(args.job) == bool(args.url):
+            print("[autopilot] provide exactly one of --job / --url")
+            return 1
+        try:
+            job_key = args.job or li.job_key_for(
+                li.parse_link(args.url)["videoId"])
+        except li.LinkIntakeError as exc:
+            print(f"[autopilot] REFUSED [{exc.code}] {exc}")
+            return 1
+        try:
+            result = _run_autopilot(store, args, job_key)
+        except KeyError as exc:
+            print(f"[autopilot] {exc.args[0]} — paste the link first: "
+                  f"ingest-link/convert-link --url \"<youtube-url>\"")
+            return 1
+        from automation import autopilot as ap
+        if args.json:
+            print(json.dumps(result, indent=2))
+        else:
+            print(f"[autopilot] {job_key}:")
+            print(ap.format_result(result))
+        return 0 if result["ok"] else 1
+    finally:
+        store.close()
+
+
+def cmd_convert_link(args: argparse.Namespace) -> int:
+    """`convert-link --url "<youtube-url>"` — the ONE match-day command:
+    ingest the pasted link, then run the autopilot loop as far as the
+    evidence allows, then refresh the intake panel. Ends either at a human
+    gate (printed, with the exact next command) or at a blocker (printed,
+    with the reason)."""
+    from automation import autopilot as ap
+    config = cfg.load_config()
+    store = js.JobStore(args.db, config=config)
+    try:
+        client = None if args.no_metadata else _build_youtube_client(
+            args, store=store)
+        try:
+            ingest = li.ingest_link(store, args.url, client=client,
+                                    requested_by=args.requested_by)
+        except li.LinkIntakeError as exc:
+            print(f"[convert] REFUSED [{exc.code}] {exc}")
+            return 1
+        print(f"[convert] link {'attached to existing job' if ingest['duplicate'] else 'ingested'}: "
+              f"{ingest['jobKey']} ({ingest['canonicalUrl']})")
+        src = ingest["source"]
+        print(f"  source     : {src['state']} [{src['reasonCode']}] {src['reason']}")
+        for w in ingest["warnings"]:
+            print(f"  WARNING    : {w}")
+        result = _run_autopilot(store, args, ingest["jobKey"])
+        if args.json:
+            print(json.dumps({"ingest": ingest, "autopilot": result}, indent=2))
+        else:
+            print(f"[convert] autopilot for {ingest['jobKey']}:")
+            print(ap.format_result(result))
+        return 0 if result["ok"] else 1
+    finally:
         store.close()
 
 
@@ -1779,6 +1877,54 @@ def main(argv: list[str] | None = None) -> int:
     paj_p.add_argument("--publish", action="store_true",
                        help="actually commit + push (default: dry-run validation only)")
     paj_p.set_defaults(func=cmd_process_approved_job)
+
+    # ---- the free-agent loop: convert-link / autopilot -------------------
+    def _add_autopilot_args(sp) -> None:
+        sp.add_argument("--auto-accept", action="store_true",
+                        help="accept clean machine identity proposals for "
+                             "pending SEGMENTS through the accept-proposed "
+                             "gate (source/layout/detection review and "
+                             "publication always stay human)")
+        sp.add_argument("--accepted-by", default=None,
+                        help="your name/handle, recorded on every "
+                             "auto-accepted segment's reviewer note")
+        sp.add_argument("--max-steps", type=int,
+                        default=None,  # resolved below to autopilot's default
+                        help="safety cap on automatic steps per run")
+        sp.add_argument("--worker-id", default=None)
+        sp.add_argument("--media-root", default=None,
+                        help="worker media cache root (default: "
+                             "data/worker/jobs under the repo)")
+        sp.add_argument("--samples", type=int, default=8,
+                        help="frames sampled per segment for identity proposals")
+        sp.add_argument("--ocr-engine", default="easyocr")
+        sp.add_argument("--no-export", action="store_true",
+                        help="skip refreshing assets/data/intake.v1.json")
+        sp.add_argument("--json", action="store_true")
+
+    cl_p = sub.add_parser("convert-link",
+                          help="match-day one-liner: ingest one pasted URL and "
+                               "autopilot it to the first human gate")
+    cl_p.add_argument("--url", required=True,
+                      help="a YouTube broadcast link in any spelling")
+    cl_p.add_argument("--requested-by", default=None,
+                      help="your name/handle, recorded on the intake record")
+    cl_p.add_argument("--no-metadata", action="store_true",
+                      help="skip the YouTube metadata call (offline); the "
+                           "source then cannot be auto-approved")
+    cl_p.add_argument("--fixture-dir", default=None,
+                      help="serve YouTube responses from local fixtures (offline)")
+    _add_autopilot_args(cl_p)
+    cl_p.set_defaults(func=cmd_convert_link)
+
+    ap_run_p = sub.add_parser("autopilot",
+                              help="advance an existing intake job through every "
+                                   "automatic stage to the first human gate")
+    ap_run_p.add_argument("--job", default=None, help="job key (record:<video-id>)")
+    ap_run_p.add_argument("--url", default=None,
+                          help="or the pasted URL (resolves to the same job)")
+    _add_autopilot_args(ap_run_p)
+    ap_run_p.set_defaults(func=cmd_autopilot)
 
     args = p.parse_args(argv)
     return args.func(args)

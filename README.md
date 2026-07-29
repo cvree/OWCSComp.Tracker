@@ -191,14 +191,28 @@ python pipeline/export_data.py --public
 Reruns are idempotent — the same `(match, map, detector_version)` replaces
 its own CV rows and never touches manual/reviewed rows.
 
-### Process a NEW VOD/map
+### Process a NEW VOD/map — paste one link
 
-The workflow generalizes: calibrate → review the sheet → harvest + label
-templates → (once per broadcast package) cut reject markers + a
-`round_emblem` rect → ingest → review `report.html`/`review.html` →
-`export_data.py --public`. See the **CURRENT STATUS** section of
-[`HANDOFF.md`](HANDOFF.md) for the step-by-step and the exact download
-strategy that works around googlevideo throttling.
+```bash
+python pipeline/automation/cli.py convert-link --url "<youtube-url>" --requested-by "<you>"
+```
+
+The free-agent autopilot runs every automatic stage in a row — metadata +
+registry authorization, full-VOD download + 360p scan proxy, layout
+resolution, segmentation, identity proposals, segment-clip extraction —
+and stops honestly at the first gate that belongs to a human (source /
+layout / segment review / detection review / publication), printing the
+exact next command. After clearing a gate, `autopilot --job <key>`
+re-enters the loop; `--auto-accept` additionally accepts clean machine
+identity proposals through the same `accept-proposed` gate a human uses.
+
+The same flow runs from the browser: `python pipeline/serve.py`, open
+`intake.html`, paste the link, watch the live log. On static hosting the
+page stays read-only and only builds the command for you to copy. See the
+**Match-day runbook** in [`docs/AUTOMATION.md`](docs/AUTOMATION.md) and
+the **CURRENT STATUS** section of [`HANDOFF.md`](HANDOFF.md) for the
+step-by-step and the exact download strategy that works around googlevideo
+throttling.
 
 #### Downloading a VOD (this machine's quirks)
 

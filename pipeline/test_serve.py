@@ -238,6 +238,48 @@ def main() -> int:
           code == 409 and "already running" in j["error"])
     wait_idle(port)
 
+    print("intake endpoints (paste-a-link prototype):")
+    reset_state()
+    serve.AUTOMATION_DB = os.path.join(TMP, "automation.sqlite")
+    code, j = api(port, "/api/intake")
+    check("live intake report has the intake.v1 shape (fresh DB, no jobs)",
+          code == 200 and j.get("schema") == "intake.v1"
+          and j.get("jobs") == [])
+    fr = FakeRunner()
+    serve.RUNNER = fr
+    code, j = api(port, "/api/intake/link", {})
+    check("missing url -> 400", code == 400 and "url" in j["error"])
+    code, j = api(port, "/api/intake/link", {"url": "https://twitch.tv/x"})
+    check("non-YouTube host refused with the parser's stable code",
+          code == 400 and "unsupported_host" in j["error"])
+    code, j = api(port, "/api/intake/link", {"url": "https://youtu.be/short"})
+    check("malformed video id refused", code == 400
+          and "malformed_video_id" in j["error"])
+    check("nothing launched for refused links", fr.cmds == [])
+    code, j = api(port, "/api/intake/link",
+                  {"url": "youtu.be/AAAAAAAAAAA?t=90&si=track"})
+    st = wait_idle(port)
+    check("valid link starts a convert job with identity known up front",
+          code == 200 and j["started"] is True
+          and j["videoId"] == "AAAAAAAAAAA"
+          and j["jobKey"] == "record:aaaaaaaaaaa:source"
+          and j["canonicalUrl"] == "https://www.youtube.com/watch?v=AAAAAAAAAAA")
+    cmd = fr.cmds[0]
+    check("argv is convert-link on the CANONICAL url via the test DB",
+          cmd[1].endswith(os.path.join("pipeline", "automation", "cli.py"))
+          and "convert-link" in cmd and j["canonicalUrl"] in cmd
+          and "--db" in cmd and serve.AUTOMATION_DB in cmd
+          and "--auto-accept" not in cmd and st["kind"] == "intake")
+    check("intake jobs get the long-download timeout",
+          st["timeout"] == serve.INTAKE_TIMEOUT)
+    reset_state()
+    code, j = api(port, "/api/intake/link",
+                  {"url": "https://www.youtube.com/watch?v=AAAAAAAAAAA",
+                   "autoAccept": True})
+    wait_idle(port)
+    check("autoAccept opts in via API", "--auto-accept" in fr.cmds[1])
+    serve.AUTOMATION_DB = None
+
     print("evidence regeneration job:")
     reset_state()
     fr = FakeRunner()

@@ -12,6 +12,57 @@ Everything here is **stdlib-only** (sqlite3 + a tiny dependency-free YAML
 parser), so it runs in exactly the offline environment CI and the site build
 already use — no new dependencies, no secrets.
 
+## Match-day runbook — the free-agent loop (2026-07-29)
+
+The 12-step checklist below ("Real-host validation") is still the
+authoritative stage-by-stage reference, but on a match day you no longer
+drive it by hand. The steps that are *automatic* are now chained by the
+autopilot, and the intake page can drive the whole thing from a browser.
+
+**One command per finished broadcast:**
+
+```powershell
+python pipeline\automation\cli.py convert-link --url "<youtube-url>" --requested-by "<you>"
+```
+
+That ingests the link and runs every automatic stage in a row — metadata +
+registry authorization, full-VOD download + 360p proxy, layout resolution,
+segmentation, and (new) segment-clip extraction — stopping honestly at the
+FIRST gate that belongs to a human, with the exact next command printed.
+`assets/data/intake.v1.json` is refreshed automatically, so `intake.html`
+always shows the live stage.
+
+**Or from the browser:** run `python pipeline\serve.py`, open
+`http://localhost:8000/intake.html`, paste the link, watch the live log.
+The page POSTs `/api/intake/link`, which launches the same `convert-link`
+command locally (static hosting keeps the read-only behavior and only
+prints the command for you to copy).
+
+**The human gates, unchanged and non-negotiable** — the autopilot stops at
+each and names it:
+
+1. `approve-source --confirm` — a link not on a verified official channel.
+2. `approve-layout --confirm` — a freshly-calibrated layout (review the sheet).
+3. Segment identity review — approve in `intake.html`/CLI as before, **or**
+   re-run with `--auto-accept`, which accepts machine proposals through the
+   SAME `accept-proposed` gate (a blocking review task or an UNKNOWN field
+   still refuses and waits for you; recorded with your `--accepted-by` name).
+4. Detection review — hero comps NEVER reach production automatically;
+   review `reports/ingest/<id>/report.html`, then `detect-job <job> --write`.
+5. Publication — `process-approved-job --job <job> --publish` stays
+   supervised.
+
+**Resuming after a gate:** once you've cleared a gate, one command re-enters
+the loop and runs to the next gate:
+
+```powershell
+python pipeline\automation\cli.py autopilot --job <job-key>          # or --url "<same link>"
+python pipeline\automation\cli.py autopilot --job <job-key> --auto-accept --accepted-by "<you>"
+```
+
+`link-status --job <job-key>` still prints stage/blockers/next command at
+any moment, and every autopilot run ends with the same summary.
+
 ## Real-host validation — the exact Windows commands (2026-07-27)
 
 Everything in the URL-only pipeline is implemented and offline-tested, but a
