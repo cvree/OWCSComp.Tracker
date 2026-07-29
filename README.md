@@ -47,7 +47,7 @@ plain HTML/CSS/JS, still GitHub-Pages-safe, still evidence-first. Pages:
 |---|---|
 | `index.html` | cinematic homepage hero that replays the **real** detection story: the actual Nepal frame (39:54), the autocalibrated slot rectangles, the confirmed ZOX Juno→Lúcio swap crops, consensus 0.817, verified seal |
 | `tournaments.html` / `tournament.html` | events, brackets, standings |
-| `calendar.html` | month grid + agenda of tracked matches |
+| `calendar.html` | the season by day: official stage windows (from `config/owcs_calendar.json`, with their unverified-dates status shown honestly), the month grid of tracked matches, a "next up" list, and "time TBA" wherever only a date is known |
 | `matches.html` / `match.html` | schedule and the match page with comps, **confirmed swaps with before/after crops**, bans, evidence chain, review queue |
 | `teams.html` / `team.html` | directory + team dossier (record, hero pool, calibration provenance) |
 | `heroes.html` / `hero.html` | hero analytics directory + per-hero dossier (rates, teams, swap activity, portrait provenance) |

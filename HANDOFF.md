@@ -1,6 +1,76 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
-## CURRENT STATUS (authoritative — 2026-07-29, second pass) — YouTube ingestion resilience + full browser control
+## CURRENT STATUS (authoritative — 2026-07-29, third pass) — the calendar system
+
+> Additive to the two passes below, which remain accurate.
+
+### What was actually broken
+
+`calendar.html` rendered fine — grid, agenda, navigation and URL state all
+worked. The break was upstream, and in two places:
+
+1. **The official calendar never reached the site.**
+   `config/owcs_calendar.json` (4 season events with stage windows) was
+   loaded by `sync-calendar` into the automation DB's `source_events`
+   ledger — and stopped there. `export_data.py --public` had no
+   `calendarEvents` key at all, so the public calendar could only show
+   matches that had *already been ingested*. It had no idea a stage was
+   even running: an August with three live stage windows rendered
+   identically to an empty month in 2027.
+2. **Every match time was a fabrication.** `matches.scheduled_at` is NULL
+   for all 15 rows; the exporter derived `"{date}T00:00:00+00:00"` and
+   published it as `scheduledAt` with nothing marking it as derived. The
+   UI could not tell a real midnight kickoff from an unknown time.
+
+(The 12 matches missing from the public export are *correct* — they are
+synthetic sample fixtures, excluded deliberately. `export-coverage` names
+each one.)
+
+### What was built
+
+* **`calendarEvents` in the public dataset** — exported straight from the
+  committed config (not the operator's job DB, so a public build never
+  needs it), sorted by start date, with `verified` carried through
+  **unchanged**. Every current event is `verified: false`, and the site
+  now says so on each band rather than laundering seed dates into fact.
+* **`timeKnown` on every match** — false when the instant was derived from
+  a bare date. The calendar renders "time TBA"; populate `scheduled_at`
+  and it becomes a real time automatically.
+* **`korea` / `japan` / `global` added to the regions catalog and the
+  region-badge CSS.** The official calendar uses regions the match dataset
+  never did, so the Korea band was rendering its raw id as a label and
+  falling back to an untinted grey.
+* **`calendar.html` is now a schedule, not an archive**: official event
+  bands per month (with "running now"), a day tint across each stage
+  window, upcoming/live/past match states, a **Next up** block, a
+  **Today** button distinct from "Latest match", and a default view that
+  opens on the current month when the season is live around now.
+* **An empty month inside a stage window now says something different**
+  from an empty month outside one — "Stage running, nothing tracked yet,
+  paste a link in the control room to start one" vs. the flat "no tracked
+  matches".
+
+### Verified in a browser (real Chromium, live `serve.py`)
+
+July 2026: 3 event bands, all "running now", all flagged unverified; 31
+in-window day tints; today marked; 2 tracked matches; "time TBA" on both
+(neither has a real start time). August 2026: "3 official event windows, no
+tracked matches yet" + the stage-running empty state. March 2027: the plain
+empty state, no bands. With a live + two future matches injected, **Next
+up** listed 3 in the right order (live first), rendered real times
+(`12:00 PM`, `05:30 PM`) and "time TBA" for the date-only one. No console
+errors. 86 suites green; 7 new calendar contract tests.
+
+### Still true
+
+Match *times* remain unknown until something populates `scheduled_at`
+(FACEIT sync or the official calendar adapter), and the four event windows
+stay `verified: false` until confirmed against the official Overwatch
+Esports schedule — which was not reachable from this environment.
+
+---
+
+## HISTORICAL (2026-07-29, second pass) — YouTube ingestion resilience + full browser control
 
 > Supersedes the "match-day autofill" section below, which is still
 > accurate about the autopilot loop; this pass fixed what happened when the

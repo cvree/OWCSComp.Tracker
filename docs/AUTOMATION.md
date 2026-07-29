@@ -12,6 +12,41 @@ Everything here is **stdlib-only** (sqlite3 + a tiny dependency-free YAML
 parser), so it runs in exactly the offline environment CI and the site build
 already use — no new dependencies, no secrets.
 
+## The calendar system (2026-07-29)
+
+The calendar has two independent layers, and they are deliberately kept
+apart because they have different provenance:
+
+| layer | source | reaches the site via |
+|---|---|---|
+| **Official events** — regional stage windows, major events, their broadcast destinations | `config/owcs_calendar.json` (committed seed) | `export_data.py --public` → `calendarEvents` |
+| **Tracked matches** — real rows with teams, scores, comps | the content DB | `export_data.py --public` → `matches` |
+
+`sync-calendar` also loads the events into the automation DB's
+`source_events` ledger, where reconciliation (B4) compares them against
+FACEIT match facts. That ledger is an *operator* surface; the public site
+reads the committed config directly so a public build never needs the
+operator's private job database.
+
+**Every event carries `verified` unchanged.** The committed seed is
+entirely `verified: false` (the official schedule site was unreachable when
+it was written), and `calendar.html` says so on every band — placeholder
+dates are never presented as confirmed. To verify a window, edit
+`config/owcs_calendar.json`, set `verified: true` against an official
+source, and re-export.
+
+**Time honesty.** Most matches carry only a DATE (`matches.date`), not a
+start instant (`matches.scheduled_at` is NULL for every current row). The
+exporter derives midnight so the match can be placed on a grid, and sets
+`timeKnown: false`; the calendar renders "time TBA" rather than a
+fabricated `00:00`. Populate `scheduled_at` and `timeKnown` becomes true
+automatically.
+
+```bash
+python pipeline/automation/cli.py sync-calendar   # events -> operator ledger
+python pipeline/export_data.py --public           # events -> public site
+```
+
 ## YouTube download authentication + the fallback ladder (2026-07-29)
 
 YouTube refuses media URLs for several unrelated reasons that need

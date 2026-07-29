@@ -521,5 +521,82 @@ class TestFixtureToProductionSwitching(unittest.TestCase):
         self.assertIsInstance(published_match_ids, set)
 
 
+class TestCalendarContract(unittest.TestCase):
+    """The official season calendar reaching the public site.
+
+    Before this existed, `config/owcs_calendar.json` was loaded by
+    `sync-calendar` into the automation DB's `source_events` ledger and
+    stopped there — nothing exported it, so calendar.html could only ever
+    show matches that had already been ingested and had no idea a stage was
+    even running.
+    """
+
+    def setUp(self):
+        self.data = load_public("public_data.v1.js")
+
+    def test_calendar_events_are_exported(self):
+        events = self.data.get("calendarEvents")
+        self.assertIsInstance(events, list)
+        self.assertTrue(events, "the official calendar must reach the site")
+
+    def test_every_event_can_be_placed_on_a_grid(self):
+        for e in self.data["calendarEvents"]:
+            self.assertTrue(e.get("id"))
+            self.assertTrue(e.get("name"))
+            self.assertRegex(e["startDate"], r"^\d{4}-\d{2}-\d{2}$")
+            self.assertRegex(e["endDate"], r"^\d{4}-\d{2}-\d{2}$")
+            self.assertGreaterEqual(e["endDate"], e["startDate"],
+                                    f"{e['id']} ends before it starts")
+            self.assertIsInstance(e["verified"], bool)
+
+    def test_events_are_sorted_by_start_date(self):
+        starts = [e["startDate"] for e in self.data["calendarEvents"]]
+        self.assertEqual(starts, sorted(starts))
+
+    def test_the_verified_flag_is_carried_through_unchanged(self):
+        """The committed seed is unverified; the export must not launder
+        placeholder dates into apparent fact."""
+        src = os.path.join(REPO, "config", "owcs_calendar.json")
+        with open(src, encoding="utf-8") as f:
+            raw = {e["id"]: e for e in json.load(f).get("events", [])}
+        for e in self.data["calendarEvents"]:
+            self.assertEqual(e["verified"], bool(raw[e["id"]].get("verified")),
+                             f"{e['id']}: verified flag was altered")
+
+    def test_every_event_region_resolves_to_a_named_region(self):
+        """A region missing from the catalog renders as a raw id in the
+        badge — which is exactly how `korea` was displaying."""
+        known = {r["id"] for r in self.data["regions"]}
+        for e in self.data["calendarEvents"]:
+            self.assertIn(e["region"], known,
+                          f"{e['id']} uses region {e['region']!r}, which has "
+                          f"no entry in the regions catalog")
+
+    def test_matches_declare_whether_the_time_is_real(self):
+        """`scheduledAt` is derived as midnight when only a DATE is known.
+        Without this flag the UI cannot tell a real 00:00 kickoff from an
+        unknown time, and would render a fabricated start time."""
+        for m in self.data["matches"]:
+            self.assertIn("timeKnown", m, f"{m['id']} has no timeKnown flag")
+            self.assertIsInstance(m["timeKnown"], bool)
+            if not m["timeKnown"]:
+                self.assertTrue(m["scheduledAt"].endswith("T00:00:00+00:00"),
+                                f"{m['id']} claims an unknown time but "
+                                f"carries a non-midnight instant")
+
+    def test_calendar_page_is_wired_to_the_new_data(self):
+        page = open(os.path.join(REPO, "calendar.html"), encoding="utf-8").read()
+        js = open(os.path.join(REPO, "assets", "js", "public",
+                               "page-calendar.js"), encoding="utf-8").read()
+        for node in ("cal-events", "cal-next-up", "cal-now", "cal-grid",
+                     "cal-agenda"):
+            self.assertIn(node, page, f"calendar.html lost #{node}")
+        self.assertIn("calendarEvents", js,
+                      "the calendar page must read the exported events")
+        self.assertIn("timeKnown", js,
+                      "the calendar page must honour the time-known flag")
+        self.assertIn("time TBA", js)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
