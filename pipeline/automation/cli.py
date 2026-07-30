@@ -503,6 +503,24 @@ def _build_youtube_client(args: argparse.Namespace, store: "js.JobStore | None" 
     return yt.YouTubeClient(cache_dir=cache, quota_sink=quota_sink)
 
 
+def _build_keyless_resolver(args: argparse.Namespace):
+    """The no-API-key metadata fallback intake may use, or None.
+
+    Returns None (fallback disabled) when the operator asked for a fully
+    offline run — `--no-metadata`, `--no-keyless`, or `--fixture-dir`, which
+    exists precisely so a run touches nothing live. Otherwise every intake
+    gets the ladder, because a missing YOUTUBE_API_KEY is a missing lookup,
+    not a human decision: yt-dlp (already required to download the VOD) and
+    the public per-video feed both report the channel id the registry check
+    needs, for free."""
+    from automation import keyless_metadata as km
+    if (getattr(args, "no_keyless", False)
+            or getattr(args, "no_metadata", False)
+            or getattr(args, "fixture_dir", None)):
+        return None
+    return km.resolver()
+
+
 def cmd_verify_channels(args: argparse.Namespace) -> int:
     """Verify every configured channel (enabled or not) against the live
     YouTube API (Phase C1). Read-only: NEVER edits
@@ -694,7 +712,8 @@ def cmd_ingest_link(args: argparse.Namespace) -> int:
         try:
             result = li.ingest_link(
                 store, args.url, client=client, dry_run=args.dry_run,
-                requested_by=args.requested_by)
+                requested_by=args.requested_by,
+                keyless=_build_keyless_resolver(args))
         except li.LinkIntakeError as exc:
             print(f"[intake] REFUSED [{exc.code}] {exc}")
             return 1
@@ -719,9 +738,15 @@ def cmd_ingest_link(args: argparse.Namespace) -> int:
             print(f"  channel      : {meta.get('channelTitle')} ({meta.get('channelId')})")
             print(f"  duration     : {meta.get('durationSeconds')}s "
                   f"[{meta.get('liveBroadcastStatus')}]")
+            print(f"  metadata via : {meta.get('source')} "
+                  f"({meta.get('completeness')})")
         else:
             print(f"  metadata     : {meta.get('status')} "
                   f"[{meta.get('errorCode')}] {meta.get('error')}")
+            if meta.get("keylessAttempts"):
+                from automation import keyless_metadata as km
+                print(f"  keyless      : "
+                      f"{km.format_attempts(meta['keylessAttempts'])}")
         if result.get("likeness"):
             lk_ = result["likeness"]
             print(f"  broadcast-likeness: {lk_['confidence']} (score {lk_['score']})")
@@ -1449,12 +1474,17 @@ def cmd_convert_link(args: argparse.Namespace) -> int:
             args, store=store)
         try:
             ingest = li.ingest_link(store, args.url, client=client,
-                                    requested_by=args.requested_by)
+                                    requested_by=args.requested_by,
+                                    keyless=_build_keyless_resolver(args))
         except li.LinkIntakeError as exc:
             print(f"[convert] REFUSED [{exc.code}] {exc}")
             return 1
         print(f"[convert] link {'attached to existing job' if ingest['duplicate'] else 'ingested'}: "
               f"{ingest['jobKey']} ({ingest['canonicalUrl']})")
+        meta = ingest["metadata"]
+        if meta.get("status") == "ok":
+            print(f"  metadata   : {meta.get('channelTitle')} "
+                  f"({meta.get('channelId')}) via {meta.get('source')}")
         src = ingest["source"]
         print(f"  source     : {src['state']} [{src['reasonCode']}] {src['reason']}")
         for w in ingest["warnings"]:
@@ -1500,6 +1530,7 @@ def cmd_find_matches(args: argparse.Namespace) -> int:
         try:
             client = None if args.no_metadata else _build_youtube_client(
                 args, store=None if args.dry_run else store)
+            keyless = _build_keyless_resolver(args)
             for cand in ledger["candidates"]:
                 if (cand.get("likeness") or {}).get("confidence") != "likely":
                     continue
@@ -1509,7 +1540,8 @@ def cmd_find_matches(args: argparse.Namespace) -> int:
                     res = li.ingest_link(
                         store, cand["url"], client=client,
                         dry_run=args.dry_run,
-                        requested_by=args.requested_by or "match-finder")
+                        requested_by=args.requested_by or "match-finder",
+                        keyless=keyless)
                     queued.append({"videoId": cand["videoId"],
                                    "jobKey": res["jobKey"],
                                    "sourceState": res["source"]["state"]})
@@ -1825,8 +1857,12 @@ def main(argv: list[str] | None = None) -> int:
     il_p.add_argument("--requested-by", default=None,
                       help="your name/handle, recorded on the intake record")
     il_p.add_argument("--no-metadata", action="store_true",
-                      help="skip the YouTube metadata call (offline); the source "
-                           "then cannot be auto-approved")
+                      help="skip EVERY metadata lookup, API and keyless "
+                           "(offline); the source then cannot be auto-approved")
+    il_p.add_argument("--no-keyless", action="store_true",
+                      help="do not fall back to the no-API-key metadata "
+                           "sources (yt-dlp probe, public video feed) when "
+                           "YOUTUBE_API_KEY is missing or the API fails")
     il_p.add_argument("--fixture-dir", default=None,
                       help="serve YouTube responses from local fixtures (offline)")
     il_p.add_argument("--json", action="store_true")
@@ -2068,8 +2104,11 @@ def main(argv: list[str] | None = None) -> int:
     cl_p.add_argument("--requested-by", default=None,
                       help="your name/handle, recorded on the intake record")
     cl_p.add_argument("--no-metadata", action="store_true",
-                      help="skip the YouTube metadata call (offline); the "
-                           "source then cannot be auto-approved")
+                      help="skip EVERY metadata lookup, API and keyless "
+                           "(offline); the source then cannot be auto-approved")
+    cl_p.add_argument("--no-keyless", action="store_true",
+                      help="do not fall back to the no-API-key metadata "
+                           "sources (yt-dlp probe, public video feed)")
     cl_p.add_argument("--fixture-dir", default=None,
                       help="serve YouTube responses from local fixtures (offline)")
     _add_autopilot_args(cl_p)
@@ -2102,8 +2141,12 @@ def main(argv: list[str] | None = None) -> int:
                       help="name recorded on queued intake records "
                            "(default: match-finder)")
     fm_p.add_argument("--no-metadata", action="store_true",
-                      help="with --queue-likely: skip the YouTube metadata "
-                           "call (offline); sources then cannot auto-approve")
+                      help="with --queue-likely: skip every metadata lookup, "
+                           "API and keyless (offline); sources then cannot "
+                           "auto-approve")
+    fm_p.add_argument("--no-keyless", action="store_true",
+                      help="with --queue-likely: do not fall back to the "
+                           "no-API-key metadata sources")
     fm_p.add_argument("--fixture-dir", default=None,
                       help="serve YouTube responses from local fixtures (offline)")
     fm_p.add_argument("--dry-run", action="store_true",

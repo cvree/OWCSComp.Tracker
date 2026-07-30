@@ -1,6 +1,78 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
-## CURRENT STATUS (authoritative — 2026-07-29, fifth pass) — making the finder actually work
+## CURRENT STATUS (authoritative — 2026-07-30, sixth pass) — the source gate stopped being a key check
+
+> Additive to every pass below. Nothing about authorization got looser; a
+> lookup that was missing now happens.
+
+### The failure this pass came from
+
+An operator pasted a real broadcast link on a machine with no
+`YOUTUBE_API_KEY`:
+
+```
+python pipeline/automation/cli.py convert-link --url "https://www.youtube.com/watch?v=h3pgxhsUCt0"
+  source     : pending-approval [no_api_key] source metadata could not be retrieved...
+  BLOCKED    : source not authorized
+  next command: approve-source --job record:h3pgxhsuct0:source --approved-by "<your name>" --confirm
+```
+
+The portal promises the pipeline "stops only where a human decision
+genuinely belongs". This was not one of those places. The decision the gate
+exists for is *"is this channel the verified official broadcaster?"* — and
+that channel id is public. The pipeline had exactly one way to read it (the
+Data API), so a missing key masqueraded as a missing decision, and the
+operator was asked to hand-approve a source the machine could have checked
+itself.
+
+### What was built: `automation/keyless_metadata.py`
+
+A metadata ladder that answers the same question without a key, on the same
+free sources `match_finder.py` already trusts, cheapest-first:
+
+| rung | source | gives | needs |
+| --- | --- | --- | --- |
+| `yt-dlp` | `--dump-single-json`, never downloads media | channel id, title, description, **duration + live status** | yt-dlp on PATH — already required to download the VOD |
+| `youtube-video-feed` | `feeds/videos.xml?video_id=<id>` | channel id, title, description, publish time | nothing (stdlib urllib) |
+
+Output is normalized to EXACTLY the shape `link_intake.fetch_metadata`
+returns for the Data API, plus provenance (`source`, `completeness`,
+`attempts`), so nothing downstream knows or cares which provider answered.
+`ingest_link(..., keyless=...)` consults it ONLY when the API could not
+answer; a working API is never second-guessed. The CLI (`ingest-link`,
+`convert-link`, `find-matches --queue-likely`) injects the resolver;
+`--no-keyless` restores API-only behavior, and `--no-metadata` /
+`--fixture-dir` still disable every lookup.
+
+Result for the command above, with the same empty environment: source
+auto-approved from real channel evidence, job in ARCHIVED, next command
+`worker-run` — no human in the loop where none was needed.
+
+### What deliberately did NOT get looser
+
+* Only a channel in the verified registry auto-approves. Keyless evidence
+  changed WHERE the channel id comes from, never WHICH channels count.
+* Live/upcoming broadcasts are still refused, and the broadcast-likeness
+  gate still blocks promos/Shorts on the official channel.
+* **The partial-metadata trap.** The feed rung carries no duration and no
+  live status, so it cannot prove a stream has ENDED — auto-approving on it
+  could send the worker at a broadcast still in progress. Within
+  `PARTIAL_METADATA_LIVE_WINDOW_SECONDS` (6h) of publish time such a link
+  stays `pending-approval` with `live_status_unknown`; an unknown publish
+  time counts as "cannot rule out", because a missing timestamp is not
+  permission.
+* When every provider fails, the API's own error stays the headline (it is
+  the one an operator can fix by setting the secret) with the keyless
+  attempts attached, and the remedy hint only names installing yt-dlp when
+  yt-dlp was actually missing rather than merely failing.
+* A keyless source that positively reports "this video does not exist" beats
+  the API's "I could not ask" — better evidence wins.
+
+`test_automation_keyless_metadata.py` (23 tests, fully offline: fake
+subprocess runner, fake feed fetcher, no network, no key, no yt-dlp binary)
+covers each of those boundaries.
+
+## CURRENT STATUS (2026-07-29, fifth pass) — making the finder actually work
 
 > Additive to the fourth pass below. The fourth pass BUILT the match
 > finder; this pass made it work in the two places it didn't.

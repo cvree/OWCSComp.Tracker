@@ -23,10 +23,18 @@ What this module guarantees:
     Anything else stays `pending-approval` until a human runs
     `approve-source --confirm`, which is recorded with who approved it, when,
     and why. Nothing downloads before that.
-  * Honest metadata failure. When YouTube metadata cannot be retrieved
-    (no API key, quota, network, deleted video), intake still records the
-    job with `metadataStatus="unavailable"` and the classified reason — the
-    link is never silently dropped, and the source is never auto-approved on
+  * Evidence before a human gate. The Data API is the preferred metadata
+    provider, but a missing `YOUTUBE_API_KEY` is not a human decision — it
+    is a missing lookup. When the API cannot answer, intake falls back to
+    `keyless_metadata` (yt-dlp's own metadata probe, then the public
+    per-video Atom feed), which returns the SAME public `channelId` the API
+    would have. The authorization rule below is unchanged; it just gets to
+    run. Provenance (`metadata.source`) is recorded on the job either way.
+  * Honest metadata failure. When YouTube metadata cannot be retrieved by
+    ANY provider (no key and no keyless source, quota, network, deleted
+    video), intake still records the job with
+    `metadataStatus="unavailable"` and the classified reason — the link is
+    never silently dropped, and the source is never auto-approved on
     missing evidence.
   * Broadcast-likeness warnings. The existing `broadcast_matching.
     broadcast_likeness` gate (already tuned against real promos/guides/
@@ -46,7 +54,7 @@ import os
 import re
 import sys
 import urllib.parse
-from typing import Any
+from typing import Any, Callable
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _PIPELINE_DIR = os.path.dirname(_HERE)
@@ -81,6 +89,14 @@ _VIDEO_ID_RE = re.compile(r"^[A-Za-z0-9_-]{11}$")
 SOURCE_PENDING = "pending-approval"
 SOURCE_APPROVED = "approved"
 SOURCE_REJECTED = "rejected"
+
+# A metadata provider that carries no duration/live status (the keyless
+# per-video feed) cannot prove a broadcast has ENDED. Within this window of
+# its publish time the stream may still be running, so the source stays a
+# human decision rather than being auto-approved into a download of an
+# in-progress stream. Outside it, "published N hours ago" is evidence enough
+# that whatever was streamed is over.
+PARTIAL_METADATA_LIVE_WINDOW_SECONDS = 6 * 3600
 
 
 class LinkIntakeError(ValueError):
@@ -247,8 +263,11 @@ def fetch_metadata(client: "yt.YouTubeClient", video_id: str) -> dict[str, Any]:
     live = item.get("liveStreamingDetails") or {}
     content = item.get("contentDetails") or {}
     from . import broadcast_discovery as bdisc
+    from . import keyless_metadata as km
     return {
         "status": "ok",
+        "source": km.SOURCE_DATA_API,
+        "completeness": "full",
         "videoId": item.get("id") or video_id,
         "channelId": snippet.get("channelId"),
         "channelTitle": snippet.get("channelTitle"),
@@ -265,16 +284,68 @@ def fetch_metadata(client: "yt.YouTubeClient", video_id: str) -> dict[str, Any]:
     }
 
 
+def _with_keyless_fallback(metadata: dict[str, Any], video_id: str,
+                           keyless: "Callable[[str], dict] | None",
+                           warnings: list[str]) -> dict[str, Any]:
+    """Ask the keyless ladder when the Data API could not answer.
+
+    The API stays preferred (it is the only provider with exact
+    liveStreamingDetails), so this runs ONLY on an API failure and never
+    overwrites a successful API answer. Whatever happens is recorded:
+      * fallback succeeded -> the returned metadata carries `source`,
+        `completeness` and `keylessAttempts`, plus `primaryError` (why the
+        API could not answer), and a warning names the swap;
+      * fallback failed    -> the ORIGINAL API error is kept as the headline
+        (it is the one an operator can fix by setting the secret), with the
+        keyless attempts attached so the failure is not mysterious.
+    """
+    if metadata.get("status") == "ok" or keyless is None:
+        return metadata
+    primary = {"errorCode": metadata.get("errorCode"),
+               "error": metadata.get("error"),
+               "status": metadata.get("status")}
+    try:
+        fallback = keyless(video_id)
+    except Exception as exc:  # noqa: BLE001 — a fallback must never break intake
+        return dict(metadata, keylessAttempts=[{
+            "rung": "keyless", "ok": False, "errorCode": "keyless_crashed",
+            "error": f"{type(exc).__name__}: {exc}"}])
+    attempts = fallback.get("attempts") or []
+    if fallback.get("status") == "ok":
+        from . import keyless_metadata as km
+        warnings.append(
+            f"YouTube Data API metadata was unavailable "
+            f"[{primary['errorCode']}], so the public keyless source "
+            f"'{fallback.get('source')}' was used instead — the channel id "
+            f"it reports is the same public fact the API returns "
+            f"({km.format_attempts(attempts)})")
+        return dict(fallback, keylessAttempts=attempts, primaryError=primary)
+    if fallback.get("status") == "not_found":
+        # A keyless source that positively says "this video does not exist"
+        # is BETTER evidence than the API's "I could not ask", so it becomes
+        # the headline verdict.
+        return dict(fallback, keylessAttempts=attempts, primaryError=primary)
+    return dict(metadata, keylessAttempts=attempts,
+                keylessError=fallback.get("error"))
+
+
 # ----------------------------------------------------------- authorization
 def authorize_source(metadata: dict, *,
                      registry: dict[str, dict],
-                     likeness: dict | None = None) -> dict[str, Any]:
+                     likeness: dict | None = None,
+                     now: str | None = None) -> dict[str, Any]:
     """Decide whether a source is authorized to download WITHOUT a human.
 
     Auto-approval requires all of:
-      * metadata retrieved successfully (never approve on missing evidence),
+      * metadata retrieved successfully by SOME provider (never approve on
+        missing evidence — but a keyless provider's channel id is the same
+        public fact the Data API would have returned, so it counts),
       * a channelId present in the verified official registry,
-      * the video not failing the broadcast-likeness gate.
+      * the video not failing the broadcast-likeness gate,
+      * enough evidence to rule out an in-progress stream: a provider that
+        reports no duration and no live status (`completeness: "partial"`)
+        can only do that for a video published longer ago than
+        PARTIAL_METADATA_LIVE_WINDOW_SECONDS.
 
     Everything else -> pending-approval with an explicit reason. This
     function is pure; it writes nothing.
@@ -284,9 +355,10 @@ def authorize_source(metadata: dict, *,
             "state": SOURCE_PENDING,
             "auto": False,
             "reasonCode": metadata.get("errorCode") or "metadata_unavailable",
-            "reason": ("source metadata could not be retrieved, so the "
-                       "channel cannot be checked against the verified "
-                       "official registry — manual approval required"),
+            "reason": ("source metadata could not be retrieved by any "
+                       "provider, so the channel cannot be checked against "
+                       "the verified official registry — manual approval "
+                       "required"),
             "registryChannel": None,
         }
     channel_id = metadata.get("channelId")
@@ -312,15 +384,60 @@ def authorize_source(metadata: dict, *,
                        f"manually only if it really is one"),
             "registryChannel": row.get("id"),
         }
+    if (metadata.get("completeness") == "partial"
+            and _maybe_still_live(metadata, now)):
+        return {
+            "state": SOURCE_PENDING,
+            "auto": False,
+            "reasonCode": "live_status_unknown",
+            "reason": (f"channel {channel_id} is the verified official "
+                       f"registry entry {row.get('id')!r}, but the only "
+                       f"metadata source that answered "
+                       f"({metadata.get('source')}) carries no duration and "
+                       f"no live status, and this video was published less "
+                       f"than {PARTIAL_METADATA_LIVE_WINDOW_SECONDS // 3600}h "
+                       f"ago — it may still be streaming. Wait for the VOD, "
+                       f"install yt-dlp, or set YOUTUBE_API_KEY; approve "
+                       f"manually if you can see the broadcast has ended"),
+            "registryChannel": row.get("id"),
+        }
+    from . import keyless_metadata as km
+    via = ("" if metadata.get("source") in (None, km.SOURCE_DATA_API)
+           else f", confirmed without an API key via {metadata['source']}")
     return {
         "state": SOURCE_APPROVED,
         "auto": True,
         "reasonCode": "registry_channel",
         "reason": (f"channel {channel_id} is the verified official "
                    f"registry entry {row.get('id')!r} "
-                   f"({row.get('region') or 'unknown region'})"),
+                   f"({row.get('region') or 'unknown region'}){via}"),
         "registryChannel": row.get("id"),
     }
+
+
+def _maybe_still_live(metadata: dict, now: str | None) -> bool:
+    """True when partial metadata cannot rule out an in-progress stream.
+
+    Unknown or unparseable publish time counts as "cannot rule out" — a
+    missing timestamp is not permission.
+    """
+    published = metadata.get("publishedAt")
+    if not published:
+        return True
+    try:
+        when = dt.datetime.fromisoformat(str(published).replace("Z", "+00:00"))
+    except ValueError:
+        return True
+    if when.tzinfo is None:
+        when = when.replace(tzinfo=dt.timezone.utc)
+    try:
+        ref = (dt.datetime.fromisoformat(str(now).replace("Z", "+00:00"))
+               if now else dt.datetime.now(dt.timezone.utc))
+    except ValueError:
+        ref = dt.datetime.now(dt.timezone.utc)
+    if ref.tzinfo is None:
+        ref = ref.replace(tzinfo=dt.timezone.utc)
+    return (ref - when).total_seconds() < PARTIAL_METADATA_LIVE_WINDOW_SECONDS
 
 
 # ------------------------------------------------------------------ intake
@@ -329,13 +446,22 @@ def ingest_link(store: js.JobStore, url: str, *,
                 channels: list[dict] | None = None,
                 dry_run: bool = False,
                 requested_by: str | None = None,
-                now: str | None = None) -> dict[str, Any]:
+                now: str | None = None,
+                keyless: "Callable[[str], dict] | None" = None
+                ) -> dict[str, Any]:
     """Turn one pasted URL into (at most) one job.
 
     Returns a result dict describing exactly what happened:
       {"ok", "videoId", "jobKey", "canonicalUrl", "created", "duplicate",
        "dryRun", "state", "source": {...}, "metadata": {...},
        "likeness": {...}, "warnings": [...], "nextCommand": "..."}
+
+    `client` is the YouTube Data API client (preferred provider). `keyless`
+    is the no-API-key fallback — a `(video_id) -> metadata` callable, built
+    by `keyless_metadata.resolver()`; it is only consulted when the API
+    client is absent or could not answer. BOTH default to None (no provider
+    is ever conjured inside this function), so a caller — the CLI, a test —
+    always decides explicitly what this intake is allowed to touch.
 
     `dry_run=True` writes NOTHING (no job row, no payload update) — it still
     parses, fetches metadata, and reports the decision it would have made.
@@ -356,6 +482,7 @@ def ingest_link(store: js.JobStore, url: str, *,
     metadata = ({"status": "unavailable", "errorCode": "no_client",
                  "error": "no YouTube client supplied to intake"}
                 if client is None else fetch_metadata(client, video_id))
+    metadata = _with_keyless_fallback(metadata, video_id, keyless, warnings)
 
     likeness = None
     if metadata.get("status") == "ok":
@@ -374,14 +501,29 @@ def ingest_link(store: js.JobStore, url: str, *,
             warnings.append(
                 f"video is {metadata['liveBroadcastStatus']} — only COMPLETED "
                 f"VODs are processed; re-run intake once the stream has ended")
+        if metadata.get("completeness") == "partial":
+            warnings.append(
+                f"metadata source '{metadata.get('source')}' carries no "
+                f"duration and no live status — the broadcast-likeness score "
+                f"is computed from the title/description alone")
     else:
+        keyless_note = ""
+        if metadata.get("keylessAttempts") is not None:
+            from . import keyless_metadata as km
+            keyless_note = (f" (keyless fallback also failed: "
+                            f"{km.format_attempts(metadata['keylessAttempts'])})")
+        elif keyless is None:
+            keyless_note = (" (no keyless fallback was offered to this "
+                            "intake call)")
         warnings.append(
             f"metadata unavailable [{metadata.get('errorCode')}]: "
-            f"{metadata.get('error')} — the link is recorded, but the source "
-            f"cannot be auto-approved without verifiable channel evidence")
+            f"{metadata.get('error')}{keyless_note} — the link is recorded, "
+            f"but the source cannot be auto-approved without verifiable "
+            f"channel evidence")
 
     registry = registry_channel_index(channels)
-    decision = authorize_source(metadata, registry=registry, likeness=likeness)
+    decision = authorize_source(metadata, registry=registry,
+                                likeness=likeness, now=ts)
 
     source_block = {
         "state": decision["state"],
@@ -610,8 +752,19 @@ def blocking_reasons(job: models.Job) -> list[str]:
                    f"{source.get('reason')}")
     meta = job.payload.get("metadata") or {}
     if meta.get("status") != "ok":
+        detail = ""
+        if meta.get("keylessAttempts"):
+            from . import keyless_metadata as km
+            attempts = meta["keylessAttempts"]
+            # Only name the remedy that actually applies: a missing yt-dlp is
+            # an install away, while a network failure is not.
+            remedy = (" (install yt-dlp to make the keyless path work)"
+                      if any(a.get("errorCode") == "ytdlp_missing"
+                             for a in attempts) else "")
+            detail = (f"; keyless fallback: {km.format_attempts(attempts)}"
+                      f"{remedy}")
         out.append(f"YouTube metadata unavailable [{meta.get('errorCode')}]: "
-                   f"{meta.get('error')}")
+                   f"{meta.get('error')}{detail}")
     if (meta.get("liveBroadcastStatus") in ("live", "upcoming")):
         out.append(f"broadcast is {meta['liveBroadcastStatus']} — only "
                    f"completed VODs are processed")
@@ -663,6 +816,9 @@ def link_status(store: js.JobStore, *, job_key: str | None = None,
             "channelTitle": meta.get("channelTitle"),
             "durationSeconds": meta.get("durationSeconds"),
             "metadataStatus": meta.get("status"),
+            "metadataSource": meta.get("source"),
+            "metadataCompleteness": meta.get("completeness"),
+            "metadataAttempts": meta.get("keylessAttempts") or [],
             "likeness": j.payload.get("likeness"),
             "warnings": intake.get("warnings") or [],
             "pastes": 1 + len(intake.get("history") or []),
@@ -834,7 +990,8 @@ def format_status(rows: list[dict]) -> str:
         lines.append(f"  {r['jobKey']}")
         lines.append(f"    video      : {r['videoId']}  {r['canonicalUrl']}")
         lines.append(f"    title      : {r['title'] or '(metadata unavailable)'}")
-        lines.append(f"    channel    : {r['channelTitle'] or '?'} ({r['channelId'] or '?'})")
+        lines.append(f"    channel    : {r['channelTitle'] or '?'} ({r['channelId'] or '?'})"
+                     + (f" [via {r['metadataSource']}]" if r.get("metadataSource") else ""))
         lines.append(f"    state      : {r['state']}")
         lines.append(f"    source     : {r['sourceState']} — {r['sourceReason']}"
                      + (f" [by {r['sourceDecidedBy']}]" if r["sourceDecidedBy"] else ""))

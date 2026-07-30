@@ -210,6 +210,8 @@ prints the command for you to copy).
 each and names it:
 
 1. `approve-source --confirm` — a link not on a verified official channel.
+   A verified official one does **not** stop here, with or without a
+   `YOUTUBE_API_KEY`: see "Metadata without an API key" below.
 2. `approve-layout --confirm` — a freshly-calibrated layout (review the sheet).
 3. Segment identity review — approve in `intake.html`/CLI as before, **or**
    re-run with `--auto-accept`, which accepts machine proposals through the
@@ -219,6 +221,43 @@ each and names it:
    review `reports/ingest/<id>/report.html`, then `detect-job <job> --write`.
 5. Publication — `process-approved-job --job <job> --publish` stays
    supervised.
+
+### Metadata without an API key (2026-07-30)
+
+`YOUTUBE_API_KEY` is now **optional for intake**. The authorization rule is
+unchanged — a source is auto-approved only when its channel id is in the
+verified official registry (`config/broadcast_channels.json`) — but a
+missing key is a missing *lookup*, not a human decision, so intake no longer
+stops for one. When the Data API cannot answer (no key, quota, network),
+`automation/keyless_metadata.py` reads the same public channel id from free,
+no-key sources, cheapest-first:
+
+| rung | source | gives | needs |
+| --- | --- | --- | --- |
+| `yt-dlp` | `yt-dlp --dump-single-json` (never downloads media) | channel id, title, description, **duration + live status** | yt-dlp on PATH (already required to download the VOD) |
+| `youtube-video-feed` | `youtube.com/feeds/videos.xml?video_id=<id>` | channel id, title, description, publish time | nothing — stdlib urllib |
+
+Every attempt is recorded on the job (`metadata.keylessAttempts`) and shown
+by `link-status`, the portal card, and the CLI, so which provider answered
+is always visible: `metadata via : yt-dlp (full)`.
+
+What did **not** get looser:
+
+* A non-registry channel still stops at `approve-source --confirm`.
+* A live/upcoming broadcast is still refused, whichever provider reported it.
+* The broadcast-likeness gate still runs and still blocks promos/Shorts.
+* The feed rung carries no duration and no live status, so it cannot prove a
+  stream has ended. Within 6h of publish time (`link_intake.
+  PARTIAL_METADATA_LIVE_WINDOW_SECONDS`) such a link stays
+  `pending-approval` with reason `live_status_unknown` rather than sending
+  the worker at a stream that may still be running.
+* If every provider fails, the API's own error stays the headline (it is the
+  one you can fix by setting the secret) with the keyless attempts attached.
+
+`--no-keyless` restores the API-only behavior; `--no-metadata` and
+`--fixture-dir` disable every lookup (fully offline) as before. The key is
+still required for `verify-channels` and scheduled `discover` runs, which
+enumerate channels rather than resolve one pasted video.
 
 **Resuming after a gate:** once you've cleared a gate, one command re-enters
 the loop and runs to the next gate:
@@ -246,7 +285,8 @@ python pipeline\automation\cli.py worker-doctor
 #    before continuing — every later step depends on it.
 
 # 1. Paste the broadcast link. This is the whole intake.
-$env:YOUTUBE_API_KEY = "<your key>"   # needed to read the source's channel
+$env:YOUTUBE_API_KEY = "<your key>"   # OPTIONAL: without it the channel is
+#    read from the keyless sources instead (yt-dlp probe, public video feed)
 python pipeline\automation\cli.py ingest-link --url "<youtube-url>" --requested-by "<your name>"
 #    -> prints the video id, canonical URL, deterministic job key, job state,
 #       whether the source was auto-approved (verified official channel) or
@@ -540,7 +580,7 @@ python pipeline/automation/cli.py coverage --window 30   # now includes Phase C6
 | Secret | Where to set it | Used by |
 |---|---|---|
 | `FACEIT_API_KEY` | GitHub → repo **Settings → Secrets and variables → Actions** | `faceit_api.urllib_transport` |
-| `YOUTUBE_API_KEY` | GitHub → repo **Settings → Secrets and variables → Actions** | `youtube_api.urllib_transport` (channel verification + broadcast discovery) |
+| `YOUTUBE_API_KEY` | GitHub → repo **Settings → Secrets and variables → Actions** | `youtube_api.urllib_transport` (channel verification + broadcast discovery). **Not required for intake** — a pasted link falls back to `automation/keyless_metadata.py` (see "Metadata without an API key"). |
 
 Neither key is committed, logged, or ever appears in a cache filename or
 exception message (`youtube_api._sanitize_url` strips it from every URL

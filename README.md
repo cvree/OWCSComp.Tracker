@@ -206,6 +206,16 @@ exact next command. After clearing a gate, `autopilot --job <key>`
 re-enters the loop; `--auto-accept` additionally accepts clean machine
 identity proposals through the same `accept-proposed` gate a human uses.
 
+**No `YOUTUBE_API_KEY` needed.** Intake prefers the Data API when a key is
+set, but a missing key is a missing lookup, not a human decision: it falls
+back to free, no-key sources for the source's channel id (a `yt-dlp`
+metadata probe that never downloads media, then the public per-video Atom
+feed), so a broadcast on the verified official channel auto-approves and
+goes straight to the worker. The authorization rule is unchanged — only a
+channel in the verified registry auto-approves, live/upcoming streams are
+still refused, and anything else still stops at `approve-source --confirm`.
+Which provider answered is printed and recorded (`metadata via : yt-dlp`).
+
 Don't have a link? The **auto match finder** finds one for you, on
 permanently free sources (channel RSS + the streams tab — no API key, no
 quota): `python pipeline/automation/cli.py find-matches`, or the "Scan for

@@ -296,6 +296,10 @@
         <span>job <b>${esc(job.jobKey)}</b></span>
         <span>video <b>${esc(job.videoId)}</b></span>
         ${job.channelTitle ? `<span>channel <b>${esc(job.channelTitle)}</b></span>` : ""}
+        ${job.metadataSource
+          ? `<span>metadata via <b>${esc(job.metadataSource)}</b>${
+              job.metadataCompleteness === "partial" ? " (partial)" : ""}</span>`
+          : ""}
         ${job.durationSeconds ? `<span>duration <b>${esc(clock(job.durationSeconds))}</b></span>` : ""}
         <span>pastes <b>${esc(job.pastes)}</b></span>
         ${job.downloaded ? chip("downloaded", "ok") : chip("not downloaded", "warn")}
@@ -361,7 +365,9 @@
       cell("YOUTUBE_API_KEY (metadata)", keys.YOUTUBE_API_KEY ? "present" : "absent",
         keys.YOUTUBE_API_KEY ? "good" : "warn",
         keys.YOUTUBE_API_KEY ? "value never shown"
-          : "without it a source cannot auto-approve; media download is unaffected"),
+          : "optional: without it intake reads the channel id from the "
+            + "keyless sources (yt-dlp probe, public video feed) instead, so a "
+            + "verified official source still auto-approves"),
       cell("last probe",
         probe ? (probe.ok ? `OK via ${probe.rung}` : `FAILED ${probe.code || ""}`)
           : "not run this session",
