@@ -235,8 +235,36 @@ def _num(value: Any) -> float | None:
 
 
 # ---------------------------------------------------------------- the gates
+def _discovery_provenance(discovery: dict | None) -> dict | None:
+    """Channel-binding evidence from a keyless discovery pass, or None.
+
+    A video that appears in `youtube.com/feeds/videos.xml?channel_id=<id>`,
+    or in that channel's own /streams tab, is bound to that channel by
+    YouTube itself — the same authority the API would be quoting. So when
+    the discovery pass found this video on a channel that is in the VERIFIED
+    registry, the provenance question is answered without an API key.
+
+    Requires the registry binding to be explicit: a discovery record with no
+    `channelRegistryId` was not matched to a verified channel and proves
+    nothing at all.
+    """
+    d = discovery or {}
+    registry_id = d.get("channelRegistryId")
+    if not registry_id:
+        return None
+    sources = [str(s) for s in (d.get("sources") or [])]
+    return {"registryChannel": registry_id,
+            "channelId": d.get("channelId"),
+            "channelTitle": d.get("channelTitle"),
+            "sources": sources,
+            "durationSeconds": d.get("durationSeconds"),
+            "liveBroadcastStatus": d.get("liveBroadcastStatus"),
+            "likeness": d.get("likeness")}
+
+
 def evaluate_source_gate(source: dict | None, *, metadata: dict | None = None,
                          likeness: dict | None = None,
+                         discovery: dict | None = None,
                          floors: dict | None = None,
                          now: str | None = None) -> Verdict:
     """Gate 0 — may this source be downloaded with nobody signing for it?
@@ -282,15 +310,22 @@ def evaluate_source_gate(source: dict | None, *, metadata: dict | None = None,
             floors=used, now=now)
 
     meta = metadata or {}
+    provenance = _discovery_provenance(discovery)
     if meta.get("status") != "ok":
-        return _verdict(
-            GATE_SOURCE, False, "metadata_unavailable",
-            "source metadata could not be retrieved, so there is no "
-            "provenance evidence to judge — this is the last case that "
-            "should ever be waved through",
-            metrics={"metadataStatus": meta.get("status"),
-                     "errorCode": meta.get("errorCode")},
-            floors=used, now=now)
+        # No API metadata. A keyless discovery pass may still have bound
+        # this video to a verified registry channel via that channel's own
+        # feed — evidence of the same kind, from the same authority.
+        if provenance is None:
+            return _verdict(
+                GATE_SOURCE, False, "metadata_unavailable",
+                "source metadata could not be retrieved and no verified "
+                "channel-feed provenance was recorded, so there is nothing "
+                "to judge — this is the last case that should ever be "
+                "waved through",
+                metrics={"metadataStatus": meta.get("status"),
+                         "errorCode": meta.get("errorCode")},
+                floors=used, now=now)
+        return _evaluate_discovery_source(provenance, floors=used, now=now)
 
     live_status = meta.get("liveBroadcastStatus")
     if live_status in ("live", "upcoming"):
@@ -337,6 +372,70 @@ def evaluate_source_gate(source: dict | None, *, metadata: dict | None = None,
                  "channelTitle": meta.get("channelTitle"),
                  "liveBroadcastStatus": live_status},
         floors=used, now=now)
+
+
+def _evaluate_discovery_source(prov: dict, *, floors: dict,
+                               now: str | None = None) -> Verdict:
+    """The keyless provenance path: a verified registry channel's own feed.
+
+    Held to the SAME duration, live-status and likeness floors as the API
+    path. The only thing that differs is where the channel binding came
+    from, and a registry channel's own feed is not a weaker source for that
+    question than the API — it is the same fact from the same publisher.
+    """
+    min_score = floors["auto_source_min_likeness"]
+    min_dur = floors["auto_source_min_duration_seconds"]
+    metrics = {"registryChannel": prov["registryChannel"],
+               "channelId": prov.get("channelId"),
+               "discoverySources": prov.get("sources"),
+               "provenance": "verified-channel-feed"}
+
+    live_status = prov.get("liveBroadcastStatus")
+    if live_status in ("live", "upcoming"):
+        return _verdict(
+            GATE_SOURCE, False, "not_a_completed_vod",
+            f"video is {live_status} on the channel feed — only completed "
+            f"VODs are processed",
+            metrics=dict(metrics, liveBroadcastStatus=live_status),
+            floors=floors, now=now)
+
+    duration = _num(prov.get("durationSeconds"))
+    if duration is None or duration < min_dur:
+        # The RSS feed alone carries no duration; the /streams tab does. A
+        # candidate seen only via RSS therefore waits rather than being
+        # approved on an unknown length.
+        return _verdict(
+            GATE_SOURCE, False, "duration_unknown_or_short",
+            f"channel-feed duration "
+            f"{duration if duration is not None else 'unknown (RSS carries none)'}"
+            f" does not clear the {min_dur}s floor",
+            metrics=dict(metrics, durationSeconds=duration),
+            floors=floors, now=now)
+
+    lk = prov.get("likeness") or {}
+    score = _num(lk.get("score"))
+    if score is None:
+        return _verdict(
+            GATE_SOURCE, False, "likeness_unavailable",
+            "the discovery pass recorded no broadcast-likeness score",
+            metrics=metrics, floors=floors, now=now)
+    if lk.get("confidence") == "unlikely" or score < min_score:
+        return _verdict(
+            GATE_SOURCE, False, "likeness_below_floor",
+            f"broadcast-likeness {score:g} is below the {min_score} floor — "
+            + "; ".join(list(lk.get("reasons") or [])[:3]),
+            metrics=dict(metrics, likenessScore=score,
+                         likenessConfidence=lk.get("confidence")),
+            floors=floors, now=now)
+
+    return _verdict(
+        GATE_SOURCE, True, "registry_channel_feed",
+        f"found on verified registry channel {prov['registryChannel']!r}'s "
+        f"own feed ({', '.join(prov.get('sources') or ['feed'])}); "
+        f"likeness {score:g} >= {min_score}, completed VOD of "
+        f"{duration:.0f}s — no API key was needed to establish this",
+        metrics=dict(metrics, likenessScore=score, durationSeconds=duration),
+        floors=floors, now=now)
 
 
 def evaluate_layout_gate(layout: dict | None, *, floors: dict | None = None,

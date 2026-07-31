@@ -329,6 +329,7 @@ def ingest_link(store: js.JobStore, url: str, *,
                 channels: list[dict] | None = None,
                 dry_run: bool = False,
                 requested_by: str | None = None,
+                discovery: dict[str, Any] | None = None,
                 now: str | None = None) -> dict[str, Any]:
     """Turn one pasted URL into (at most) one job.
 
@@ -336,6 +337,17 @@ def ingest_link(store: js.JobStore, url: str, *,
       {"ok", "videoId", "jobKey", "canonicalUrl", "created", "duplicate",
        "dryRun", "state", "source": {...}, "metadata": {...},
        "likeness": {...}, "warnings": [...], "nextCommand": "..."}
+
+    `discovery` is the evidence a FREE, keyless discovery pass already
+    gathered about this video — which verified registry channel's own feed
+    it appeared in, its duration/live status, and the broadcast-likeness
+    score computed there. It is recorded verbatim on the job and never
+    changes intake's own decision (a discovered link is still
+    `pending-approval`); it exists so the unattended source gate has
+    something to judge on a machine with no YOUTUBE_API_KEY. Without it,
+    every keyless discovery is permanently stuck at "metadata unavailable",
+    which is the difference between a system that runs itself and one that
+    only looks like it could.
 
     `dry_run=True` writes NOTHING (no job row, no payload update) — it still
     parses, fetches metadata, and reports the decision it would have made.
@@ -409,7 +421,12 @@ def ingest_link(store: js.JobStore, url: str, *,
         "channelId": metadata.get("channelId"),
         "broadcastAuthority": metadata.get("channelId"),
         "metadata": metadata,
-        "likeness": likeness,
+        # A keyless discovery pass computes its OWN likeness from the feed;
+        # keep it when the API could not be reached, so the evidence is not
+        # thrown away just because the optional API key is absent.
+        "likeness": likeness or (discovery or {}).get("likeness"),
+        "discovery": discovery or (existing.payload.get("discovery")
+                                   if existing else None),
         # Identity resolution is a LATER stage's job; intake records the
         # honest UNKNOWNs rather than inventing them (see resolve.py).
         "matchId": (existing.payload.get("matchId") if existing else None),

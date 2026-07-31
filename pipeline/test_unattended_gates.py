@@ -203,6 +203,94 @@ class TestSourceGate(unittest.TestCase):
         self.assertEqual(v.metrics["likenessScore"], 60)
 
 
+class TestKeylessDiscoverySource(unittest.TestCase):
+    """The provenance path that works with no YOUTUBE_API_KEY.
+
+    A video appearing in `feeds/videos.xml?channel_id=<verified id>` is bound
+    to that channel by YouTube itself — the same fact the API would report.
+    Without this path every keyless discovery is stuck at "metadata
+    unavailable" forever, which is the difference between a system that runs
+    itself and one that only looks like it could.
+    """
+
+    GOOD = {"channelRegistryId": "ow_esports_global",
+            "channelId": "UCxyz", "channelTitle": "Overwatch Esports",
+            "durationSeconds": 2502, "liveBroadcastStatus": "completed",
+            "sources": ["rss", "streams"],
+            "likeness": {"score": 60, "confidence": "likely", "reasons": []}}
+
+    def _gate(self, **over):
+        return gt.evaluate_source_gate(
+            {"state": "pending-approval"},
+            metadata={"status": "unavailable", "errorCode": "no_api_key"},
+            discovery=dict(self.GOOD, **over))
+
+    def test_a_verified_channel_feed_clears_the_gate_without_an_api_key(self):
+        v = self._gate()
+        self.assertTrue(v.passed)
+        self.assertEqual(v.reason_code, "registry_channel_feed")
+        self.assertEqual(v.metrics["registryChannel"], "ow_esports_global")
+
+    def test_discovery_without_a_registry_binding_proves_nothing(self):
+        """A candidate not matched to a VERIFIED channel is just a URL."""
+        v = self._gate(channelRegistryId=None)
+        self.assertFalse(v.passed)
+        self.assertEqual(v.reason_code, "metadata_unavailable")
+
+    def test_no_discovery_at_all_still_refuses(self):
+        v = gt.evaluate_source_gate(
+            {"state": "pending-approval"},
+            metadata={"status": "unavailable", "errorCode": "no_api_key"})
+        self.assertFalse(v.passed)
+        self.assertEqual(v.reason_code, "metadata_unavailable")
+
+    def test_an_rss_only_candidate_has_no_duration_and_waits(self):
+        """RSS carries no duration; the /streams tab does. A candidate seen
+        only via RSS must not be approved on an unknown length."""
+        v = self._gate(durationSeconds=None, sources=["rss"])
+        self.assertFalse(v.passed)
+        self.assertEqual(v.reason_code, "duration_unknown_or_short")
+
+    def test_the_keyless_path_uses_the_same_duration_floor(self):
+        v = self._gate(durationSeconds=300)
+        self.assertFalse(v.passed)
+        self.assertEqual(v.reason_code, "duration_unknown_or_short")
+
+    def test_the_keyless_path_uses_the_same_likeness_floor(self):
+        v = self._gate(likeness={"score": 30, "confidence": "likely"})
+        self.assertFalse(v.passed)
+        self.assertEqual(v.reason_code, "likeness_below_floor")
+
+    def test_an_unlikely_candidate_is_refused_on_the_keyless_path_too(self):
+        v = self._gate(likeness={"score": 99, "confidence": "unlikely"})
+        self.assertFalse(v.passed)
+        self.assertEqual(v.reason_code, "likeness_below_floor")
+
+    def test_a_live_stream_on_the_feed_is_not_a_completed_vod(self):
+        v = self._gate(liveBroadcastStatus="live")
+        self.assertFalse(v.passed)
+        self.assertEqual(v.reason_code, "not_a_completed_vod")
+
+    def test_a_human_rejection_still_wins_over_feed_provenance(self):
+        v = gt.evaluate_source_gate(
+            {"state": "rejected", "decidedBy": "Connor"},
+            metadata={"status": "unavailable"}, discovery=self.GOOD)
+        self.assertFalse(v.passed)
+        self.assertEqual(v.reason_code, "human_rejection_stands")
+
+    def test_real_api_metadata_still_takes_precedence(self):
+        """When the API DID answer, that path runs — discovery is the
+        fallback, not an override that could bypass a live-stream check."""
+        v = gt.evaluate_source_gate(
+            {"state": "pending-approval"},
+            metadata={"status": "ok", "liveBroadcastStatus": "live",
+                      "durationSeconds": 7200, "channelId": "UCx"},
+            likeness={"score": 60, "confidence": "likely"},
+            discovery=self.GOOD)
+        self.assertFalse(v.passed)
+        self.assertEqual(v.reason_code, "not_a_completed_vod")
+
+
 # ================================================================ layout gate
 class TestLayoutGate(unittest.TestCase):
     def test_no_confidence_refuses(self):

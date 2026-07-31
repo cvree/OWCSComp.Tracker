@@ -1,182 +1,102 @@
 <#
 .SYNOPSIS
-    One unattended pass: doctor -> scan -> queue -> advance every open job.
+    One unattended pass: doctor -> scan -> advance every open job.
 
 .DESCRIPTION
-    This is the whole hands-off loop, in the order that fails loudest first.
+    A thin wrapper over `cli.py auto-run`, which is where the actual logic
+    lives. That split is deliberate. The first version of this script held
+    the orchestration itself, and it could not be tested — the lock, the
+    power check and the retention sweep were all trusted rather than
+    verified, and one unrecognised cmdlet (`Get-CimInstance`, absent on
+    PowerShell for Linux) took the whole pass down before it ran a single
+    step. In Python the same logic has real coverage, and this file only has
+    to do the one thing Task Scheduler needs: name something to run.
 
-      1. worker-doctor. A pass that CANNOT work must say so instead of
-         quietly doing nothing for six hours. If yt-dlp, ffmpeg or the job
-         database is missing, the run stops here with a non-zero exit and a
-         log that names the missing piece — a silent no-op is the one
-         outcome an unattended system must never produce.
-      2. find-matches. Scans the verified official channels for new
-         broadcasts and records candidates in the ledger.
-      3. Queue. Every discovered link is ingested; registry channels are
-         authorized on the spot, everything else waits on the source gate.
-      4. Advance. Each open job is driven through `autopilot --unattended`,
-         which clears each gate ONLY when its metrics do. A job that stops
-         at a held gate is a normal outcome, not an error.
-
-    Nothing here loosens a gate. The floors that decide every approval are
-    printed at the top of each log (`unattended-floors`), so a log alone is
-    enough to reconstruct why a given night approved what it did.
+    So keep this file boring. New behaviour belongs in
+    `pipeline/automation/auto_run.py`, where it can be tested.
 
 .PARAMETER WhatIfOnly
-    Print the plan and the live floors, then exit without touching a job.
-    Run this first.
+    Print the plan and exit without touching a job. Run this first.
 
 .PARAMETER OperatorName
     Recorded on anything this pass accepts, alongside the machine verdict.
 
 .PARAMETER Gates
     Which gates may open. Defaults to all five ('unattended'). Pass a subset
-    like 'source','layout' to bring them up one at a time — the recommended
-    way to start.
+    like 'templates','layout' to bring them up one at a time — the
+    recommended way to start.
 
 .PARAMETER MaxJobs
     Safety cap on jobs advanced in one pass (default 10).
+
+.PARAMETER Last
+    Print the most recent pass summary and exit.
 
 .EXAMPLE
     .\tools\owcs-auto-run.ps1 -WhatIfOnly
 
 .EXAMPLE
     .\tools\owcs-auto-run.ps1 -Gates templates,layout
+
+.EXAMPLE
+    .\tools\owcs-auto-run.ps1 -Last
 #>
 [CmdletBinding()]
 param(
     [switch] $WhatIfOnly,
     [string] $OperatorName = $env:USERNAME,
-    [ValidateSet('unattended', 'source', 'layout', 'templates', 'detect', 'publish')]
-    [string[]] $Gates = @('unattended'),
+    # A STRING, split here, not a [string[]] with a ValidateSet. Task
+    # Scheduler invokes this with `powershell -File`, and `-File` binds every
+    # argument as a single literal token — so `-Gates templates,layout`
+    # arrives as one string and a [string[]]+ValidateSet parameter rejects it
+    # outright. Splitting by hand is what makes the scheduled task able to
+    # pass more than one gate at all.
+    [string] $Gates = 'unattended',
     [int] $MaxJobs = 10,
-    [switch] $IgnoreBattery
+    [switch] $IgnoreBattery,
+    [switch] $SkipDoctor,
+    [switch] $Last
 )
 
-Set-StrictMode -Version Latest
-$ErrorActionPreference = 'Stop'
+# NOT 'Stop': a non-zero exit from the pass is normal (a held gate, a
+# skipped run on battery), and this wrapper must report it rather than
+# turning it into a PowerShell exception.
+$ErrorActionPreference = 'Continue'
 
 $RepoRoot = Split-Path -Parent $PSScriptRoot
-$Cli      = Join-Path $RepoRoot 'pipeline\automation\cli.py'
-$LogDir   = Join-Path $RepoRoot 'data\auto-run-logs'
-$LockFile = Join-Path $LogDir '.running.lock'
-$Stamp    = Get-Date -Format 'yyyy-MM-dd_HHmmss'
-$LogFile  = Join-Path $LogDir "auto-run_$Stamp.log"
+$Cli      = Join-Path $RepoRoot 'pipeline' 'automation' 'cli.py'
 
-New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
-
-function Write-Log {
-    param([string] $Message, [string] $Level = 'INFO')
-    $line = "{0} [{1}] {2}" -f (Get-Date -Format 'HH:mm:ss'), $Level, $Message
-    Write-Host $line
-    Add-Content -Path $LogFile -Value $line -Encoding utf8
-}
-
-function Invoke-Cli {
-    <# Run one CLI subcommand, tee its output into the log, return the exit
-       code. Never throws on a non-zero exit: a held gate is a legitimate
-       outcome and must not abort the pass for the remaining jobs. #>
-    param([string[]] $CliArgs)
-    Write-Log ("> python cli.py " + ($CliArgs -join ' '))
-    $output = & python $Cli @CliArgs 2>&1
-    $code = $LASTEXITCODE
-    foreach ($line in $output) { Add-Content -Path $LogFile -Value "    $line" -Encoding utf8 }
-    if ($code -ne 0) { Write-Log "exit code $code" 'WARN' }
-    return $code
-}
-
-# ---------------------------------------------------------------- preflight
-Write-Log "OWCS unattended pass starting (operator: $OperatorName)"
-Write-Log "repo: $RepoRoot"
-
-# A previous pass still running means the machine woke up before the last
-# one finished. Two concurrent passes would fight over the job locks and the
-# media cache, so this one steps aside rather than racing.
-if (Test-Path $LockFile) {
-    $held = Get-Content $LockFile -Raw -ErrorAction SilentlyContinue
-    $age  = (Get-Date) - (Get-Item $LockFile).LastWriteTime
-    if ($age.TotalHours -lt 12) {
-        Write-Log "a previous pass is still running (started $held, $([int]$age.TotalMinutes)m ago) — skipping this one" 'WARN'
-        exit 0
-    }
-    Write-Log "stale lock from $held ($([int]$age.TotalHours)h old) — taking over" 'WARN'
-}
-
-# Downloading and decoding a VOD on battery drains a laptop fast, and the
-# nightly pass is never urgent enough to justify it.
-if (-not $IgnoreBattery) {
-    $battery = Get-CimInstance -ClassName Win32_Battery -ErrorAction SilentlyContinue
-    if ($battery -and $battery.BatteryStatus -eq 1) {
-        Write-Log "running on battery — skipping (pass -IgnoreBattery to override)" 'WARN'
-        exit 0
+$python = $null
+foreach ($candidate in @('python', 'python3', 'py')) {
+    if (Get-Command $candidate -ErrorAction SilentlyContinue) {
+        $python = $candidate; break
     }
 }
-
-$gateFlags = @()
-foreach ($g in $Gates) { $gateFlags += "--auto-$g" -replace '--auto-unattended', '--unattended' }
-
-Write-Log "gates for this pass: $($gateFlags -join ' ')"
-Write-Log "--- floors in force ---"
-Invoke-Cli (@('unattended-floors') + $gateFlags) | Out-Null
-
-if ($WhatIfOnly) {
-    Write-Log "WhatIfOnly: the pass would now run worker-doctor, find-matches, then advance up to $MaxJobs job(s) with $($gateFlags -join ' ')"
-    Write-Log "nothing was touched. Log: $LogFile"
-    exit 0
+if (-not $python) {
+    Write-Error "No Python on PATH. Run .\tools\setup-machine.ps1 first."
+    exit 1
+}
+if (-not (Test-Path $Cli)) {
+    Write-Error "cli.py not found at $Cli"
+    exit 1
 }
 
-Set-Content -Path $LockFile -Value (Get-Date -Format 'o') -Encoding utf8
-
-try {
-    # 1. Doctor first — a pass that cannot work fails loudly.
-    Write-Log "--- 1/4 worker-doctor ---"
-    if ((Invoke-Cli @('worker-doctor')) -ne 0) {
-        Write-Log "worker-doctor FAILED — this pass could not have done real work, so it stops here instead of reporting a quiet success" 'ERROR'
-        exit 1
-    }
-
-    # 2. Scan for new broadcasts.
-    Write-Log "--- 2/4 find-matches ---"
-    Invoke-Cli @('find-matches') | Out-Null
-
-    # 3/4. Advance every open job.
-    Write-Log "--- 3/4 open jobs ---"
-    # `list-jobs --json` prints a bare array of job rows serialized straight
-    # off the dataclass, so the keys are snake_case (job_key, not jobKey).
-    $jobsJson = & python $Cli list-jobs --json 2>&1 | Out-String
-    $jobs = @()
-    try {
-        $jobs = @($jobsJson | ConvertFrom-Json | Where-Object {
-            $_.state -notin @('PUBLISHED', 'FAILED_PERMANENT', 'IGNORED', 'CANCELLED')
-        })
-    } catch {
-        Write-Log "could not parse list-jobs output as JSON: $_" 'ERROR'
-        exit 1
-    }
-    Write-Log "$($jobs.Count) open job(s)"
-
-    Write-Log "--- 4/4 advance ---"
-    $advanced = 0
-    foreach ($job in $jobs) {
-        if ($advanced -ge $MaxJobs) {
-            Write-Log "reached -MaxJobs $MaxJobs — leaving $($jobs.Count - $advanced) job(s) for the next pass"
-            break
-        }
-        $key = $job.job_key
-        Write-Log "advancing $key (state $($job.state))"
-        Invoke-Cli (@('autopilot', '--job', $key, '--auto-accept',
-                      '--accepted-by', $OperatorName) + $gateFlags) | Out-Null
-        $advanced++
-    }
-
-    Write-Log "pass complete: $advanced job(s) advanced. Log: $LogFile"
+$known = @('unattended', 'source', 'layout', 'templates', 'detect', 'publish')
+$wanted = $Gates -split '[,\s]+' | Where-Object { $_ }
+$bad = $wanted | Where-Object { $known -notcontains $_ }
+if ($bad) {
+    Write-Error ("Unknown gate(s): {0}. Valid: {1}" -f ($bad -join ', '), ($known -join ', '))
+    exit 1
 }
-finally {
-    Remove-Item $LockFile -ErrorAction SilentlyContinue
-    # Keep the last 30 logs; an unattended system that fills a disk with its
-    # own logs has found a novel way to stop working.
-    Get-ChildItem $LogDir -Filter 'auto-run_*.log' |
-        Sort-Object LastWriteTime -Descending |
-        Select-Object -Skip 30 |
-        Remove-Item -ErrorAction SilentlyContinue
+
+$cliArgs = @('auto-run', '--operator', $OperatorName, '--max-jobs', $MaxJobs)
+foreach ($g in $wanted) {
+    $cliArgs += if ($g -eq 'unattended') { '--unattended' } else { "--auto-$g" }
 }
+if ($WhatIfOnly)    { $cliArgs += '--what-if' }
+if ($IgnoreBattery) { $cliArgs += '--ignore-battery' }
+if ($SkipDoctor)    { $cliArgs += '--skip-doctor' }
+if ($Last)          { $cliArgs = @('auto-run', '--last') }
+
+& $python $Cli @cliArgs
+exit $LASTEXITCODE

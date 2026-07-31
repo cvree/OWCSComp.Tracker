@@ -1071,18 +1071,78 @@ against, and a `decidedBy` of `automatic-gate:<gate>`. An automatic approval
 never claims to be a person's signature, and a refusal is the record that
 answers "why did nothing publish last night?" months later.
 
-## The scheduled runner
+## Running it on your own PC
 
 ```powershell
+.\tools\setup-machine.ps1                                   # install what's missing
+.\tools\owcs-auto-run.ps1 -WhatIfOnly                        # see what a pass would do
 .\tools\install-scheduled-task.ps1 -OperatorName "Connor"   # once, elevated
-.\tools\owcs-auto-run.ps1 -WhatIfOnly                        # see what it'd do
 ```
 
-Nightly: `worker-doctor` first (a pass that cannot work fails loudly instead
-of silently doing nothing), then scan → queue → advance every job. Logs in
-`data\auto-run-logs\`, AC-power only, skips if the previous pass is still
-running. `-Gates` brings the gates up one at a time rather than all five at
-once.
+`setup-machine.ps1` installs the Python packages, yt-dlp (nightly build) and
+ffmpeg/ffprobe (winget, user scope — no elevation), then runs `worker-doctor`
+so you see the real state rather than the script's opinion of it. Everything
+is idempotent; anything already present is reported and skipped.
+
+The pass itself is `cli.py auto-run` — doctor, then scan/queue, then advance
+every open job:
+
+```
+python pipeline/automation/cli.py auto-run --unattended --what-if
+python pipeline/automation/cli.py auto-run --unattended
+python pipeline/automation/cli.py auto-run --last     # last pass summary
+```
+
+The `.ps1` is a thin wrapper over exactly that. The logic lives in
+`automation/auto_run.py` deliberately: the first version held the
+orchestration in PowerShell, where it could not be tested and where one
+unrecognised cmdlet took the whole pass down before it ran a single step.
+
+What the pass does and does not do:
+
+- **doctor first.** A machine that cannot work fails loudly with a non-zero
+  exit rather than quietly doing nothing — a silent no-op is the worst
+  outcome an unattended system can produce, because it is indistinguishable
+  from "there was nothing to do". `--skip-doctor` overrides; the default is
+  the right one.
+- **a held gate is not a failure.** `autopilot` exits 0 for a legitimate
+  resting point. If a held gate failed the pass, every night with a held
+  gate would look like an outage and real outages would be invisible.
+- **a failed scan still advances queued jobs.** Discovery is a nice-to-have.
+- **one pass at a time.** A live lock is skipped, not raced; a lock older
+  than 12h is taken over, so one crash cannot disable the schedule.
+- **AC power only** (`--ignore-battery` overrides). An unknown power state —
+  a desktop with no battery — proceeds rather than skipping forever.
+- **logs** in `data/auto-run-logs/`, newest 30 kept, each with a `.json`
+  summary that `--last` reads back.
+
+Exit codes: `0` ok, `1` the machine could not work, `2` deliberately skipped
+(locked or on battery).
+
+## No YouTube API key required
+
+`YOUTUBE_API_KEY` is optional, and the unattended path works without it.
+
+`find-matches` scans only channels in the VERIFIED registry, using two free,
+keyless sources — the channel's own RSS feed and its `/streams` tab. A video
+that appears there is bound to that channel by YouTube itself, which is the
+same fact the API would report, from the same publisher. So the finder's own
+evidence (which registry channel, duration, live status, likeness score) is
+carried onto the job as a `discovery` block, and the source gate accepts it
+as provenance with reason code `registry_channel_feed`.
+
+It is held to the *same* duration, live-status and likeness floors as the API
+path. Two consequences worth knowing:
+
+- a candidate seen only via RSS has **no duration** (RSS does not carry one)
+  and is refused with `duration_unknown_or_short` until the `/streams` scan
+  supplies it;
+- a `discovery` record with no `channelRegistryId` was never matched to a
+  verified channel and proves nothing — it refuses.
+
+Without this, every keyless discovery sat permanently at "metadata
+unavailable", which is the difference between a system that runs itself and
+one that only looks like it could.
 
 ## Coverage is the real ceiling
 
@@ -1093,6 +1153,8 @@ detection gate starts passing on its own.
 
 ## Tests
 
-`test_unattended_gates.py` (the gate functions, mostly asserting refusals)
-and `test_unattended_autopilot.py` (the loop wiring, including that flags-off
-behaviour is byte-for-byte the old behaviour).
+`test_unattended_gates.py` (the gate functions, mostly asserting refusals,
+including the keyless channel-feed provenance path), `test_unattended_autopilot.py`
+(the loop wiring, including that flags-off behaviour is the old behaviour),
+and `test_auto_run.py` (the pass driver: doctor refusal, lock, battery skip,
+log retention, and that a held gate never fails the pass).

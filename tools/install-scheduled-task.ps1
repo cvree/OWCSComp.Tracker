@@ -42,8 +42,11 @@
 param(
     [string] $OperatorName = $env:USERNAME,
     [string] $At = '03:00',
-    [ValidateSet('unattended', 'source', 'layout', 'templates', 'detect', 'publish')]
-    [string[]] $Gates = @('unattended'),
+    # Comma-separated, passed straight through to the runner. See the note
+    # in owcs-auto-run.ps1: `-File` cannot bind a real array, so the runner
+    # takes a string and splits it. Keeping the same shape here means the
+    # command this registers is the command you can also type by hand.
+    [string] $Gates = 'unattended',
     [string] $TaskName = 'OWCS Comp Tracker - nightly unattended pass',
     [switch] $Unregister
 )
@@ -68,10 +71,9 @@ if ($Unregister) {
 
 if (-not (Test-Path $Runner)) { throw "runner not found: $Runner" }
 
-$gateArg = ($Gates | ForEach-Object { "'$_'" }) -join ','
 $action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument (
     "-NoProfile -NonInteractive -ExecutionPolicy Bypass -File `"$Runner`" " +
-    "-OperatorName `"$OperatorName`" -Gates $gateArg") -WorkingDirectory $RepoRoot
+    "-OperatorName `"$OperatorName`" -Gates `"$Gates`"") -WorkingDirectory $RepoRoot
 
 $trigger = New-ScheduledTaskTrigger -Daily -At $At
 
@@ -95,7 +97,7 @@ Register-ScheduledTask -TaskName $TaskName -Action $action -Trigger $trigger `
 Write-Host ""
 Write-Host "Registered '$TaskName'."
 Write-Host "  runs      : daily at $At (AC power only, skipped on battery)"
-Write-Host "  gates     : $($Gates -join ', ')"
+Write-Host "  gates     : $Gates"
 Write-Host "  operator  : $OperatorName"
 Write-Host "  logs      : $(Join-Path $RepoRoot 'data\auto-run-logs')"
 Write-Host ""

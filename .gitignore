@@ -82,6 +82,9 @@ data/match_finder.json
 #     images before human approval + variant generation. Never committed —
 #     only a PUBLISHED, human-approved asset reaches assets/img/teams/. ---
 data/asset_staging/
+# Unattended pass logs + their JSON summaries: runtime state, written
+# by `cli.py auto-run` on whatever machine runs the schedule.
+data/auto-run-logs/
 
 # --- Template cluster scratch (4-5 MB, regenerable via harvest --cluster) ---
 _candidates/

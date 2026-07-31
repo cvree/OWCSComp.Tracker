@@ -1410,6 +1410,46 @@ def cmd_unattended_floors(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_auto_run(args: argparse.Namespace) -> int:
+    """`auto-run` — one full unattended pass on this machine.
+
+    doctor -> scan/queue -> advance every open job. This is what the
+    scheduled task invokes; the PowerShell wrapper only exists because Task
+    Scheduler needs a file to point at.
+    """
+    from automation import auto_run as ar
+    from automation import gates as gt
+
+    if args.last:
+        report = ar.last_pass()
+        if report is None:
+            print("[auto-run] no pass has been recorded yet")
+            return 1
+        print(json.dumps(report, indent=2) if args.json
+              else ar.format_report(report))
+        return 0
+
+    settings = gt.GateSettings.from_args(args)
+    flags = [gt.GATE_FLAGS[g] for g in settings.enabled_gates()]
+    if not flags:
+        # An unattended pass with no gate enabled would advance jobs only to
+        # the first human gate. That is a legitimate thing to want (it still
+        # downloads and segments), so it runs — but it should not be a
+        # surprise, and silence here would make it one.
+        print("[auto-run] no gates enabled — jobs will advance only as far "
+              "as the first human gate. Pass --unattended (or one "
+              "--auto-* flag) to let evidence clear a gate.")
+
+    report = ar.run_pass(
+        gate_flags=flags, operator=args.operator or "", max_jobs=args.max_jobs,
+        what_if=args.what_if, ignore_battery=args.ignore_battery,
+        auto_accept=not args.no_auto_accept, skip_doctor=args.skip_doctor,
+        db=args.db)
+    if args.json:
+        print(json.dumps(report, indent=2, default=str))
+    return int(report.get("exitCode", 0))
+
+
 def cmd_bootstrap_templates(args: argparse.Namespace) -> int:
     """`bootstrap-templates --job <key> [--dry-run]` — run the additive
     auto-labeller over one job's broadcast package.
@@ -1597,7 +1637,23 @@ def cmd_find_matches(args: argparse.Namespace) -> int:
                     res = li.ingest_link(
                         store, cand["url"], client=client,
                         dry_run=args.dry_run,
-                        requested_by=args.requested_by or "match-finder")
+                        requested_by=args.requested_by or "match-finder",
+                        # Carry the finder's OWN evidence onto the job. It
+                        # scanned only verified registry channels, so this
+                        # records which one's feed the video came from —
+                        # the channel binding the unattended source gate
+                        # needs when there is no API key to ask.
+                        discovery={
+                            "channelRegistryId": cand.get("channelRegistryId"),
+                            "channelId": cand.get("channelId"),
+                            "channelTitle": cand.get("channelTitle"),
+                            "title": cand.get("title"),
+                            "durationSeconds": cand.get("durationSeconds"),
+                            "liveBroadcastStatus": cand.get("liveBroadcastStatus"),
+                            "sources": cand.get("sources"),
+                            "likeness": cand.get("likeness"),
+                            "discoveredBy": "match-finder",
+                        })
                     queued.append({"videoId": cand["videoId"],
                                    "jobKey": res["jobKey"],
                                    "sourceState": res["source"]["state"]})
@@ -2216,6 +2272,34 @@ def main(argv: list[str] | None = None) -> int:
         uf_p.add_argument(_flag, action="store_true",
                           help="show this gate as ENABLED in the listing")
     uf_p.set_defaults(func=cmd_unattended_floors)
+
+    ar_p = sub.add_parser("auto-run",
+                          help="one full unattended pass on this machine: "
+                               "doctor -> scan -> advance every open job")
+    ar_p.add_argument("--operator", default=None,
+                      help="your name/handle, recorded on anything accepted")
+    ar_p.add_argument("--max-jobs", type=int, default=10,
+                      help="safety cap on jobs advanced in one pass")
+    ar_p.add_argument("--what-if", action="store_true",
+                      help="print the plan and exit without touching a job")
+    ar_p.add_argument("--ignore-battery", action="store_true",
+                      help="run even on battery (skipped by default)")
+    ar_p.add_argument("--no-auto-accept", action="store_true",
+                      help="do not auto-accept clean segment identity "
+                           "proposals")
+    ar_p.add_argument("--skip-doctor", action="store_true",
+                      help="run even if worker-doctor reports this machine "
+                           "cannot do real work (it stops the pass by "
+                           "default, and that default is the right one)")
+    ar_p.add_argument("--last", action="store_true",
+                      help="print the most recent pass summary and exit")
+    ar_p.add_argument("--json", action="store_true")
+    for _flag in ("--auto-source", "--auto-layout", "--auto-templates",
+                  "--auto-detect", "--auto-publish", "--unattended"):
+        ar_p.add_argument(_flag, action="store_true",
+                          help=f"enable the {_flag[7:] or 'all'} gate for "
+                               f"this pass")
+    ar_p.set_defaults(func=cmd_auto_run)
 
     bt_p = sub.add_parser("bootstrap-templates",
                           help="additively auto-label hero templates for one "

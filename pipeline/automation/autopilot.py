@@ -339,7 +339,8 @@ def run_autopilot(store: js.JobStore, lock_mgr: lk.LockManager,
                     break
                 verdict = gt.evaluate_source_gate(
                     source, metadata=job.payload.get("metadata"),
-                    likeness=job.payload.get("likeness"), floors=floors)
+                    likeness=job.payload.get("likeness"),
+                    discovery=job.payload.get("discovery"), floors=floors)
                 if not _gate(store, job_key, verdict, steps, state):
                     stop = STOP_HUMAN_GATE
                     detail = _gate_stop_detail(

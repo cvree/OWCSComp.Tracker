@@ -175,7 +175,10 @@ class TestCoverageForLayout(unittest.TestCase):
     def test_the_repos_real_proven_layout_reports_real_coverage(self):
         """A regression guard on the shipped package, not a fixture: the
         proven owcs_jksix_qwc set must keep reporting honest coverage."""
-        con = content_db.connect()
+        # The repo's real DB by path — see the note in the official-assets
+        # test: $OWCS_DB leaks between modules in a full-suite run.
+        con = content_db.connect(os.path.join(content_db.REPO_ROOT, "data",
+                                              "owcs.sqlite"))
         try:
             content_db.init_schema(con)
             rep = tb.coverage_for_layout(
@@ -295,7 +298,15 @@ class TestLabelSuggestion(unittest.TestCase):
         self.assertEqual(sorted(index), ["tracer"])
 
     def test_the_repos_real_official_assets_are_discoverable(self):
-        con = content_db.connect()
+        # Connect to the repo's REAL content DB by path, not via the ambient
+        # default. `db.DB_PATH` is frozen from $OWCS_DB at first import, and
+        # a dozen sibling test modules set that env var at import time and
+        # never restore it — so in a full-suite run this test would read an
+        # empty scratch DB, find an empty roster, and fail for a reason that
+        # has nothing to do with what it is checking. It asserts against the
+        # committed assets, so it must read the committed DB.
+        con = content_db.connect(os.path.join(content_db.REPO_ROOT, "data",
+                                              "owcs.sqlite"))
         try:
             content_db.init_schema(con)
             roster = tb.full_roster(con)

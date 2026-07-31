@@ -120,7 +120,12 @@ class TestCommittedManifest(unittest.TestCase):
         with open(MANIFEST_PATH, encoding="utf-8") as f:
             self.manifest = json.load(f)
         self.hero_official = self.manifest.get("heroOfficial", {})
-        con = db.connect()
+        # The repo's REAL content DB by path. `db.DB_PATH` is frozen from
+        # $OWCS_DB at first import and sibling test modules set that env var
+        # at import time without restoring it, so the ambient default points
+        # at an empty scratch DB in a full-suite run. This class asserts
+        # against the committed manifest, so it must read the committed DB.
+        con = db.connect(os.path.join(db.REPO_ROOT, "data", "owcs.sqlite"))
         self.all_hero_ids = {r["id"] for r in con.execute("SELECT id FROM heroes")}
         con.close()
 
