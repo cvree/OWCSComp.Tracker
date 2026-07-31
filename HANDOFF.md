@@ -1,6 +1,85 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
-## CURRENT STATUS (authoritative — 2026-07-30, sixth pass) — the source gate stopped being a key check
+## CURRENT STATUS (authoritative — 2026-07-31, seventh pass) — unattended, with floors that refuse
+
+> The operator asked for the pipeline to run without them, and chose all
+> four non-source gates: layout, templates, detection, publication.
+
+### The principle this pass had to get right
+
+Making a gate automatic is not the same as removing it. Every one of these
+gates existed because a decision had consequences; handing it to the machine
+means writing the judgement down as **measurable floors** and letting the
+machine refuse on them — as often and as loudly as a person would.
+
+So the shape of this pass is: `automation/unattended.py` is a pure policy
+layer (floors in, allow/hold verdict + the numbers out), the autopilot
+consults it at each gate, and every verdict is recorded on the job under
+`unattended` with its metrics. An automatic approval leaves the same audit
+trail a human one does.
+
+**Nothing is on by default.** `Policy()` with no flags behaves exactly like
+the supervised autopilot, and the existing tests prove it.
+
+### The four gates and their bars
+
+| gate | flag | bar |
+| --- | --- | --- |
+| layout | `--auto-layout` | confidence ≥ 0.75 — above `calibrate_source.CONFIDENCE_FLOOR` (0.55). Clearing the calibrator's own refusal floor is not the same as being good enough to adopt unseen. |
+| templates | `--auto-templates` | score ≥ 0.55 AND margin ≥ 0.12 against a REAL labeled portrait, ≥4 member frames, no contradicting official-art opinion |
+| detection | `--auto-detect` | this run's `calibration_health`: ok, unknown ≤ 0.25, full-house ≥ 0.60, median ≥ 0.65, ≥30 gameplay frames |
+| publish | `--auto-publish` | a committed (`write=True`) detection with ≥1 stint whose own gate passed; publishes to a BRANCH, never main |
+
+`--unattended` turns on all four. Source approval has no flag at all.
+Floors are overridable per-key in `config/automation.yml`
+(`unattended_<key>:`) and printed with `cli.py unattended-floors`.
+
+### The two design decisions worth remembering
+
+**1. Official hero art may suggest a label; it may never decide one.** The
+existing `suggest_labels` scores clusters against official splash renders,
+and its own docstring is right that a render does not look like a broadcast
+HUD portrait. So auto-labeling scores clusters against **real portraits a
+human already labeled in other packages** (`match_against_labeled`) — the
+same kind of image as the thing being identified — and uses official art
+only as a veto: if the two sources name different heroes, that is a
+`sources_disagree` hold, not a coin flip. Icon-only confidence never writes
+a file.
+
+**2. Auto-labeling is additive, never destructive.**
+`harvest_templates.stage_labels` clears the target directory before writing
+— correct for a human doing a full reviewed pass, catastrophic for an
+unattended one that happened to label fewer heroes. `auto_label` writes only
+heroes the package does not already cover, resolves competing claims by
+score (one hero cannot be two portraits), and writes a review manifest even
+when it labels nothing — because "nothing could be decided" is exactly when
+a human needs the cluster list and the reasons.
+
+### What unattended mode does NOT fix
+
+Template coverage is still 13–33%, so the detection gate will **hold most
+jobs**, and that is the correct outcome: publishing mostly-UNKNOWN comps
+would be worse than publishing nothing. The order of operations is raise
+coverage (`--auto-templates` / `bootstrap-templates`), then watch the
+detection gate start passing on its own. Unattended mode is not a shortcut
+past thin evidence — the floors are precisely what stops it being one.
+
+### The scheduled pass
+
+`cli.py auto-run` is the single entry point: scan verified channels → queue
+likely broadcasts through the normal intake gate → advance every tracked job
+→ report every stop with its reason and next command. `tools\owcs-auto-run.ps1`
+wraps it with a `worker-doctor` pre-check (a pass that cannot work must fail
+loudly, not silently do nothing) and daily logs;
+`tools\install-scheduled-task.ps1` registers it nightly. Nothing about
+`auto-run` is Windows-specific — any scheduler can call it.
+
+`test_automation_unattended.py` (35 tests, offline) exercises every floor
+refusing on its own, the gates staying shut with no policy, source approval
+having no escape, publication being unable to route around a held detection
+gate, and the labeling decision rules.
+
+## CURRENT STATUS (2026-07-30, sixth pass) — the source gate stopped being a key check
 
 > Additive to every pass below. Nothing about authorization got looser; a
 > lookup that was missing now happens.

@@ -206,6 +206,15 @@ exact next command. After clearing a gate, `autopilot --job <key>`
 re-enters the loop; `--auto-accept` additionally accepts clean machine
 identity proposals through the same `accept-proposed` gate a human uses.
 
+**Run it unattended.** `--unattended` lets the machine clear the layout,
+template, detection and publication gates *when their quality floors are
+met* — never otherwise, and never source approval, which stays a human
+decision always. Each verdict is recorded on the job with the numbers behind
+it; `unattended-floors` prints exactly what the machine will and will not
+accept. On Windows, `tools\install-scheduled-task.ps1` registers a nightly
+pass (`auto-run`) that scans for new broadcasts and drives every tracked job
+as far as its evidence allows.
+
 **No `YOUTUBE_API_KEY` needed.** Intake prefers the Data API when a key is
 set, but a missing key is a missing lookup, not a human decision: it falls
 back to free, no-key sources for the source's channel id (a `yt-dlp`

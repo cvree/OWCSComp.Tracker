@@ -63,3 +63,22 @@ regions:
   - pacific
   - china
   - global
+
+# ---------------------------------------------------------------------
+# Unattended gate floors (`--unattended` / --auto-layout / --auto-templates
+# / --auto-detect / --auto-publish). Uncomment a line to override the
+# built-in default; `cli.py unattended-floors` prints the live values and
+# where each came from. Raising a floor makes the machine refuse more
+# often. SOURCE approval is not here and has no flag: authorizing an
+# unverified broadcaster is always a human decision.
+# ---------------------------------------------------------------------
+# unattended_layout_min_confidence: 0.75        # > calibrate_source's 0.55 refusal floor
+# unattended_template_min_score: 0.55
+# unattended_template_min_margin: 0.12
+# unattended_template_min_cluster_members: 4
+# unattended_detection_require_health_ok: true
+# unattended_detection_max_unknown_rate: 0.25   # < ingest_map's own 0.35 bar
+# unattended_detection_min_full_house_rate: 0.60
+# unattended_detection_min_median_score: 0.65
+# unattended_detection_min_gameplay_frames: 30
+# unattended_detection_min_stints: 1

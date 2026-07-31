@@ -326,6 +326,173 @@ def suggest_labels(cluster_protos: dict[str, "object"], icon_index: dict[str, st
                      "official asset is ever written into a template set.")}
 
 
+# --------------------------------------------- labeled-template referencing
+def labeled_template_index(*, repo_root: str = db.REPO_ROOT,
+                           exclude_dir: str | None = None,
+                           packages: list[str] | None = None
+                           ) -> dict[str, list[str]]:
+    """{hero_id: [template png paths]} from every OTHER committed package.
+
+    These are the strongest reference this project owns: real HUD portraits
+    a human already labeled, cut from real broadcasts. An official splash
+    render is a weak proxy for a broadcast portrait (which is exactly why
+    `suggest_labels` only ever proposes with it); a portrait cut from
+    another broadcast of the same game is the same kind of image as the
+    cluster being identified.
+
+    `exclude_dir` is the package being built — matching it against itself
+    would be circular.
+    """
+    roots = packages if packages is not None else _candidate_package_dirs(repo_root)
+    excl = os.path.abspath(exclude_dir) if exclude_dir else None
+    out: dict[str, list[str]] = {}
+    for root in roots:
+        if not os.path.isdir(root) or (excl and os.path.abspath(root) == excl):
+            continue
+        for hero_id, files in scan_template_dir(root).items():
+            for f in files:
+                out.setdefault(hero_id, []).append(os.path.join(root, f["file"]))
+    return out
+
+
+def _candidate_package_dirs(repo_root: str) -> list[str]:
+    """Every directory that could hold a labeled template set: the root
+    `templates/` plus each per-source package under it."""
+    base = os.path.join(repo_root, "templates")
+    dirs = [base]
+    if os.path.isdir(base):
+        for name in sorted(os.listdir(base)):
+            path = os.path.join(base, name)
+            if os.path.isdir(path) and not name.startswith("_"):
+                dirs.append(path)
+    return dirs
+
+
+def match_against_labeled(cluster_protos: dict[str, "object"],
+                          template_index: dict[str, list[str]], *,
+                          margin: float = LABEL_MARGIN,
+                          min_score: float = LABEL_MIN_SCORE) -> dict:
+    """Score each cluster against every already-labeled hero template.
+
+    Same shape as `suggest_labels`, so the two evidence sources can be
+    compared field-for-field. A hero's score is its BEST variant's score:
+    packages carry alive/dead/tinted variants, and a cluster only has to
+    look like one of them.
+    """
+    import cv2
+
+    loaded: dict[str, list] = {}
+    for hero_id, paths in template_index.items():
+        for path in paths:
+            img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
+            if img is not None:
+                loaded.setdefault(hero_id, []).append(img)
+
+    suggestions: dict[str, dict] = {}
+    needs_review: list[str] = []
+    unmatched: list[str] = []
+    for name, proto in cluster_protos.items():
+        if proto is None or not loaded:
+            unmatched.append(name)
+            continue
+        scored = []
+        for hero_id, images in loaded.items():
+            best = max(
+                float(cv2.matchTemplate(
+                    proto, cv2.resize(img, (proto.shape[1], proto.shape[0])),
+                    cv2.TM_CCOEFF_NORMED).max())
+                for img in images)
+            scored.append((best, hero_id))
+        scored.sort(reverse=True)
+        best_score, best = scored[0]
+        runner_score, runner = (scored[1] if len(scored) > 1 else (0.0, None))
+        gap = round(best_score - runner_score, 4)
+        confident = best_score >= min_score and gap >= margin
+        suggestions[name] = {
+            "hero": best if confident else None,
+            "bestGuess": best,
+            "score": round(best_score, 4),
+            "runnerUp": runner, "runnerUpScore": round(runner_score, 4),
+            "margin": gap, "confident": confident,
+            "source": "labeled-template",
+            "reason": (f"real labeled portrait of {best} correlates "
+                       f"{best_score:.3f} (runner-up {runner} "
+                       f"{runner_score:.3f}, margin {gap:.3f})"
+                       + ("" if confident else
+                          f" — below the {margin} margin / {min_score} score "
+                          f"bar, so a human must label this cluster")),
+        }
+        if not confident:
+            needs_review.append(name)
+    return {"suggestions": suggestions, "needsReview": needs_review,
+            "unmatched": unmatched,
+            "note": ("Scored against hero templates a human already labeled "
+                     "in other broadcast packages — real HUD portraits, not "
+                     "official art.")}
+
+
+def combine_evidence(from_templates: dict, from_icons: dict, *,
+                     min_score: float, min_margin: float) -> dict:
+    """Merge both label sources into ONE decision per cluster.
+
+    The rule, in order of trust:
+      1. A confident labeled-template match that the official-icon guess
+         does not CONTRADICT wins. (No icon opinion is not a contradiction —
+         many heroes have no usable icon, and a cluster is often a state the
+         icon cannot show.)
+      2. A confident labeled-template match contradicted by a confident icon
+         match is a DISAGREEMENT and goes to a human. Two independent
+         sources naming different heroes is exactly the case where guessing
+         is worst.
+      3. Icon-only confidence is never enough on its own to write a
+         template. Official art does not look like a broadcast portrait, so
+         the one source that can be systematically wrong never decides
+         alone; it is recorded as a suggestion for review.
+
+    Returns {cluster: {hero, accept, reasonCode, reason, evidence{...}}}.
+    """
+    out: dict[str, dict] = {}
+    names = set(from_templates.get("suggestions") or {}) | set(
+        from_icons.get("suggestions") or {})
+    for name in sorted(names):
+        tpl = (from_templates.get("suggestions") or {}).get(name) or {}
+        icon = (from_icons.get("suggestions") or {}).get(name) or {}
+        evidence = {"labeledTemplate": tpl or None, "officialIcon": icon or None}
+        tpl_ok = bool(tpl.get("confident")
+                      and tpl.get("score", 0) >= min_score
+                      and tpl.get("margin", 0) >= min_margin)
+        if tpl_ok and icon.get("confident") and icon.get("hero") \
+                and icon["hero"] != tpl["hero"]:
+            out[name] = {
+                "hero": None, "accept": False, "reasonCode": "sources_disagree",
+                "reason": (f"labeled templates say {tpl['hero']} "
+                           f"({tpl['score']}), official art says "
+                           f"{icon['hero']} ({icon['score']}) — a human "
+                           f"decides when the evidence disagrees"),
+                "evidence": evidence}
+            continue
+        if tpl_ok:
+            out[name] = {
+                "hero": tpl["hero"], "accept": True,
+                "reasonCode": "labeled_template_match",
+                "reason": (f"{tpl['reason']}"
+                           + (f"; official art agrees ({icon['hero']})"
+                              if icon.get("hero") == tpl["hero"] else
+                              "; no contradicting official-art opinion")),
+                "evidence": evidence}
+            continue
+        why = (tpl.get("reason") or "no labeled-template match")
+        out[name] = {
+            "hero": None, "accept": False,
+            "reasonCode": ("below_floor" if tpl else "no_reference"),
+            "reason": (f"not written automatically: {why}"
+                       + (f". Official art suggests {icon['bestGuess']} "
+                          f"({icon['score']}) — review it."
+                          if icon.get("bestGuess") else "")),
+            "evidence": evidence}
+    return out
+
+
 # ---------------------------------------------------------------- bootstrap
 def bootstrap(con, templates_dir: str, *, clip: str | None = None,
               layout: dict | None = None, times: list[float] | None = None,
@@ -405,6 +572,234 @@ def bootstrap(con, templates_dir: str, *, clip: str | None = None,
         f"pipeline/harvest_templates.py --labels <your-map.json> to write "
         f"templates.")
     return result
+
+
+# ------------------------------------------------------------- auto-labeling
+def auto_label(con, templates_dir: str, *, clip: str, layout: dict,
+               times: list[float] | None = None,
+               layout_id: str | None = None, source_video: str | None = None,
+               min_score: float = 0.55, min_margin: float = 0.12,
+               min_cluster_members: int = 4,
+               variants: int = DEFAULT_VARIANTS,
+               max_clusters: int = 12,
+               labeled_by: str = "auto-label",
+               dry_run: bool = False) -> dict:
+    """Harvest a package's missing hero templates WITHOUT a human labeler.
+
+    This is the one path in this repo that writes a hero template without a
+    person naming it, so every safeguard is deliberate:
+
+      * ADDITIVE ONLY. A hero the package already covers is never touched,
+        never overwritten, never deleted. (`harvest_templates.stage_labels`
+        clears the directory first — correct for a human doing a full
+        reviewed pass, catastrophic for an unattended one that happened to
+        label fewer heroes.)
+      * Two independent evidence sources, and the weak one cannot decide
+        alone (see `combine_evidence`).
+      * Score AND margin floors, plus a minimum cluster size: a cluster seen
+        in a couple of frames is as likely to be a killcam or a transition
+        as a portrait.
+      * One hero per write. If two clusters both claim the same hero, the
+        higher-scoring one wins and the other is left for review — the same
+        hero cannot legitimately be two different portraits in one package.
+      * Everything not written is reported with the reason, so the leftovers
+        are a review list, not a silence.
+      * `dry_run=True` decides and reports without writing a single file.
+
+    Returns {"written": [...], "skipped": [...], "decisions": {...},
+             "status": <coverage after>, "candidatesDir": ...}.
+    """
+    import cv2
+    import harvest_templates as ht
+
+    roster = full_roster(con)
+    before = template_set_status(templates_dir, roster)
+    already = set(before.get("covered") or [])
+    slot_keys = [f"{s}{i}" for s in ("a", "b") for i in range(1, 6)]
+    times = times or ht.parse_times("60:600:15")
+    crops = ht.collect_crops(clip, times, layout, slot_keys)
+
+    protos: dict[str, object] = {}
+    members: dict[str, list] = {}
+    meta: dict[str, dict] = {}
+    for key in slot_keys:
+        for k, c in enumerate(ht.cluster_slot(crops.get(key) or [])[:max_clusters]):
+            name = f"{key}_c{k}"
+            protos[name] = c["proto_gray"]
+            members[name] = c["members"]
+            ts = sorted(m[0] for m in c["members"])
+            meta[name] = {"slot": key, "count": len(c["members"]),
+                          "tFirst": ts[0], "tLast": ts[-1]}
+
+    from_templates = match_against_labeled(
+        protos, labeled_template_index(exclude_dir=templates_dir),
+        margin=min_margin, min_score=min_score)
+    from_icons = suggest_labels(protos, official_icon_index(roster))
+    decisions = combine_evidence(from_templates, from_icons,
+                                 min_score=min_score, min_margin=min_margin)
+
+    # Resolve competing claims BEFORE writing anything: best score wins the
+    # hero, everything else becomes a review item with the reason.
+    claims: dict[str, list[tuple[float, str]]] = {}
+    for name, d in decisions.items():
+        if d["accept"] and meta.get(name, {}).get("count", 0) >= min_cluster_members:
+            score = ((d.get("evidence") or {}).get("labeledTemplate") or {}
+                     ).get("score", 0.0)
+            claims.setdefault(d["hero"], []).append((score, name))
+    winners: dict[str, str] = {}
+    for hero, rows in claims.items():
+        rows.sort(reverse=True)
+        winners[rows[0][1]] = hero
+
+    written: list[dict] = []
+    skipped: list[dict] = []
+    cand_dir = os.path.join(templates_dir, "_candidates")
+    for name in sorted(decisions):
+        d = decisions[name]
+        info = meta.get(name, {})
+        count = info.get("count", 0)
+        hero = winners.get(name)
+        if hero is None:
+            reason = d["reason"]
+            code = d["reasonCode"]
+            if d["accept"] and count < min_cluster_members:
+                code = "cluster_too_small"
+                reason = (f"{d['hero']} matched, but this cluster has only "
+                          f"{count} member frame(s) (< {min_cluster_members}) "
+                          f"— too thin to trust as a portrait")
+            elif d["accept"]:
+                code = "duplicate_hero_claim"
+                reason = (f"another cluster matched {d['hero']} more "
+                          f"strongly; this one is left for review")
+            skipped.append({"cluster": name, "reasonCode": code,
+                            "reason": reason, "members": count,
+                            "bestGuess": ((d.get("evidence") or {})
+                                          .get("labeledTemplate") or {}
+                                          ).get("bestGuess")})
+            continue
+        if hero in already:
+            skipped.append({"cluster": name, "reasonCode": "already_covered",
+                            "reason": (f"{hero} already has a template in this "
+                                       f"package — never overwritten"),
+                            "members": count})
+            continue
+        files = _write_cluster_variants(
+            cv2, ht, templates_dir, hero, members[name], variants,
+            dry_run=dry_run)
+        already.add(hero)
+        written.append({"cluster": name, "hero": hero, "files": files,
+                        "members": count,
+                        "score": ((d.get("evidence") or {})
+                                  .get("labeledTemplate") or {}).get("score"),
+                        "reason": d["reason"]})
+
+    if not dry_run:
+        if written:
+            write_provenance(
+                templates_dir,
+                [{"file": f, "hero": w["hero"], "cluster": w["cluster"],
+                  "sourceClip": clip, "sourceVideo": source_video,
+                  "tFirst": meta.get(w["cluster"], {}).get("tFirst"),
+                  "tLast": meta.get(w["cluster"], {}).get("tLast"),
+                  "labeledBy": labeled_by, "autoLabeled": True,
+                  "matchScore": w["score"], "evidence": w["reason"]}
+                 for w in written for f in w["files"]],
+                source_video=source_video, source_clip=clip,
+                labeled_by=labeled_by, layout_id=layout_id)
+        # Written even when NOTHING was labeled: the skipped list is the
+        # human's review list, and "nothing could be decided" is exactly
+        # when they need to see the clusters and the reasons.
+        _write_review_manifest(cand_dir, meta, decisions, written, skipped,
+                               clip=clip, source_video=source_video,
+                               layout_id=layout_id)
+
+    after = template_set_status(templates_dir, roster)
+    return {
+        "written": written, "skipped": skipped, "decisions": decisions,
+        "clusters": len(meta), "dryRun": dry_run,
+        "coverageBefore": before["coveragePct"],
+        "coverageAfter": after["coveragePct"],
+        "status": after,
+        "candidatesDir": (os.path.relpath(cand_dir, db.REPO_ROOT)
+                          .replace("\\", "/") if not dry_run else None),
+        "message": (
+            f"auto-labeled {len(written)} hero(es) from {len(meta)} cluster(s); "
+            f"coverage {before['coveragePct']}% -> {after['coveragePct']}%; "
+            f"{len(skipped)} cluster(s) left for review"
+            + (" (dry run — nothing written)" if dry_run else "")),
+    }
+
+
+def _write_cluster_variants(cv2, ht, templates_dir: str, hero: str,
+                            cluster_members: list, variants: int, *,
+                            dry_run: bool) -> list[str]:
+    """Write up to `variants` maximally-different crops of one cluster as
+    `<hero>.png` / `<hero>.v1.png` …, reusing harvest_templates' own variant
+    picker so an auto-labeled file is cut exactly like a human-labeled one."""
+    crops = [m[1] for m in cluster_members]
+    grays = [m[2] for m in cluster_members]
+    order = sorted(range(len(crops)), key=lambda i: -ht.sharpness(grays[i]))
+    chosen = [order[0]]
+    while len(chosen) < variants and len(chosen) < len(order):
+        best_i, best_sim = None, 2.0
+        for i in order:
+            if i in chosen:
+                continue
+            sim = max(ht.corr(grays[c], grays[i]) for c in chosen)
+            if sim < best_sim:
+                best_sim, best_i = sim, i
+        if best_i is None or best_sim > 0.995:
+            break
+        chosen.append(best_i)
+    out: list[str] = []
+    if not dry_run:
+        os.makedirs(templates_dir, exist_ok=True)
+    for n, idx in enumerate(chosen):
+        fname = f"{hero}.png" if n == 0 else f"{hero}.v{n}.png"
+        out.append(fname)
+        if not dry_run:
+            cv2.imwrite(os.path.join(templates_dir, fname), crops[idx])
+    return out
+
+
+def _write_review_manifest(cand_dir: str, meta: dict, decisions: dict,
+                           written: list, skipped: list, *, clip: str,
+                           source_video: str | None,
+                           layout_id: str | None) -> None:
+    """Everything the auto-labeler decided, written next to the package so a
+    human can audit it after the fact — which clusters became templates, and
+    every cluster that did not, with the reason."""
+    os.makedirs(cand_dir, exist_ok=True)
+    payload = {
+        "generatedAt": _utcnow_iso(), "sourceClip": clip,
+        "sourceVideo": source_video, "layoutId": layout_id,
+        "clusters": meta, "decisions": decisions,
+        "written": written, "skipped": skipped,
+        "note": ("Auto-labeling record. Every 'written' entry was accepted by "
+                 "labeled-template similarity above the score+margin floors "
+                 "with no contradicting official-art opinion; every 'skipped' "
+                 "entry names why it was NOT written. Official hero art is "
+                 "never itself written into a template set."),
+    }
+    with open(os.path.join(cand_dir, "auto_labels.json"), "w",
+              encoding="utf-8") as f:
+        json.dump(payload, f, indent=1)
+        f.write("\n")
+
+
+def format_auto_label(result: dict) -> str:
+    lines = [f"  {result.get('message')}"]
+    for w in result.get("written") or []:
+        lines.append(f"    WROTE  {w['hero']:10} <- {w['cluster']} "
+                     f"(score {w.get('score')}, {w['members']} frames, "
+                     f"{len(w['files'])} variant(s))")
+    for s in (result.get("skipped") or [])[:20]:
+        lines.append(f"    review {s['cluster']:10} [{s['reasonCode']}] "
+                     f"{s['reason'][:100]}")
+    extra = len(result.get("skipped") or []) - 20
+    if extra > 0:
+        lines.append(f"    … and {extra} more cluster(s) for review")
+    return "\n".join(lines)
 
 
 # --------------------------------------------------------------------- CLI

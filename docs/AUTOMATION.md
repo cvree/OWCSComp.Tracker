@@ -259,6 +259,66 @@ What did **not** get looser:
 still required for `verify-channels` and scheduled `discover` runs, which
 enumerate channels rather than resolve one pasted video.
 
+### Unattended mode — automatic gates with floors (2026-07-31)
+
+The five gates above are human by default and stay that way. Four of them
+(everything except source approval) can be handed to the machine with an
+explicit flag. Doing so does **not** remove the judgement — it replaces "a
+person looks" with measurable floors that refuse just as loudly, and records
+every verdict with its numbers on the job under `unattended`.
+
+```powershell
+# all four gates, floors enforced:
+python pipeline\automation\cli.py convert-link --url "<url>" --unattended --auto-accept --accepted-by "<you>"
+# or one at a time:
+python pipeline\automation\cli.py autopilot --job <key> --auto-layout --auto-detect
+# what will the machine actually accept?
+python pipeline\automation\cli.py unattended-floors
+```
+
+| gate | flag | the bar it must clear |
+| --- | --- | --- |
+| layout | `--auto-layout` | calibration confidence ≥ `unattended_layout_min_confidence` (0.75) — deliberately above `calibrate_source.CONFIDENCE_FLOOR` (0.55), the bar below which a layout is refused outright. A refused calibration is never promoted. |
+| templates | `--auto-templates` | a cluster matches a REAL labeled portrait from another package above score (0.55) **and** margin (0.12) floors, from ≥4 member frames, with no contradicting official-art opinion. Additive only — a hero the package already covers is never overwritten. |
+| detection | `--auto-detect` | **this run's own** `calibration_health`: status ok, unknown_rate ≤ 0.25, full_house_rate ≥ 0.60, median score ≥ 0.65, ≥ 30 gameplay frames. |
+| publish | `--auto-publish` | a detection that was really committed (`write=True`) with ≥1 stint, and whose own gate passed. Publication creates a **branch**; `publish.publish_job` never touches main, so the merge stays a human act. |
+
+**Source approval has no flag.** Authorizing an unverified broadcaster is
+the one decision that is always a person's.
+
+Every floor is overridable in `config/automation.yml` with an
+`unattended_<key>: <value>` line, so tightening or loosening a bar is a
+visible, diffable edit — never a hidden default. `unattended-floors` prints
+each value and whether it came from the config or the default.
+
+**What this means at today's template coverage.** Packages currently cover
+13–33% of the roster, so most slots read UNKNOWN and the detection gate will
+**hold most jobs** — correctly. Unattended mode is not a way to publish
+weak data; it is a way to stop typing between the stages that are already
+sound. Raise coverage first (`--auto-templates`, or
+`bootstrap-templates --job <key>`), and the detection gate starts passing on
+its own.
+
+### The nightly scheduled pass (Windows)
+
+```powershell
+# once, in an ELEVATED PowerShell:
+.\tools\install-scheduled-task.ps1 -OperatorName "<you>"
+# check what it would do, any time:
+.\tools\owcs-auto-run.ps1 -WhatIfOnly
+```
+
+The task runs `tools\owcs-auto-run.ps1` nightly: `worker-doctor` first (a
+pass that cannot work aborts loudly instead of silently doing nothing),
+then `auto-run --unattended`, which scans the verified channels, queues new
+broadcasts through the normal intake gate, and advances every tracked job.
+Logs land in `data\auto-run-logs\` (30 days kept). It runs on AC power only
+unless `-AllowOnBattery`, wakes the machine unless `-NoWake`, and skips a
+pass if the previous one is still running. `-Remove` unregisters it.
+
+`auto-run` is a normal command — nothing about it is Windows-specific. Any
+scheduler (cron, systemd timer) can call the same thing.
+
 **Resuming after a gate:** once you've cleared a gate, one command re-enters
 the loop and runs to the next gate:
 

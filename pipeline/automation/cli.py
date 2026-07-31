@@ -1406,6 +1406,28 @@ def cmd_process_approved_job(args: argparse.Namespace) -> int:
 
 
 # ------------------------------------------------- autopilot / convert-link
+def _build_policy(args: argparse.Namespace):
+    """Which non-source gates this invocation may clear by itself.
+
+    Nothing is enabled unless the operator asked. `--unattended` turns all
+    four on (what the scheduled runner uses); the per-gate flags let you
+    enable exactly one. Floors come from config/automation.yml's
+    `unattended_*` keys, so tightening a bar is a visible, diffable edit —
+    never a hidden default.
+    """
+    from automation import unattended as un
+    floors = un.load_floors(cfg.load_config())
+    if getattr(args, "unattended", False):
+        return un.Policy.unattended(floors=floors,
+                                    decided_by=getattr(args, "worker_id", None))
+    return un.Policy(
+        layout=getattr(args, "auto_layout", False),
+        templates=getattr(args, "auto_templates", False),
+        detection=getattr(args, "auto_detect", False),
+        publish=getattr(args, "auto_publish", False),
+        floors=floors, decided_by=getattr(args, "worker_id", None))
+
+
 def _run_autopilot(store: "js.JobStore", args: argparse.Namespace,
                    job_key: str) -> dict:
     """Shared driver for `autopilot` and `convert-link`: run the free-agent
@@ -1415,14 +1437,16 @@ def _run_autopilot(store: "js.JobStore", args: argparse.Namespace,
     from automation import worker
     locks = lk.LockManager(store.con)
     wid = args.worker_id or worker.worker_identity("autopilot")
+    policy = _build_policy(args)
     result = ap.run_autopilot(
         store, locks, job_key, worker_id=wid,
         media_root=args.media_root or None,
         auto_accept=args.auto_accept,
         accepted_by=args.accepted_by or args.worker_id,
-        for_harvest=getattr(args, "for_harvest", False),
+        for_harvest=getattr(args, "for_harvest", False) or policy.templates,
         max_steps=args.max_steps or ap.DEFAULT_MAX_STEPS,
-        samples=args.samples, ocr_engine=args.ocr_engine)
+        samples=args.samples, ocr_engine=args.ocr_engine,
+        policy=policy)
     if not args.no_export:
         _save_intake_export(store)
     return result
@@ -1496,6 +1520,177 @@ def cmd_convert_link(args: argparse.Namespace) -> int:
             print(f"[convert] autopilot for {ingest['jobKey']}:")
             print(ap.format_result(result))
         return 0 if result["ok"] else 1
+    finally:
+        store.close()
+
+
+def cmd_unattended_floors(args: argparse.Namespace) -> int:
+    """`unattended-floors` — print the exact bars every automatic gate must
+    clear, and where each one came from. An operator should never have to
+    read source code to know what "automatic" will and will not do."""
+    from automation import unattended as un
+    defaults = un.DEFAULT_FLOORS
+    floors = un.load_floors(cfg.load_config())
+    if args.json:
+        print(json.dumps({"floors": floors, "defaults": defaults}, indent=2))
+        return 0
+    print("[unattended] quality floors (config/automation.yml overrides "
+          "with `unattended_<key>: <value>`):")
+    for key in sorted(floors):
+        origin = ("default" if floors[key] == defaults.get(key)
+                  else f"CONFIG (default {defaults.get(key)})")
+        print(f"  {key:38} {str(floors[key]):>8}   [{origin}]")
+    print("\n  Source approval has no floor and no flag — authorizing an "
+          "unverified broadcaster is always a human decision.")
+    return 0
+
+
+def cmd_auto_run(args: argparse.Namespace) -> int:
+    """`auto-run` — THE scheduled entry point: find new broadcasts, then
+    drive every tracked job as far as its evidence allows, in one command.
+
+    Exactly the same stages, gates and floors as the interactive path; the
+    only difference is that nobody types between them. Every job that stops
+    is reported with the reason and the exact command a human would run, so
+    an unattended pass produces a work list rather than silence.
+    """
+    from automation import autopilot as ap
+    from automation import match_finder as mf
+    from automation import worker
+    config = cfg.load_config()
+    store = js.JobStore(args.db, config=config)
+    policy = _build_policy(args)
+    found: list[dict] = []
+    runs: list[dict] = []
+    try:
+        if not args.no_scan:
+            chans = mf.scan_channels()
+            if chans:
+                ledger = mf.scan(chans, limit=args.limit)
+                mf.save_ledger(ledger)
+                keyless = _build_keyless_resolver(args)
+                client = None if args.no_metadata else _build_youtube_client(
+                    args, store=store)
+                for cand in ledger["candidates"]:
+                    if (cand.get("likeness") or {}).get("confidence") != "likely":
+                        continue
+                    if store.get(li.job_key_for(cand["videoId"])) is not None:
+                        continue
+                    try:
+                        res = li.ingest_link(
+                            store, cand["url"], client=client, keyless=keyless,
+                            requested_by=args.requested_by or "auto-run")
+                        found.append({"videoId": cand["videoId"],
+                                      "jobKey": res["jobKey"],
+                                      "sourceState": res["source"]["state"]})
+                    except li.LinkIntakeError as exc:
+                        print(f"[auto-run] intake refused {cand['videoId']} "
+                              f"[{exc.code}] {exc}")
+                mf.export_snapshot(mf.build_report(args.db, ledger=ledger))
+            else:
+                print("[auto-run] no verified channel to scan — "
+                      "run verify-channels or paste links by hand")
+
+        # Every job that is not finished and not waiting on a human gets a
+        # pass. A job blocked on source approval is listed, never retried in
+        # a loop: the thing it needs is a person, and saying so once is the
+        # useful behavior.
+        jobs = [j for j in store.list_jobs(kind=models.KIND_RECORD)
+                if j.payload.get("intake") and j.state not in sm.TERMINAL_STATES]
+        for job in jobs[:args.max_jobs]:
+            source = (job.payload.get("source") or {}).get("state")
+            if source != li.SOURCE_APPROVED:
+                runs.append({"jobKey": job.job_key, "state": job.state,
+                             "stop": "human-gate",
+                             "detail": "source not authorized",
+                             "nextCommand": li.next_command(job)})
+                continue
+            print(f"[auto-run] {job.job_key} ({job.state})")
+            try:
+                result = _run_autopilot(store, args, job.job_key)
+            except Exception as exc:  # noqa: BLE001 — one bad job must not
+                # end the pass; the rest of the night's broadcasts still run.
+                runs.append({"jobKey": job.job_key, "state": job.state,
+                             "stop": "error", "detail": f"{type(exc).__name__}: {exc}",
+                             "nextCommand": None})
+                continue
+            runs.append({"jobKey": job.job_key, "state": result["state"],
+                         "stop": result["stop"],
+                         "detail": result["stopDetail"],
+                         "nextCommand": result["nextCommand"]})
+        if args.json:
+            print(json.dumps({"found": found, "runs": runs,
+                              "policy": policy.describe()}, indent=2))
+            return 0
+        print(f"\n[auto-run] {len(found)} new broadcast(s) queued, "
+              f"{len(runs)} job(s) advanced")
+        for r in runs:
+            print(f"  {r['jobKey']:34} {r['state']:<20} {r['stop']}")
+            print(f"      {r['detail']}")
+            if r.get("nextCommand"):
+                print(f"      next: {r['nextCommand']}")
+        waiting = [r for r in runs if r["stop"] not in ("terminal",)]
+        if waiting:
+            print(f"\n[auto-run] {len(waiting)} job(s) need a human. "
+                  f"Everything else ran to completion.")
+        return 0
+    finally:
+        store.close()
+        _ = worker  # imported for parity with the interactive path
+
+
+def cmd_bootstrap_templates(args: argparse.Namespace) -> int:
+    """`bootstrap-templates --job <key>` — raise a package's hero coverage
+    by labeling clusters against the real portraits other packages already
+    carry. Additive only: a hero this package already covers is never
+    touched. `--dry-run` decides and reports without writing a file."""
+    from automation import autopilot as ap
+    from automation import unattended as un
+    import template_bootstrap as tb
+    store = js.JobStore(args.db)
+    try:
+        job = _job_or_exit(store, args.job)
+        floors = un.load_floors(cfg.load_config())
+        if args.dry_run:
+            # Same decision path, no writer: patch the one flag through.
+            import capture
+            import db as content_db
+            from automation import detection_runner as dr
+            layout_id = job.payload.get("expectedLayoutId")
+            if not layout_id:
+                print("[templates] this job has no resolved layout — "
+                      "run resolve-layout first")
+                return 1
+            layout = capture.load_layout(dr.layout_path(layout_id))
+            clip = ap._harvestable_clip(store, job)
+            if not clip:
+                print("[templates] no extracted segment clip to harvest from "
+                      "— approve a gameplay segment first")
+                return 1
+            con = _open_content_db()
+            try:
+                result = tb.auto_label(
+                    con, os.path.join(content_db.REPO_ROOT,
+                                      layout["templates_dir"]),
+                    clip=clip, layout=layout, layout_id=layout_id,
+                    source_video=job.payload.get("videoId"),
+                    min_score=float(floors["template_min_score"]),
+                    min_margin=float(floors["template_min_margin"]),
+                    min_cluster_members=int(floors["template_min_cluster_members"]),
+                    labeled_by=args.labeled_by or "dry-run", dry_run=True)
+            finally:
+                con.close()
+        else:
+            result = ap.default_bootstrap_templates(
+                store, job, floors=floors,
+                media_root=args.media_root or "",
+                labeled_by=args.labeled_by or "bootstrap-templates")
+        if args.json:
+            print(json.dumps(result, indent=2, default=str))
+            return 0
+        print(f"[templates] {args.job}:")
+        print(tb.format_auto_label(result))
+        return 0
     finally:
         store.close()
 
@@ -2094,6 +2289,25 @@ def main(argv: list[str] | None = None) -> int:
                              "assets FROM this VOD. Never the default.")
         sp.add_argument("--no-export", action="store_true",
                         help="skip refreshing assets/data/intake.v1.json")
+        sp.add_argument("--unattended", action="store_true",
+                        help="clear every non-source gate automatically when "
+                             "its quality floors are met (layout + templates "
+                             "+ detection + publish). Source approval is "
+                             "NEVER automatic. Floors: config/automation.yml "
+                             "`unattended_*` — see `unattended-floors`")
+        sp.add_argument("--auto-layout", action="store_true",
+                        help="promote a calibrated layout when its confidence "
+                             "clears unattended_layout_min_confidence")
+        sp.add_argument("--auto-templates", action="store_true",
+                        help="auto-label missing hero templates from the real "
+                             "labeled portraits in other packages (additive; "
+                             "never overwrites a covered hero)")
+        sp.add_argument("--auto-detect", action="store_true",
+                        help="promote detections into production when this "
+                             "run's calibration_health clears every floor")
+        sp.add_argument("--auto-publish", action="store_true",
+                        help="create + push the validated publication branch "
+                             "(never main; the merge stays a human act)")
         sp.add_argument("--json", action="store_true")
 
     cl_p = sub.add_parser("convert-link",
@@ -2122,6 +2336,42 @@ def main(argv: list[str] | None = None) -> int:
                           help="or the pasted URL (resolves to the same job)")
     _add_autopilot_args(ap_run_p)
     ap_run_p.set_defaults(func=cmd_autopilot)
+
+    uf_p = sub.add_parser("unattended-floors",
+                          help="print the quality floors every automatic "
+                               "gate must clear, and where each came from")
+    uf_p.add_argument("--json", action="store_true")
+    uf_p.set_defaults(func=cmd_unattended_floors)
+
+    bt_p = sub.add_parser("bootstrap-templates",
+                          help="auto-label a package's missing hero templates "
+                               "from the real portraits other packages carry")
+    bt_p.add_argument("--job", required=True)
+    bt_p.add_argument("--labeled-by", default=None,
+                      help="recorded in the package's provenance file")
+    bt_p.add_argument("--media-root", default=None)
+    bt_p.add_argument("--dry-run", action="store_true",
+                      help="decide and report, write no template file")
+    bt_p.add_argument("--json", action="store_true")
+    bt_p.set_defaults(func=cmd_bootstrap_templates)
+
+    ar_p = sub.add_parser("auto-run",
+                          help="the scheduled entry point: scan for new "
+                               "broadcasts, then advance every job as far as "
+                               "its evidence allows")
+    ar_p.add_argument("--no-scan", action="store_true",
+                      help="skip the match-finder scan; only advance jobs "
+                           "already tracked")
+    ar_p.add_argument("--limit", type=int, default=60,
+                      help="max videos per channel from the streams tab")
+    ar_p.add_argument("--max-jobs", type=int, default=5,
+                      help="most jobs to advance in one pass (default %(default)s)")
+    ar_p.add_argument("--requested-by", default=None)
+    ar_p.add_argument("--no-metadata", action="store_true")
+    ar_p.add_argument("--no-keyless", action="store_true")
+    ar_p.add_argument("--fixture-dir", default=None)
+    _add_autopilot_args(ar_p)
+    ar_p.set_defaults(func=cmd_auto_run)
 
     fm_p = sub.add_parser("find-matches",
                           help="auto match finder: scan verified channels on "
