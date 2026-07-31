@@ -246,7 +246,7 @@ def main() -> None:
           "demo-ribbon" in shell and "meta.demo" in shell)
     check("shell links public + control-room surfaces",
           "tournaments.html" in shell and "runs.html" in shell
-          and "index.html" in shell)
+          and "portal.html" in shell)
     check("shell respects prefers-reduced-motion",
           "prefers-reduced-motion" in shell)
     pt = read("assets/js/public/page-tournament.js")
@@ -414,8 +414,52 @@ def main() -> None:
     check("comps page groups only publicComps (credibility rule)",
           "publicComps" in pcp)
 
+    print("front door: the public site is the front page, the portal is a page:")
+    idx = read("index.html")
+    check("index.html is a public fan page, not the control room",
+          "assets/css/public.css" in idx
+          and "assets/js/public/page-home.js" in idx
+          and "assets/js/ui.js" not in idx)
+    check("index.html leads with what the site is and links the explainer",
+          "how-it-works.html" in idx and "portal.html" in idx)
+    home = read("assets/js/public/page-home.js")
+    check("the front page shows a real verified match, not a mock",
+          "publicComps" in home and "match.html?id=" in home)
+    check("the front page states the size of the dataset honestly",
+          "home-coverage" in home and "verified compositions" in home)
+    portal = read("portal.html")
+    check("portal.html keeps the paste-a-link flow + match finder",
+          "ik-form" in portal and "mf-scan" in portal
+          and "assets/js/public/page-intake.js" in portal)
+    check("portal.html points back at the public site",
+          'href="index.html"' in portal)
+    check("intake.html redirects to the portal, not the old front page",
+          "portal.html#pipeline" in read("intake.html"))
+    how = read("how-it-works.html")
+    check("how-it-works explains verified/auto-high, evidence and limits",
+          all(k in how for k in ("#verified", "#evidence", "#glossary",
+                                 "#limits", "gloss-root"))
+          and "auto-high" in how.lower())
+    check("the glossary renders the site's own chip helpers (cannot drift)",
+          "chipCapture" in read("assets/js/public/page-how.js")
+          and "badgeSrc" in read("assets/js/public/page-how.js"))
+    check("every public page links How it works from the shared nav",
+          '{ href: "how-it-works.html", label: "How it works" }' in shell)
+
+    print("every in-repo page link resolves to a real file:")
+    pages = [f for f in sorted(os.listdir(ROOT)) if f.endswith(".html")]
+    broken = []
+    for p in pages:
+        for href in re.findall(r'href="([^"#?:]+\.html)[^"]*"', read(p)):
+            if "${" in href or "{{" in href:
+                continue          # built at runtime from run data, not a link
+            if not os.path.exists(os.path.join(ROOT, href)):
+                broken.append(f"{p} -> {href}")
+    check(f"no dead page link in {len(pages)} pages ({', '.join(broken) or 'none'})",
+          not broken)
+
     print("old control-room surfaces untouched:")
-    for p in ["index.html", "run.html", "runs.html", "sources.html",
+    for p in ["portal.html", "run.html", "runs.html", "sources.html",
               "admin.html", "team-prep.html", "prep.html", "fact-admin.html",
               "team-coverage.html", "beta-ops.html"]:
         h = read(p)

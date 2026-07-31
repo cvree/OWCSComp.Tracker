@@ -1,290 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>OWCS Comp Tracker — paste a link, get the comps</title>
-<meta name="description" content="Paste one OWCS broadcast link and the pipeline turns it into a verified hero-composition timeline with evidence. Auto match finder for every OWCS broadcast, on permanently free sources." />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OWCS Comp Tracker — verified pro Overwatch compositions</title>
+<meta name="description" content="Which heroes pro Overwatch teams actually played, read off the broadcast frame by frame, reviewed by a human, and linked to the evidence. Independent OWCS fan project.">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css" />
-<style>
-  /* ---- portal-only styles (intake cards + match finder) ---- */
-  .ik-job { border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; margin: 18px 0; }
-  .ik-job h2 { font-size: 1.05rem; margin: 0 0 4px; }
-  .ik-meta { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: .8rem; color: var(--muted); margin: 6px 0 10px; }
-  .ik-meta b { color: var(--text); font-weight: 600; }
-  .ik-chip { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: .72rem;
-    border: 1px solid var(--line); white-space: nowrap; }
-  .ik-chip.ok { border-color: var(--win, #46d68c); color: var(--win, #46d68c); }
-  .ik-chip.warn { border-color: var(--amber); color: var(--amber); }
-  .ik-chip.bad { border-color: var(--loss, #e15b5b); color: var(--loss, #e15b5b); }
-  .ik-block { color: var(--amber); font-size: .82rem; margin: 2px 0; }
-  .ik-warn { color: var(--muted); font-size: .8rem; margin: 2px 0; }
-  .ik-cmd { display: block; font-size: .74rem; color: var(--text); background: rgba(255,255,255,.04);
-    border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; margin: 4px 0;
-    font-family: ui-monospace, "SF Mono", Consolas, monospace; overflow-x: auto; white-space: pre; }
-  .ik-timeline { position: relative; height: 26px; background: rgba(255,255,255,.05);
-    border: 1px solid var(--line); border-radius: 6px; margin: 10px 0 4px; overflow: hidden; }
-  .ik-span { position: absolute; top: 0; bottom: 0; border-radius: 3px; opacity: .85; }
-  .ik-span.pending { background: var(--amber); }
-  .ik-span.approved { background: var(--win, #46d68c); }
-  .ik-span.rejected, .ik-span.invalid { background: var(--loss, #e15b5b); }
-  .ik-span.split, .ik-span.merged { background: rgba(255,255,255,.25); }
-  .ik-scale { display: flex; justify-content: space-between; font-size: .7rem; color: var(--muted); }
-  .ik-seg { border-top: 1px solid var(--line); padding: 12px 0; }
-  .ik-seg-head { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: baseline; }
-  .ik-seg-head h3 { font-size: .92rem; margin: 0; }
-  .ik-thumbs { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0; }
-  .ik-thumbs figure { margin: 0; }
-  .ik-thumbs img { width: 190px; max-width: 42vw; border-radius: 6px; border: 1px solid var(--line); display: block; }
-  .ik-thumbs figcaption { font-size: .7rem; color: var(--muted); margin-top: 3px; }
-  .ik-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 8px 16px; margin: 8px 0; }
-  .ik-field { font-size: .8rem; }
-  .ik-field .k { color: var(--muted); text-transform: uppercase; letter-spacing: .04em; font-size: .68rem; display: block; }
-  .ik-field .v { font-weight: 600; }
-  .ik-field .v.unknown { color: var(--amber); font-weight: 500; }
-  .ik-field .why { color: var(--muted); font-size: .72rem; display: block; margin-top: 2px; }
-  .ik-slots { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 4px 12px;
-    font-size: .76rem; margin: 6px 0; }
-  .ik-actions { margin-top: 8px; }
-  .ik-actions .lbl { font-size: .76rem; font-weight: 600; }
-  .ik-actions .note { font-size: .72rem; color: var(--muted); }
-  .ik-rej { font-size: .74rem; color: var(--muted); margin: 4px 0; }
-  table.ik-lay { width: 100%; border-collapse: collapse; font-size: .76rem; margin: 6px 0; }
-  table.ik-lay td, table.ik-lay th { padding: 4px 8px; border-bottom: 1px solid var(--line); text-align: left; }
-  .ik-form-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 10px 0 6px; }
-  .ik-form-row input[type="url"] { flex: 1 1 320px; min-width: 0; padding: 12px 14px;
-    background: rgba(255,255,255,.05); border: 1px solid var(--line); border-radius: 10px;
-    color: var(--text); font: inherit; font-size: .95rem; }
-  .ik-form-row button { padding: 12px 20px; border-radius: 10px; border: 1px solid var(--line);
-    background: rgba(255,255,255,.08); color: var(--text); font: inherit; font-size: .9rem;
-    font-weight: 600; cursor: pointer; }
-  .ik-form-row button:disabled { opacity: .45; cursor: not-allowed; }
-  .ik-form-opt { font-size: .78rem; color: var(--muted); display: flex; gap: 6px;
-    align-items: baseline; margin: 4px 0; }
-  .ik-form-note { font-size: .78rem; color: var(--muted); margin: 6px 0 0; }
-  .ik-form-note.bad { color: var(--loss, #e15b5b); }
-  .ik-form-note.ok { color: var(--win, #46d68c); }
-  .ik-panel { border: 1px solid var(--line); border-radius: 12px; padding: 14px 18px; margin: 18px 0; }
-  .ik-panel h2 { font-size: 1.02rem; margin: 0 0 8px; }
-  .ik-stat { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 8px 18px; }
-  .ik-stat > div { font-size: .8rem; }
-  .ik-stat .k { color: var(--muted); text-transform: uppercase; letter-spacing: .04em;
-    font-size: .66rem; display: block; }
-  .ik-stat .v { font-weight: 600; }
-  .ik-stat .v.good { color: var(--win, #46d68c); }
-  .ik-stat .v.bad { color: var(--loss, #e15b5b); }
-  .ik-stat .v.warn { color: var(--amber); }
-  .ik-ladder { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 0; }
-  .ik-rung { font-size: .7rem; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line);
-    color: var(--muted); }
-  .ik-rung.on { border-color: var(--win, #46d68c); color: var(--win, #46d68c); }
-  .ik-rung.active { border-color: var(--amber); color: var(--amber); font-weight: 700; }
-  .ik-btns { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 0; }
-  .ik-btns button { padding: 6px 12px; border-radius: 7px; border: 1px solid var(--line);
-    background: rgba(255,255,255,.06); color: var(--text); font: inherit; font-size: .76rem;
-    font-weight: 600; cursor: pointer; }
-  .ik-btns button:hover:not(:disabled) { background: rgba(255,255,255,.12); }
-  .ik-btns button:disabled { opacity: .4; cursor: not-allowed; }
-  .ik-btns button.danger { border-color: var(--loss, #e15b5b); color: var(--loss, #e15b5b); }
-  .ik-btns button.go { border-color: var(--win, #46d68c); color: var(--win, #46d68c); }
-  .ik-who { padding: 6px 10px; border-radius: 7px; border: 1px solid var(--line);
-    background: rgba(255,255,255,.05); color: var(--text); font: inherit; font-size: .76rem;
-    max-width: 190px; }
-  .ik-remedy { font-size: .74rem; color: var(--amber); margin: 4px 0; }
-  .ik-remedy code { color: var(--text); }
-  #ik-live-log { max-height: 260px; overflow: auto; background: rgba(0,0,0,.35);
-    border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; margin: 10px 0 0;
-    font-family: ui-monospace, "SF Mono", Consolas, monospace; font-size: .72rem;
-    line-height: 1.45; white-space: pre-wrap; word-break: break-word; }
-  /* paste hero */
-  .portal-hero { padding: 44px 0 8px; }
-  .portal-hero h1 { font-size: clamp(1.7rem, 4vw, 2.6rem); margin: 6px 0 10px; }
-  .portal-hero .lead { max-width: 62ch; }
-  .flow-strip { display: flex; flex-wrap: wrap; gap: 6px 10px; margin: 14px 0 4px;
-    font-size: .74rem; color: var(--muted); align-items: center; }
-  .flow-strip b { color: var(--text); font-weight: 600; }
-  .flow-strip .gate { color: var(--amber); }
-  .flow-strip .arw { opacity: .5; }
-  /* match finder cards */
-  .mf-head { display: flex; flex-wrap: wrap; gap: 10px; align-items: baseline; justify-content: space-between; }
-  .mf-cand { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center;
-    border-top: 1px solid var(--line); padding: 10px 0; }
-  .mf-cand:first-of-type { border-top: 0; }
-  .mf-cand .t { flex: 1 1 320px; min-width: 0; }
-  .mf-cand .t b { font-size: .88rem; font-weight: 600; display: block; }
-  .mf-cand .t span { font-size: .74rem; color: var(--muted); }
-  .mf-cand .likeness-why { cursor: help; }
-  .mf-watch { font-size: .78rem; color: var(--text); text-decoration: none;
-    border: 1px solid var(--line); border-radius: 7px; padding: 6px 12px;
-    white-space: nowrap; }
-  .mf-watch:hover { border-color: var(--amber); }
-  .mf-err { color: var(--amber); font-size: .76rem; margin: 4px 0; }
-  .results-links { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 0; }
-  .results-links a { padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px;
-    font-size: .82rem; color: var(--text); text-decoration: none; }
-  .results-links a:hover { border-color: var(--amber); }
-  details.adv { margin: 18px 0; }
-  details.adv summary { cursor: pointer; color: var(--muted); font-size: .84rem; }
-</style>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Cinzel:wght@500;600&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Cinzel:wght@500;600&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="assets/css/public.css">
 </head>
-<body data-page="portal" data-shell="control" data-vanta="net">
+<body class="pub">
+<a class="skip-link" href="#main">Skip to content</a>
+<main class="pub-main" id="main">
 
-<nav class="nav">
-  <div class="wrap nav-inner">
-    <a class="brand brand--pub" href="index.html"><span class="brand-mark">CT</span><span class="brand-word">OWCS Comp Tracker</span><span class="brand-tag">paste a link, get the comps</span></a>
-    <div class="nav-links">
-      <a href="index.html" class="active">Portal</a>
-      <a href="matches.html">Matches</a>
-      <a href="calendar.html">Calendar</a>
-      <a href="teams.html">Teams</a>
-      <a href="stats.html">Hero stats</a>
-    </div>
-    <span class="nav-status" id="nav-status"><span class="dot"></span><span>checking…</span></span>
+  <!-- 1 · what this is ------------------------------------------------- -->
+  <div class="home-hero rv">
+    <span class="ph-eyebrow">Independent OWCS intelligence</span>
+    <h1>Every hero pick in pro Overwatch —<br><span class="gold-word">proven, not guessed.</span></h1>
+    <p class="lede">Schedules and scores are everywhere. <b>What the teams actually played</b>
+      is not. This site reads the hero portraits straight off the OWCS broadcast, frame by
+      frame, has a human check the reads, and then shows you the exact crops it decided from.
+      If a composition can't show its receipts, it isn't published.</p>
+    <div class="cluster home-cta" id="home-cta"></div>
+    <p class="home-honesty" id="home-coverage"></p>
   </div>
-</nav>
 
-<!-- ============ 1 · PASTE ============ -->
-<header class="portal-hero">
-  <div class="wrap">
-    <p class="eyebrow">OWCS · one link is the whole workflow</p>
-    <h1>Paste a broadcast link.<br><span class="amber">The pipeline does the rest.</span></h1>
-    <p class="lead muted">One YouTube URL becomes a calibrated, human-reviewed hero-composition
-      timeline with click-through evidence. Every automatic stage runs on its own; the pipeline
-      stops only where a human decision genuinely belongs.</p>
+  <!-- 2 · what you can do here ------------------------------------------ -->
+  <section class="section" aria-labelledby="h-start">
+    <h2 id="h-start">Start here</h2>
+    <p class="lede" style="margin-bottom:var(--sp-4)">Four ways in. Each one is a different
+      question about the same verified data.</p>
+    <div class="grid-cards" id="home-doors"></div>
+  </section>
 
-    <section id="ik-intake" style="margin-top:18px">
-      <form id="ik-form">
-        <div class="ik-form-row">
-          <input type="url" id="ik-url" placeholder="https://www.youtube.com/watch?v=…"
-                 autocomplete="off" spellcheck="false" required />
-          <button type="submit" id="ik-go" disabled>Convert broadcast</button>
-        </div>
-        <label class="ik-form-opt"><input type="checkbox" id="ik-autoaccept" />
-          <span>auto-accept clean identity proposals (segment review only — anything blocked or
-          UNKNOWN still waits for a human)</span></label>
-      </form>
-      <div class="ik-form-row" style="margin-top:4px">
-        <label class="ik-form-opt" style="margin:0">your name
-          <input class="ik-who" id="ik-who" placeholder="for audited approvals"
-                 autocomplete="off" /></label>
+  <!-- 3 · the actual product, on the front page -------------------------- -->
+  <section class="section" aria-labelledby="h-featured">
+    <h2 id="h-featured">The verified map</h2>
+    <p class="lede" style="margin-bottom:var(--sp-4)">This is what a finished result looks like —
+      both line-ups, every confirmed mid-map swap, and a link to the frames behind each read.</p>
+    <div id="home-featured"></div>
+  </section>
+
+  <!-- 4 · how it works, short version ------------------------------------ -->
+  <section class="section" aria-labelledby="h-how">
+    <h2 id="h-how">How a broadcast becomes data</h2>
+    <p class="lede" style="margin-bottom:var(--sp-4)">Five steps. Two of them are a human
+      saying yes — that is on purpose.
+      <a href="how-it-works.html">Read the long version →</a></p>
+    <ol class="how-steps" id="home-steps"></ol>
+  </section>
+
+  <!-- 5 · limits --------------------------------------------------------- -->
+  <section class="section" aria-labelledby="h-limits">
+    <h2 id="h-limits">What this site does <em>not</em> claim</h2>
+    <p class="lede" style="margin-bottom:var(--sp-4)">A tracker that hides its limits is just a
+      rumour with a stylesheet. These are ours, in plain language.</p>
+    <div class="limit-grid" id="home-limits"></div>
+  </section>
+
+  <!-- 6 · operators ------------------------------------------------------ -->
+  <section class="section" aria-labelledby="h-run">
+    <h2 id="h-run">Run it on a broadcast yourself</h2>
+    <div class="card home-operator">
+      <div class="stack-sm">
+        <p style="margin:0">The whole pipeline is free and open: paste a YouTube link into the
+          <b>operator portal</b> and it downloads the VOD, calibrates the HUD, finds the maps,
+          proposes the teams and reads the compositions — stopping at each point where a human
+          has to confirm something.</p>
+        <p class="dim" style="margin:0;font-size:13px">On this hosted copy the portal is
+          read-only: there is no server behind a static site, so it builds the exact command
+          for you to run against your own checkout instead of pretending to work.</p>
       </div>
-      <p class="ik-form-note" id="ik-note">checking for the local control room…</p>
-      <code class="ik-cmd" id="ik-cmd-preview" hidden></code>
-      <pre id="ik-live-log" hidden></pre>
-      <div class="flow-strip" aria-label="pipeline stages">
-        <b>paste</b><span class="arw">→</span>
-        <span>download + scan proxy</span><span class="arw">→</span>
-        <span>layout calibration</span><span class="arw">→</span>
-        <span>map / team / player proposals</span><span class="arw">→</span>
-        <span class="gate">human review</span><span class="arw">→</span>
-        <span>detection</span><span class="arw">→</span>
-        <span class="gate">human publish</span>
+      <div class="cluster">
+        <a class="btn btn--gold" href="portal.html">Open the operator portal</a>
+        <a class="btn" href="how-it-works.html#pipeline">What each stage does</a>
       </div>
-    </section>
-  </div>
-</header>
-
-<!-- ============ 2 · AUTO MATCH FINDER ============ -->
-<section id="matchfinder">
-  <div class="wrap">
-    <div class="ik-panel" style="margin-top:8px">
-      <div class="mf-head">
-        <div>
-          <h2 style="margin:0">Auto match finder</h2>
-          <p class="muted" style="font-size:.8rem;margin:4px 0 0">Every broadcast on the verified
-            OWCS channels, found automatically on permanently free sources (channel RSS + the
-            streams tab — no API key, no quota, $0 forever). One click sends a broadcast into the
-            same paste-link flow above.</p>
-        </div>
-        <div class="ik-btns" style="margin:0">
-          <button id="mf-scan" class="go">Scan for new matches</button>
-        </div>
-      </div>
-      <p class="ik-form-note" id="mf-note"></p>
-      <div id="mf-root"><p class="muted" style="font-size:.82rem">Loading match finder…</p></div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ============ 3 · PIPELINE (REVIEW GATES LIVE HERE) ============ -->
-<section id="pipeline">
-  <div class="wrap">
-    <div class="section-head" style="margin-top:8px">
-      <p class="eyebrow">Pipeline</p>
-      <h2 style="font-size:clamp(1.2rem,2.4vw,1.6rem)">Every pasted broadcast, every stage, every gate.</h2>
-      <p class="muted" style="font-size:.86rem">Proposed values are shown beside what a human has
-        confirmed — only confirmed values are ever published. Nothing here approves itself.</p>
-      <div class="ik-meta" id="ik-summary"></div>
-    </div>
-    <div id="ik-root"><p class="muted">Loading intake status…</p></div>
+</main>
 
-    <details class="adv">
-      <summary>Download authentication &amp; readiness (advanced)</summary>
-      <div class="ik-panel" id="ik-dl">
-        <p class="muted" style="font-size:.78rem;margin:0 0 10px">
-          Read-only status. Cookie access is OFF unless configured in the environment; this shows
-          <em>whether</em> a source is configured — never its value, never a profile path, never a key.</p>
-        <div class="ik-stat" id="ik-dl-stat"><span class="muted">loading…</span></div>
-        <div class="ik-ladder" id="ik-dl-ladder"></div>
-        <div id="ik-dl-assets"></div>
-      </div>
-    </details>
-  </div>
-</section>
-
-<!-- ============ 4 · RESULTS ============ -->
-<section id="results">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">Results</p>
-      <h2 style="font-size:clamp(1.2rem,2.4vw,1.6rem)">What the pros actually played.</h2>
-      <p class="muted" style="font-size:.86rem">Everything published by the pipeline — verified
-        comps, swaps and stats with receipts.</p>
-    </div>
-    <div class="results-links">
-      <a href="matches.html">Matches</a>
-      <a href="calendar.html">Calendar</a>
-      <a href="teams.html">Teams</a>
-      <a href="heroes.html">Heroes</a>
-      <a href="stats.html">Hero stats</a>
-      <a href="comps.html">Comps</a>
-      <a href="swaps.html">Swap evidence</a>
-      <a href="maps.html">Maps</a>
-      <a href="tournaments.html">Tournaments</a>
-    </div>
-  </div>
-</section>
-
-<!-- ============ FOOTER ============ -->
-<footer class="site">
-  <div class="wrap foot-grid">
-    <div>
-      <a class="brand" href="index.html"><span class="brand-mark"></span>OWCS Comp Tracker</a>
-      <p style="margin-top:10px">Independent fan project. Not affiliated with or endorsed by
-        Blizzard Entertainment, Overwatch, or OWCS. Overwatch is a trademark of Blizzard
-        Entertainment, Inc. Data recorded from public broadcasts.</p>
-    </div>
-    <div>
-      <p class="muted small" style="margin-bottom:6px">Advanced tools (the back office — you never
-        need these for the paste-link flow):</p>
-      <p><a href="run.html">Manual run</a> · <a href="runs.html">Vision lab</a> ·
-         <a href="calibration.html">Calibration</a> · <a href="sources.html">Sources</a> ·
-         <a href="admin.html">Review</a> · <a href="team-coverage.html">Team coverage</a> ·
-         <a href="beta-ops.html">Beta ops</a></p>
-    </div>
-  </div>
-</footer>
-
-<script src="assets/js/ui.js"></script>
-<script src="assets/js/public/page-intake.js"></script>
 <script src="assets/vendor/lenis.min.js" defer></script>
 <script src="assets/vendor/gsap.min.js" defer></script>
 <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
 <script src="assets/vendor/three.min.js" defer></script>
 <script src="assets/vendor/vanta.net.min.js" defer></script>
 <script src="assets/js/motion.js" defer></script>
+<script src="assets/data/public_data.v1.js"></script>
+<script src="assets/data/public_fixture.v1.js"></script>
+<script src="assets/js/public/core.js"></script>
+<script src="assets/js/public/assets.js"></script>
+<script src="assets/js/public/shell.js"></script>
+<script src="assets/js/public/stats.js"></script>
+<script src="assets/js/public/page-home.js"></script>
 </body>
 </html>

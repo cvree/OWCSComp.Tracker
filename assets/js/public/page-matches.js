@@ -14,15 +14,40 @@
 
   let region = P.qs().get("region") || "all";
 
+  /* The one question a visitor actually has about a row in a schedule:
+     "does this one have the hero data yet?" — answered on the card, in
+     words, instead of making them open every match to find out. */
+  const compCount = (matchId) =>
+    (P.publicComps ? P.publicComps((c) => c.matchId === matchId) : []).length;
+
+  function dataLine(m) {
+    const n = compCount(m.id);
+    if (n) return `<span class="m-data m-data--yes">✓ ${n} verified composition${n === 1 ? "" : "s"}</span>`;
+    if (m.status === "upcoming")
+      return `<span class="m-data">Not played yet — compositions are read after the broadcast.</span>`;
+    if (m.status === "forfeit")
+      return `<span class="m-data">Forfeit — no broadcast, so nothing to read.</span>`;
+    const why = {
+      "needs-review": "Captured; detections still waiting on human review.",
+      "capturing": "Being captured right now.",
+      "queued": "Queued for capture.",
+      "needs-source": "No broadcast VOD linked yet.",
+      "failed": "The capture run failed — see the match page.",
+      "verified": "Capture verified; nothing promoted yet.",
+    }[m.captureStatus] || "No compositions published yet.";
+    return `<span class="m-data">${esc(why)}</span>`;
+  }
+
   function card(m) {
     const t = P.tournament(m.tournamentId);
     const winA = m.winner && m.winner === m.teamA, winB = m.winner && m.winner === m.teamB;
+    const scored = m.scoreA != null || m.scoreB != null;
     return `<a class="card card--link card--spot m-card rv" href="match.html?id=${esc(m.id)}">
       <div class="m-card__meta">
         ${P.chipStatus(m.status)} ${P.chipCapture(m.captureStatus)}
         ${t ? P.badgeRegion(t.region) : ""}
         <span>${t ? esc(t.name) : ""}</span>
-        <span class="mono">${esc(P.fmtLocal(m.scheduledAt))}</span>
+        <span class="mono">${esc(P.fmtLocal(m.scheduledAt))}${m.timeKnown === false ? " (time TBA)" : ""}</span>
       </div>
       <div class="m-card__row">
         <div class="m-card__teams">
@@ -30,16 +55,22 @@
           ${P.teamPlate(m.teamB, { win: winB, tbd: m.tbdNote })}
         </div>
         <span class="cluster">
-          ${P.scorePlate(m.scoreA, m.scoreB, winA ? "a" : winB ? "b" : null)}
+          ${scored ? P.scorePlate(m.scoreA, m.scoreB, winA ? "a" : winB ? "b" : null) : ""}
           ${m.status === "live" && m.streamUrl ? `<span class="btn btn--gold" style="pointer-events:none">Watch</span>` : ""}
         </span>
       </div>
+      ${dataLine(m)}
     </a>`;
   }
 
+  /* An empty section should cost one line, not a screen: on a young dataset
+     the big "nothing here" boxes used to push the real results below the
+     fold on every visit. */
   function section(el, title, list, emptyMsg) {
     el.innerHTML = `<h2>${esc(title)} <span class="h-count">${list.length || ""}</span></h2>` +
-      (list.length ? `<div class="stack-sm">${list.map(card).join("")}</div>` : P.emptyState("◷", emptyMsg[0], emptyMsg[1]));
+      (list.length
+        ? `<div class="stack-sm">${list.map(card).join("")}</div>`
+        : `<p class="empty-line"><b>${esc(emptyMsg[0])}.</b> ${esc(emptyMsg[1])}</p>`);
   }
 
   function render(push) {
@@ -56,7 +87,9 @@
     section(P.$("#m-live"), "Live now", live, ["Nothing on air", "When a tracked match goes live it appears here with a watch link."]);
     section(P.$("#m-upcoming"), "Upcoming", upcoming, ["No matches scheduled", "New matches appear after the discovery import runs for this region."]);
     section(P.$("#m-recent"), "Recent results", recent, ["No results yet", "Finished series show up here with their capture status."]);
+    const withComps = ms.filter((m) => compCount(m.id)).length;
     P.$("#m-summary").innerHTML = `<span>${ms.length} match${ms.length === 1 ? "" : "es"}</span>` +
+      `<span class="fs-pill">${withComps} with verified compositions</span>` +
       (region !== "all" ? `<span class="fs-pill">region: ${esc(P.regionName(region))}</span>` : `<span class="faint">all regions</span>`);
     P.observeReveals(document);
   }

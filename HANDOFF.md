@@ -1,5 +1,97 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
+## CURRENT STATUS (authoritative — 2026-07-31, sixth pass) — the site explains itself
+
+> Additive to the fifth pass below. The pipeline worked; the *site* was
+> still shaped like the tool that built it. This pass is entirely about
+> what a visitor sees and can do.
+
+### 1. The front page was an operator console
+
+`index.html` was the paste-a-link portal, so the first thing a fan met was
+a form that cannot work on static hosting, with the actual results (the
+verified Nepal map, the swap evidence, the stats) demoted to footer links.
+
+* **`index.html` is now the public front door** (public shell,
+  `assets/js/public/page-home.js`): what the site is, the honest size of
+  the dataset computed live from `publicComps()` — never rounded up, never
+  a "coming soon" — the featured verified map rendered in full (both
+  line-ups from real broadcast crops, the confirmed swaps, the winner),
+  the five-step explanation, the published limits, and one-line
+  descriptions of every surface.
+* **The portal moved to `portal.html`**, unchanged in function, with a
+  banner saying it is the back office and that reading the data never
+  needs it. `intake.html` redirects there; every control-room page gained
+  a Portal link; the tests that asserted "index.html is a control-room
+  page" now assert it of `portal.html`.
+
+### 2. Nothing defined its own terms
+
+**`how-it-works.html`** is the manual: what "verified" means (reviewed vs
+auto-high, and that everything else is withheld rather than greyed out),
+the five stages, the evidence chain, the swap rejection ledger, how the
+stats are counted, and what the tracker refuses to claim. Its glossary is
+rendered by the site's own `P.chipStatus` / `P.chipCapture` / `P.badgeSrc`
+helpers, so a label change in `core.js` changes the glossary too — a
+glossary that can silently drift is worse than none. It is in the nav on
+every public page.
+
+### 3. Getting anywhere took too many hops
+
+Site search lives in `shell.js`: a header button plus `/` and ⌘/Ctrl-K,
+indexing matches, teams, heroes, maps, tournaments and the site's own
+pages from `public_data.v1.js`. No service, no index artifact.
+
+### 4. Real defects fixed on the way
+
+* **Sample rosters were published as fact.** `players` rows carrying
+  `source='sample'` (GEN-TAN1, FLC-DAM2, …) are fixture rows for the
+  offline tests; the public export shipped them as if they were real
+  line-ups. `export_data.py` now filters them from `_current_roster` and
+  from the exported `players` list — a team whose only lineups are
+  fixtures exports an empty roster, which is the honest answer. The
+  internal control-room dataset (`assets/js/data.js`) is untouched: it is
+  allowed to carry its labelled demo. Covered by two new contract tests.
+* **A closed search palette covered the whole page.** `.palette` set
+  `display:grid`, which beats the UA `[hidden]` rule; found by screenshot,
+  fixed with an explicit `.palette[hidden]`.
+* **"Score detail unavailable"** now says which part is missing —
+  "Twisted Minds won this map. The per-round scoreline was not read from
+  the broadcast" — and the empty `– : –` plate is dropped entirely when no
+  score exists, so a blank can't read as a zero.
+* **The match page hid its own product behind a tab.** The overview now
+  carries the line-ups and confirmed swaps; when there are none it states
+  the reason, from the same `whyNoComps()` the Comps tab uses.
+* **Empty schedule sections cost a screen each.** Live/Upcoming collapse
+  to one line, and every match card now says whether its compositions
+  exist yet ("✓ 8 verified compositions" / "Captured; detections still
+  waiting on human review").
+* **Zero-data dossiers read like breakage.** Hero and team pages lead with
+  a sentence saying whether anything has been captured, so four zeroes are
+  legible as coverage rather than as a loss record. Team "tracking
+  coverage" is a readable list instead of red chips whose meaning lived in
+  a tooltip. Publisher artwork moved below the evidence sections and is
+  size-capped.
+* **Webfonts blocked first paint** on every page (a `<link>` to
+  fonts.googleapis.com). Now loaded non-render-blocking with a `<noscript>`
+  fallback; the CSS already had real fallback stacks.
+* The static portal's "no intake snapshot (HTTP 404)" error is now stated
+  as the normal state of a hosted copy, with the commands to change it.
+
+### 5. Test + doc state
+
+`test_public_site.py` gained the front-door/explainer contract and a
+repo-wide dead-page-link check (every `href="*.html"` in every page must
+resolve). `test_public_export_contracts.py` gained the sample-player
+rules. README, `docs/AUTOMATION.md` and `serve.py`'s startup banner point
+at the new page names.
+
+Two suites fail in a container without `ffmpeg`/`yt-dlp` on PATH
+(`test_calibration_tools.py`, and the `worker-doctor` case in
+`test_automation_cli_import_isolation.py`) — environmental, unrelated to
+this pass; everything else passes plus `check_packaging.py`.
+
+
 ## CURRENT STATUS (authoritative — 2026-07-29, fifth pass) — making the finder actually work
 
 > Additive to the fourth pass below. The fourth pass BUILT the match

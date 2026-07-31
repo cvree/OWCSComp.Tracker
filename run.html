@@ -6,7 +6,8 @@
 <title>Control room — OWCS Comp Tracker</title>
 <meta name="robots" content="noindex" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="assets/css/style.css" />
 <style>
   .room { display: grid; grid-template-columns: minmax(320px, .9fr) 1.1fr; gap: 18px; align-items: start; }
@@ -40,7 +41,7 @@
 <nav class="nav">
   <div class="wrap nav-inner">
     <a class="brand" href="index.html"><span class="brand-mark"></span>OWCS Comp Tracker</a>
-    <div class="nav-links"><a class="active" href="run.html">Run</a><a href="runs.html">Vision Lab</a><a href="calibration.html">Calibration</a><a href="sources.html">Sources</a><a href="matches.html">Matches</a><a href="admin.html">Admin</a></div>
+    <div class="nav-links"><a href="portal.html">Portal</a><a class="active" href="run.html">Run</a><a href="runs.html">Vision Lab</a><a href="calibration.html">Calibration</a><a href="sources.html">Sources</a><a href="matches.html">Matches</a><a href="admin.html">Admin</a></div>
     <span class="nav-status" id="nav-status"><span class="dot"></span><span>checking…</span></span>
   </div>
 </nav>

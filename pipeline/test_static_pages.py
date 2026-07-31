@@ -64,7 +64,7 @@ def main() -> None:
           ".scroll-progress" in css and "#cr-atmosphere" in css)
 
     print("pages load the shared system:")
-    pages = ["index.html", "run.html", "runs.html", "sources.html",
+    pages = ["portal.html", "run.html", "runs.html", "sources.html",
              "admin.html", "team-prep.html", "calibration.html",
              "prep.html", "fact-admin.html"]
     for p in pages:
@@ -76,16 +76,17 @@ def main() -> None:
               and "assets/vendor/gsap.min.js" in h
               and "assets/vendor/ScrollTrigger.min.js" in h
               and "assets/js/motion.js" in h)
-    check("index.html opts into the Vanta tactical grid",
-          'data-vanta="net"' in read("index.html")
-          and "assets/vendor/three.min.js" in read("index.html")
-          and "assets/vendor/vanta.net.min.js" in read("index.html"))
+    check("portal.html opts into the Vanta tactical grid",
+          'data-vanta="net"' in read("portal.html")
+          and "assets/vendor/three.min.js" in read("portal.html")
+          and "assets/vendor/vanta.net.min.js" in read("portal.html"))
 
     # stats.html and matches.html were rebuilt as public fan pages — they
     # now load the public shell instead (fully covered by
     # test_public_site.py; asserted here too so a regression to neither
     # shell can slip through).
-    for p in ["stats.html", "matches.html", "teams.html", "team.html"]:
+    for p in ["index.html", "how-it-works.html", "stats.html", "matches.html",
+              "teams.html", "team.html"]:
         h = read(p)
         check(f"{p}: rebuilt on the public shell",
               "assets/css/public.css" in h
@@ -93,7 +94,7 @@ def main() -> None:
 
     print("nav links resolve to real files:")
     import re
-    for p in ["index.html", "run.html", "runs.html", "sources.html"]:
+    for p in ["index.html", "portal.html", "run.html", "runs.html", "sources.html"]:
         h = read(p)
         hrefs = re.findall(r'href="([a-z\-]+\.html)"', h)
         missing = [x for x in set(hrefs)

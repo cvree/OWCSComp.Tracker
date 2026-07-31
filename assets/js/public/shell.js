@@ -23,16 +23,19 @@
 
   /* One site, one nav: the five result surfaces people actually open.
      Everything else (tournaments, comps, swaps, maps) stays one click away
-     in the footer — heavily simplified on purpose. */
+     in the footer — heavily simplified on purpose. "How it works" sits in
+     the nav because every number on this site needs its definition to be
+     one click away, not buried. */
   const NAV = [
     { href: "matches.html", label: "Matches" },
     { href: "calendar.html", label: "Calendar" },
     { href: "teams.html", label: "Teams" },
     { href: "heroes.html", label: "Heroes" },
     { href: "stats.html", label: "Stats" },
+    { href: "how-it-works.html", label: "How it works" },
   ];
   const ADMIN = [
-    { href: "index.html", label: "Portal" },
+    { href: "portal.html", label: "Portal" },
   ];
 
   /* ---- header ------------------------------------------------------ */
@@ -60,6 +63,11 @@
           <span class="nav-sep" aria-hidden="true"></span>
           ${ADMIN.map((n) => link(n, "nav-admin")).join("")}
         </nav>
+        <button class="pub-search-btn" id="pub-search-btn" aria-haspopup="dialog"
+                title="Search matches, teams, heroes and maps (press /)">
+          <span aria-hidden="true">⌕</span><span class="psb-label">Search</span>
+          <kbd aria-hidden="true">/</kbd>
+        </button>
         <div class="pub-header__status" data-state="${D && D.meta && D.meta.demo ? "demo" : "prod"}">
           <span class="dot" aria-hidden="true"></span>
           <span>${D && D.meta && D.meta.demo ? "demo dataset" : "production"}</span>
@@ -84,6 +92,146 @@
         nav.classList.remove("open");
         toggle.setAttribute("aria-expanded", "false");
         toggle.focus();
+      }
+    });
+  }
+
+  /* ---- search: one box that reaches every page ----------------------
+     A small site with data spread over ten surfaces is still a site you
+     can get lost in. This indexes everything the dataset knows about —
+     matches, teams, heroes, maps, tournaments — plus the site's own
+     pages, and jumps straight there. Opens with the button, "/" or
+     ⌘/Ctrl-K; arrows to move, Enter to go, Esc to leave. */
+  function buildSearch() {
+    const items = [];
+    const add = (type, label, sub, href, keys) =>
+      items.push({ type, label, sub: sub || "", href, keys: (keys || label).toLowerCase() });
+
+    if (D) {
+      (D.matches || []).forEach((m) => {
+        const a = P.team(m.teamA), b = P.team(m.teamB);
+        const t = P.tournament(m.tournamentId);
+        const label = `${a ? a.name : "TBD"} vs ${b ? b.name : "TBD"}`;
+        add("match", label, t ? t.name : "Match", `match.html?id=${m.id}`,
+          [label, a && a.code, b && b.code, t && t.name].filter(Boolean).join(" "));
+      });
+      (D.teams || []).forEach((t) =>
+        add("team", t.name, `Team · ${P.regionName(t.region)}`, `team.html?id=${t.id}`,
+          [t.name, t.code, (t.aliases || []).join(" ")].join(" ")));
+      (D.heroes || []).forEach((h) =>
+        add("hero", h.name, `Hero · ${h.role || "—"}`, `hero.html?id=${h.id}`,
+          `${h.name} ${h.id} ${h.role || ""}`));
+      (D.mapsCatalog || []).forEach((m) =>
+        add("map", m.name, `Map · ${m.mode || "—"}`, `maps.html#${m.id}`,
+          `${m.name} ${m.mode || ""}`));
+      (D.tournaments || []).forEach((t) =>
+        add("event", t.name, "Tournament", `tournament.html?id=${t.id}`, t.name));
+    }
+    [["Matches", "matches.html", "Schedule and results"],
+     ["Calendar", "calendar.html", "The season by day"],
+     ["Teams", "teams.html", "Team directory"],
+     ["Heroes", "heroes.html", "Hero directory"],
+     ["Hero stats", "stats.html", "Pick and win rates"],
+     ["Compositions", "comps.html", "Every verified line-up"],
+     ["Swap evidence", "swaps.html", "Confirmed and rejected swaps"],
+     ["Maps", "maps.html", "Map meta"],
+     ["Tournaments", "tournaments.html", "Events and brackets"],
+     ["How it works", "how-it-works.html", "What verified means"],
+     ["Operator portal", "portal.html", "Paste a broadcast link"],
+    ].forEach(([label, href, sub]) => add("page", label, sub, href, label + " " + sub));
+
+    const wrap = document.createElement("div");
+    wrap.className = "palette";
+    wrap.hidden = true;
+    wrap.innerHTML = `
+      <div class="palette__scrim" data-close></div>
+      <div class="palette__box" role="dialog" aria-modal="true" aria-label="Search the site">
+        <input type="search" id="palette-input" autocomplete="off" spellcheck="false"
+               placeholder="Search matches, teams, heroes, maps…"
+               role="combobox" aria-expanded="true" aria-controls="palette-list"
+               aria-autocomplete="list">
+        <ul class="palette__list" id="palette-list" role="listbox"
+            aria-label="Search results"></ul>
+        <p class="palette__hint">↑↓ to move · Enter to open · Esc to close</p>
+      </div>`;
+    document.body.append(wrap);
+    const input = wrap.querySelector("#palette-input");
+    const list = wrap.querySelector("#palette-list");
+    let shown = [], cursor = 0, lastFocus = null;
+
+    const score = (it, q) => {
+      const i = it.keys.indexOf(q);
+      if (i < 0) return -1;
+      return (i === 0 ? 0 : 10) + i + (it.type === "page" ? 2 : 0);
+    };
+    function render(q) {
+      const query = q.trim().toLowerCase();
+      shown = (query
+        ? items.map((it) => ({ it, s: score(it, query) })).filter((r) => r.s >= 0)
+          .sort((a, b) => a.s - b.s).slice(0, 12).map((r) => r.it)
+        : items.filter((it) => it.type === "page").slice(0, 8));
+      cursor = 0;
+      if (!shown.length) {
+        list.innerHTML = `<li class="palette__empty">Nothing matches “${esc(q)}”.
+          The dataset only contains what has been captured so far —
+          <a href="how-it-works.html">why coverage is small</a>.</li>`;
+        return;
+      }
+      list.innerHTML = shown.map((it, i) => `
+        <li role="option" id="palette-opt-${i}" aria-selected="${i === 0}"
+            class="palette__row${i === 0 ? " is-on" : ""}" data-href="${esc(it.href)}">
+          <span class="pr-type">${esc(it.type)}</span>
+          <span class="pr-label">${esc(it.label)}</span>
+          <span class="pr-sub">${esc(it.sub)}</span></li>`).join("");
+    }
+    function move(d) {
+      if (!shown.length) return;
+      cursor = (cursor + d + shown.length) % shown.length;
+      Array.from(list.children).forEach((el, i) => {
+        const on = i === cursor;
+        el.classList.toggle("is-on", on);
+        el.setAttribute("aria-selected", on ? "true" : "false");
+        if (on) el.scrollIntoView({ block: "nearest" });
+      });
+      input.setAttribute("aria-activedescendant", "palette-opt-" + cursor);
+    }
+    function open() {
+      lastFocus = document.activeElement;
+      wrap.hidden = false;
+      document.documentElement.classList.add("palette-open");
+      input.value = "";
+      render("");
+      input.focus();
+    }
+    function close() {
+      wrap.hidden = true;
+      document.documentElement.classList.remove("palette-open");
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+    const go = (i) => { const it = shown[i]; if (it) location.href = it.href; };
+
+    input.addEventListener("input", () => render(input.value));
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowDown") { e.preventDefault(); move(1); }
+      else if (e.key === "ArrowUp") { e.preventDefault(); move(-1); }
+      else if (e.key === "Enter") { e.preventDefault(); go(cursor); }
+      else if (e.key === "Escape") { e.preventDefault(); close(); }
+    });
+    list.addEventListener("click", (e) => {
+      const row = e.target.closest("[data-href]");
+      if (row) location.href = row.dataset.href;
+    });
+    wrap.addEventListener("click", (e) => { if (e.target.dataset.close !== undefined) close(); });
+    const btn = document.getElementById("pub-search-btn");
+    if (btn) btn.addEventListener("click", open);
+    document.addEventListener("keydown", (e) => {
+      const typing = /^(input|textarea|select)$/i.test((e.target.tagName || "")) ||
+        e.target.isContentEditable;
+      if (!wrap.hidden) return;
+      if ((e.key === "/" && !typing) ||
+          ((e.key === "k" || e.key === "K") && (e.metaKey || e.ctrlKey))) {
+        e.preventDefault();
+        open();
       }
     });
   }
@@ -117,7 +265,9 @@
         <div>
           <h3>Behind the data</h3>
           <ul>
-            <li><a href="index.html">Portal (paste a link)</a></li>
+            <li><a href="how-it-works.html">How it works (start here)</a></li>
+            <li><a href="how-it-works.html#glossary">What the badges mean</a></li>
+            <li><a href="portal.html">Operator portal (paste a link)</a></li>
             <li><a href="runs.html">Vision lab (runs)</a></li>
             <li><a href="sources.html">Sources</a></li>
             <li><a href="admin.html">Review &amp; corrections</a></li>
@@ -210,6 +360,7 @@
   document.addEventListener("DOMContentLoaded", () => {
     buildAtmosphere();
     buildHeader();
+    buildSearch();
     buildFooter();
     initMotion();
     initSpotlight();

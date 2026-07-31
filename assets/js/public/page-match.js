@@ -94,11 +94,56 @@
         ${P.mapScoreDetail(mp, m.teamA, m.teamB)}
       </div>
       <span class="cluster">
-        ${P.scorePlate(mp.scoreA, mp.scoreB, winA ? "a" : winB ? "b" : null)}
+        ${mp.scoreA == null && mp.scoreB == null ? ""
+          : P.scorePlate(mp.scoreA, mp.scoreB, winA ? "a" : winB ? "b" : null)}
         ${mp.winner ? P.teamPlate(mp.winner, { size: "sm", short: true, win: true, link: true }) : ""}
       </span>
     </div>`;
   }
+  /* The compositions ARE the product — a visitor should not have to find a
+     tab to see them. This is the condensed line-up view for the overview;
+     the Comps tab keeps the full per-snapshot detail. */
+  function lineupsHtml() {
+    if (!comps.length) {
+      return `<div class="stat-note"><span aria-hidden="true">⛨</span><span>
+        <b>No compositions published for this match.</b> ${esc(whyNoComps())}
+        <a href="how-it-works.html#verified">Why we hold data back →</a></span></div>`;
+    }
+    const byMap = new Map();
+    comps.forEach((c) => {
+      if (!byMap.has(c.mapId)) byMap.set(c.mapId, new Map());
+      const perTeam = byMap.get(c.mapId);
+      if (!perTeam.has(c.teamId)) perTeam.set(c.teamId, c);
+    });
+    const blocks = Array.from(byMap.entries()).map(([mapId, perTeam]) => {
+      const mp = (m.maps || []).find((x) => x.id === mapId);
+      const mi = mp ? P.mapInfo(mp.map) : { name: mapId };
+      const sides = [m.teamA, m.teamB].filter(Boolean).map((tid) => {
+        const c = perTeam.get(tid);
+        const won = mp && mp.winner === tid;
+        return `<div class="lineup${won ? " lineup--win" : ""}">
+          <div class="split">${P.teamPlate(tid, { size: "sm", link: true })}
+            ${won ? `<span class="chip" data-cap="verified">won this map</span>` : ""}</div>
+          ${c ? P.heroStrip(c.heroes, { link: true })
+              : `<p class="faint" style="margin:0;font-size:12.5px">No reviewed line-up for this side yet.</p>`}
+        </div>`;
+      }).join("");
+      return `<div class="card comp-block">
+        <div class="comp-block__head"><h3>${esc(mi.name)}</h3>
+          ${mp ? `<span class="map-mode">${esc(mp.mode || "")}</span>` : ""}
+          <a class="ev-tick" style="margin-left:auto" href="?id=${esc(m.id)}&tab=comps"
+             data-goto-tab="comps">every snapshot + confidence →</a></div>
+        <div class="lineups">${sides}</div>
+      </div>`;
+    }).join("");
+    return `<div class="stack-sm">
+      <h3 class="sec-h">Verified compositions</h3>
+      <p class="dim" style="margin:0;font-size:13px;max-width:74ch">Read from the broadcast and
+        either human-reviewed or cleared through the high-confidence gate.
+        <a href="how-it-works.html#verified">What that means →</a></p>
+      ${blocks}${swapsHtml()}</div>`;
+  }
+
   function panelOverview() {
     const srcRows = (m.sources || []).map((s) =>
       `<dt>${P.badgeSrc(s.type)}</dt><dd>${s.url ? `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.url)}</a>` : "manual entry"} <span class="faint">synced ${esc(P.fmtRel(s.lastSynced))}</span></dd>`).join("");
@@ -109,6 +154,7 @@
         <div class="card stat-card"><span class="sc-num">${comps.length}</span><span class="sc-label">Verified comps</span><span class="sc-sub">reviewed or auto-high only</span></div>
         <div class="card stat-card"><span class="sc-num" style="font-size:20px;padding-top:6px">${P.chipCapture(m.captureStatus)}</span><span class="sc-label">Capture pipeline</span></div>
       </div>
+      ${lineupsHtml()}
       ${(m.maps || []).length ? `<div class="stack-sm">${m.maps.map(mapRow).join("")}</div>`
         : m.status === "upcoming"
           ? P.emptyState("◷", "Not played yet", `Maps appear here after the series ${m.tbdNote ? "opponent is decided and the series " : ""}is played.`)
@@ -156,16 +202,22 @@
     <p class="faint" style="font-size:12px;margin-top:12px">Bans are match facts from the import pipeline — never inferred from video.</p>`;
   }
 
+  /* Why this match has no published compositions, in the visitor's terms —
+     used by both the overview and the Comps tab so the two can't disagree. */
+  function whyNoComps() {
+    return {
+      "verified": "The capture run is verified but no snapshots were promoted yet.",
+      "needs-review": "The capture run finished, but its detections are still waiting for human review — unreviewed comps never appear here.",
+      "capturing": "The broadcast is being captured right now. Comps appear after detection and review.",
+      "queued": "The VOD is queued for capture. Comps appear after capture, detection and review.",
+      "needs-source": "No VOD is linked for this match yet, so there is nothing to extract comps from.",
+      "failed": "The capture run failed — see the Evidence tab for what went wrong.",
+    }[m.captureStatus] || "No verified comps exist for this match.";
+  }
+
   function panelComps() {
     if (!comps.length) {
-      const why = {
-        "verified": "The capture run is verified but no snapshots were promoted yet.",
-        "needs-review": "The capture run finished, but its detections are still waiting for human review — unreviewed comps never appear here.",
-        "capturing": "The broadcast is being captured right now. Comps appear after detection and review.",
-        "queued": "The VOD is queued for capture. Comps appear after capture, detection and review.",
-        "needs-source": "No VOD is linked for this match yet, so there is nothing to extract comps from.",
-        "failed": "The capture run failed — see the Evidence tab for what went wrong.",
-      }[m.captureStatus] || "No verified comps exist for this match.";
+      const why = whyNoComps();
       return P.emptyState("⛨", "No verified comps to show", esc(why) +
         (hiddenCount ? `<br><span class="mono" style="font-size:11px">${hiddenCount} unreviewed snapshot${hiddenCount > 1 ? "s" : ""} held back</span>` : ""));
     }

@@ -96,10 +96,22 @@
     { label: "Broadcast", ok: matches.some((m) => m.streamUrl), note: matches.some((m) => m.streamUrl) ? "located" : "no official broadcast located yet" },
     { label: "Compositions", ok: !team.compositionTrackingPending, note: team.compositionTrackingPending ? "tracking pending — no maps captured yet" : "captured" },
   ];
+  /* Coverage used to be a row of red "NO" chips whose meaning lived in a
+     tooltip — unreadable on touch and alarming for what is usually just
+     "we haven't captured this team yet". Each line now states the fact. */
   P.$("#t-coverage-sec").hidden = false;
-  P.$("#t-coverage").innerHTML = `<div class="cluster" style="gap:10px;flex-wrap:wrap">
-    ${coverage.map((c) => `<span class="chip" data-cap="${c.ok ? "verified" : "needs-review"}" title="${esc(c.note)}">${esc(c.label)}: ${c.ok ? "yes" : "no"}</span>`).join("")}
-  </div>`;
+  const covOk = coverage.filter((c) => c.ok).length;
+  P.$("#t-coverage").innerHTML = `
+    <p class="dim" style="margin:0 0 var(--sp-3);font-size:13px;max-width:74ch">
+      What the tracker has confirmed about this team — ${covOk} of ${coverage.length} items.
+      “Not yet” means nobody has verified it, never that it is untrue.
+      <a href="how-it-works.html#verified">How verification works →</a></p>
+    <ul class="cov-list">
+      ${coverage.map((c) => `<li>
+        <span class="chip" data-cap="${c.ok ? "verified" : "needs-review"}">${c.ok ? "confirmed" : "not yet"}</span>
+        <b>${esc(c.label)}</b>
+        <span class="cov-note">${esc(c.note)}</span></li>`).join("")}
+    </ul>`;
 
   /* ---- roster (Phase D2) ---------------------------------------------- */
   if (team.roster && team.roster.length) {
@@ -113,6 +125,17 @@
 
   /* ---- summary cards ------------------------------------------------ */
   const hs = S.computeHeroStats({ teamId: id });
+  /* Say up front whether there is anything behind the numbers, so four
+     zeroes never read as "this team lost everything". */
+  P.$("#t-head").insertAdjacentHTML("beforeend", hs.totalAppearances
+    ? `<div class="stat-note" style="margin-top:12px"><span aria-hidden="true">⛨</span><span>
+        Verified compositions on record for <b>${hs.totalAppearances}</b>
+        team-map ${hs.totalAppearances === 1 ? "appearance" : "appearances"} —
+        every hero and rate below is read from those maps only.</span></div>`
+    : `<div class="stat-note" style="margin-top:12px"><span aria-hidden="true">◌</span><span>
+        <b>No map of this team has been captured and reviewed yet</b>, so its record and hero
+        pool are empty rather than estimated. Match facts (schedule, opponents) are still shown.
+        <a href="how-it-works.html#limits">Why coverage is small →</a></span></div>`);
   P.$("#t-cards").innerHTML = [
     [`${record.matchW}–${record.matchL}`, "Match record", "tracked series"],
     [`${record.mapW}–${record.mapL}`, "Map record", "decided maps"],

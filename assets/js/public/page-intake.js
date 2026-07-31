@@ -584,10 +584,19 @@
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
       .then(render)
       .catch((err) => {
-        document.getElementById("ik-root").innerHTML =
-          `<p class="muted">No intake snapshot available (${esc(err.message)}).
-           Generate one with:</p>
-           <code class="ik-cmd">python pipeline/automation/cli.py intake-export --save</code>`;
+        /* A missing snapshot on static hosting is the normal state, not a
+           failure — say so, and keep the real error for anything else. */
+        const missing = /HTTP 404/.test(err.message);
+        document.getElementById("ik-root").innerHTML = missing
+          ? `<p class="muted">No broadcast has been put through the pipeline on this deployment,
+             so there is nothing to review here. Jobs appear once you run the intake locally:</p>
+             <code class="ik-cmd">python pipeline/automation/cli.py convert-link --url "&lt;youtube-url&gt;"</code>
+             <code class="ik-cmd">python pipeline/automation/cli.py intake-export --save</code>
+             <p class="muted">Published results are on the
+             <a href="index.html">public site</a>.</p>`
+          : `<p class="muted">Could not read the intake snapshot (${esc(err.message)}).
+             Regenerate it with:</p>
+             <code class="ik-cmd">python pipeline/automation/cli.py intake-export --save</code>`;
       });
   }
 

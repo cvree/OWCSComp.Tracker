@@ -217,9 +217,14 @@
     const tA = teamAId ? (P.team(teamAId) || {}).code || "A" : "A";
     const tB = teamBId ? (P.team(teamBId) || {}).code || "B" : "B";
     if (!d) {
-      return map.live
-        ? `<span class="map-detail"><span class="chip" data-st="live">Live</span><span class="dim">In progress — score pending.</span></span>`
-        : `<span class="map-detail faint">Score detail unavailable.</span>`;
+      if (map.live)
+        return `<span class="map-detail"><span class="chip" data-st="live">Live</span><span class="dim">In progress — score pending.</span></span>`;
+      /* An honest, specific fallback beats "unavailable": say which part is
+         missing and why, so nobody reads a blank as a zero. */
+      const winner = map.winner ? P.team(map.winner) : null;
+      return `<span class="map-detail faint">${winner
+        ? `${esc(winner.name)} won this map. The per-round scoreline was not read from the broadcast — only the result was recorded.`
+        : "No scoreline was recorded for this map."}</span>`;
     }
     if (d.type === "control") {
       const rounds = (d.rounds || []).map((r, i) => {

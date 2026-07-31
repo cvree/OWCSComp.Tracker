@@ -7,7 +7,8 @@
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Cinzel:wght@500;600&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Cinzel:wght@500;600&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Cinzel:wght@500;600&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="assets/css/public.css">
 </head>
 <body class="pub">
@@ -16,13 +17,15 @@
   <div class="stack" style="max-width:52ch">
     <span class="ph-eyebrow" style="justify-self:center">404</span>
     <h1>That page isn't here.</h1>
-    <p class="lede" style="margin-inline:auto">The link may be old, or the match hasn't been ingested yet.
-      Everything the tracker has is one hop away.</p>
+    <p class="lede" style="margin-inline:auto">The link may be old, or that match, team or hero
+      isn't in the dataset yet. Press <kbd>/</kbd> to search everything the tracker has, or take
+      one of these.</p>
     <div class="cluster" style="justify-content:center;gap:10px;margin-top:8px">
       <a class="btn btn--gold" href="index.html">Home</a>
+      <a class="btn" href="matches.html">Matches</a>
       <a class="btn" href="stats.html">Hero stats</a>
       <a class="btn" href="teams.html">Teams</a>
-      <a class="btn" href="matches.html">Matches</a>
+      <a class="btn btn--ghost" href="how-it-works.html">How it works</a>
     </div>
   </div>
 </main>

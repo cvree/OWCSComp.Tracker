@@ -52,6 +52,29 @@
   const swaps = (D.heroSwaps || []).filter(
     (s) => s.status === "confirmed" && (s.fromHero === heroId || s.toHero === heroId));
 
+  /* A hero page has to answer "is there any data on this hero?" before it
+     shows a single zero — otherwise four "—" cards read like a broken page
+     instead of an honest absence. */
+  const statusEl = $("#hero-status");
+  if (statusEl) {
+    if (row && row.picks) {
+      const decided = row.wins + row.losses;
+      statusEl.innerHTML = `<div class="stat-note"><span aria-hidden="true">⛨</span><span>
+        <b>${esc(hero.name)}</b> appears in <b>${row.picks}</b> verified team-map
+        ${row.picks === 1 ? "appearance" : "appearances"}${decided
+          ? `, winning <b>${row.wins}</b> of <b>${decided}</b> decided ${decided === 1 ? "map" : "maps"}`
+          : ", none of them on a map with a recorded winner"}.
+        Every number below links to the frames it was read from.</span></div>`;
+    } else {
+      statusEl.innerHTML = `<div class="stat-note"><span aria-hidden="true">◌</span><span>
+        <b>${esc(hero.name)} has not been sighted in a tracked composition yet.</b>
+        That is a statement about this tracker's coverage, not about the hero's play rate —
+        only a handful of maps have been captured and reviewed so far.
+        <a href="how-it-works.html#limits">Why coverage is small →</a> ·
+        <a href="stats.html">heroes that do have data →</a></span></div>`;
+    }
+  }
+
   $("#hero-cards").innerHTML = [
     { n: row ? row.picks : 0, l: "verified picks", s: "one per team-map appearance" },
     { n: row ? pct(row.pickRate) : "—", l: "pick rate", s: "share of tracked team-maps", raw: true },
@@ -183,7 +206,7 @@
     $("#hero-official").innerHTML = `
       <img src="${esc(ho.artwork.path)}" alt="" loading="lazy"
         width="${ho.artwork.width}" height="${ho.artwork.height}"
-        style="width:100%;height:auto;border-radius:8px;display:block">
+        class="hero-official__art">
       <dl class="ev-kv" style="margin-top:12px">
         <dt>Source</dt><dd><a href="${esc(ho.sourceUrl)}" rel="noopener noreferrer" target="_blank">overwatch.blizzard.com</a></dd>
         <dt>Attribution</dt><dd style="font-family:var(--font-body)">${esc(ho.attribution)}</dd>

@@ -45,7 +45,9 @@ plain HTML/CSS/JS, still GitHub-Pages-safe, still evidence-first. Pages:
 
 | page | what it shows |
 |---|---|
-| `index.html` | **the portal** — the paste-a-link box front and center, the auto match finder (every OWCS broadcast, one click to ingest), the live pipeline with every human gate as a button, and links to the result pages. One site, one flow. |
+| `index.html` | **the front door** — what the site is in one screen, the honest size of the dataset (computed, never rounded up), the featured verified map with both line-ups and its confirmed swaps, the five-step explanation, the published limits, and the way in to every surface. Reading the data never touches the pipeline. |
+| `how-it-works.html` | **the manual** — what "verified" means, the five pipeline stages, the evidence chain, the swap rejection ledger, a glossary of every badge on the site (rendered by the site's own chip helpers so it can't drift), how the stats are counted, and what the tracker refuses to claim |
+| `portal.html` | **the operator portal** — the paste-a-link box, the auto match finder (every OWCS broadcast, one click to ingest), the live pipeline with every human gate as a button. Static hosting keeps it read-only and builds the command instead. (`intake.html` redirects here.) |
 | `tournaments.html` / `tournament.html` | events, brackets, standings |
 | `calendar.html` | the season by day: official stage windows (from `config/owcs_calendar.json`, with their unverified-dates status shown honestly), the month grid of tracked matches, a "next up" list, and "time TBA" wherever only a date is known |
 | `matches.html` / `match.html` | schedule and the match page with comps, **confirmed swaps with before/after crops**, bans, evidence chain, review queue |
@@ -54,6 +56,12 @@ plain HTML/CSS/JS, still GitHub-Pages-safe, still evidence-first. Pages:
 | `comps.html` | every verified five-hero lineup, grouped and counted, with map results and evidence links |
 | `swaps.html` | swap intelligence — confirmed swaps with evidence, plus the rejected-noise honesty ledger |
 | `maps.html` / `stats.html` | map meta + the sortable pick/win-rate table with drill-downs |
+
+**Site search** (`assets/js/public/shell.js`): every public page carries a
+search button plus `/` and ⌘/Ctrl-K shortcuts. It indexes matches, teams,
+heroes, maps, tournaments and the site's own pages straight from
+`public_data.v1.js` — no service, no index file to rebuild — and jumps to
+the page. Arrow keys move, Enter opens, Esc closes.
 
 Screenshots live in [`docs/screenshots/`](docs/screenshots/).
 
@@ -136,7 +144,8 @@ Requirements: **Python 3.12+**, `pip install -r requirements.txt`, and
 ### Preview the site locally
 
 ```bash
-python pipeline/serve.py            # control room at http://localhost:8000/run.html
+python pipeline/serve.py            # public site at http://localhost:8000/
+                                    # operator portal at /portal.html
 # or any static server:
 python -m http.server 8000          # then open match.html?id=m-qad-twis-s2po
 ```
@@ -214,8 +223,8 @@ every likely broadcast is registered through the same intake gate as a
 pasted URL, metadata only, nothing downloaded or approved.
 
 **The whole pipeline runs from the browser**: `python pipeline/serve.py`,
-open `index.html` (the portal), paste the link or click **Ingest** on a
-found match, watch the live log — then drive every
+open `portal.html` (the operator portal — `index.html` is the public site),
+paste the link or click **Ingest** on a found match, watch the live log — then drive every
 stage from the page itself (retry, autopilot, approve source, approve
 layout, propose/accept identity, detect, publish, export). Audited
 approvals require a typed name and a confirm; nothing is ever approved

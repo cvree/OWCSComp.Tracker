@@ -140,7 +140,7 @@ python pipeline/automation/cli.py find-matches --queue-likely  # agentic mode:
 Artifacts: `data/match_finder.json` (the accumulating ledger — a broadcast
 that leaves the feed window is kept) and `assets/data/matchfinder.v1.json`
 (the static snapshot the portal renders on GitHub Pages). In the control
-room the portal front page (`index.html`) shows the live report
+room the operator portal (`portal.html`) shows the live report
 (`GET /api/matchfinder`) with an **Ingest** button per candidate that feeds
 the exact paste-link flow, and a **Scan for new matches** button that runs
 this command (`POST /api/action {action: "find-matches"}`).
@@ -197,11 +197,11 @@ That ingests the link and runs every automatic stage in a row — metadata +
 registry authorization, full-VOD download + 360p proxy, layout resolution,
 segmentation, and (new) segment-clip extraction — stopping honestly at the
 FIRST gate that belongs to a human, with the exact next command printed.
-`assets/data/intake.v1.json` is refreshed automatically, so `intake.html`
+`assets/data/intake.v1.json` is refreshed automatically, so `portal.html`
 always shows the live stage.
 
 **Or from the browser:** run `python pipeline\serve.py`, open
-`http://localhost:8000/intake.html`, paste the link, watch the live log.
+`http://localhost:8000/portal.html`, paste the link, watch the live log.
 The page POSTs `/api/intake/link`, which launches the same `convert-link`
 command locally (static hosting keeps the read-only behavior and only
 prints the command for you to copy).
@@ -211,7 +211,7 @@ each and names it:
 
 1. `approve-source --confirm` — a link not on a verified official channel.
 2. `approve-layout --confirm` — a freshly-calibrated layout (review the sheet).
-3. Segment identity review — approve in `intake.html`/CLI as before, **or**
+3. Segment identity review — approve in `portal.html`/CLI as before, **or**
    re-run with `--auto-accept`, which accepts machine proposals through the
    SAME `accept-proposed` gate (a blocking review task or an UNKNOWN field
    still refuses and waits for you; recorded with your `--accepted-by` name).
@@ -282,7 +282,7 @@ python pipeline\template_bootstrap.py --layout layouts\<layout-id>.json
 # 7. Propose map / mode / teams / sides / order / players, with evidence.
 python pipeline\automation\cli.py propose-identity --job <job-key>
 
-# 8. Render the operator review panel, then open intake.html in a browser.
+# 8. Render the operator review panel, then open portal.html in a browser.
 python pipeline\automation\cli.py intake-export --save
 
 # 9. Approve each real map segment. Either accept the proposal wholesale:

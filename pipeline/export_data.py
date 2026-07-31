@@ -183,8 +183,19 @@ def pick_veto_for_match(con, match_id: str) -> list[dict]:
     } for r in rows]
 
 
+# Players seeded as demo fixtures (source='sample', handles like
+# 'GEN-TAN1') are never real people. They exist so the offline test
+# fixtures have something to join against — publishing them would put
+# invented handles on a public roster, which is exactly the kind of guess
+# this project refuses to make. Every roster read filters them out.
+SAMPLE_PLAYER_SOURCE = "sample"
+
+
 def rosters_for_match(con, match_id: str, team_a: str, team_b: str) -> dict:
-    """FACEIT-sourced lineups: {'a': [players], 'b': [players]}."""
+    """FACEIT-sourced lineups: {'a': [players], 'b': [players]}.
+    This feeds the internal control-room dataset (assets/js/data.js),
+    which is allowed to carry the labeled demo fixtures; the PUBLIC
+    export filters them (see SAMPLE_PLAYER_SOURCE)."""
     out = {"a": [], "b": []}
     rows = con.execute(
         """SELECT r.team_id, p.id, p.nickname, p.role, p.faceit_player_id
@@ -528,20 +539,26 @@ def _has_logo_candidate(team_id: str, sources: dict) -> bool:
 
 
 def _current_roster(con, team_id: str) -> list[dict]:
-    """Players from this team's most recently dated match — the closest
-    thing to a 'current roster' the content DB can state as fact. Empty
-    (never guessed) when the team has no tracked match yet."""
-    m = con.execute(
-        """SELECT id FROM matches WHERE team_a=? OR team_b=?
-           ORDER BY COALESCE(scheduled_at, finished_at, date) DESC LIMIT 1""",
-        (team_id, team_id)).fetchone()
-    if not m:
+    """Players from this team's most recent match that has a REAL lineup —
+    the closest thing to a 'current roster' the content DB can state as
+    fact. Demo-fixture players (source='sample') are skipped entirely, so
+    a team whose only lineups are fixtures exports an empty roster rather
+    than invented handles. Empty (never guessed) is always allowed."""
+    rows = con.execute(
+        """SELECT r.match_id, p.id, p.nickname, p.role, p.country
+             FROM match_rosters r
+             JOIN players p ON p.id = r.player_id
+             JOIN matches  m ON m.id = r.match_id
+            WHERE r.team_id = ? AND COALESCE(p.source,'') <> ?
+            ORDER BY COALESCE(m.scheduled_at, m.finished_at, m.date) DESC,
+                     r.match_id DESC""",
+        (team_id, SAMPLE_PLAYER_SOURCE)).fetchall()
+    if not rows:
         return []
+    newest = rows[0]["match_id"]          # the query is already ordered
     return [{"id": p["id"], "handle": p["nickname"], "role": rv(p, "role"),
              "country": rv(p, "country")}
-            for p in con.execute(
-                """SELECT p.* FROM match_rosters r JOIN players p ON p.id=r.player_id
-                   WHERE r.match_id=? AND r.team_id=?""", (m["id"], team_id))]
+            for p in rows if p["match_id"] == newest]
 
 
 def _has_table(con, name: str) -> bool:
@@ -1392,7 +1409,8 @@ def build_public_payload(con) -> dict:
         for p in con.execute(
                 """SELECT r.team_id, p.* FROM match_rosters r
                    JOIN players p ON p.id=r.player_id
-                   WHERE r.match_id=?""", (mid,)):
+                   WHERE r.match_id=? AND COALESCE(p.source,'') <> ?""",
+                (mid, SAMPLE_PLAYER_SOURCE)):
             players_out.append({"id": p["id"], "teamId": p["team_id"],
                                 "handle": p["nickname"],
                                 "role": rv(p, "role")})

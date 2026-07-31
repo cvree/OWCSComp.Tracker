@@ -7,7 +7,8 @@
 <meta name="description" content="Per-hero OWCS intelligence: verified pick and win rates, the teams that run the hero, confirmed swaps and click-through evidence.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Cinzel:wght@500;600&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Cinzel:wght@500;600&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Cinzel:wght@500;600&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="assets/css/public.css">
 </head>
 <body class="pub">
@@ -19,10 +20,7 @@
     <div class="hero-head" id="hero-head"></div>
   </header>
 
-  <section class="section rv" aria-label="Official hero art" id="hero-official-section" hidden>
-    <h2>Official presentation</h2>
-    <div class="ev-card" id="hero-official"></div>
-  </section>
+  <div id="hero-status" class="rv" style="margin-top:14px"></div>
 
   <div class="stat-cards rv" id="hero-cards" style="margin-top:20px" aria-label="Hero headline numbers"></div>
 
@@ -47,6 +45,16 @@
   <section class="section" aria-label="Portrait provenance">
     <h2>Portrait provenance</h2>
     <div class="ev-card" id="hero-prov"></div>
+  </section>
+
+  <!-- Reference art, deliberately last: it is publisher artwork, not
+       evidence, and must never sit where a verified read belongs. -->
+  <section class="section rv" aria-label="Official hero art" id="hero-official-section" hidden>
+    <h2>Official presentation</h2>
+    <p class="dim" style="margin:0 0 var(--sp-3);font-size:13px;max-width:70ch">Publisher artwork,
+      shown for reference only. Nothing on this page is measured from it — the numbers above come
+      from broadcast crops. <a href="how-it-works.html#verified">How reads are verified →</a></p>
+    <div class="ev-card hero-official" id="hero-official"></div>
   </section>
 </main>
 

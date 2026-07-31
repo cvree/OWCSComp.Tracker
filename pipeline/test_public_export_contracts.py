@@ -415,6 +415,31 @@ class TestProductionExportContracts(unittest.TestCase):
         self.assertTrue([c for c in self.data["compSnapshots"]
                          if c["matchId"] == "m-qad-twis-s2po"])
 
+    def test_no_demo_fixture_player_is_ever_published(self):
+        """players seeded as source='sample' (GEN-TAN1, FLC-DAM2, …) are
+        invented handles that exist only for the offline fixtures. A public
+        roster must never show one — an empty roster is the honest answer."""
+        con = content_db.connect(os.path.join(REPO, "data", "owcs.sqlite"))
+        try:
+            sample = {r[0] for r in con.execute(
+                "SELECT id FROM players WHERE COALESCE(source,'')=?",
+                (ex.SAMPLE_PLAYER_SOURCE,))}
+        finally:
+            con.close()
+        self.assertTrue(sample, "the fixture players must still be in the DB "
+                                "for this test to mean anything")
+        for p in self.data["players"]:
+            self.assertNotIn(p["id"], sample, p["handle"])
+        for t in self.data["teams"]:
+            for p in t["roster"]:
+                self.assertNotIn(p["id"], sample, f"{t['id']}: {p['handle']}")
+
+    def test_a_team_with_only_fixture_lineups_exports_an_empty_roster(self):
+        gen = next((t for t in self.data["teams"] if t["id"] == "gen"), None)
+        if gen is None:
+            self.skipTest("gen is not in the current export")
+        self.assertEqual(gen["roster"], [])
+
     def test_every_hero_and_map_referenced_by_an_aggregate_exists(self):
         hero_ids = {h["id"] for h in self.data["heroes"]}
         map_ids = {m["id"] for m in self.data["mapsCatalog"]}
