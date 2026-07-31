@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Start here — OWCS Comp Tracker</title>
+<meta name="description" content="Set it up once, then paste a whole day of OWCS broadcast links and walk away. Every step, every stop, and what to do when something breaks — in plain English.">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Cinzel:wght@500;600&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Cinzel:wght@500;600&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="assets/css/public.css">
+<style>
+  /* start-guide-only: numbered steps that stay readable on a phone, and a
+     "what to do" table that never needs horizontal scrolling. */
+  .sg-step { display:grid; grid-template-columns:auto 1fr; gap:var(--sp-3);
+             align-items:start; margin:var(--sp-4) 0; }
+  .sg-num { font-family:"IBM Plex Mono",monospace; font-size:13px;
+            line-height:1; padding:8px 10px; border:1px solid var(--line);
+            border-radius:8px; color:var(--tx-1); white-space:nowrap; }
+  .sg-step h3 { margin:0 0 6px; }
+  .sg-step p, .sg-step ul { margin:0 0 8px; }
+  .sg-do { border:1px solid var(--line); border-radius:10px;
+           padding:var(--sp-3); margin:var(--sp-3) 0; }
+  .sg-do > b { display:block; margin-bottom:4px; }
+  .sg-stops { display:grid; gap:10px; margin:var(--sp-3) 0; }
+  .sg-stop { border:1px solid var(--line); border-left:3px solid var(--tx-1);
+             border-radius:8px; padding:12px 14px; }
+  .sg-stop h4 { margin:0 0 4px; font-size:15px; }
+  .sg-stop p { margin:0; font-size:14px; }
+  .sg-stop .sg-you { display:block; margin-top:6px; font-size:14px; }
+  .sg-time { font-family:"IBM Plex Mono",monospace; font-size:12px;
+             color:var(--tx-2); }
+  .sg-callout { border:1px solid var(--line); border-radius:10px;
+                padding:var(--sp-3); margin:var(--sp-4) 0;
+                background:rgba(255,255,255,.02); }
+  code.blk { display:block; padding:10px 12px; margin:8px 0;
+             border:1px solid var(--line); border-radius:8px;
+             overflow-x:auto; white-space:pre; font-size:13px; }
+</style>
+</head>
+<body class="pub">
+<a class="skip-link" href="#main">Skip to content</a>
+<main class="pub-main" id="main">
+
+  <div class="page-head rv">
+    <span class="ph-eyebrow">Set it up once</span>
+    <h1>Start here</h1>
+    <p class="lede">This page turns a day of OWCS broadcasts into verified hero compositions.
+      You install four free tools once, then every match day you run one command, paste the
+      links, and leave it alone. It will stop and ask you a few questions — those questions are
+      listed below with exactly what to click.</p>
+    <nav class="doc-toc" aria-label="On this page">
+      <a href="#install">1 · Install (once)</a>
+      <a href="#open">2 · Open the portal</a>
+      <a href="#paste">3 · Paste the whole day</a>
+      <a href="#stops">4 · The questions it asks</a>
+      <a href="#done">5 · Publish</a>
+      <a href="#broken">When something breaks</a>
+      <a href="#faq">Honest answers</a>
+    </nav>
+  </div>
+
+  <div class="doc">
+
+    <div class="sg-callout">
+      <b>Do you actually need this page?</b>
+      <p style="margin:6px 0 0">Only if you want to <i>add</i> matches. If you just want to read
+        what teams played, everything published is already on the
+        <a href="index.html">front page</a> — no setup, no install, nothing to run.</p>
+    </div>
+
+    <h2 id="install">1 · Install the four tools (once, ~15 minutes)</h2>
+    <p>All four are free and none of them need an account, an API key or a login. Everything
+      below is for Windows; on macOS or Linux the same four tools install from
+      <code>brew</code> or your package manager.</p>
+
+    <div class="sg-step">
+      <span class="sg-num">1a</span>
+      <div>
+        <h3>Python</h3>
+        <p>Get it from <a href="https://www.python.org/downloads/" rel="noopener noreferrer"
+          target="_blank">python.org/downloads</a>. In the installer, <b>tick “Add python.exe to
+          PATH”</b> on the first screen — if you miss that box nothing else will work.</p>
+        <code class="blk">python --version</code>
+        <p class="dim" style="font-size:13px">Should print 3.10 or higher.</p>
+      </div>
+    </div>
+
+    <div class="sg-step">
+      <span class="sg-num">1b</span>
+      <div>
+        <h3>ffmpeg — reads the video</h3>
+        <p>Download a Windows build from
+          <a href="https://www.gyan.dev/ffmpeg/builds/" rel="noopener noreferrer"
+          target="_blank">gyan.dev/ffmpeg/builds</a>, unzip it to <code>C:\ffmpeg</code>, then add
+          <code>C:\ffmpeg\bin</code> to PATH (Settings → System → About → Advanced system
+          settings → Environment Variables → Path → New). <b>Close the terminal and open a new
+          one</b>, then check:</p>
+        <code class="blk">ffmpeg -version</code>
+      </div>
+    </div>
+
+    <div class="sg-step">
+      <span class="sg-num">1c</span>
+      <div>
+        <h3>yt-dlp — downloads the broadcast</h3>
+        <p>Grab <code>yt-dlp.exe</code> from
+          <a href="https://github.com/yt-dlp/yt-dlp/releases/latest" rel="noopener noreferrer"
+          target="_blank">the releases page</a> and drop it into <code>C:\ffmpeg\bin</code> —
+          that folder is already on PATH from the last step, so there is nothing else to change.</p>
+        <code class="blk">yt-dlp --version</code>
+      </div>
+    </div>
+
+    <div class="sg-step">
+      <span class="sg-num">1d</span>
+      <div>
+        <h3>Deno — the part everyone forgets</h3>
+        <p>YouTube scrambles its video links and yt-dlp needs a JavaScript runtime to unscramble
+          them. Without one, downloads start and then sit at zero bytes forever. Install
+          <a href="https://deno.com/" rel="noopener noreferrer" target="_blank">Deno</a> (one
+          command, no account) and this whole class of problem disappears.</p>
+        <code class="blk">deno --version</code>
+        <p class="dim" style="font-size:13px">Node.js works too — the pipeline detects either.</p>
+      </div>
+    </div>
+
+    <div class="sg-step">
+      <span class="sg-num">1e</span>
+      <div>
+        <h3>The project's Python packages</h3>
+        <p>In the folder you downloaded this project into:</p>
+        <code class="blk">pip install -r requirements.txt</code>
+      </div>
+    </div>
+
+    <div class="sg-do">
+      <b>Check everything at once</b>
+      <p>Run this and read the list it prints. Anything marked MISSING is a tool from the steps
+        above that isn't on PATH yet — and it tells you how to fix each one.</p>
+      <code class="blk">python pipeline/preflight.py</code>
+    </div>
+
+    <h2 id="open">2 · Every match day: one command</h2>
+    <p>Open a terminal in the project folder and run:</p>
+    <code class="blk">python pipeline/serve.py</code>
+    <p>Leave that window open — it <i>is</i> the program. Then open
+      <a href="portal.html">http://localhost:8000/portal.html</a> in your browser. The paste box at
+      the top should say <b>“control room detected”</b>. If it says “static hosting” instead, the
+      command above isn't running or is running in a different folder.</p>
+
+    <h2 id="paste">3 · Paste the whole day at once</h2>
+    <p>Go to the OWCS channel, open each VOD you want, and copy its link. Paste <b>all of them
+      into the box together</b> — one per line, or separated by spaces or commas. Anything that
+      isn't a link is ignored, so you can paste straight from a schedule or a chat message.</p>
+    <code class="blk">https://www.youtube.com/watch?v=aaaaaaaaaaa
+https://www.youtube.com/watch?v=bbbbbbbbbbb
+https://www.youtube.com/watch?v=ccccccccccc</code>
+    <p>Press <b>Convert broadcast</b>. The first link starts immediately; the rest join a queue
+      shown underneath and start on their own as each one finishes. You do not have to come back
+      between broadcasts.</p>
+    <p>You can also skip the copying entirely: the <b>Auto match finder</b> section below the
+      paste box lists every broadcast it found on the official OWCS channels, and
+      <b>Ingest</b> sends one into exactly the same queue.</p>
+
+    <div class="sg-callout">
+      <b>How long does one broadcast take?</b>
+      <p style="margin:6px 0 0">Roughly <span class="sg-time">30–90 minutes</span> of unattended
+        work for a full match day VOD: most of it is downloading several gigabytes, then about
+        <span class="sg-time">15–40 min</span> making a small scanning copy, then a few minutes
+        finding the maps. The log shows a live percentage and an ETA for every stage — if a line
+        says <span class="sg-time">eta 0:18:00</span>, that is a real estimate, not a spinner.</p>
+      <p style="margin:6px 0 0">The computer has to stay awake and the terminal window has to stay
+        open. Closing the lid pauses everything; nothing is lost, but nothing progresses either.
+        A stopped download <b>resumes</b> where it left off when you start it again.</p>
+    </div>
+
+    <h2 id="stops">4 · The questions it will ask you</h2>
+    <p>The pipeline runs every step it can decide on its own, and deliberately stops at the ones
+      where being confidently wrong would be worse than being slow. Each stop shows up as a card
+      on the portal with buttons. This is the complete list — there are no others.</p>
+
+    <div class="sg-stops">
+      <div class="sg-stop">
+        <h4>“Is this really an OWCS broadcast?”</h4>
+        <p>It found a video on a channel it hasn't been told to trust.</p>
+        <span class="sg-you"><b>You:</b> type your name in the name box, then click
+          <b>Approve source</b> if it's a real OWCS broadcast, or <b>Reject source</b> if you
+          pasted the wrong link. Your name is recorded with the decision.</span>
+      </div>
+      <div class="sg-stop">
+        <h4>“I worked out where the HUD is — does this look right?”</h4>
+        <p>Every broadcast puts the hero portraits in slightly different places, so the first
+          time it sees a new broadcast style it measures the layout itself and asks you to
+          confirm it rather than guessing.</p>
+        <span class="sg-you"><b>You:</b> click <b>Approve layout</b>. If it refused to calibrate
+          at all, it says why — that usually means the broadcast has an unusual overlay, and the
+          honest answer is to skip that VOD.</span>
+      </div>
+      <div class="sg-stop">
+        <h4>“Here are the maps I found — which ones are real?”</h4>
+        <p>It scans the whole broadcast and proposes the stretches that look like live gameplay,
+          with thumbnails and how many gameplay frames it saw in each. Desk segments, replays and
+          scoreboards are already thrown out.</p>
+        <span class="sg-you"><b>You:</b> look at the thumbnails. Approve the ones that are real
+          maps, reject the ones that aren't. The tick-box above the paste box
+          (“auto-accept clean identity proposals”) lets it accept the unambiguous ones by itself —
+          anything uncertain still waits for you.</span>
+      </div>
+      <div class="sg-stop">
+        <h4>“Here's what I read — publish it?”</h4>
+        <p>The final gate. Nothing reaches the public site until you press this.</p>
+        <span class="sg-you"><b>You:</b> <b>Detect (dry run)</b> to see the reads,
+          <b>Commit detection</b> to save them, then <b>PUBLISH</b>.</span>
+      </div>
+    </div>
+
+    <h2 id="done">5 · Publishing</h2>
+    <p>Publishing writes the approved compositions into the site's data file. Refresh the
+      <a href="index.html">front page</a> and the new maps are there, with their evidence.
+      If you have the project connected to GitHub, committing and pushing that data file is what
+      makes it appear on the live site.</p>
+    <p>What gets published is only what cleared review. A map where the detector wasn't sure is
+      held back rather than shown with an asterisk — the reasoning behind that is on
+      <a href="how-it-works.html">How it works</a>.</p>
+
+    <h2 id="broken">When something breaks</h2>
+    <p>Every failure the pipeline knows about is printed with a <b>code</b> and a <b>remedy</b>,
+      and nothing is lost when one happens — jobs resume, downloads continue from where they
+      stopped, and you can hit <b>Retry</b> on the card. These are the ones you'll actually meet:</p>
+
+    <div class="sg-stops">
+      <div class="sg-stop">
+        <h4><code>youtube_js_runtime_missing</code> — or a download stuck at 0 bytes</h4>
+        <p>yt-dlp can't unscramble YouTube's video links.</p>
+        <span class="sg-you"><b>Fix:</b> install Deno (step 1d), then hit Retry.</span>
+      </div>
+      <div class="sg-stop">
+        <h4><code>youtube_media_forbidden</code> / <code>youtube_bot_check</code></h4>
+        <p>YouTube refused this particular download attempt. The pipeline already retries with
+          five different strategies before showing you this.</p>
+        <span class="sg-you"><b>Fix:</b> wait a few minutes and hit Retry. If it keeps happening,
+          the advanced panel at the bottom of the portal explains how to point it at your
+          browser's cookies.</span>
+      </div>
+      <div class="sg-stop">
+        <h4><code>ffmpeg_crashed</code></h4>
+        <p>ffmpeg died while reading the video. The pipeline now recovers from this by itself —
+          it re-reads the affected stretch one frame at a time — so you only see this code if
+          the file on disk is genuinely unreadable.</p>
+        <span class="sg-you"><b>Fix:</b> delete that broadcast's downloaded file and hit Retry to
+          download it fresh. If it fails again, update ffmpeg.</span>
+      </div>
+      <div class="sg-stop">
+        <h4>“no download progress for 300s — killed”</h4>
+        <p>Something stopped moving entirely and was shut down on purpose rather than left to
+          hang forever.</p>
+        <span class="sg-you"><b>Fix:</b> hit Retry. Downloads resume, so a stall costs minutes,
+          not the whole broadcast.</span>
+      </div>
+      <div class="sg-stop">
+        <h4><code>insufficient disk space</code></h4>
+        <p>A full match-day VOD is several gigabytes and it checks before downloading, not after.</p>
+        <span class="sg-you"><b>Fix:</b> clear space, or delete finished broadcasts from
+          <code>data/worker/jobs/</code>. Published results don't need the video kept.</span>
+      </div>
+      <div class="sg-stop">
+        <h4>Nothing is happening and there's no error</h4>
+        <p>Check the terminal window is still open, and look at the live log under the paste box —
+          every stage prints a heartbeat with elapsed time, so a genuinely silent job is
+          unusual.</p>
+        <span class="sg-you"><b>Fix:</b> <b>Cancel</b> stops the current job and clears the queue
+          behind it. Nothing already downloaded is thrown away.</span>
+      </div>
+    </div>
+
+    <h2 id="faq">Honest answers</h2>
+    <ul>
+      <li><b>Does it cost anything?</b> No. No API keys, no subscriptions, no paid services —
+        the whole thing runs on your own machine against public video.</li>
+      <li><b>Can it do a full day without me?</b> The downloading, scanning and map-finding, yes —
+        that's most of the wall-clock time. The four questions above still need a person, by
+        design. Queue everything in the morning, answer the questions when you get back.</li>
+      <li><b>Will it ever make something up?</b> No. Anything it isn't sure about is withheld
+        rather than guessed, which is why a broadcast sometimes produces fewer maps than you
+        expected.</li>
+      <li><b>I broke something — can I start over?</b> Yes. Deleting a job's folder under
+        <code>data/worker/jobs/</code> and pasting the link again starts that broadcast from
+        scratch. Nothing published is affected.</li>
+      <li><b>Where do I look when I'm stuck?</b> The live log under the paste box is the whole
+        truth — every command it runs, every failure and every remedy is printed there.</li>
+    </ul>
+
+    <p class="dim" style="font-size:13px;border-top:1px solid var(--line);padding-top:var(--sp-4)">
+      Independent fan project. Not affiliated with or endorsed by Blizzard Entertainment,
+      Overwatch, OWCS or FACEIT. Data recorded from public broadcasts.</p>
+  </div>
+</main>
+
+<script src="assets/vendor/lenis.min.js" defer></script>
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="assets/vendor/three.min.js" defer></script>
+<script src="assets/vendor/vanta.net.min.js" defer></script>
+<script src="assets/js/motion.js" defer></script>
+<script src="assets/data/public_data.v1.js"></script>
+<script src="assets/data/public_fixture.v1.js"></script>
+<script src="assets/js/public/core.js"></script>
+<script src="assets/js/public/assets.js"></script>
+<script src="assets/js/public/shell.js"></script>
+</body>
+</html>

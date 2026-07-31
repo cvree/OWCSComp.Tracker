@@ -271,24 +271,268 @@ def is_gameplay(frame_bgr, anchor, replay,
 
 
 # --------------------------------------------------------------- ffmpeg
-def extract_frames(video_path: str, out_dir: str, interval: int) -> list[str]:
-    """One PNG every `interval` seconds, named by offset: 000600.png = 10 min."""
-    os.makedirs(out_dir, exist_ok=True)
-    # -vf fps=1/interval keeps timestamps derivable from the frame index.
-    cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-i", video_path,
+def log(msg: str) -> None:
+    print(f"[capture] {msg}", flush=True)
+
+
+class FrameExtractionError(RuntimeError):
+    """No frames could be sampled from a video at all.
+
+    Carries a stable `code` and an operator `remedy` so the automation state
+    machine records something actionable instead of a raw
+    `CalledProcessError` repr nobody can act on.
+    """
+
+    def __init__(self, message: str, *, code: str = "frame_extraction_failed",
+                 remedy: str = ""):
+        self.code = code
+        self.remedy = remedy
+        super().__init__(message)
+
+
+# Exit statuses that mean "ffmpeg DIED", not "ffmpeg read a bad file".
+# 3221225477 is 0xC0000005, a Windows access violation — the exact failure
+# this pipeline hit while turning a 5-hour 360p proxy into ~2000 PNGs in one
+# unbounded pass. A crash 90% of the way through used to discard every frame
+# already written, so the whole scan restarted from zero.
+FFMPEG_CRASH_CODES = frozenset({
+    3221225477,   # 0xC0000005 STATUS_ACCESS_VIOLATION (Windows)
+    3221225725,   # 0xC00000FD STATUS_STACK_OVERFLOW  (Windows)
+    -11, 139,     # SIGSEGV
+    -6, 134,      # SIGABRT
+})
+
+# Sampling is done one WINDOW at a time rather than in a single pass over the
+# whole broadcast. A crash, a hang or an undecodable stretch then costs one
+# window instead of the entire scan, and every pass gets a deadline
+# proportional to the work it was actually asked to do.
+DEFAULT_EXTRACT_WINDOW_SECONDS = 20 * 60
+# Wall-clock budget per window: decoding 20 minutes of 360p and writing a
+# handful of PNGs is seconds of work, so this is deliberately loose — it
+# exists to catch a hang, not to police a slow machine.
+EXTRACT_TIMEOUT_FLOOR = 300.0
+EXTRACT_TIMEOUT_PER_SECOND = 0.5
+# A single frame grabbed by its own seek (the fallback path).
+SINGLE_FRAME_TIMEOUT = 120.0
+
+
+def _extract_timeout(window_seconds: float) -> float:
+    return max(EXTRACT_TIMEOUT_FLOOR,
+               window_seconds * EXTRACT_TIMEOUT_PER_SECOND)
+
+
+def probe_duration(video_path: str, runner=subprocess) -> float | None:
+    """Length of `video_path` in seconds, or None when ffprobe can't say.
+
+    Best-effort by design: an unknown duration downgrades extraction to a
+    single guarded pass rather than failing the scan.
+    """
+    cmd = ["ffprobe", "-v", "error", "-show_entries", "format=duration",
+           "-of", "default=nw=1:nk=1", video_path]
+    try:
+        res = runner.run(cmd, check=True, capture_output=True, text=True,
+                         timeout=60)
+        return float((getattr(res, "stdout", "") or "").strip())
+    except (FileNotFoundError, subprocess.SubprocessError, ValueError,
+            TypeError, OSError):
+        return None
+
+
+def _describe_exit(rc: int) -> str:
+    if rc in FFMPEG_CRASH_CODES:
+        return (f"ffmpeg CRASHED (exit {rc}) — the decoder died mid-pass; "
+                f"this is a crash, not a rejected file")
+    return f"ffmpeg exited {rc}"
+
+
+def _run_ffmpeg(cmd: list[str], runner, timeout: float
+                ) -> tuple[bool, str]:
+    """(ok, detail) for one ffmpeg invocation.
+
+    Never raises: every failure mode — crash, timeout, missing binary — is
+    reported as a reason string so the caller can fall back instead of
+    losing the frames it already has.
+    """
+    try:
+        res = runner.run(cmd, capture_output=True, text=True, timeout=timeout)
+    except subprocess.TimeoutExpired:
+        return False, (f"ffmpeg made no progress for {int(timeout)}s and was "
+                       f"killed")
+    except FileNotFoundError:
+        return False, "ffmpeg is not installed or not on PATH"
+    except OSError as e:
+        return False, f"could not start ffmpeg: {e}"
+    rc = getattr(res, "returncode", 0) or 0
+    if rc != 0:
+        tail = (getattr(res, "stderr", "") or "").strip()[-300:]
+        return False, _describe_exit(rc) + (f": {tail}" if tail else "")
+    return True, "ok"
+
+
+def _extract_one_frame(video_path: str, offset: int, out_path: str,
+                       runner=subprocess) -> bool:
+    """Grab ONE frame by its own seek. Slower per frame than a filter pass,
+    but it isolates a bad stretch of video to the samples inside it."""
+    cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+           "-ss", str(offset), "-i", video_path, "-frames:v", "1", out_path]
+    ok, _detail = _run_ffmpeg(cmd, runner, SINGLE_FRAME_TIMEOUT)
+    return ok and os.path.exists(out_path)
+
+
+def _extract_window(video_path: str, out_dir: str, interval: int,
+                    start: int, span: float, runner) -> tuple[list[str], str]:
+    """One filter pass over [start, start+span). Returns (frames, detail).
+
+    Frames are written under a per-window prefix and then renamed to their
+    ABSOLUTE offset, so a partially-successful run leaves a correctly-named
+    set behind rather than a half-numbered one.
+    """
+    prefix = f"w{start:08d}_"
+    for stale in os.listdir(out_dir):
+        if stale.startswith(prefix):
+            try:
+                os.remove(os.path.join(out_dir, stale))
+            except OSError:
+                pass
+    cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+           "-ss", str(start), "-t", str(int(span)), "-i", video_path,
            "-vf", f"fps=1/{interval}", "-start_number", "0",
-           os.path.join(out_dir, "idx%06d.png")]
-    subprocess.run(cmd, check=True)
+           os.path.join(out_dir, prefix + "%06d.png")]
+    ok, detail = _run_ffmpeg(cmd, runner, _extract_timeout(span))
+    # Salvage whatever landed even when the pass failed: a decoder that
+    # crashed at minute 14 still wrote minutes 0-13, and those frames are
+    # every bit as good as the ones a clean pass produces.
     frames = []
     for fn in sorted(os.listdir(out_dir)):
-        if not fn.startswith("idx"):
+        if not fn.startswith(prefix):
             continue
-        idx = int(fn[3:9])
-        offset = idx * interval
-        new = os.path.join(out_dir, f"{offset:06d}.png")
-        os.rename(os.path.join(out_dir, fn), new)
-        frames.append(new)
+        offset = start + int(fn[len(prefix):len(prefix) + 6]) * interval
+        dest = os.path.join(out_dir, f"{offset:06d}.png")
+        try:
+            os.replace(os.path.join(out_dir, fn), dest)
+        except OSError:
+            continue
+        frames.append(dest)
+    return frames, ("ok" if ok else detail)
+
+
+def extract_frames(video_path: str, out_dir: str, interval: int, *,
+                   duration: float | None = None,
+                   window_seconds: int = DEFAULT_EXTRACT_WINDOW_SECONDS,
+                   runner=subprocess) -> list[str]:
+    """One PNG every `interval` seconds, named by offset: 000600.png = 10 min.
+
+    Sampling a multi-hour broadcast is the longest unattended stretch in the
+    whole pipeline, so it is built to survive rather than to be fast:
+
+      * the video is walked in WINDOWS (`window_seconds`), each its own
+        ffmpeg pass, so one bad stretch costs one window and not the scan;
+      * every pass has a deadline — a hung ffmpeg is killed and reported
+        instead of heart-beating forever;
+      * a window that crashes is retried once, then falls back to grabbing
+        its samples one seek at a time, which routinely succeeds where the
+        filter pass died;
+      * frames that WERE produced are always kept and correctly named.
+
+    Raises `FrameExtractionError` only when the video yielded no frames at
+    all — a genuinely unusable file, reported with a remedy. Individual
+    missing samples are logged and skipped, exactly as an unreadable frame
+    already was downstream.
+    """
+    os.makedirs(out_dir, exist_ok=True)
+    if interval <= 0:
+        raise ValueError("sample interval must be > 0")
+    if duration is None:
+        duration = probe_duration(video_path, runner=runner)
+
+    if not duration or duration <= 0:
+        # Unknown length: one guarded pass over the whole file. Still gets a
+        # deadline and still salvages a partial result, but it cannot be
+        # chunked without knowing where the end is.
+        log(f"sampling every {interval}s (length unknown — single pass)")
+        frames, detail = _extract_window(video_path, out_dir, interval, 0,
+                                         window_seconds * 6, runner)
+        if not frames:
+            raise FrameExtractionError(
+                f"ffmpeg produced no frames from {os.path.basename(video_path)}"
+                f" — {detail}",
+                code=("ffmpeg_crashed" if "CRASHED" in detail
+                      else "frame_extraction_failed"),
+                remedy=("re-download the media (the file on disk may be "
+                        "truncated), then re-run this job"))
+        return sorted(frames)
+
+    windows = []
+    start = 0
+    while start < duration:
+        span = min(window_seconds, duration - start)
+        windows.append((start, span))
+        start += window_seconds
+    log(f"sampling every {interval}s across {_fmt_hms(duration)} "
+        f"in {len(windows)} window(s) of {_fmt_hms(window_seconds)}")
+
+    frames: list[str] = []
+    failures: list[str] = []
+    recovered = 0
+    for i, (start, span) in enumerate(windows, start=1):
+        got, detail = _extract_window(video_path, out_dir, interval,
+                                      start, span, runner)
+        if detail != "ok":
+            log(f"window {i}/{len(windows)} ({_fmt_hms(start)}) FAILED — "
+                f"{detail}")
+            if got:
+                log(f"window {i}/{len(windows)}: kept {len(got)} frame(s) "
+                    f"written before the failure")
+            retry, retry_detail = _extract_window(video_path, out_dir,
+                                                  interval, start, span,
+                                                  runner)
+            if len(retry) > len(got):
+                got, detail = retry, retry_detail
+            if detail != "ok":
+                # Last resort for this window: one seek per sample. A single
+                # undecodable stretch then costs only the samples inside it.
+                want = [int(start + k * interval)
+                        for k in range(int(span // interval) + 1)
+                        if k * interval < span
+                        and start + k * interval < duration]
+                have = {int(os.path.splitext(os.path.basename(p))[0])
+                        for p in got}
+                for off in want:
+                    if off in have:
+                        continue
+                    dest = os.path.join(out_dir, f"{off:06d}.png")
+                    if _extract_one_frame(video_path, off, dest,
+                                          runner=runner):
+                        got.append(dest)
+                        recovered += 1
+                failures.append(f"{_fmt_hms(start)}: {detail}")
+        frames.extend(got)
+
+    frames = sorted(set(frames))
+    if recovered:
+        log(f"recovered {recovered} frame(s) with per-frame seeks after a "
+            f"filter pass failed")
+    if failures:
+        log(f"{len(failures)} window(s) needed recovery: "
+            + "; ".join(failures[:4])
+            + (" …" if len(failures) > 4 else ""))
+    if not frames:
+        detail = failures[0] if failures else "ffmpeg produced no output"
+        raise FrameExtractionError(
+            f"no frames could be sampled from "
+            f"{os.path.basename(video_path)} — {detail}",
+            code=("ffmpeg_crashed" if any("CRASHED" in f for f in failures)
+                  else "frame_extraction_failed"),
+            remedy=("re-download the media (the file on disk may be "
+                    "truncated or corrupt), then re-run this job; if it "
+                    "fails again, update ffmpeg"))
+    log(f"sampled {len(frames)} frame(s) -> {out_dir}")
     return frames
+
+
+def _fmt_hms(seconds: float) -> str:
+    s = int(seconds)
+    return f"{s // 3600:d}:{(s % 3600) // 60:02d}:{s % 60:02d}"
 
 
 def download_vod(url: str, out_path: str) -> None:

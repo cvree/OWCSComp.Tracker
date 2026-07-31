@@ -38,6 +38,75 @@
     return chip(s, cls);
   }
 
+  /* ---- plain English ---------------------------------------------------
+     A state name is evidence; it is not an instruction. Someone who has
+     never seen this pipeline cannot act on "RETRY_SCHEDULED", so every
+     state gets one sentence saying what the machine is doing and one
+     saying what the PERSON does next. The raw state chip stays visible
+     beside it — this replaces nothing, it explains it. */
+  const PLAIN = {
+    DISCOVERED: ["Found on an official channel. Nothing has been downloaded.",
+      "Approve the source to let it start."],
+    SCHEDULED: ["Queued to start.", "Nothing — it will begin on its own."],
+    AWAITING_BROADCAST: ["The stream hasn't started yet.", "Come back later."],
+    LIVE: ["Still broadcasting live — it can only be read once it ends.",
+      "Come back after the stream finishes."],
+    RECORDING: ["Being recorded.", "Nothing — wait for it to finish."],
+    ARCHIVED: ["Ready to download.", "Nothing — the download starts on its own."],
+    DOWNLOADING: ["Downloading the broadcast. This is the long part — several "
+      + "gigabytes, usually 20–60 minutes.",
+      "Nothing. The log below shows live progress; a stopped download resumes."],
+    DOWNLOADED: ["Downloaded. Next it makes a small scanning copy and works "
+      + "out where the HUD sits.",
+      "Nothing — it continues on its own."],
+    SEGMENTING: ["Scanning the whole broadcast for the stretches that are "
+      + "actual gameplay.", "Nothing — this takes a few minutes."],
+    PROCESSING: ["Working through the approved maps.", "Nothing."],
+    NEEDS_LAYOUT: ["It measured where this broadcast puts the hero portraits "
+      + "and wants you to confirm the fit before trusting it.",
+      "Type your name, then click <b>Approve layout</b>."],
+    NEEDS_TEMPLATES: ["It has no hero portrait references for this broadcast "
+      + "style, so it cannot read comps from it yet.",
+      "Cut hero templates from this VOD (tick <code>--for-harvest</code>), or "
+      + "use a broadcast whose layout is already trained."],
+    NEEDS_REVIEW: ["It found candidate maps and needs you to say which are "
+      + "real. This is the main thing you do.",
+      "Look at the thumbnails below and approve or reject each segment."],
+    READY_FOR_DETECTION: ["Segments are approved. Ready to read the heroes.",
+      "Click <b>Detect (dry run)</b> to see what it reads."],
+    APPROVED: ["The reads are approved and can be published.",
+      "Click <b>Commit detection</b>, then <b>PUBLISH</b>."],
+    PUBLISHED: ["Done. This broadcast's comps are on the public site.",
+      "Nothing — go look at it."],
+    PARTIAL: ["Some of this broadcast went through; some didn't.",
+      "Read the warnings below to see what was held back."],
+    RETRY_SCHEDULED: ["Something failed and it will try again by itself.",
+      "Nothing yet. If you want it now, click <b>Retry</b> — the reason and "
+      + "the fix are shown below."],
+    FAILED: ["A step failed.",
+      "Read the remedy below, fix it, then click <b>Retry</b>."],
+    FAILED_PERMANENT: ["It gave up after repeated failures, rather than "
+      + "spinning forever.",
+      "Read the remedy below. Fixing the cause and clicking <b>Retry</b> "
+      + "still works."],
+    IGNORED: ["Marked as not worth processing.", "Nothing."],
+    CANCELLED: ["Stopped by a person.",
+      "Click <b>Retry</b> to pick it back up — nothing downloaded was lost."],
+  };
+
+  function plainBlock(job) {
+    const p = PLAIN[job.state];
+    if (!p) return "";
+    /* The blocking reasons are the real instruction when there are any —
+       say so instead of the generic line for the state. */
+    const blocked = (job.blocking || []).length;
+    return `<p class="ik-plain">${p[0]}</p>
+      <p class="ik-next"><b>You:</b> ${blocked
+        ? "resolve what is listed as BLOCKED below — that is what is holding "
+          + "this broadcast up."
+        : p[1]}</p>`;
+  }
+
   function sourceChip(state) {
     const cls = state === "approved" ? "ok"
       : state === "rejected" ? "bad" : "warn";
@@ -301,6 +370,7 @@
         ${job.downloaded ? chip("downloaded", "ok") : chip("not downloaded", "warn")}
         ${job.proxyPath ? chip("360p proxy", "ok") : chip("no scan proxy", "warn")}
       </div>
+      ${plainBlock(job)}
       ${job.canonicalUrl
         ? `<p class="ik-warn"><a href="${esc(job.canonicalUrl)}" rel="noopener noreferrer"
             target="_blank">${esc(job.canonicalUrl)}</a></p>` : ""}
@@ -567,10 +637,11 @@
         <span>generated <b>${esc(data.generatedAt || "—")}</b></span>`;
     }
     if (!jobs.length) {
-      root.innerHTML = `<p class="muted">No intake jobs yet. Paste a broadcast
-        link:</p><code class="ik-cmd">python pipeline/automation/cli.py ingest-link --url "&lt;youtube-url&gt;"</code>
-        <p class="muted">Then regenerate this page:</p>
-        <code class="ik-cmd">python pipeline/automation/cli.py intake-export --save</code>`;
+      root.innerHTML = `<p class="muted">No broadcasts in the pipeline yet.
+        Paste one or more links in the box above — or read
+        <a href="start.html">Start here</a> if this is your first time.</p>
+        <p class="muted">The equivalent from a terminal:</p>
+        <code class="ik-cmd">python pipeline/automation/cli.py convert-link --url "&lt;youtube-url&gt;"</code>`;
       return;
     }
     root.innerHTML = jobs.map(jobBlock).join("");
@@ -627,15 +698,89 @@
     note.className = `ik-form-note ${cls || ""}`;
   }
 
+  /* The box takes a whole match day, so everything downstream works on a
+     LIST. Splitting mirrors serve.split_links: a single token is passed
+     through untouched (so a bad link still gets the parser's precise
+     reason), and a multi-link paste ignores surrounding prose. */
+  function pastedLinks() {
+    const raw = (urlBox && urlBox.value || "").trim();
+    if (!raw) return [];
+    const toks = raw.split(/[\s,;]+/)
+      .map((t) => t.replace(/^[<>()[\]"'“”‘’,.]+|[<>()[\]"'“”‘’,.]+$/g, ""))
+      .filter(Boolean);
+    if (toks.length <= 1) return toks;
+    const out = [];
+    toks.forEach((t) => {
+      if ((t.indexOf("://") !== -1 || t.toLowerCase().indexOf("youtu") !== -1)
+        && out.indexOf(t) === -1) out.push(t);
+    });
+    return out;
+  }
+
   function previewCommand() {
     if (!cmdPrev) return;
-    const url = (urlBox && urlBox.value || "").trim();
-    if (apiMode || !url) { cmdPrev.hidden = true; return; }
+    const links = pastedLinks();
+    if (apiMode || !links.length) { cmdPrev.hidden = true; return; }
     cmdPrev.hidden = false;
-    cmdPrev.textContent =
-      `python pipeline/automation/cli.py convert-link --url "${url}"` +
-      (autoBox && autoBox.checked ? " --auto-accept --accepted-by \"<your name>\"" : "");
+    const auto = autoBox && autoBox.checked
+      ? " --auto-accept --accepted-by \"<your name>\"" : "";
+    /* Static hosting can't run anything — so give a runnable command per
+       link rather than one command that silently drops the other nine. */
+    cmdPrev.textContent = links.map((u) =>
+      `python pipeline/automation/cli.py convert-link --url "${u}"${auto}`)
+      .join("\n");
   }
+
+  /* ---- the queue -------------------------------------------------------
+     One job runs at a time, but a match day is six to ten broadcasts. This
+     panel is the answer to "did it take all of them, and where is it now" —
+     without it, pasting ten links and seeing one job start looks like nine
+     were dropped. */
+  function renderQueue(q) {
+    const el = document.getElementById("ik-queue");
+    if (!el) return;
+    const pending = (q && q.pending) || [];
+    const history = (q && q.history) || [];
+    const current = q && q.current;
+    if (!current && !pending.length && !history.length) {
+      el.hidden = true;
+      return;
+    }
+    el.hidden = false;
+    let n = 0;
+    const row = (cls, id, status) =>
+      `<div class="qrow ${cls}"><span class="qn">${++n}</span>
+        <span class="qid">${esc(id)}</span>
+        <span class="qst">${esc(status)}</span></div>`;
+    const done = history.map((h) => row(
+      h.status === "ok" ? "done-ok" : "done-bad",
+      h.videoId || h.label || "?", h.status || "finished")).join("");
+    const now = current
+      ? row("now", current.videoId || current.label || "?", "running now")
+      : "";
+    const wait = pending.map((p) => row(
+      "", p.videoId || p.label || "?", "waiting")).join("");
+    el.innerHTML = `<h3>Batch — ${history.length} done ·
+        ${current ? "1 running" : "none running"} ·
+        ${pending.length} waiting</h3>${done}${now}${wait}
+      ${pending.length && apiMode
+        ? `<div class="ik-btns"><button id="ik-qclear">Clear the ${
+            pending.length} waiting</button></div>` : ""}`;
+  }
+
+  function loadQueue() {
+    if (!apiMode) return Promise.resolve();
+    return fetch("/api/queue", { cache: "no-store" })
+      .then((r) => r.json()).then(renderQueue).catch(() => {});
+  }
+
+  document.addEventListener("click", (ev) => {
+    const clear = ev.target.closest && ev.target.closest("#ik-qclear");
+    if (!clear) return;
+    ev.preventDefault();
+    fetch("/api/queue/clear", { method: "POST" })
+      .then((r) => r.json()).then(renderQueue).catch(() => {});
+  });
 
   /* Which ladder rung a running job is on right now, read from the
      sanitized log lines the downloader already prints. Nothing secret can
@@ -659,41 +804,72 @@
   }
 
   function tailJob(sinceStart, what) {
-    /* Follow the running job via /api/status until it ends, then re-render
-       the panel + the download-auth status from the live report. */
+    /* Follow the running job via /api/status until the whole BATCH ends.
+       When one broadcast finishes and the next starts, the server replaces
+       its log, so the tail restarts from 0 and keeps going rather than
+       declaring victory in the gap between two queued jobs — the entire
+       point of the queue is that nobody has to be watching for that. */
     let since = sinceStart || 0;
+    let job = null;
     const label = what || "convert";
     if (liveLog) { liveLog.hidden = false; liveLog.textContent = ""; }
     const tick = () => fetch(`/api/status?since=${since}`, { cache: "no-store" })
       .then((r) => r.json())
       .then((st) => {
-        since = st.next;
-        if (st.lines && st.lines.length) {
-          st.lines.forEach(noteAttempt);
-          if (liveLog) {
-            liveLog.textContent += st.lines.join("\n") + "\n";
-            liveLog.scrollTop = liveLog.scrollHeight;
-          }
-          loadDownloadStatus();
+        if (job !== null && st.job !== job) {
+          since = 0;                       // a new job owns the log now
+          if (liveLog) liveLog.textContent += `\n— next broadcast —\n`;
+          loadQueue();
+          return fetch(`/api/status?since=0`, { cache: "no-store" })
+            .then((r) => r.json()).then(step);
         }
-        if (st.running) { setTimeout(tick, 800); return; }
-        currentAttempt = null;
-        const ok = st.status === "ok";
-        setNote(ok
-          ? `${label} finished — review the updated stages below.`
-          : `${label} ended: ${st.status} — the log above says why; the job is resumable.`,
-          ok ? "ok" : "bad");
-        setBusy(false);
-        reload();
-        loadDownloadStatus();
-        loadMatchFinder();
+        return step(st);
       })
+      .then((again) => { if (again !== false) setTimeout(tick, 800); })
       .catch(() => { setTimeout(tick, 2000); });
+
+    function step(st) {
+      job = st.job;
+      since = st.next;
+      if (st.lines && st.lines.length) {
+        st.lines.forEach(noteAttempt);
+        if (liveLog) {
+          liveLog.textContent += st.lines.join("\n") + "\n";
+          liveLog.scrollTop = liveLog.scrollHeight;
+        }
+        loadDownloadStatus();
+      }
+      if (st.running) return true;
+      if (st.queued) {
+        // Finished one, another is waiting: the server starts it itself.
+        setNote(`${label}: ${st.queued} broadcast(s) still queued — `
+          + `starting the next one.`);
+        loadQueue();
+        reload();
+        return true;
+      }
+      currentAttempt = null;
+      const ok = st.status === "ok";
+      setNote(ok
+        ? `${label} finished — review the updated stages below.`
+        : `${label} ended: ${st.status} — the log above says why; the job is resumable.`,
+        ok ? "ok" : "bad");
+      setBusy(false);
+      reload();
+      loadDownloadStatus();
+      loadMatchFinder();
+      loadQueue();
+      return false;
+    }
     tick();
   }
 
   function setBusy(busy) {
-    if (goBtn) goBtn.disabled = busy;
+    /* The per-job action buttons genuinely cannot run while something else
+       is: they'd be refused. The PASTE box is different — pasting now adds
+       to the queue, so it stays live and more links can be thrown in while
+       the first batch is still downloading. */
+    if (goBtn) goBtn.disabled = apiMode ? false : busy;
     document.querySelectorAll(".ik-btns button")
       .forEach((b) => { b.disabled = busy; });
   }
@@ -740,25 +916,39 @@
   });
 
   function submitLink(ev) {
-    ev.preventDefault();
-    const url = (urlBox && urlBox.value || "").trim();
-    if (!url) return;
+    if (ev && ev.preventDefault) ev.preventDefault();
+    const links = pastedLinks();
+    if (!links.length) return;
     if (!apiMode) { previewCommand(); return; }
     if (goBtn) goBtn.disabled = true;
-    setNote("submitting link…");
+    setNote(links.length > 1
+      ? `checking ${links.length} links…` : "submitting link…");
     fetch("/api/intake/link", {
       method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ url, autoAccept: !!(autoBox && autoBox.checked) }),
+      body: JSON.stringify({ urls: links,
+        autoAccept: !!(autoBox && autoBox.checked) }),
     })
       .then((r) => r.json().then((j) => ({ status: r.status, j })))
       .then(({ status, j }) => {
-        if (status === 200 && j.started) {
-          setNote(`converting ${j.videoId} (job ${j.jobKey}) — live log below.`);
-          tailJob(0, "convert");
-        } else {
+        if (status !== 200) {
           setNote(j.error || `refused (HTTP ${status})`, "bad");
           setBusy(false);
+          return;
         }
+        /* Report the bad links BY NAME. Silently accepting nine of ten is
+           how someone loses an afternoon waiting for a broadcast that was
+           never queued. */
+        const bad = (j.rejected || []).map((r) => `${r.url} (${r.error})`);
+        const queued = j.queued || 0;
+        setNote(
+          `${j.accepted} broadcast(s) accepted — ${j.videoId} is running`
+          + (queued ? `, ${queued} waiting behind it` : "")
+          + (bad.length ? `. SKIPPED: ${bad.join("; ")}` : "")
+          + ". Live log below.",
+          bad.length ? "bad" : "");
+        if (urlBox) urlBox.value = "";
+        loadQueue();
+        tailJob(0, "convert");
       })
       .catch((err) => {
         setNote(`control room unreachable: ${err.message}`, "bad");
@@ -778,10 +968,12 @@
     .then((ping) => {
       apiMode = !!(ping && ping.ok);
       if (apiMode) {
-        if (goBtn) goBtn.disabled = !!ping.running;
+        if (goBtn) goBtn.disabled = false;
         setNote(ping.running
-          ? "control room detected — a job is already running (one at a time); wait or cancel it on the Run page."
-          : "control room detected — pasting a link will run convert-link locally, to the first human gate.",
+          ? "control room detected — a broadcast is already running; paste more "
+            + "links and they queue behind it."
+          : "control room detected — paste one link or a whole match day (one "
+            + "per line). Each runs to its first human gate, in turn.",
           "ok");
       }
     })
@@ -798,5 +990,15 @@
     })
     .then(reload)
     .then(loadDownloadStatus)
-    .then(loadMatchFinder);
+    .then(loadMatchFinder)
+    .then(loadQueue)
+    .then(() => {
+      /* A batch left running from an earlier visit keeps streaming into
+         this page: reloading the browser must not orphan it. */
+      if (!apiMode) return;
+      fetch("/api/status?since=0", { cache: "no-store" })
+        .then((r) => r.json())
+        .then((st) => { if (st.running) tailJob(0, "convert"); })
+        .catch(() => {});
+    });
 })();

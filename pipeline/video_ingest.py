@@ -391,7 +391,8 @@ def _is_progress(line: str) -> bool:
 def _run_live(cmd: list[str], prefix: str, runner=subprocess,
               heartbeat_every: float = 12.0,
               idle_msg: str = "still running",
-              stall_timeout: float | None = None):
+              stall_timeout: float | None = None,
+              line_filter=None):
     """Run cmd, streaming its output live, killing it if it stalls.
 
     With the real subprocess module this uses Popen so long yt-dlp/ffmpeg
@@ -407,6 +408,15 @@ def _run_live(cmd: list[str], prefix: str, runner=subprocess,
     heartbeats forever. Until the FIRST progress line, the process is given a
     grace period of max(stall_timeout, 20s) to start (metadata + format
     negotiation can be slow) before the stall clock applies.
+
+    `line_filter(line) -> str | None` rewrites the child's output before it
+    is printed. Returning None SWALLOWS the line and counts it as real
+    progress — that is how ffmpeg's machine-readable `-progress pipe:1`
+    stream (a dozen key=value lines twice a second) becomes one readable
+    percentage line without either flooding the log or starving the stall
+    clock. Any string it returns is printed and judged by `_is_progress` as
+    usual, and an unrecognized line must be returned unchanged so genuine
+    ffmpeg errors always reach the operator.
 
     Injected fake runners (tests) usually only implement .run(), so anything
     without a Popen attribute falls back to the old captured one-shot call.
@@ -470,6 +480,15 @@ def _run_live(cmd: list[str], prefix: str, runner=subprocess,
         if line is None:
             break
         line = line.rstrip()
+        if line and line_filter is not None:
+            shown = line_filter(line)
+            if shown is None:
+                # Machine progress the filter absorbed: no output, but the
+                # child is demonstrably alive and moving.
+                seen_progress = True
+                last_line = last_progress = time.monotonic()
+                continue
+            line = shown.rstrip()
         if line:
             # Redact BEFORE printing: yt-dlp echoes the signed googlevideo
             # URL (a time-limited credential) on several code paths, and
@@ -1313,11 +1332,86 @@ def _rung_index(name: str) -> int:
 DEFAULT_PROXY_HEIGHT = 360
 PROXY_CRF = "30"          # scanning quality: HUD anchors/chips survive this
 PROXY_PRESET = "veryfast"
+# Transcoding a multi-hour broadcast legitimately takes tens of minutes, so
+# there is no wall-clock ceiling here — only a guard against a transcode
+# that has genuinely STOPPED. With `-progress pipe:1` ffmpeg reports twice a
+# second, so five minutes of silence is a hang, not slow work.
+PROXY_STALL_TIMEOUT = 300.0
+
+
+class FfmpegProgress:
+    """Turns ffmpeg's `-progress pipe:1` key=value stream into one readable
+    line every `every` seconds: position, percent, speed and ETA.
+
+    Without this, a long transcode runs with `-loglevel error` and therefore
+    prints NOTHING for its entire duration, which reads exactly like a hang
+    ("still transcoding... elapsed 1552s (no output for 1552s)") and leaves
+    the stall guard with nothing to measure. With it, the same transcode
+    reports where it is and when it will finish, and a real stall becomes
+    detectable within `PROXY_STALL_TIMEOUT`.
+
+    Call it as `_run_live(..., line_filter=FfmpegProgress(total))`:
+      * a recognized progress key returns None (swallowed, counts as alive),
+      * every `every` seconds one summary line is returned instead,
+      * anything else — a genuine ffmpeg error — is returned untouched.
+    """
+
+    _KEYS = ("frame=", "fps=", "stream_", "bitrate=", "total_size=",
+             "out_time_us=", "out_time_ms=", "out_time=", "dup_frames=",
+             "drop_frames=", "speed=", "progress=")
+
+    def __init__(self, total_seconds: float | None = None,
+                 every: float = 20.0, label: str = "transcoding"):
+        self.total = float(total_seconds or 0) or None
+        self.every = every
+        self.label = label
+        self.position = 0.0
+        self.speed = None
+        self._last_emit = 0.0
+        self._started = time.monotonic()
+
+    def _summary(self) -> str:
+        parts = [f"{self.label} {fmt_hms(self.position)}"]
+        if self.total:
+            pct = max(0.0, min(100.0, self.position / self.total * 100.0))
+            parts[0] += f" / {fmt_hms(self.total)}"
+            parts.append(f"{pct:.0f}%")
+        if self.speed:
+            parts.append(f"{self.speed:.1f}x")
+            remaining = (self.total - self.position) if self.total else None
+            if remaining and remaining > 0 and self.speed > 0:
+                parts.append(f"eta {fmt_hms(remaining / self.speed)}")
+        return " · ".join(parts)
+
+    def __call__(self, line: str) -> str | None:
+        stripped = line.strip()
+        if not any(stripped.startswith(k) for k in self._KEYS):
+            return line                      # a real message — never hide it
+        key, _, value = stripped.partition("=")
+        if key == "out_time_us":
+            try:
+                self.position = int(value) / 1_000_000.0
+            except ValueError:
+                pass
+        elif key == "speed":
+            try:
+                self.speed = float(value.rstrip("x").strip())
+            except ValueError:
+                pass
+        elif key == "progress":
+            now = time.monotonic()
+            if value.strip() == "end":
+                return self._summary() + " — done"
+            if now - self._last_emit >= self.every:
+                self._last_emit = now
+                return self._summary()
+        return None
 
 
 def make_scan_proxy(source_path: str, out_path: str, *,
                     height: int = DEFAULT_PROXY_HEIGHT,
-                    runner=subprocess, force: bool = False) -> dict:
+                    runner=subprocess, force: bool = False,
+                    stall_timeout: float | None = PROXY_STALL_TIMEOUT) -> dict:
     """Transcode a LOCAL full-resolution VOD down to a small scan proxy.
 
     The proxy is what every scanning pass reads (gameplay classification,
@@ -1344,13 +1438,29 @@ def make_scan_proxy(source_path: str, out_path: str, *,
             return {"path": out_path, "width": res.get("width"),
                     "height": res.get("height"),
                     "sizeBytes": os.path.getsize(out_path), "reused": True}
+    src_meta = probe_clip_resolution(source_path, runner=runner) or {}
+    total = src_meta.get("duration")
     cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
            "-i", source_path,
            "-vf", f"scale=-2:{height}",
            "-c:v", "libx264", "-preset", PROXY_PRESET, "-crf", PROXY_CRF,
-           "-an", "-sn", out_path]
-    log(f"proxy: building {height}p scan proxy from {source_path}")
-    _run_live(cmd, "[ffmpeg]", runner, idle_msg="still transcoding")
+           "-an", "-sn", "-progress", "pipe:1", "-nostats", out_path]
+    log(f"proxy: building {height}p scan proxy from {source_path}"
+        + (f" ({fmt_hms(total)} of video)" if total else ""))
+    try:
+        _run_live(cmd, "[ffmpeg]", runner, idle_msg="still transcoding",
+                  stall_timeout=stall_timeout,
+                  line_filter=FfmpegProgress(total, label="transcoding"))
+    except StallTimeout as exc:
+        # A transcode that stopped moving is a dead transcode. Say so with
+        # the position it reached instead of heart-beating until the job
+        # times out hours later.
+        raise StallTimeout(
+            cmd, exc.waited,
+            f"ffmpeg stopped making progress for {int(exc.waited)}s while "
+            f"building the scan proxy — the source file may be truncated. "
+            f"Re-run the job: the download resumes and the proxy rebuilds."
+        ) from exc
     ok, reason = probe_clip_valid(out_path, runner=runner)
     if not ok:
         raise InvalidClip(f"generated scan proxy is invalid — {reason} ({out_path})")

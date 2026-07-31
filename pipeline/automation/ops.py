@@ -230,10 +230,20 @@ def _resolve_and_segment(store: js.JobStore, content_con, job: models.Job, *,
                 "layoutId": layout_id,
                 "scannedProxy": os.path.basename(scan_path)}
     except Exception as exc:  # noqa: BLE001
+        # A frame-sampling failure already knows WHY it failed and what to do
+        # about it (capture.FrameExtractionError) — record that instead of a
+        # `CalledProcessError: Command '[...]' returned non-zero exit status
+        # 3221225477` nobody can act on.
+        code = getattr(exc, "code", None) or "segmentation_failed"
+        remedy = getattr(exc, "remedy", "")
+        message = str(exc) if getattr(exc, "code", None) \
+            else f"{type(exc).__name__}: {exc}"
         store.record_attempt(job_key, ok=False, worker_id=worker_id,
-                             error_code="segmentation_failed",
-                             error_message=f"{type(exc).__name__}: {exc}")
-        return {"ok": False, "reason": str(exc)}
+                             error_code=code,
+                             error_message=message
+                             + (f" — remedy: {remedy}" if remedy else ""))
+        return {"ok": False, "reason": message,
+                "errorCode": code, "remedy": remedy}
 
 
 # --------------------------------------------------------- automatic driver

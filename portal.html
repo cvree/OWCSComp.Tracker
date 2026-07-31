@@ -56,9 +56,33 @@
   table.ik-lay { width: 100%; border-collapse: collapse; font-size: .76rem; margin: 6px 0; }
   table.ik-lay td, table.ik-lay th { padding: 4px 8px; border-bottom: 1px solid var(--line); text-align: left; }
   .ik-form-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 10px 0 6px; }
-  .ik-form-row input[type="url"] { flex: 1 1 320px; min-width: 0; padding: 12px 14px;
-    background: rgba(255,255,255,.05); border: 1px solid var(--line); border-radius: 10px;
-    color: var(--text); font: inherit; font-size: .95rem; }
+  .ik-form-row input[type="url"], .ik-form-row textarea { flex: 1 1 320px; min-width: 0;
+    padding: 12px 14px; background: rgba(255,255,255,.05); border: 1px solid var(--line);
+    border-radius: 10px; color: var(--text); font: inherit; font-size: .95rem; }
+  /* One box, any number of links: it grows as a match day is pasted in
+     rather than hiding everything past the first URL behind a scroll. */
+  .ik-form-row textarea { resize: vertical; min-height: 52px; line-height: 1.45;
+    font-family: ui-monospace, "SF Mono", Consolas, monospace; font-size: .82rem; }
+  /* what-is-happening / what-you-do-next, stated in words above the raw
+     state enum — the enum is evidence, the sentence is the instruction. */
+  .ik-plain { font-size: .86rem; margin: 8px 0 2px; color: var(--text); }
+  .ik-plain b { color: var(--amber); }
+  .ik-next { font-size: .82rem; color: var(--muted); margin: 2px 0 8px; }
+  .ik-next b { color: var(--text); }
+  /* the queue: what is running, what is waiting, what finished */
+  #ik-queue { border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px;
+    margin: 10px 0 0; font-size: .8rem; }
+  #ik-queue h3 { font-size: .84rem; margin: 0 0 6px; }
+  .qrow { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline;
+    padding: 5px 0; border-top: 1px solid var(--line); }
+  .qrow:first-of-type { border-top: 0; }
+  .qrow .qn { color: var(--muted); font-size: .72rem;
+    font-family: ui-monospace, "SF Mono", Consolas, monospace; }
+  .qrow .qid { font-weight: 600; }
+  .qrow .qst { font-size: .72rem; color: var(--muted); }
+  .qrow.now .qid { color: var(--amber); }
+  .qrow.done-ok .qst { color: var(--win, #46d68c); }
+  .qrow.done-bad .qst { color: var(--loss, #e15b5b); }
   .ik-form-row button { padding: 12px 20px; border-radius: 10px; border: 1px solid var(--line);
     background: rgba(255,255,255,.08); color: var(--text); font: inherit; font-size: .9rem;
     font-weight: 600; cursor: pointer; }
@@ -156,16 +180,17 @@
       timeline with click-through evidence. Every automatic stage runs on its own; the pipeline
       stops only where a human decision genuinely belongs.</p>
     <p class="lead muted" style="font-size:.86rem">
-      <b>This is the back office.</b> Nothing here is needed to read the data —
-      the published results live on the <a href="index.html">public site</a>, and
-      <a href="how-it-works.html">How it works</a> explains what “verified” means before you
-      trust a single number.</p>
+      <b>First time here?</b> Read <a href="start.html">Start here</a> — it is the whole setup and
+      the four questions this page will ask you, in plain English.
+      <b>Just want to read the data?</b> None of this is needed: the published results live on the
+      <a href="index.html">public site</a>, and <a href="how-it-works.html">How it works</a>
+      explains what “verified” means before you trust a single number.</p>
 
     <section id="ik-intake" style="margin-top:18px">
       <form id="ik-form">
         <div class="ik-form-row">
-          <input type="url" id="ik-url" placeholder="https://www.youtube.com/watch?v=…"
-                 autocomplete="off" spellcheck="false" required />
+          <textarea id="ik-url" rows="2" spellcheck="false" autocomplete="off" required
+            placeholder="https://www.youtube.com/watch?v=…&#10;paste as many links as you like — one per line"></textarea>
           <button type="submit" id="ik-go" disabled>Convert broadcast</button>
         </div>
         <label class="ik-form-opt"><input type="checkbox" id="ik-autoaccept" />
@@ -179,6 +204,7 @@
       </div>
       <p class="ik-form-note" id="ik-note">checking for the local control room…</p>
       <code class="ik-cmd" id="ik-cmd-preview" hidden></code>
+      <div id="ik-queue" hidden></div>
       <pre id="ik-live-log" hidden></pre>
       <div class="flow-strip" aria-label="pipeline stages">
         <b>paste</b><span class="arw">→</span>

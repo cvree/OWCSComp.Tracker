@@ -26,9 +26,13 @@ API (all JSON):
                             the fallback ladder, per-layout detection
                             readiness, API-key presence
   POST /api/run             start run_owcs_auto with validated params
-  POST /api/intake/link     {url, autoAccept?} validate the pasted URL
-                            offline, then launch `cli.py convert-link` (the
-                            one match-day command) as the current job
+  POST /api/intake/link     {url|urls, autoAccept?} validate every pasted
+                            URL offline, then run `cli.py convert-link` (the
+                            one match-day command) for each in turn. A whole
+                            match day can be pasted at once: the first link
+                            starts, the rest queue and drain unattended.
+  GET  /api/queue           what is running, what is waiting, what finished
+  POST /api/queue/clear     drop every job still waiting (never the running one)
   GET  /api/matchfinder     LIVE auto-match-finder report: every discovered
                             OWCS broadcast + its intake job state (same
                             shape as assets/data/matchfinder.v1.json)
@@ -42,7 +46,8 @@ API (all JSON):
                             from its already-extracted frames (no download)
   POST /api/test            run every pipeline/test_*.py suite in order
   POST /api/cancel          cancel the current job (kills its yt-dlp/ffmpeg
-                            children too); 409 when nothing is running
+                            children too) AND drop anything queued behind it;
+                            409 only when nothing is running or waiting
 Only one job runs at a time; a second start returns 409. Every job ends in
 one of: ok / partial / failed / canceled / timeout — the UI can never spin
 forever. Silent children produce "[serve] heartbeat" lines; a job past
@@ -91,10 +96,22 @@ AUTOMATION_DB: str | None = None
 STATE: dict = {"running": False, "status": "idle", "job": 0, "kind": None,
                "label": None, "cmds": None, "startedAt": None,
                "finishedAt": None, "returncode": None, "timeout": None,
-               "log": []}
+               "log": [], "queueItem": None}
 LOCK = threading.Lock()
 CANCEL = threading.Event()
 _PROC: list = [None]         # current child process (for cancel/timeout kill)
+
+# Pending jobs, FIFO. A match day is six to ten broadcasts and each one is a
+# multi-hour download; making the operator come back and paste the next link
+# every time is the difference between "start it and go to school" and
+# "babysit a terminal all afternoon". Only ONE job ever runs at a time (the
+# rest of the server's contract is unchanged) — the queue simply removes the
+# waiting-around between them.
+QUEUE: list[dict] = []
+# Completed queue entries, newest last, so the page can show what a batch
+# actually did after the fact.
+HISTORY: list[dict] = []
+MAX_HISTORY = 50
 
 
 def log(msg: str) -> None:
@@ -159,8 +176,8 @@ def _final_status(outcome: str | None, rc: int) -> str:
 
 
 def launch(cmds: list[list[str]], kind: str, label: str,
-           runner=None, timeout: float | None = None
-           ) -> tuple[bool, str | None]:
+           runner=None, timeout: float | None = None,
+           queue_item: dict | None = None) -> tuple[bool, str | None]:
     """Run one job (a sequence of commands) in a worker thread.
 
     Streams every output line into STATE["log"], emits heartbeat lines when
@@ -180,7 +197,9 @@ def launch(cmds: list[list[str]], kind: str, label: str,
                      kind=kind, label=label,
                      cmds=[" ".join(c) for c in cmds], log=[],
                      returncode=None, startedAt=time.time(),
-                     finishedAt=None, timeout=timeout)
+                     finishedAt=None, timeout=timeout,
+                     queueItem=(dict(queue_item, startedAt=time.time())
+                                if queue_item else None))
         job_id = STATE["job"]
 
     def worker() -> None:
@@ -258,10 +277,85 @@ def launch(cmds: list[list[str]], kind: str, label: str,
         with LOCK:
             STATE.update(running=False, status=status, returncode=rc,
                          finishedAt=time.time())
+            finished = dict(STATE.get("queueItem") or {})
+        if finished:
+            finished.update(status=status, finishedAt=time.time())
+            with LOCK:
+                HISTORY.append(finished)
+                del HISTORY[:-MAX_HISTORY]
+        # A canceled job cancels the BATCH: someone who hit cancel wants the
+        # machine to stop, not to watch the next broadcast start downloading.
+        if outcome == "canceled":
+            dropped = drain_queue(clear=True)
+            if dropped:
+                _append_log(f"[serve] canceled — {dropped} queued job(s) "
+                            f"dropped too")
+        else:
+            start_next()
 
     threading.Thread(target=worker, daemon=True).start()
     del job_id  # job id is read from STATE by the endpoints
     return True, None
+
+
+# ------------------------------------------------------------------- queue
+def queue_snapshot() -> dict:
+    """What the page shows: what is running, what is waiting, what is done."""
+    with LOCK:
+        return {
+            "running": STATE["running"],
+            "current": dict(STATE.get("queueItem") or {}) or None,
+            "pending": [dict(it.get("info") or {}, label=it.get("label"),
+                             kind=it.get("kind")) for it in QUEUE],
+            "pendingCount": len(QUEUE),
+            "history": [dict(h) for h in HISTORY[-20:]],
+        }
+
+
+def drain_queue(clear: bool = True) -> int:
+    """Drop every pending job. Returns how many were discarded."""
+    with LOCK:
+        n = len(QUEUE)
+        if clear:
+            QUEUE.clear()
+    return n
+
+
+def start_next() -> bool:
+    """Launch the next queued job if one is waiting and nothing is running."""
+    with LOCK:
+        if STATE["running"] or not QUEUE:
+            return False
+        item = QUEUE.pop(0)
+        remaining = len(QUEUE)
+    ok, err = launch(item["cmds"], item["kind"], item["label"],
+                     timeout=item.get("timeout"), queue_item=item.get("info"))
+    if ok:
+        _append_log(f"[serve] starting queued job: {item['label']} "
+                    f"({remaining} still waiting)")
+    else:
+        # Losing the race with another start is fine — put it back so the
+        # next completion picks it up rather than silently dropping work.
+        with LOCK:
+            QUEUE.insert(0, item)
+        log(f"could not start queued job ({err}) — left it queued")
+    return ok
+
+
+def enqueue(items: list[dict]) -> dict:
+    """Add jobs to the back of the queue and start one if the server is idle.
+
+    Returns {"started", "queued", "items"}. Every item is
+    {"cmds", "kind", "label", "timeout", "info"}.
+    """
+    with LOCK:
+        QUEUE.extend(items)
+    started = start_next()
+    with LOCK:
+        pending = len(QUEUE)
+    return {"started": started, "queued": pending,
+            "items": [dict(it.get("info") or {}, label=it.get("label"))
+                      for it in items]}
 
 
 # ------------------------------------------------------------ job builders
@@ -471,6 +565,77 @@ def build_intake_cmd(p: dict) -> tuple[list[str] | None, str | None, dict | None
     return cmd, None, info
 
 
+# One paste box, any number of links: a match day is pasted as a block of
+# URLs (newline-, comma- or space-separated, and tolerant of the numbering
+# people paste from a schedule). Anything that isn't a link is ignored
+# rather than treated as a typo'd URL, so pasting a whole bracket page works.
+_URL_SPLIT_RE = re.compile(r"[\s,;]+")
+
+
+def split_links(raw) -> list[str]:
+    """Every distinct URL in a pasted blob, in the order they appear.
+
+    A SINGLE token is always returned as-is, whatever it looks like, so one
+    bad link still reaches `link_intake.parse_link` and comes back with that
+    parser's precise reason ("unsupported_host", "malformed_video_id") rather
+    than a vague "no links found". Only a multi-token paste — a schedule, a
+    chat log, a column of URLs — is filtered down to the things that are
+    plausibly links, so surrounding prose is ignored instead of being
+    reported as a dozen typos.
+    """
+    if isinstance(raw, list):
+        out, seen = [], set()
+        for item in raw:
+            for link in split_links(item):
+                if link not in seen:
+                    seen.add(link)
+                    out.append(link)
+        return out
+    if not isinstance(raw, str):
+        return []
+    tokens = [t.strip().strip("<>()[]\"'“”‘’,.")
+              for t in _URL_SPLIT_RE.split(raw.strip())]
+    tokens = [t for t in tokens if t]
+    if len(tokens) == 1:
+        return tokens
+    out, seen = [], set()
+    for tok in tokens:
+        if "://" not in tok and "youtu" not in tok.lower():
+            continue
+        if tok not in seen:
+            seen.add(tok)
+            out.append(tok)
+    return out
+
+
+def build_intake_batch(p: dict) -> tuple[list[dict], list[dict], str | None]:
+    """(queue items, rejected, fatal error) for a pasted block of links.
+
+    Every link is validated offline FIRST, so a batch of ten with one typo
+    queues the nine good ones and names the bad one — losing an afternoon
+    because link #7 had a stray character is exactly the failure this whole
+    change exists to prevent.
+    """
+    links = split_links(p.get("urls") if p.get("urls") is not None
+                        else p.get("url"))
+    if not links:
+        # Keep the single-link error wording: it is what the page shows, and
+        # "url is required" is clearer than anything about batches.
+        return [], [], "url is required (paste one or more YouTube links)"
+    items, rejected = [], []
+    for link in links:
+        cmd, err, info = build_intake_cmd({**p, "url": link})
+        if err:
+            rejected.append({"url": link, "error": err})
+            continue
+        items.append({"cmds": [cmd], "kind": "intake",
+                      "label": info["videoId"], "timeout": INTAKE_TIMEOUT,
+                      "info": {**info, "url": link}})
+    if not items:
+        return [], rejected, rejected[0]["error"]
+    return items, rejected, None
+
+
 def find_run(run_name: str) -> dict | None:
     try:
         with open(AUTO_RUNS_PATH, "r", encoding="utf-8") as f:
@@ -553,6 +718,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                                         "job": STATE["job"]})
         if path == "/api/sources":
             return self._json(200, {"sources": load_sources()})
+        if path == "/api/queue":
+            return self._json(200, queue_snapshot())
         if path == "/api/calibration":
             # per-source calibration health for the Calibration Lab page.
             # Read-only: reports what the calibrator/harvester left on disk
@@ -692,6 +859,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                     "startedAt": STATE["startedAt"],
                     "finishedAt": STATE["finishedAt"],
                     "elapsed": elapsed, "timeout": STATE["timeout"],
+                    "queued": len(QUEUE),
+                    "current": dict(STATE.get("queueItem") or {}) or None,
                     "next": len(STATE["log"]),
                     "lines": STATE["log"][since:since + 500]})
         m = _HC_LIST_RE.match(path)
@@ -724,16 +893,25 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             p = self._read_body()
             if p is None:
                 return self._json(400, {"error": "bad JSON body"})
-            cmd, err, info = build_intake_cmd(p)
+            items, rejected, err = build_intake_batch(p)
             if err:
-                return self._json(400, {"error": err})
-            ok, err = launch([cmd], "intake", info["videoId"],
-                             timeout=INTAKE_TIMEOUT)
+                return self._json(400, {"error": err, "rejected": rejected})
+            res = enqueue(items)
             with LOCK:
                 job = STATE["job"]
-            return self._json(200 if ok else 409,
-                              {"started": ok, "error": err, "job": job,
-                               "cmd": " ".join(cmd), **info})
+            first = items[0]
+            # A single link into an idle server answers EXACTLY as it always
+            # did (started/job/cmd/videoId/jobKey/canonicalUrl) — the batch
+            # fields are additive so nothing that already worked changes.
+            return self._json(200, {
+                "started": res["started"], "error": None, "job": job,
+                "cmd": " ".join(first["cmds"][0]),
+                "accepted": len(items), "queued": res["queued"],
+                "rejected": rejected, "items": res["items"],
+                **first["info"]})
+        if self.path == "/api/queue/clear":
+            n = drain_queue(clear=True)
+            return self._json(200, {"cleared": n, **queue_snapshot()})
         if self.path == "/api/action":
             p = self._read_body()
             if p is None:
@@ -751,12 +929,22 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                                "cmd": " ".join(cmd)})
         if self.path == "/api/cancel":
             with LOCK:
-                running, job = STATE["running"], STATE["job"]
+                running, job, waiting = (STATE["running"], STATE["job"],
+                                         len(QUEUE))
             if not running:
+                # Nothing running but a batch still waiting: cancel means
+                # "stop the batch", which is a real thing to do here.
+                if waiting:
+                    n = drain_queue(clear=True)
+                    log(f"cancel cleared {n} queued job(s)")
+                    return self._json(200, {"canceling": False, "job": job,
+                                            "cleared": n})
                 return self._json(409, {"error": "no job running"})
             CANCEL.set()
-            log(f"cancel requested for job {job}")
-            return self._json(200, {"canceling": True, "job": job})
+            log(f"cancel requested for job {job}"
+                + (f" (and {waiting} queued)" if waiting else ""))
+            return self._json(200, {"canceling": True, "job": job,
+                                    "cleared": waiting})
         if self.path == "/api/evidence":
             p = self._read_body() or {}
             cmds, err = build_evidence_cmds(str(p.get("run", "")))

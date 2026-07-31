@@ -278,6 +278,100 @@ def main() -> int:
                    "autoAccept": True})
     wait_idle(port)
     check("autoAccept opts in via API", "--auto-accept" in fr.cmds[1])
+
+    print("a whole match day in one paste (the queue):")
+    reset_state()
+    check("split_links keeps a lone bad token so the parser explains it",
+          serve.split_links("https://twitch.tv/x") == ["https://twitch.tv/x"])
+    check("split_links pulls links out of pasted prose, ignoring the rest",
+          serve.split_links(
+              "Day 1\nhttps://youtu.be/AAAAAAAAAAA maybe?\n"
+              "2) https://www.youtube.com/watch?v=BBBBBBBBBBB")
+          == ["https://youtu.be/AAAAAAAAAAA",
+              "https://www.youtube.com/watch?v=BBBBBBBBBBB"])
+    check("split_links de-dupes a link pasted twice",
+          serve.split_links("https://youtu.be/AAAAAAAAAAA "
+                            "https://youtu.be/AAAAAAAAAAA") ==
+          ["https://youtu.be/AAAAAAAAAAA"])
+
+    # Three good links + one that can never work: the batch must take the
+    # three and NAME the fourth, not refuse the lot or silently drop it.
+    serve.QUEUE.clear()
+    serve.HISTORY.clear()
+    # Records every argv AND takes long enough that the queue can be
+    # observed mid-batch rather than only after it has already drained.
+    batch = FakeRunner()
+    batch.Popen = lambda cmd, **kw: (batch.cmds.append(list(cmd))
+                                     or FakePopen(["converting"], 0,
+                                                  delay=0.15))
+    serve.RUNNER = batch
+    code, j = api(port, "/api/intake/link", {"urls": [
+        "https://www.youtube.com/watch?v=AAAAAAAAAAA",
+        "https://www.youtube.com/watch?v=BBBBBBBBBBB",
+        "https://twitch.tv/nope",
+        "https://youtu.be/CCCCCCCCCCC"]})
+    check("batch accepts the good links and starts the first",
+          code == 200 and j["accepted"] == 3 and j["started"] is True
+          and j["videoId"] == "AAAAAAAAAAA")
+    check("the unusable link is reported by name, not swallowed",
+          len(j["rejected"]) == 1
+          and j["rejected"][0]["url"] == "https://twitch.tv/nope"
+          and "unsupported_host" in j["rejected"][0]["error"])
+    _, q = api(port, "/api/queue")
+    check("the rest are queued behind it, in paste order",
+          [p["videoId"] for p in q["pending"]] == ["BBBBBBBBBBB",
+                                                   "CCCCCCCCCCC"])
+    check("the running broadcast is named in the queue snapshot",
+          q["current"] and q["current"]["videoId"] == "AAAAAAAAAAA")
+    # ...and the queue drains WITHOUT anyone pasting again: that is the
+    # entire point of it.
+    t0 = time.time()
+    while time.time() - t0 < 10:
+        _, q = api(port, "/api/queue")
+        if not q["running"] and not q["pendingCount"]:
+            break
+        time.sleep(0.05)
+    check("the batch drains unattended (all three ran)",
+          [h["videoId"] for h in q["history"]]
+          == ["AAAAAAAAAAA", "BBBBBBBBBBB", "CCCCCCCCCCC"])
+    check("every queued job ran the same convert-link command",
+          len(batch.cmds) == 3
+          and all("convert-link" in c for c in batch.cmds))
+
+    print("cancel stops the batch, not just the current broadcast:")
+    reset_state()
+    serve.QUEUE.clear()
+    serve.HISTORY.clear()
+    slow_batch = FakeRunner()
+    slow_batch.Popen = lambda cmd, **kw: FakePopen(["a", "b", "c"], 0,
+                                                   delay=0.25)
+    serve.RUNNER = slow_batch
+    api(port, "/api/intake/link", {"urls": [
+        "https://www.youtube.com/watch?v=DDDDDDDDDDD",
+        "https://www.youtube.com/watch?v=EEEEEEEEEEE"]})
+    code, j = api(port, "/api/cancel", {})
+    check("cancel reports the queued jobs it is dropping",
+          code == 200 and j.get("cleared") == 1)
+    wait_idle(port)
+    _, q = api(port, "/api/queue")
+    check("nothing is left waiting after a cancel", q["pendingCount"] == 0)
+
+    print("clearing the queue never touches the running job:")
+    reset_state()
+    stuck = FakeRunner()
+    stuck.Popen = lambda cmd, **kw: StuckPopen()
+    serve.RUNNER = stuck
+    api(port, "/api/intake/link", {"urls": [
+        "https://www.youtube.com/watch?v=FFFFFFFFFFF",
+        "https://www.youtube.com/watch?v=GGGGGGGGGGG"]})
+    code, j = api(port, "/api/queue/clear", {})
+    check("clear drops the waiting job and leaves the running one alone",
+          code == 200 and j["cleared"] == 1 and j["running"] is True
+          and j["pendingCount"] == 0)
+    api(port, "/api/cancel", {})
+    wait_idle(port)
+    serve.QUEUE.clear()
+    serve.HISTORY.clear()
     serve.AUTOMATION_DB = None
 
     print("control-room actions (the website drives the whole pipeline):")

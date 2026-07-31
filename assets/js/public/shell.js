@@ -34,7 +34,12 @@
     { href: "stats.html", label: "Stats" },
     { href: "how-it-works.html", label: "How it works" },
   ];
+  /* The two back-office entries: the setup guide someone reads once, and
+     the portal they use every match day. "Start here" sits BEFORE the
+     portal because arriving at the portal without having read it is the
+     one way to get stuck. */
   const ADMIN = [
+    { href: "start.html", label: "Start here" },
     { href: "portal.html", label: "Portal" },
   ];
 
@@ -137,6 +142,7 @@
      ["Maps", "maps.html", "Map meta"],
      ["Tournaments", "tournaments.html", "Events and brackets"],
      ["How it works", "how-it-works.html", "What verified means"],
+     ["Start here", "start.html", "Set up and add matches yourself"],
      ["Operator portal", "portal.html", "Paste a broadcast link"],
     ].forEach(([label, href, sub]) => add("page", label, sub, href, label + " " + sub));
 
@@ -267,6 +273,7 @@
           <ul>
             <li><a href="how-it-works.html">How it works (start here)</a></li>
             <li><a href="how-it-works.html#glossary">What the badges mean</a></li>
+            <li><a href="start.html">Start here (add matches yourself)</a></li>
             <li><a href="portal.html">Operator portal (paste a link)</a></li>
             <li><a href="runs.html">Vision lab (runs)</a></li>
             <li><a href="sources.html">Sources</a></li>
