@@ -508,6 +508,7 @@ def _advance_to_ready(store: js.JobStore, job: models.Job) -> models.Job:
 def approve_source(store: js.JobStore, job_key: str, *,
                    approved_by: str, reason: str | None = None,
                    confirm: bool = False, reject: bool = False,
+                   auto_gate: dict[str, Any] | None = None,
                    now: str | None = None) -> dict[str, Any]:
     """The ONE step a human must take for a non-registry source.
 
@@ -516,6 +517,15 @@ def approve_source(store: js.JobStore, job_key: str, *,
     trail), then advances an approved job to ARCHIVED so a worker can claim
     it. `reject=True` records an explicit refusal instead and leaves the job
     un-downloadable.
+
+    `auto_gate` is the ONE way an approval can be recorded without a human
+    name behind it: the autopilot passes the PASSING `gates.Verdict` payload
+    that cleared the source gate under `--auto-source`/`--unattended`. The
+    approval is then written as machine-decided, carrying the metrics and
+    floors that opened the gate, so the audit trail distinguishes it from a
+    person's signature instead of impersonating one. A rejection is never
+    automatic — `auto_gate` with `reject=True` is a programming error and is
+    refused here rather than quietly recorded.
     """
     job = store.get(job_key)
     if job is None:
@@ -524,7 +534,18 @@ def approve_source(store: js.JobStore, job_key: str, *,
         raise LinkIntakeError(
             "confirmation_required",
             "pass --confirm — there is no default that approves a source")
-    if not (approved_by or "").strip():
+    if auto_gate is not None:
+        if reject:
+            raise LinkIntakeError(
+                "auto_rejection_refused",
+                "a gate never rejects a source — refusals stay human")
+        if not auto_gate.get("passed"):
+            raise LinkIntakeError(
+                "gate_did_not_pass",
+                f"source gate did not pass "
+                f"({auto_gate.get('reasonCode')}) — refusing to record an "
+                f"approval it never granted")
+    elif not (approved_by or "").strip():
         raise LinkIntakeError(
             "approver_required",
             "--approved-by is required: an approval with no accountable "
@@ -534,16 +555,21 @@ def approve_source(store: js.JobStore, job_key: str, *,
     state = SOURCE_REJECTED if reject else SOURCE_APPROVED
     source_block = {
         "state": state,
-        "autoApproved": False,
-        "reasonCode": "manual_rejection" if reject else "manual_approval",
-        "reason": reason or ("rejected by operator" if reject
-                             else "approved by operator after review"),
+        "autoApproved": auto_gate is not None,
+        "reasonCode": ("unattended_gate" if auto_gate is not None else
+                       ("manual_rejection" if reject else "manual_approval")),
+        "reason": reason or (
+            auto_gate.get("reason") if auto_gate is not None else
+            ("rejected by operator" if reject
+             else "approved by operator after review")),
         "registryChannel": prior.get("registryChannel"),
         "decidedAt": ts,
-        "decidedBy": approved_by.strip(),
+        "decidedBy": (approved_by or "").strip() or "automatic-gate:source",
         "priorReasonCode": prior.get("reasonCode"),
         "priorState": prior.get("state"),
     }
+    if auto_gate is not None:
+        source_block["gate"] = auto_gate
     store.update_payload(job_key, {"source": source_block})
     job = store.get(job_key)
     if reject:

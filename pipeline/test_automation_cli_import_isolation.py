@@ -202,6 +202,19 @@ class TestNoHeavyImportsAtStartup(unittest.TestCase):
     def test_verify_channels_help_loads_nothing_heavy(self):
         self._assert_lightweight(["verify-channels", "--help"])
 
+    def test_unattended_floors_loads_nothing_heavy(self):
+        """`unattended-floors` reports the gate thresholds in force. It is
+        the command an operator reaches for when the nightly pass approved
+        something surprising, so it has to run on any machine — including
+        the lightweight runner with no OpenCV."""
+        self._assert_lightweight(["unattended-floors", "--unattended"])
+
+    def test_bootstrap_templates_help_loads_nothing_heavy(self):
+        """The auto-labeller genuinely needs cv2 to RUN, but merely printing
+        its help (or its refusal) must not require it — same rule the rest
+        of the CV commands follow."""
+        self._assert_lightweight(["bootstrap-templates", "--help"])
+
     def test_broadcast_dryrun_real_run_loads_nothing_heavy(self):
         self._assert_lightweight(["broadcast-dryrun", "--lookback-days", "14"])
 

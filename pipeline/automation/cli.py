@@ -1380,6 +1380,85 @@ def cmd_process_approved_job(args: argparse.Namespace) -> int:
         store.close()
 
 
+# -------------------------------------------------- unattended gate surface
+def cmd_unattended_floors(args: argparse.Namespace) -> int:
+    """`unattended-floors` — print every gate threshold that is actually in
+    force right now, and whether it came from config/automation.yml or from
+    the built-in default.
+
+    An unattended system whose thresholds you cannot read is not auditable,
+    and this is the command that makes them readable without grepping the
+    source. It touches no job and no database.
+    """
+    from automation import config as cfgmod
+    from automation import gates as gt
+
+    cfg = cfgmod.load_config()
+    settings = gt.GateSettings.from_args(args)
+    if args.json:
+        print(json.dumps({
+            "gates": settings.to_payload(),
+            "floors": gt.describe_floors(cfg, settings),
+            "configPath": cfgmod.AUTOMATION_YML,
+            "configExists": os.path.exists(cfgmod.AUTOMATION_YML),
+        }, indent=2))
+        return 0
+    print(f"config: {cfgmod.AUTOMATION_YML}"
+          + ("" if os.path.exists(cfgmod.AUTOMATION_YML)
+             else "  (absent — every floor below is a default)"))
+    print(gt.format_floors(cfg, settings))
+    return 0
+
+
+def cmd_bootstrap_templates(args: argparse.Namespace) -> int:
+    """`bootstrap-templates --job <key> [--dry-run]` — run the additive
+    auto-labeller over one job's broadcast package.
+
+    `--dry-run` writes nothing at all: no PNG, no manifest, no provenance.
+    It reports exactly which heroes it WOULD label and which clusters it
+    would hold, which is the safe way to see what a nightly pass would do to
+    a package before letting it touch one.
+    """
+    from automation import auto_label
+    from automation import config as cfgmod
+    from automation import gates as gt
+
+    store = js.JobStore(args.db)
+    try:
+        job = store.get(args.job)
+        if job is None:
+            print(f"[bootstrap-templates] no such job: {args.job}")
+            return 2
+        try:
+            result = auto_label.label_package(
+                store, job, floors=gt.floor_values(cfgmod.load_config()),
+                dry_run=args.dry_run, max_clusters=args.max_clusters,
+                times_spec=args.times)
+        except ValueError as exc:
+            print(f"[bootstrap-templates] REFUSED: {exc}")
+            return 2
+        if args.json:
+            print(json.dumps(result, indent=2))
+            return 0
+        mode = "WOULD LABEL (dry run — nothing written)" if args.dry_run \
+            else "LABELLED"
+        print(f"  templates dir : {result['templatesDir']}")
+        print(f"  coverage      : {result['coverageBefore']} -> "
+              f"{result['coverageAfter']}")
+        print(f"  {mode:<14}: {len(result['labelled'])} "
+              f"({', '.join(result['labelled']) or 'none'})")
+        print(f"  held          : {len(result['held'])}")
+        for h in result["held"][:15]:
+            print(f"    - {h['cluster']:<12} [{h['reasonCode']}] {h['reason']}")
+        if len(result["held"]) > 15:
+            print(f"    ... and {len(result['held']) - 15} more")
+        if result.get("manifest"):
+            print(f"  review manifest: {result['manifest']}")
+        return 0
+    finally:
+        store.close()
+
+
 # ------------------------------------------------- autopilot / convert-link
 def _run_autopilot(store: "js.JobStore", args: argparse.Namespace,
                    job_key: str) -> dict:
@@ -1387,9 +1466,16 @@ def _run_autopilot(store: "js.JobStore", args: argparse.Namespace,
     loop, then refresh the intake panel export so intake.html is never
     stale after an automatic pass."""
     from automation import autopilot as ap
+    from automation import config as cfgmod
+    from automation import gates as gt
     from automation import worker
     locks = lk.LockManager(store.con)
     wid = args.worker_id or worker.worker_identity("autopilot")
+    settings = gt.GateSettings.from_args(args)
+    if settings.any_enabled():
+        print(f"[autopilot] unattended gates ENABLED: "
+              f"{', '.join(settings.enabled_gates())} "
+              f"(see `unattended-floors` for the live thresholds)")
     result = ap.run_autopilot(
         store, locks, job_key, worker_id=wid,
         media_root=args.media_root or None,
@@ -1397,6 +1483,8 @@ def _run_autopilot(store: "js.JobStore", args: argparse.Namespace,
         accepted_by=args.accepted_by or args.worker_id,
         for_harvest=getattr(args, "for_harvest", False),
         max_steps=args.max_steps or ap.DEFAULT_MAX_STEPS,
+        gate_settings=settings,
+        floors=gt.floor_values(cfgmod.load_config()),
         samples=args.samples, ocr_engine=args.ocr_engine)
     if not args.no_export:
         _save_intake_export(store)
@@ -2059,6 +2147,41 @@ def main(argv: list[str] | None = None) -> int:
         sp.add_argument("--no-export", action="store_true",
                         help="skip refreshing assets/data/intake.v1.json")
         sp.add_argument("--json", action="store_true")
+        # ---- unattended approval gates. Every one of these is OFF by
+        # default; passing one lets EVIDENCE clear a gate that otherwise
+        # waits for a person. A gate that is enabled but whose metrics fall
+        # short still stops the run — see `unattended-floors` for the live
+        # thresholds and where each came from.
+        gate_group = sp.add_argument_group(
+            "unattended approval gates",
+            "Each flag lets one gate be cleared by metrics instead of by a "
+            "human. Every verdict (passing or refusing) is recorded on the "
+            "job with the numbers and the floors it was judged against.")
+        gate_group.add_argument(
+            "--auto-source", action="store_true",
+            help="authorize a non-registry SOURCE when its provenance and "
+                 "broadcast-likeness clear the floors (a source a human "
+                 "REJECTED is never re-opened)")
+        gate_group.add_argument(
+            "--auto-layout", action="store_true",
+            help="approve a freshly calibrated LAYOUT when its calibration "
+                 "confidence clears the floor")
+        gate_group.add_argument(
+            "--auto-templates", action="store_true",
+            help="label hero TEMPLATES that match a real labelled portrait "
+                 "clearly enough — additive only, never overwrites a "
+                 "covered hero")
+        gate_group.add_argument(
+            "--auto-detect", action="store_true",
+            help="approve a DETECTION into production when THIS run's own "
+                 "calibration health clears the floors")
+        gate_group.add_argument(
+            "--auto-publish", action="store_true",
+            help="PUBLISH a committed detection to a fresh branch (never "
+                 "main, never a merge)")
+        gate_group.add_argument(
+            "--unattended", action="store_true",
+            help="turn on all five gates above")
 
     cl_p = sub.add_parser("convert-link",
                           help="match-day one-liner: ingest one pasted URL and "
@@ -2083,6 +2206,28 @@ def main(argv: list[str] | None = None) -> int:
                           help="or the pasted URL (resolves to the same job)")
     _add_autopilot_args(ap_run_p)
     ap_run_p.set_defaults(func=cmd_autopilot)
+
+    uf_p = sub.add_parser("unattended-floors",
+                          help="print every unattended gate threshold in "
+                               "force and where it came from")
+    uf_p.add_argument("--json", action="store_true")
+    for _flag in ("--auto-source", "--auto-layout", "--auto-templates",
+                  "--auto-detect", "--auto-publish", "--unattended"):
+        uf_p.add_argument(_flag, action="store_true",
+                          help="show this gate as ENABLED in the listing")
+    uf_p.set_defaults(func=cmd_unattended_floors)
+
+    bt_p = sub.add_parser("bootstrap-templates",
+                          help="additively auto-label hero templates for one "
+                               "job's broadcast package")
+    bt_p.add_argument("--job", required=True, help="job key (record:<video-id>)")
+    bt_p.add_argument("--dry-run", action="store_true",
+                      help="report what would be labelled and write NOTHING")
+    bt_p.add_argument("--max-clusters", type=int, default=12)
+    bt_p.add_argument("--times", default="60:600:15",
+                      help="clip-relative sampling window 'start:end:step'")
+    bt_p.add_argument("--json", action="store_true")
+    bt_p.set_defaults(func=cmd_bootstrap_templates)
 
     fm_p = sub.add_parser("find-matches",
                           help="auto match finder: scan verified channels on "

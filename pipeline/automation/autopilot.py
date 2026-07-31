@@ -15,15 +15,27 @@ glue the closed loop was missing (both previously required a Python console):
     source — extraction refuses the scan proxy, unchanged) before detection
     is attempted, instead of detection failing with "no extracted clip yet".
 
-What the autopilot NEVER does, deliberately:
+By DEFAULT the loop still stops at every gate that belongs to a human:
 
-  * approve a SOURCE — a non-registry link always stops on
-    `approve-source --confirm` (the audited human gate);
-  * approve a LAYOUT — a freshly-calibrated layout always stops on
-    `approve-layout --confirm` after a human has looked at the sheet;
-  * approve a DETECTION review — the gate that lets hero compositions reach
-    production is always a human decision, `--auto-accept` or not;
-  * publish — `process-approved-job --publish` stays a supervised command.
+  * a SOURCE — a non-registry link stops on `approve-source --confirm`;
+  * a LAYOUT — a freshly-calibrated layout stops on `approve-layout
+    --confirm` after a human has looked at the sheet;
+  * TEMPLATES — insufficient hero-template coverage stops for a harvest;
+  * a DETECTION review — the gate that lets hero compositions reach
+    production;
+  * publication — `process-approved-job --publish`.
+
+`gate_settings` (the `--auto-*` / `--unattended` flags, see `gates.py`) lets
+any of those five be cleared by EVIDENCE instead of by a person. This is not
+a bypass: an enabled gate whose metrics fall short still stops the loop, and
+the stop then names the number that held it. Every verdict — refusals
+included — is recorded on the job under `autoApprovals.<gate>` with the
+metrics and the floors it was judged against, and an automatic approval is
+stamped `automatic-gate:<gate>` so it never masquerades as a signature.
+
+Two refusals no flag can override: a source a human explicitly REJECTED is
+never re-opened, and publication only ever pushes a fresh branch — never
+main, never a merge.
 
 `auto_accept=True` covers exactly one gate: SEGMENT identity review. It runs
 the identity proposer on every pending segment and accepts each proposal
@@ -48,6 +60,7 @@ _PIPELINE_DIR = os.path.dirname(_HERE)
 if _PIPELINE_DIR not in sys.path:
     sys.path.insert(0, _PIPELINE_DIR)
 
+from . import gates as gt  # noqa: E402
 from . import job_store as js  # noqa: E402
 from . import link_intake as li  # noqa: E402
 from . import locks as lk  # noqa: E402
@@ -195,6 +208,40 @@ def _step(steps: list[dict], state: str, action: str, ok: bool,
     log(f"{state}: {action} — {'ok' if ok else 'STOP'} · {detail}")
 
 
+# ----------------------------------------------------------- gate plumbing
+def _record_verdict(store: js.JobStore, job_key: str,
+                    verdict: gt.Verdict) -> dict:
+    """Persist a gate verdict on the job under `autoApprovals[<gate>]`.
+
+    EVERY verdict is recorded, refusals included. A gate that held is as
+    much a fact about this job as one that opened, and the refusals are what
+    make a later "why did nothing publish last night?" answerable from the
+    job itself rather than from a log file that may have rotated away.
+    """
+    payload = verdict.to_payload()
+    job = store.get(job_key)
+    existing = dict((job.payload.get("autoApprovals") or {}) if job else {})
+    existing[verdict.gate] = payload
+    store.update_payload(job_key, {"autoApprovals": existing})
+    return payload
+
+
+def _gate(store: js.JobStore, job_key: str, verdict: gt.Verdict,
+          steps: list[dict], state: str) -> bool:
+    """Record a verdict, log it as a step, and return whether it opened."""
+    _record_verdict(store, job_key, verdict)
+    _step(steps, state, f"gate:{verdict.gate}", verdict.passed,
+          f"[{verdict.reason_code}] {verdict.reason}")
+    return verdict.passed
+
+
+def _gate_stop_detail(verdict: gt.Verdict, manual_command: str) -> str:
+    """The human-gate message when an ENABLED gate refused — it must name
+    the metric that held it, not just the command to type."""
+    return (f"the {verdict.gate} gate held [{verdict.reason_code}]: "
+            f"{verdict.reason} — {manual_command}")
+
+
 def _summarize(result: dict) -> str:
     if result.get("ok"):
         keys = [k for k in ("candidates", "summary", "path", "segmentIds")
@@ -215,8 +262,10 @@ def run_autopilot(store: js.JobStore, lock_mgr: lk.LockManager,
                   official_channel_ids: set | None = None,
                   manual_approved_video_ids: set | None = None,
                   samples: int = 8, ocr_engine: str = "easyocr",
+                  gate_settings: gt.GateSettings | None = None,
+                  floors: dict | None = None,
                   run_one=None, propose_fn=None, accept_fn=None,
-                  extract_fn=None) -> dict:
+                  extract_fn=None, label_fn=None, publish_fn=None) -> dict:
     """Drive one job through every automatic stage until a human gate,
     a terminal state, or a blocker. Returns a full report:
 
@@ -229,10 +278,19 @@ def run_autopilot(store: js.JobStore, lock_mgr: lk.LockManager,
     the whole loop (re-entrant with the per-stage acquire/release inside
     worker.download_job) and always released on the way out.
 
-    `run_one`/`propose_fn`/`accept_fn`/`extract_fn` are injectable for
-    offline tests; the defaults are the real stages.
+    `gate_settings` says which of the five gates (source, layout, templates,
+    detection, publish) may be cleared by evidence instead of by a person.
+    The default — every gate off — is the fully supervised behaviour this
+    loop has always had. A gate that is ENABLED but whose metrics fall short
+    still stops the loop at a human gate; the difference is that the stop
+    now names the number that held it.
+
+    `run_one`/`propose_fn`/`accept_fn`/`extract_fn`/`label_fn`/`publish_fn`
+    are injectable for offline tests; the defaults are the real stages.
     """
     media_root = media_root or worker.DEFAULT_MEDIA_ROOT
+    gate_settings = gate_settings or gt.GateSettings()
+    floors = floors or gt.floor_values()
     run_one = run_one or ops.run_one_job
     propose_fn = propose_fn or (
         lambda s, j, g: default_propose(s, j, g, samples=samples,
@@ -265,16 +323,33 @@ def run_autopilot(store: js.JobStore, lock_mgr: lk.LockManager,
                 stop, detail = STOP_TERMINAL, f"job is {state} — nothing left"
                 break
 
-            # Gate 0: source authorization. The audited human gate — the
-            # autopilot never approves a source, it stops and says so.
+            # Gate 0: source authorization. Registry channels have always
+            # been automatic; everything else stopped here for a signature.
+            # With --auto-source the same decision can be made on evidence
+            # (provenance + broadcast likeness), recorded as machine-decided.
             source = job.payload.get("source") or {}
             if source.get("state") != li.SOURCE_APPROVED:
-                stop = STOP_HUMAN_GATE
-                detail = ("source is not authorized "
-                          f"({source.get('state') or 'unknown'}: "
-                          f"{source.get('reason') or 'no reason recorded'}) — "
-                          "approve-source --confirm is a human decision")
-                break
+                if not gate_settings.enabled(gt.GATE_SOURCE):
+                    stop = STOP_HUMAN_GATE
+                    detail = ("source is not authorized "
+                              f"({source.get('state') or 'unknown'}: "
+                              f"{source.get('reason') or 'no reason recorded'})"
+                              " — approve-source --confirm is a human "
+                              "decision (or enable --auto-source)")
+                    break
+                verdict = gt.evaluate_source_gate(
+                    source, metadata=job.payload.get("metadata"),
+                    likeness=job.payload.get("likeness"), floors=floors)
+                if not _gate(store, job_key, verdict, steps, state):
+                    stop = STOP_HUMAN_GATE
+                    detail = _gate_stop_detail(
+                        verdict, "approve-source --confirm is still available")
+                    break
+                li.approve_source(store, job_key, approved_by="",
+                                  confirm=True, auto_gate=verdict.to_payload())
+                _step(steps, state, "approve-source", True,
+                      "source authorized by the unattended gate")
+                continue
 
             # An approved source still sitting in DISCOVERED/SCHEDULED (e.g.
             # approved manually after intake) just needs the bookkeeping
@@ -286,17 +361,58 @@ def run_autopilot(store: js.JobStore, lock_mgr: lk.LockManager,
                 continue
 
             if state == sm.NEEDS_LAYOUT:
-                stop = STOP_HUMAN_GATE
-                detail = ("a calibrated layout awaits human review — "
-                          "approve-layout --confirm after checking the sheet")
-                break
+                if not gate_settings.enabled(gt.GATE_LAYOUT):
+                    stop = STOP_HUMAN_GATE
+                    detail = ("a calibrated layout awaits human review — "
+                              "approve-layout --confirm after checking the "
+                              "sheet (or enable --auto-layout)")
+                    break
+                record = job.payload.get("layout") or {}
+                calib = dict(record.get("calibration") or {})
+                calib.setdefault("layoutId", record.get("layoutId")
+                                 or calib.get("sourceId"))
+                verdict = gt.evaluate_layout_gate(calib, floors=floors)
+                if not _gate(store, job_key, verdict, steps, state):
+                    stop = STOP_HUMAN_GATE
+                    detail = _gate_stop_detail(
+                        verdict, "approve-layout --confirm after checking "
+                                 "the review sheet")
+                    break
+                from . import layout_resolver as lr
+                try:
+                    lr.approve_layout(store, job_key, confirm=True,
+                                      approved_by="automatic-gate:layout")
+                except lr.LayoutRefusal as exc:
+                    # The approver's own preconditions still apply — a gate
+                    # never routes around them.
+                    stop = STOP_BLOCKED
+                    detail = f"layout approval refused [{exc.code}]: {exc}"
+                    break
+                _step(steps, state, "approve-layout", True,
+                      "layout committed by the unattended gate")
+                continue
 
             if state == sm.NEEDS_TEMPLATES:
-                stop = STOP_HUMAN_GATE
-                detail = ("hero-template coverage is insufficient for this "
-                          "broadcast package — harvest + label templates "
-                          "(a human step by design)")
-                break
+                if not gate_settings.enabled(gt.GATE_TEMPLATES):
+                    stop = STOP_HUMAN_GATE
+                    detail = ("hero-template coverage is insufficient for "
+                              "this broadcast package — harvest + label "
+                              "templates (or enable --auto-templates)")
+                    break
+                ok, why = _auto_label_templates(store, job, steps,
+                                                floors=floors,
+                                                label_fn=label_fn)
+                if not ok:
+                    stop = STOP_HUMAN_GATE
+                    detail = why
+                    break
+                _step(steps, state, "auto-label-templates", True, why)
+                # Labelling does not by itself move the job — without this
+                # the loop re-enters NEEDS_TEMPLATES and re-harvests until
+                # it hits the step cap. Coverage has changed, so the
+                # PROCESSING stage re-evaluates it.
+                store.transition(job_key, sm.PROCESSING)
+                continue
 
             if state == sm.DOWNLOADING:
                 stop = STOP_BLOCKED
@@ -328,12 +444,18 @@ def run_autopilot(store: js.JobStore, lock_mgr: lk.LockManager,
                 continue
 
             if state == sm.NEEDS_REVIEW:
-                verdict, why = _handle_review(
+                outcome, why = _handle_review(
                     store, job, steps, auto_accept=auto_accept,
-                    propose_fn=propose_fn, accept_fn=accept_fn)
-                if verdict == "continue":
+                    gate_settings=gate_settings, floors=floors)
+                if outcome == "continue":
                     continue
-                stop, detail = verdict, why
+                if outcome == "identity":
+                    outcome, why = _handle_identity_review(
+                        store, job, steps, auto_accept=auto_accept,
+                        propose_fn=propose_fn, accept_fn=accept_fn)
+                    if outcome == "continue":
+                        continue
+                stop, detail = outcome, why
                 break
 
             if state in (sm.READY_FOR_DETECTION, sm.APPROVED):
@@ -361,11 +483,27 @@ def run_autopilot(store: js.JobStore, lock_mgr: lk.LockManager,
                 break
             after = store.get(job_key).state
             if after == sm.APPROVED and before == sm.APPROVED:
-                # Detection committed. Publication is a supervised command —
-                # a legitimate resting point, not a loop.
-                stop = STOP_HUMAN_GATE
-                detail = ("detection committed — publication stays "
-                          "supervised: process-approved-job --publish")
+                # Detection committed. Publication pushes a BRANCH — never
+                # main, never a merge — so the automatic path here still
+                # ends at a pull request a human opens and CI checks.
+                if not gate_settings.enabled(gt.GATE_PUBLISH):
+                    stop = STOP_HUMAN_GATE
+                    detail = ("detection committed — publication stays "
+                              "supervised: process-approved-job --publish "
+                              "(or enable --auto-publish)")
+                    break
+                job = store.get(job_key)
+                verdict = gt.evaluate_publish_gate(job.payload, floors=floors)
+                if not _gate(store, job_key, verdict, steps, after):
+                    stop = STOP_HUMAN_GATE
+                    detail = _gate_stop_detail(
+                        verdict, "process-approved-job --publish is still "
+                                 "available")
+                    break
+                ok, why = _auto_publish(store, job, steps,
+                                        publish_fn=publish_fn)
+                stop = STOP_TERMINAL if ok else STOP_BLOCKED
+                detail = why
                 break
             if after == before:
                 stop = STOP_NO_PROGRESS
@@ -378,22 +516,55 @@ def run_autopilot(store: js.JobStore, lock_mgr: lk.LockManager,
 
 
 def _handle_review(store: js.JobStore, job, steps: list[dict], *,
-                   auto_accept: bool, propose_fn, accept_fn
-                   ) -> tuple[str, str]:
-    """NEEDS_REVIEW handling. Returns ("continue", why) when the job was
-    legally advanced, or (stop_kind, why) when the loop must stop."""
+                   auto_accept: bool, gate_settings: gt.GateSettings,
+                   floors: dict) -> tuple[str, str]:
+    """NEEDS_REVIEW triage. Two different reviews share this one state, and
+    `review_tasks.kind` is what tells them apart:
+
+      * a DETECTION review (the job carries a detection summary and nothing
+        is pending) — whether hero compositions reach production;
+      * an IDENTITY review (segments are pending) — handled downstream by
+        `_handle_identity_review`.
+
+    Returns ("continue", why) when the job was legally advanced,
+    ("identity", why) to hand off to the identity path, or (stop_kind, why).
+    """
+    video_id = job.payload.get("videoId")
+    pending = _list_segments(store, video_id, "pending")
+
+    if job.payload.get("detection") and not pending:
+        if not gate_settings.enabled(gt.GATE_DETECTION):
+            return (STOP_HUMAN_GATE,
+                    "detection candidates await HUMAN review — approving "
+                    "comps into production is never automatic without "
+                    "--auto-detect (review the ingest report, then "
+                    "transition the job to APPROVED)")
+        # Judged on THIS run's own calibration health, not the layout's
+        # reputation — a good layout can still drift on a new capture.
+        verdict = gt.evaluate_detection_gate(job.payload.get("detection"),
+                                             floors=floors)
+        if not _gate(store, job.job_key, verdict, steps, sm.NEEDS_REVIEW):
+            return (STOP_HUMAN_GATE,
+                    _gate_stop_detail(verdict,
+                                      "review the ingest report and "
+                                      "transition the job to APPROVED"))
+        store.transition(job.job_key, sm.APPROVED)
+        _step(steps, sm.NEEDS_REVIEW, "approve-detection", True,
+              "detection review cleared by the unattended gate")
+        return ("continue", "detection approved by gate")
+
+    return ("identity", "segment identity review")
+
+
+def _handle_identity_review(store: js.JobStore, job, steps: list[dict], *,
+                            auto_accept: bool, propose_fn, accept_fn
+                            ) -> tuple[str, str]:
+    """The SEGMENT identity review — unchanged behaviour, `--auto-accept`
+    still runs proposals through the same `accept_proposed` gate a human
+    uses, and a refusal there still stops the loop."""
     video_id = job.payload.get("videoId")
     pending = _list_segments(store, video_id, "pending")
     approved = _list_segments(store, video_id, "approved")
-
-    # Detection review: the job ran detection (payload carries the summary)
-    # and no segment is pending — the review on the table is whether hero
-    # compositions reach production. ALWAYS a human decision.
-    if job.payload.get("detection") and not pending:
-        return (STOP_HUMAN_GATE,
-                "detection candidates await HUMAN review — approving comps "
-                "into production is never automatic (review the ingest "
-                "report, then transition the job to APPROVED)")
 
     if pending:
         if not auto_accept:
@@ -434,6 +605,94 @@ def _handle_review(store: js.JobStore, job, steps: list[dict], *,
     return (STOP_BLOCKED,
             f"no approved segment to detect ({len(pending)} pending, "
             f"{len(approved)} approved) — review or re-segment first")
+
+
+def _auto_label_templates(store: js.JobStore, job, steps: list[dict], *,
+                          floors: dict, label_fn=None) -> tuple[bool, str]:
+    """NEEDS_TEMPLATES under `--auto-templates`.
+
+    Delegates the real work to `auto_label.label_package`, which is
+    additive-only: it never overwrites a hero that already has a template
+    and never clears the directory. That is the difference between this
+    path and `harvest_templates.stage_labels`, which wipes the directory
+    before writing — correct for a human doing a full reviewed pass, and
+    catastrophic for an unattended pass that happened to label fewer heroes.
+
+    A pass that labels NOTHING is not a failure of this function; it is the
+    gates doing their job. It still stops the loop (there are still not
+    enough templates to detect with) but it says so with the per-cluster
+    refusals rather than a bare "insufficient coverage".
+    """
+    if label_fn is None:
+        from . import auto_label
+        label_fn = auto_label.label_package
+    try:
+        result = label_fn(store, job, floors=floors)
+    except Exception as exc:  # noqa: BLE001 — surfaced, never swallowed
+        return False, (f"auto-labelling could not run: {exc} — harvest + "
+                       f"label templates manually")
+    labelled = result.get("labelled") or []
+    held = result.get("held") or []
+    _record_verdict(store, job.job_key, gt.Verdict(
+        gate=gt.GATE_TEMPLATES,
+        passed=bool(labelled),
+        reason_code="labelled" if labelled else "nothing_cleared",
+        reason=(f"auto-labelled {len(labelled)} hero(es); {len(held)} "
+                f"cluster(s) held for review"),
+        metrics={"labelled": labelled, "held": held[:12],
+                 "manifest": result.get("manifest"),
+                 "coverageBefore": result.get("coverageBefore"),
+                 "coverageAfter": result.get("coverageAfter")},
+        floors={k: v for k, v in floors.items()
+                if k.startswith("auto_templates_")},
+        decided_at="", decided_by="automatic-gate:templates"))
+    if not labelled:
+        return False, (
+            f"the templates gate held on every cluster ({len(held)} "
+            f"reviewed, none cleared) — coverage is unchanged at "
+            f"{result.get('coverageAfter')}; the review manifest is at "
+            f"{result.get('manifest')}")
+    return True, (f"auto-labelled {len(labelled)} hero(es) "
+                  f"({', '.join(labelled[:8])}); coverage "
+                  f"{result.get('coverageBefore')} -> "
+                  f"{result.get('coverageAfter')}; {len(held)} held")
+
+
+def _auto_publish(store: js.JobStore, job, steps: list[dict], *,
+                  publish_fn=None) -> tuple[bool, str]:
+    """Run the existing publication path under `--auto-publish`.
+
+    Nothing about publication is loosened here: `publish.publish_job` still
+    regenerates and validates the export, runs the offline tests and the
+    packaging check, scans for secrets, and creates a scoped commit on a
+    FRESH BRANCH which it pushes. It has never had a path to main and does
+    not get one. What the flag changes is only who types the command.
+    """
+    if publish_fn is None:
+        from . import publish as pub
+
+        def publish_fn(store_, job_):  # noqa: ANN001
+            segments = _list_segments(store_, job_.payload.get("videoId"),
+                                      "approved")
+            if not segments:
+                raise ValueError("no approved segment to publish")
+            import db as content_db
+            con = content_db.connect()
+            try:
+                return pub.publish_job(store_, con, job_, segments[0],
+                                       push=True)
+            finally:
+                con.close()
+    try:
+        result = publish_fn(store, job)
+    except Exception as exc:  # noqa: BLE001 — surfaced, never swallowed
+        _step(steps, job.state, "publish", False, str(exc))
+        return False, (f"the publish gate passed but publication failed: "
+                       f"{exc} — nothing was pushed")
+    branch = (result or {}).get("branch")
+    _step(steps, job.state, "publish", True, f"pushed branch {branch}")
+    return True, (f"published to branch {branch} — open a PR against the "
+                  f"default branch; nothing was merged and main is untouched")
 
 
 def _ensure_extracted(store: js.JobStore, job, steps: list[dict], *,

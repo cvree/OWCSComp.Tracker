@@ -1002,3 +1002,97 @@ responses, API-failure retry jobs, stable ids, dry-run purity, no comp
 leakage, no fixture contamination), `test_automation_reconcile.py`
 (FACEIT↔calendar conflicts), `test_automation_calendar_export.py`
 (public calendar export, end-to-end discovery→export).
+
+---
+
+# Unattended approval gates
+
+Every gate in this pipeline used to end the same way: the autopilot stopped
+and named a command for a human to type. That is still the default. The five
+`--auto-*` flags let a gate be **cleared by evidence** instead, and record
+exactly which evidence cleared it.
+
+| Gate | Flag | What has to be true |
+|---|---|---|
+| source | `--auto-source` | retrieved metadata, a completed (not live) VOD ≥ 1200s, broadcast-likeness ≥ 55. A source a human **rejected** is never re-opened. |
+| layout | `--auto-layout` | calibration confidence ≥ 0.75 — above the 0.55 floor below which calibration is refused outright |
+| templates | `--auto-templates` | score ≥ 0.55 and margin ≥ 0.12 vs a real labelled portrait, ≥ 4 frames, no contradicting official-art opinion |
+| detection | `--auto-detect` | this run's own health: unknown ≤ 0.25, full-house ≥ 0.60, median ≥ 0.65, ≥ 30 gameplay frames |
+| publish | `--auto-publish` | a committed detection with ≥ 1 stint whose own gate passed → pushes a branch, never main |
+
+`--unattended` turns on all five.
+
+```
+python pipeline/automation/cli.py unattended-floors --unattended
+```
+
+prints the live value of every floor and whether it came from
+`config/automation.yml` or from the built-in default. Any floor can be
+overridden by name in that file.
+
+## Why the floors are stricter than the existing health check
+
+`ingest_map` already calls a detection run *suspect* below 0.40 full-house /
+0.60 median / above 0.35 unknown. That threshold answers "should a human look
+at this?". The gate answers "may this reach production with nobody looking?"
+— a different and much higher question. Passing `ingest_map`'s health check
+is deliberately **not** enough to clear the detection gate, and there is a
+test pinning that gap.
+
+## Two design decisions worth knowing about
+
+**Official hero art suggests, it never decides.** `template_bootstrap.
+suggest_labels` scores clusters against official splash renders, and its own
+docstring is right that a render does not look like a broadcast HUD portrait.
+So auto-labelling scores against real portraits humans already labelled in
+the repo's *other* packages — same kind of image — and consults official art
+only as a **veto**: two sources naming different heroes is a hold, not a coin
+flip. A candidate scored against official art is refused outright
+(`wrong_reference_kind`).
+
+**Auto-labelling only adds.** `harvest_templates.stage_labels` wipes every
+`*.png` in the directory before writing, which is right for a human doing a
+full reviewed pass and catastrophic for an unattended one that labelled fewer
+heroes. `automation/auto_label.py` never calls it, never overwrites a covered
+hero, and writes a review manifest (`_auto_label_review.json`) even when it
+labels nothing.
+
+```
+python pipeline/automation/cli.py bootstrap-templates --job <key> --dry-run
+```
+
+reports exactly what it would label, writing nothing at all.
+
+## Audit trail
+
+Every verdict — **refusals included** — lands on the job payload under
+`autoApprovals.<gate>` with the metrics it judged, the floors it judged them
+against, and a `decidedBy` of `automatic-gate:<gate>`. An automatic approval
+never claims to be a person's signature, and a refusal is the record that
+answers "why did nothing publish last night?" months later.
+
+## The scheduled runner
+
+```powershell
+.\tools\install-scheduled-task.ps1 -OperatorName "Connor"   # once, elevated
+.\tools\owcs-auto-run.ps1 -WhatIfOnly                        # see what it'd do
+```
+
+Nightly: `worker-doctor` first (a pass that cannot work fails loudly instead
+of silently doing nothing), then scan → queue → advance every job. Logs in
+`data\auto-run-logs\`, AC-power only, skips if the previous pass is still
+running. `-Gates` brings the gates up one at a time rather than all five at
+once.
+
+## Coverage is the real ceiling
+
+At 13–33% template coverage the detection gate will hold most jobs. That is
+the design working, not a bug. The sequence that gets you hands-off output
+is: `--auto-templates` raises coverage → the unknown rate drops → the
+detection gate starts passing on its own.
+
+## Tests
+
+`test_unattended_gates.py` (the gate functions, mostly asserting refusals)
+and `test_unattended_autopilot.py` (the loop wiring, including that flags-off
+behaviour is byte-for-byte the old behaviour).

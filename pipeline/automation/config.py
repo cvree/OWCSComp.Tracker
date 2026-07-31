@@ -42,6 +42,18 @@ DEFAULTS: dict[str, Any] = {
     "regions": ["na", "emea", "korea", "japan", "pacific", "china", "global"],
 }
 
+# Unattended-approval floors live in `automation.gates.FLOOR_SPECS` (one
+# table, so `unattended-floors` can print every tunable next to its
+# description). They are merged in here so automation.yml can override any
+# of them exactly like any other setting, and so a typo'd floor name is
+# visible as "not a known key" rather than silently ignored.
+def _gate_floor_defaults() -> dict[str, Any]:
+    from . import gates
+    return {k: spec[0] for k, spec in gates.FLOOR_SPECS.items()}
+
+
+DEFAULTS.update(_gate_floor_defaults())
+
 
 # --------------------------------------------------------------- yaml subset
 def _coerce_scalar(text: str) -> Any:
@@ -115,6 +127,11 @@ def parse_simple_yaml(text: str) -> dict[str, Any]:
 @dataclass
 class AutomationConfig:
     values: dict[str, Any] = field(default_factory=dict)
+    # Keys the config FILE actually set, as opposed to the ones that fell
+    # through to DEFAULTS. `values` is a merged view, so without this there
+    # is no way to tell a deliberately tuned threshold from an assumed one —
+    # which is exactly what `unattended-floors` has to report.
+    explicit: set = field(default_factory=set)
 
     def get(self, key: str, default: Any = None) -> Any:
         val = self.values.get(key, DEFAULTS.get(key, default))
@@ -157,11 +174,13 @@ class AutomationConfig:
 
 def load_config(path: str = AUTOMATION_YML) -> AutomationConfig:
     values = dict(DEFAULTS)
+    explicit: set = set()
     if os.path.exists(path):
         with open(path, "r", encoding="utf-8") as f:
             parsed = parse_simple_yaml(f.read())
         values.update(parsed)
-    return AutomationConfig(values=values)
+        explicit = set(parsed)
+    return AutomationConfig(values=values, explicit=explicit)
 
 
 # ----------------------------------------------------------- registries (JSON)
