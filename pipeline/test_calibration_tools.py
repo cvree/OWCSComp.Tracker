@@ -10,6 +10,13 @@ synthesized on the fly, so no network or yt-dlp is needed:
   build_hero_templates        crops 10 slots/frame + writes the HTML sheet
   layouts/owcs_youtube_2026.json  starter layout is valid + has placeholders
 
+"Fully offline" is not the same as "zero external tools": the local-file
+path genuinely shells out to `ffmpeg`, which is present in CI but not on
+every dev box or container. That one section is SKIPPED (loudly, and named
+in the final summary) when ffmpeg is absent, instead of crashing the whole
+suite with FileNotFoundError and taking the other 14 checks down with it.
+Where ffmpeg exists, it still runs for real — nothing is stubbed.
+
 Run:  python3 pipeline/test_calibration_tools.py   (non-zero on failure)
 """
 from __future__ import annotations
@@ -38,10 +45,25 @@ META = os.path.join(HERE, "fixtures", "video", "vod_meta_sample.json")
 TW = os.path.join(ROOT, "work", "test_calib")
 
 
+SKIPPED: list[str] = []
+
+
 def check(name, cond):
     print(("  PASS  " if cond else "  FAIL  ") + name)
     if not cond:
         sys.exit(1)
+
+
+def skip(name, reason):
+    """Record a section that could not run here. Never silent: it prints at
+    the point of the skip AND is listed again in the final summary, so a
+    green run always states exactly what it did not cover."""
+    SKIPPED.append(f"{name} ({reason})")
+    print(f"  SKIP  {name} — {reason}")
+
+
+def have_ffmpeg() -> bool:
+    return shutil.which("ffmpeg") is not None
 
 
 def make_local_mp4(path: str) -> None:
@@ -112,14 +134,17 @@ def main():
 
     # ---- extract_calibration_frames: local file (real ffmpeg) ------------
     print("extract_calibration_frames (local mp4, real ffmpeg)")
-    mp4 = os.path.join(TW, "clip.mp4")
-    make_local_mp4(mp4)
-    loc_out = os.path.join(TW, "local")
-    rloc = ecf.run(local=mp4, start=0, end=2, every=1, out=loc_out, fmt="png")
-    names = sorted(os.listdir(loc_out))
-    check(f"local extract produced offset-named PNGs ({names})",
-          rloc["count"] >= 2 and all(n.endswith(".png") for n in names)
-          and "000000.png" in names)
+    if not have_ffmpeg():
+        skip("local mp4 extraction (real ffmpeg)", "ffmpeg not on PATH")
+    else:
+        mp4 = os.path.join(TW, "clip.mp4")
+        make_local_mp4(mp4)
+        loc_out = os.path.join(TW, "local")
+        rloc = ecf.run(local=mp4, start=0, end=2, every=1, out=loc_out, fmt="png")
+        names = sorted(os.listdir(loc_out))
+        check(f"local extract produced offset-named PNGs ({names})",
+              rloc["count"] >= 2 and all(n.endswith(".png") for n in names)
+              and "000000.png" in names)
 
     # ---- build_layout_debug on fixture frames ----------------------------
     print("build_layout_debug")
@@ -170,7 +195,13 @@ def main():
     check("starter layout draws without error (incl. score_map)",
           ann is not None)
 
-    print("\nALL CALIBRATION TOOL TESTS PASSED")
+    if SKIPPED:
+        print("\nALL RUNNABLE CALIBRATION TOOL TESTS PASSED "
+              f"({len(SKIPPED)} section(s) skipped on this machine):")
+        for s in SKIPPED:
+            print(f"  SKIPPED  {s}")
+    else:
+        print("\nALL CALIBRATION TOOL TESTS PASSED")
 
 
 if __name__ == "__main__":
