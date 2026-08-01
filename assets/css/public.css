@@ -28,10 +28,15 @@
   --line-strong: rgba(158, 170, 208, 0.27);
   --etch: rgba(214, 197, 152, 0.16);   /* engraved gold hairline */
 
-  /* text hierarchy — soft bone-white, never pure #fff walls */
+  /* text hierarchy — soft bone-white, never pure #fff walls.
+     tx-3 is the tertiary/meta tone and it carries a lot of small type
+     (evidence lines, counts, timestamps, hero names). The old #67708a
+     measured 3.25:1 on --surface-3 and 4.04:1 on --bg-1 — below WCAG AA
+     for body text on every surface in this palette. #828da8 measures
+     4.82–5.99:1 across bg-1/surface-0..3 and keeps the same cool cast. */
   --tx-1: #eae6da;
   --tx-2: #a6acbf;
-  --tx-3: #67708a;
+  --tx-3: #828da8;
 
   /* the cathedral palette */
   --gold: #d9a94f;            /* verified / elite / winner path */
@@ -281,7 +286,10 @@ body.pub {
   grid-template-columns: minmax(240px, 1.4fr) 1fr 1fr;
   font-size: 13px; color: var(--tx-2);
 }
-.pub-footer h3 { font-size: 12px; letter-spacing: .12em; color: var(--tx-3); margin-bottom: var(--sp-2); font-family: var(--font-serif); font-weight: 600; }
+/* h2 in markup (so a page whose only heading is its h1 does not jump
+   straight to h3), h3-scale visually — the footer is not a section of the
+   page's argument. */
+.pub-footer h2, .pub-footer h3 { font-size: 12px; letter-spacing: .12em; color: var(--tx-3); margin-bottom: var(--sp-2); font-family: var(--font-serif); font-weight: 600; text-transform: uppercase; }
 .pub-footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
 .pub-footer a { color: var(--tx-2); }
 .pub-footer a:hover { color: var(--gold-hot); }
@@ -400,7 +408,11 @@ html.motion-on .seal[data-armed] { animation: seal-pulse .7s var(--ease) 1; }
 }
 
 /* ---------- 6. Team plates (skewed broadcast identity) ---------- */
-.team-plate { display: inline-flex; align-items: center; gap: 10px; min-width: 0; }
+/* max-width + the flex guard on __name below are load-bearing: without
+   them a long org name overflows its card and gets hard-clipped mid-word
+   by the card's own overflow, so you get "SPACESTATIC" with no ellipsis
+   and no way to tell the text was truncated at all. */
+.team-plate { display: inline-flex; align-items: center; gap: 10px; min-width: 0; max-width: 100%; }
 .team-plate__logo {
   width: 34px; height: 34px; flex: none;
   display: grid; place-items: center;
@@ -421,10 +433,26 @@ html.motion-on .seal[data-armed] { animation: seal-pulse .7s var(--ease) 1; }
   font-family: var(--font-display); text-transform: uppercase;
   font-weight: 600; letter-spacing: .03em;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  min-width: 0; flex: 0 1 auto;
 }
 .team-plate--sm .team-plate__logo { width: 24px; height: 24px; font-size: 9.5px; }
-.team-plate--lg .team-plate__logo { width: 54px; height: 54px; font-size: 17px; }
-.team-plate--lg .team-plate__name { font-size: 22px; }
+.team-plate--lg .team-plate__logo { width: 52px; height: 52px; font-size: 17px; }
+/* Fluid, because this same plate is both a directory card title (narrow
+   card, long org names like "Spacestation Gaming") and an entity page
+   title. A fixed 30px overflowed and hard-clipped mid-word on the Teams
+   grid — the truncation guards below make that structurally impossible
+   now, ellipsis or not. */
+.team-plate--lg .team-plate__name { font-size: clamp(16px, 1.5vw, 21px); }
+/* An entity page's subject IS the page title. team.html and match.html
+   previously shipped no <h1> at all — the team name was a 22px span, i.e.
+   smaller than the "Footage & calibration" section heading below it. */
+.pub h1.entity-title {
+  font-size: inherit; line-height: 1.1; letter-spacing: 0;
+  text-transform: none; text-shadow: none; margin: 0; display: flex;
+  min-width: 0; max-width: 100%;
+}
+.pub h1.entity-title .team-plate__name { font-size: clamp(22px, 3vw, 32px); }
+.pub h1.entity-title .team-plate__logo { width: 58px; height: 58px; font-size: 18px; }
 .team-plate--tbd .team-plate__logo { opacity: .55; }
 .team-plate--tbd .team-plate__name { color: var(--tx-3); font-weight: 400; }
 .team-plate--win .team-plate__name { color: var(--gold); }
@@ -450,6 +478,11 @@ a.team-plate[style*="--team-h"]:focus-visible .team-plate__logo {
 }
 .score-plate .s-a.win, .score-plate .s-b.win { color: var(--gold); text-shadow: 0 0 14px color-mix(in srgb, var(--gold) 45%, transparent); }
 .score-plate .s-sep { padding: 2px 0; color: var(--tx-3); font-weight: 400; }
+.score-none {
+  font-family: var(--font-mono); font-size: 11px; color: var(--tx-3);
+  border: 1px dashed var(--line-strong); border-radius: var(--r-1);
+  padding: 4px 10px; white-space: nowrap;
+}
 
 /* ---------- 7. Cards / panels ---------- */
 .card {
@@ -540,11 +573,22 @@ hr.rule::after, .rule-etched::after {
 [role="tabpanel"] { padding-top: var(--sp-5); }
 [role="tabpanel"][hidden] { display: none; }
 
-/* segmented control (regions) */
+/* segmented control (regions).
+   `inline-flex` alone loses to the stretch default of the grid/flex
+   parents these sit in, which is why the region strip used to run the
+   full 1240px with 600px of empty box after "GLOBAL". A control should be
+   exactly as wide as its options. */
 .seg-region {
   display: inline-flex; flex-wrap: wrap; gap: 4px;
   background: var(--bg-0); border: 1px solid var(--line);
   border-radius: var(--r-3); padding: 4px;
+  /* fit-content, NOT max-content: max-content makes the auto grid track
+     this sits in size to the unwrapped strip, which overflowed the page
+     by 258px at 390px wide. fit-content clamps to the space available and
+     lets flex-wrap do its job. The bounded track below is the other half
+     of that fix. */
+  width: fit-content; max-width: 100%;
+  justify-self: start; align-self: start;
 }
 .seg-region button {
   appearance: none; border: 1px solid transparent; background: none; cursor: pointer;
@@ -675,7 +719,7 @@ a.b-node:hover { border-color: var(--line-strong); box-shadow: var(--shadow-2); 
 .push-bars { display: grid; gap: 4px; max-width: 320px; }
 .push-bar { display: grid; grid-template-columns: 34px 1fr 58px; gap: 8px; align-items: center; font-family: var(--font-mono); font-size: 10.5px; color: var(--tx-3); }
 .push-bar .pb-track { height: 6px; background: var(--surface-3); border-radius: 3px; overflow: hidden; }
-.push-bar .pb-fill { height: 100%; background: var(--tx-2); border-radius: 3px; }
+.push-bar .pb-fill { display: block; height: 100%; background: var(--tx-2); border-radius: 3px; }
 .push-bar.win .pb-fill { background: var(--gold); }
 
 /* ---------- 12. Comps + hero tiles ---------- */
@@ -685,10 +729,10 @@ a.b-node:hover { border-color: var(--line-strong); box-shadow: var(--shadow-2); 
 .comp-row { display: grid; grid-template-columns: minmax(120px, 180px) 1fr auto; gap: var(--sp-3); align-items: center; }
 .hero-strip { display: flex; gap: 6px; flex-wrap: wrap; }
 .hero-tile {
-  width: 52px; display: grid; gap: 3px; justify-items: center; text-align: center;
+  width: 58px; display: grid; gap: 4px; justify-items: center; text-align: center;
 }
 .hero-tile__face {
-  width: 46px; height: 46px; border-radius: var(--r-2);
+  width: 50px; height: 50px; border-radius: var(--r-2);
   display: grid; place-items: center; position: relative; overflow: hidden;
   font-family: var(--font-display); font-weight: 700; font-size: 15px;
   color: rgba(255,255,255,.94);
@@ -715,7 +759,9 @@ html.motion-on .hero-tile:hover .hero-tile__face img { filter: saturate(1.08) co
   border-radius: 3px; background: var(--role-c, var(--tx-3));
   border: 2px solid var(--surface-1);
 }
-.hero-tile__name { font-size: 9.5px; color: var(--tx-3); line-height: 1.15; max-width: 52px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* 9.5px in the old tertiary grey was decorative, not readable — and this
+   is the label on the actual product (which hero was played). */
+.hero-tile__name { font-size: 11px; color: var(--tx-2); line-height: 1.2; max-width: 58px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .hero-tile--sm { width: 34px; }
 .hero-tile--sm .hero-tile__face { width: 32px; height: 32px; font-size: 11px; border-radius: var(--r-1); }
 .hero-tile--sm .hero-tile__name { display: none; }
@@ -746,11 +792,48 @@ a.hero-tile:hover .hero-tile__name { color: var(--tx-1); }
 .ev-kv { display: grid; grid-template-columns: max-content 1fr; gap: 4px 16px; font-size: 12.5px; }
 .ev-kv dt { color: var(--tx-3); }
 .ev-kv dd { margin: 0; font-family: var(--font-mono); font-size: 12px; }
+/* These read as dead boxes without a disclosure affordance — several sat
+   on the match page looking like empty panels rather than "open me". */
 details.ev-more { border: 1px dashed var(--line); border-radius: var(--r-2); padding: var(--sp-2) var(--sp-3); }
-details.ev-more > summary { cursor: pointer; color: var(--tx-2); font-size: 12.5px; min-height: 30px; display: flex; align-items: center; }
+details.ev-more > summary {
+  cursor: pointer; color: var(--tx-2); font-size: 12.5px; min-height: 34px;
+  display: flex; align-items: center; gap: 9px; list-style: none;
+}
+details.ev-more > summary::-webkit-details-marker { display: none; }
+details.ev-more > summary::before {
+  content: "▸"; color: var(--gold); font-size: 11px; flex: none;
+  transition: transform var(--dur-1) var(--ease);
+}
+details.ev-more[open] > summary::before { transform: rotate(90deg); }
+details.ev-more > summary:hover { color: var(--tx-1); }
+details.ev-more > summary:focus-visible { box-shadow: var(--focus); border-radius: var(--r-1); }
 
 /* ---------- 14. Stats ---------- */
 .stat-table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r-3); background: var(--surface-1); }
+/* Scroll shadows. Wide content correctly scrolls inside its own container
+   rather than the page, but at 390px that left the stats table showing
+   four of seven columns with nothing to say the rest existed. These are
+   background layers, not elements: the `local` pair scrolls away with the
+   content and the `scroll` pair stays pinned, so the shading appears only
+   on the side that still has content off-screen. No JS, no extra markup. */
+.stat-table-wrap, .cal-grid-wrap, .bracket-scroll, .tabs {
+  background-repeat: no-repeat;
+  background-image:
+    linear-gradient(90deg, var(--surface-1), transparent),
+    linear-gradient(270deg, var(--surface-1), transparent),
+    linear-gradient(90deg, rgba(0,0,0,.55), transparent),
+    linear-gradient(270deg, rgba(0,0,0,.55), transparent);
+  background-position: 0 0, 100% 0, 0 0, 100% 0;
+  background-size: 26px 100%, 26px 100%, 15px 100%, 15px 100%;
+  background-attachment: local, local, scroll, scroll;
+}
+.cal-grid-wrap, .bracket-scroll, .tabs {
+  background-image:
+    linear-gradient(90deg, var(--bg-1), transparent),
+    linear-gradient(270deg, var(--bg-1), transparent),
+    linear-gradient(90deg, rgba(0,0,0,.5), transparent),
+    linear-gradient(270deg, rgba(0,0,0,.5), transparent);
+}
 table.stat-table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 13px; }
 .stat-table th, .stat-table td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--line); }
 .stat-table thead th {
@@ -762,9 +845,18 @@ table.stat-table { border-collapse: collapse; width: 100%; min-width: 640px; fon
 .stat-table thead th[aria-sort="ascending"]::after { content: " ▴"; color: var(--gold); }
 .stat-table tbody tr:hover { background: var(--surface-2); }
 .stat-table td.num { font-family: var(--font-mono); font-size: 12px; }
-.rate-bar { display: inline-flex; align-items: center; gap: 8px; min-width: 130px; }
-.rate-bar .rb-track { flex: 1; height: 5px; border-radius: 3px; background: var(--surface-3); overflow: hidden; }
-.rate-bar .rb-fill { height: 100%; border-radius: 3px; background: var(--tx-2); }
+.rate-bar { display: inline-flex; align-items: center; gap: 10px; min-width: 130px; width: 100%; }
+.rate-bar .rb-track { flex: 1; min-width: 60px; height: 7px; border-radius: 4px; background: var(--surface-3);
+  box-shadow: inset 0 0 0 1px var(--line); overflow: hidden; }
+/* display:block is load-bearing on every one of these fills. They are
+   rendered as <span>, so without it they stay inline boxes, `width`
+   does not apply, and the element measures 0px — which is exactly
+   what was happening: every pick-rate, win-rate, push-distance and
+   roster-coverage bar on the site drew an empty track. Verified by
+   measurement: fill.style.width "100%" -> getBoundingClientRect()
+   .width 0. .mm-fill already had it, which is why the map page was
+   the only place the bars ever looked right. */
+.rate-bar .rb-fill { display: block; height: 100%; border-radius: 4px; background: var(--tx-2); min-width: 3px; }
 .rate-bar.hot .rb-fill { background: linear-gradient(90deg, var(--gold), var(--gold-hot)); }
 .stat-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--sp-3); }
 .stat-card { padding: var(--sp-4); display: grid; gap: 4px; }
@@ -881,6 +973,16 @@ table.stat-table { border-collapse: collapse; width: 100%; min-width: 640px; fon
 .vs-score { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 700; font-size: clamp(34px, 6vw, 52px); line-height: 1; }
 .vs-score .win { color: var(--gold); text-shadow: 0 0 26px color-mix(in srgb, var(--gold) 45%, transparent); }
 .vs-score .vs-dash { color: var(--tx-3); font-size: .55em; font-weight: 400; }
+.vs-score--none { font-size: 0; }
+.vs-noscore {
+  display: grid; gap: 2px; justify-items: center; text-align: center;
+  font-family: var(--font-display); text-transform: uppercase;
+  letter-spacing: .08em; font-size: 15px; font-weight: 600; color: var(--tx-2);
+  border: 1px dashed var(--line-strong); border-radius: var(--r-2);
+  padding: 8px 16px; white-space: nowrap;
+}
+.vs-noscore small { font-family: var(--font-mono); font-size: 10.5px;
+  letter-spacing: .04em; text-transform: none; color: var(--tx-3); font-weight: 400; }
 @media (max-width: 640px) {
   .vs-band { grid-template-columns: 1fr; gap: var(--sp-3); }
   .vs-band .side-a, .vs-band .side-b { justify-self: stretch; text-align: left; }
@@ -888,14 +990,21 @@ table.stat-table { border-collapse: collapse; width: 100%; min-width: 640px; fon
 }
 
 /* ---------- 16. States: empty / skeleton / stale ---------- */
+/* Empty states are a NOTE, not a monument. The centred 170px-tall box
+   made "no ban data yet" the visually heaviest element on /stats and
+   /team, and it sat next to compact one-line empties on /matches — two
+   different answers to the same question. One treatment now: a quiet
+   left-aligned strip that reads at a glance and takes one row. */
 .empty {
-  border: 1px dashed var(--line-strong); border-radius: var(--r-3);
-  padding: var(--sp-6) var(--sp-5); text-align: center; display: grid; gap: 8px; justify-items: center;
-  color: var(--tx-2); background: rgba(0,0,0,.18);
+  border: 1px dashed var(--line); border-radius: var(--r-3);
+  padding: var(--sp-3) var(--sp-4);
+  display: grid; grid-template-columns: auto 1fr; gap: 4px var(--sp-3);
+  align-items: baseline;
+  color: var(--tx-2); background: var(--surface-0);
 }
-.empty .e-glyph { font-size: 22px; color: var(--tx-3); }
-.empty .e-title { font-family: var(--font-display); text-transform: uppercase; letter-spacing: .05em; font-size: 15px; color: var(--tx-1); }
-.empty .e-hint { font-size: 12.5px; color: var(--tx-3); max-width: 46ch; }
+.empty .e-glyph { font-size: 14px; color: var(--tx-3); grid-row: 1 / span 2; align-self: center; }
+.empty .e-title { font-family: var(--font-display); text-transform: uppercase; letter-spacing: .05em; font-size: 14px; color: var(--tx-1); }
+.empty .e-hint { font-size: 12.5px; color: var(--tx-3); max-width: 68ch; }
 .empty .e-hint code { font-family: var(--font-mono); color: var(--tx-2); background: var(--bg-0); padding: 1px 6px; border-radius: 4px; }
 .skel { position: relative; overflow: hidden; background: var(--surface-2); border-radius: var(--r-2); min-height: 14px; }
 .skel::after {
@@ -914,10 +1023,23 @@ table.stat-table { border-collapse: collapse; width: 100%; min-width: 640px; fon
 
 /* ---------- 17. Utility layout ---------- */
 .grid-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: var(--sp-4); }
-.stack { display: grid; gap: var(--sp-4); }
-.stack-sm { display: grid; gap: var(--sp-2); }
+/* minmax(0, 1fr), not the implicit `auto`: an auto track sizes to its
+   items' max-content and is allowed to overflow the grid container, so a
+   single wide child (a region strip, a long code string) silently widens
+   the whole page instead of being constrained by it. */
+.stack { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--sp-4); }
+.stack-sm { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--sp-2); }
 .cluster { display: flex; flex-wrap: wrap; gap: var(--sp-2); align-items: center; }
 .split { display: flex; flex-wrap: wrap; gap: var(--sp-3); align-items: center; justify-content: space-between; }
+/* Grid and flex items both default to min-width:auto, so a long
+   unbreakable title (SPACESTATION GAMING) grows its own row past the
+   track, blows out of the card, and gets hard-clipped by the card's
+   overflow — no ellipsis, no sign anything was truncated. Measured: a
+   .split row rendering 275px inside a 258px card track. These are the
+   floors that let text-overflow actually fire. */
+.split > *, .cluster > *,
+.t-card > *, .m-card > *, .compi > *, .swap-card > *,
+.stack > *, .stack-sm > * { min-width: 0; }
 .section { margin-top: var(--sp-6); }
 .section > h2 { margin-bottom: var(--sp-4); display: flex; align-items: baseline; gap: 10px; }
 .section > h2 .h-count { font-family: var(--font-mono); font-size: 12px; color: var(--tx-3); }
@@ -926,6 +1048,15 @@ table.stat-table { border-collapse: collapse; width: 100%; min-width: 640px; fon
 .rv { opacity: 1; }
 html.motion-on .rv { opacity: 0; transform: translateY(10px); }
 html.motion-on .rv.rv-in { opacity: 1; transform: none; transition: opacity var(--dur-3) var(--ease), transform var(--dur-3) var(--ease); }
+/* A printed page never scrolls, so a scroll reveal must not be able to
+   print a blank sheet. shell.js also reveals on beforeprint; this is the
+   belt to that braces, and it also covers "Save as PDF" in engines that
+   skip the event. */
+@media print {
+  html.motion-on .rv,
+  html.motion-on .rv:not(.rv-in) { opacity: 1 !important; transform: none !important; }
+  #pub-atmosphere, .scroll-progress, .pub-nav-toggle, .pub-search-btn { display: none !important; }
+}
 
 /* ---------- 18. Reduced motion + small screens ---------- */
 @media (prefers-reduced-motion: reduce) {
@@ -949,8 +1080,18 @@ html.motion-on .rv.rv-in { opacity: 1; transform: none; transition: opacity var(
    prefers-reduced-motion (the engine never boots) and without the
    vendored libraries (static gradient remains).
    ===================================================================== */
-#pub-atmosphere.m-vanta { opacity: .5; }
-#pub-atmosphere canvas { position: absolute; inset: 0; }
+/* The tactical grid is ATMOSPHERE, not content. At opacity .5 across a
+   fixed full-viewport layer it drew a visible constellation straight
+   through the H1 and behind every stat table — the one thing a data site
+   cannot afford. It now sits at a low opacity and is masked to the top of
+   the frame, so the band behind the masthead has texture and the region
+   where the numbers live stays flat black. */
+#pub-atmosphere.m-vanta { opacity: .22; }
+#pub-atmosphere canvas {
+  position: absolute; inset: 0;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0,0,0,.55) 38%, transparent 72%);
+  mask-image: linear-gradient(180deg, #000 0%, rgba(0,0,0,.55) 38%, transparent 72%);
+}
 
 .scroll-progress {
   position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 90;
@@ -998,8 +1139,8 @@ button.meta-card:focus-visible { outline: 2px solid var(--gold); outline-offset:
 /* ---------- 23. Team story: recency, calibration provenance, maps ---------- */
 .recency-badge { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; color: var(--tx-2);
   font-family: var(--font-mono); border: 1px solid var(--line); border-radius: 999px; padding: 3px 11px; }
-.recency-badge .rb-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--teal);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--teal) 20%, transparent); }
+.recency-badge .rb-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--verified);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--verified) 20%, transparent); }
 .recency-badge b { color: var(--tx-1); font-weight: 600; }
 .calib-card { display: grid; gap: 12px; }
 .calib-card .ev-tick { white-space: nowrap; }
@@ -1010,17 +1151,28 @@ button.meta-card:focus-visible { outline: 2px solid var(--gold); outline-offset:
 .cal-k { font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--tx-3); font-family: var(--font-mono); }
 .cal-v { font-family: var(--font-display); font-weight: 700; font-size: 17px; }
 .cal-v small { font-size: 11px; color: var(--tx-3); font-weight: 500; }
-.cal-v.good { color: var(--teal); } .cal-v.bad { color: var(--role-damage); }
+/* --verified (emerald) already means "proven" on every other surface;
+   --teal was an eighth accent that appeared only in this one card. Same
+   meaning, one fewer colour in the system. */
+.cal-v.good { color: var(--verified); } .cal-v.bad { color: var(--role-damage); }
 .cal-cov { display: flex; align-items: center; gap: 10px; }
-.cal-cov .cov-track { flex: 1; height: 6px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
-.cal-cov .cov-fill { height: 100%; background: linear-gradient(90deg, var(--teal), color-mix(in srgb, var(--teal) 55%, transparent)); }
+/* surface-2 on a surface-1 card is a 1.2:1 difference — the track was
+   invisible, so a 15% bar read as a label and a number with nothing
+   between them */
+.cal-cov .cov-track { flex: 1; height: 7px; border-radius: 999px; background: var(--surface-3);
+  box-shadow: inset 0 0 0 1px var(--line); overflow: hidden; }
+.cal-cov .cov-fill { display: block; height: 100%; background: linear-gradient(90deg, var(--verified), color-mix(in srgb, var(--verified) 55%, transparent)); }
 .map-story { display: block; }
 .map-story .map-mode { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--tx-3); font-family: var(--font-mono); }
 
 /* ---------- 24. Maps showcase (auto map meta) ---------- */
-.map-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: var(--sp-4); }
+/* auto-FILL keeps the empty tracks, so the one map this dataset has ever
+   verified rendered as a 340px card marooned in the left third of a
+   1240px page. auto-FIT collapses the empty tracks and lets a sparse grid
+   use the width it has — which also gives the pick-rate bars more room. */
+.map-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: var(--sp-4); }
 .map-showcase { display: grid; gap: 12px; }
-.ms-head { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; }
+.ms-head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 12px; }
 .ms-glyph { width: 40px; height: 40px; display: grid; place-items: center; border-radius: var(--r-2);
   background: var(--surface-2); color: var(--gold); font-size: 20px;
   border: 1px solid var(--etch);
@@ -1064,7 +1216,7 @@ button.meta-card:focus-visible { outline: 2px solid var(--gold); outline-offset:
   padding: 8px 10px; text-align: center;
 }
 .cal-cell { background: var(--surface-0); min-height: 96px; padding: 7px 8px; display: grid; gap: 5px; align-content: start; position: relative; }
-.cal-cell--out { background: var(--bg-0); opacity: .55; }
+.cal-cell--out { background: var(--bg-0); opacity: .38; }
 .cal-cell--today { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--cyan) 55%, transparent); }
 .cal-cell--today .cal-day { color: var(--cyan); }
 .cal-day { font-family: var(--font-mono); font-size: 11px; color: var(--tx-3); }
@@ -1090,7 +1242,15 @@ button.meta-card:focus-visible { outline: 2px solid var(--gold); outline-offset:
 .cal-eband__name { font-weight: 600; color: var(--tx-1); }
 .cal-eband__win { font-family: var(--font-mono); font-size: 11px; color: var(--tx-3); }
 .cal-eband__note { font-family: var(--font-mono); font-size: 10.5px; color: var(--amber, #f5a524); }
-.cal-cell--inevent { background: color-mix(in srgb, var(--rg, var(--line-strong)) 6%, var(--surface-0)); }
+/* At 6% the "a stage is running on this day" tint was indistinguishable
+   from an ordinary cell, so a 610px month grid with no matches in it read
+   as 35 identical empty boxes. It now actually marks the window. */
+.cal-cell--inevent {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--rg, var(--line-strong)) 20%, transparent), transparent 70%),
+    var(--surface-0);
+  box-shadow: inset 2px 0 0 color-mix(in srgb, var(--rg, var(--line-strong)) 55%, transparent);
+}
 .cal-cell--past { opacity: .82; }
 .cal-day--tba { font-family: var(--font-mono); font-size: 10px; color: var(--tx-3); }
 .cal-ev--upcoming { border-style: dashed; }
@@ -1120,6 +1280,28 @@ button.meta-card:focus-visible { outline: 2px solid var(--gold); outline-offset:
 .hero-card__pr { font-family: var(--font-display); font-weight: 700; font-size: 19px; color: var(--role-c); line-height: 1; }
 .hero-card__sub { font-family: var(--font-mono); font-size: 10px; color: var(--tx-3); white-space: nowrap; }
 .hero-card--dormant .hero-card__pr { color: var(--tx-3); }
+
+/* compact directory row — used for heroes with no verified appearance,
+   where the only per-row facts are the name and the role */
+.hero-dir--compact { grid-template-columns: repeat(auto-fill, minmax(172px, 1fr)); gap: 6px; }
+.hero-chip {
+  display: flex; align-items: center; gap: 9px; min-width: 0;
+  padding: 5px 10px 5px 6px; border: 1px solid var(--line);
+  border-radius: var(--r-2); background: var(--surface-0); color: var(--tx-2);
+  min-height: 44px;
+  transition: border-color var(--dur-1) var(--ease), background var(--dur-1) var(--ease);
+}
+.hero-chip[data-role="Tank"]    { --role-c: var(--role-tank); }
+.hero-chip[data-role="Damage"]  { --role-c: var(--role-damage); }
+.hero-chip[data-role="Support"] { --role-c: var(--role-support); }
+.hero-chip:hover { background: var(--surface-1); border-color: color-mix(in srgb, var(--role-c, var(--line-strong)) 55%, transparent); color: var(--tx-1); }
+.hero-chip__face { width: 30px; height: 30px; flex: none; border-radius: var(--r-1); overflow: hidden;
+  border: 1px solid var(--line); background: var(--surface-0); }
+.hero-chip__face img, .hero-chip__face .hero-mono { width: 100%; height: 100%; object-fit: cover; font-size: 11px; }
+.hero-chip__name { font-size: 13px; font-weight: 600; flex: 1; min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hero-chip__role { flex: none; color: var(--role-c, var(--tx-3)); display: flex; }
+.hero-chip__role .role-ic { width: 15px; height: 15px; }
 .hero-head { display: flex; gap: var(--sp-5); align-items: center; flex-wrap: wrap; position: relative; }
 .hero-head__face { width: 120px; height: 120px; flex: none; border-radius: var(--r-3); overflow: hidden;
   border: 1px solid color-mix(in srgb, var(--role-c, var(--line)) 45%, var(--line));
@@ -1134,7 +1316,10 @@ button.meta-card:focus-visible { outline: 2px solid var(--gold); outline-offset:
 /* =====================================================================
    27. Swap intelligence (before/after evidence)
    ===================================================================== */
-.swap-list { display: grid; gap: var(--sp-4); }
+/* same dead-space problem as .compi-list: a swap card is ~520px of
+   before/after evidence, stacked one per 1240px row */
+.swap-list { display: grid; gap: var(--sp-4); grid-template-columns: repeat(auto-fill, minmax(520px, 1fr)); }
+@media (max-width: 620px) { .swap-list { grid-template-columns: 1fr; } }
 .swap-card { padding: var(--sp-4); display: grid; gap: var(--sp-3); }
 .swap-card__head { display: flex; align-items: center; gap: var(--sp-3); flex-wrap: wrap; }
 .swap-flow { display: flex; align-items: center; gap: var(--sp-3); flex-wrap: wrap; }
@@ -1152,7 +1337,11 @@ html.motion-on .swap-flow__arrow .sf-line::after {
 @keyframes sf-run { from { left: 0; opacity: 0;} 25% { opacity: 1;} to { left: calc(100% - 10px); opacity: 0;} }
 .swap-flow__arrow .sf-t { font-family: var(--font-mono); font-size: 11px; color: var(--tx-2); }
 .swap-card__why { font-size: 12.5px; color: var(--tx-2); border-top: 1px dashed var(--line); padding-top: var(--sp-3); }
-.swap-rejects summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; gap: 8px; color: var(--tx-2); }
+.swap-rejects summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; gap: 9px; color: var(--tx-2); list-style: none; }
+.swap-rejects summary::-webkit-details-marker { display: none; }
+.swap-rejects summary::after { content: "▸"; color: var(--gold); font-size: 11px; transition: transform var(--dur-1) var(--ease); }
+.swap-rejects[open] summary::after { transform: rotate(90deg); }
+.swap-rejects summary:hover { color: var(--tx-1); }
 .swap-rejects .rj-row { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; padding: 8px 2px; border-top: 1px solid var(--line); font-size: 12.5px; }
 .swap-rejects .rj-what { font-family: var(--font-mono); color: var(--tx-2); white-space: nowrap; }
 .swap-rejects .rj-why { color: var(--tx-3); }
@@ -1160,7 +1349,11 @@ html.motion-on .swap-flow__arrow .sf-line::after {
 /* =====================================================================
    28. Composition intelligence cards
    ===================================================================== */
-.compi-list { display: grid; gap: var(--sp-4); }
+/* A composition card is ~420px of content. Stacked one-per-row in a
+   1240px shell it left ~800px of dead space beside every card and pushed
+   the list off the fold for no reason. */
+.compi-list { display: grid; gap: var(--sp-4); grid-template-columns: repeat(auto-fill, minmax(430px, 1fr)); }
+@media (max-width: 520px) { .compi-list { grid-template-columns: 1fr; } }
 .compi { padding: var(--sp-4); display: grid; gap: var(--sp-3); position: relative; }
 .compi__head { display: flex; align-items: center; gap: var(--sp-3); flex-wrap: wrap; }
 .compi__count { margin-left: auto; font-family: var(--font-display); font-weight: 700; font-size: 22px; color: var(--gold); }
@@ -1176,20 +1369,27 @@ html.motion-on .swap-flow__arrow .sf-line::after {
    prose measures and generous vertical rhythm — the rest of the site
    stays dense.
    ===================================================================== */
-.home-hero { display: grid; gap: var(--sp-4); padding: var(--sp-6) 0 var(--sp-5); }
+.home-hero { display: grid; gap: var(--sp-4); padding: var(--sp-7) 0 var(--sp-6); }
+/* The headline was capped at 18ch, which broke it into five short ragged
+   lines ("IN PRO" alone, "OVERWATCH —" alone) down the left third of a
+   1440px screen. A wider measure lets it set in three balanced lines and
+   actually occupy the hero. */
 .home-hero h1 {
-  font-size: clamp(30px, 5.4vw, 60px); line-height: 1.02; text-transform: uppercase;
-  letter-spacing: .01em; max-width: 18ch;
+  font-size: clamp(30px, 5.2vw, 58px); line-height: 1.04; text-transform: uppercase;
+  letter-spacing: .01em; max-width: 26ch; text-wrap: balance;
 }
 .home-hero .gold-word { color: var(--gold); }
 .home-hero .lede { max-width: 68ch; font-size: 16.5px; color: var(--tx-2); }
 .home-hero .lede b { color: var(--tx-1); }
 .home-cta { gap: var(--sp-3); margin-top: var(--sp-1); }
+/* This paragraph is the site's credibility claim — how small the dataset
+   honestly is. It was set 13px in the tertiary grey, i.e. styled like a
+   disclaimer nobody reads. It gets primary-adjacent treatment now. */
 .home-honesty {
-  margin: 0; max-width: 78ch; font-size: 13px; color: var(--tx-3);
-  border-left: 2px solid var(--etch); padding-left: var(--sp-3);
+  margin: 0; max-width: 78ch; font-size: 13.5px; color: var(--tx-2);
+  border-left: 2px solid var(--gold); padding-left: var(--sp-4);
 }
-.home-honesty b { color: var(--tx-2); }
+.home-honesty b { color: var(--tx-1); }
 
 .home-door { display: grid; gap: 8px; padding: var(--sp-4); align-content: start;
   text-decoration: none; color: inherit; }
@@ -1240,8 +1440,12 @@ html.motion-on .swap-flow__arrow .sf-line::after {
 
 /* explainer page ------------------------------------------------------ */
 .doc { max-width: 76ch; display: grid; gap: var(--sp-4); }
+/* This document is 5,400px tall. At 24px of lead-in the section heads did
+   not separate one argument from the next; they read as one wall. */
 .doc h2 { font-size: 24px; text-transform: uppercase; letter-spacing: .03em;
-  margin-top: var(--sp-5); scroll-margin-top: 90px; }
+  margin-top: var(--sp-7); padding-top: var(--sp-3);
+  border-top: 1px solid var(--line); scroll-margin-top: 120px; }
+.doc h2:first-of-type { margin-top: var(--sp-4); }
 .doc h3 { font-size: 16px; text-transform: uppercase; letter-spacing: .04em; }
 .doc p, .doc li { font-size: 14.5px; color: var(--tx-2); }
 .doc p { margin: 0; }
@@ -1250,10 +1454,24 @@ html.motion-on .swap-flow__arrow .sf-line::after {
 .doc code { font-family: var(--font-mono); font-size: 12.5px; color: var(--tx-1);
   background: var(--bg-0); border: 1px solid var(--line); border-radius: var(--r-2);
   padding: 1px 6px; }
-.doc-toc { display: flex; flex-wrap: wrap; gap: 8px; }
+/* On a 5,400px reference page the table of contents is useless if it only
+   exists at the top — that is where you need it least. It rides under the
+   masthead instead, the way a reference wiki keeps its section rail. */
+.doc-toc {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  position: sticky; top: 62px; z-index: 40;
+  margin: 0 calc(-1 * var(--sp-3)); padding: var(--sp-3);
+  background: color-mix(in srgb, var(--bg-1) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
 .doc-toc a { font-size: 12.5px; color: var(--tx-2); border: 1px solid var(--line);
-  border-radius: 999px; padding: 5px 12px; }
+  border-radius: 999px; padding: 6px 12px; background: var(--surface-1); }
 .doc-toc a:hover { border-color: var(--gold); color: var(--gold-hot); }
+@media (max-width: 720px) {
+  .doc-toc { position: static; margin: 0; padding: 0; background: none;
+    backdrop-filter: none; border-bottom: 0; }
+}
 .gloss { display: grid; gap: 0; }
 .gloss__row { display: grid; grid-template-columns: minmax(150px, 210px) 1fr;
   gap: var(--sp-3); padding: var(--sp-3) 0; border-top: 1px solid var(--line); }
@@ -1341,9 +1559,15 @@ html.palette-open { overflow: hidden; }
 .empty-line { margin: 0; padding: 10px 14px; font-size: 13px; color: var(--tx-3);
   background: var(--surface-0); border: 1px dashed var(--line); border-radius: var(--r-3); }
 .empty-line b { color: var(--tx-2); }
-.m-card .m-data { display: block; margin-top: 8px; padding-top: 8px;
-  border-top: 1px solid var(--line); font-size: 12.5px; color: var(--tx-3); }
-.m-card .m-data--yes { color: var(--verified); }
+.m-card__right { display: flex; align-items: center; justify-content: flex-end;
+  gap: var(--sp-3); flex-wrap: wrap; text-align: right; min-width: 0; }
+.m-card .m-data { display: block; font-size: 12.5px; color: var(--tx-3); max-width: 44ch; }
+.m-card .m-data--yes { color: var(--verified); font-weight: 600; }
+@media (max-width: 620px) {
+  .m-card__row { grid-template-columns: 1fr; }
+  .m-card__right { justify-content: flex-start; text-align: left;
+    border-top: 1px solid var(--line); padding-top: 8px; }
+}
 
 /* reference artwork: capped so it can never dominate a dossier */
 .hero-official__art { display: block; width: 100%; max-width: 620px; height: auto;

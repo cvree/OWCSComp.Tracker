@@ -9,6 +9,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"></noscript>
+<!-- Ambience libraries, declared instead of <script>-loaded: three.js is 616 KB,
+     and a deferred <script> lands in front of DOMContentLoaded — which is when
+     the shell builds the page. motion.js fetches these on idle after first
+     paint, and only on devices that can actually use WebGL. -->
+<meta name="owcs-ambience" content="assets/vendor/three.min.js,assets/vendor/vanta.net.min.js">
 <link rel="stylesheet" href="assets/css/style.css" />
 <style>
   /* ---- portal-only styles (intake cards + match finder) ---- */
@@ -71,7 +76,10 @@
   .ik-panel { border: 1px solid var(--line); border-radius: 12px; padding: 14px 18px; margin: 18px 0; }
   .ik-panel h2 { font-size: 1.02rem; margin: 0 0 8px; }
   .ik-stat { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 8px 18px; }
-  .ik-stat > div { font-size: .8rem; }
+  .ik-stat > div { font-size: .8rem; min-width: 0; }
+  /* these carry env-var names and shell fragments with no break
+     opportunities — measured pushing the document 104px wide at 768px */
+  .ik-stat .why, .ik-field .why { overflow-wrap: anywhere; word-break: break-word; }
   .ik-stat .k { color: var(--muted); text-transform: uppercase; letter-spacing: .04em;
     font-size: .66rem; display: block; }
   .ik-stat .v { font-weight: 600; }
@@ -114,6 +122,12 @@
   .mf-cand { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center;
     border-top: 1px solid var(--line); padding: 10px 0; }
   .mf-cand:first-of-type { border-top: 0; }
+  /* The discovery feed grows without bound (~90 rows today). It scrolls in
+     its own well so the sections below it stay reachable; Lenis leaves
+     [data-scroll-region] on native wheel behaviour. */
+  .mf-well { max-height: 62vh; overflow-y: auto; overscroll-behavior: contain;
+    padding-right: 6px; scrollbar-width: thin; }
+  .mf-well:focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
   .mf-cand .t { flex: 1 1 320px; min-width: 0; }
   .mf-cand .t b { font-size: .88rem; font-weight: 600; display: block; }
   .mf-cand .t span { font-size: .74rem; color: var(--muted); }
@@ -132,6 +146,7 @@
 </style>
 </head>
 <body data-page="portal" data-shell="control" data-vanta="net">
+<a class="skip-link" href="#main">Skip to content</a>
 
 <nav class="nav">
   <div class="wrap nav-inner">
@@ -148,6 +163,7 @@
 </nav>
 
 <!-- ============ 1 · PASTE ============ -->
+<main id="main">
 <header class="portal-hero">
   <div class="wrap">
     <p class="eyebrow">Operator portal · one link is the whole workflow</p>
@@ -268,6 +284,8 @@
 </section>
 
 <!-- ============ FOOTER ============ -->
+</main>
+
 <footer class="site">
   <div class="wrap foot-grid">
     <div>
@@ -292,8 +310,6 @@
 <script src="assets/vendor/lenis.min.js" defer></script>
 <script src="assets/vendor/gsap.min.js" defer></script>
 <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
-<script src="assets/vendor/three.min.js" defer></script>
-<script src="assets/vendor/vanta.net.min.js" defer></script>
 <script src="assets/js/motion.js" defer></script>
 </body>
 </html>

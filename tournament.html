@@ -8,6 +8,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Cinzel:wght@500;600&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Cinzel:wght@500;600&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
+<!-- Ambience libraries, declared instead of <script>-loaded: three.js is 616 KB,
+     and a deferred <script> lands in front of DOMContentLoaded — which is when
+     the shell builds the header, nav and footer. motion.js fetches these on idle
+     after first paint, and only on devices that can actually use WebGL. -->
+<meta name="owcs-ambience" content="assets/vendor/three.min.js,assets/vendor/vanta.net.min.js">
 <link rel="stylesheet" href="assets/css/public.css">
 </head>
 <body class="pub">
@@ -27,8 +32,6 @@
 <script src="assets/vendor/lenis.min.js" defer></script>
 <script src="assets/vendor/gsap.min.js" defer></script>
 <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
-<script src="assets/vendor/three.min.js" defer></script>
-<script src="assets/vendor/vanta.net.min.js" defer></script>
 <script src="assets/js/motion.js" defer></script>
 <script src="assets/data/public_data.v1.js"></script>
 <script src="assets/data/public_fixture.v1.js"></script>

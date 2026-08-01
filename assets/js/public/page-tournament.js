@@ -324,7 +324,17 @@
     standings: panelStandings, teams: panelTeams, maps: panelMaps,
     vods: panelVods, capture: panelCapture,
   };
-  Object.entries(panels).forEach(([k, fn]) => { P.$("#panel-" + k).innerHTML = fn(); });
+  /* Each tab panel is a top-level section of this page, but its name lives
+     in the tab button, so the panel itself had no heading — which left the
+     page going straight from its h1 to the panels' h3s (a reported
+     heading-order skip) and gave screen-reader users no way to jump to a
+     panel's content by heading. One visually-hidden h2 per panel fixes
+     both; the visible label is still the tab. */
+  Object.entries(panels).forEach(([k, fn]) => {
+    const label = (TABS.find((t) => t[0] === k) || [k, k])[1];
+    P.$("#panel-" + k).innerHTML =
+      `<h2 class="visually-hidden">${esc(label)}</h2>` + fn();
+  });
   P.initTabs(root.querySelector(".tabs").parentElement, { hashKey: "tab" });
   P.observeReveals(root);
   root.querySelectorAll("[data-count-to]").forEach((el) => P.countUp && P.countUp(el));

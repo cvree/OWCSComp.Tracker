@@ -67,7 +67,7 @@
   P.$("#t-head").innerHTML = `
     <div class="split" style="align-items:center;gap:18px;flex-wrap:wrap">
       <div class="cluster" style="gap:14px">
-        ${P.teamPlate(id, { size: "lg" })}
+        <h1 class="entity-title">${P.teamPlate(id, { size: "lg" })}</h1>
         ${P.badgeRegion(team.region)}
         ${statusNote}
         ${recencyHtml}

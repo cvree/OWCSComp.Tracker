@@ -468,7 +468,16 @@
     const rank = (c) => (c.likeness && c.likeness.confidence === "likely" ? 0 : 2)
       + (c.job ? 1 : 0);
     const rows = cands.slice().sort((a, b) => rank(a) - rank(b));
-    root.innerHTML = head + errHtml + rows.map(mfCandidate).join("");
+    /* The discovery feed is ~90 rows and grows with every scan. Rendered
+       flat it made portal.html a 7,600px page whose last two sections
+       (the pipeline explainer and the results links) were effectively
+       unreachable. The list keeps every row and every link — it just
+       scrolls in its own well instead of scrolling the document. */
+    root.innerHTML = head + errHtml
+      + `<div class="mf-well" data-scroll-region tabindex="0" role="group"
+              aria-label="Discovered broadcasts (${rows.length})">`
+      + rows.map(mfCandidate).join("")
+      + `</div>`;
   }
 
   function loadMatchFinder() {

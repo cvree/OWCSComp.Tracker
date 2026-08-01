@@ -30,6 +30,26 @@
     window.matchMedia("(hover: hover) and (pointer: fine)").matches;
   const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
 
+  /* Where the vendored libraries live, derived from this file's own URL so
+     it keeps working from any directory depth without a build step. */
+  const SELF = (document.currentScript && document.currentScript.src) || "";
+  const VENDOR = /\/js\/motion\.js/.test(SELF)
+    ? SELF.replace(/\/js\/motion\.js.*$/, "/vendor/")
+    : "assets/vendor/";
+
+  const loaded = Object.create(null);
+  function loadScript(src) {
+    if (loaded[src]) return loaded[src];
+    loaded[src] = new Promise((resolve, reject) => {
+      const s = document.createElement("script");
+      s.src = src; s.async = true;
+      s.onload = resolve;
+      s.onerror = () => reject(new Error("load failed: " + src));
+      document.head.appendChild(s);
+    });
+    return loaded[src];
+  }
+
   const M = (window.OWCSMotion = {
     reduced,
     booted: false,
@@ -475,9 +495,43 @@
     return true;
   }
 
-  /* atmosphere(holder): best available ambience into an existing layer */
+  /* atmosphere(holder): best available ambience into an existing layer.
+
+     three.js is 616 KB — measured as the single largest asset on every
+     public page. Loading it with <script defer> put it in front of
+     DOMContentLoaded, and the public shell builds its header, nav and
+     footer on DOMContentLoaded, so a decorative WebGL background was
+     gating the site's chrome on 616 KB of download. It is now fetched
+     only after the page is idle, only when it can actually be used, and
+     the cheap 2D canvas net paints immediately in the meantime. Nothing
+     about the page's completeness depends on either arriving. */
   M.atmosphere = function (holder) {
-    return safely("atmosphere", () => vanta(holder) || canvasNet(holder)) || false;
+    if (reduced) return false;
+    // small screens and no-WebGL devices never pay for three.js at all
+    if (innerWidth < 760 || !webglOK())
+      return safely("atmosphere", () => canvasNet(holder)) || false;
+    safely("atmosphere", () => canvasNet(holder));
+    /* a page declares its ambience libraries with
+       <meta name="owcs-ambience" content="a.js,b.js">; otherwise they
+       resolve next to this file */
+    const metaEl = document.querySelector('meta[name="owcs-ambience"]');
+    const declared = ((metaEl && metaEl.content) || "")
+      .split(",").map((s) => s.trim()).filter(Boolean);
+    const srcs = declared.length
+      ? declared
+      : [VENDOR + "three.min.js", VENDOR + "vanta.net.min.js"];
+    const upgrade = () =>
+      srcs.reduce((chain, src) => chain.then(() => loadScript(src)), Promise.resolve())
+        .then(() => {
+          if (M.vantaFx || !window.VANTA || !window.VANTA.NET) return;
+          // swap the 2D net for the real grid, then drop the placeholder
+          const c = holder.querySelector("canvas");
+          if (vanta(holder) && c) c.remove();
+        })
+        .catch(() => { /* 2D net already on screen — nothing to do */ });
+    if ("requestIdleCallback" in window) requestIdleCallback(upgrade, { timeout: 3000 });
+    else setTimeout(upgrade, 1500);
+    return true;
   };
 
   /* ---- boot ----------------------------------------------------------- */

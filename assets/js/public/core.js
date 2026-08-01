@@ -193,7 +193,14 @@
   };
   P.heroStrip = (heroIds, opt) =>
     `<span class="hero-strip">${(heroIds || []).map((h) => P.heroTile(h, opt)).join("")}</span>`;
+  /* A scoreboard reading "– : –" looks like a rendering fault. When the
+     export carries no scoreline at all, say so in words instead of
+     drawing an empty scoreboard — the distinction between "0–0" and "we
+     never read this" is the whole point of the site. Nothing is invented
+     in either branch. */
   P.scorePlate = (a, b, winner) => {
+    if (a == null && b == null)
+      return `<span class="score-none" title="No series score was recorded in the export">not recorded</span>`;
     const va = a == null ? "–" : a, vb = b == null ? "–" : b;
     return `<span class="score-plate" aria-label="score ${esc(va)} to ${esc(vb)}">
       <span class="s-a${winner === "a" ? " win" : ""}">${esc(va)}</span>

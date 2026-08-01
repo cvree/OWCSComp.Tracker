@@ -5,6 +5,15 @@
    Signature element: segmented capture-bar meters for every rate stat.
    ===================================================================== */
 
+/* Skip link — the control-room shell had none, so a keyboard user landing
+   on portal.html had to tab the whole masthead before reaching content. */
+.skip-link {
+  position: absolute; left: -9999px; top: 0; z-index: 400;
+  background: var(--amber, #ffa92b); color: #1a1204; padding: 10px 16px;
+  font-weight: 700; border-radius: 0 0 4px 0; text-decoration: none;
+}
+.skip-link:focus { left: 0; }
+
 :root {
   /* Palette — control-room v2 */
   --bg: #060b15;          /* deep field */
@@ -100,7 +109,9 @@ a:hover { text-decoration: underline; }
 .brand {
   font-family: var(--display); font-weight: 700; font-size: 1.05rem;
   color: var(--text); display: flex; align-items: center; gap: 9px;
+  white-space: nowrap; flex: none; min-width: 0;
 }
+.brand-word, .brand-tag { white-space: nowrap; }
 .brand:hover { text-decoration: none; }
 .brand-mark {
   width: 22px; height: 22px; border-radius: 6px;
@@ -111,10 +122,15 @@ a:hover { text-decoration: underline; }
   content: ""; position: absolute; inset: 6px;
   border-radius: 3px; background: var(--bg);
 }
-.nav-links { display: flex; gap: 4px; margin-left: auto; }
+.nav-links { display: flex; gap: 4px; margin-left: auto; flex: 0 1 auto; min-width: 0; }
+/* Without nowrap every masthead item wrapped mid-phrase at 1440px —
+   "OWCS Comp / Tracker", "operator / portal", "How it / works". Flex
+   shrinks items before it lets a row overflow, and these have no
+   intrinsic minimum without it. */
 .nav-links a {
   color: var(--muted); font-size: .92rem; font-weight: 500;
   padding: 7px 12px; border-radius: 7px;
+  white-space: nowrap; flex: none;
 }
 .nav-links a:hover { color: var(--text); text-decoration: none; background: var(--bg-raise); }
 .nav-links a.active { color: var(--amber); background: var(--amber-soft); }
@@ -410,9 +426,16 @@ td.num { font-family: var(--display); font-weight: 600; white-space: nowrap; }
 }
 @media (max-width: 560px) {
   .grid-3, .grid-2, .team-grid, .pipeline { grid-template-columns: 1fr; }
-  .nav-links { overflow-x: auto; }
   .hero { padding-top: 52px; }
   .match-stage { display: none; }
+}
+/* The masthead links do not wrap mid-phrase any more, so below the width
+   where they all fit the strip has to scroll inside itself — otherwise
+   nowrap simply widens the document (measured: 104px of horizontal page
+   scroll at 768px). */
+@media (max-width: 1080px) {
+  .nav-links { overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .nav-links::-webkit-scrollbar { display: none; }
 }
 
 /* ---- Milestone 1 analyst + FACEIT metadata -------------------------- */

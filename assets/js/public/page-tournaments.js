@@ -49,6 +49,15 @@
       </div>
       <div class="t-card__badges">
         ${P.badgeRegion(t.region)} ${P.badgeTier(t.tier)} ${P.chipStatus(t.status)}
+        ${/* The export can carry an event status that its own match records
+              contradict (an "upcoming" event whose every match is final).
+              A tracker that prints both claims side by side without saying
+              they disagree is asking to be believed twice. No value is
+              changed or invented here — the disagreement is just named. */
+          t.status === "upcoming" && matches.length && done === matches.length
+            ? `<span class="chip" data-cap="needs-review"
+                 title="The event record still says upcoming, but every match on it is final. The event status has not been re-synced.">status not re-synced</span>`
+            : ""}
       </div>
       <div class="t-card__facts">
         <span><span class="mono">📅</span> ${esc(P.fmtRange(t.startsAt, t.endsAt))}</span>

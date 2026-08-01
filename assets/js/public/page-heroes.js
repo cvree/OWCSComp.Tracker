@@ -59,6 +59,23 @@
     </a>`;
   }
 
+  /* The "not yet sighted" list is 44 of the 52 heroes, and every one of
+     those cards carried the identical "—  /  no verified pick" payload.
+     Rendered at full card size that was ~1900px of repeated nothing — more
+     than half the page — burying the eight heroes that DO have data.
+     Same heroes, same links, no data removed: just the two facts that
+     differ per row (name, role) at directory density. */
+  function heroChip(h) {
+    const face = P.assets ? P.assets.heroOfficialFace(h, { px: 30 }) : "";
+    const roleIc = P.assets ? P.assets.roleIcon(h.role) : "";
+    return `<a class="hero-chip" data-role="${esc(h.role)}" href="hero.html?id=${esc(h.id)}"
+        title="Open hero page — ${esc(h.name)} (${esc(h.role)}, no verified pick yet)">
+      <span class="hero-chip__face">${face}</span>
+      <span class="hero-chip__name">${esc(h.name)}</span>
+      <span class="hero-chip__role">${roleIc}<span class="visually-hidden">${esc(h.role)}</span></span>
+    </a>`;
+  }
+
   function render() {
     const role = $("#hx-role").value;
     const q = $("#hx-search").value.trim().toLowerCase();
@@ -81,7 +98,7 @@
         q || role !== "all"
           ? "No hero with verified appearances matches this filter."
           : "No verified comps in the dataset yet — run the pipeline export.");
-    $("#hx-dormant").innerHTML = dormant.map(heroCard).join("");
+    $("#hx-dormant").innerHTML = dormant.map(heroChip).join("");
     $("#hx-dormant-count").textContent = `(${dormant.length})`;
     $("#hx-summary").textContent =
       `${live.length} in the meta · ${dormant.length} awaiting proof`;

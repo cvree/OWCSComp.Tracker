@@ -54,12 +54,17 @@
           ${P.teamPlate(m.teamA, { win: winA, tbd: m.tbdNote })}
           ${P.teamPlate(m.teamB, { win: winB, tbd: m.tbdNote })}
         </div>
-        <span class="cluster">
+        <span class="m-card__right">
           ${scored ? P.scorePlate(m.scoreA, m.scoreB, winA ? "a" : winB ? "b" : null) : ""}
-          ${m.status === "live" && m.streamUrl ? `<span class="btn btn--gold" style="pointer-events:none">Watch</span>` : ""}
+          ${m.status === "live" && m.streamUrl
+            ? `<span class="chip" data-st="live">Stream live</span>` : ""}
+          ${/* the "does this one have hero data yet" answer is the reason
+                anyone scans this list, so it sits opposite the teams
+                instead of on its own full-width line under a card that was
+                otherwise 1200px of empty */ ""}
+          ${dataLine(m)}
         </span>
       </div>
-      ${dataLine(m)}
     </a>`;
   }
 

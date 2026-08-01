@@ -31,8 +31,25 @@
     { label: hero.name },
   ]);
 
-  /* ---- header ---- */
-  const face = P.assets ? P.assets.heroFace(hero, { px: 120 }) : "";
+  /* ---- stats (computed before the header: the dossier portrait depends
+     on whether this hero has any evidence at all) ---- */
+  const detail = S.heroDetail(heroId, {});
+  const row = detail.row || null;
+  const swaps = (D.heroSwaps || []).filter(
+    (s) => s.status === "confirmed" && (s.fromHero === heroId || s.toHero === heroId));
+  const hasAnyData = !!((row && row.picks) || detail.teams.length || swaps.length);
+
+  /* ---- header ----
+     A hero with verified picks shows the EVIDENCE face (a real broadcast
+     crop, or the monogram if none was harvested). A hero with no picks has
+     no evidence to show, so it shows the same official reference art the
+     directory card already shows for it — otherwise clicking a hero card
+     made its portrait disappear and turn into a letter. */
+  const face = P.assets
+    ? (row && row.picks
+      ? P.assets.heroFace(hero, { px: 120 })
+      : P.assets.heroOfficialFace(hero, { px: 120 }))
+    : "";
   const roleIc = P.assets ? P.assets.roleIcon(hero.role) : "";
   $("#hero-head").dataset.role = hero.role;
   $("#hero-head").innerHTML = `
@@ -45,12 +62,6 @@
         <span class="badge">${esc(hero.id)}</span>
       </div>
     </div>`;
-
-  /* ---- stats ---- */
-  const detail = S.heroDetail(heroId, {});
-  const row = detail.row || null;
-  const swaps = (D.heroSwaps || []).filter(
-    (s) => s.status === "confirmed" && (s.fromHero === heroId || s.toHero === heroId));
 
   /* A hero page has to answer "is there any data on this hero?" before it
      shows a single zero — otherwise four "—" cards read like a broken page
@@ -218,6 +229,23 @@
     renderOfficial(man);
   });
   else renderProv(null);
+
+  /* A hero nobody has been proven to play produced four separate panels
+     all saying the same thing — the status banner, then "no verified
+     appearances", "no confirmed swaps" and "nothing on record yet", about
+     500px of restating one fact. The banner above says it once, with the
+     links that actually help. The empty sections come back the moment
+     there is anything to put in them. */
+  if (!hasAnyData) {
+    ["#hero-teams-empty", "#hero-swaps-empty", "#hero-apps-empty"].forEach((sel) => {
+      const el = $(sel);
+      if (el) el.hidden = true;
+    });
+    P.$$("section.section").forEach((sec) => {
+      const lbl = sec.getAttribute("aria-label") || "";
+      if (/Teams running|Confirmed swaps|Verified appearances/.test(lbl)) sec.hidden = true;
+    });
+  }
 
   P.observeReveals && P.observeReveals(document);
 })();

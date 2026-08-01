@@ -73,7 +73,12 @@
           <span>${D && D.meta && D.meta.demo ? "demo dataset" : "production"}</span>
         </div>
       </div>`;
-    document.body.prepend(header);
+    /* The skip link must stay the FIRST thing a keyboard user reaches.
+       Prepending the header ahead of it made "Skip to content" the tenth
+       tab stop — i.e. useless, because you had to tab through the whole
+       nav to reach the control that exists to skip the nav. */
+    const skip = document.querySelector(".skip-link");
+    if (skip) skip.after(header); else document.body.prepend(header);
     if (D && D.meta && D.meta.demo) {
       const ribbon = document.createElement("div");
       ribbon.className = "demo-ribbon";
@@ -245,7 +250,7 @@
     f.innerHTML = `
       <div class="pub-footer__inner">
         <div>
-          <h3>OWCS Comp Tracker</h3>
+          <h2>OWCS Comp Tracker</h2>
           <p>Professional Overwatch schedules, brackets, results and — the part nobody else has — verified team compositions, extracted from broadcast video and reviewed by a human.</p>
           <p>Statistics on this site only count comps whose review status is <b>reviewed</b> or <b>auto-high</b>; everything traces back to frames, crops and match scores. Match facts come from FACEIT, official pages or manual entry; hero comps never come from FACEIT.</p>
           <p class="pub-footer__meta">
@@ -254,7 +259,7 @@
           </p>
         </div>
         <div>
-          <h3>More data</h3>
+          <h2>More data</h2>
           <ul>
             <li><a href="tournaments.html">Tournaments</a></li>
             <li><a href="comps.html">Compositions</a></li>
@@ -263,7 +268,7 @@
           </ul>
         </div>
         <div>
-          <h3>Behind the data</h3>
+          <h2>Behind the data</h2>
           <ul>
             <li><a href="how-it-works.html">How it works (start here)</a></li>
             <li><a href="how-it-works.html#glossary">What the badges mean</a></li>
@@ -305,29 +310,92 @@
     if (window.OWCSMotion) window.OWCSMotion.boot({ ambience: false });
     if (reduced) return;
     document.documentElement.classList.add("motion-on");
+
+    /* Content on this site is the product. A scroll reveal may delay it;
+       it may NEVER be able to withhold it. Every path below therefore
+       ends in a guaranteed-visible state:
+         - `.rv-in` is added FIRST (CSS alone then makes the element
+           visible), so an interrupted or missing GSAP tween cannot leave
+           a card at opacity 0;
+         - `clearProps` drops the inline styles GSAP wrote when it lands;
+         - a watchdog reveals anything still pending a few seconds after
+           load, so print, find-in-page, deep links that jump past a
+           section, in-page anchors and headless renderers can never see
+           an empty page. Round 1 measured 10 permanently-invisible blocks
+           on the home page and 2 hidden match rows on /matches. */
+    const pending = new Set();
     const reveal = (els) => {
+      els = els.filter((e) => pending.has(e));
+      if (!els.length) return;
+      els.forEach((e) => { pending.delete(e); e.classList.add("rv-in"); });
       if (window.gsap) {
         window.gsap.to(els, {
           opacity: 1, y: 0, duration: 0.5, ease: "power2.out",
-          stagger: 0.06, overwrite: true,
-          onComplete: () => els.forEach((e) => e.classList.add("rv-in")),
+          stagger: 0.06, overwrite: true, clearProps: "opacity,transform",
         });
       } else {
-        els.forEach((e) => e.classList.add("rv-in"));
+        els.forEach((e) => { e.style.opacity = ""; e.style.transform = ""; });
       }
     };
-    const pending = new Set(document.querySelectorAll(".rv"));
-    if (!("IntersectionObserver" in window)) { reveal(Array.from(pending)); return; }
-    const io = new IntersectionObserver((entries) => {
-      const batch = [];
-      for (const en of entries)
-        if (en.isIntersecting) { batch.push(en.target); io.unobserve(en.target); }
-      if (batch.length) reveal(batch);
-    }, { rootMargin: "0px 0px -6% 0px" });
-    pending.forEach((el) => io.observe(el));
-    P.observeReveals = (root) => {
-      (root || document).querySelectorAll(".rv:not(.rv-in)").forEach((el) => io.observe(el));
+    const revealAll = () => reveal(Array.from(pending));
+
+    const arm = (root) => {
+      const fresh = Array.from((root || document).querySelectorAll(".rv:not(.rv-in)"))
+        .filter((el) => !pending.has(el));
+      if (!fresh.length) return;
+      fresh.forEach((el) => pending.add(el));
+      if (!io) { reveal(fresh); return; }
+      /* anything already in (or just under) the first screen is part of
+         the page, not a scroll surprise — reveal it now so the first
+         paint is complete and LCP isn't gated on an observer tick */
+      const above = [], below = [];
+      fresh.forEach((el) =>
+        (el.getBoundingClientRect().top < innerHeight * 0.95 ? above : below).push(el));
+      if (above.length) reveal(above);
+      below.forEach((el) => io.observe(el));
     };
+
+    const io = "IntersectionObserver" in window
+      ? new IntersectionObserver((entries) => {
+        const batch = [];
+        for (const en of entries)
+          if (en.isIntersecting) { batch.push(en.target); io.unobserve(en.target); }
+        if (batch.length) reveal(batch);
+      }, { rootMargin: "0px 0px -6% 0px" })
+      : null;
+
+    P.observeReveals = (root) => arm(root);
+    arm(document);
+
+    /* Watchdog. Two competing requirements:
+         - content must never be withheld from a reader who does not
+           scroll (print, find-in-page, a deep link that jumps past a
+           section, a screenshot tool, some assistive tech);
+         - a reader who IS scrolling should still get the reveal they
+           came for, all the way down a long page.
+       So: if nothing has scrolled by the deadline, show everything —
+       nobody is watching, so there is no animation to lose. Once real
+       scrolling is observed the observer is demonstrably working and the
+       deadline is pushed out, with a hard ceiling that still guarantees
+       nothing stays hidden forever. */
+    let scrolled = false;
+    let watchdog = null;
+    const armWatchdog = (ms) => {
+      clearTimeout(watchdog);
+      watchdog = setTimeout(() => {
+        if (!scrolled) { revealAll(); return; }
+        scrolled = false;
+        armWatchdog(8000);          // still scrolling — check again later
+      }, ms);
+    };
+    armWatchdog(4000);
+    addEventListener("scroll", () => { scrolled = true; }, { passive: true });
+    setTimeout(revealAll, 30000);   // hard ceiling, whatever else happened
+    addEventListener("beforeprint", revealAll);
+    if (window.matchMedia) {
+      const mq = window.matchMedia("print");
+      if (mq.addEventListener) mq.addEventListener("change", (e) => { if (e.matches) revealAll(); });
+    }
   }
   P.observeReveals = P.observeReveals || function () {};
 

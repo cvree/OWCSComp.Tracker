@@ -35,6 +35,9 @@
     ].filter(Boolean);
     return `
       ${P.breadcrumbs(crumbs)}
+      <h1 class="visually-hidden">${esc(
+        (P.team(m.teamA) || {}).name || "TBD")} versus ${esc(
+        (P.team(m.teamB) || {}).name || "TBD")}${t ? " — " + esc(t.name) : ""}</h1>
       <div class="event-head rv" style="margin-top:12px">
         <div class="cluster" style="justify-content:center">
           ${P.chipStatus(m.status)} ${P.chipCapture(m.captureStatus)}
@@ -44,11 +47,19 @@
         <div class="vs-band">
           <div class="side-a">${P.teamPlate(m.teamA, { size: "lg", win: winA, tbd: m.tbdNote, link: true })}</div>
           <div class="vs-center">
-            <div class="vs-score" aria-label="Series score">
-              <span class="${winA ? "win" : ""}">${m.scoreA == null ? "–" : m.scoreA}</span>
-              <span class="vs-dash">:</span>
-              <span class="${winB ? "win" : ""}">${m.scoreB == null ? "–" : m.scoreB}</span>
-            </div>
+            ${/* A 52px "– : –" reads as a rendering fault, not as "no score
+                  was ever recorded". When the export carries no series
+                  score, say that in words instead of drawing a broken
+                  scoreboard. No score is invented either way. */
+              m.scoreA == null && m.scoreB == null
+                ? `<div class="vs-score vs-score--none" aria-label="Series score not recorded">
+                     <span class="vs-noscore">no series score<small>not read from the broadcast</small></span>
+                   </div>`
+                : `<div class="vs-score" aria-label="Series score">
+                     <span class="${winA ? "win" : ""}">${m.scoreA == null ? "–" : m.scoreA}</span>
+                     <span class="vs-dash">:</span>
+                     <span class="${winB ? "win" : ""}">${m.scoreB == null ? "–" : m.scoreB}</span>
+                   </div>`}
             <span class="mono dim" style="font-size:12px">${esc(P.fmtLocal(m.scheduledAt))} <span class="faint">(${esc(P.fmtRel(m.scheduledAt))})</span></span>
           </div>
           <div class="side-b">${P.teamPlate(m.teamB, { size: "lg", win: winB, tbd: m.tbdNote, link: true })}</div>
@@ -150,7 +161,7 @@
     return `<div class="stack">
       ${m.summary ? `<p class="dim" style="max-width:70ch;margin:0">${esc(m.summary)}</p>` : ""}
       <div class="stat-cards">
-        <div class="card stat-card"><span class="sc-num">${(m.maps || []).length || "—"}</span><span class="sc-label">Maps played</span></div>
+        <div class="card stat-card"><span class="sc-num">${(m.maps || []).length || "—"}</span><span class="sc-label">${(m.maps || []).length === 1 ? "Map played" : "Maps played"}</span></div>
         <div class="card stat-card"><span class="sc-num">${comps.length}</span><span class="sc-label">Verified comps</span><span class="sc-sub">reviewed or auto-high only</span></div>
         <div class="card stat-card"><span class="sc-num" style="font-size:20px;padding-top:6px">${P.chipCapture(m.captureStatus)}</span><span class="sc-label">Capture pipeline</span></div>
       </div>
@@ -398,7 +409,17 @@
   /* ---------- assemble ---------- */
   root.innerHTML = head() + tabsHtml();
   const panels = { overview: panelOverview, maps: panelMaps, bans: panelBans, comps: panelComps, vod: panelVod, evidence: panelEvidence, review: panelReview };
-  Object.entries(panels).forEach(([k, fn]) => { P.$("#panel-" + k).innerHTML = fn(); });
+  /* Each tab panel is a top-level section of this page, but its name lives
+     in the tab button, so the panel itself had no heading — which left the
+     page going straight from its h1 to the panels' h3s (a reported
+     heading-order skip) and gave screen-reader users no way to jump to a
+     panel's content by heading. One visually-hidden h2 per panel fixes
+     both; the visible label is still the tab. */
+  Object.entries(panels).forEach(([k, fn]) => {
+    const label = (TABS.find((t) => t[0] === k) || [k, k])[1];
+    P.$("#panel-" + k).innerHTML =
+      `<h2 class="visually-hidden">${esc(label)}</h2>` + fn();
+  });
   const tabApi = P.initTabs(root.querySelector(".tabs").parentElement, { hashKey: "tab" });
   root.addEventListener("click", (e) => {
     const goto = e.target.closest && e.target.closest("[data-goto-tab]");

@@ -159,9 +159,16 @@
           const id = el.getAttribute("data-hero-official");
           const e = ho[id];
           if (!e || !e.portrait || !e.portrait.path) return;
-          const px = el.getAttribute("data-hero-official-px") || 96;
+          const px = +(el.getAttribute("data-hero-official-px") || 96);
           const img = document.createElement("img");
-          img.src = e.portrait.path;
+          /* The manifest already ships a WebP of every portrait (~8 KB vs
+             ~44-92 KB for the PNG) and a 64px icon. The hero directory was
+             pulling 256px PNGs into 30-52px cells — measured 4.0 MB for
+             heroes.html. Pick the smallest asset that still covers the
+             rendered box at 2x; the PNG stays the fallback. */
+          const src = (px <= 32 && e.icon && (e.icon.webp || e.icon.path)) ||
+            (e.portrait.webp || e.portrait.path);
+          img.src = src;
           img.alt = "";
           img.loading = "lazy";
           img.width = px;
