@@ -101,9 +101,12 @@ def check_video_sources(root: str) -> None:
         sid, layout = s.get("id"), s.get("layout")
         if not sid or not layout:
             continue
-        exists = os.path.exists(os.path.join(root, layout))
+        # NB: not named `exists` — that shadows this module's exists() helper
+        # inside this function, so any later use of the helper here would
+        # raise TypeError instead of checking anything.
+        has_layout = os.path.exists(os.path.join(root, layout))
         if s.get("enabled") is False:
-            if exists:
+            if has_layout:
                 ok(f"{sid}: disabled, layout present")
             elif s.get("disabledReason"):
                 ok(f"{sid}: disabled with a recorded reason "
@@ -111,7 +114,7 @@ def check_video_sources(root: str) -> None:
             else:
                 bad(f"{sid}: layout {layout} missing AND no disabledReason — "
                     f"record why this source cannot run, or remove it")
-        elif exists:
+        elif has_layout:
             ok(f"{sid}: layout {layout}")
         else:
             bad(f"{sid} is ENABLED but its layout {layout} does not exist — "
@@ -302,21 +305,36 @@ def check_public_export(root: str) -> None:
     else:
         bad("Nepal match/winner missing from public export")
     dangling = 0
+    checked = 0
     for r in d.get("captureRuns", []):
         for fr in r.get("frames", []):
-            if fr.get("file") and not exists(root, fr["file"]):
-                dangling += 1
+            if fr.get("file"):
+                checked += 1
+                if not exists(root, fr["file"]):
+                    dangling += 1
         for c in r.get("crops", []):
-            if c and not exists(root, c):
-                dangling += 1
+            if c:
+                checked += 1
+                if not exists(root, c):
+                    dangling += 1
     for s in d.get("compSnapshots", []):
         ev = s.get("evidenceFrame")
-        if ev and not exists(root, ev):
-            dangling += 1
-    if dangling == 0:
-        ok("all production evidence paths resolve")
+        if ev:
+            checked += 1
+            if not exists(root, ev):
+                dangling += 1
+    # `dangling == 0` alone is a VACUOUS pass: an export that lost its
+    # capture runs and comp snapshots entirely has nothing to dangle, and
+    # the gate would have reported "all evidence paths resolve" while the
+    # click-through evidence the whole product rests on had vanished.
+    if checked == 0:
+        bad("the production export contains NO evidence paths at all — "
+            "capture-run frames/crops and comp-snapshot evidence are the "
+            "click-through proof; an export without them is not publishable")
+    elif dangling == 0:
+        ok(f"all {checked} production evidence paths resolve")
     else:
-        bad(f"{dangling} production evidence path(s) do not resolve")
+        bad(f"{dangling}/{checked} production evidence path(s) do not resolve")
 
 
 def check_fixture(root: str) -> None:
@@ -326,16 +344,22 @@ def check_fixture(root: str) -> None:
         bad("public_fixture.v1.js missing or unparseable")
         return
     dangling = 0
+    checked = 0
     for r in d.get("captureRuns", []):
         for path in ([r.get("reportPath")]
                      + [fr.get("file") for fr in r.get("frames", [])]
                      + list(r.get("crops", []))):
-            if path and not exists(root, path):
-                dangling += 1
-    if dangling == 0:
-        ok("all fixture evidence paths resolve")
+            if path:
+                checked += 1
+                if not exists(root, path):
+                    dangling += 1
+    if checked == 0:
+        bad("the dev fixture contains NO evidence paths — the click-through "
+            "rule it exists to demonstrate is unverifiable")
+    elif dangling == 0:
+        ok(f"all {checked} fixture evidence paths resolve")
     else:
-        bad(f"{dangling} fixture evidence path(s) do not resolve")
+        bad(f"{dangling}/{checked} fixture evidence path(s) do not resolve")
 
 
 def check_pages(root: str) -> None:
@@ -346,7 +370,8 @@ def check_pages(root: str) -> None:
         if not os.path.exists(p):
             bad(f"{page} missing")
             continue
-        s = open(p, encoding="utf-8").read()
+        with open(p, encoding="utf-8") as fh:
+            s = fh.read()
         i_prod = s.find("public_data.v1.js")
         i_fix = s.find("public_fixture.v1.js")
         if 0 <= i_prod < i_fix:

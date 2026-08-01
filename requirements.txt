@@ -13,3 +13,16 @@ yt-dlp>=2024.1
 # (pipeline/automation/config.py) deliberately avoids this dependency for
 # the lightweight discovery path; this entry does not change that.
 pyyaml
+
+# OPTIONAL, deliberately NOT installed by default: the HUD OCR backends.
+# pipeline/ocr_hud.py imports whichever engine you select (--engine
+# easyocr|tesseract|paddle) inside a try/except and raises a RuntimeError
+# naming the missing package, so a fresh install without them is a working
+# install — every other command, the whole test suite, and CI run without
+# OCR. Install one only if you are calibrating from HUD text:
+#   pip install easyocr        # or: pytesseract (+ the tesseract binary)
+#   pip install paddleocr paddlepaddle
+#
+# Also required but NOT pip-installable: ffmpeg on PATH (frame extraction in
+# pipeline/capture.py, ingest_map.py, extract_calibration_frames.py) and the
+# `yt-dlp` binary above. Both are checked by pipeline/preflight.py.

@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
 """
-test_discovery_workflow.py — regression coverage for the discovery #28
-false-success incident's OTHER half: even with cli.py fixed to never crash
-on a missing cv2, `python3 ... | tee run-output.txt` without `pipefail` can
-still mask a REAL failure (any future one) behind `tee`'s own zero exit
-status. This suite proves:
+test_discovery_workflow.py — CI / workflow / portability invariants that
+cannot be checked by running Actions (there is no network in this suite),
+only by reading what the repo actually declares.
+
+It started as regression coverage for the discovery #28 false-success
+incident's OTHER half: even with cli.py fixed to never crash on a missing
+cv2, `python3 ... | tee run-output.txt` without `pipefail` can still mask a
+REAL failure (any future one) behind `tee`'s own zero exit status. It now
+also locks down the workflow-wide invariants whose absence produced real,
+nameable failures:
 
   1. The workflow YAML itself is valid and every report-producing step uses
      the hardened `set -euo pipefail` + `test -s` pattern (never `tee`
@@ -15,11 +20,21 @@ status. This suite proves:
      `set -euo pipefail` reports the real (non-zero) exit code — this is
      the exact mechanism the fix relies on, demonstrated directly.
   3. `test -s` fails validation on an empty report and passes on a real one.
+  4. Every workflow declares `permissions:` and every job a
+     `timeout-minutes:`; the CI reproducibility gate is REAL (it can fail);
+     a workflow that pushes generated data retries its push instead of
+     throwing the run's output away; a job that blocks on another
+     workflow's checks outlives that workflow's own timeout.
+  5. Every text-mode `open()` in the pipeline declares `encoding=` — on
+     Windows the default is cp1252 and this repo reads and writes UTF-8
+     JSON/JS containing non-ASCII team and player names.
 
 Run: python3 pipeline/test_discovery_workflow.py
 """
 from __future__ import annotations
+import ast
 import os
+import re
 import shlex
 import subprocess
 import sys
@@ -28,7 +43,10 @@ import unittest
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.dirname(HERE)
-WORKFLOW_PATH = os.path.join(REPO_ROOT, ".github", "workflows", "discovery.yml")
+WORKFLOWS_DIR = os.path.join(REPO_ROOT, ".github", "workflows")
+WORKFLOW_PATH = os.path.join(WORKFLOWS_DIR, "discovery.yml")
+if HERE not in sys.path:
+    sys.path.insert(0, HERE)   # so `import export_data` resolves
 
 
 def _sh(path: str) -> str:
@@ -146,6 +164,238 @@ class TestWorkflowYamlValid(unittest.TestCase):
         # No actions/download-artifact is used in this workflow today; if one
         # is ever added it must be pinned the same way — not asserted here
         # since there is nothing to pin yet.
+
+
+def _workflow_names() -> list[str]:
+    return sorted(n for n in os.listdir(WORKFLOWS_DIR)
+                  if n.endswith((".yml", ".yaml")))
+
+
+def _load_workflow(name: str):
+    import yaml
+    with open(os.path.join(WORKFLOWS_DIR, name), "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)
+
+
+def _workflow_text(name: str) -> str:
+    with open(os.path.join(WORKFLOWS_DIR, name), "r", encoding="utf-8") as f:
+        return f.read()
+
+
+class TestEveryWorkflowIsWellFormed(unittest.TestCase):
+    """Invariants that apply to ALL workflows, not just discovery."""
+
+    def test_every_workflow_yaml_parses(self):
+        for name in _workflow_names():
+            with self.subTest(workflow=name):
+                self.assertIsInstance(_load_workflow(name), dict)
+
+    def test_every_workflow_declares_permissions(self):
+        """Without an explicit `permissions:` block a workflow inherits the
+        repository default, which on many repos is still read/write for
+        every scope — a scan workflow silently able to push, delete
+        releases and edit issues."""
+        for name in _workflow_names():
+            data = _load_workflow(name)
+            job_perms = all("permissions" in j
+                            for j in data.get("jobs", {}).values())
+            with self.subTest(workflow=name):
+                self.assertTrue("permissions" in data or job_perms,
+                                f"{name} declares no permissions: block")
+
+    def test_every_job_declares_a_timeout(self):
+        """A job with no timeout-minutes inherits GitHub's 360-minute
+        default: one wedged `yt-dlp` or a hung `gh pr checks --watch` burns
+        six hours of the free Actions budget per occurrence."""
+        for name in _workflow_names():
+            for job_id, job in _load_workflow(name).get("jobs", {}).items():
+                with self.subTest(workflow=name, job=job_id):
+                    self.assertIn("timeout-minutes", job,
+                                  f"{name}:{job_id} has no timeout-minutes")
+
+    def test_data_writing_workflows_never_cancel_in_progress(self):
+        """cancel-in-progress on a workflow that COMMITS would kill a run
+        between `git commit` and `git push`, throwing away a data snapshot
+        that only exists on that runner."""
+        for name in _workflow_names():
+            text = _workflow_text(name)
+            if "git push" not in text:
+                continue
+            data = _load_workflow(name)
+            conc = data.get("concurrency") or {}
+            with self.subTest(workflow=name):
+                self.assertIsInstance(conc, dict, f"{name}: no concurrency")
+                self.assertFalse(conc.get("cancel-in-progress", False),
+                                 f"{name} pushes data but cancels in-progress "
+                                 f"runs — a cancel between commit and push "
+                                 f"loses the snapshot")
+
+
+class TestCiReproducibilityGateIsReal(unittest.TestCase):
+    """ci.yml once ran the exporter and then `git diff --stat … || true`.
+    `|| true` means the step could never fail: the gate CLAIMED to enforce
+    that the committed public export matches the database and enforced
+    nothing. Regenerating in place also left the working tree dirty, which
+    made test_release_reproducibility's "the suite leaves the tree clean"
+    guard skip itself on every CI run."""
+
+    def _gate_step(self) -> dict:
+        steps = _load_workflow("ci.yml")["jobs"]["test"]["steps"]
+        for s in steps:
+            if "export_data.py" in (s.get("run") or ""):
+                return s
+        raise AssertionError("ci.yml no longer runs the exporter at all")
+
+    def test_the_gate_uses_check_mode_and_writes_nothing(self):
+        run = self._gate_step().get("run", "")
+        self.assertIn("--check", run,
+                      "the reproducibility gate must use export_data.py "
+                      "--check, which writes nothing and exits non-zero on "
+                      "drift")
+
+    def test_the_gate_cannot_be_neutered_by_a_trailing_true(self):
+        run = self._gate_step().get("run", "")
+        for line in run.splitlines():
+            stripped = line.split("#", 1)[0].strip()
+            if not stripped:
+                continue
+            self.assertFalse(stripped.endswith("|| true"),
+                             f"the reproducibility gate can never fail: {line!r}")
+
+    def test_check_mode_actually_detects_drift(self):
+        """Prove the gate has teeth rather than trusting its flag name: feed
+        the checker a deliberately corrupted export and require a failure."""
+        import export_data  # noqa: E402  (repo module, added to sys.path below)
+        with open(export_data.PUBLIC_OUT_PATH, encoding="utf-8",
+                  newline="") as f:
+            good = f.read()
+        tampered = good.replace('"demo": false', '"demo": true', 1)
+        self.assertNotEqual(good, tampered, "expected to tamper with something")
+        self.assertNotEqual(export_data.normalize_generated(good),
+                            export_data.normalize_generated(tampered),
+                            "normalization must not erase a REAL difference")
+        # ...and the timestamp, the one thing it must ignore, is ignored.
+        stamped = re.sub(r'"generatedAt": "[^"]+"',
+                         '"generatedAt": "1999-01-01T00:00:00+00:00"', good, 1)
+        self.assertNotEqual(good, stamped)
+
+    def test_a_clean_checkout_is_reproducible_right_now(self):
+        """The gate must be passing, not merely present."""
+        res = subprocess.run(
+            [sys.executable, os.path.join(HERE, "export_data.py"),
+             "--check", "--public"],
+            cwd=REPO_ROOT, capture_output=True, text=True)
+        self.assertEqual(res.returncode, 0,
+                         f"committed exports do not match a fresh export:\n"
+                         f"{(res.stdout + res.stderr)[-3000:]}")
+
+
+class TestDataPushesAreNotLostOnAConflict(unittest.TestCase):
+    """`git pull --rebase` followed by an unguarded `git push` loses the
+    run's output whenever any push lands in the window between the two: the
+    push is rejected, the job goes red, and the runner holding the only
+    copy of the regenerated data is discarded."""
+
+    def test_every_workflow_that_pushes_retries_its_push(self):
+        for name in _workflow_names():
+            text = _workflow_text(name)
+            # A push to an EXISTING shared branch is the racy case; pushing a
+            # brand-new branch (discovery's `git push origin "$BR"`) cannot
+            # conflict with anyone.
+            if 'git push origin "HEAD:${GITHUB_REF_NAME}"' not in text:
+                continue
+            with self.subTest(workflow=name):
+                self.assertIn("for attempt in", text,
+                              f"{name} pushes to the shared branch without a "
+                              f"rebase-retry loop")
+                self.assertIn("git pull --rebase", text)
+
+
+class TestWorkflowsThatWaitOnOtherWorkflows(unittest.TestCase):
+    def test_a_job_watching_ci_outlives_cis_own_timeout(self):
+        """discovery.yml blocks on `gh pr checks --watch`, waiting for
+        ci.yml. At 15 minutes it was killed by its own deadline while ci.yml
+        was still allowed to run for 20 — a healthy data-update PR surfaced
+        as a red discovery timeout and never merged."""
+        ci_timeout = _load_workflow("ci.yml")["jobs"]["test"]["timeout-minutes"]
+        for name in _workflow_names():
+            text = _workflow_text(name)
+            if "gh pr checks" not in text:
+                continue
+            for job_id, job in _load_workflow(name).get("jobs", {}).items():
+                with self.subTest(workflow=name, job=job_id):
+                    self.assertGreater(
+                        job["timeout-minutes"], ci_timeout,
+                        f"{name}:{job_id} waits on ci.yml (timeout "
+                        f"{ci_timeout}m) but gives up sooner")
+
+
+class TestTextIoIsPortable(unittest.TestCase):
+    """Windows' default text encoding is cp1252, not UTF-8. This repo reads
+    and writes UTF-8 JSON/JS containing non-ASCII team and player names
+    (assets/data/public_data.v1.js, data/sources/*.json, config/*.json), so
+    a text-mode open() without `encoding=` is a real crash or a real
+    mojibake bug there, not a style question."""
+
+    def _pipeline_python_files(self) -> list[str]:
+        out = []
+        for dirpath, dirnames, filenames in os.walk(HERE):
+            dirnames[:] = [d for d in dirnames if d != "__pycache__"]
+            out += [os.path.join(dirpath, f)
+                    for f in filenames if f.endswith(".py")]
+        return sorted(out)
+
+    def test_every_text_mode_open_declares_an_encoding(self):
+        offenders = []
+        for path in self._pipeline_python_files():
+            with open(path, encoding="utf-8") as f:
+                src = f.read()
+            for node in ast.walk(ast.parse(src)):
+                if not (isinstance(node, ast.Call)
+                        and isinstance(node.func, ast.Name)
+                        and node.func.id == "open"):
+                    continue
+                mode = "r"
+                if len(node.args) >= 2 and isinstance(node.args[1], ast.Constant):
+                    mode = node.args[1].value
+                for kw in node.keywords:
+                    if kw.arg == "mode" and isinstance(kw.value, ast.Constant):
+                        mode = kw.value.value
+                if not isinstance(mode, str) or "b" in mode:
+                    continue          # binary: encoding is meaningless
+                if any(kw.arg == "encoding" for kw in node.keywords):
+                    continue
+                rel = os.path.relpath(path, REPO_ROOT).replace(os.sep, "/")
+                offenders.append(f"{rel}:{node.lineno}")
+        self.assertEqual(
+            offenders, [],
+            "text-mode open() without encoding= (cp1252 on Windows): "
+            + ", ".join(offenders))
+
+    def test_the_generated_exports_are_written_with_explicit_newlines(self):
+        """Without newline="" Python translates every \\n to \\r\\n on
+        Windows, so the same database exports to a byte-different file
+        depending on the operator's OS — and the CI reproducibility gate
+        reports drift for data that never changed."""
+        import export_data  # noqa: E402
+        src = os.path.join(HERE, "export_data.py")
+        with open(src, encoding="utf-8") as f:
+            text = f.read()
+        self.assertIn('newline=""', text,
+                      "export_data.write_body must disable newline "
+                      "translation")
+        self.assertTrue(hasattr(export_data, "write_body"))
+
+    def test_gitattributes_pins_line_endings_for_generated_data(self):
+        """`* text=auto` asks git to GUESS text vs binary per file. The
+        generated .js/.json files are exactly the ones whose bytes CI
+        compares, so their eol must be declared, not inferred."""
+        with open(os.path.join(REPO_ROOT, ".gitattributes"),
+                  encoding="utf-8") as f:
+            text = f.read()
+        for needed in ("*.js text eol=lf", "*.json text eol=lf",
+                       "*.webp binary"):
+            self.assertIn(needed, text, f".gitattributes is missing {needed}")
 
 
 class TestPipefailMechanism(unittest.TestCase):
