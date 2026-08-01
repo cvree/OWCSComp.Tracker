@@ -46,24 +46,69 @@ def is_frozen() -> bool:
     return bool(getattr(sys, "frozen", False))
 
 
+#: A directory is the payload root only if this is in it. Used to tell the
+#: PyInstaller layout apart from the executable's own directory.
+_PAYLOAD_MARKER = "layouts"
+
+
 def app_root() -> str:
     """The installed, read-only payload root.
 
-    Frozen: the directory holding the .exe (PyInstaller onedir), because the
-    installer lays the repository payload down beside it. Unfrozen: the
-    repository root, two levels up from this file
+    Frozen, this is NOT simply the executable's directory. PyInstaller's
+    onedir build puts every bundled data file under `_internal/` beside the
+    .exe (`sys._MEIPASS`), so an app_root() of "wherever the exe is" finds no
+    layouts and no hero templates — the application installs perfectly, starts,
+    and then cannot read a broadcast or identify a hero. So: prefer whichever
+    candidate actually contains the payload, checking `_MEIPASS` first, and
+    fall back to the executable's directory for a layout that puts the payload
+    beside the exe instead.
+
+    Unfrozen: the repository root, two levels up from this file
     (`desktop/owcs_desktop/paths.py`).
     """
     override = os.environ.get("OWCS_APP_ROOT")
     if override:
         return os.path.abspath(override)
     if is_frozen():
-        return os.path.dirname(os.path.abspath(sys.executable))
+        exe_dir = os.path.dirname(os.path.abspath(sys.executable))
+        candidates = [
+            getattr(sys, "_MEIPASS", None),          # onedir: <exe dir>/_internal
+            os.path.join(exe_dir, "_internal"),      # same, without the attr
+            exe_dir,                                 # payload beside the exe
+        ]
+        for candidate in candidates:
+            if candidate and os.path.isdir(os.path.join(candidate,
+                                                        _PAYLOAD_MARKER)):
+                return os.path.abspath(candidate)
+        # Nothing carries the payload. Return the executable's directory so
+        # the health checks report exactly which pieces are missing, rather
+        # than this function raising during startup.
+        return exe_dir
     return os.path.dirname(os.path.dirname(_THIS_DIR))
 
 
 def pipeline_dir() -> str:
     return os.path.join(app_root(), "pipeline")
+
+
+def python_command() -> list[str]:
+    """The command prefix that runs one of this project's Python scripts.
+
+    From source this is just the interpreter. **Frozen it is not**:
+    `sys.executable` is OWCSCompTracker.exe, and there is no `python.exe` in
+    the bundle, so `[sys.executable, "pipeline/thing.py"]` hands the script
+    path to the application's own argument parser and fails with
+    "unrecognized arguments". Every stage that shells out to a pipeline
+    script — the readiness test, the public export, the FACEIT ingest, the
+    control room's job runner — hit that.
+
+    So the frozen build re-enters itself in `--run-script` mode, which
+    executes the given file with the bundled interpreter and stdlib. Use this
+    everywhere instead of `sys.executable` directly.
+    """
+    if is_frozen():
+        return [os.path.abspath(sys.executable), "--run-script"]
+    return [os.path.abspath(sys.executable)]
 
 
 def vendor_dir() -> str:

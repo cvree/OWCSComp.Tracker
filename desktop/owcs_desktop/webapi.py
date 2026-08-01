@@ -669,8 +669,8 @@ def export_public() -> dict[str, Any]:
     paths.apply_environment(env=env)
     try:
         proc = subprocess.run(
-            [sys.executable, os.path.join("pipeline", "export_data.py"),
-             "--public"],
+            paths.python_command()
+            + [os.path.join("pipeline", "export_data.py"), "--public"],
             cwd=app, env=env, capture_output=True, text=True, timeout=900)
     except (OSError, subprocess.SubprocessError) as exc:
         return {"ok": False, "error": mask(str(exc)), "backup": snapshot["id"]}

@@ -356,7 +356,7 @@ def _submit_faceit_match(match_id: str, classification: dict, *,
     url = f"https://www.faceit.com/en/ow2/room/1-{match_id}"
     try:
         proc = runner.run(
-            [sys.executable, script, "--room-url", url],
+            paths.python_command() + [script, "--room-url", url],
             cwd=app, env=env, capture_output=True, text=True, timeout=600)
     except (OSError, subprocess.SubprocessError) as exc:
         return {"ok": False, "error": str(exc), "classification": classification}

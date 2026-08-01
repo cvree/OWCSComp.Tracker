@@ -85,9 +85,25 @@ class TestPayload(unittest.TestCase):
         """PyInstaller's static analysis cannot see modules the pipeline
         imports by name at runtime; missing one produces an exe that starts
         and then fails on the first job."""
-        for module in ("cv2", "numpy", "yt_dlp", "sqlite3",
+        for module in ("cv2", "numpy", "sqlite3",
                        "owcs_desktop.supervisor", "owcs_desktop.webapi"):
             self.assertIn(module, payload.HIDDEN_IMPORTS)
+
+    def test_yt_dlp_ships_as_a_binary_not_a_python_package(self):
+        """The pipeline shells out to the `yt-dlp` binary and never imports
+        the package. Bundling it dragged in ~2,000 extractor modules and the
+        cryptography stack — hundreds of megabytes to ship a second, unused
+        copy of a tool already vendored as an executable."""
+        self.assertNotIn("yt_dlp", payload.HIDDEN_IMPORTS)
+        self.assertIn("yt_dlp", payload.EXCLUDES)
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "fetch_vendor", os.path.join(PACKAGING, "fetch_vendor.py"))
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        self.assertIn("yt-dlp.exe", module.MIN_SIZES,
+                      "yt-dlp is excluded from the bundle but not vendored as "
+                      "a binary either — nothing would download a VOD")
 
     def test_heavy_unused_packages_are_excluded(self):
         for module in ("torch", "matplotlib", "scipy", "paddleocr"):
@@ -377,6 +393,116 @@ class TestCleanMachineWorkflow(unittest.TestCase):
         self.assertIsNotNone(
             updates.INSTALLER_PATTERN.match(name),
             f"the updater would not recognise its own installer, {name}")
+
+
+class TestFrozenMode(unittest.TestCase):
+    """The two ways a frozen build differs from a source checkout. Both of
+    these shipped as bugs until an actual PyInstaller build was run and its
+    own --check and --readiness were executed against it."""
+
+    def setUp(self) -> None:
+        from owcs_desktop import paths
+        self.paths = paths
+        self._frozen = getattr(sys, "frozen", None)
+        self._meipass = getattr(sys, "_MEIPASS", None)
+
+    def tearDown(self) -> None:
+        if self._frozen is None:
+            if hasattr(sys, "frozen"):
+                del sys.frozen
+        else:
+            sys.frozen = self._frozen
+        if self._meipass is None:
+            if hasattr(sys, "_MEIPASS"):
+                del sys._MEIPASS
+        else:
+            sys._MEIPASS = self._meipass
+
+    def test_app_root_finds_the_payload_under_internal(self):
+        """PyInstaller onedir puts bundled data in `_internal/` beside the
+        exe. An app_root() of "the exe's directory" finds no layouts and no
+        hero templates: the app installs, starts, and can never read a
+        broadcast. Caught by running the frozen binary's own --check."""
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmp:
+            exe_dir = os.path.join(tmp, "app")
+            internal = os.path.join(exe_dir, "_internal")
+            os.makedirs(os.path.join(internal, "layouts"))
+            sys.frozen = True
+            sys._MEIPASS = internal
+            try:
+                self.assertEqual(os.path.realpath(self.paths.app_root()),
+                                 os.path.realpath(internal))
+            finally:
+                del sys.frozen, sys._MEIPASS
+
+    def test_app_root_still_works_when_the_payload_sits_beside_the_exe(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmp:
+            os.makedirs(os.path.join(tmp, "layouts"))
+            sys.frozen = True
+            real_executable = sys.executable
+            sys.executable = os.path.join(tmp, "OWCSCompTracker")
+            try:
+                self.assertEqual(os.path.realpath(self.paths.app_root()),
+                                 os.path.realpath(tmp))
+            finally:
+                sys.executable = real_executable
+                del sys.frozen
+
+    def test_python_command_re_enters_the_app_when_frozen(self):
+        """There is no python.exe in the bundle: `sys.executable` IS the
+        application. Every stage that shells out to a pipeline script has to
+        re-enter the app in --run-script mode, or it fails with
+        "unrecognized arguments" on an installed machine while working
+        perfectly from source. Caught by running the frozen --readiness."""
+        self.assertEqual(self.paths.python_command(),
+                         [os.path.abspath(sys.executable)])
+        sys.frozen = True
+        try:
+            command = self.paths.python_command()
+        finally:
+            del sys.frozen
+        self.assertEqual(command[-1], "--run-script")
+        self.assertEqual(command[0], os.path.abspath(sys.executable))
+
+    def test_nothing_shells_out_with_a_bare_sys_executable(self):
+        """The regression guard for the above. A new call site that uses
+        sys.executable directly to run a script re-introduces the bug."""
+        offenders = []
+        targets = [os.path.join(REPO, "desktop", "owcs_desktop", n)
+                   for n in ("health.py", "webapi.py", "intake.py")]
+        targets.append(os.path.join(REPO, "pipeline", "serve.py"))
+        for path in targets:
+            with open(path, "r", encoding="utf-8") as f:
+                for lineno, line in enumerate(f, 1):
+                    if "sys.executable" not in line:
+                        continue
+                    # Legitimate: defining the helper, or naming the exe's own
+                    # directory. Illegitimate: building a command with it.
+                    stripped = line.lstrip()
+                    if ("python_command" in line or "os.path.dirname" in line
+                            or stripped.startswith(("#", '"""', "'''"))
+                            or "return [" in line or "frozen" in line
+                            # Prose inside a docstring explaining the hazard.
+                            or "`sys.executable`" in line):
+                        continue
+                    offenders.append(f"{os.path.basename(path)}:{lineno}: "
+                                     f"{line.strip()}")
+        self.assertEqual(offenders, [],
+                         "these build a command from sys.executable, which is "
+                         "the application itself in a frozen build:\n"
+                         + "\n".join(offenders))
+
+    def test_the_run_script_mode_bypasses_the_argument_parser(self):
+        """A pipeline script's own flags (--source, --start) must reach the
+        script, not the application's parser."""
+        source = read(os.path.join(REPO, "desktop", "owcs_app.py"))
+        self.assertIn('raw[0] == "--run-script"', source)
+        self.assertLess(source.index('raw[0] == "--run-script"'),
+                        source.index("build_parser().parse_args(raw)"),
+                        "--run-script is handled after argparse, so a script's "
+                        "own flags would be rejected")
 
 
 class TestVendoredBinaries(unittest.TestCase):

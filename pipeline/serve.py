@@ -89,6 +89,25 @@ except Exception:  # pragma: no cover - source checkouts without the layer
 
     desktop_api = _NoDesktopApi()  # type: ignore[assignment]
 
+
+def python_cmd() -> list[str]:
+    """The command prefix for running one of this repo's Python scripts.
+
+    Normally just the interpreter. Inside the frozen Windows application
+    there IS no separate python.exe — `sys.executable` is
+    OWCSCompTracker.exe — so every job this server starts has to re-enter
+    the application in its `--run-script` mode instead. Without this, every
+    button in the control room fails with "unrecognized arguments" once
+    installed, while working perfectly from a source checkout.
+    """
+    if getattr(sys, "frozen", False):
+        try:
+            from owcs_desktop import paths as _dpaths
+            return _dpaths.python_command()
+        except Exception:
+            return [os.path.abspath(sys.executable), "--run-script"]
+    return [sys.executable]
+
 REPO = db.REPO_ROOT
 AUTO_RUNS_PATH = os.path.join(REPO, "data", "auto_runs.json")
 SOURCES_PATH = os.path.join(REPO, "data", "sources", "video_sources.json")
@@ -290,7 +309,7 @@ def launch(cmds: list[list[str]], kind: str, label: str,
 
 # ------------------------------------------------------------ job builders
 def _py(script: str, *args: str) -> list[str]:
-    return [sys.executable, os.path.join("pipeline", script), *args]
+    return [*python_cmd(), os.path.join("pipeline", script), *args]
 
 
 def load_sources() -> list[dict]:
@@ -347,7 +366,7 @@ def build_run_cmd(p: dict) -> tuple[list[str] | None, str | None]:
 
 def _cli(*args: str) -> list[str]:
     """argv for this repo's automation CLI, honouring the test DB override."""
-    cmd = [sys.executable, os.path.join("pipeline", "automation", "cli.py")]
+    cmd = [*python_cmd(), os.path.join("pipeline", "automation", "cli.py")]
     if AUTOMATION_DB:
         cmd += ["--db", AUTOMATION_DB]
     return cmd + list(args)
@@ -459,7 +478,7 @@ def build_action_cmd(action: str, p: dict
         # downloads video, never approves anything), so no name required.
         return _cli("find-matches"), None, "scan for OWCS matches", JOB_TIMEOUT
     if action == "export-public":
-        return ([sys.executable, os.path.join("pipeline", "export_data.py"),
+        return ([*python_cmd(), os.path.join("pipeline", "export_data.py"),
                  "--public"], None, "export public data", JOB_TIMEOUT)
     if action == "intake-export":
         return _cli("intake-export", "--save"), None, \
@@ -482,7 +501,7 @@ def build_intake_cmd(p: dict) -> tuple[list[str] | None, str | None, dict | None
         parsed = ali.parse_link(url)
     except ali.LinkIntakeError as e:
         return None, f"[{e.code}] {e}", None
-    cmd = [sys.executable, os.path.join("pipeline", "automation", "cli.py")]
+    cmd = [*python_cmd(), os.path.join("pipeline", "automation", "cli.py")]
     if AUTOMATION_DB:
         cmd += ["--db", AUTOMATION_DB]
     cmd += ["convert-link", "--url", parsed["canonicalUrl"],
@@ -538,7 +557,7 @@ def _hero_report_dir(run: str) -> str:
 
 def build_test_cmds() -> list[list[str]]:
     tests = sorted(globmod.glob(os.path.join(PIPE_DIR, "test_*.py")))
-    return [[sys.executable, os.path.relpath(t, REPO)] for t in tests]
+    return [[*python_cmd(), os.path.relpath(t, REPO)] for t in tests]
 
 
 # ----------------------------------------------------------------- handler

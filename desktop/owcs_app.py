@@ -191,8 +191,45 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def _run_script(argv: list[str]) -> int:
+    """`--run-script <path> [args...]` — execute a bundled Python script.
+
+    The frozen application IS the interpreter: there is no python.exe in the
+    bundle, so this is how the readiness test, the public export, the FACEIT
+    ingest and the control room's job runner start a pipeline script. The
+    script sees a normal `sys.argv` and a normal `__main__`, so nothing in
+    `pipeline/` needs to know it is running inside a frozen app.
+
+    Handled before argparse, deliberately: the script's own flags
+    (`--source`, `--start`, …) must reach the script, not this parser.
+    """
+    import runpy
+
+    if not argv:
+        print("--run-script needs a script path", file=sys.stderr)
+        return 2
+    script, script_args = argv[0], argv[1:]
+    if not os.path.isabs(script):
+        script = os.path.join(paths.app_root(), script)
+    if not os.path.isfile(script):
+        print(f"--run-script: no such script: {script}", file=sys.stderr)
+        return 2
+
+    _prepare()
+    sys.argv = [script] + list(script_args)
+    try:
+        runpy.run_path(script, run_name="__main__")
+    except SystemExit as exit_code:
+        return int(exit_code.code or 0)
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
-    args = build_parser().parse_args(argv)
+    raw = list(sys.argv[1:] if argv is None else argv)
+    if raw and raw[0] == "--run-script":
+        return _run_script(raw[1:])
+
+    args = build_parser().parse_args(raw)
     _prepare()
 
     if args.service:

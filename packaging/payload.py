@@ -61,7 +61,14 @@ HTML_GLOB = "*.html"
 #: launches these as subprocesses or imports them by name at runtime.
 HIDDEN_IMPORTS = [
     "cv2", "numpy",
-    "yt_dlp", "yt_dlp.extractor", "yt_dlp.compat", "yt_dlp.utils",
+    # NOT yt_dlp. The pipeline shells out to the `yt-dlp` BINARY (vendored as
+    # vendor/bin/yt-dlp.exe), and nothing in this codebase imports the Python
+    # package — the one textual reference, ytdlp_opts.ytdlp_module_version,
+    # runs `python -c "import yt_dlp"` in a subprocess purely to DIAGNOSE a
+    # version mismatch and returns None when it is absent. Listing it here
+    # dragged in ~2,000 extractor modules plus the cryptography stack, which
+    # added hundreds of megabytes to the installer to ship a second, unused
+    # copy of a tool already bundled as an executable.
     "sqlite3", "urllib.request", "http.server", "webbrowser",
     "tkinter", "tkinter.ttk",
     "owcs_desktop", "owcs_desktop.supervisor", "owcs_desktop.tray",
@@ -77,6 +84,10 @@ EXCLUDES = [
     "matplotlib", "scipy", "pandas", "PyQt5", "PyQt6", "PySide2", "PySide6",
     "IPython", "jupyter", "notebook", "pytest", "setuptools._distutils",
     "easyocr", "paddleocr", "paddle", "torch", "torchvision",
+    # See HIDDEN_IMPORTS: yt-dlp ships as the vendored binary, so its Python
+    # package (and the cryptography stack its extractors pull in) has no
+    # reason to be in the bundle.
+    "yt_dlp", "cryptography",
 ]
 
 

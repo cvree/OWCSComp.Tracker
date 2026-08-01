@@ -390,7 +390,8 @@ def run_readiness_test(*, timeout: int = 1800, app: str | None = None,
                             "detail": f"{rel} is not installed"})
             continue
         try:
-            proc = runner.run([sys.executable, script], cwd=app, env=env,
+            proc = runner.run(paths.python_command() + [script],
+                              cwd=app, env=env,
                               capture_output=True, text=True, timeout=timeout)
         except subprocess.TimeoutExpired:
             results.append({"suite": rel, "label": label, "status": "timeout",
