@@ -65,6 +65,30 @@ PIPE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, PIPE_DIR)
 import db  # noqa: E402
 
+# The desktop application's own API surface (health, credentials, storage,
+# backups, updates, repair, review inbox, calibration editor). Lives in
+# desktop/owcs_desktop so the pipeline never depends on it: if the desktop
+# layer is absent, serve.py still serves the site and the pipeline API exactly
+# as before, and every /api/desktop/* route simply 404s.
+sys.path.insert(0, os.path.join(db.REPO_ROOT, "desktop"))
+try:
+    from owcs_desktop import webapi as desktop_api  # noqa: E402
+except Exception:  # pragma: no cover - source checkouts without the layer
+    class _NoDesktopApi:
+        PREFIX = "/api/desktop/"
+
+        @staticmethod
+        def handle_get(path, query=""):
+            return (503, {"ok": False, "error": "the desktop application layer "
+                                                "is not installed"})
+
+        @staticmethod
+        def handle_post(path, body):
+            return (503, {"ok": False, "error": "the desktop application layer "
+                                                "is not installed"})
+
+    desktop_api = _NoDesktopApi()  # type: ignore[assignment]
+
 REPO = db.REPO_ROOT
 AUTO_RUNS_PATH = os.path.join(REPO, "data", "auto_runs.json")
 SOURCES_PATH = os.path.join(REPO, "data", "sources", "video_sources.json")
@@ -545,6 +569,10 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
     def do_GET(self):  # noqa: N802
         path, _, query = self.path.partition("?")
+        if path.startswith(desktop_api.PREFIX):
+            handled = desktop_api.handle_get(path, query)
+            if handled is not None:
+                return self._json(*handled)
         if path == "/api/ping":
             with LOCK:
                 return self._json(200, {"ok": True,
@@ -706,6 +734,13 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         return super().do_GET()
 
     def do_POST(self):  # noqa: N802
+        if self.path.startswith(desktop_api.PREFIX):
+            body = self._read_body()
+            if body is None:
+                return self._json(400, {"error": "bad JSON body"})
+            handled = desktop_api.handle_post(self.path, body)
+            if handled is not None:
+                return self._json(*handled)
         if self.path == "/api/run":
             p = self._read_body()
             if p is None:

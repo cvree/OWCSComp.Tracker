@@ -1,0 +1,61 @@
+OWCS Comp Tracker
+=================
+
+An independent fan project. NOT affiliated with, endorsed by, or associated
+with Blizzard Entertainment, Overwatch, the Overwatch Champions Series
+(OWCS), or FACEIT. Overwatch and OWCS are trademarks of their respective
+owners; hero and team artwork remains the property of its owners and is used
+here under Blizzard's Fan Content Policy for non-commercial fan use.
+
+
+WHAT THIS APPLICATION DOES
+--------------------------
+
+It reads publicly broadcast Overwatch esports VODs and produces an auditable
+record of which heroes each team played and when they swapped. Every claim it
+publishes links back to the video frame and image crop it came from.
+
+It runs entirely on this PC. There is no account, no subscription, and no
+server. It sends no analytics or usage data anywhere.
+
+
+WHAT IS INCLUDED
+----------------
+
+This installer bundles third-party software so you do not have to install
+anything yourself. Each remains under its own licence:
+
+  Python                  Python Software Foundation License
+  OpenCV                  Apache License 2.0
+  NumPy                   BSD 3-Clause License
+  yt-dlp                  The Unlicense
+  FFmpeg / FFprobe        GNU LGPL v2.1 or later (essentials build)
+  Pillow                  MIT-CMU License
+  pystray                 GNU LGPL v3
+
+Full licence texts for the bundled components are installed alongside the
+application. FFmpeg source corresponding to the shipped build is available
+from https://www.gyan.dev/ffmpeg/builds/ .
+
+
+NETWORK USE
+-----------
+
+The application makes network requests only when you ask it to:
+
+  * downloading a broadcast you pasted a link to (YouTube),
+  * reading match facts you pasted a link to (FACEIT),
+  * checking for an application update, if you leave that enabled.
+
+API keys you enter are encrypted for your Windows account and are never
+written to logs, exports, or anything the application publishes.
+
+
+NO WARRANTY
+-----------
+
+This software is provided "as is", without warranty of any kind, express or
+implied, including but not limited to the warranties of merchantability,
+fitness for a particular purpose and noninfringement. In no event shall the
+authors be liable for any claim, damages or other liability arising from the
+use of this software.

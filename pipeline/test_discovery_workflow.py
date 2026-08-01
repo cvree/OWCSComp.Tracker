@@ -230,6 +230,69 @@ class TestEveryWorkflowIsWellFormed(unittest.TestCase):
                                  f"runs — a cancel between commit and push "
                                  f"loses the snapshot")
 
+    def test_repo_writing_workflows_share_one_concurrency_group(self):
+        """Two workflows that commit to this repository must never run at
+        once. discovery, match-finder, pipeline and update-data all push
+        generated data; without ONE shared group they interleave, and the
+        loser of the race force-pushes over the winner's snapshot or dies on
+        a non-fast-forward with its only copy of the data on a discarded
+        runner. A per-ref group is not enough — they all target the same ref.
+
+        Workflows that push a *branch of their own* and workflows that push
+        to the shared branch are equally covered: both mutate refs in this
+        repository.
+        """
+        groups = {}
+        for name in _workflow_names():
+            text = _workflow_text(name)
+            if "git push" not in text:
+                continue
+            conc = _load_workflow(name).get("concurrency") or {}
+            groups[name] = conc.get("group")
+        self.assertTrue(groups, "no repo-writing workflow found at all")
+        distinct = set(groups.values())
+        self.assertEqual(
+            len(distinct), 1,
+            "every workflow that commits to this repo must share ONE "
+            f"concurrency group so they serialise; found {groups}")
+        group = distinct.pop()
+        self.assertNotIn(
+            "${{", str(group),
+            f"the shared data group is templated ({group!r}); a per-ref or "
+            f"per-run group lets two data workflows run at the same time")
+
+    def test_a_pushed_branch_is_never_left_without_a_pull_request(self):
+        """A workflow that pushes a NEW branch and then opens a PR for it
+        must clean up when the PR cannot be opened.
+
+        discovery.yml used to end its PR step with
+        `gh pr create ... || echo "PR may already exist."`. Any failure —
+        a transient API error, a permissions change — left the branch pushed
+        with nothing pointing at it. Running hourly, that quietly filled the
+        repository with `auto/*` refs that had no PR, no CI and no
+        notification, and which nobody could distinguish from live work.
+        """
+        for name in _workflow_names():
+            text = _workflow_text(name)
+            if "gh pr create" not in text or 'git push origin "$BR"' not in text:
+                continue
+            with self.subTest(workflow=name):
+                self.assertNotIn(
+                    'gh pr create \\\n            --title', text.replace(
+                        "if gh pr create", "IF_GUARDED"),
+                    f"{name} calls `gh pr create` unguarded")
+                self.assertIn(
+                    "git push origin --delete", text,
+                    f"{name} pushes a branch and opens a PR for it, but has no "
+                    f"path that deletes the branch when the PR cannot be "
+                    f"opened — that orphans the branch")
+                # The cleanup must actually fail the step. A cleanup that
+                # swallows its own failure is how this regressed the first time.
+                self.assertIn(
+                    "exit 1", text,
+                    f"{name} cleans up an orphaned branch but does not fail, "
+                    f"so a run that shipped nothing still reports success")
+
 
 class TestCiReproducibilityGateIsReal(unittest.TestCase):
     """ci.yml once ran the exporter and then `git diff --stat … || true`.

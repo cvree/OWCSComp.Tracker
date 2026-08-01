@@ -135,6 +135,32 @@ Key modules (all under `pipeline/`):
 
 ---
 
+## Install it as a Windows application
+
+Everything below this section is the developer path. If you just want to
+process broadcasts, there is a one-file installer instead — no Python, no
+ffmpeg, no terminal, no configuration files.
+
+1. Download `OWCSCompTracker-<version>-Setup.exe` from
+   [Releases](https://github.com/cvree/owcscomp.tracker/releases) and run it.
+   It installs per-user, so it needs no administrator rights.
+2. The graphical wizard checks the machine, sets a storage budget, takes any
+   optional API keys, offers to start with Windows, and runs a **real**
+   end-to-end test that builds a broadcast on your PC and drives the whole
+   pipeline over it.
+3. Paste a link in the control room: a YouTube VOD or playlist, a FACEIT
+   matchroom or tournament, or a video file on your PC.
+
+Processing runs in a background service, so closing the control room window
+changes nothing and a reboot resumes where it left off. Uncertain detections
+go to a graphical review inbox with their evidence crops attached; only
+repeated, high-confidence readings publish on their own.
+
+Architecture, guarantees and build instructions:
+[`docs/WINDOWS-APP.md`](docs/WINDOWS-APP.md).
+
+---
+
 ## Quick start
 
 Requirements: **Python 3.12+**, `pip install -r requirements.txt`, and

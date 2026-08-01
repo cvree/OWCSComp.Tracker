@@ -36,7 +36,14 @@ import video_ingest as vi  # noqa: E402
 
 DEFAULT_CHANNEL = "https://www.youtube.com/@ow_esports/streams"
 DEFAULT_SOURCES = vi.DEFAULT_SOURCES
-DEFAULT_LAYOUT = "layouts/owcs_youtube_2026.json"
+import layout_registry as lr  # noqa: E402
+
+#: Sentinel meaning "resolve a CALIBRATED layout when the source is written".
+#: This was hardcoded to layouts/owcs_youtube_2026.json — a documented STARTER
+#: of hand-guessed rectangles — so every discovered VOD was registered against
+#: a layout that cannot read it, and the failure only surfaced much later as
+#: UNKNOWN detections. See pipeline/layout_registry.py.
+DEFAULT_LAYOUT = None
 
 YTDLP_INSTALL_HINT = (
     "yt-dlp not found on PATH.\n"
@@ -170,12 +177,19 @@ def existing_video_ids(data: dict) -> set[str]:
 
 
 def write_source(vod: dict, sources_path: str,
-                 layout: str = DEFAULT_LAYOUT) -> tuple[bool, str]:
-    """Append the vod as a source entry. Returns (added, slug)."""
+                 layout: str | None = DEFAULT_LAYOUT) -> tuple[bool, str]:
+    """Append the vod as a source entry. Returns (added, slug).
+
+    With no explicit layout, a CALIBRATED one is resolved. If none is
+    installed this raises `layout_registry.NoCalibratedLayout` rather than
+    writing a source entry that points at guessed rectangles — registering a
+    source you cannot read is how a broken run gets discovered a week later.
+    """
     data = load_sources_file(sources_path)
     slug = vod["slug"]
     if vod["videoId"].lower() in existing_video_ids(data):
         return False, slug
+    layout = lr.resolve(layout)
     data["sources"].append({
         "id": slug,
         "title": vod["title"],
@@ -219,7 +233,9 @@ def main(argv=None) -> int:
                     help="save the selected VOD into video_sources.json "
                          "(without this flag nothing is written)")
     ap.add_argument("--sources", default=DEFAULT_SOURCES)
-    ap.add_argument("--layout", default=DEFAULT_LAYOUT)
+    ap.add_argument("--layout", default=DEFAULT_LAYOUT,
+                    help="layout json for the written source (default: the "
+                         "calibrated default; never a starter layout)")
     args = ap.parse_args(argv)
 
     vods = discover(args.channel_url, args.limit)
