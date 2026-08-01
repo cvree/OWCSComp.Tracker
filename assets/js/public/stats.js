@@ -145,6 +145,151 @@
     return { rows: out, banCount: bans.length };
   };
 
+  /* Confirmed swap activity per hero — swapped INTO a slot vs OUT of one.
+     Rejected swap candidates are deliberately excluded: they are recorded
+     evidence that something did NOT happen (see swaps.html), and counting
+     them here would turn the rejection ledger into a stat. */
+  S.computeSwapStats = function (filters) {
+    const swaps = (D && D.heroSwaps ? D.heroSwaps : []).filter((s) => {
+      if (s.status !== "confirmed") return false;
+      if (!filters) return true;
+      if (filters.region && filters.region !== "all"
+        && matchRegion(s.matchId) !== filters.region) return false;
+      if (filters.teamId && filters.teamId !== "all"
+        && s.teamId !== filters.teamId) return false;
+      if (filters.tournamentId && filters.tournamentId !== "all") {
+        const m = P.match(s.matchId);
+        if (!m || m.tournamentId !== filters.tournamentId) return false;
+      }
+      if (filters.mapId && filters.mapId !== "all") {
+        const m = P.match(s.matchId);
+        const row = m && (m.maps || []).find((x) => x.id === s.mapId);
+        if (!row || row.map !== filters.mapId) return false;
+      }
+      return true;
+    });
+    const rows = new Map();
+    const touch = (heroId) => {
+      if (!rows.has(heroId)) rows.set(heroId, { heroId, in: 0, out: 0, evidence: [] });
+      return rows.get(heroId);
+    };
+    swaps.forEach((s) => {
+      if (s.toHero) { const r = touch(s.toHero); r.in += 1; r.evidence.push(s); }
+      if (s.fromHero) { const r = touch(s.fromHero); r.out += 1; r.evidence.push(s); }
+    });
+    return { rows, swapCount: swaps.length };
+  };
+
+  /* ---- honest ranking ------------------------------------------------
+     A raw win rate over two decided maps is not a measurement, it is an
+     accident: "100%" from 1–0 must never outrank 8–4. The Wilson score
+     interval's LOWER bound is the standard fix — it asks "what win rate is
+     this sample actually evidence for", so a small sample is pulled toward
+     the middle and a large one is trusted. It is what makes a ranked hero
+     board possible here at all without inventing a tier list: rank by what
+     the evidence supports, and show the sample size next to it so the
+     reader can see exactly how much that is.
+
+     z = 1.96 (95%). Returns null when there is nothing decided to score. */
+  S.wilsonLower = function (wins, total, z) {
+    const n = Number(total) || 0;
+    if (n <= 0) return null;
+    const zz = z == null ? 1.96 : z;
+    const p = wins / n;
+    const d = 1 + (zz * zz) / n;
+    const centre = p + (zz * zz) / (2 * n);
+    const margin = zz * Math.sqrt((p * (1 - p) + (zz * zz) / (4 * n)) / n);
+    return Math.max(0, (centre - margin) / d);
+  };
+
+  /* How much a rate on this many appearances is worth saying out loud.
+     The thresholds are deliberately blunt and stated in the UI rather than
+     tuned: with a dataset this small the honest message is "this is a
+     handful of maps", not a false precision. */
+  S.SAMPLE_FLOOR = 3;          // below this, a rate is shown but never ranked
+  S.SAMPLE_SOLID = 10;
+
+  S.sampleGrade = function (n) {
+    if (!n) return "none";
+    if (n < S.SAMPLE_FLOOR) return "thin";
+    if (n < S.SAMPLE_SOLID) return "some";
+    return "solid";
+  };
+
+  /* ONE row per hero in the pool — including heroes with no verified pick.
+     Every owtics-style board shows the whole roster; showing only the
+     heroes that happen to have data hides the actual shape of the coverage,
+     which for this project is the most important thing on the page. Rows
+     for unseen heroes carry explicit nulls, never zeros: 0% pick rate is a
+     claim, "not sighted" is the truth. */
+  S.heroBoard = function (filters) {
+    const hs = S.computeHeroStats(filters);
+    const bs = S.computeBanStats(filters);
+    const sw = S.computeSwapStats(filters);
+    const statBy = new Map(hs.rows.map((r) => [r.heroId, r]));
+    const banBy = new Map(bs.rows.map((r) => [r.heroId, r]));
+    const rows = (D && D.heroes ? D.heroes : []).map((h) => {
+      const r = statBy.get(h.id);
+      const ban = banBy.get(h.id);
+      const s = sw.rows.get(h.id);
+      const decided = r ? r.wins + r.losses : 0;
+      return {
+        heroId: h.id, name: h.name, role: h.role,
+        seen: !!r,
+        picks: r ? r.picks : 0,
+        pickRate: r ? r.pickRate : null,
+        winRate: r && decided ? r.wins / decided : null,
+        wins: r ? r.wins : 0,
+        losses: r ? r.losses : 0,
+        decided,
+        confidence: r && decided ? S.wilsonLower(r.wins, decided) : null,
+        grade: S.sampleGrade(r ? r.picks : 0),
+        swapsIn: s ? s.in : 0,
+        swapsOut: s ? s.out : 0,
+        bans: ban ? ban.bans : 0,
+        banSource: ban ? ban.source : null,
+        evidence: r ? r.evidence : [],
+      };
+    });
+    return {
+      rows,
+      totalAppearances: hs.totalAppearances,
+      seenCount: hs.rows.length,
+      poolCount: rows.length,
+      compCount: hs.compCount,
+      swapCount: sw.swapCount,
+      banCount: bs.banCount,
+    };
+  };
+
+  /* Which maps a hero was actually picked on, most-played first — the
+     honest, evidence-backed version of an owtics "hero × map" table. */
+  S.heroMaps = function (heroId, filters) {
+    const hs = S.computeHeroStats(filters);
+    const row = hs.rows.find((r) => r.heroId === heroId);
+    if (!row) return [];
+    const byMap = new Map();
+    row.evidence.forEach((e) => {
+      const m = P.match(e.matchId);
+      const mapRow = m && (m.maps || []).find((x) => x.id === e.mapId);
+      const key = (mapRow && mapRow.map) || "unknown";
+      let g = byMap.get(key);
+      if (!g) {
+        const cat = (D.mapsCatalog || []).find((x) => x.id === key);
+        g = { mapId: key, name: (cat && cat.name) || key,
+              mode: cat && cat.mode, picks: 0, wins: 0, losses: 0,
+              evidence: [] };
+        byMap.set(key, g);
+      }
+      g.picks += 1;
+      if (e.result === "win") g.wins += 1;
+      else if (e.result === "loss") g.losses += 1;
+      g.evidence.push(e);
+    });
+    return Array.from(byMap.values())
+      .sort((a, b) => b.picks - a.picks || a.name.localeCompare(b.name));
+  };
+
   /* Headline numbers for the stat cards. */
   S.summary = function (filters) {
     const hs = S.computeHeroStats(filters);

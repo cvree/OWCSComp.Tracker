@@ -135,7 +135,7 @@
     [["Matches", "matches.html", "Schedule and results"],
      ["Calendar", "calendar.html", "The season by day"],
      ["Teams", "teams.html", "Team directory"],
-     ["Heroes", "heroes.html", "Hero directory"],
+     ["Heroes", "heroes.html", "Hero board — every hero, sortable"],
      ["Hero stats", "stats.html", "Pick and win rates"],
      ["Compositions", "comps.html", "Every verified line-up"],
      ["Swap evidence", "swaps.html", "Confirmed and rejected swaps"],

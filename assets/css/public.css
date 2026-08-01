@@ -1370,3 +1370,150 @@ html.palette-open { overflow: hidden; }
   }
   .pub-nav-toggle { padding: 9px 10px; }
 }
+
+/* =====================================================================
+   HERO BOARD (heroes.html)
+   One dense, sortable, filterable view of the whole roster — the format
+   every good stats site converges on, built here on the site's own rule:
+   a rate is never shown without the sample it came from, and a hero with
+   no proven pick reads as absent, not as zero.
+   ===================================================================== */
+.hb-controls { display: grid; gap: var(--sp-3); }
+.hb-roles { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+.hb-roles button {
+  font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer;
+  padding: 7px 14px; border-radius: 999px; background: transparent;
+  border: 1px solid var(--line); color: var(--tx-2);
+  display: inline-flex; align-items: center; gap: 7px;
+}
+.hb-roles button::before {
+  content: ""; width: 8px; height: 8px; border-radius: 2px;
+  background: var(--role-c, var(--tx-3)); transform: rotate(45deg);
+}
+.hb-roles button:hover { background: var(--surface-1); color: var(--tx-1); }
+.hb-roles button[aria-pressed="true"] {
+  color: var(--role-c, var(--tx-1)); border-color: currentColor;
+  background: color-mix(in srgb, var(--role-c, var(--tx-3)) 12%, transparent);
+}
+.hb-roles button[data-role="Tank"]    { --role-c: var(--role-tank); }
+.hb-roles button[data-role="Damage"]  { --role-c: var(--role-damage); }
+.hb-roles button[data-role="Support"] { --role-c: var(--role-support); }
+.hb-roles button[data-role="all"]     { --role-c: var(--gold); }
+.hb-roles .hb-n { color: var(--tx-3); font-weight: 500; font-size: 11.5px; }
+
+/* This lives inside .filterbar, whose `label` rule makes every label an
+   uppercase two-row grid — right for "SEARCH / [input]", wrong for a
+   checkbox whose text sits beside it. */
+.filterbar label.hb-toggle, .hb-toggle {
+  display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
+  font-size: 12.5px; color: var(--tx-2);
+  text-transform: none; letter-spacing: normal;
+}
+.hb-toggle input { accent-color: var(--gold); }
+
+/* A long table needs its header to stay put — otherwise sorting a 52-row
+   board means scrolling back up to remember which column you sorted. */
+.hb-wrap { overflow: auto; max-height: min(72vh, 900px);
+  border: 1px solid var(--line); border-radius: var(--r-3);
+  background: var(--surface-1); }
+table.hb { border-collapse: separate; border-spacing: 0; width: 100%;
+  min-width: 860px; font-size: 13px; }
+.hb th, .hb td { padding: 9px 12px; text-align: left;
+  border-bottom: 1px solid var(--line); }
+.hb thead th {
+  position: sticky; top: 0; z-index: 2; background: var(--surface-2);
+  font-family: var(--font-display); letter-spacing: .06em;
+  text-transform: uppercase; font-size: 11.5px; color: var(--tx-3);
+  white-space: nowrap; cursor: pointer; user-select: none;
+}
+.hb thead th:not([data-sort]) { cursor: default; }
+.hb thead th[aria-sort="descending"]::after { content: " ▾"; color: var(--gold); }
+.hb thead th[aria-sort="ascending"]::after  { content: " ▴"; color: var(--gold); }
+.hb tbody tr { transition: background var(--dur-1, .15s) ease; }
+.hb tbody tr:hover { background: var(--surface-2); }
+.hb tbody tr.is-open { background: var(--surface-2); }
+.hb tbody tr.hb-unseen td { color: var(--tx-3); }
+.hb tbody tr.hb-unseen .hb-name { color: var(--tx-2); }
+.hb td.num { font-family: var(--font-mono); text-align: right;
+  font-variant-numeric: tabular-nums; }
+.hb .hb-hero { display: flex; align-items: center; gap: 9px; min-width: 0; }
+.hb .hb-name { font-weight: 600; color: var(--tx-1); white-space: nowrap; }
+.hb .hb-role { font-size: 11.5px; color: var(--role-c, var(--tx-2)); }
+.hb tr[data-role="Tank"]    { --role-c: var(--role-tank); }
+.hb tr[data-role="Damage"]  { --role-c: var(--role-damage); }
+.hb tr[data-role="Support"] { --role-c: var(--role-support); }
+.hb .hb-pick { display: flex; align-items: center; gap: 8px; min-width: 96px; }
+.hb .hb-bar { flex: 1; height: 5px; border-radius: 3px;
+  background: color-mix(in srgb, var(--tx-3) 25%, transparent);
+  overflow: hidden; min-width: 42px; }
+.hb .hb-bar i { display: block; height: 100%; border-radius: 3px;
+  background: var(--role-c, var(--gold)); }
+.hb .hb-bar.win i { background: var(--verified); }
+.hb .hb-bar.win.low i { background: var(--failed); }
+.hb .hb-val { font-family: var(--font-mono); font-size: 12px;
+  font-variant-numeric: tabular-nums; color: var(--tx-1); }
+.hb .faint { color: var(--tx-3); }
+
+/* sample strength: the honest replacement for a tier letter */
+.hb-sample { display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--font-mono); font-size: 11.5px; color: var(--tx-3); }
+.hb-pips { display: inline-flex; gap: 2px; }
+.hb-pips i { width: 5px; height: 10px; border-radius: 1px;
+  background: color-mix(in srgb, var(--tx-3) 32%, transparent); }
+.hb-sample[data-grade="thin"]  i:nth-child(1) { background: var(--review); }
+.hb-sample[data-grade="some"]  i:nth-child(-n+2) { background: var(--cyan); }
+.hb-sample[data-grade="solid"] i { background: var(--verified); }
+.hb-sample[data-grade="thin"] { color: var(--review); }
+
+.hb-cmp { width: 34px; }
+.hb-cmp input { accent-color: var(--gold); cursor: pointer; }
+
+/* the expanded row */
+.hb-drill td { background: var(--surface-0, var(--bg)); padding: 0; }
+.hb-drill__in { padding: var(--sp-4) var(--sp-5);
+  border-left: 2px solid var(--role-c, var(--gold)); }
+.hb-drill h4 { margin: 0 0 var(--sp-2); font-size: 12px;
+  text-transform: uppercase; letter-spacing: .08em; color: var(--tx-3); }
+.hb-drill__grid { display: grid; gap: var(--sp-5);
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+/* .drill-team's own grid assumes a full-width container; inside a third of
+   the expanded row it wraps "1 map · 0–1" onto three lines. Stack it
+   instead of squeezing it. */
+.hb-drill .drill-team { display: flex; flex-wrap: wrap; gap: 6px 12px;
+  align-items: center; }
+.hb-drill .drill-team .rate-cell { flex: 1 1 60px; min-width: 60px; }
+.hb-drill .drill-team .mono { white-space: nowrap; }
+.hb-maps { display: grid; gap: 6px; }
+.hb-maps > div { display: grid; grid-template-columns: 1fr auto auto;
+  gap: var(--sp-3); align-items: center; font-size: 12.5px;
+  padding: 5px 0; border-top: 1px solid var(--line); }
+.hb-maps > div:first-child { border-top: 0; }
+.hb-maps .hb-mode { color: var(--tx-3); font-size: 11.5px; }
+
+/* compare tray + panel */
+.hb-tray { position: sticky; bottom: 0; z-index: 6; margin-top: var(--sp-3);
+  display: flex; flex-wrap: wrap; gap: var(--sp-3); align-items: center;
+  padding: var(--sp-3) var(--sp-4); border: 1px solid var(--gold);
+  border-radius: var(--r-3);
+  background: color-mix(in srgb, var(--surface-2) 92%, var(--gold) 8%);
+  backdrop-filter: blur(6px); font-size: 13px;
+}
+.hb-tray[hidden] { display: none; }
+.hb-tray .hb-tray__who { display: flex; flex-wrap: wrap; gap: 6px; }
+.hb-cmp-grid { display: grid; gap: var(--sp-4);
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+.hb-cmp-card { border: 1px solid var(--line); border-radius: var(--r-3);
+  padding: var(--sp-4); background: var(--surface-1);
+  border-top: 3px solid var(--role-c, var(--gold)); }
+.hb-cmp-card h3 { margin: 0; font-size: 16px; }
+.hb-cmp-card .hb-cmp-role { font-size: 11.5px; color: var(--role-c);
+  text-transform: uppercase; letter-spacing: .08em; }
+.hb-cmp-row { display: flex; justify-content: space-between; gap: var(--sp-3);
+  padding: 6px 0; border-top: 1px solid var(--line); font-size: 12.5px; }
+.hb-cmp-row b { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.hb-cmp-row.best b { color: var(--gold); }
+
+@media (max-width: 720px) {
+  .hb-wrap { max-height: none; }
+  .hb thead th { position: static; }
+}

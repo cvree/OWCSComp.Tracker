@@ -69,6 +69,21 @@
   .ik-plain b { color: var(--amber); }
   .ik-next { font-size: .82rem; color: var(--muted); margin: 2px 0 8px; }
   .ik-next b { color: var(--text); }
+  /* tool readiness, at the point of use */
+  #ik-ready { display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center;
+    margin: 8px 0 0; }
+  .rdy { display: inline-flex; align-items: center; gap: 6px; font-size: .74rem;
+    padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line);
+    color: var(--muted); }
+  .rdy::before { content: ""; width: 7px; height: 7px; border-radius: 50%;
+    background: currentColor; }
+  .rdy.ok { border-color: var(--win, #46d68c); color: var(--win, #46d68c); }
+  .rdy.bad { border-color: var(--loss, #e15b5b); color: var(--loss, #e15b5b); }
+  .rdy.warn { border-color: var(--amber); color: var(--amber); }
+  .rdy-fix { flex: 1 1 100%; font-size: .76rem; color: var(--amber); margin: 2px 0 0; }
+  .rdy-fix code { color: var(--text); background: rgba(255,255,255,.06);
+    border-radius: 4px; padding: 1px 5px;
+    font-family: ui-monospace, "SF Mono", Consolas, monospace; }
   /* the queue: what is running, what is waiting, what finished */
   #ik-queue { border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px;
     margin: 10px 0 0; font-size: .8rem; }
@@ -203,6 +218,11 @@
                  autocomplete="off" /></label>
       </div>
       <p class="ik-form-note" id="ik-note">checking for the local control room…</p>
+      <!-- Tool readiness belongs HERE, not inside the advanced panel: a
+           missing yt-dlp or JS runtime is the single most common reason a
+           paste goes nowhere, and nobody opens a collapsed <details> to
+           find that out. -->
+      <div id="ik-ready" hidden></div>
       <code class="ik-cmd" id="ik-cmd-preview" hidden></code>
       <div id="ik-queue" hidden></div>
       <pre id="ik-live-log" hidden></pre>

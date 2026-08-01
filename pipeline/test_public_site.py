@@ -404,9 +404,22 @@ def main() -> None:
     check("calendar has an honest empty month state",
           "No tracked matches" in pcal)
     phx = read("assets/js/public/page-heroes.js")
-    check("hero directory splits verified picks from honest absence",
+    pst = read("assets/js/public/stats.js")
+    check("hero board splits verified picks from honest absence",
           "not yet sighted" in read("heroes.html").lower()
-          and "computeHeroStats" in phx)
+          and "heroBoard" in phx)
+    # The board renders the WHOLE roster, so the thing that matters is that
+    # a hero with no proven pick can never be rendered as a zero — and that
+    # the rows still come from the verified engine, not from D.heroes alone.
+    check("heroBoard is derived from the verified comp engine",
+          "S.heroBoard" in pst and "computeHeroStats" in pst
+          and "S.heroBoard = function" in pst)
+    check("unsighted heroes carry nulls, never 0% (zero is a claim)",
+          "pickRate: r ? r.pickRate : null" in pst)
+    check("win rate is RANKED by evidence, not by the raw percentage",
+          "wilsonLower" in pst and "confidence" in phx)
+    check("the board states its sample size next to every rate",
+          "sampleGrade" in pst and "n=" in phx)
     ph = read("assets/js/public/page-hero.js")
     check("hero detail uses the verified stats engine + provenance",
           "heroDetail" in ph and "manifest" in ph.lower())

@@ -387,8 +387,53 @@
     </section>`;
   }
 
+  /* ---- readiness strip, at the point of use ----------------------------
+     The advanced panel below already reports every dependency in full. But
+     a missing yt-dlp or JS runtime is THE reason a pasted link goes
+     nowhere, and nobody opens a collapsed <details> to discover that. This
+     is the same data, reduced to: can this paste box actually work, and if
+     not, what exactly do I type. */
+  const NEEDED = [
+    ["ffmpeg", "ffmpeg", "reads the video",
+      "install ffmpeg and put it on PATH — see Start here"],
+    ["yt-dlp", "yt-dlp", "downloads the broadcast", "pip install -U yt-dlp"],
+    ["js-runtime", "JS runtime", "unscrambles YouTube links",
+      "install Deno (deno.com) — without it downloads stall at 0 bytes"],
+  ];
+
+  function renderReady(d) {
+    const el = document.getElementById("ik-ready");
+    if (!el) return;
+    if (!apiMode || !d || d.error) { el.hidden = true; return; }
+    const deps = d.dependencies || [];
+    const find = (n) => deps.find((e) => e.name === n) || {};
+    /* ffmpeg isn't in the dependency report (it is a system package the
+       preflight owns), so only report what this endpoint actually knows —
+       inventing a green pill for something unchecked would be worse than
+       showing nothing. */
+    const known = NEEDED.filter(([name]) => deps.some((e) => e.name === name));
+    if (!known.length) { el.hidden = true; return; }
+    const missing = known.filter(([name]) => !find(name).present);
+    el.hidden = false;
+    const pills = known.map(([name, label, why]) => {
+      const e = find(name);
+      return `<span class="rdy ${e.present ? "ok" : "bad"}"
+        title="${esc(why)}${e.version ? ` · ${e.version}` : ""}">${esc(label)}${
+        e.present ? "" : " missing"}</span>`;
+    }).join("");
+    const fixes = missing.map(([name, label, , fallback]) =>
+      `<span class="rdy-fix"><b>${esc(label)}</b> — ${
+        esc(find(name).remedy || fallback)}</span>`).join("");
+    el.innerHTML = pills
+      + (missing.length
+        ? fixes + `<span class="rdy-fix">Full walkthrough: `
+          + `<a href="start.html">Start here</a>.</span>`
+        : `<span class="rdy ok" style="border-style:dashed">ready to paste</span>`);
+  }
+
   /* ---- download-authentication panel ---------------------------------- */
   function renderDownloadStatus(d) {
+    renderReady(d);
     const stat = document.getElementById("ik-dl-stat");
     const ladderEl = document.getElementById("ik-dl-ladder");
     const assetsEl = document.getElementById("ik-dl-assets");

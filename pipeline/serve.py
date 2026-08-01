@@ -992,13 +992,31 @@ def main(argv=None) -> int:
     ap.add_argument("--timeout", type=int, default=JOB_TIMEOUT,
                     help="kill a job after this many seconds "
                          "(default %(default)s)")
+    ap.add_argument("--open", dest="open_browser", action="store_true",
+                    default=True,
+                    help="open the operator portal in a browser (default)")
+    ap.add_argument("--no-open", dest="open_browser", action="store_false",
+                    help="don't open a browser (headless/remote use)")
     args = ap.parse_args(argv)
     JOB_TIMEOUT = args.timeout
     httpd = http.server.ThreadingHTTPServer((args.host, args.port), Handler)
+    portal = f"http://{args.host}:{args.port}/portal.html"
     log(f"public site:    http://{args.host}:{args.port}/")
-    log(f"operator portal: http://{args.host}:{args.port}/portal.html")
+    log(f"operator portal: {portal}")
     log(f"control room:    http://{args.host}:{args.port}/run.html")
     log(f"serving {REPO} · one job at a time · Ctrl+C to stop")
+    if args.open_browser:
+        # The last piece of "run one command": knowing which URL to type is
+        # a step, and a step is somewhere to get stuck. Opened from a thread
+        # so a browser that is slow to launch never delays serve_forever.
+        def _open() -> None:
+            time.sleep(0.6)
+            try:
+                import webbrowser
+                webbrowser.open(portal)
+            except Exception as e:          # a headless box has no browser
+                log(f"could not open a browser ({e}) — visit {portal}")
+        threading.Thread(target=_open, daemon=True).start()
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:

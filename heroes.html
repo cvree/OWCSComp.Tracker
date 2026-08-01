@@ -3,8 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hero analytics — OWCS Comp Tracker</title>
-<meta name="description" content="OWCS hero analytics — pick rates and win rates for every hero, computed only from verified broadcast-extracted compositions.">
+<title>Hero board — OWCS Comp Tracker</title>
+<meta name="description" content="Every Overwatch hero in one sortable board: pick rate, win rate, swap activity and bans from verified broadcast-extracted compositions — always shown with the sample size behind them.">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Cinzel:wght@500;600&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
@@ -16,39 +17,84 @@
 <main class="pub-main" id="main">
   <div class="page-head rv">
     <span class="ph-eyebrow">The roster, measured</span>
-    <h1>Hero analytics</h1>
-    <p class="lede">Every hero in the pool, ranked by what pro teams actually run. Rates count only verified compositions — heroes with no proven appearances say so instead of pretending.</p>
+    <h1>Hero board</h1>
+    <p class="lede">Every hero in the pool in one sortable view — picks, win rate, swap activity
+      and bans. Each rate is shown next to the number of appearances it was computed from,
+      because a rate without its sample is a rumour.</p>
   </div>
+
+  <!-- The honest headline: how much of the roster this dataset can actually
+       speak about. It is the first thing on the page on purpose. -->
+  <div class="stat-note rv" id="hb-coverage"><span aria-hidden="true">⛨</span><span>Loading…</span></div>
 
   <div class="stat-cards rv" id="hx-cards" aria-label="Headline numbers"></div>
 
-  <form class="filterbar rv" id="hx-filters" style="margin-top:16px" aria-label="Filter heroes">
-    <label>Role
-      <select name="role" id="hx-role">
-        <option value="all">All roles</option>
-        <option value="Tank">Tank</option>
-        <option value="Damage">Damage</option>
-        <option value="Support">Support</option>
-      </select>
-    </label>
-    <label>Search
-      <input type="search" id="hx-search" placeholder="Hero name…" autocomplete="off">
-    </label>
-    <div class="fb-actions">
-      <span class="filter-summary" id="hx-summary" aria-live="polite"></span>
+  <div class="stack rv hb-controls" style="margin-top:20px">
+    <div class="hb-roles" id="hb-roles" role="group" aria-label="Filter by role"></div>
+    <div class="seg-region" id="region-seg" role="group" aria-label="Region"></div>
+    <form class="filterbar" id="hx-filters" aria-label="Filter heroes">
+      <label>Search
+        <input type="search" id="hx-search" placeholder="Hero name…" autocomplete="off">
+      </label>
+      <label>Tournament
+        <select id="sf-tournament"><option value="all">All tournaments</option></select>
+      </label>
+      <label>Team
+        <select id="sf-team"><option value="all">All teams</option></select>
+      </label>
+      <label>Map
+        <select id="sf-map"><option value="all">All maps</option></select>
+      </label>
+      <div class="fb-actions">
+        <label class="hb-toggle"><input type="checkbox" id="hb-unseen">
+          <span>Show heroes not yet sighted <span class="hb-n" id="hb-unseen-count"></span></span></label>
+        <button type="button" class="btn btn--ghost" id="sf-reset">Reset</button>
+      </div>
+    </form>
+    <div class="split">
+      <div class="filter-summary" id="hx-summary" aria-live="polite"></div>
+      <span class="freshness" id="freshness"></span>
     </div>
-  </form>
+  </div>
 
-  <section class="section" aria-label="Heroes with verified appearances">
-    <h2>In the meta <span class="h-count" id="hx-live-count"></span></h2>
-    <div class="hero-dir" id="hx-live"></div>
-    <div id="hx-live-empty" hidden></div>
+  <section class="section" id="hb-compare-section" hidden aria-label="Hero comparison">
+    <h2>Side by side</h2>
+    <div class="hb-cmp-grid" id="hb-compare"></div>
   </section>
 
-  <section class="section" aria-label="Heroes without verified appearances">
-    <h2>Not yet sighted <span class="h-count" id="hx-dormant-count"></span></h2>
-    <p class="dim" style="margin:0 0 14px">No verified appearance in tracked matches yet — honest absence, not zero interest. They join the table the moment the pipeline proves a pick.</p>
-    <div class="hero-dir" id="hx-dormant"></div>
+  <section class="section" aria-label="Hero board">
+    <h2>The board <span class="h-count" id="hx-live-count"></span></h2>
+    <p class="dim" style="margin-top:0;max-width:66ch">Sorting by win rate ranks by what the
+      evidence actually supports, not by the raw percentage — a hero who won their only decided
+      map does not outrank one who won eight of twelve. Click any hero for their teams and maps.</p>
+    <div class="hb-wrap" id="hb-wrap"></div>
+    <div id="hx-live-empty" hidden></div>
+    <div class="hb-tray" id="hb-tray" hidden aria-live="polite">
+      <span id="hb-tray-label"></span>
+      <span class="hb-tray__who" id="hb-tray-who"></span>
+      <button type="button" class="btn btn--ghost" id="hb-tray-clear">Clear</button>
+    </div>
+  </section>
+
+  <section class="section" aria-label="How to read this board">
+    <h2>How to read this board</h2>
+    <ul class="dim" style="max-width:70ch;line-height:1.7">
+      <li><b>Pick rate</b> is the share of tracked team-map appearances this hero was in. One
+        hero played by one team for a whole map counts once, however many frames it appeared in.</li>
+      <li><b>Win rate</b> counts only maps with a recorded winner. A blank is “no decided map
+        yet”, never a zero — zero is a claim.</li>
+      <li><b>Sample</b> is the honest version of a tier letter. Three pips is a rate worth
+        quoting; one amber pip means the number is arithmetic over a handful of maps and should
+        be read as “what happened”, not “what is true”.</li>
+      <li><b>Swaps</b> are mid-map hero changes confirmed across consecutive samples. Candidates
+        that failed that test are published as rejections on the
+        <a href="swaps.html">swap evidence page</a> rather than counted here.</li>
+      <li><b>Bans</b> are match facts imported from official sources, never inferred from video,
+        and never mixed into pick rates.</li>
+      <li>Heroes <b>not yet sighted</b> have no verified appearance in a tracked match. That is a
+        statement about this tracker's coverage, not about how the hero is played —
+        <a href="how-it-works.html#limits">why coverage is small →</a></li>
+    </ul>
   </section>
 </main>
 

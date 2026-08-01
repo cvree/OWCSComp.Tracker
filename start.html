@@ -138,18 +138,28 @@
 
     <div class="sg-do">
       <b>Check everything at once</b>
-      <p>Run this and read the list it prints. Anything marked MISSING is a tool from the steps
-        above that isn't on PATH yet — and it tells you how to fix each one.</p>
+      <p>The launcher in step 2 runs this for you, but you can run it yourself any time. It lists
+        every tool with OK / WARN / FAIL and the exact fix for each one.</p>
       <code class="blk">python pipeline/preflight.py</code>
     </div>
 
-    <h2 id="open">2 · Every match day: one command</h2>
-    <p>Open a terminal in the project folder and run:</p>
+    <h2 id="open">2 · Every match day: double-click one file</h2>
+    <div class="sg-do">
+      <b>Windows: double-click <code>start.bat</code></b>
+      <p style="margin:6px 0 0">In the project folder. It checks your tools, tells you plainly if
+        anything is missing, starts the control room, and opens the portal in your browser by
+        itself. <b>On macOS or Linux, double-click <code>start.command</code></b> (or run
+        <code>./start.command</code>) instead.</p>
+    </div>
+    <p>A black window will open and stay open. <b>Leave it open</b> — it <i>is</i> the program.
+      Closing it stops everything (nothing is lost; work resumes next time).</p>
+    <p>If you'd rather type it yourself, that's the same thing:</p>
     <code class="blk">python pipeline/serve.py</code>
-    <p>Leave that window open — it <i>is</i> the program. Then open
-      <a href="portal.html">http://localhost:8000/portal.html</a> in your browser. The paste box at
-      the top should say <b>“control room detected”</b>. If it says “static hosting” instead, the
-      command above isn't running or is running in a different folder.</p>
+    <p>Either way you land on <a href="portal.html">http://localhost:8000/portal.html</a>. The
+      paste box should say <b>“control room detected”</b>, with a row of green pills under it
+      confirming ffmpeg, yt-dlp and the JS runtime are all present. A red pill there names exactly
+      what to install and the command to do it. If the box says “static hosting” instead, the
+      launcher isn't running, or it's running in a different folder.</p>
 
     <h2 id="paste">3 · Paste the whole day at once</h2>
     <p>Go to the OWCS channel, open each VOD you want, and copy its link. Paste <b>all of them
@@ -219,7 +229,9 @@ https://www.youtube.com/watch?v=ccccccccccc</code>
 
     <h2 id="done">5 · Publishing</h2>
     <p>Publishing writes the approved compositions into the site's data file. Refresh the
-      <a href="index.html">front page</a> and the new maps are there, with their evidence.
+      <a href="index.html">front page</a> and the new maps are there, with their evidence — and
+      every hero you just added shows up on the <a href="heroes.html">hero board</a>, with the
+      sample size it came from.
       If you have the project connected to GitHub, committing and pushing that data file is what
       makes it appear on the live site.</p>
     <p>What gets published is only what cleared review. A map where the detector wasn't sure is
