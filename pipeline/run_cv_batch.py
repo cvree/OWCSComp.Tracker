@@ -170,13 +170,12 @@ def main() -> None:
 
 
 def export_data_main_write(payload) -> None:
-    import datetime as dt
-    import json
-    ts = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d %H:%M")
-    body = export_data.HEADER.format(ts=ts) + json.dumps(payload, indent=1) + ";\n"
-    os.makedirs(os.path.dirname(export_data.OUT_PATH), exist_ok=True)
-    with open(export_data.OUT_PATH, "w", encoding="utf-8") as f:
-        f.write(body)
+    # Renders through export_data so this writer is byte-identical to the
+    # exporter CI checks (`export_data.py --check`). Inlining json.dumps
+    # here dropped ensure_ascii=False and rewrote every non-ASCII name as a
+    # \uXXXX escape — a whole-file diff for identical data.
+    export_data.write_body(export_data.OUT_PATH,
+                           export_data.render_main_body(payload))
     log(f"Wrote {export_data.OUT_PATH}: {len(payload['matches'])} matches.")
 
 

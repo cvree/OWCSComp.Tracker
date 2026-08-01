@@ -222,7 +222,7 @@ def process_match(con, match_id: str, frames_dir: str, layout: dict,
         if any(reasons.values()):
             os.makedirs(qdir, exist_ok=True)
             shutil.copy(fp, os.path.join(qdir, fn))
-            with open(os.path.join(qdir, fn + ".json"), "w") as f:
+            with open(os.path.join(qdir, fn + ".json"), "w", encoding="utf-8") as f:
                 json.dump({"reasons": reasons, "read": comps}, f, indent=1)
             n_q += 1
             continue

@@ -147,7 +147,7 @@ def main():
     print("manual override")
     manual_opener = ["rein", "dva", "ashe", "ana", "kiriko"]  # different comp
     corr_path = os.path.join(TEST_WORK, "corrections.json")
-    with open(corr_path, "w") as f:
+    with open(corr_path, "w", encoding="utf-8") as f:
         json.dump({"corrections": [{
             "match": MATCH, "mapOrder": 1, "team": "falcons",
             "openerComp": manual_opener, "note": "read from replay code",

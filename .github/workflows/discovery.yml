@@ -32,8 +32,11 @@
 #   mode=export-dryrun      match export coverage report — why every excluded
 #                           match isn't public yet, read-only (D2.1)
 #   mode=sync              (default) same as the scheduled run — now also runs LIVE
-#                          team enrichment + opens (and auto-merges once green) a
-#                          data-update PR when calendar or team facts change
+#                          team enrichment + opens a data-update PR when calendar
+#                          or team facts change. It ATTEMPTS to merge that PR once
+#                          its CI is green; with only the default GITHUB_TOKEN the
+#                          PR does not trigger ci.yml, so the merge is best-effort
+#                          and the PR is left for a human (see the step's comment).
 #
 # Every YouTube mode is read-only: no video download, no recording, no hero-
 # composition writes, no production DB update, no auto-merge. Only sanitized
@@ -81,7 +84,12 @@ permissions:
 jobs:
   discover:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # The sync path's last step BLOCKS on `gh pr checks --watch`, waiting for
+    # ci.yml — whose own job timeout is 20 minutes, before queue time. At the
+    # previous 15 minutes this job was killed by its own deadline while still
+    # waiting, so a healthy data-update PR showed up as a red "discovery"
+    # timeout and never merged. Must comfortably exceed ci.yml's budget.
+    timeout-minutes: 45
     env:
       FACEIT_API_KEY: ${{ secrets.FACEIT_API_KEY }}
       YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
@@ -359,8 +367,16 @@ jobs:
         run: |
           git config user.name  "owcs-discovery[bot]"
           git config user.email "actions@users.noreply.github.com"
-          git add assets/js/data.js assets/data/public_data.v1.js data/owcs.sqlite \
-                  assets/data/team_asset_sources.json assets/data/team_coverage.v1.json 2>/dev/null || true
+          # Stage each generated file only if it exists. The previous form
+          # (`git add a b c 2>/dev/null || true`) staged NOTHING at all when
+          # any single path was absent — one missing optional export silently
+          # dropped a real calendar update, and the step then reported
+          # "nothing to publish".
+          for f in assets/js/data.js assets/data/public_data.v1.js \
+                   data/owcs.sqlite assets/data/team_asset_sources.json \
+                   assets/data/team_coverage.v1.json; do
+            if [ -e "$f" ]; then git add "$f"; fi
+          done
           if git diff --cached --quiet; then
             echo "No validated calendar/team changes this run — nothing to publish."
             exit 0
@@ -380,10 +396,25 @@ jobs:
           # until it reports a conclusion, then merge ONLY on success. A
           # failing or timed-out check leaves the PR open for a human —
           # never force-merged, never bypassed.
+          #
+          # KNOWN LIMITATION, stated here because the alternative is a
+          # workflow that lies: this PR is opened with the default
+          # GITHUB_TOKEN, and GitHub's anti-recursion rule means a
+          # GITHUB_TOKEN-created pull_request event does NOT start a workflow
+          # run. So unless a PAT/App token is configured, ci.yml never runs on
+          # $BR, `gh pr checks` reports "no checks" (exit 8), and this branch
+          # correctly falls through to the human-review path below. Auto-merge
+          # is therefore best-effort, NOT a guarantee — do not read a green
+          # discovery run as "the data update shipped".
           if gh pr checks "$BR" --watch --fail-fast; then
             gh pr merge --squash --delete-branch "$BR"
+            echo "merged=true" >> "$GITHUB_OUTPUT"
           else
-            echo "CI on $BR did not pass — leaving the PR open for review."
+            echo "merged=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::No passing CI conclusion for $BR (either a real "
+            echo "::warning::failure, or no checks ran because a GITHUB_TOKEN-"
+            echo "::warning::opened PR does not trigger workflows). The PR is "
+            echo "::warning::open and waiting for a human — nothing shipped."
           fi
 
       - name: Summary
@@ -414,5 +445,9 @@ jobs:
             fi
             echo "- Match metadata repair: ${{ steps.match_repair.conclusion || 'skipped' }}"
             echo "- Team enrichment: ${{ steps.teams.conclusion || 'skipped' }}"
-            echo "- Data-update PR: ${{ steps.pr.conclusion || 'skipped' }} (auto-merges once its own CI is green)"
+            echo "- Data-update PR: ${{ steps.pr.conclusion || 'skipped' }} (merged: ${{ steps.pr.outputs.merged || 'n/a' }})"
+            if [ "${{ steps.pr.outputs.merged }}" = "false" ]; then
+              echo "  A PR was opened but NOT merged — no CI conclusion. See the"
+              echo "  'Open data-update PR' step; the change has not shipped."
+            fi
           } >> "$GITHUB_STEP_SUMMARY"

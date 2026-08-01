@@ -69,7 +69,7 @@ class TestSanitizeUrl(unittest.TestCase):
 class TestFixtureClient(unittest.TestCase):
     def test_channel_by_handle_and_uploads_playlist(self):
         with tempfile.TemporaryDirectory() as d:
-            with open(os.path.join(d, "channels_handle_ow_esports.json"), "w") as f:
+            with open(os.path.join(d, "channels_handle_ow_esports.json"), "w", encoding="utf-8") as f:
                 json.dump({"items": [channel_item()]}, f)
             client = yt.YouTubeClient(transport=yt.fixture_transport(d))
             item = client.get_channel_by_handle("OW_Esports")
@@ -90,9 +90,9 @@ class TestFixtureClient(unittest.TestCase):
                                {"contentDetails": {"videoId": "v2"}}],
                      "nextPageToken": "PAGE2"}
             page2 = {"items": [{"contentDetails": {"videoId": "v3"}}]}
-            with open(os.path.join(d, "playlistItems_uuuploads123_page1.json"), "w") as f:
+            with open(os.path.join(d, "playlistItems_uuuploads123_page1.json"), "w", encoding="utf-8") as f:
                 json.dump(page1, f)
-            with open(os.path.join(d, "playlistItems_uuuploads123_page2.json"), "w") as f:
+            with open(os.path.join(d, "playlistItems_uuuploads123_page2.json"), "w", encoding="utf-8") as f:
                 json.dump(page2, f)
             client = yt.YouTubeClient(transport=yt.fixture_transport(d))
             items = client.list_playlist_items("UUuploads123")
@@ -116,7 +116,7 @@ class TestFixtureClient(unittest.TestCase):
                 {"contentDetails": {"videoId": "ancient", "videoPublishedAt": "2020-01-01T00:00:00Z"}},
             ]}
             for name, payload in (("page1", page1), ("page2", page2), ("page3", page3)):
-                with open(os.path.join(d, f"playlistItems_uuuploads123_{name}.json"), "w") as f:
+                with open(os.path.join(d, f"playlistItems_uuuploads123_{name}.json"), "w", encoding="utf-8") as f:
                     json.dump(payload, f)
             client = yt.YouTubeClient(transport=yt.fixture_transport(d))
             stats: dict = {}
@@ -141,7 +141,7 @@ class TestFixtureClient(unittest.TestCase):
                 {"contentDetails": {"videoId": "ancient", "videoPublishedAt": "2020-01-01T00:00:00Z"}},
             ]}
             for name, payload in (("page1", page1), ("page2", page2)):
-                with open(os.path.join(d, f"playlistItems_uuuploads123_{name}.json"), "w") as f:
+                with open(os.path.join(d, f"playlistItems_uuuploads123_{name}.json"), "w", encoding="utf-8") as f:
                     json.dump(payload, f)
             client = yt.YouTubeClient(transport=yt.fixture_transport(d))
             # stop_before=None (the full_history contract) walks every page.
@@ -152,7 +152,7 @@ class TestFixtureClient(unittest.TestCase):
     def test_videos_list_batches_and_dedupes(self):
         with tempfile.TemporaryDirectory() as d:
             ids = [f"v{i}" for i in range(3)]
-            with open(os.path.join(d, f"videos_{'_'.join(sorted(ids))}.json"), "w") as f:
+            with open(os.path.join(d, f"videos_{'_'.join(sorted(ids))}.json"), "w", encoding="utf-8") as f:
                 json.dump({"items": [video_item(v) for v in ids]}, f)
             client = yt.YouTubeClient(transport=yt.fixture_transport(d))
             # A duplicate id (e.g. a full-day broadcast appearing twice in an
@@ -163,7 +163,7 @@ class TestFixtureClient(unittest.TestCase):
 
     def test_search_fallback_costs_100_units(self):
         with tempfile.TemporaryDirectory() as d:
-            with open(os.path.join(d, "search_uc123_page1.json"), "w") as f:
+            with open(os.path.join(d, "search_uc123_page1.json"), "w", encoding="utf-8") as f:
                 json.dump({"items": [{"id": {"videoId": "v9"}}]}, f)
             client = yt.YouTubeClient(transport=yt.fixture_transport(d))
             found = client.search_channel_videos("UC123")
@@ -210,7 +210,7 @@ class TestQuotaSink(unittest.TestCase):
     def test_sink_called_with_endpoint_and_units(self):
         seen = []
         with tempfile.TemporaryDirectory() as d:
-            with open(os.path.join(d, "channels_id_uc123.json"), "w") as f:
+            with open(os.path.join(d, "channels_id_uc123.json"), "w", encoding="utf-8") as f:
                 json.dump({"items": [channel_item(cid="UC123")]}, f)
             client = yt.YouTubeClient(transport=yt.fixture_transport(d),
                                       quota_sink=lambda ep, units: seen.append((ep, units)))
@@ -221,14 +221,14 @@ class TestQuotaSink(unittest.TestCase):
 class TestCaching(unittest.TestCase):
     def test_deterministic_cache_key_no_key_leakage(self):
         with tempfile.TemporaryDirectory() as fixdir, tempfile.TemporaryDirectory() as cachedir:
-            with open(os.path.join(fixdir, "channels_id_uc123.json"), "w") as f:
+            with open(os.path.join(fixdir, "channels_id_uc123.json"), "w", encoding="utf-8") as f:
                 json.dump({"items": [channel_item(cid="UC123")]}, f)
             client = yt.YouTubeClient(api_key="TOP-SECRET-KEY",
                                       transport=yt.fixture_transport(fixdir), cache_dir=cachedir)
             client.get_channel_by_id("UC123")
             cached_files = os.listdir(cachedir)
             self.assertEqual(len(cached_files), 1)
-            with open(os.path.join(cachedir, cached_files[0])) as f:
+            with open(os.path.join(cachedir, cached_files[0]), encoding="utf-8") as f:
                 content = f.read()
             self.assertNotIn("TOP-SECRET-KEY", content)
             # A second identical call reuses the same deterministic filename.
@@ -237,7 +237,7 @@ class TestCaching(unittest.TestCase):
 
     def test_cache_hit_skips_network_and_quota(self):
         with tempfile.TemporaryDirectory() as fixdir, tempfile.TemporaryDirectory() as cachedir:
-            with open(os.path.join(fixdir, "channels_id_uc123.json"), "w") as f:
+            with open(os.path.join(fixdir, "channels_id_uc123.json"), "w", encoding="utf-8") as f:
                 json.dump({"items": [channel_item(cid="UC123")]}, f)
             calls_made = []
             real_transport = yt.fixture_transport(fixdir)
@@ -262,7 +262,7 @@ class TestCaching(unittest.TestCase):
 
     def test_cache_ttl_zero_disables_caching(self):
         with tempfile.TemporaryDirectory() as fixdir, tempfile.TemporaryDirectory() as cachedir:
-            with open(os.path.join(fixdir, "channels_id_uc123.json"), "w") as f:
+            with open(os.path.join(fixdir, "channels_id_uc123.json"), "w", encoding="utf-8") as f:
                 json.dump({"items": [channel_item(cid="UC123")]}, f)
             client = yt.YouTubeClient(transport=yt.fixture_transport(fixdir), cache_dir=cachedir,
                                       cache_ttl_seconds=0)
@@ -273,7 +273,7 @@ class TestCaching(unittest.TestCase):
 
     def test_no_key_in_call_audit_trail(self):
         with tempfile.TemporaryDirectory() as d:
-            with open(os.path.join(d, "channels_id_uc123.json"), "w") as f:
+            with open(os.path.join(d, "channels_id_uc123.json"), "w", encoding="utf-8") as f:
                 json.dump({"items": [channel_item(cid="UC123")]}, f)
             client = yt.YouTubeClient(api_key="TOP-SECRET-KEY", transport=yt.fixture_transport(d))
             client.get_channel_by_id("UC123")

@@ -40,7 +40,7 @@ def rooms():
 def main():
     shutil.rmtree(TMP, ignore_errors=True)
     os.makedirs(TMP, exist_ok=True)
-    json.dump({"rooms": []}, open(SRC, "w"))
+    json.dump({"rooms": []}, open(SRC, "w", encoding="utf-8"))
 
     print("add")
     ms.cmd_add(ms.load(SRC), args(url=URL1, region="NA", stage="Stage 2"))
@@ -64,7 +64,7 @@ def main():
     data = ms.load(SRC)
     data["rooms"].append({"url": URL1})            # manual dup
     data["rooms"].append({"url": URL2})
-    json.dump(data, open(SRC, "w"))
+    json.dump(data, open(SRC, "w", encoding="utf-8"))
     ms.cmd_dedupe(ms.load(SRC), args())
     check("2 unique remain", len(rooms()) == 2)
 
@@ -77,7 +77,7 @@ def main():
     check("0 remain", len(rooms()) == 0)
 
     print("validate flags bad url")
-    json.dump({"rooms": [{"url": "not-a-url"}]}, open(SRC, "w"))
+    json.dump({"rooms": [{"url": "not-a-url"}]}, open(SRC, "w", encoding="utf-8"))
     check("validate nonzero on bad url", ms.cmd_validate(ms.load(SRC), args()) == 1)
 
     shutil.rmtree(TMP, ignore_errors=True)

@@ -167,7 +167,7 @@ def main() -> None:
     print("primary real-VOD source is registered:")
     import json as _json
     srcs = _json.load(open(os.path.join(ROOT, "data", "sources",
-                                        "video_sources.json")))["sources"]
+                                        "video_sources.json"), encoding="utf-8"))["sources"]
     by_id = {s.get("id"): s for s in srcs if s.get("id")}
     check("owcs-8c105lnzlam source exists",
           "owcs-8c105lnzlam" in by_id)

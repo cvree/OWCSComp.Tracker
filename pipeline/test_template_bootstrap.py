@@ -73,7 +73,7 @@ class TestScanTemplateDir(unittest.TestCase):
     def test_underscore_prefixed_and_non_png_files_are_ignored(self):
         write_png(os.path.join(self.d, "_candidates_montage.png"))
         write_png(os.path.join(self.d, "tracer.png"))
-        with open(os.path.join(self.d, "notes.txt"), "w") as f:
+        with open(os.path.join(self.d, "notes.txt"), "w", encoding="utf-8") as f:
             f.write("x")
         self.assertEqual(sorted(tb.scan_template_dir(self.d)), ["tracer"])
 
@@ -226,7 +226,7 @@ class TestProvenance(unittest.TestCase):
         self.assertIsNone(tb.load_provenance(self.d))
 
     def test_corrupt_provenance_is_none_not_an_exception(self):
-        with open(os.path.join(self.d, tb.PROVENANCE_FILENAME), "w") as f:
+        with open(os.path.join(self.d, tb.PROVENANCE_FILENAME), "w", encoding="utf-8") as f:
             f.write("{not json")
         self.assertIsNone(tb.load_provenance(self.d))
 

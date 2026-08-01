@@ -137,7 +137,7 @@ def main() -> None:
         "match_threshold": 0.6,
         "templates_dir": "pipeline/fixtures/video/templates",
     }
-    with open(os.path.join(HERE, "demo-layout.json"), "w") as f:
+    with open(os.path.join(HERE, "demo-layout.json"), "w", encoding="utf-8") as f:
         json.dump(layout, f, indent=1)
 
     print(f"Wrote {len(ROSTER)} templates, anchor/replay crops, "

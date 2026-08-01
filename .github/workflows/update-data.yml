@@ -28,6 +28,7 @@ concurrency:
 
 permissions:
   contents: write
+  actions: write  # to dispatch pages.yml after a real commit (see below)
 
 jobs:
   update:
@@ -42,8 +43,13 @@ jobs:
         with:
           python-version: "3.12"
 
+      # Install the DECLARED dependency set, not an ad-hoc subset. This step
+      # used to `pip install opencv-python-headless` only, so any dependency
+      # added to requirements.txt (or any version floor raised there) simply
+      # would not exist on this runner — the run dies with ModuleNotFoundError
+      # long after the "fresh install" was supposedly verified in ci.yml.
       - name: Install dependencies
-        run: pip install --quiet opencv-python-headless
+        run: pip install --quiet -r requirements.txt
 
       - name: Run pipeline
         run: |
@@ -65,18 +71,48 @@ jobs:
           fi
 
       - name: Commit updated data.js (and DB) if changed
+        id: commit
+        shell: bash
         run: |
+          set -euo pipefail
           git config user.name  "owcs-pipeline[bot]"
           git config user.email "actions@users.noreply.github.com"
-          git add assets/js/data.js assets/data/public_data.v1.js data/owcs.sqlite 2>/dev/null \
-            || git add assets/js/data.js assets/data/public_data.v1.js
+          for f in assets/js/data.js assets/data/public_data.v1.js data/owcs.sqlite; do
+            if [ -e "$f" ]; then git add "$f"; fi
+          done
           if git diff --cached --quiet; then
             echo "No data changes this run."
+            echo "committed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git commit -m "data: update from FACEIT + corrections ($(date -u +'%Y-%m-%d %H:%M') UTC)"
-          git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
-          git push origin "HEAD:${GITHUB_REF_NAME}"
+          # Bounded rebase-retry. A single `pull --rebase` + `push` loses this
+          # run's regenerated data if ANY push lands in the window between the
+          # two: the push is rejected, the job goes red, and the runner — which
+          # holds the only copy of the export — is discarded.
+          pushed=false
+          for attempt in 1 2 3; do
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
+            if git push origin "HEAD:${GITHUB_REF_NAME}"; then pushed=true; break; fi
+            echo "::warning::push attempt ${attempt} rejected (a concurrent push landed) — rebasing and retrying"
+            sleep $((attempt * 5))
+          done
+          if [ "$pushed" != "true" ]; then
+            echo "::error::could not push the data update after 3 rebase attempts"
+            exit 1
+          fi
+          echo "committed=true" >> "$GITHUB_OUTPUT"
+
+      # A push made with the default GITHUB_TOKEN deliberately does NOT
+      # trigger other workflows (GitHub's anti-recursion safeguard on push
+      # events), so without this step a data update would land on the branch
+      # and pages.yml would never redeploy — the live site stays on whatever
+      # a HUMAN last pushed. workflow_dispatch called via the API is exempt.
+      - name: Trigger a Pages redeploy
+        if: steps.commit.outputs.committed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run pages.yml --ref "${GITHUB_REF_NAME}"
 
       - name: Run summary
         if: always()

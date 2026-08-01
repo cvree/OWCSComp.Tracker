@@ -90,8 +90,6 @@ def step_validate(con, strict: bool) -> int:
 
 
 def step_export(con, allow_empty: bool = False) -> None:
-    import datetime as dt
-    import json
     payload = export_data.build_payload(con)
     # Safety: don't overwrite an existing populated data.js with an empty one
     # (e.g. a fresh CI DB before real FACEIT rooms are configured). Prevents
@@ -99,11 +97,14 @@ def step_export(con, allow_empty: bool = False) -> None:
     if not payload["matches"] and not allow_empty and os.path.exists(export_data.OUT_PATH):
         log("export: 0 matches — keeping existing data.js (use --allow-empty to override)")
         return
-    ts = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d %H:%M")
-    body = export_data.HEADER.format(ts=ts) + json.dumps(payload, indent=1) + ";\n"
-    os.makedirs(os.path.dirname(export_data.OUT_PATH), exist_ok=True)
-    with open(export_data.OUT_PATH, "w", encoding="utf-8") as f:
-        f.write(body)
+    # Renders through export_data so a batch run and `export_data.py`
+    # produce the SAME bytes. This used to inline json.dumps(payload,
+    # indent=1) without ensure_ascii=False, so a batch run rewrote every
+    # non-ASCII team/player name as \uXXXX — a whole-file diff against the
+    # committed export, and a guaranteed failure of the CI reproducibility
+    # gate, for data that had not changed at all.
+    export_data.write_body(export_data.OUT_PATH,
+                           export_data.render_main_body(payload))
     log(f"export: wrote {export_data.OUT_PATH} — {len(payload['matches'])} matches, "
         f"{sum(len(m['maps']) for m in payload['matches'])} maps")
 

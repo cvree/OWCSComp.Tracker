@@ -123,7 +123,7 @@ def detect_dir(frames_dir: str, layout: dict, lib: dict,
             if quarantine_dir:
                 os.makedirs(quarantine_dir, exist_ok=True)
                 shutil.copy(fp, os.path.join(quarantine_dir, fn))
-                with open(os.path.join(quarantine_dir, fn + ".json"), "w") as f:
+                with open(os.path.join(quarantine_dir, fn + ".json"), "w", encoding="utf-8") as f:
                     json.dump({"reasons": reasons, "read": reading}, f, indent=1)
     return {"accepted": accepted, "quarantined": quarantined}
 

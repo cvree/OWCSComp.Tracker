@@ -35,8 +35,8 @@ def check(name, cond):
 
 def prime_cache(url, fixture):
     os.makedirs(CACHE, exist_ok=True)
-    body = open(os.path.join(FIX, fixture)).read()
-    open(os.path.join(CACHE, ing.cache_key_for(url) + ".body"), "w").write(body)
+    body = open(os.path.join(FIX, fixture), encoding="utf-8").read()
+    open(os.path.join(CACHE, ing.cache_key_for(url) + ".body"), "w", encoding="utf-8").write(body)
 
 
 _open_cons: list = []
@@ -155,7 +155,7 @@ def main():
         {"url": URL_DET, "region": "EMEA"},
         {"url": "https://www.faceit.com/en/ow2/room/1-uncached"},  # offline skip
         {"url": "", "notes": "blank"},                          # filtered by loader
-    ]}, open(src, "w"))
+    ]}, open(src, "w", encoding="utf-8"))
 
     test_reads_source_list(src)
     test_batch_offline_dedupe_and_resilience(src)

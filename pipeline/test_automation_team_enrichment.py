@@ -122,7 +122,7 @@ class TestEnrichHappyPath(EnrichCase):
         self.seed_team()
         r = self.run_enrich({"ft-1": raw_team(avatar="https://img.example/ssg.png")})
         self.assertEqual(len(r["newCandidateSources"]), 1)
-        with open(self.assets_path) as f:
+        with open(self.assets_path, encoding="utf-8") as f:
             registry = json.load(f)
         sources = registry["teams"]["ssg"]["candidateSources"]
         self.assertEqual(len(sources), 1)
@@ -162,7 +162,7 @@ class TestIdempotency(EnrichCase):
         self.run_enrich({"ft-1": raw_team()})
         r2 = self.run_enrich({"ft-1": raw_team()})
         self.assertEqual(r2["newCandidateSources"], [])
-        with open(self.assets_path) as f:
+        with open(self.assets_path, encoding="utf-8") as f:
             registry = json.load(f)
         self.assertEqual(len(registry["teams"]["ssg"]["candidateSources"]), 1)
 
@@ -216,7 +216,7 @@ class TestTeamIdFilter(EnrichCase):
 class TestFixtureTransport(unittest.TestCase):
     def test_team_endpoint_routes_to_team_file(self):
         with tempfile.TemporaryDirectory() as d:
-            with open(os.path.join(d, "team_ft-1.json"), "w") as f:
+            with open(os.path.join(d, "team_ft-1.json"), "w", encoding="utf-8") as f:
                 json.dump(raw_team(), f)
             client = fa.FaceitClient(transport=fa.fixture_transport(d))
             raw = client.get_team("ft-1")

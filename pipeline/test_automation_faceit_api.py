@@ -101,7 +101,7 @@ class TestClient(unittest.TestCase):
             # whole list in one file, so pagination stops when a short page
             # returns. Use a small list to keep it simple.
             items = [raw_match(mid=f"1-{i}") for i in range(3)]
-            with open(os.path.join(d, "champ1.json"), "w") as f:
+            with open(os.path.join(d, "champ1.json"), "w", encoding="utf-8") as f:
                 json.dump({"items": items}, f)
             client = fa.FaceitClient(transport=fa.fixture_transport(d))
             got = client.list_championship_matches("champ1")

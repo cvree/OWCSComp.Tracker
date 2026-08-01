@@ -46,7 +46,7 @@ def write_corr(entries):
     d = os.path.join(ROOT, "corrections")
     os.makedirs(d, exist_ok=True)
     path = os.path.join(d, "corrections.test.json")
-    json.dump({"corrections": entries}, open(path, "w"))
+    json.dump({"corrections": entries}, open(path, "w", encoding="utf-8"))
     return path
 
 

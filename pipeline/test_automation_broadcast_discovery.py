@@ -78,7 +78,7 @@ def _cfg(**over):
 class TestVerifyChannels(unittest.TestCase):
     def test_resolves_by_handle_when_no_channel_id(self):
         with tempfile.TemporaryDirectory() as d:
-            with open(os.path.join(d, "channels_handle_ow_esports.json"), "w") as f:
+            with open(os.path.join(d, "channels_handle_ow_esports.json"), "w", encoding="utf-8") as f:
                 json.dump({"items": [raw_channel()]}, f)
             client = yt.YouTubeClient(transport=yt.fixture_transport(d))
             ch = channel_row(channelId=None, sourceUrl="https://www.youtube.com/OW_Esports")
@@ -101,7 +101,7 @@ class TestVerifyChannels(unittest.TestCase):
         # never a 404 — simulate that exactly (a fixture-lookup 404 would
         # instead be an API-error test, not a not-found test).
         with tempfile.TemporaryDirectory() as d:
-            with open(os.path.join(d, "channels_id_ucnope.json"), "w") as f:
+            with open(os.path.join(d, "channels_id_ucnope.json"), "w", encoding="utf-8") as f:
                 json.dump({"items": []}, f)
             client = yt.YouTubeClient(transport=yt.fixture_transport(d))
             report = bd.verify_channels(client, [channel_row(channelId="UCnope", sourceUrl=None)])
@@ -207,7 +207,7 @@ class TestDiscoverChannelVideos(DiscoveryCase):
 
     def test_channel_not_found(self):
         with tempfile.TemporaryDirectory() as d:
-            with open(os.path.join(d, "channels_id_ucnope.json"), "w") as f:
+            with open(os.path.join(d, "channels_id_ucnope.json"), "w", encoding="utf-8") as f:
                 json.dump({"items": []}, f)
             client = yt.YouTubeClient(transport=yt.fixture_transport(d))
             result = bd.discover_channel_videos(client, channel_row(channelId="UCnope"),
@@ -216,14 +216,14 @@ class TestDiscoverChannelVideos(DiscoveryCase):
 
     def test_playlist_pagination_and_hydration(self):
         with tempfile.TemporaryDirectory() as d:
-            with open(os.path.join(d, "channels_id_uc123.json"), "w") as f:
+            with open(os.path.join(d, "channels_id_uc123.json"), "w", encoding="utf-8") as f:
                 json.dump({"items": [raw_channel()]}, f)
-            with open(os.path.join(d, "playlistItems_uuuploads_page1.json"), "w") as f:
+            with open(os.path.join(d, "playlistItems_uuuploads_page1.json"), "w", encoding="utf-8") as f:
                 json.dump({"items": [{"contentDetails": {"videoId": "v1"}}],
                           "nextPageToken": "PAGE2"}, f)
-            with open(os.path.join(d, "playlistItems_uuuploads_page2.json"), "w") as f:
+            with open(os.path.join(d, "playlistItems_uuuploads_page2.json"), "w", encoding="utf-8") as f:
                 json.dump({"items": [{"contentDetails": {"videoId": "v2"}}]}, f)
-            with open(os.path.join(d, "videos_v1_v2.json"), "w") as f:
+            with open(os.path.join(d, "videos_v1_v2.json"), "w", encoding="utf-8") as f:
                 json.dump({"items": [raw_video("v1", published=epoch_iso(-1)),
                                      raw_video("v2", published=epoch_iso(-2))]}, f)
             client = yt.YouTubeClient(transport=yt.fixture_transport(d))
@@ -240,19 +240,19 @@ class TestDiscoverChannelVideos(DiscoveryCase):
         # once a page's oldest item predates lookback+buffer, never walking
         # a channel's entire upload history.
         with tempfile.TemporaryDirectory() as d:
-            with open(os.path.join(d, "channels_id_uc123.json"), "w") as f:
+            with open(os.path.join(d, "channels_id_uc123.json"), "w", encoding="utf-8") as f:
                 json.dump({"items": [raw_channel()]}, f)
-            with open(os.path.join(d, "playlistItems_uuuploads_page1.json"), "w") as f:
+            with open(os.path.join(d, "playlistItems_uuuploads_page1.json"), "w", encoding="utf-8") as f:
                 json.dump({"items": [
                     {"contentDetails": {"videoId": "recent1", "videoPublishedAt": epoch_iso(-1)}},
                 ], "nextPageToken": "PAGE2"}, f)
-            with open(os.path.join(d, "playlistItems_uuuploads_page2.json"), "w") as f:
+            with open(os.path.join(d, "playlistItems_uuuploads_page2.json"), "w", encoding="utf-8") as f:
                 json.dump({"items": [
                     {"contentDetails": {"videoId": "old1", "videoPublishedAt": epoch_iso(-30)}},
                 ], "nextPageToken": "PAGE3"}, f)
             # page3 deliberately has NO fixture file — if pagination reaches
             # it, the call raises a YouTubeApiError, failing this test.
-            with open(os.path.join(d, "videos_old1_recent1.json"), "w") as f:
+            with open(os.path.join(d, "videos_old1_recent1.json"), "w", encoding="utf-8") as f:
                 json.dump({"items": [raw_video("recent1", published=epoch_iso(-1)),
                                      raw_video("old1", published=epoch_iso(-30))]}, f)
             client = yt.YouTubeClient(transport=yt.fixture_transport(d))
@@ -264,17 +264,17 @@ class TestDiscoverChannelVideos(DiscoveryCase):
 
     def test_full_history_walks_every_page(self):
         with tempfile.TemporaryDirectory() as d:
-            with open(os.path.join(d, "channels_id_uc123.json"), "w") as f:
+            with open(os.path.join(d, "channels_id_uc123.json"), "w", encoding="utf-8") as f:
                 json.dump({"items": [raw_channel()]}, f)
-            with open(os.path.join(d, "playlistItems_uuuploads_page1.json"), "w") as f:
+            with open(os.path.join(d, "playlistItems_uuuploads_page1.json"), "w", encoding="utf-8") as f:
                 json.dump({"items": [
                     {"contentDetails": {"videoId": "recent1", "videoPublishedAt": epoch_iso(-1)}},
                 ], "nextPageToken": "PAGE2"}, f)
-            with open(os.path.join(d, "playlistItems_uuuploads_page2.json"), "w") as f:
+            with open(os.path.join(d, "playlistItems_uuuploads_page2.json"), "w", encoding="utf-8") as f:
                 json.dump({"items": [
                     {"contentDetails": {"videoId": "ancient1", "videoPublishedAt": epoch_iso(-900)}},
                 ]}, f)
-            with open(os.path.join(d, "videos_ancient1_recent1.json"), "w") as f:
+            with open(os.path.join(d, "videos_ancient1_recent1.json"), "w", encoding="utf-8") as f:
                 json.dump({"items": [raw_video("recent1", published=epoch_iso(-1)),
                                      raw_video("ancient1", published=epoch_iso(-900))]}, f)
             client = yt.YouTubeClient(transport=yt.fixture_transport(d))
@@ -286,11 +286,11 @@ class TestDiscoverChannelVideos(DiscoveryCase):
 
     def test_search_fallback_only_when_no_uploads(self):
         with tempfile.TemporaryDirectory() as d:
-            with open(os.path.join(d, "channels_id_uc123.json"), "w") as f:
+            with open(os.path.join(d, "channels_id_uc123.json"), "w", encoding="utf-8") as f:
                 json.dump({"items": [raw_channel(uploads="")]}, f)
-            with open(os.path.join(d, "search_uc123_page1.json"), "w") as f:
+            with open(os.path.join(d, "search_uc123_page1.json"), "w", encoding="utf-8") as f:
                 json.dump({"items": [{"id": {"videoId": "v9"}}]}, f)
-            with open(os.path.join(d, "videos_v9.json"), "w") as f:
+            with open(os.path.join(d, "videos_v9.json"), "w", encoding="utf-8") as f:
                 json.dump({"items": [raw_video("v9", published=epoch_iso(-1))]}, f)
             client = yt.YouTubeClient(transport=yt.fixture_transport(d))
             result = bd.discover_channel_videos(client, channel_row(),
@@ -301,7 +301,7 @@ class TestDiscoverChannelVideos(DiscoveryCase):
 
     def test_search_fallback_not_used_unless_opted_in(self):
         with tempfile.TemporaryDirectory() as d:
-            with open(os.path.join(d, "channels_id_uc123.json"), "w") as f:
+            with open(os.path.join(d, "channels_id_uc123.json"), "w", encoding="utf-8") as f:
                 json.dump({"items": [raw_channel(uploads="")]}, f)
             client = yt.YouTubeClient(transport=yt.fixture_transport(d))
             result = bd.discover_channel_videos(client, channel_row(),
@@ -377,11 +377,11 @@ class TestUpsertIdempotency(DiscoveryCase):
 class TestSyncBroadcasts(DiscoveryCase):
     def _client_with_video(self, video_id="v1", **video_kw):
         d = tempfile.mkdtemp()
-        with open(os.path.join(d, "channels_id_uc123.json"), "w") as f:
+        with open(os.path.join(d, "channels_id_uc123.json"), "w", encoding="utf-8") as f:
             json.dump({"items": [raw_channel()]}, f)
-        with open(os.path.join(d, "playlistItems_uuuploads_page1.json"), "w") as f:
+        with open(os.path.join(d, "playlistItems_uuuploads_page1.json"), "w", encoding="utf-8") as f:
             json.dump({"items": [{"contentDetails": {"videoId": video_id}}]}, f)
-        with open(os.path.join(d, f"videos_{video_id}.json"), "w") as f:
+        with open(os.path.join(d, f"videos_{video_id}.json"), "w", encoding="utf-8") as f:
             json.dump({"items": [raw_video(video_id, published=epoch_iso(-1), **video_kw)]}, f)
         return yt.YouTubeClient(transport=yt.fixture_transport(d))
 
@@ -456,17 +456,17 @@ class TestSyncBroadcasts(DiscoveryCase):
         kr_channel = channel_row(id="ow_esports_korea", language="ko", channelId="UC456",
                                  sourceUrl=None)
         d = tempfile.mkdtemp()
-        with open(os.path.join(d, "channels_id_uc123.json"), "w") as f:
+        with open(os.path.join(d, "channels_id_uc123.json"), "w", encoding="utf-8") as f:
             json.dump({"items": [raw_channel(cid="UC123")]}, f)
-        with open(os.path.join(d, "channels_id_uc456.json"), "w") as f:
+        with open(os.path.join(d, "channels_id_uc456.json"), "w", encoding="utf-8") as f:
             json.dump({"items": [raw_channel(cid="UC456", uploads="UUuploadsKR")]}, f)
-        with open(os.path.join(d, "playlistItems_uuuploads_page1.json"), "w") as f:
+        with open(os.path.join(d, "playlistItems_uuuploads_page1.json"), "w", encoding="utf-8") as f:
             json.dump({"items": [{"contentDetails": {"videoId": "ven"}}]}, f)
-        with open(os.path.join(d, "playlistItems_uuuploadskr_page1.json"), "w") as f:
+        with open(os.path.join(d, "playlistItems_uuuploadskr_page1.json"), "w", encoding="utf-8") as f:
             json.dump({"items": [{"contentDetails": {"videoId": "vkr"}}]}, f)
-        with open(os.path.join(d, "videos_ven.json"), "w") as f:
+        with open(os.path.join(d, "videos_ven.json"), "w", encoding="utf-8") as f:
             json.dump({"items": [raw_video("ven", published=epoch_iso(-1))]}, f)
-        with open(os.path.join(d, "videos_vkr.json"), "w") as f:
+        with open(os.path.join(d, "videos_vkr.json"), "w", encoding="utf-8") as f:
             json.dump({"items": [raw_video("vkr", published=epoch_iso(-1))]}, f)
         client = yt.YouTubeClient(transport=yt.fixture_transport(d))
         summary = bd.sync_broadcasts(client=client, store=s, channels=[en_channel, kr_channel],
@@ -495,7 +495,7 @@ class TestVerifiedRegistryStability(unittest.TestCase):
     correctly against the real config file (not a synthetic channel_row)."""
 
     def _real_channel_fixture(self, d):
-        with open(os.path.join(d, f"channels_id_{yt._slug(VERIFIED_CHANNEL_ID)}.json"), "w") as f:
+        with open(os.path.join(d, f"channels_id_{yt._slug(VERIFIED_CHANNEL_ID)}.json"), "w", encoding="utf-8") as f:
             json.dump({"items": [raw_channel(cid=VERIFIED_CHANNEL_ID,
                                             uploads=VERIFIED_UPLOADS_PLAYLIST_ID)]}, f)
 
@@ -518,9 +518,9 @@ class TestVerifiedRegistryStability(unittest.TestCase):
         self.assertEqual([c["id"] for c in live], ["ow_esports_global"])
         with tempfile.TemporaryDirectory() as d:
             self._real_channel_fixture(d)
-            with open(os.path.join(d, f"playlistItems_{yt._slug(VERIFIED_UPLOADS_PLAYLIST_ID)}_page1.json"), "w") as f:
+            with open(os.path.join(d, f"playlistItems_{yt._slug(VERIFIED_UPLOADS_PLAYLIST_ID)}_page1.json"), "w", encoding="utf-8") as f:
                 json.dump({"items": [{"contentDetails": {"videoId": "real1"}}]}, f)
-            with open(os.path.join(d, "videos_real1.json"), "w") as f:
+            with open(os.path.join(d, "videos_real1.json"), "w", encoding="utf-8") as f:
                 json.dump({"items": [raw_video("real1", published=epoch_iso(-1))]}, f)
             client = yt.YouTubeClient(transport=yt.fixture_transport(d))
             result = bd.discover_channel_videos(client, live[0], lookback_days=14,

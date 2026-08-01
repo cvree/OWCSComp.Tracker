@@ -45,7 +45,7 @@ def setup():
 
 def write(entries):
     p = os.path.join(os.path.dirname(TEST_DB), "facts.json")
-    json.dump({"matchFacts": entries}, open(p, "w"))
+    json.dump({"matchFacts": entries}, open(p, "w", encoding="utf-8"))
     return p
 
 

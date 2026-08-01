@@ -187,21 +187,21 @@ class TestPipefailMechanism(unittest.TestCase):
                  f"(python3 -c 'import sys; print(\"to stderr\", file=sys.stderr)'; true) "
                  f"2>&1 | tee {_sh(out)}"],
                 capture_output=True, text=True)
-            with open(out) as f:
+            with open(out, encoding="utf-8") as f:
                 content = f.read()
             self.assertIn("to stderr", content)
 
     def test_empty_report_fails_validation(self):
         with tempfile.TemporaryDirectory() as d:
             out = os.path.join(d, "run-output.txt")
-            open(out, "w").close()  # empty file
+            open(out, "w", encoding="utf-8").close()  # empty file
             res = subprocess.run(["bash", "-c", f"test -s {_sh(out)}"])
             self.assertNotEqual(res.returncode, 0)
 
     def test_nonempty_report_passes_validation(self):
         with tempfile.TemporaryDirectory() as d:
             out = os.path.join(d, "run-output.txt")
-            with open(out, "w") as f:
+            with open(out, "w", encoding="utf-8") as f:
                 f.write("some real discovery output\n")
             res = subprocess.run(["bash", "-c", f"test -s {_sh(out)}"])
             self.assertEqual(res.returncode, 0)

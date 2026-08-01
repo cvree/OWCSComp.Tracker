@@ -155,8 +155,22 @@ jobs:
             exit 0
           fi
           git commit -m "data: auto match finder snapshot ($(date -u +'%Y-%m-%d %H:%M') UTC)"
-          git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
-          git push origin "HEAD:${GITHUB_REF_NAME}"
+          # Bounded rebase-retry. A single pull+push loses the scan outright
+          # if any push lands in the window between them: the ledger this
+          # snapshot was built from is gitignored runtime state that only
+          # exists on this runner, so a rejected push discards real findings
+          # rather than merely deferring them.
+          pushed=false
+          for attempt in 1 2 3; do
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
+            if git push origin "HEAD:${GITHUB_REF_NAME}"; then pushed=true; break; fi
+            echo "::warning::push attempt ${attempt} rejected (a concurrent push landed) — rebasing and retrying"
+            sleep $((attempt * 5))
+          done
+          if [ "$pushed" != "true" ]; then
+            echo "::error::could not push the match-finder snapshot after 3 rebase attempts"
+            exit 1
+          fi
           echo "committed=true" >> "$GITHUB_OUTPUT"
 
       # A push made with the default GITHUB_TOKEN deliberately does NOT

@@ -83,7 +83,7 @@ def test_metadata_fields(tmp: str) -> None:
     print("metadata includes run/frame/side/slot/path:")
     frames_dir, report_dir = _make_run(tmp, "meta_run")
     chc.capture_run("meta_run", _layout(), frames_dir, report_dir)
-    meta = json.load(open(chc.crops_json_path(report_dir)))
+    meta = json.load(open(chc.crops_json_path(report_dir), encoding="utf-8"))
     crops = meta["crops"]
     check("20 crop metadata entries", len(crops) == 20)
     need = {"id", "run", "frame", "offset", "side", "slot", "crop",
@@ -113,18 +113,18 @@ def test_label_updates_sidecar(tmp: str) -> None:
     check("no error", err is None)
     check("returned entry is labeled", entry["label_status"] == "labeled")
     check("returned entry hero set", entry["label"] == "kiriko")
-    labels = json.load(open(chc.labels_json_path(report_dir)))
+    labels = json.load(open(chc.labels_json_path(report_dir), encoding="utf-8"))
     check("labels.json has the crop", labels.get("000600_a1", {}).get("hero")
           == "kiriko")
     check("labels.json status labeled",
           labels["000600_a1"]["status"] == "labeled")
     # crops.json reflects it too
-    meta = json.load(open(chc.crops_json_path(report_dir)))
+    meta = json.load(open(chc.crops_json_path(report_dir), encoding="utf-8"))
     c = next(c for c in meta["crops"] if c["id"] == "000600_a1")
     check("crops.json reflects the label", c["label"] == "kiriko")
     # idempotent
     e2, _ = chc.set_label(report_dir, "000600_a1", "ana")
-    labels2 = json.load(open(chc.labels_json_path(report_dir)))
+    labels2 = json.load(open(chc.labels_json_path(report_dir), encoding="utf-8"))
     check("relabel overwrites (idempotent)",
           labels2["000600_a1"]["hero"] == "ana")
     check("unknown crop id errors",
@@ -138,7 +138,7 @@ def test_reject_updates_sidecar(tmp: str) -> None:
     entry, err = chc.reject_crop(report_dir, "000600_b3")
     check("no error", err is None)
     check("entry status rejected", entry["label_status"] == "rejected")
-    labels = json.load(open(chc.labels_json_path(report_dir)))
+    labels = json.load(open(chc.labels_json_path(report_dir), encoding="utf-8"))
     check("labels.json marks rejected",
           labels.get("000600_b3", {}).get("status") == "rejected")
     check("unknown crop id errors",
@@ -264,7 +264,7 @@ def test_api_endpoints(tmp: str) -> None:
         check("POST label unknown crop 404", code == 404)
 
         # persisted to the sidecar the CLI/page also read
-        labels = json.load(open(chc.labels_json_path(report_dir)))
+        labels = json.load(open(chc.labels_json_path(report_dir), encoding="utf-8"))
         check("API label persisted to labels.json",
               labels["000600_a1"]["hero"] == "kiriko")
         check("API reject persisted to labels.json",

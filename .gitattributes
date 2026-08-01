@@ -1,13 +1,35 @@
 # Normalize text line endings; keep binaries untouched.
 * text=auto eol=lf
 
+# Generated data files, declared EXPLICITLY rather than left to `text=auto`.
+# `text=auto` asks git to guess text-vs-binary per file; these are the files
+# whose exact bytes ci.yml compares (pipeline/export_data.py --check), so
+# their line endings must be LF in every working tree, on every platform,
+# without depending on a heuristic or on the cloner's core.autocrlf.
+*.js text eol=lf
+*.json text eol=lf
+*.jsonl text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.py text eol=lf
+*.yml text eol=lf
+*.sql text eol=lf
+*.md text eol=lf
+
 # Binary assets — never touch line endings or diff as text.
 *.png binary
 *.jpg binary
 *.jpeg binary
+# 167 tracked .webp files relied on git's text/binary GUESS. `text=auto`
+# classifies by looking for NUL bytes in the first 8000; a webp whose header
+# region happens to contain none would be treated as text and LF/CRLF-
+# rewritten on a Windows checkout, silently corrupting the image.
+*.webp binary
 *.gif binary
 *.ico binary
+*.svg text eol=lf
 *.sqlite binary
 *.mp4 binary
+*.mkv binary
 *.webm binary
 *.min.js -diff

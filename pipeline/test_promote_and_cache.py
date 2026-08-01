@@ -131,7 +131,7 @@ def _det_snapshot(offset, a_heroes, b_heroes, a_score, b_score, fhash):
 def _write_detections(run, snaps, threshold=0.6):
     d = os.path.join(pd.REPORTS_DIR, run)
     os.makedirs(d, exist_ok=True)
-    with open(os.path.join(d, "detections.json"), "w") as f:
+    with open(os.path.join(d, "detections.json"), "w", encoding="utf-8") as f:
         json.dump({"accepted": snaps, "quarantined": [],
                    "match_threshold": threshold}, f)
 
@@ -180,7 +180,7 @@ def test_promote_gate():
     check("dry run wrote no comps", out["written"] is None)
     check("dry run produced a review queue file",
           os.path.exists(out["reviewQueue"]))
-    q = json.load(open(out["reviewQueue"]))
+    q = json.load(open(out["reviewQueue"], encoding="utf-8"))
     check("review queue records high + needsReview counts",
           q["counts"]["high"] >= 1 and q["counts"]["needsReview"] >= 1)
 

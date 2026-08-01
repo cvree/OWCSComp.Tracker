@@ -46,12 +46,16 @@ jobs:
       - name: Packaging / reproducibility check
         run: python pipeline/check_packaging.py
 
-      - name: Regenerate production public export (must stay reproducible)
-        run: |
-          python pipeline/export_data.py --public
-          # The committed public_data.v1.js must match a fresh export
-          # (timestamps aside) — fail loudly if the DB and export drift.
-          git diff --stat -- assets/data/public_data.v1.js || true
+      # A REAL gate. This used to run the exporter and then
+      # `git diff --stat … || true`, which can never fail — the step claimed
+      # to enforce reproducibility while accepting any amount of drift.
+      # Worse, regenerating in place left the working tree dirty, so
+      # test_release_reproducibility's "the suite leaves the tree clean"
+      # guard skipped itself (it skips when the tree is already dirty) on
+      # every CI run. `--check` writes nothing and exits 1 on any difference
+      # other than the generation timestamp.
+      - name: Committed exports must match a fresh export (reproducibility)
+        run: python pipeline/export_data.py --check --public
 
       - name: Offline test suite
         run: |
@@ -75,6 +79,6 @@ jobs:
             echo "### CI summary"
             echo ""
             echo "- Suites: $(ls pipeline/test_*.py | wc -l)"
-            echo "- Packaging check + public export regeneration + full"
+            echo "- Packaging check + export reproducibility gate + full"
             echo "  offline test suite ran on ubuntu-latest / Python 3.12."
           } >> "$GITHUB_STEP_SUMMARY"

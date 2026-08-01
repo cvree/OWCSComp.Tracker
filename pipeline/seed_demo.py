@@ -56,7 +56,7 @@ def prime_and_ingest(con):
     rooms = []
     for fixture, url, region in DEMO_ROOMS:
         body = open(os.path.join(FIX, fixture), encoding="utf-8").read()
-        open(os.path.join(CACHE, ing.cache_key_for(url) + ".body"), "w").write(body)
+        open(os.path.join(CACHE, ing.cache_key_for(url) + ".body"), "w", encoding="utf-8").write(body)
         rooms.append({"url": url, "region": region, "stage": "Demo Stage"})
     summary = batch.run_batch(con, rooms, CACHE, offline=True)
     print(f"[demo] ingested {summary['ingested']} FACEIT rooms offline "
@@ -77,7 +77,7 @@ def demo_match_facts(con):
                      {"team": m["team_b"], "hero": "widow", "order": 2}],
         "notes": "Demo: entered manually (public API lacks replay/bans)."}]}]}
     path = os.path.join(db.REPO_ROOT, "data", "raw", "faceit", "_demo_facts.json")
-    json.dump(facts, open(path, "w"))
+    json.dump(facts, open(path, "w", encoding="utf-8"))
     apply_match_facts.apply_file(con, path)
     os.remove(path)
 
@@ -93,7 +93,7 @@ def demo_correction(con):
         "openerComp": ["winston", "tracer", "genji", "kiriko", "juno"],
         "note": "Demo: reviewed from replay code DEMO01."}]}
     path = os.path.join(db.REPO_ROOT, "data", "raw", "faceit", "_demo_corr.json")
-    json.dump(corr, open(path, "w"))
+    json.dump(corr, open(path, "w", encoding="utf-8"))
     apply_corrections.apply_file(con, path)
     os.remove(path)
 

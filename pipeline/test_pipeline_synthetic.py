@@ -153,7 +153,7 @@ def main() -> None:
         "match_threshold": 0.6,
         "templates_dir": os.path.relpath(TEMPLATES_DIR, ROOT).replace("\\", "/"),
     }
-    with open(LAYOUT_PATH, "w") as f:
+    with open(LAYOUT_PATH, "w", encoding="utf-8") as f:
         json.dump(layout, f, indent=1)
 
     # Synthetic hero templates (as if cropped from broadcast frames), written

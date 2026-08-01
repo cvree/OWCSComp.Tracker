@@ -47,7 +47,7 @@ def _init_repo_root(tmp: str) -> str:
     root = os.path.join(tmp, "repo")
     os.makedirs(os.path.join(root, "assets", "data"), exist_ok=True)
     export_path = os.path.join(root, "assets", "data", "public_data.v1.js")
-    with open(export_path, "w") as f:
+    with open(export_path, "w", encoding="utf-8") as f:
         f.write("window.OWCS_PUBLIC = {version: 0};\n")
     subprocess.run(["git", "init", "-q", "-b", "main"], cwd=root, check=True)
     subprocess.run(["git", "config", "user.email", "test@example.com"], cwd=root, check=True)
@@ -180,7 +180,7 @@ class TestRealPublish(PublishTestBase):
         # publish_job's stubbed regenerate_and_validate_export won't touch
         # it, so mutate it directly the way a real export run would.
         export_path = os.path.join(self.repo_root, "assets", "data", "public_data.v1.js")
-        with open(export_path, "w") as f:
+        with open(export_path, "w", encoding="utf-8") as f:
             f.write("window.OWCS_PUBLIC = {version: 1, match: 'm-test'};\n")
 
         result = pub.publish_job(self.store, self.con, job, segment,
@@ -196,7 +196,7 @@ class TestRealPublish(PublishTestBase):
     def test_no_media_ever_staged(self):
         job, segment = self.make_approved_job_and_segment()
         export_path = os.path.join(self.repo_root, "assets", "data", "public_data.v1.js")
-        with open(export_path, "w") as f:
+        with open(export_path, "w", encoding="utf-8") as f:
             f.write("window.OWCS_PUBLIC = {version: 2};\n")
         # Sneak a media file into the working tree AND try to have it staged
         # by publish_job's own commit step — it must never be included.
@@ -233,7 +233,7 @@ class TestRealPublish(PublishTestBase):
     def test_republish_of_already_published_job_is_refused(self):
         job, segment = self.make_approved_job_and_segment()
         export_path = os.path.join(self.repo_root, "assets", "data", "public_data.v1.js")
-        with open(export_path, "w") as f:
+        with open(export_path, "w", encoding="utf-8") as f:
             f.write("window.OWCS_PUBLIC = {version: 3};\n")
         first = pub.publish_job(self.store, self.con, job, segment,
                                 dry_run=False, repo_root=self.repo_root,
@@ -251,7 +251,7 @@ class TestRealPublish(PublishTestBase):
     def test_failing_offline_test_refuses_publication(self):
         job, segment = self.make_approved_job_and_segment()
         export_path = os.path.join(self.repo_root, "assets", "data", "public_data.v1.js")
-        with open(export_path, "w") as f:
+        with open(export_path, "w", encoding="utf-8") as f:
             f.write("window.OWCS_PUBLIC = {version: 4};\n")
         runner = FakeRunner({"export_data.py": (0, "ok", ""),
                             "validate_data.py": (0, "ok", ""),

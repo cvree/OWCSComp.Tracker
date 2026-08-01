@@ -62,6 +62,7 @@ concurrency:
 
 permissions:
   contents: write   # commit the updated DB + data.js
+  actions: write    # dispatch pages.yml after a real commit (see below)
 
 env:
   # Chosen at dispatch time; defaults to the one CALIBRATED, verified package.
@@ -82,10 +83,14 @@ jobs:
           python-version: "3.12"
           cache: pip
 
+      # Install the DECLARED dependency set (plus ffmpeg, a system package
+      # requirements.txt cannot provide). Naming a hand-picked subset here
+      # meant anything later added to requirements.txt was simply absent on
+      # this runner, surfacing as a ModuleNotFoundError mid-batch.
       - name: Install dependencies
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
-          pip install --quiet opencv-python-headless yt-dlp
+          pip install --quiet -r requirements.txt
 
       - name: Init / migrate database
         run: python3 pipeline/init_db.py   # idempotent: schema + reference seed
@@ -107,6 +112,13 @@ jobs:
             ARGS="$ARGS --match ${{ github.event.inputs.match_id }}"
           fi
           python3 pipeline/run_batch.py $ARGS
+          # run_batch only writes the control-room export (assets/js/data.js).
+          # Without this the PUBLIC dataset the live site actually renders
+          # (assets/data/public_data.v1.js) is never refreshed, so a pipeline
+          # run updates the DB and the site shows the old comps — and the
+          # committed public export now disagrees with the committed DB, which
+          # ci.yml's reproducibility gate reports as drift on the next push.
+          python3 pipeline/export_data.py --public
 
       - name: Upload quarantined frames (if any)
         if: always()
@@ -118,18 +130,44 @@ jobs:
           retention-days: 14
 
       - name: Commit updated data
+        id: commit
+        shell: bash
         run: |
+          set -euo pipefail
           git config user.name  "owcs-pipeline[bot]"
           git config user.email "actions@users.noreply.github.com"
-          git add data/owcs.sqlite assets/js/data.js
+          git add data/owcs.sqlite assets/js/data.js assets/data/public_data.v1.js
           if git diff --cached --quiet; then
             echo "No data changes this run."
+            echo "committed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git commit -m "pipeline: update comps & stats ($(date -u +'%Y-%m-%d %H:%M') UTC)"
-          # Tolerate a push that landed between checkout and now
-          git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
-          git push origin "HEAD:${GITHUB_REF_NAME}"
+          # Bounded rebase-retry: a single pull+push loses this run's work if
+          # any push lands in the window between them (rejected push -> red
+          # job -> the runner holding the only copy of the batch output is
+          # discarded, and the VOD has to be reprocessed from scratch).
+          pushed=false
+          for attempt in 1 2 3; do
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
+            if git push origin "HEAD:${GITHUB_REF_NAME}"; then pushed=true; break; fi
+            echo "::warning::push attempt ${attempt} rejected (a concurrent push landed) — rebasing and retrying"
+            sleep $((attempt * 5))
+          done
+          if [ "$pushed" != "true" ]; then
+            echo "::error::could not push the pipeline update after 3 rebase attempts"
+            exit 1
+          fi
+          echo "committed=true" >> "$GITHUB_OUTPUT"
+
+      # A GITHUB_TOKEN push does not trigger push-event workflows, so without
+      # this the refreshed public dataset would sit on the branch and the
+      # Pages site would keep serving the previous export indefinitely.
+      - name: Trigger a Pages redeploy
+        if: steps.commit.outputs.committed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run pages.yml --ref "${GITHUB_REF_NAME}"
 
       - name: Run summary
         if: always()
@@ -137,9 +175,13 @@ jobs:
           {
             echo "### Pipeline run summary"
             echo ""
-            echo "- Matches in DB: $(python3 -c "import sys; sys.path.insert(0,'pipeline'); import db; print(db.connect().execute('SELECT COUNT(*) FROM matches').fetchone()[0])")"
-            echo "- Comp snapshots: $(python3 -c "import sys; sys.path.insert(0,'pipeline'); import db; print(db.connect().execute('SELECT COUNT(*) FROM comp_snapshots').fetchone()[0])")"
-            echo "- Unassigned snapshots: $(python3 -c "import sys; sys.path.insert(0,'pipeline'); import db; print(db.connect().execute('SELECT COUNT(*) FROM comp_snapshots WHERE map_result_id IS NULL').fetchone()[0])")"
+            # `|| echo n/a` on a SUMMARY line only. This step is if: always(),
+            # so on a run that died before init_db these queries raise; without
+            # the fallback the summary step itself goes red and buries the
+            # actual failure under a second, meaningless one.
+            echo "- Matches in DB: $(python3 -c "import sys; sys.path.insert(0,'pipeline'); import db; print(db.connect().execute('SELECT COUNT(*) FROM matches').fetchone()[0])" 2>/dev/null || echo n/a)"
+            echo "- Comp snapshots: $(python3 -c "import sys; sys.path.insert(0,'pipeline'); import db; print(db.connect().execute('SELECT COUNT(*) FROM comp_snapshots').fetchone()[0])" 2>/dev/null || echo n/a)"
+            echo "- Unassigned snapshots: $(python3 -c "import sys; sys.path.insert(0,'pipeline'); import db; print(db.connect().execute('SELECT COUNT(*) FROM comp_snapshots WHERE map_result_id IS NULL').fetchone()[0])" 2>/dev/null || echo n/a)"
             q=$(find work -type d -name quarantine 2>/dev/null | wc -l)
             echo "- Matches with quarantined frames this run: $q"
           } >> "$GITHUB_STEP_SUMMARY"

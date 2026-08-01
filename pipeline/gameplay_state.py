@@ -22,6 +22,23 @@ The probe is COLOR-AGNOSTIC (any team color saturates) and works on dead
 slots too: a death desaturates SOME chips, but 4-of-5 per side with the
 portrait-texture backstop keeps classification stable through team fights.
 
+OPTIONAL POSITIVE ANCHOR GATE (third gate)
+The structural probe is a POSITIVE test for "ten ult chips are lit at the
+right coordinates". That is strong, but it is inferred from colour and
+texture, so a full-screen graphic whose art happens to saturate those ten
+boxes can still reach it. A layout that ships a real 'anchor' crop — a
+region of the broadcast overlay that is on screen while the game is being
+played — gets a second, independent positive test: the anchor must also
+match, or the frame is 'no-hud' no matter what the chips say. Layouts
+without an anchor (or whose anchor template file is missing) behave exactly
+as before; this can only ever ADD a rejection, and it is measured, never
+assumed — see pipeline/test_gameplay_anchor.py, which re-derives every score
+in layouts/owcs_jksix_qwc.json's anchor note from the committed frames.
+
+Order matters: reject markers and the replay template are checked BEFORE the
+anchor, because a replay in these broadcasts renders a COMPLETE HUD — the
+anchor is present on it and must not be read as "therefore gameplay".
+
 GENERALIZED HIGHLIGHT/REPLAY GUARD (optional, second gate)
 A highlight/POTG replay renders a complete, in-focus HUD — that is exactly
 the failure mode the structural probe alone cannot catch, which is why the
@@ -118,6 +135,33 @@ def ocr_guard(frame_bgr, read_fn, aliases: dict) -> tuple[str | None, str]:
     return None, ""
 
 
+def anchor_score(frame_gray, layout: dict, cache: dict | None = None):
+    """(score, min_score) for the layout's HUD anchor, or (None, None).
+
+    None means "this layout has no usable anchor" — no anchor block, or the
+    template PNG has not been cut yet (the honest placeholder state several
+    layouts are still in). Callers must treat that as "no opinion", never as
+    a failed match.
+
+    `layout` must already be scaled to the frame (capture.scale_layout_to_frame)
+    so the anchor rect lands on the right pixels; the template image itself is
+    stored at the layout's native size and capture.region_score resizes it to
+    the crop, which is why build_anchor_template.py writes it at exactly the
+    rect's native dimensions.
+    """
+    cache = layout.setdefault("_gs_cache", {}) if cache is None else cache
+    if "anchor" not in cache:
+        try:
+            cache["anchor"] = capture._load_template(layout, "anchor")
+        except (FileNotFoundError, KeyError, TypeError):
+            # not cut yet / malformed block — no opinion, not a failure
+            cache["anchor"] = None
+    anchor = cache["anchor"]
+    if anchor is None:
+        return None, None
+    return capture.region_score(frame_gray, anchor), anchor["min_score"]
+
+
 def classify_frame(frame_bgr, layout: dict,
                    min_chips: int = DEFAULT_MIN_CHIPS,
                    ocr_read_fn=None, ocr_aliases: dict | None = None
@@ -157,12 +201,27 @@ def classify_frame(frame_bgr, layout: dict,
         if score >= replay["min_score"]:
             return "replay", f"replay marker {score:.2f}"
 
+    # Positive HUD anchor — see "OPTIONAL POSITIVE ANCHOR GATE" above. Runs
+    # after the reject/replay templates on purpose: those screens carry the
+    # anchor too, so the anchor may only ever CONFIRM a frame the earlier
+    # gates already let through.
+    a_detail = ""
+    if gray is None and layout.get("anchor"):
+        gray = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2GRAY)
+    if gray is not None:
+        a_score, a_min = anchor_score(gray, layout, cache)
+        if a_score is not None:
+            if a_score < a_min:
+                return "no-hud", (f"anchor {a_score:.2f} < {a_min:.2f} "
+                                  f"(broadcast HUD not on screen)")
+            a_detail = f" anchor:{a_score:.2f}"
+
     p = probe_hud(frame_bgr, layout)
     ca, cb = p["chips"].get("a", 0), p["chips"].get("b", 0)
     ta = p["portrait_tex"].get("a", 0.0)
     tb = p["portrait_tex"].get("b", 0.0)
     detail = (f"chips a:{ca}/5 b:{cb}/5 "
-              f"tex a:{ta:.0f} b:{tb:.0f}")
+              f"tex a:{ta:.0f} b:{tb:.0f}{a_detail}")
     if ca >= min_chips and cb >= min_chips \
             and ta >= MIN_PORTRAIT_TEXTURE and tb >= MIN_PORTRAIT_TEXTURE:
         if ocr_read_fn is not None and ocr_aliases is not None:
