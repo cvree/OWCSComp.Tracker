@@ -10,6 +10,7 @@ disappears from the report.
 Run: python3 pipeline/test_automation_team_coverage.py
 """
 from __future__ import annotations
+import datetime as dt
 import json
 import os
 import sys
@@ -20,6 +21,14 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import db as content_db  # noqa: E402
 from automation import team_coverage as tc  # noqa: E402
+
+# build_report is a ROLLING window over `now`, so the fixture matches below
+# (dated 2026-07-01) are only "inside the current window" relative to a clock
+# near that date. Left on the wall clock, these tests silently change meaning
+# as real time passes and start failing once the fixtures age out of the
+# window — a test-harness bug, not a coverage rule change. Pin the clock via
+# the injection point build_report already exposes for exactly this.
+FIXED_NOW = dt.datetime(2026, 7, 15, 12, 0, tzinfo=dt.timezone.utc)
 
 
 class TeamCoverageTestCase(unittest.TestCase):
@@ -52,6 +61,7 @@ class TeamCoverageTestCase(unittest.TestCase):
         self.con.commit()
 
     def _report(self, **kw):
+        kw.setdefault("now", FIXED_NOW)
         return tc.build_report(content_db=self.content_path,
                                asset_sources_path=self.sources_path, **kw)
 
@@ -127,6 +137,23 @@ class TestBroadcastAndCapture(TeamCoverageTestCase):
         self.con.commit()
         row = self._row(self._report(), "t1")
         self.assertIn("broadcast-located", row["states"])
+
+    def test_match_older_than_the_window_is_not_counted(self):
+        """The report is explicitly a rolling window: a match (and its VOD)
+        that predates the window must NOT be reported as this team's
+        broadcast, and the team must say so as its blocking issue."""
+        self._team("t1", faceit_team_id="F1",
+                  identity_verified_at="2026-07-01T00:00:00+00:00")
+        self.con.execute("INSERT INTO teams (id, name, region, code) VALUES ('t2','T2','na','T2')")
+        self.con.execute(
+            "INSERT INTO matches (id, region, date, team_a, team_b, vod_url) VALUES "
+            "('m1','na','2026-01-05','t1','t2','https://youtube.com/watch?v=x')")
+        self.con.commit()
+        row = self._row(self._report(), "t1")
+        self.assertEqual(row["matches"], 0)
+        self.assertNotIn("broadcast-located", row["states"])
+        self.assertIn("no matches for this team inside the current window",
+                      row["blockingIssue"])
 
     def test_composition_captured_from_hero_stints(self):
         self._team("t1")

@@ -276,16 +276,43 @@ class TestMissingCv2OnlyFailsCvCommands(unittest.TestCase):
                             "when cv2 is unavailable")
         self.assertIn("cv2", (res.stdout + res.stderr).lower())
 
-    def test_worker_run_fails_explicitly_without_cv2_when_a_job_needs_download(self):
+    def test_worker_doctor_still_runs_and_reports_honestly_without_cv2(self):
         # worker-doctor merely CHECKS for cv2 (never imports it) so it must
         # keep working; this is the contrast case proving the boundary is
         # precise, not "anything worker-related now breaks without cv2".
+        # Its EXIT CODE is defined to report worker READINESS (see
+        # cmd_worker_doctor: `0 if report["ok"] else 1`), so a machine that
+        # is legitimately not ready — no ffmpeg/yt-dlp, unharvested layouts —
+        # exits 1 without anything being broken. Asserting a bare 0 here made
+        # this case pass only on a fully provisioned worker; the real
+        # contract is that the command RUNS (no import crash), emits a
+        # parseable report, tells the truth about the missing cv2, and ties
+        # its exit code to that report rather than to the crash.
         with tempfile.TemporaryDirectory() as d:
             res = _run(["--db", os.path.join(d, "automation.sqlite"),
                        "worker-doctor", "--json"], block_cv2=True)
-        self.assertEqual(res.returncode, 0, res.stderr)
+        self.assertNotIn("Traceback", res.stderr)
+        self.assertNotIn("ModuleNotFoundError", res.stderr)
         report = json.loads(res.stdout)
         self.assertIsNone(report["repoDependencies"]["opencv-python-headless"])
+        # Never a silent success: readiness is reported, not swallowed.
+        self.assertEqual(res.returncode, 0 if report["ok"] else 1, res.stderr)
+
+    def test_worker_doctor_pulls_in_no_media_pipeline_modules(self):
+        """worker-doctor only PROBES for the media stack, so it must not drag
+        in the recording/segmentation modules to answer. (cv2 itself is
+        deliberately excluded from this check: check_repo_dependencies
+        imports it on purpose to report its version, and under block_cv2 the
+        sentinel makes `'cv2' in sys.modules` true regardless — so cv2's
+        absence is proven by the report above, not by sys.modules.)"""
+        with tempfile.TemporaryDirectory() as d:
+            loaded = _loaded_heavy_modules(
+                ["--db", os.path.join(d, "automation.sqlite"),
+                 "worker-doctor", "--json"])
+        self.assertNotIn("capture", loaded)
+        self.assertNotIn("video_ingest", loaded)
+        self.assertNotIn("download_vod_clip", loaded)
+        self.assertNotIn("automation.segmentation", loaded)
 
 
 if __name__ == "__main__":

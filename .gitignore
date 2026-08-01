@@ -109,3 +109,9 @@ reports/calibration/*
 # "generate one with ..." message when the file is absent, and the local
 # control room serves the LIVE report from /api/intake instead.
 assets/data/intake.v1.json
+
+# Visual-review scratch: multi-round Playwright screenshot sweeps
+# (docs/screenshots/review/r1, r2, ...) are throwaway evidence generated
+# during a review loop, several MB per round. Curated screenshots that are
+# worth keeping live directly in docs/screenshots/.
+docs/screenshots/review/
