@@ -609,6 +609,63 @@ class TestCalendarContract(unittest.TestCase):
                                 f"{m['id']} claims an unknown time but "
                                 f"carries a non-midnight instant")
 
+    def test_no_tournament_contradicts_its_own_matches(self):
+        """A tournament stubbed from a discovered match is born "upcoming".
+        If that guess is never reconciled the page asserts two contradictory
+        things at once — an UPCOMING chip above a full set of final scores —
+        which is exactly the kind of unsupported claim this export exists to
+        avoid. Regression guard for that reconciliation."""
+        by_tid: dict = {}
+        for m in self.data["matches"]:
+            by_tid.setdefault(m["tournamentId"], []).append(
+                (m["status"] or "").lower())
+        settled = {"completed", "forfeit", "cancelled"}
+        for t in self.data["tournaments"]:
+            statuses = by_tid.get(t["id"])
+            if not statuses:
+                continue
+            if "completed" in statuses and all(s in settled for s in statuses):
+                self.assertEqual(
+                    t["status"], "completed",
+                    f"{t['id']} claims {t['status']!r} but every one of its "
+                    f"matches is settled ({statuses})")
+            if "live" in statuses:
+                self.assertEqual(t["status"], "live", f"{t['id']} has a live "
+                                 f"match but claims {t['status']!r}")
+            for stage in t.get("stages") or []:
+                self.assertEqual(
+                    stage["status"], t["status"],
+                    f"{t['id']} stage {stage['id']} says "
+                    f"{stage['status']!r} while the event says "
+                    f"{t['status']!r}")
+
+    def test_reconcile_stub_status_is_derived_not_guessed(self):
+        """Unit-level truth table for the reconciliation itself."""
+        import export_data as ed
+
+        def run(match_statuses, *, stub=True):
+            tid = "t1"
+            tours = {tid: {"id": tid, "status": "upcoming",
+                           "stages": [{"id": "s", "status": "upcoming"}]}}
+            matches = [{"tournamentId": tid, "status": s}
+                       for s in match_statuses]
+            ed._reconcile_stub_tournament_status(
+                tours, {tid} if stub else set(), matches)
+            return tours[tid]["status"], tours[tid]["stages"][0]["status"]
+
+        self.assertEqual(run(["completed"]), ("completed", "completed"))
+        self.assertEqual(run(["completed", "forfeit"]),
+                         ("completed", "completed"))
+        self.assertEqual(run(["completed", "upcoming"]),
+                         ("upcoming", "upcoming"))
+        self.assertEqual(run(["completed", "live"]), ("live", "live"))
+        # An all-cancelled event has nothing to show and must not claim to
+        # have been played.
+        self.assertEqual(run(["cancelled"]), ("upcoming", "upcoming"))
+        # A curated (non-stub) tournament keeps its authoritative status.
+        self.assertEqual(run(["completed"], stub=False),
+                         ("upcoming", "upcoming"))
+
     def test_calendar_page_is_wired_to_the_new_data(self):
         page = open(os.path.join(REPO, "calendar.html"), encoding="utf-8").read()
         js = open(os.path.join(REPO, "assets", "js", "public",

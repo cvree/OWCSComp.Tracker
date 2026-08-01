@@ -693,6 +693,56 @@ def _public_capture_status(m: Any, has_vod: bool, has_maps: bool) -> str | None:
     return "needs-source"
 
 
+#: Public match statuses that mean "this match will not be played again".
+_MATCH_STATUS_SETTLED = frozenset({"completed", "forfeit", "cancelled"})
+
+
+def _reconcile_stub_tournament_status(tournaments_by_id: dict,
+                                      stub_tids: set,
+                                      matches_out: list) -> None:
+    """Derive a stub tournament's status from the matches it actually holds.
+
+    A tournament invented from a discovered match has no lifecycle of its own,
+    so it is stubbed as "upcoming". Left alone that guess goes stale the moment
+    its matches finish, and the site then asserts two contradictory things at
+    once — an "UPCOMING" event chip above a full set of final scores. The
+    public data's whole claim is that it never states something it cannot
+    support, so the guess is reconciled here instead of being rendered.
+
+    Only auto-stubbed tournaments are touched: a curated event carries an
+    authoritative status that must win over anything inferred from matches.
+
+    live     - any match in progress
+    completed- at least one match played and none still to come
+    upcoming - anything else (including an all-cancelled event, which has
+               nothing to show and must not claim to be finished)
+    """
+    if not stub_tids:
+        return
+    by_tid: dict = {}
+    for mo in matches_out:
+        by_tid.setdefault(mo.get("tournamentId"), []).append(
+            (mo.get("status") or "").lower())
+
+    for tid in stub_tids:
+        statuses = by_tid.get(tid) or []
+        if not statuses:
+            continue
+        if "live" in statuses:
+            derived = "live"
+        elif ("completed" in statuses
+              and all(s in _MATCH_STATUS_SETTLED for s in statuses)):
+            derived = "completed"
+        else:
+            derived = "upcoming"
+        t = tournaments_by_id[tid]
+        t["status"] = derived
+        # The lone auto-stubbed stage stands for the whole event, so it must
+        # not contradict the parent it was created alongside.
+        for stage in t.get("stages") or []:
+            stage["status"] = derived
+
+
 def _fmt_clock(seconds: int | None) -> str | None:
     if seconds is None:
         return None
@@ -1500,6 +1550,12 @@ def build_public_payload(con) -> dict:
     # its real scheduled time and an honest capture state, so calendar.html
     # populates the moment FACEIT discovery upserts a match — no comps invented.
     emitted_ids = {mo["id"] for mo in matches_out}
+    # Tournaments invented as stubs below start life as "upcoming" because a
+    # freshly discovered match carries no event lifecycle of its own. That
+    # guess has to be reconciled against the matches once they are all known
+    # (see the _reconcile_stub_tournament_status pass after this loop) —
+    # otherwise a finished event keeps advertising itself as upcoming.
+    stub_tids: set = set()
     for m in _discovered_window_matches(con):
         if m["id"] in emitted_ids:
             continue
@@ -1539,6 +1595,7 @@ def build_public_payload(con) -> dict:
             "maps": [],
         })
         if tid not in tournaments_by_id:
+            stub_tids.add(tid)
             stage_name = rv(m, "stage") or "Matches"
             tournaments_by_id[tid] = {
                 "id": tid, "name": rv(m, "event_name") or "OWCS 2026",
@@ -1555,6 +1612,8 @@ def build_public_payload(con) -> dict:
                 "standings": [],
             }
         tournaments_by_id[tid]["teamIds"].update((m["team_a"], m["team_b"]))
+
+    _reconcile_stub_tournament_status(tournaments_by_id, stub_tids, matches_out)
 
     tournaments_out = [dict(t, teamIds=sorted(t["teamIds"]))
                        for t in tournaments_by_id.values()]
