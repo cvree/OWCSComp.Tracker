@@ -89,6 +89,10 @@
     badge('review', o.review.total, 'warm');
     badge('queue', o.queue.waitingOnYou, 'warm');
     badge('health', o.health.counts.fail, 'hot');
+    /* The hero badge counts CANDIDATES WAITING, not heroes missing. A "44"
+       that never changes is wallpaper; a number that only appears when
+       there is something to click is a prompt. */
+    badge('heroes', (o.heroes && o.heroes.templateReview) || 0, 'warm');
 
     if (current === 'overview') {
       const stats = $('overviewStats');
@@ -108,6 +112,12 @@
       stats.appendChild(statCard('Storage', D.gb(o.storage.totalGb),
         D.gb(o.storage.freeGb) + ' free of budget ' + D.gb(o.storage.budgetGb),
         o.storage.freeGb < 10 ? 'warn' : ''));
+      if (o.heroes && o.heroes.available) {
+        stats.appendChild(statCard('Hero detection',
+          o.heroes.provenSomewhere + '/' + o.heroes.rosterSize + ' proven',
+          o.heroes.detectableSomewhere + ' have a template somewhere',
+          o.heroes.provenSomewhere >= o.heroes.rosterSize ? 'ok' : 'warn'));
+      }
       stats.appendChild(statCard('Autostart',
         o.autoStart.supported ? (o.autoStart.enabled ? 'On' : 'Off') : 'N/A',
         o.autoStart.supported ? (o.autoStart.stale ? 'points at an old install' : 'starts with Windows')
@@ -285,6 +295,144 @@
     ]);
   }
   const fmt = (n) => (n === null || n === undefined) ? '—' : Number(n).toFixed(2);
+
+  /* ----------------------------------------------------- hero coverage */
+  /* Four states, four colours, one meaning each. The palette is
+     deliberately not a gradient: "covered but unproven" is not 75% of
+     "ready", it is a different situation with a different fix, and a
+     gradient would invite reading it as nearly-done. */
+  const HERO_TONE = { READY: 'ok', UNPROVEN: 'warn', BLOCKED: 'bad', MISSING: '' };
+  const HERO_WHAT = {
+    READY: 'template exists, quality-gated, traced to a source frame, and '
+         + 'proven correct on held-out frames',
+    UNPROVEN: 'a template exists but nothing has scored it on frames it '
+            + 'never saw — it may be fine, it is not shown to be',
+    BLOCKED: 'something is measurably wrong: a failing quality check or a '
+           + 'confident wrong answer on held-out footage',
+    MISSING: 'no template at all — every frame of this hero reads UNKNOWN'
+  };
+
+  RENDERERS.heroes = async function () {
+    const r = await D.get('heroes/coverage');
+    const stats = $('heroStats');
+    const list = $('heroLayouts');
+    clear(stats); clear(list);
+    if (r.offline) { list.appendChild(el('div', { class: 'empty', text: r.error })); return; }
+    if (!r.available) {
+      list.appendChild(el('div', { class: 'empty', text: r.error || r.note || 'Hero coverage is unavailable on this machine.' }));
+      return;
+    }
+    stats.appendChild(statCard('Proven anywhere',
+      (r.provenSomewhere || []).length + '/' + r.rosterSize,
+      'validated on held-out frames in at least one package',
+      (r.provenSomewhere || []).length >= r.rosterSize ? 'ok' : 'warn'));
+    stats.appendChild(statCard('Covered anywhere',
+      (r.detectableSomewhere || []).length + '/' + r.rosterSize,
+      'a template exists in at least one package'));
+    stats.appendChild(statCard('Best package', r.bestLayout || '—',
+      r.bestLayoutReadiness || ''));
+    (r.layouts || []).forEach((lay) => list.appendChild(heroLayoutRow(lay)));
+
+    const inbox = await D.get('templates/review');
+    const tr = $('templateReview');
+    clear(tr);
+    if (inbox.offline) { tr.appendChild(el('div', { class: 'empty', text: inbox.error })); return; }
+    if (!(inbox.items || []).length) {
+      tr.appendChild(el('div', { class: 'empty', text: 'No portrait candidates are waiting. Every harvested crop was either clean enough to accept or bad enough to reject outright.' }));
+      return;
+    }
+    inbox.items.forEach((item) => tr.appendChild(templateCandidate(item)));
+  };
+
+  function heroLayoutRow(lay) {
+    const c = lay.counts || {};
+    const grid = el('div', { class: 'herogrid' });
+    (lay.heroes || []).forEach((h) => {
+      const cell = el('span', {
+        class: 'herocell ' + (HERO_TONE[h.state] || ''),
+        text: h.id,
+        title: h.name + ' — ' + h.state + ': ' + (h.blocker || HERO_WHAT[h.state])
+             + (h.templates && h.templates.length
+                 ? '\n' + h.templates.length + ' template(s): ' + h.templates.join(', ')
+                 : '')
+             + (h.action ? '\nNext: ' + h.action : '')
+      });
+      grid.appendChild(cell);
+    });
+
+    const kids = [
+      el('div', { class: 'revhead' }, [
+        el('b', { text: lay.layoutId }),
+        el('span', { class: 'pill ' + (c.READY === lay.rosterSize ? 'ok' : 'warn'),
+                     text: lay.readiness })
+      ]),
+      el('div', { class: 'detail', text:
+        `${c.READY || 0} ready · ${c.UNPROVEN || 0} unproven · `
+        + `${c.BLOCKED || 0} blocked · ${c.MISSING || 0} missing`
+        + (lay.templatesDir ? ' · ' + lay.templatesDir : ' · no templates_dir') }),
+      grid
+    ];
+
+    const prof = lay.detectorProfile || {};
+    if (prof.portraitRoi || prof.unknownFloor) {
+      kids.push(el('div', { class: 'detail', text:
+        'Detector profile: '
+        + (prof.portraitRoi ? 'portrait ROI ' + JSON.stringify(prof.portraitRoi) : 'full slot')
+        + (prof.unknownFloor ? ' · UNKNOWN below ' + prof.unknownFloor : '') }));
+    }
+
+    const run = lay.validationRun;
+    if (run) {
+      const fm = run.falseMatch || {};
+      if (fm.note) kids.push(el('div', { class: 'revwhy', text: fm.note }));
+      (run.confusablePairs || []).slice(0, 4).forEach((p) =>
+        kids.push(el('div', { class: 'revwhy', text: 'Confusable: ' + p.note })));
+    } else {
+      kids.push(el('div', { class: 'revwhy', text:
+        'No validation report for this package. Nothing here has been scored '
+        + 'on frames it did not help build, so "covered" is all that can be '
+        + 'claimed.' }));
+    }
+
+    /* The blockers, with the command that clears each one. A coverage page
+       that lists problems without their remedy just relocates the problem. */
+    const blocked = (lay.heroes || []).filter((h) => h.state === 'BLOCKED' || h.state === 'UNPROVEN');
+    if (blocked.length) {
+      const seen = {};
+      blocked.forEach((h) => { if (h.action) seen[h.action] = (seen[h.action] || 0) + 1; });
+      Object.keys(seen).forEach((action) =>
+        kids.push(el('div', { class: 'detail', text:
+          `${seen[action]} hero(es) → ${action}` })));
+    }
+    return el('div', { class: 'revitem' }, kids);
+  }
+
+  function templateCandidate(item) {
+    const src = String(item.cropPath || '').replace(/\\/g, '/').replace(/^\/+/, '');
+    const img = el('img', { src: src, alt: 'candidate portrait', loading: 'lazy' });
+    const fig = el('figure', {}, [img, el('figcaption', { text: item.heroId || '?' })]);
+    img.addEventListener('error', () => {
+      fig.replaceChildren(el('div', { class: 'revmiss', text: 'crop not on this PC: ' + item.cropPath }));
+    });
+    return el('div', { class: 'revitem' }, [
+      el('div', { class: 'revhead' }, [
+        el('b', { text: (item.heroId || 'unlabelled') + ' — ' + item.package }),
+        el('span', { class: 'pill warn', text: 'candidate' })
+      ]),
+      el('div', { class: 'detail', text:
+        `${item.layoutId || ''} · slot ${item.slot || '?'} · t=${D.clock(item.t || 0)}` }),
+      el('div', { class: 'revwhy', text: 'Marginal because: ' + ((item.reasons || []).join('; ') || 'unspecified') }),
+      el('div', { class: 'revshots' }, [fig]),
+      el('div', { class: 'note', text:
+        'Approving a portrait template is not wired to a button on purpose. '
+        + 'It changes what every future detection compares against, so it '
+        + 'goes through pipeline/template_forge.py, which re-runs the quality '
+        + 'gate and held-out validation before anything is promoted.' })
+    ]);
+  }
+
+  const heroRefreshBtn = $('heroRefresh');
+  if (heroRefreshBtn) heroRefreshBtn.addEventListener('click', () => RENDERERS.heroes());
 
   /* ------------------------------------------------------ calibration */
   let editing = null;   /* {name, width, height, boxes:[{id,kind,label,rect}]} */

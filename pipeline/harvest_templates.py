@@ -38,6 +38,7 @@ import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import capture  # noqa: E402
+import template_quality as tq  # noqa: E402
 
 CLUSTER_SIM = 0.62      # min correlation to join an existing cluster
 
@@ -159,11 +160,36 @@ def stage_cluster(args, layout, slot_keys) -> None:
 
 
 def pick_variants(files: list[str], n: int) -> list[str]:
-    """Greedy min-correlation pick of up to n maximally-different crops."""
+    """Greedy min-correlation pick of up to n maximally-different crops.
+
+    Quality-gated FIRST, then diversified. That order is the whole fix.
+
+    Picking maximally-different crops with no quality floor is not merely
+    unlucky, it actively selects for garbage: a fade-to-black, a full-screen
+    overlay or a blank slot is *maximally different from a portrait by
+    construction*, so it wins the diversity contest every time it appears in
+    the pool. That is exactly how `templates/owcs_jksix_qwc/mauga.v1.png`
+    came to be a 35x35 block of solid grey sitting in a production template
+    set, alongside two near-black `kiriko.v4` / `sym.v4` fade frames.
+    """
     if not files:
         return []
     grays = {f: cv2.imread(f, cv2.IMREAD_GRAYSCALE) for f in files}
     files = [f for f in files if grays[f] is not None]
+    usable, rejected = [], []
+    for f in files:
+        verdict = tq.assess_crop(grays[f], hero_id="candidate",
+                                 require_provenance=False)
+        (usable if verdict["verdict"] != tq.REJECT else rejected).append(f)
+    if rejected:
+        print(f"[harvest] quality gate rejected {len(rejected)} crop(s): "
+              + ", ".join(os.path.basename(f) for f in rejected[:6])
+              + (" …" if len(rejected) > 6 else ""))
+    if not usable:
+        print("[harvest] WARNING every candidate crop failed the quality "
+              "gate — no template written rather than a bad one")
+        return []
+    files = usable
     files.sort(key=lambda f: -sharpness(grays[f]))
     chosen = [files[0]]
     while len(chosen) < n and len(chosen) < len(files):
@@ -201,10 +227,25 @@ def stage_labels(args, slot_keys) -> None:
         files = [os.path.join(mdir, f) for f in os.listdir(mdir)
                  if f.startswith(f"c{ck}_")]
         by_hero.setdefault(hero, []).extend(files)
-    # clean previous hero pngs (keep _candidates)
-    for fn in os.listdir(args.out):
-        if fn.endswith(".png"):
+    # Replace only the heroes THIS harvest actually labeled.
+    #
+    # This used to delete every PNG in the output directory before writing.
+    # That makes a second harvest — of a different clip, adding two heroes
+    # to a set of eight — silently destroy the six it did not re-label,
+    # including any that had been validated. Harvesting more footage must
+    # never be able to reduce a package's coverage. `--replace-all` is there
+    # for the case where the intent really is to start over.
+    if getattr(args, "replace_all", False):
+        removed = [fn for fn in os.listdir(args.out) if fn.endswith(".png")]
+        for fn in removed:
             os.remove(os.path.join(args.out, fn))
+        print(f"[harvest] --replace-all: removed {len(removed)} existing "
+              f"template file(s)")
+    else:
+        for hero in by_hero:
+            for fn in os.listdir(args.out):
+                if fn.endswith(".png") and fn[:-4].split(".")[0] == hero:
+                    os.remove(os.path.join(args.out, fn))
     n_files = 0
     for hero, files in sorted(by_hero.items()):
         chosen = pick_variants(files, args.variants)
@@ -232,6 +273,10 @@ def main(argv=None) -> int:
     ap.add_argument("--cluster", action="store_true")
     ap.add_argument("--labels", help="cluster->hero JSON (stage 2)")
     ap.add_argument("--variants", type=int, default=3)
+    ap.add_argument("--replace-all", action="store_true",
+                    help="delete EVERY existing template in --out first "
+                         "(default: replace only the heroes this run labels, "
+                         "so a second harvest cannot destroy the first)")
     ap.add_argument("--max-clusters", type=int, default=10)
     args = ap.parse_args(argv)
 

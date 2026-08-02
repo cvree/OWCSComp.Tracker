@@ -52,7 +52,8 @@ class TempHome(unittest.TestCase):
 class TestRouting(TempHome):
     READ_ROUTES = ("overview", "health", "settings", "credentials", "storage",
                    "backups", "repairs", "queue", "review", "calibration",
-                   "publish", "task", "logs", "paths")
+                   "publish", "task", "logs", "paths",
+                   "heroes/coverage", "templates/review")
 
     def test_every_documented_get_route_answers(self):
         for route in self.READ_ROUTES:

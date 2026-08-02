@@ -1,0 +1,1207 @@
+{
+ "entries": [
+  {
+   "file": "dva.png",
+   "heroId": "dva",
+   "sourceVideo": null,
+   "sourceReport": "reports/ingest/qad-twis-nepal",
+   "sourceCrop": "t0001840.0_b3.png",
+   "offset": 1840.0,
+   "slot": "b3",
+   "state": "gameplay",
+   "labelSource": "stint-consensus",
+   "stintId": "b3#0",
+   "quality": {
+    "width": 35,
+    "height": 25,
+    "sharpness": 6266.22,
+    "contrast": 61.03,
+    "flatFraction": 0.114,
+    "obstruction": 0.0,
+    "nearestOtherHero": null,
+    "nearestOtherScore": null,
+    "nearestSameScore": null
+   },
+   "buildWindows": [
+    [
+     1811.0,
+     2105.0
+    ]
+   ],
+   "holdoutStarts": 2165.0,
+   "recordedAt": "2026-08-02T23:13:27+00:00"
+  },
+  {
+   "file": "dva.v1.png",
+   "heroId": "dva",
+   "sourceVideo": null,
+   "sourceReport": "reports/ingest/qad-twis-nepal",
+   "sourceCrop": "t0002015.0_b3.png",
+   "offset": 2015.0,
+   "slot": "b3",
+   "state": "gameplay",
+   "labelSource": "stint-consensus",
+   "stintId": "b3#0",
+   "quality": {
+    "width": 35,
+    "height": 25,
+    "sharpness": 2016.87,
+    "contrast": 35.68,
+    "flatFraction": 0.161,
+    "obstruction": 0.0,
+    "nearestOtherHero": null,
+    "nearestOtherScore": null,
+    "nearestSameScore": 0.8979
+   },
+   "buildWindows": [
+    [
+     1811.0,
+     2105.0
+    ]
+   ],
+   "holdoutStarts": 2165.0,
+   "recordedAt": "2026-08-02T23:13:27+00:00"
+  },
+  {
+   "file": "dva.v2.png",
+   "heroId": "dva",
+   "sourceVideo": null,
+   "sourceReport": "reports/ingest/qad-twis-nepal",
+   "sourceCrop": "t0001885.0_b3.png",
+   "offset": 1885.0,
+   "slot": "b3",
+   "state": "gameplay",
+   "labelSource": "stint-consensus",
+   "stintId": "b3#0",
+   "quality": {
+    "width": 35,
+    "height": 25,
+    "sharpness": 1627.8,
+    "contrast": 35.93,
+    "flatFraction": 0.209,
+    "obstruction": 0.0,
+    "nearestOtherHero": null,
+    "nearestOtherScore": null,
+    "nearestSameScore": 0.9139
+   },
+   "buildWindows": [
+    [
+     1811.0,
+     2105.0
+    ]
+   ],
+   "holdoutStarts": 2165.0,
+   "recordedAt": "2026-08-02T23:13:27+00:00"
+  },
+  {
+   "file": "dva.v3.png",
+   "heroId": "dva",
+   "sourceVideo": null,
+   "sourceReport": "reports/ingest/qad-twis-nepal",
+   "sourceCrop": "t0002105.0_b3.png",
+   "offset": 2105.0,
+   "slot": "b3",
+   "state": "gameplay",
+   "labelSource": "stint-consensus",
+   "stintId": "b3#0",
+   "quality": {
+    "width": 35,
+    "height": 25,
+    "sharpness": 2168.77,
+    "contrast": 41.49,
+    "flatFraction": 0.305,
+    "obstruction": 0.0,
+    "nearestOtherHero": null,
+    "nearestOtherScore": null,
+    "nearestSameScore": 0.9287
+   },
+   "buildWindows": [
+    [
+     1811.0,
+     2105.0
+    ]
+   ],
+   "holdoutStarts": 2165.0,
+   "recordedAt": "2026-08-02T23:13:27+00:00"
+  },
+  {
+   "file": "juno.png",
+   "heroId": "juno",
+   "sourceVideo": null,
+   "sourceReport": "reports/ingest/qad-twis-nepal",
+   "sourceCrop": "t0001840.0_a5.png",
+   "offset": 1840.0,
+   "slot": "a5",
+   "state": "gameplay",
+   "labelSource": "stint-consensus",
+   "stintId": "a5#1",
+   "quality": {
+    "width": 35,
+    "height": 25,
+    "sharpness": 6696.21,
+    "contrast": 58.32,
+    "flatFraction": 0.273,
+    "obstruction": 0.0,
+    "nearestOtherHero": "dva.v2.png",
+    "nearestOtherScore": 0.3425,
+    "nearestSameScore": null
+   },
+   "buildWindows": [
+    [
+     1821.0,
+     2005.0
+    ],
+    [
+     2475.0,
+     2500.0
+    ]
+   ],
+   "holdoutStarts": 2065.0,
+   "recordedAt": "2026-08-02T23:13:27+00:00"
+  },
+  {
+   "file": "juno.v1.png",
+   "heroId": "juno",
+   "sourceVideo": null,
+   "sourceReport": "reports/ingest/qad-twis-nepal",
+   "sourceCrop": "t0001943.0_a5.png",
+   "offset": 1943.0,
+   "slot": "a5",
+   "state": "gameplay",
+   "labelSource": "stint-consensus",
+   "stintId": "a5#1",
+   "quality": {
+    "width": 35,
+    "height": 25,
+    "sharpness": 1425.74,
+    "contrast": 33.23,
+    "flatFraction": 0.282,
+    "obstruction": 0.0,
+    "nearestOtherHero": "dva.png",
+    "nearestOtherScore": 0.3278,
+    "nearestSameScore": 0.3771
+   },
+   "buildWindows": [
+    [
+     1821.0,
+     2005.0
+    ],
+    [
+     2475.0,
+     2500.0
+    ]
+   ],
+   "holdoutStarts": 2065.0,
+   "recordedAt": "2026-08-02T23:13:27+00:00"
+  },
+  {
+   "file": "juno.v2.png",
+   "heroId": "juno",
+   "sourceVideo": null,
+   "sourceReport": "reports/ingest/qad-twis-nepal",
+   "sourceCrop": "t0001947.0_a5.png",
+   "offset": 1947.0,
+   "slot": "a5",
+   "state": "gameplay",
+   "labelSource": "stint-consensus",
+   "stintId": "a5#1",
+   "quality": {
+    "width": 35,
+    "height": 25,
+    "sharpness": 1778.55,
+    "contrast": 32.63,
+    "flatFraction": 0.362,
+    "obstruction": 0.0,
+    "nearestOtherHero": "dva.v2.png",
+    "nearestOtherScore": 0.3625,
+    "nearestSameScore": 0.8954
+   },
+   "buildWindows": [
+    [
+     1821.0,
+     2005.0
+    ],
+    [
+     2475.0,
+     2500.0
+    ]
+   ],
+   "holdoutStarts": 2065.0,
+   "recordedAt": "2026-08-02T23:13:27+00:00"
+  },
+  {
+   "file": "juno.v3.png",
+   "heroId": "juno",
+   "sourceVideo": null,
+   "sourceReport": "reports/ingest/qad-twis-nepal",
+   "sourceCrop": "t0001946.0_a5.png",
+   "offset": 1946.0,
+   "slot": "a5",
+   "state": "gameplay",
+   "labelSource": "stint-consensus",
+   "stintId": "a5#1",
+   "quality": {
+    "width": 35,
+    "height": 25,
+    "sharpness": 1704.04,
+    "contrast": 33.5,
+    "flatFraction": 0.28,
+    "obstruction": 0.0,
+    "nearestOtherHero": "dva.v2.png",
+    "nearestOtherScore": 0.3325,
+    "nearestSameScore": 0.8976
+   },
+   "buildWindows": [
+    [
+     1821.0,
+     2005.0
+    ],
+    [
+     2475.0,
+     2500.0
+    ]
+   ],
+   "holdoutStarts": 2065.0,
+   "recordedAt": "2026-08-02T23:13:27+00:00"
+  },
+  {
+   "file": "kiriko.png",
+   "heroId": "kiriko",
+   "sourceVideo": null,
+   "sourceReport": "reports/ingest/qad-twis-nepal",
+   "sourceCrop": "t0001825.0_b5.png",
+   "offset": 1825.0,
+   "slot": "b5",
+   "state": "gameplay",
+   "labelSource": "stint-consensus",
+   "stintId": "b5#2",
+   "quality": {
+    "width": 35,
+    "height": 25,
+    "sharpness": 6486.93,
+    "contrast": 59.12,
+    "flatFraction": 0.266,
+    "obstruction": 0.0,
+    "nearestOtherHero": "juno.png",
+    "nearestOtherScore": 0.7899,
+    "nearestSameScore": null
+   },
+   "buildWindows": [
+    [
+     1811.0,
+     1812.0
+    ],
+    [
+     1845.0,
+     1955.0
+    ],
+    [
+     2191.0,
+     2329.0
+    ],
+    [
+     2614.0,
+     2655.0
+    ],
+    [
+     1820.0,
+     2105.0
+    ]
+   ],
+   "holdoutStarts": 2390.0,
+   "recordedAt": "2026-08-02T23:13:27+00:00"
+  },
+  {
+   "file": "kiriko.v1.png",
+   "heroId": "kiriko",
+   "sourceVideo": null,
+   "sourceReport": "reports/ingest/qad-twis-nepal",
+   "sourceCrop": "t0001946.0_a4.png",
+   "offset": 1946.0,
+   "slot": "a4",
+   "state": "gameplay",
+   "labelSource": "stint-consensus",
+   "stintId": "a4#2",
+   "quality": {
+    "width": 35,
+    "height": 25,
+    "sharpness": 973.52,
+    "contrast": 32.36,
+    "flatFraction": 0.189,
+    "obstruction": 0.0,
+    "nearestOtherHero": "juno.v1.png",
+    "nearestOtherScore": 0.485,
+    "nearestSameScore": 0.2658
+   },
+   "buildWindows": [
+    [
+     1811.0,
+     1812.0
+    ],
+    [
+     1845.0,
+     1955.0
+    ],
+    [
+     2191.0,
+     2329.0
+    ],
+    [
+     2614.0,
+     2655.0
+    ],
+    [
+     1820.0,
+     2105.0
+    ]
+   ],
+   "holdoutStarts": 2390.0,
+   "recordedAt": "2026-08-02T23:13:27+00:00"
+  },
+  {
+   "file": "kiriko.v2.png",
+   "heroId": "kiriko",
+   "sourceVideo": null,
+   "sourceReport": "reports/ingest/qad-twis-nepal",
+   "sourceCrop": "t0002228.0_a4.png",
+   "offset": 2228.0,
+   "slot": "a4",
+   "state": "gameplay",
+   "labelSource": "stint-consensus",
+   "stintId": "a4#4",
+   "quality": {
+    "width": 35,
+    "height": 25,
+    "sharpness": 4289.85,
+    "contrast": 57.18,
+    "flatFraction": 0.121,
+    "obstruction": 0.0,
+    "nearestOtherHero": "juno.v1.png",
+    "nearestOtherScore": 0.4822,
+    "nearestSameScore": 0.5488
+   },
+   "buildWindows": [
+    [
+     1811.0,
+     1812.0
+    ],
+    [
+     1845.0,
+     1955.0
+    ],
+    [
+     2191.0,
+     2329.0
+    ],
+    [
+     2614.0,
+     2655.0
+    ],
+    [
+     1820.0,
+     2105.0
+    ]
+   ],
+   "holdoutStarts": 2390.0,
+   "recordedAt": "2026-08-02T23:13:27+00:00"
+  },
+  {
+   "file": "kiriko.v3.png",
+   "heroId": "kiriko",
+   "sourceVideo": null,
+   "sourceReport": "reports/ingest/qad-twis-nepal",
+   "sourceCrop": "t0002005.0_b5.png",
+   "offset": 2005.0,
+   "slot": "b5",
+   "state": "gameplay",
+   "labelSource": "stint-consensus",
+   "stintId": "b5#2",
+   "quality": {
+    "width": 35,
+    "height": 25,
+    "sharpness": 1575.46,
+    "contrast": 37.77,
+    "flatFraction": 0.227,
+    "obstruction": 0.0,
+    "nearestOtherHero": "dva.v2.png",
+    "nearestOtherScore": 0.4671,
+    "nearestSameScore": 0.6887
+   },
+   "buildWindows": [
+    [
+     1811.0,
+     1812.0
+    ],
+    [
+     1845.0,
+     1955.0
+    ],
+    [
+     2191.0,
+     2329.0
+    ],
+    [
+     2614.0,
+     2655.0
+    ],
+    [
+     1820.0,
+     2105.0
+    ]
+   ],
+   "holdoutStarts": 2390.0,
+   "recordedAt": "2026-08-02T23:13:27+00:00"
+  },
+  {
+   "file": "lucio.png",
+   "heroId": "lucio",
+   "sourceVideo": null,
+   "sourceReport": "reports/ingest/qad-twis-nepal",
+   "sourceCrop": "t0001814.0_b4.png",
+   "offset": 1814.0,
+   "slot": "b4",
+   "state": "gameplay",
+   "labelSource": "stint-consensus",
+   "stintId": "b4#0",
+   "quality": {
+    "width": 35,
+    "height": 25,
+    "sharpness": 4974.22,
+    "contrast": 43.17,
+    "flatFraction": 0.168,
+    "obstruction": 0.0,
+    "nearestOtherHero": "dva.v1.png",
+    "nearestOtherScore": -0.0728,
+    "nearestSameScore": null
+   },
+   "buildWindows": [
+    [
+     2581.0,
+     2581.0
+    ],
+    [
+     2614.0,
+     2655.0
+    ],
+    [
+     1811.0,
+     1985.0
+    ],
+    [
+     2340.0,
+     2480.0
+    ]
+   ],
+   "holdoutStarts": 2050.0,
+   "recordedAt": "2026-08-02T23:13:27+00:00"
+  },
+  {
+   "file": "lucio.v1.png",
+   "heroId": "lucio",
+   "sourceVideo": null,
+   "sourceReport": "reports/ingest/qad-twis-nepal",
+   "sourceCrop": "t0002630.0_a5.png",
+   "offset": 2630.0,
+   "slot": "a5",
+   "state": "gameplay",
+   "labelSource": "stint-consensus",
+   "stintId": "a5#6",
+   "quality": {
+    "width": 35,
+    "height": 25,
+    "sharpness": 3199.94,
+    "contrast": 43.31,
+    "flatFraction": 0.119,
+    "obstruction": 0.0,
+    "nearestOtherHero": "juno.v3.png",
+    "nearestOtherScore": -0.0228,
+    "nearestSameScore": 0.4135
+   },
+   "buildWindows": [
+    [
+     2581.0,
+     2581.0
+    ],
+    [
+     2614.0,
+     2655.0
+    ],
+    [
+     1811.0,
+     1985.0
+    ],
+    [
+     2340.0,
+     2480.0
+    ]
+   ],
+   "holdoutStarts": 2050.0,
+   "recordedAt": "2026-08-02T23:13:27+00:00"
+  },
+  {
+   "file": "lucio.v2.png",
+   "heroId": "lucio",
+   "sourceVideo": null,
+   "sourceReport": "reports/ingest/qad-twis-nepal",
+   "sourceCrop": "t0002620.0_a5.png",
+   "offset": 2620.0,
+   "slot": "a5",
+   "state": "gameplay",
+   "labelSource": "stint-consensus",
+   "stintId": "a5#6",
+   "quality": {
+    "width": 35,
+    "height": 25,
+    "sharpness": 3482.2,
+    "contrast": 42.53,
+    "flatFraction": 0.136,
+    "obstruction": 0.0,
+    "nearestOtherHero": "juno.v2.png",
+    "nearestOtherScore": -0.1172,
+    "nearestSameScore": 0.6822
+   },
+   "buildWindows": [
+    [
+     2581.0,
+     2581.0
+    ],
+    [
+     2614.0,
+     2655.0
+    ],
+    [
+     1811.0,
+     1985.0
+    ],
+    [
+     2340.0,
+     2480.0
+    ]
+   ],
+   "holdoutStarts": 2050.0,
+   "recordedAt": "2026-08-02T23:13:27+00:00"
+  },
+  {
+   "file": "lucio.v3.png",
+   "heroId": "lucio",
+   "sourceVideo": null,
+   "sourceReport": "reports/ingest/qad-twis-nepal",
+   "sourceCrop": "t0001885.0_b4.png",
+   "offset": 1885.0,
+   "slot": "b4",
+   "state": "gameplay",
+   "labelSource": "stint-consensus",
+   "stintId": "b4#0",
+   "quality": {
+    "width": 35,
+    "height": 25,
+    "sharpness": 1395.73,
+    "contrast": 28.56,
+    "flatFraction": 0.21,
+    "obstruction": 0.0,
+    "nearestOtherHero": "dva.v2.png",
+    "nearestOtherScore": -0.0756,
+    "nearestSameScore": 0.8742
+   },
+   "buildWindows": [
+    [
+     2581.0,
+     2581.0
+    ],
+    [
+     2614.0,
+     2655.0
+    ],
+    [
+     1811.0,
+     1985.0
+    ],
+    [
+     2340.0,
+     2480.0
+    ]
+   ],
+   "holdoutStarts": 2050.0,
+   "recordedAt": "2026-08-02T23:13:27+00:00"
+  },
+  {
+   "file": "mauga.png",
+   "heroId": "mauga",
+   "sourceVideo": null,
+   "sourceReport": "reports/ingest/qad-twis-nepal",
+   "sourceCrop": "t0001840.0_a3.png",
+   "offset": 1840.0,
+   "slot": "a3",
+   "state": "gameplay",
+   "labelSource": "stint-consensus",
+   "stintId": "a3#0",
+   "quality": {
+    "width": 35,
+    "height": 25,
+    "sharpness": 7813.64,
+    "contrast": 61.98,
+    "flatFraction": 0.145,
+    "obstruction": 0.0,
+    "nearestOtherHero": "kiriko.png",
+    "nearestOtherScore": 0.1756,
+    "nearestSameScore": null
+   },
+   "buildWindows": [
+    [
+     1811.0,
+     2070.0
+    ],
+    [
+     2614.0,
+     2655.0
+    ]
+   ],
+   "holdoutStarts": 2140.0,
+   "recordedAt": "2026-08-02T23:13:27+00:00"
+  },
+  {
+   "file": "mauga.v1.png",
+   "heroId": "mauga",
+   "sourceVideo": null,
+   "sourceReport": "reports/ingest/qad-twis-nepal",
+   "sourceCrop": "t0001811.0_a3.png",
+   "offset": 1811.0,
+   "slot": "a3",
+   "state": "gameplay",
+   "labelSource": "stint-consensus",
+   "stintId": "a3#0",
+   "quality": {
+    "width": 35,
+    "height": 25,
+    "sharpness": 6252.37,
+    "contrast": 44.46,
+    "flatFraction": 0.187,
+    "obstruction": 0.0,
+    "nearestOtherHero": "kiriko.v3.png",
+    "nearestOtherScore": 0.0965,
+    "nearestSameScore": 0.2777
+   },
+   "buildWindows": [
+    [
+     1811.0,
+     2070.0
+    ],
+    [
+     2614.0,
+     2655.0
+    ]
+   ],
+   "holdoutStarts": 2140.0,
+   "recordedAt": "2026-08-02T23:13:27+00:00"
+  },
+  {
+   "file": "mauga.v2.png",
+   "heroId": "mauga",
+   "sourceVideo": null,
+   "sourceReport": "reports/ingest/qad-twis-nepal",
+   "sourceCrop": "t0002010.0_a3.png",
+   "offset": 2010.0,
+   "slot": "a3",
+   "state": "gameplay",
+   "labelSource": "stint-consensus",
+   "stintId": "a3#0",
+   "quality": {
+    "width": 35,
+    "height": 25,
+    "sharpness": 1057.78,
+    "contrast": 25.11,
+    "flatFraction": 0.197,
+    "obstruction": 0.0,
+    "nearestOtherHero": "kiriko.v2.png",
+    "nearestOtherScore": 0.2978,
+    "nearestSameScore": 0.3528
+   },
+   "buildWindows": [
+    [
+     1811.0,
+     2070.0
+    ],
+    [
+     2614.0,
+     2655.0
+    ]
+   ],
+   "holdoutStarts": 2140.0,
+   "recordedAt": "2026-08-02T23:13:27+00:00"
+  },
+  {
+   "file": "mauga.v3.png",
+   "heroId": "mauga",
+   "sourceVideo": null,
+   "sourceReport": "reports/ingest/qad-twis-nepal",
+   "sourceCrop": "t0001997.0_a3.png",
+   "offset": 1997.0,
+   "slot": "a3",
+   "state": "gameplay",
+   "labelSource": "stint-consensus",
+   "stintId": "a3#0",
+   "quality": {
+    "width": 35,
+    "height": 25,
+    "sharpness": 5468.39,
+    "contrast": 56.17,
+    "flatFraction": 0.121,
+    "obstruction": 0.0,
+    "nearestOtherHero": "dva.png",
+    "nearestOtherScore": 0.2613,
+    "nearestSameScore": 0.7299
+   },
+   "buildWindows": [
+    [
+     1811.0,
+     2070.0
+    ],
+    [
+     2614.0,
+     2655.0
+    ]
+   ],
+   "holdoutStarts": 2140.0,
+   "recordedAt": "2026-08-02T23:13:27+00:00"
+  },
+  {
+   "file": "shion.png",
+   "heroId": "shion",
+   "sourceVideo": null,
+   "sourceReport": "reports/ingest/qad-twis-nepal",
+   "sourceCrop": "t0001840.0_a1.png",
+   "offset": 1840.0,
+   "slot": "a1",
+   "state": "gameplay",
+   "labelSource": "stint-consensus",
+   "stintId": "a1#0",
+   "quality": {
+    "width": 35,
+    "height": 25,
+    "sharpness": 8046.3,
+    "contrast": 50.82,
+    "flatFraction": 0.175,
+    "obstruction": 0.0,
+    "nearestOtherHero": "dva.v3.png",
+    "nearestOtherScore": 0.3959,
+    "nearestSameScore": null
+   },
+   "buildWindows": [
+    [
+     1811.0,
+     2105.0
+    ]
+   ],
+   "holdoutStarts": 2165.0,
+   "recordedAt": "2026-08-02T23:13:27+00:00"
+  },
+  {
+   "file": "shion.v1.png",
+   "heroId": "shion",
+   "sourceVideo": null,
+   "sourceReport": "reports/ingest/qad-twis-nepal",
+   "sourceCrop": "t0001941.0_a1.png",
+   "offset": 1941.0,
+   "slot": "a1",
+   "state": "gameplay",
+   "labelSource": "stint-consensus",
+   "stintId": "a1#0",
+   "quality": {
+    "width": 35,
+    "height": 25,
+    "sharpness": 4955.52,
+    "contrast": 44.32,
+    "flatFraction": 0.182,
+    "obstruction": 0.0,
+    "nearestOtherHero": "kiriko.v3.png",
+    "nearestOtherScore": 0.3378,
+    "nearestSameScore": 0.1969
+   },
+   "buildWindows": [
+    [
+     1811.0,
+     2105.0
+    ]
+   ],
+   "holdoutStarts": 2165.0,
+   "recordedAt": "2026-08-02T23:13:27+00:00"
+  },
+  {
+   "file": "shion.v2.png",
+   "heroId": "shion",
+   "sourceVideo": null,
+   "sourceReport": "reports/ingest/qad-twis-nepal",
+   "sourceCrop": "t0001987.0_a1.png",
+   "offset": 1987.0,
+   "slot": "a1",
+   "state": "gameplay",
+   "labelSource": "stint-consensus",
+   "stintId": "a1#0",
+   "quality": {
+    "width": 35,
+    "height": 25,
+    "sharpness": 1486.88,
+    "contrast": 37.93,
+    "flatFraction": 0.194,
+    "obstruction": 0.029,
+    "nearestOtherHero": "kiriko.v3.png",
+    "nearestOtherScore": 0.4244,
+    "nearestSameScore": 0.7005
+   },
+   "buildWindows": [
+    [
+     1811.0,
+     2105.0
+    ]
+   ],
+   "holdoutStarts": 2165.0,
+   "recordedAt": "2026-08-02T23:13:27+00:00"
+  },
+  {
+   "file": "shion.v3.png",
+   "heroId": "shion",
+   "sourceVideo": null,
+   "sourceReport": "reports/ingest/qad-twis-nepal",
+   "sourceCrop": "t0001993.0_a1.png",
+   "offset": 1993.0,
+   "slot": "a1",
+   "state": "gameplay",
+   "labelSource": "stint-consensus",
+   "stintId": "a1#0",
+   "quality": {
+    "width": 35,
+    "height": 25,
+    "sharpness": 1171.95,
+    "contrast": 23.69,
+    "flatFraction": 0.28,
+    "obstruction": 0.0,
+    "nearestOtherHero": "dva.v3.png",
+    "nearestOtherScore": 0.4139,
+    "nearestSameScore": 0.792
+   },
+   "buildWindows": [
+    [
+     1811.0,
+     2105.0
+    ]
+   ],
+   "holdoutStarts": 2165.0,
+   "recordedAt": "2026-08-02T23:13:27+00:00"
+  },
+  {
+   "file": "sojourn.png",
+   "heroId": "sojourn",
+   "sourceVideo": null,
+   "sourceReport": "reports/ingest/qad-twis-nepal",
+   "sourceCrop": "t0001840.0_b1.png",
+   "offset": 1840.0,
+   "slot": "b1",
+   "state": "gameplay",
+   "labelSource": "stint-consensus",
+   "stintId": "b1#0",
+   "quality": {
+    "width": 35,
+    "height": 25,
+    "sharpness": 3335.19,
+    "contrast": 42.86,
+    "flatFraction": 0.195,
+    "obstruction": 0.0,
+    "nearestOtherHero": "juno.v1.png",
+    "nearestOtherScore": 0.2589,
+    "nearestSameScore": null
+   },
+   "buildWindows": [
+    [
+     1811.0,
+     2105.0
+    ]
+   ],
+   "holdoutStarts": 2165.0,
+   "recordedAt": "2026-08-02T23:13:27+00:00"
+  },
+  {
+   "file": "sojourn.v1.png",
+   "heroId": "sojourn",
+   "sourceVideo": null,
+   "sourceReport": "reports/ingest/qad-twis-nepal",
+   "sourceCrop": "t0001865.0_b1.png",
+   "offset": 1865.0,
+   "slot": "b1",
+   "state": "gameplay",
+   "labelSource": "stint-consensus",
+   "stintId": "b1#0",
+   "quality": {
+    "width": 35,
+    "height": 25,
+    "sharpness": 300.25,
+    "contrast": 18.68,
+    "flatFraction": 0.555,
+    "obstruction": 0.08,
+    "nearestOtherHero": "juno.v2.png",
+    "nearestOtherScore": 0.2026,
+    "nearestSameScore": 0.539
+   },
+   "buildWindows": [
+    [
+     1811.0,
+     2105.0
+    ]
+   ],
+   "holdoutStarts": 2165.0,
+   "recordedAt": "2026-08-02T23:13:27+00:00"
+  },
+  {
+   "file": "sojourn.v2.png",
+   "heroId": "sojourn",
+   "sourceVideo": null,
+   "sourceReport": "reports/ingest/qad-twis-nepal",
+   "sourceCrop": "t0002065.0_b1.png",
+   "offset": 2065.0,
+   "slot": "b1",
+   "state": "gameplay",
+   "labelSource": "stint-consensus",
+   "stintId": "b1#0",
+   "quality": {
+    "width": 35,
+    "height": 25,
+    "sharpness": 446.02,
+    "contrast": 18.24,
+    "flatFraction": 0.338,
+    "obstruction": 0.0,
+    "nearestOtherHero": "juno.v1.png",
+    "nearestOtherScore": 0.2436,
+    "nearestSameScore": 0.6813
+   },
+   "buildWindows": [
+    [
+     1811.0,
+     2105.0
+    ]
+   ],
+   "holdoutStarts": 2165.0,
+   "recordedAt": "2026-08-02T23:13:27+00:00"
+  },
+  {
+   "file": "sojourn.v3.png",
+   "heroId": "sojourn",
+   "sourceVideo": null,
+   "sourceReport": "reports/ingest/qad-twis-nepal",
+   "sourceCrop": "t0002060.0_b1.png",
+   "offset": 2060.0,
+   "slot": "b1",
+   "state": "gameplay",
+   "labelSource": "stint-consensus",
+   "stintId": "b1#0",
+   "quality": {
+    "width": 35,
+    "height": 25,
+    "sharpness": 805.19,
+    "contrast": 23.21,
+    "flatFraction": 0.409,
+    "obstruction": 0.0,
+    "nearestOtherHero": "mauga.v1.png",
+    "nearestOtherScore": 0.1592,
+    "nearestSameScore": 0.7529
+   },
+   "buildWindows": [
+    [
+     1811.0,
+     2105.0
+    ]
+   ],
+   "holdoutStarts": 2165.0,
+   "recordedAt": "2026-08-02T23:13:27+00:00"
+  },
+  {
+   "file": "sym.png",
+   "heroId": "sym",
+   "sourceVideo": null,
+   "sourceReport": "reports/ingest/qad-twis-nepal",
+   "sourceCrop": "t0001812.0_b2.png",
+   "offset": 1812.0,
+   "slot": "b2",
+   "state": "gameplay",
+   "labelSource": "stint-consensus",
+   "stintId": "b2#0",
+   "quality": {
+    "width": 35,
+    "height": 25,
+    "sharpness": 3825.89,
+    "contrast": 42.56,
+    "flatFraction": 0.143,
+    "obstruction": 0.0,
+    "nearestOtherHero": "lucio.v3.png",
+    "nearestOtherScore": 0.1703,
+    "nearestSameScore": null
+   },
+   "buildWindows": [
+    [
+     1811.0,
+     2070.0
+    ],
+    [
+     2614.0,
+     2655.0
+    ],
+    [
+     1811.0,
+     1940.0
+    ],
+    [
+     2209.0,
+     2394.0
+    ]
+   ],
+   "holdoutStarts": 2140.0,
+   "recordedAt": "2026-08-02T23:13:27+00:00"
+  },
+  {
+   "file": "sym.v1.png",
+   "heroId": "sym",
+   "sourceVideo": null,
+   "sourceReport": "reports/ingest/qad-twis-nepal",
+   "sourceCrop": "t0001946.0_a2.png",
+   "offset": 1946.0,
+   "slot": "a2",
+   "state": "gameplay",
+   "labelSource": "stint-consensus",
+   "stintId": "a2#0",
+   "quality": {
+    "width": 35,
+    "height": 25,
+    "sharpness": 776.16,
+    "contrast": 23.51,
+    "flatFraction": 0.314,
+    "obstruction": 0.0,
+    "nearestOtherHero": "shion.png",
+    "nearestOtherScore": 0.2683,
+    "nearestSameScore": 0.3066
+   },
+   "buildWindows": [
+    [
+     1811.0,
+     2070.0
+    ],
+    [
+     2614.0,
+     2655.0
+    ],
+    [
+     1811.0,
+     1940.0
+    ],
+    [
+     2209.0,
+     2394.0
+    ]
+   ],
+   "holdoutStarts": 2140.0,
+   "recordedAt": "2026-08-02T23:13:27+00:00"
+  },
+  {
+   "file": "sym.v2.png",
+   "heroId": "sym",
+   "sourceVideo": null,
+   "sourceReport": "reports/ingest/qad-twis-nepal",
+   "sourceCrop": "t0002065.0_a2.png",
+   "offset": 2065.0,
+   "slot": "a2",
+   "state": "gameplay",
+   "labelSource": "stint-consensus",
+   "stintId": "a2#0",
+   "quality": {
+    "width": 35,
+    "height": 25,
+    "sharpness": 960.86,
+    "contrast": 28.56,
+    "flatFraction": 0.282,
+    "obstruction": 0.0,
+    "nearestOtherHero": "lucio.v1.png",
+    "nearestOtherScore": 0.2299,
+    "nearestSameScore": 0.5043
+   },
+   "buildWindows": [
+    [
+     1811.0,
+     2070.0
+    ],
+    [
+     2614.0,
+     2655.0
+    ],
+    [
+     1811.0,
+     1940.0
+    ],
+    [
+     2209.0,
+     2394.0
+    ]
+   ],
+   "holdoutStarts": 2140.0,
+   "recordedAt": "2026-08-02T23:13:27+00:00"
+  },
+  {
+   "file": "sym.v3.png",
+   "heroId": "sym",
+   "sourceVideo": null,
+   "sourceReport": "reports/ingest/qad-twis-nepal",
+   "sourceCrop": "t0002060.0_a2.png",
+   "offset": 2060.0,
+   "slot": "a2",
+   "state": "gameplay",
+   "labelSource": "stint-consensus",
+   "stintId": "a2#0",
+   "quality": {
+    "width": 35,
+    "height": 25,
+    "sharpness": 1146.2,
+    "contrast": 24.96,
+    "flatFraction": 0.291,
+    "obstruction": 0.0,
+    "nearestOtherHero": "shion.png",
+    "nearestOtherScore": 0.2343,
+    "nearestSameScore": 0.732
+   },
+   "buildWindows": [
+    [
+     1811.0,
+     2070.0
+    ],
+    [
+     2614.0,
+     2655.0
+    ],
+    [
+     1811.0,
+     1940.0
+    ],
+    [
+     2209.0,
+     2394.0
+    ]
+   ],
+   "holdoutStarts": 2140.0,
+   "recordedAt": "2026-08-02T23:13:27+00:00"
+  }
+ ],
+ "harvests": [
+  {
+   "at": "2026-08-02T23:03:59+00:00",
+   "sourceVideo": null,
+   "sourceClip": "reports/ingest/qad-twis-nepal",
+   "labeledBy": "template_forge --promote (held-out validated)",
+   "layoutId": "owcs_jksix_qwc",
+   "files": 32
+  },
+  {
+   "at": "2026-08-02T23:13:27+00:00",
+   "sourceVideo": null,
+   "sourceClip": "reports/ingest/qad-twis-nepal",
+   "labeledBy": "template_forge --promote (held-out validated)",
+   "layoutId": "owcs_jksix_qwc",
+   "files": 32
+  }
+ ],
+ "note": "Provenance for this broadcast package's hero templates. Every entry traces one template PNG back to the real gameplay frame it was cut from. Official hero art is NEVER a template source \u2014 it is only used to help a human label a cluster (see template_bootstrap.py)."
+}

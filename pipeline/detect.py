@@ -43,8 +43,72 @@ TEMPLATES_DIR = os.path.join(db.REPO_ROOT, "templates")
 WORK_DIR = os.path.join(db.REPO_ROOT, "work")
 
 
+# ------------------------------------------------------- detector profile
+def portrait_roi(layout: dict | None) -> tuple[float, float, float, float] | None:
+    """The sub-rectangle of a slot that actually holds the hero portrait.
+
+    Given as fractions of the slot, `[x0, y0, x1, y1]`, under the layout key
+    `portrait_roi`. Absent (the default), the whole slot is used and nothing
+    about matching changes.
+
+    Why a layout needs this: on several OWCS packages the calibrated slot box
+    includes the **player-name strip** under the portrait. A template cut
+    from such a slot is not a template for a hero, it is a template for
+    "this hero *played by this player*", and it degrades the moment the same
+    hero appears in another slot or another team. That is not a theory — on
+    the committed Nepal footage, held-out validation of a set built from
+    full-slot crops missed Lúcio in the enemy team's slot (read `juno`,
+    0.695) purely because the name strip said `OX` instead of `YASTRO`.
+    Cutting the strip off both the template and the probe took the same
+    1,891 held-out trials from 98.36% to 99.84% and removed every confident
+    wrong answer.
+
+    Both sides of the comparison must use the same ROI, which is why it is
+    applied in `load_templates` and `read_slot` rather than at the call site.
+    """
+    if not layout:
+        return None
+    roi = layout.get("portrait_roi")
+    if not roi or len(roi) != 4:
+        return None
+    x0, y0, x1, y1 = (float(v) for v in roi)
+    if not (0.0 <= x0 < x1 <= 1.0 and 0.0 <= y0 < y1 <= 1.0):
+        raise ValueError(
+            f"portrait_roi {roi!r} must be fractional [x0,y0,x1,y1] with "
+            f"0 <= x0 < x1 <= 1 and 0 <= y0 < y1 <= 1")
+    return (x0, y0, x1, y1)
+
+
+def apply_roi(gray, roi):
+    """Crop a slot image to a fractional ROI, or return it unchanged."""
+    if roi is None:
+        return gray
+    h, w = gray.shape[:2]
+    x0, y0, x1, y1 = roi
+    a, b = int(round(y0 * h)), int(round(y1 * h))
+    c, d = int(round(x0 * w)), int(round(x1 * w))
+    # Never hand back an empty crop: a degenerate ROI on a small slot would
+    # turn every read into a crash rather than an honest UNKNOWN.
+    b, d = max(b, a + 1), max(d, c + 1)
+    return gray[a:b, c:d]
+
+
+def detector_profile(layout: dict | None) -> dict:
+    """Per-layout matching settings, defaulting to this module's constants.
+
+    Kept as an explicit dict rather than globals so that two layouts
+    processed in one run cannot leak thresholds into each other.
+    """
+    layout = layout or {}
+    return {
+        "roi": portrait_roi(layout),
+        "floor": float(layout.get("unknown_floor", UNKNOWN_FLOOR)),
+        "minMargin": float(layout.get("min_margin", MIN_MARGIN)),
+    }
+
+
 # ------------------------------------------------------------- templates
-def load_templates(templates_dir: str | None = None) -> dict:
+def load_templates(templates_dir: str | None = None, *, roi=None) -> dict:
     """{hero_id: [gray_img, ...]} — supports optional .a/.b team variants.
 
     templates_dir defaults to the repo templates/ directory. Passing an
@@ -64,7 +128,7 @@ def load_templates(templates_dir: str | None = None) -> dict:
         hero_id = fn[:-4].split(".")[0]
         img = cv2.imread(os.path.join(tdir, fn), cv2.IMREAD_GRAYSCALE)
         if img is not None:
-            lib.setdefault(hero_id, []).append((img, fn))
+            lib.setdefault(hero_id, []).append((apply_roi(img, roi), fn))
     if not lib:
         raise FileNotFoundError(f"No hero templates in {tdir}.")
     return lib
@@ -89,7 +153,28 @@ def build_templates(frame_path: str, layout: dict) -> None:
 
 # --------------------------------------------------------------- matching
 UNKNOWN_FLOOR = 0.35      # below this the slot is UNKNOWN, full stop
-MIN_MARGIN = 0.04         # top must beat runner-up by this to be trusted
+
+# Top must beat the runner-up by this to be trusted.
+#
+# This was 0.04, and 0.04 was indefensible. Measured on 2,008 held-out crops
+# from reports/ingest/qad-twis-nepal, against a template set with one hero
+# deliberately removed so that every crop of that hero is a portrait the set
+# genuinely cannot know:
+#
+#     impostor margin, median          0.071   <-- ABOVE the old 0.04 bar
+#     impostor margin, 95th percentile 0.431
+#     true-positive margin, 1st pct    0.173
+#
+# In other words the old threshold let a *typical* unknown portrait through
+# as a confident hero. At 8-of-52 coverage that is not an edge case, it is
+# the common case: with the old value only 58% of unknown portraits came
+# back UNKNOWN; at 0.12 it is 86%, with no measured loss of correct reads
+# (2004/2008 either way). The gap between 0.12 and the true-positive 1st
+# percentile of 0.173 is the safety headroom for footage this was not
+# measured on.
+#
+# A layout can raise it further via `min_margin`; see detector_profile.
+MIN_MARGIN = 0.12
 
 
 def match_slot_ranked(slot_gray, lib: dict) -> list[dict]:
@@ -117,12 +202,17 @@ def match_slot_ranked(slot_gray, lib: dict) -> list[dict]:
 
 def read_slot(slot_gray, lib: dict,
               floor: float = UNKNOWN_FLOOR,
-              min_margin: float = MIN_MARGIN) -> dict:
+              min_margin: float = MIN_MARGIN,
+              roi=None) -> dict:
     """Honest single-slot read: top + runner-up + margin + rejection reason.
 
     hero == 'UNKNOWN' whenever the evidence is insufficient — a weak match
-    is NEVER silently converted into a confident hero label."""
-    ranked = match_slot_ranked(slot_gray, lib)
+    is NEVER silently converted into a confident hero label.
+
+    `roi` must be the SAME fractional ROI the library was loaded with; the
+    templates are already cropped, so cropping the probe here is what keeps
+    the two comparable."""
+    ranked = match_slot_ranked(apply_roi(slot_gray, roi), lib)
     top = ranked[0] if ranked else {"hero": "", "score": -1.0, "template": ""}
     second = ranked[1] if len(ranked) > 1 else {"hero": "", "score": -1.0}
     margin = top["score"] - second["score"]
@@ -152,13 +242,22 @@ def match_slot(slot_gray, lib: dict) -> tuple[str, float]:
 
 
 def read_frame_comps(frame_bgr, layout: dict, lib: dict) -> dict:
-    """Both teams' comps from one frame, with per-slot scores."""
+    """Both teams' comps from one frame, with per-slot scores.
+
+    The layout's `portrait_roi` (if any) is applied to each slot crop here.
+    The caller is responsible for having loaded `lib` with the same ROI —
+    `hero_overlay_detect.load_lib` does, and passing a full-slot library to
+    an ROI layout would compare a cropped probe against an uncropped
+    template and score everything near zero.
+    """
+    roi = portrait_roi(layout)
     gray = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2GRAY)
     out = {}
     for side, key in (("a", "slots_a"), ("b", "slots_b")):
         slots = []
         for (x, y, w, h) in layout[key]:
-            hero, score = match_slot(gray[y:y + h, x:x + w], lib)
+            hero, score = match_slot(apply_roi(gray[y:y + h, x:x + w], roi),
+                                     lib)
             slots.append({"hero": hero, "score": round(score, 3)})
         out[side] = slots
     return out

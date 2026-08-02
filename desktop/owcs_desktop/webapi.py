@@ -694,6 +694,97 @@ def calibration_save(name: str, boxes: list[dict[str, Any]], *,
                       f"kept as backup {snapshot['id']}."}
 
 
+# ------------------------------------------------------- hero readiness
+def _pipeline_import(name: str):
+    """Import a `pipeline/` module from the installed payload.
+
+    The pipeline is a directory of scripts, not a package — `paths` already
+    knows where it lives in both the source tree and the frozen bundle, and
+    `apply_environment()` has already pointed it at per-user storage by the
+    time any route runs.
+    """
+    pdir = paths.pipeline_dir()
+    if pdir not in sys.path:
+        sys.path.insert(0, pdir)
+    return __import__(name)
+
+
+def hero_coverage(*, layout: str | None = None) -> dict[str, Any]:
+    """52-hero detection readiness, per broadcast package.
+
+    Deliberately never returns a single "percent ready". Coverage (is there
+    a template) and validation (has it been proven on frames it never saw)
+    are different questions with different remedies, and a UI that shows
+    one number will show the flattering one.
+
+    Degrades rather than fails: a machine without OpenCV still gets
+    coverage and provenance, just not the quality verdicts.
+    """
+    try:
+        hc = _pipeline_import("hero_coverage")
+        pdb = _pipeline_import("db")
+    except Exception as exc:                      # pragma: no cover - env
+        return {"available": False, "error": mask(str(exc)),
+                "note": "the pipeline modules could not be imported"}
+    con = pdb.connect()
+    try:
+        pdb.init_schema(con)
+        report = (hc.layout_coverage(con, layout) if layout
+                  else hc.all_layouts(con))
+    finally:
+        con.close()
+    report["available"] = True
+    return report
+
+
+def template_review_inbox(*, limit: int = 200) -> dict[str, Any]:
+    """Harvested portrait candidates the quality gate could not decide.
+
+    Separate from `review_inbox`, which is about *detections*. This one is
+    about the templates detection will be run WITH — a candidate approved
+    here becomes a production template, so it is the higher-stakes of the
+    two and gets its own surface rather than being mixed in.
+
+    Every item carries the crop itself (as a path the control room can
+    serve) plus the exact checks that came back marginal, so the decision
+    is made by looking rather than by trusting a number.
+    """
+    items: list[dict[str, Any]] = []
+    roots: list[str] = []
+    tdir_root = os.path.join(paths.app_root(), "templates")
+    if os.path.isdir(tdir_root):
+        roots.append(tdir_root)
+    staging = os.path.join(paths.data_root(), "templates")
+    if os.path.isdir(staging):
+        roots.append(staging)
+
+    for root in roots:
+        for entry in sorted(os.listdir(root)):
+            inbox = os.path.join(root, entry, "_review", "inbox.json")
+            if not os.path.exists(inbox):
+                continue
+            try:
+                with open(inbox, encoding="utf-8") as f:
+                    payload = json.load(f)
+            except (OSError, ValueError):
+                continue
+            for item in payload.get("items", [])[:limit]:
+                items.append(dict(
+                    item,
+                    package=entry,
+                    layoutId=payload.get("layoutId"),
+                    cropPath=os.path.join(root, entry, "_review",
+                                          item.get("file", "")),
+                ))
+    return {
+        "items": items[:limit],
+        "counts": {"total": len(items)},
+        "note": ("Candidates that are neither clean enough to accept nor bad "
+                 "enough to reject. Nothing here is in production; approving "
+                 "one is what puts it there."),
+    }
+
+
 # --------------------------------------------------------------- overview
 def overview() -> dict[str, Any]:
     """The single call the control room's header polls."""
@@ -723,6 +814,30 @@ def overview() -> dict[str, Any]:
         "setupComplete": os.path.exists(paths.first_run_marker()),
         "autoStart": autostart.AutoStart().status(),
         "task": TASK.snapshot(),
+        # Hero readiness on the header poll, so the one number an operator
+        # most wants ("can this thing actually see the heroes?") is visible
+        # without navigating anywhere. Never raises: a coverage report is
+        # useful information, not a reason for the whole page to fail.
+        "heroes": _overview_heroes(),
+    }
+
+
+def _overview_heroes() -> dict[str, Any]:
+    try:
+        report = hero_coverage()
+    except Exception as exc:                      # pragma: no cover - env
+        return {"available": False, "error": mask(str(exc))}
+    if not report.get("available"):
+        return report
+    return {
+        "available": True,
+        "rosterSize": report.get("rosterSize"),
+        "headline": report.get("headline"),
+        "bestLayout": report.get("bestLayout"),
+        "bestLayoutReadiness": report.get("bestLayoutReadiness"),
+        "detectableSomewhere": len(report.get("detectableSomewhere") or []),
+        "provenSomewhere": len(report.get("provenSomewhere") or []),
+        "templateReview": template_review_inbox()["counts"]["total"],
     }
 
 
@@ -833,6 +948,11 @@ def handle_get(path: str, query: str = "") -> tuple[int, dict[str, Any]] | None:
             return 200, queue_report()
         if route == "review":
             return 200, review_inbox()
+        if route == "heroes/coverage":
+            return 200, hero_coverage(
+                layout=(params.get("layout") or [None])[0])
+        if route == "templates/review":
+            return 200, template_review_inbox()
         if route == "calibration":
             name = (params.get("name") or [""])[0]
             if name:

@@ -221,6 +221,29 @@
 .revshots figcaption { font-size: .68rem; color: var(--muted); margin-top: 3px; }
 .revmiss { font-size: .74rem; color: var(--muted); font-style: italic; }
 
+/* ------------------------------------------------------ hero coverage */
+/* A 52-cell grid, one cell per hero, colour-coded by readiness state. Four
+   flat colours rather than a gradient: "covered but unproven" is a
+   different situation from "ready", not a percentage of it, and a gradient
+   would read as nearly-there. Every cell carries its blocker and its next
+   action in the title attribute, so the grid is a map of what to do rather
+   than a scoreboard. */
+.herogrid {
+  display: flex; flex-wrap: wrap; gap: 4px; margin: 10px 0 4px;
+}
+.herocell {
+  font: 600 .64rem var(--mono); letter-spacing: .02em;
+  padding: 3px 7px; border-radius: 6px; cursor: help;
+  border: 1px solid var(--line);
+  background: var(--st-idle-soft); color: var(--muted);
+}
+.herocell.ok   { background: var(--st-ok-soft);  color: var(--st-ok);
+                 border-color: rgba(46,189,107,.35); }
+.herocell.warn { background: var(--amber-soft);  color: var(--amber);
+                 border-color: rgba(255,169,43,.35); }
+.herocell.bad  { background: var(--st-bad-soft); color: var(--st-bad);
+                 border-color: rgba(255,92,100,.4); }
+
 /* -------------------------------------------------------------- misc */
 .kv { display: grid; grid-template-columns: minmax(120px, auto) 1fr; gap: 4px 14px; font-size: .82rem; }
 .kv dt { color: var(--muted); }

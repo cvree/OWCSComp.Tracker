@@ -110,6 +110,13 @@ reports/ingest/*
 !reports/calibration/
 reports/calibration/*
 !reports/calibration/owcs-jksix-qwc/
+# Held-out validation reports (pipeline/template_validate.py --out). These
+# are the evidence behind every "validated" claim the coverage page makes,
+# they are small JSON, and the desktop UI reads them rather than re-running
+# a 2,000-trial scoring pass on every page load. Committing them is what
+# lets a clean checkout show the same readiness the machine that ran the
+# validation saw.
+!reports/validation/
 
 # Operator runtime snapshot for intake.html. Regenerated on every
 # `intake-export --save` / `convert-link` run and specific to whoever is

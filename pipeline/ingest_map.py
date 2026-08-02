@@ -170,7 +170,8 @@ def resolve_sides(slots: dict, hero_roles: dict) -> dict:
 def observe(t: float, frame_path: str, layout_scaled: dict, lib: dict,
             crops_dir: str, save_crop: bool = True,
             ocr_read_fn=None, ocr_aliases: dict | None = None,
-            hero_roles: dict | None = None) -> dict:
+            hero_roles: dict | None = None,
+            profile: dict | None = None) -> dict:
     """One frame -> state + (if gameplay) ten slot reads with evidence.
 
     ocr_read_fn/ocr_aliases (both optional, from --ocr-guard) run OCR
@@ -202,11 +203,17 @@ def observe(t: float, frame_path: str, layout_scaled: dict, lib: dict,
         obs["_ocr"] = ocr_items
     if state != "gameplay":
         return obs
+    # Per-layout matching settings (portrait ROI, UNKNOWN floor, margin).
+    # Derived from the layout rather than module globals so a run against a
+    # calibrated package cannot inherit another package's thresholds.
+    profile = profile or detect.detector_profile(layout_scaled)
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     for side in ("a", "b"):
         for i, (x, y, w, h) in enumerate(layout_scaled[f"slots_{side}"], 1):
             crop = gray[y:y + h, x:x + w]
-            read = detect.read_slot(crop, lib)
+            read = detect.read_slot(crop, lib, floor=profile["floor"],
+                                    min_margin=profile["minMargin"],
+                                    roi=profile["roi"])
             key = f"{side}{i}"
             if save_crop:
                 cp = os.path.join(crops_dir, f"t{t:09.1f}_{key}.png")
@@ -992,9 +999,19 @@ def build_side_map(observations, rounds, side_decisions, team_a, team_b):
 # -------------------------------------------------------------------- main
 def run(args) -> dict:
     layout = capture.load_layout(args.layout)
-    lib = detect.load_templates(os.path.join(
-        db.REPO_ROOT, layout["templates_dir"]))
+    profile = detect.detector_profile(layout)
+    lib = detect.load_templates(
+        os.path.join(db.REPO_ROOT, layout["templates_dir"]),
+        roi=profile["roi"])
     log(f"templates: {len(lib)} heroes from {layout['templates_dir']}")
+    if profile["roi"]:
+        log(f"portrait ROI {profile['roi']} applied to templates and slots "
+            f"(the layout's slot box includes furniture that is not the "
+            f"portrait)")
+    if profile["floor"] != detect.UNKNOWN_FLOOR or \
+            profile["minMargin"] != detect.MIN_MARGIN:
+        log(f"match thresholds from layout: floor {profile['floor']}, "
+            f"margin {profile['minMargin']}")
     try:
         hero_roles = comp_solver.load_hero_roles(db.connect())
         log(f"roles: loaded {len(hero_roles)} hero roles for 1/2/2 "
@@ -1050,7 +1067,7 @@ def run(args) -> dict:
             observations.append(observe(
                 t, p, layout_scaled, lib, crops_dir,
                 ocr_read_fn=ocr_read_fn, ocr_aliases=ocr_aliases,
-                hero_roles=hero_roles))
+                hero_roles=hero_roles, profile=profile))
     n_game = sum(1 for o in observations if o["state"] == "gameplay")
     log(f"baseline states: gameplay {n_game}, "
         f"other {len(observations) - n_game}")
@@ -1090,7 +1107,7 @@ def run(args) -> dict:
                     observations.append(observe(
                         rt, p, layout_scaled, lib, crops_dir,
                         ocr_read_fn=ocr_read_fn, ocr_aliases=ocr_aliases,
-                        hero_roles=hero_roles))
+                        hero_roles=hero_roles, profile=profile))
                     seen_ts.add(rt)
             t += DENSE_STEP
     observations.sort(key=lambda o: o["t"])

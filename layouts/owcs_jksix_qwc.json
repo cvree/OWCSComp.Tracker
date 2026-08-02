@@ -207,6 +207,48 @@
    0.04861
   ]
  ],
+ "portrait_roi": [
+  0.0,
+  0.0,
+  1.0,
+  0.714
+ ],
+ "_portrait_roi_note": [
+  "Fractions of each slot box that actually hold the hero portrait.",
+  "The calibrated slot is 52x52 at 1920x1080 and includes a flat",
+  "separator bar and the PLAYER-NAME strip beneath the art. Cutting",
+  "them off makes a template describe the hero instead of the",
+  "player currently on that hero.",
+  "Derived, not guessed: pipeline/portrait_roi.py over 400 real",
+  "crops from reports/ingest/qad-twis-nepal found rows 25-29 of 35",
+  "flat (within-row variance under 10% of the busiest row), so the",
+  "portrait ends at row 25 -> 25/35 = 0.714.",
+  "Measured effect on 1,891 held-out crops from that broadcast:",
+  "98.36% -> 99.84% correct, 27 -> 2 UNKNOWN, and every confident",
+  "wrong answer removed (enemy Lucio had been read as juno@0.695",
+  "purely because the name strip said OX rather than YASTRO)."
+ ],
+ "unknown_floor": 0.6,
+ "_unknown_floor_note": [
+  "Per-layout override of detect.UNKNOWN_FLOOR (0.35). Measured on 2,008",
+  "held-out crops from reports/ingest/qad-twis-nepal against a",
+  "provenanced, held-out-validated template set, scoring BOTH halves of",
+  "the test: correct reads, and 'impostor' reads where the hero's own",
+  "templates were removed so the set genuinely cannot know the portrait.",
+  "  floor 0.35 -> 99.80% correct, 1 wrong, 58% of impostors rejected",
+  "  floor 0.45 -> 99.70% correct, 0 wrong, 68% of impostors rejected",
+  "  floor 0.60 -> 98.51% correct, 0 wrong, 97% of impostors rejected",
+  "  floor 0.70 -> 98.01% correct, 0 wrong, 97% of impostors rejected",
+  "0.60 is where impostor rejection saturates; paying 1.3% of correct",
+  "reads to stop a set that covers 8 of 52 heroes from confidently naming",
+  "the other 44 is the trade this project has chosen, because an UNKNOWN",
+  "costs a data point and a wrong hero corrupts a published composition.",
+  "HONEST LIMIT: fitted to ONE broadcast. The 53 impostor reads that",
+  "still get through at this floor are ALL the juno/kiriko pair, which is",
+  "genuinely confusable at 35x35 in grayscale; see the confusable-pair",
+  "section of the validation report. Re-measure when a second source is",
+  "harvested for this layout."
+ ],
  "match_threshold": 0.6,
  "anchor": {
   "rect": [
@@ -248,7 +290,7 @@
    "",
    "SCOPE, HONESTLY: this proves 'this broadcast's HUD is on screen', which",
    "is what the gameplay filter needs from an anchor. It is NOT a replay",
-   "discriminator for this source — a replay here renders a full HUD, and",
+   "discriminator for this source \u2014 a replay here renders a full HUD, and",
    "no replay/scoreboard FRAME of this VOD is committed, so that claim",
    "could not be measured. Replays keep being caught by the three real",
    "reject markers below, which gameplay_state checks BEFORE the anchor."

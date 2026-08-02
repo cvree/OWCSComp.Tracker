@@ -1,0 +1,554 @@
+{
+ "generatedAt": "2026-08-02T23:13:30+00:00",
+ "templatesDir": "templates/owcs_jksix_qwc",
+ "evidence": {
+  "sourceReport": "reports/ingest/qad-twis-nepal",
+  "layoutId": "owcs_jksix_qwc",
+  "labeledCrops": 2907,
+  "labelMethod": "stint consensus over consecutive same-slot reads"
+ },
+ "thresholds": {
+  "minTrials": 12,
+  "minAccuracy": 0.9,
+  "minGapSeconds": 60.0,
+  "maxFalseMatchRate": 0.02
+ },
+ "detectorProfile": {
+  "portraitRoi": [
+   0.0,
+   0.0,
+   1.0,
+   0.714
+  ],
+  "unknownFloor": 0.6,
+  "minMargin": 0.12
+ },
+ "heroes": {
+  "dva": {
+   "heroId": "dva",
+   "templates": [
+    "dva.png",
+    "dva.v1.png",
+    "dva.v2.png",
+    "dva.v3.png"
+   ],
+   "separationProvable": true,
+   "separationNote": "",
+   "trials": 201,
+   "correct": 201,
+   "unknown": 0,
+   "wrong": 0,
+   "contaminated": 102,
+   "confusedWith": {},
+   "byState": {
+    "gameplay": {
+     "trials": 201,
+     "correct": 201,
+     "accuracy": 1.0
+    }
+   },
+   "byLabelSource": {
+    "stint-consensus": 201
+   },
+   "examples": [],
+   "accuracy": 1.0,
+   "meanScore": 0.97,
+   "minScore": 0.718,
+   "minMargin": 0.303,
+   "verdict": "VALIDATED",
+   "why": "201/201 held-out frame(s) correct, zero wrong, min margin 0.303"
+  },
+  "juno": {
+   "heroId": "juno",
+   "templates": [
+    "juno.png",
+    "juno.v1.png",
+    "juno.v2.png",
+    "juno.v3.png"
+   ],
+   "separationProvable": true,
+   "separationNote": "",
+   "trials": 142,
+   "correct": 142,
+   "unknown": 0,
+   "wrong": 0,
+   "contaminated": 88,
+   "confusedWith": {},
+   "byState": {
+    "gameplay": {
+     "trials": 142,
+     "correct": 142,
+     "accuracy": 1.0
+    }
+   },
+   "byLabelSource": {
+    "stint-consensus": 142
+   },
+   "examples": [],
+   "accuracy": 1.0,
+   "meanScore": 0.9356,
+   "minScore": 0.85,
+   "minMargin": 0.133,
+   "verdict": "VALIDATED",
+   "why": "142/142 held-out frame(s) correct, zero wrong, min margin 0.133"
+  },
+  "kiriko": {
+   "heroId": "kiriko",
+   "templates": [
+    "kiriko.png",
+    "kiriko.v1.png",
+    "kiriko.v2.png",
+    "kiriko.v3.png"
+   ],
+   "separationProvable": true,
+   "separationNote": "",
+   "trials": 274,
+   "correct": 273,
+   "unknown": 1,
+   "wrong": 0,
+   "contaminated": 288,
+   "confusedWith": {},
+   "byState": {
+    "gameplay": {
+     "trials": 274,
+     "correct": 273,
+     "accuracy": 0.996
+    }
+   },
+   "byLabelSource": {
+    "stint-consensus": 274
+   },
+   "examples": [
+    {
+     "file": "t0002466.0_a4.png",
+     "outcome": "unknown",
+     "score": 0.404,
+     "margin": 0.029,
+     "reject": "no-match: best kiriko@0.40 below floor 0.6",
+     "t": 2466.0,
+     "slot": "a4"
+    }
+   ],
+   "accuracy": 0.9964,
+   "meanScore": 0.8956,
+   "minScore": 0.404,
+   "minMargin": 0.029,
+   "verdict": "VALIDATED",
+   "why": "273/274 held-out frame(s) correct, zero wrong, min margin 0.029"
+  },
+  "lucio": {
+   "heroId": "lucio",
+   "templates": [
+    "lucio.png",
+    "lucio.v1.png",
+    "lucio.v2.png",
+    "lucio.v3.png"
+   ],
+   "separationProvable": true,
+   "separationNote": "",
+   "trials": 221,
+   "correct": 221,
+   "unknown": 0,
+   "wrong": 0,
+   "contaminated": 106,
+   "confusedWith": {},
+   "byState": {
+    "gameplay": {
+     "trials": 221,
+     "correct": 221,
+     "accuracy": 1.0
+    }
+   },
+   "byLabelSource": {
+    "stint-consensus": 221
+   },
+   "examples": [],
+   "accuracy": 1.0,
+   "meanScore": 0.9401,
+   "minScore": 0.789,
+   "minMargin": 0.586,
+   "verdict": "VALIDATED",
+   "why": "221/221 held-out frame(s) correct, zero wrong, min margin 0.586"
+  },
+  "mauga": {
+   "heroId": "mauga",
+   "templates": [
+    "mauga.png",
+    "mauga.v1.png",
+    "mauga.v2.png",
+    "mauga.v3.png"
+   ],
+   "separationProvable": true,
+   "separationNote": "",
+   "trials": 195,
+   "correct": 195,
+   "unknown": 0,
+   "wrong": 0,
+   "contaminated": 98,
+   "confusedWith": {},
+   "byState": {
+    "gameplay": {
+     "trials": 195,
+     "correct": 195,
+     "accuracy": 1.0
+    }
+   },
+   "byLabelSource": {
+    "stint-consensus": 195
+   },
+   "examples": [],
+   "accuracy": 1.0,
+   "meanScore": 0.9358,
+   "minScore": 0.719,
+   "minMargin": 0.443,
+   "verdict": "VALIDATED",
+   "why": "195/195 held-out frame(s) correct, zero wrong, min margin 0.443"
+  },
+  "shion": {
+   "heroId": "shion",
+   "templates": [
+    "shion.png",
+    "shion.v1.png",
+    "shion.v2.png",
+    "shion.v3.png"
+   ],
+   "separationProvable": true,
+   "separationNote": "",
+   "trials": 201,
+   "correct": 201,
+   "unknown": 0,
+   "wrong": 0,
+   "contaminated": 102,
+   "confusedWith": {},
+   "byState": {
+    "gameplay": {
+     "trials": 201,
+     "correct": 201,
+     "accuracy": 1.0
+    }
+   },
+   "byLabelSource": {
+    "stint-consensus": 201
+   },
+   "examples": [],
+   "accuracy": 1.0,
+   "meanScore": 0.9153,
+   "minScore": 0.8,
+   "minMargin": 0.373,
+   "verdict": "VALIDATED",
+   "why": "201/201 held-out frame(s) correct, zero wrong, min margin 0.373"
+  },
+  "sojourn": {
+   "heroId": "sojourn",
+   "templates": [
+    "sojourn.png",
+    "sojourn.v1.png",
+    "sojourn.v2.png",
+    "sojourn.v3.png"
+   ],
+   "separationProvable": true,
+   "separationNote": "",
+   "trials": 255,
+   "correct": 251,
+   "unknown": 4,
+   "wrong": 0,
+   "contaminated": 48,
+   "confusedWith": {},
+   "byState": {
+    "gameplay": {
+     "trials": 255,
+     "correct": 251,
+     "accuracy": 0.984
+    }
+   },
+   "byLabelSource": {
+    "stint-consensus": 255
+   },
+   "examples": [
+    {
+     "file": "t0002330.0_b1.png",
+     "outcome": "unknown",
+     "score": 0.442,
+     "margin": 0.176,
+     "reject": "no-match: best mauga@0.44 below floor 0.6",
+     "t": 2330.0,
+     "slot": "b1"
+    },
+    {
+     "file": "t0002333.0_b1.png",
+     "outcome": "unknown",
+     "score": 0.323,
+     "margin": 0.035,
+     "reject": "no-match: best mauga@0.32 below floor 0.6",
+     "t": 2333.0,
+     "slot": "b1"
+    },
+    {
+     "file": "t0002334.0_b1.png",
+     "outcome": "unknown",
+     "score": 0.332,
+     "margin": 0.086,
+     "reject": "no-match: best kiriko@0.33 below floor 0.6",
+     "t": 2334.0,
+     "slot": "b1"
+    },
+    {
+     "file": "t0002335.0_b1.png",
+     "outcome": "unknown",
+     "score": 0.425,
+     "margin": 0.2,
+     "reject": "no-match: best sojourn@0.42 below floor 0.6",
+     "t": 2335.0,
+     "slot": "b1"
+    }
+   ],
+   "accuracy": 0.9843,
+   "meanScore": 0.8973,
+   "minScore": 0.323,
+   "minMargin": 0.035,
+   "verdict": "VALIDATED",
+   "why": "251/255 held-out frame(s) correct, zero wrong, min margin 0.035"
+  },
+  "sym": {
+   "heroId": "sym",
+   "templates": [
+    "sym.png",
+    "sym.v1.png",
+    "sym.v2.png",
+    "sym.v3.png"
+   ],
+   "separationProvable": true,
+   "separationNote": "",
+   "trials": 372,
+   "correct": 372,
+   "unknown": 0,
+   "wrong": 0,
+   "contaminated": 214,
+   "confusedWith": {},
+   "byState": {
+    "gameplay": {
+     "trials": 372,
+     "correct": 372,
+     "accuracy": 1.0
+    }
+   },
+   "byLabelSource": {
+    "stint-consensus": 372
+   },
+   "examples": [],
+   "accuracy": 1.0,
+   "meanScore": 0.9018,
+   "minScore": 0.642,
+   "minMargin": 0.345,
+   "verdict": "VALIDATED",
+   "why": "372/372 held-out frame(s) correct, zero wrong, min margin 0.345"
+  }
+ },
+ "counts": {
+  "VALIDATED": 8,
+  "WEAK": 0,
+  "FAILED": 0,
+  "UNVERIFIABLE": 0
+ },
+ "falseMatch": {
+  "trials": 0,
+  "unknown": 0,
+  "matched": 0,
+  "matchedAs": {},
+  "byHero": {},
+  "examples": [],
+  "rate": 0.0,
+  "passed": true,
+  "note": "no crops of uncovered heroes in this manifest \u2014 the false-match half of the test did not run, so this set is unproven against portraits it has no template for"
+ },
+ "missingCrops": 0,
+ "passed": false,
+ "leaveOneOut": {
+  "confusablePairs": [
+   {
+    "hero": "juno",
+    "readAs": "kiriko",
+    "count": 28,
+    "trials": 74,
+    "share": 0.378,
+    "note": "with no juno template in the set, 28 of 74 real juno portraits (38%) were confidently read as kiriko instead of UNKNOWN"
+   },
+   {
+    "hero": "kiriko",
+    "readAs": "juno",
+    "count": 1,
+    "trials": 57,
+    "share": 0.018,
+    "note": "with no kiriko template in the set, 1 of 57 real kiriko portraits (2%) were confidently read as juno instead of UNKNOWN"
+   }
+  ],
+  "generatedAt": "2026-08-02T23:13:30+00:00",
+  "templatesDir": "templates/owcs_jksix_qwc",
+  "heroes": {
+   "dva": {
+    "trials": 79,
+    "unknown": 79,
+    "matched": 0,
+    "rate": 0.0,
+    "matchedAs": {},
+    "examples": [],
+    "passed": true,
+    "note": "with dva removed, 0/79 of its own crops were still confidently named (n/a)"
+   },
+   "juno": {
+    "trials": 74,
+    "unknown": 46,
+    "matched": 28,
+    "rate": 0.3784,
+    "matchedAs": {
+     "kiriko": 28
+    },
+    "examples": [
+     {
+      "file": "t0002030.0_a5.png",
+      "readAs": "kiriko",
+      "score": 0.798,
+      "margin": 0.446,
+      "t": 2030.0,
+      "slot": "a5"
+     },
+     {
+      "file": "t0002035.0_a5.png",
+      "readAs": "kiriko",
+      "score": 0.796,
+      "margin": 0.446,
+      "t": 2035.0,
+      "slot": "a5"
+     },
+     {
+      "file": "t0002140.0_a5.png",
+      "readAs": "kiriko",
+      "score": 0.798,
+      "margin": 0.456,
+      "t": 2140.0,
+      "slot": "a5"
+     },
+     {
+      "file": "t0002175.0_a5.png",
+      "readAs": "kiriko",
+      "score": 0.792,
+      "margin": 0.442,
+      "t": 2175.0,
+      "slot": "a5"
+     },
+     {
+      "file": "t0002177.0_a5.png",
+      "readAs": "kiriko",
+      "score": 0.807,
+      "margin": 0.453,
+      "t": 2177.0,
+      "slot": "a5"
+     },
+     {
+      "file": "t0002179.0_a5.png",
+      "readAs": "kiriko",
+      "score": 0.793,
+      "margin": 0.445,
+      "t": 2179.0,
+      "slot": "a5"
+     },
+     {
+      "file": "t0002181.0_a5.png",
+      "readAs": "kiriko",
+      "score": 0.792,
+      "margin": 0.444,
+      "t": 2181.0,
+      "slot": "a5"
+     },
+     {
+      "file": "t0002182.0_a5.png",
+      "readAs": "kiriko",
+      "score": 0.792,
+      "margin": 0.442,
+      "t": 2182.0,
+      "slot": "a5"
+     }
+    ],
+    "passed": false,
+    "note": "with juno removed, 28/74 of its own crops were still confidently named (kiriko)"
+   },
+   "kiriko": {
+    "trials": 57,
+    "unknown": 56,
+    "matched": 1,
+    "rate": 0.0175,
+    "matchedAs": {
+     "juno": 1
+    },
+    "examples": [
+     {
+      "file": "t0002140.0_b5.png",
+      "readAs": "juno",
+      "score": 0.796,
+      "margin": 0.415,
+      "t": 2140.0,
+      "slot": "b5"
+     }
+    ],
+    "passed": true,
+    "note": "with kiriko removed, 1/57 of its own crops were still confidently named (juno)"
+   },
+   "lucio": {
+    "trials": 81,
+    "unknown": 81,
+    "matched": 0,
+    "rate": 0.0,
+    "matchedAs": {},
+    "examples": [],
+    "passed": true,
+    "note": "with lucio removed, 0/81 of its own crops were still confidently named (n/a)"
+   },
+   "mauga": {
+    "trials": 79,
+    "unknown": 79,
+    "matched": 0,
+    "rate": 0.0,
+    "matchedAs": {},
+    "examples": [],
+    "passed": true,
+    "note": "with mauga removed, 0/79 of its own crops were still confidently named (n/a)"
+   },
+   "shion": {
+    "trials": 79,
+    "unknown": 79,
+    "matched": 0,
+    "rate": 0.0,
+    "matchedAs": {},
+    "examples": [],
+    "passed": true,
+    "note": "with shion removed, 0/79 of its own crops were still confidently named (n/a)"
+   },
+   "sojourn": {
+    "trials": 100,
+    "unknown": 100,
+    "matched": 0,
+    "rate": 0.0,
+    "matchedAs": {},
+    "examples": [],
+    "passed": true,
+    "note": "with sojourn removed, 0/100 of its own crops were still confidently named (n/a)"
+   },
+   "sym": {
+    "trials": 76,
+    "unknown": 76,
+    "matched": 0,
+    "rate": 0.0,
+    "matchedAs": {},
+    "examples": [],
+    "passed": true,
+    "note": "with sym removed, 0/76 of its own crops were still confidently named (n/a)"
+   }
+  },
+  "trials": 625,
+  "matched": 29,
+  "rate": 0.0464,
+  "ceiling": 0.02,
+  "passed": false,
+  "note": "Leave-one-out false-match test over 625 real crops: 29 (4.64%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%."
+ }
+}

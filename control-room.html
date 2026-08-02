@@ -23,6 +23,7 @@
       <button data-view="intake">Add a broadcast</button>
       <button data-view="queue">Queue <span class="navcount" id="cnt-queue" data-empty="1"></span></button>
       <button data-view="review">Review inbox <span class="navcount" id="cnt-review" data-empty="1"></span></button>
+      <button data-view="heroes">Hero coverage <span class="navcount" id="cnt-heroes" data-empty="1"></span></button>
       <button data-view="calibration">Calibration</button>
       <button data-view="publish">Publishing</button>
       <button data-view="health">Health &amp; repair <span class="navcount" id="cnt-health" data-empty="1"></span></button>
@@ -121,6 +122,35 @@
         <div class="note" id="reviewNote"></div>
       </div>
       <div id="reviewList" class="rowlist"></div>
+    </section>
+
+    <!-- heroes -->
+    <section class="view" data-view="heroes">
+      <div class="app-head"><h1>Hero coverage</h1></div>
+      <p class="app-sub">Whether this application can actually recognise each of
+        the game's heroes, per broadcast package. Two different questions are
+        shown separately and never merged: <b>covered</b> means a portrait
+        template exists, <b>validated</b> means that template was scored on
+        real frames it had never seen. A hero can be covered and still be
+        wrong; only validation rules that out.</p>
+      <div class="statusbar" id="heroStats"></div>
+      <div class="dcard">
+        <h2>Packages</h2>
+        <p class="hint">Detection runs against one package at a time, so these
+          per-package numbers — not the total across all of them — are what a
+          real broadcast gets.</p>
+        <div class="btnrow" style="margin-top:0">
+          <button class="btn btn-sm btn-ghost" id="heroRefresh">Refresh</button>
+        </div>
+        <div id="heroLayouts" class="rowlist"></div>
+      </div>
+      <div class="dcard">
+        <h2>Template review</h2>
+        <p class="hint">Harvested portrait candidates the quality gate could
+          neither accept nor reject. Nothing here is in production; approving
+          one is what would put it there.</p>
+        <div id="templateReview" class="rowlist"></div>
+      </div>
     </section>
 
     <!-- calibration -->

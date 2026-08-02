@@ -51,7 +51,15 @@ def resolve_templates_dir(layout: dict, templates_dir: str | None) -> str | None
 
 
 def load_lib(layout: dict, templates_dir: str | None = None) -> dict:
-    return detect.load_templates(resolve_templates_dir(layout, templates_dir))
+    """Templates cropped to the layout's `portrait_roi`, if it declares one.
+
+    Loading through this function rather than `detect.load_templates`
+    directly is what keeps templates and probes on the same footing —
+    `detect.read_frame_comps` crops the probe with the same ROI.
+    """
+    return detect.load_templates(
+        resolve_templates_dir(layout, templates_dir),
+        roi=detect.portrait_roi(layout))
 
 
 def _team_confidence(slots: list[dict]) -> float:
