@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Calibrate a broadcast — OWCS Comp Tracker</title>
+<meta name="description" content="Teach the tracker to read a new Overwatch broadcast. Runs entirely in your browser — nothing is uploaded." />
+<link rel="icon" href="desktop/assets/owcs.png" />
+<link rel="stylesheet" href="assets/css/style.css" />
+<link rel="stylesheet" href="assets/css/desktop.css" />
+<link rel="stylesheet" href="assets/css/calibrate.css" />
+</head>
+<body data-page="calibrate">
+
+<div class="cal-wrap">
+
+  <header class="cal-head">
+    <a class="cal-back" href="index.html">← OWCS Comp Tracker</a>
+    <h1>Teach the tracker a new broadcast</h1>
+    <p class="cal-lead">
+      Every broadcast puts the hero portraits in a slightly different place.
+      This finds them for you. It takes about two minutes, and
+      <strong>everything happens inside this browser tab</strong> — your video
+      is never uploaded anywhere.
+    </p>
+  </header>
+
+  <ol class="cal-steps" id="steps">
+    <li data-step="source">Your video</li>
+    <li data-step="frames">Pick moments</li>
+    <li data-step="detect">Find the heroes</li>
+    <li data-step="adjust">Check it</li>
+    <li data-step="done">Save it</li>
+  </ol>
+
+  <!-- ==================================================== 1. source -->
+  <section class="cal-step active" data-step="source">
+    <h2>1 · Add your broadcast</h2>
+    <p class="cal-hint">
+      A video file works best. You can also drop in screenshots if you already
+      have some.
+    </p>
+
+    <label class="dropzone" id="drop" for="fileInput">
+      <input type="file" id="fileInput" accept="video/*,image/png,image/jpeg" multiple hidden />
+      <span class="dz-icon" aria-hidden="true">▲</span>
+      <span class="dz-title">Drop a video or screenshots here</span>
+      <span class="dz-sub">or click to choose a file</span>
+      <span class="dz-note">MP4, MKV, WebM, MOV · PNG, JPG</span>
+    </label>
+
+    <div class="note" id="sourceNote"></div>
+
+    <details class="cal-details">
+      <summary>I only have a YouTube link</summary>
+      <p>
+        A browser tab is not allowed to download from YouTube, so this page
+        cannot take a link directly. Two ways round it:
+      </p>
+      <ul>
+        <li><strong>Easiest:</strong> play the VOD, pause on a moment of live
+          play with both teams' heroes on screen, and press
+          <kbd>PrtScn</kbd> (Windows) or <kbd>⌘⇧4</kbd> (Mac). Do that 4–6
+          times at different points in the map, then drop those images above.</li>
+        <li><strong>Or:</strong> install the desktop app, paste the link, and
+          it does all of this by itself — including the download.
+          <a href="docs/WINDOWS-APP.md">How that works</a>.</li>
+      </ul>
+    </details>
+  </section>
+
+  <!-- ==================================================== 2. frames -->
+  <section class="cal-step" data-step="frames">
+    <h2>2 · Pick a few moments</h2>
+    <p class="cal-hint" id="framesHint">
+      Find moments of <strong>live play</strong> — both teams' hero portraits
+      visible along the top. Avoid replays, the desk, and kill cams.
+    </p>
+
+    <div class="cal-video-wrap" id="videoWrap">
+      <video id="video" playsinline muted preload="metadata"></video>
+      <div class="cal-scrub">
+        <input type="range" id="scrub" min="0" max="1000" value="0" aria-label="Position in the video" />
+        <span class="cal-time" id="timeLabel">0:00</span>
+      </div>
+      <div class="btnrow">
+        <button class="btn btn-primary" id="capture">Use this moment</button>
+        <button class="btn btn-ghost" id="autoCapture">Pick 6 for me</button>
+      </div>
+    </div>
+
+    <div class="shots" id="shots"></div>
+    <div class="note" id="framesNote"></div>
+
+    <div class="btnrow">
+      <button class="btn btn-ghost" data-back>Back</button>
+      <button class="btn btn-primary" id="toDetect" disabled>Find the heroes →</button>
+    </div>
+  </section>
+
+  <!-- ==================================================== 3. detect -->
+  <section class="cal-step" data-step="detect">
+    <h2>3 · Finding the hero portraits</h2>
+    <p class="cal-hint">
+      Looking for the team colour chips along the top, fitting a grid to each
+      team's five slots, then locating the portrait art. This runs on your
+      computer, so it takes a few seconds.
+    </p>
+    <div class="cal-progress"><i id="progBar"></i></div>
+    <p class="cal-progress-label" id="progLabel">Starting…</p>
+    <div class="note" id="detectNote"></div>
+    <div class="btnrow">
+      <button class="btn btn-ghost" data-back>Back</button>
+      <button class="btn btn-primary" id="toAdjust" hidden>Check the result →</button>
+    </div>
+  </section>
+
+  <!-- ==================================================== 4. adjust -->
+  <section class="cal-step" data-step="adjust">
+    <h2>4 · Does each box sit on a hero?</h2>
+    <p class="cal-hint">
+      Ten boxes, five per team. Each one should sit squarely on a hero's
+      portrait. <strong>Drag any box to move it</strong>, or drag its corner to
+      resize. Moving one box moves its whole team's row together.
+    </p>
+
+    <div class="cal-stage-wrap">
+      <div class="cal-stage" id="stage">
+        <canvas id="stageCanvas"></canvas>
+      </div>
+      <div class="cal-zoom" id="zoomStrip"></div>
+    </div>
+
+    <div class="btnrow">
+      <button class="btn btn-ghost" id="prevFrame">◀ Previous frame</button>
+      <button class="btn btn-ghost" id="nextFrame">Next frame ▶</button>
+      <button class="btn btn-ghost" id="redetect">Start the search again</button>
+    </div>
+
+    <div class="note" id="adjustNote"></div>
+
+    <div class="btnrow">
+      <button class="btn btn-ghost" data-back>Back</button>
+      <button class="btn btn-primary" id="toDone">They all look right →</button>
+    </div>
+  </section>
+
+  <!-- ====================================================== 5. done -->
+  <section class="cal-step" data-step="done">
+    <h2>5 · Save your layout</h2>
+    <p class="cal-hint">
+      This is a small text file describing where the heroes sit. Give it a name
+      you'll recognise.
+    </p>
+
+    <div class="field">
+      <label for="layoutName">Name this broadcast</label>
+      <div class="help">Letters, numbers and dashes. For example
+        <code>owcs-2026-stage3</code>.</div>
+      <input type="text" id="layoutName" value="my-broadcast" spellcheck="false" />
+    </div>
+
+    <div class="cal-summary" id="summary"></div>
+
+    <div class="btnrow">
+      <button class="btn btn-primary btn-xl" id="download">Download my layout</button>
+    </div>
+    <div class="note" id="doneNote"></div>
+
+    <div class="cal-next" id="nextSteps" hidden>
+      <h3>What to do with it</h3>
+      <ol>
+        <li>
+          <strong>Using the desktop app?</strong> Open it, go to
+          <em>Calibration</em>, and press <em>Import a layout</em>. Pick the
+          file you just downloaded. That's it — it will use it on the next
+          broadcast you paste in.
+        </li>
+        <li>
+          <strong>Running from the source code?</strong> Put the file in the
+          <code>layouts/</code> folder next to the others.
+        </li>
+        <li>
+          <strong>Want it shipped with the tracker?</strong> Send it in — real
+          calibrations for new broadcasts are the most useful thing anyone can
+          contribute.
+        </li>
+      </ol>
+      <p class="cal-honest">
+        <strong>One honest note.</strong> A layout made here is marked as
+        browser-calibrated. It is a real measurement from your frames, but the
+        full pipeline runs a stricter check over many more frames, so results
+        from this layout go through review before they are published rather
+        than being trusted automatically.
+      </p>
+      <div class="btnrow">
+        <button class="btn btn-ghost" id="startOver">Calibrate another broadcast</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script src="assets/js/calibrate/engine.js"></script>
+<script src="assets/js/calibrate/wizard.js"></script>
+</body>
+</html>

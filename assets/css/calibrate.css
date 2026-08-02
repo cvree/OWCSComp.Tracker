@@ -1,0 +1,183 @@
+/* =====================================================================
+   calibrate.css — the guided calibration wizard.
+
+   This page is the one part of the project a complete newcomer may meet
+   first, so it is deliberately wider-spaced and larger-typed than the
+   operator surfaces. It layers on style.css + desktop.css tokens.
+   ===================================================================== */
+
+.cal-wrap { max-width: 940px; margin: 0 auto; padding: 26px 22px 90px; }
+
+.cal-head { margin-bottom: 26px; }
+.cal-back {
+  display: inline-block; font-size: .82rem; color: var(--muted);
+  margin-bottom: 14px;
+}
+.cal-back:hover { color: var(--amber); }
+.cal-head h1 { font-size: 1.85rem; margin: 0 0 10px; line-height: 1.15; }
+.cal-lead { color: var(--muted); font-size: 1rem; max-width: 64ch; margin: 0; }
+.cal-lead strong { color: var(--text); }
+
+/* ------------------------------------------------------------- steps */
+.cal-steps {
+  display: flex; gap: 6px; margin: 0 0 30px; padding: 0;
+  list-style: none; flex-wrap: wrap;
+}
+.cal-steps li {
+  flex: 1 1 100px; text-align: center; padding-top: 10px;
+  border-top: 3px solid var(--line); color: var(--muted);
+  font: 600 .68rem var(--display); letter-spacing: .07em;
+  text-transform: uppercase;
+}
+.cal-steps li[data-state="active"] { color: var(--amber); border-top-color: var(--amber); }
+.cal-steps li[data-state="done"] { color: var(--st-ok); border-top-color: var(--st-ok); }
+
+.cal-step { display: none; }
+.cal-step.active { display: block; animation: calIn .22s ease both; }
+@keyframes calIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .cal-step.active { animation: none; } }
+
+.cal-step h2 { font-size: 1.3rem; margin: 0 0 8px; }
+.cal-hint { color: var(--muted); font-size: .92rem; max-width: 66ch; margin: 0 0 20px; }
+.cal-hint strong { color: var(--text); }
+
+/* --------------------------------------------------------- dropzone */
+.dropzone {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 6px; min-height: 230px; cursor: pointer; text-align: center;
+  border: 2px dashed var(--line-bright); border-radius: 16px;
+  background: var(--bg-raise); padding: 30px 22px;
+  transition: border-color .15s, background .15s;
+}
+.dropzone:hover, .dropzone.over {
+  border-color: var(--amber); background: var(--amber-soft);
+}
+.dz-icon { font-size: 1.7rem; color: var(--amber); line-height: 1; }
+.dz-title { font: 700 1.06rem var(--display); }
+.dz-sub { color: var(--muted); font-size: .9rem; }
+.dz-note { color: var(--muted); font-size: .74rem; margin-top: 8px; opacity: .8; }
+
+.cal-details {
+  margin-top: 20px; border: 1px solid var(--line); border-radius: 12px;
+  padding: 12px 16px; background: var(--bg-raise);
+}
+.cal-details summary { cursor: pointer; font-weight: 600; font-size: .9rem; }
+.cal-details p, .cal-details li { color: var(--muted); font-size: .87rem; }
+.cal-details ul { margin: 8px 0 0; padding-left: 20px; }
+.cal-details li { margin-bottom: 8px; }
+.cal-details strong { color: var(--text); }
+kbd {
+  background: var(--bg); border: 1px solid var(--line-bright); border-radius: 4px;
+  padding: 1px 5px; font-size: .82em; font-family: ui-monospace, monospace;
+}
+
+/* ------------------------------------------------------------ video */
+.cal-video-wrap { margin-bottom: 18px; }
+.cal-video-wrap[hidden] { display: none; }
+#video {
+  width: 100%; max-height: 56vh; background: #04070e; display: block;
+  border: 1px solid var(--line); border-radius: 12px;
+}
+.cal-scrub { display: flex; align-items: center; gap: 12px; margin: 10px 0 4px; }
+.cal-scrub input[type=range] { flex: 1; accent-color: var(--amber); }
+.cal-time {
+  font: 700 .85rem var(--display); color: var(--amber);
+  font-variant-numeric: tabular-nums; min-width: 56px; text-align: right;
+}
+
+/* ------------------------------------------------------------ shots */
+.shots { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; }
+.shot { position: relative; border-radius: 9px; overflow: hidden; border: 1px solid var(--line); }
+.shot img { display: block; width: 168px; height: auto; }
+.shot .shot-time {
+  position: absolute; left: 0; bottom: 0; background: rgba(0,0,0,.72);
+  color: #fff; font: 700 .66rem var(--display); padding: 2px 6px;
+}
+.shot .shot-del {
+  position: absolute; top: 4px; right: 4px; width: 22px; height: 22px;
+  border: 0; border-radius: 50%; cursor: pointer; line-height: 1;
+  background: rgba(0,0,0,.72); color: #fff; font-size: .9rem;
+}
+.shot .shot-del:hover { background: var(--st-bad); }
+
+/* --------------------------------------------------------- progress */
+.cal-progress {
+  height: 8px; border-radius: 999px; background: var(--line);
+  overflow: hidden; margin: 26px 0 10px;
+}
+.cal-progress > i {
+  display: block; height: 100%; width: 0;
+  background: linear-gradient(90deg, var(--amber), #ff7a2b);
+  transition: width .3s ease;
+}
+.cal-progress-label { color: var(--muted); font-size: .88rem; margin: 0 0 14px; }
+
+/* ------------------------------------------------------------ stage */
+.cal-stage-wrap { margin-bottom: 16px; }
+.cal-stage {
+  position: relative; border: 1px solid var(--line); border-radius: 12px;
+  overflow: hidden; background: #04070e; touch-action: none; user-select: none;
+}
+.cal-stage canvas { display: block; width: 100%; height: auto; }
+
+.cal-box {
+  position: absolute; box-sizing: border-box; cursor: grab;
+  border: 2px solid var(--amber); background: rgba(255,169,43,.08);
+}
+.cal-box[data-side="b"] { border-color: #22d3ee; background: rgba(34,211,238,.08); }
+.cal-box:active { cursor: grabbing; }
+.cal-box.sel { box-shadow: 0 0 0 2px #fff inset; }
+.cal-box > .bx-label {
+  position: absolute; top: -18px; left: -2px; white-space: nowrap;
+  font: 700 .6rem var(--display); letter-spacing: .05em;
+  background: var(--bg-raise); padding: 0 5px; border-radius: 4px;
+  pointer-events: none;
+}
+.cal-box > .bx-grip {
+  position: absolute; right: -6px; bottom: -6px; width: 13px; height: 13px;
+  background: #fff; border-radius: 3px; cursor: nwse-resize;
+}
+
+/* Zoomed crops so a person can actually tell whether a box is on a hero. */
+.cal-zoom { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.cal-zoom figure { margin: 0; text-align: center; }
+.cal-zoom canvas {
+  display: block; width: 72px; height: 72px; image-rendering: pixelated;
+  border: 2px solid var(--line); border-radius: 8px; background: #04070e;
+}
+.cal-zoom figure[data-side="a"] canvas { border-color: rgba(255,169,43,.55); }
+.cal-zoom figure[data-side="b"] canvas { border-color: rgba(34,211,238,.55); }
+.cal-zoom figcaption {
+  font: 600 .62rem var(--display); color: var(--muted); margin-top: 4px;
+  letter-spacing: .05em;
+}
+
+/* ---------------------------------------------------------- summary */
+.cal-summary {
+  border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px;
+  background: var(--bg-raise); margin: 18px 0;
+}
+.cal-summary dl { display: grid; grid-template-columns: auto 1fr; gap: 5px 16px; margin: 0; font-size: .88rem; }
+.cal-summary dt { color: var(--muted); }
+.cal-summary dd { margin: 0; }
+
+.cal-next {
+  margin-top: 30px; border-top: 1px solid var(--line); padding-top: 22px;
+}
+.cal-next h3 { font-size: 1.05rem; margin: 0 0 12px; }
+.cal-next ol { padding-left: 20px; margin: 0 0 18px; }
+.cal-next li { margin-bottom: 12px; color: var(--muted); font-size: .92rem; }
+.cal-next li strong { color: var(--text); }
+.cal-honest {
+  font-size: .86rem; color: var(--muted); background: var(--amber-soft);
+  border: 1px solid rgba(255,169,43,.3); border-radius: 10px; padding: 12px 14px;
+}
+.cal-honest strong { color: var(--amber); }
+
+.btn-xl { font-size: 1.02rem; padding: 12px 26px; }
+
+@media (max-width: 640px) {
+  .cal-head h1 { font-size: 1.45rem; }
+  .shot img { width: 132px; }
+  .cal-steps li { font-size: .58rem; flex-basis: 62px; }
+}

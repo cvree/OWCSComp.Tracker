@@ -457,6 +457,35 @@
 
   $('calReset').addEventListener('click', () => { if (editing) openEditor(editing.name); });
 
+  /* Importing a layout built by the browser wizard. */
+  $('importLayout').addEventListener('click', () => {
+    if (!$('importBy').value.trim()) {
+      note($('importNote'), 'bad', 'Enter your name first — imports are attributed.');
+      return;
+    }
+    $('importFile').click();
+  });
+  $('importFile').addEventListener('change', async () => {
+    const file = $('importFile').files[0];
+    if (!file) return;
+    let layout;
+    try {
+      layout = JSON.parse(await file.text());
+    } catch (err) {
+      note($('importNote'), 'bad', `${file.name} is not readable JSON.`);
+      $('importFile').value = '';
+      return;
+    }
+    const suggested = file.name.replace(/\.json$/i, '');
+    const res = await D.post('calibration/import', {
+      layout: layout, name: suggested,
+      importer: $('importBy').value.trim(),
+    });
+    outcome($('importNote'), res, res.detail);
+    $('importFile').value = '';
+    if (res.ok) RENDERERS.calibration();
+  });
+
   /* ---------------------------------------------------------- publish */
   RENDERERS.publish = async function () {
     const p = await D.get('publish');

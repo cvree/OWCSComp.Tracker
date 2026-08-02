@@ -521,6 +521,93 @@ def calibration_get(name: str) -> dict[str, Any]:
     }
 
 
+#: Keys a layout must carry to be worth importing at all.
+_REQUIRED_LAYOUT_KEYS = ("frame_width", "frame_height", "slots_a", "slots_b")
+
+
+def calibration_import(layout: Any, *, name: str,
+                       importer: str) -> dict[str, Any]:
+    """Accept a layout built by the browser wizard (calibrate.html).
+
+    Validated rather than trusted: the file arrives from a download folder,
+    so every field that matters is checked before it can influence detection.
+    A layout that fails is refused with the reason, never partially written.
+
+    Crucially, an imported layout may NOT carry a `hud_probe`. That key is
+    what `layout_registry.is_calibrated()` treats as production-calibrated
+    provenance, and it belongs solely to `pipeline/calibrate_source.py`. A
+    browser-built layout records `browser_probe` instead and is stamped
+    `calibration_source: "browser-import"`, so results from it go through
+    review rather than being trusted automatically.
+    """
+    importer = (importer or "").strip()
+    if not importer:
+        return {"ok": False, "error": "a name is required — imported layouts "
+                                      "are attributed"}
+    if not isinstance(layout, dict):
+        return {"ok": False, "error": "that file is not a layout"}
+
+    missing = [k for k in _REQUIRED_LAYOUT_KEYS if k not in layout]
+    if missing:
+        return {"ok": False,
+                "error": f"that file is missing {', '.join(missing)} — it does "
+                         "not look like a layout from the calibration wizard"}
+    for key in ("frame_width", "frame_height"):
+        if not isinstance(layout[key], int) or layout[key] <= 0:
+            return {"ok": False, "error": f"{key} must be a positive whole number"}
+    for key in ("slots_a", "slots_b"):
+        slots = layout[key]
+        if not isinstance(slots, list) or len(slots) != 5:
+            return {"ok": False,
+                    "error": f"{key} must hold exactly 5 hero slots, "
+                             f"got {len(slots) if isinstance(slots, list) else '?'}"}
+        for i, rect in enumerate(slots, 1):
+            if not _is_rect(rect):
+                return {"ok": False,
+                        "error": f"{key} slot {i} is not a rectangle "
+                                 f"[x, y, w, h] with a positive size"}
+            x, y, w, h = rect
+            if x + w > layout["frame_width"] or y + h > layout["frame_height"]:
+                return {"ok": False,
+                        "error": f"{key} slot {i} falls outside the frame"}
+
+    target_name = name or str(layout.get("browser_probe", {}).get("source_id")
+                              or "imported-broadcast")
+    try:
+        path = _layout_path(target_name)
+    except ValueError as exc:
+        return {"ok": False, "error": str(exc)}
+    if os.path.exists(path):
+        return {"ok": False,
+                "error": f"a layout named {target_name} already exists. Rename "
+                         "it in the wizard, or edit the existing one in the "
+                         "calibration editor."}
+
+    doc = dict(layout)
+    # Strip any provenance the file has no right to claim.
+    doc.pop("hud_probe", None)
+    doc["calibration_source"] = "browser-import"
+    doc.setdefault("templates_dir", f"templates/{target_name}")
+    doc["imported"] = {
+        "at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "by": importer,
+        "note": "Built with the browser calibration wizard and imported here. "
+                "Not production-calibrated: detections from this layout go "
+                "through review.",
+    }
+    try:
+        result = backup.atomic_publish(
+            path, json.dumps(doc, indent=2, ensure_ascii=False) + "\n")
+    except OSError as exc:
+        return {"ok": False, "error": mask(str(exc))}
+    return {"ok": True, "name": target_name, "path": path,
+            "bytes": result["bytes"],
+            "detail": f"Imported {target_name}. It is ready to use, and its "
+                      f"detections will go through review because it was "
+                      f"calibrated in a browser rather than by the full "
+                      f"pipeline."}
+
+
 def calibration_save(name: str, boxes: list[dict[str, Any]], *,
                      editor: str) -> dict[str, Any]:
     """Save dragged geometry back to a layout, atomically, with a backup.
@@ -870,6 +957,12 @@ def handle_post(path: str, body: dict[str, Any] | None
                 str(body.get("name") or ""),
                 body.get("boxes") or [],
                 editor=str(body.get("editor") or ""))
+
+        if route == "calibration/import":
+            return 200, calibration_import(
+                body.get("layout"),
+                name=str(body.get("name") or ""),
+                importer=str(body.get("importer") or ""))
 
         if route == "readiness":
             started, detail = TASK.start("readiness", health.run_readiness_test)

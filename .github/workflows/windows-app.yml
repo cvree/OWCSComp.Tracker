@@ -98,16 +98,40 @@ jobs:
       - name: Run every test suite
         shell: pwsh
         run: |
-          $failed = @()
+          # Each suite's output is CAPTURED, and the failing ones are replayed
+          # at the very end. Streaming everything inline meant a failure that
+          # happened early was pushed out of the retrievable log tail by the
+          # eighty suites that ran after it — the failure was reported without
+          # any way to see why, which is the one thing a CI run must not do.
+          $failed = @{}
           $passed = 0
           Get-ChildItem pipeline/test_*.py | ForEach-Object {
             Write-Host "=== $($_.Name)"
-            python $_.FullName
-            if ($LASTEXITCODE -ne 0) { $failed += $_.Name } else { $passed++ }
+            $out = & python $_.FullName 2>&1 | Out-String
+            if ($LASTEXITCODE -ne 0) {
+              $failed[$_.Name] = $out
+              Write-Host "   FAILED (output replayed below)"
+            } else {
+              $passed++
+            }
           }
           Write-Host "`n$passed passed, $($failed.Count) failed"
           if ($failed.Count -gt 0) {
-            Write-Host "FAILED: $($failed -join ', ')"
+            Write-Host "`n$('='*72)"
+            Write-Host "FAILING SUITES, IN FULL"
+            Write-Host "$('='*72)"
+            foreach ($name in $failed.Keys | Sort-Object) {
+              Write-Host "`n----- $name $('-'*(66 - $name.Length))"
+              # Only the tail of each: a suite that prints hundreds of PASS
+              # lines before failing would otherwise push the others out again.
+              $lines = $failed[$name] -split "`n"
+              if ($lines.Count -gt 60) {
+                Write-Host "   … $($lines.Count - 60) earlier lines omitted"
+                $lines = $lines[-60..-1]
+              }
+              $lines | ForEach-Object { Write-Host $_ }
+            }
+            Write-Host "`nFAILED: $($failed.Keys -join ', ')"
             exit 1
           }
 

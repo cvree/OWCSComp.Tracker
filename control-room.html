@@ -126,6 +126,24 @@
       <div class="app-head"><h1>Calibration</h1></div>
       <p class="app-sub">Broadcast layouts are worked out automatically. When one cannot reach production confidence, drag the boxes here instead — no files to edit.</p>
       <div class="dcard">
+        <h2>Import a layout</h2>
+        <p class="hint">Made one with the browser calibration wizard
+          (<a href="calibrate.html" target="_blank" rel="noopener">calibrate.html</a>)?
+          Drop the downloaded <code>.json</code> in here. It is checked before
+          it is accepted, and its detections go through review because it was
+          not calibrated by the full pipeline.</p>
+        <div class="field" style="max-width:320px">
+          <label for="importBy">Your name</label>
+          <input type="text" id="importBy" autocomplete="name" />
+        </div>
+        <div class="btnrow" style="margin-top:0">
+          <input type="file" id="importFile" accept="application/json,.json" hidden />
+          <button class="btn btn-primary" id="importLayout">Choose a layout file…</button>
+        </div>
+        <div class="note" id="importNote"></div>
+      </div>
+
+      <div class="dcard">
         <h2>Installed layouts</h2>
         <div id="layoutList" class="rowlist"></div>
       </div>
