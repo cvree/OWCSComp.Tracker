@@ -32,6 +32,7 @@ import re
 import struct
 import subprocess
 import sys
+import tempfile
 import unittest
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -534,6 +535,54 @@ class TestFrozenMode(unittest.TestCase):
                          "these build a command from sys.executable, which is "
                          "the application itself in a frozen build:\n"
                          + "\n".join(offenders))
+
+    def test_autostart_registers_the_windowed_twin_not_the_caller(self):
+        """The bug the clean-machine job printed on its way to passing.
+
+        `repair.autostart` is normally run through the CONSOLE twin — that is
+        what the CI job does, and what any support step from a terminal does.
+        Built from `sys.executable`, the Run key then said
+
+            "...\\OWCSCompTracker-cli.exe" --tray
+
+        so one click on "Repair automatic startup" made every subsequent
+        sign-in launch the console binary and flash a console window: the
+        single reason the windowed twin exists. The same arithmetic made
+        `--check` call a perfectly good entry stale.
+        """
+        from owcs_desktop import autostart, paths
+
+        with tempfile.TemporaryDirectory() as tmp:
+            gui = os.path.join(tmp, "OWCSCompTracker")
+            cli = os.path.join(tmp, paths.CLI_EXE_NAME)
+            for p in (gui, cli):
+                with open(p, "w", encoding="utf-8") as f:
+                    f.write("")
+            # Running as the console twin, exactly as the repair action does.
+            sys.frozen = True
+            original = sys.executable
+            try:
+                sys.executable = cli
+                command = autostart.launch_command()
+            finally:
+                sys.executable = original
+
+        self.assertIn("OWCSCompTracker", command)
+        self.assertNotIn(paths.CLI_EXE_NAME, command,
+                         "autostart would launch the console binary at "
+                         "sign-in and flash a console window")
+        self.assertTrue(command.endswith("--tray"), command)
+
+    def test_the_installers_run_key_and_the_apps_agree(self):
+        """Two places write the same registry value, and if they disagree the
+        health check calls one of them stale forever."""
+        iss = read(os.path.join(PACKAGING, "installer.iss"))
+        match = re.search(r'ValueData: """\{app\}\\\{#(\w+)\}"" --tray"', iss)
+        self.assertIsNotNone(match, "the Run key entry changed shape")
+        self.assertEqual(
+            match.group(1), "AppExe",
+            "the installer registers a different binary than "
+            "autostart.launch_command() builds")
 
     def test_the_run_script_mode_bypasses_the_argument_parser(self):
         """A pipeline script's own flags (--source, --start) must reach the

@@ -31,12 +31,13 @@ ENTRY_NAME = "OWCSCompTracker"
 def launch_command() -> str:
     """The command Windows should run at sign-in.
 
-    Frozen: the installed executable, quoted, with `--tray`. From source: the
-    current interpreter running the desktop entrypoint. Both are absolute —
-    the Run key has no working directory.
+    Frozen: the installed WINDOWED executable, quoted, with `--tray` — see
+    `paths.gui_executable()` for why it is not `sys.executable`. From source:
+    the current interpreter running the desktop entrypoint. Both are absolute
+    — the Run key has no working directory.
     """
     if paths.is_frozen():
-        return f'"{os.path.abspath(sys.executable)}" --tray'
+        return f'"{paths.gui_executable()}" --tray'
     entry = os.path.join(paths.app_root(), "desktop", "owcs_app.py")
     return f'"{os.path.abspath(sys.executable)}" "{entry}" --tray'
 

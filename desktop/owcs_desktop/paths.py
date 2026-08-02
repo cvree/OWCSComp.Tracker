@@ -127,6 +127,33 @@ def cli_executable() -> str:
     return twin if os.path.isfile(twin) else os.path.abspath(sys.executable)
 
 
+#: The windowed executable — the one a human is ever meant to launch.
+GUI_EXE_NAME = "OWCSCompTracker"
+
+
+def gui_executable() -> str:
+    """The executable to register anywhere Windows will start us for a user.
+
+    NOT `sys.executable`. Frozen, that is whichever of the twins happens to
+    be running, and half the things that write the Run key run from the
+    console twin: `--repair repair.autostart`, the installer's verification,
+    any support step done from a terminal. Registering the caller meant one
+    click on "Repair automatic startup" swapped the sign-in entry for the
+    console binary, and from then on every sign-in flashed a console window —
+    the single reason the windowed twin exists.
+
+    It also made `--check` report "Registered, but pointing at an old install
+    location" against a perfectly correct entry, because the expected command
+    was computed the same way.
+    """
+    if not is_frozen():
+        return os.path.abspath(sys.executable)
+    exe_dir = os.path.dirname(os.path.abspath(sys.executable))
+    suffix = ".exe" if sys.platform == "win32" else ""
+    gui = os.path.join(exe_dir, GUI_EXE_NAME + suffix)
+    return gui if os.path.isfile(gui) else os.path.abspath(sys.executable)
+
+
 def python_command() -> list[str]:
     """The command prefix that runs one of this project's Python scripts.
 
