@@ -1,6 +1,291 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
-## CURRENT STATUS (authoritative — 2026-07-31, sixth pass) — the site explains itself
+## CURRENT STATUS (authoritative — 2026-08-02, seventh pass) — the Windows app closes the loop and is merged
+
+> Additive to the sixth pass below. That pass made the *site* explain
+> itself. This one finishes the *application*: the clean-machine CI job
+> that had never gone green now does, five real bugs it uncovered are
+> fixed, "publish" now means the live website rather than a local file,
+> unsigned contributions are trusted rather than refused, and everything
+> is merged to `main` at `2634785` — no open branch, no pending PR.
+
+### Where things actually stand
+
+`main` is at `2634785`. The `windows-app` workflow (test → build →
+clean-install → release) auto-triggered on that push and **passed in
+full** — run `30767680348`, all four jobs green (test, build,
+clean-install including uninstall, release correctly skipped because
+this wasn't a tag push). This is the first time the clean-install job
+has gone green on the actual merge commit, not one behind it.
+
+99 `pipeline/test_*.py` suites pass. The packaging gate passes. The tree
+is clean after a full test run (see the reproducibility guard below).
+
+### The clean-machine job, finally green
+
+The previous handoff (a separate, tightly-scoped document handed to this
+session) said: *"Work the clean-install job to green. Everything after
+`--version` has never executed."* It now has, on a real clean
+`windows-latest` runner with no Python/ffmpeg/yt-dlp preinstalled:
+silent install, health checks, the real end-to-end readiness test,
+control-room HTTP surface + worker start, service survival through the
+control room being killed, `--stop-service`, three repair actions, clean
+uninstall. Getting there took five real bugs, each found by actually
+running the frozen bundle rather than reading the code:
+
+1. **cp1252 killed `--readiness` after everything else worked.**
+   `--readiness` printed its own suite label containing `→` to a
+   GUI-subsystem exe's stdout, which Windows gives an ANSI-code-page
+   encoding (cp1252 on English installs) with no U+2192. Two-part fix:
+   `owcs_app.py` calls `_force_utf8_io()` at **module level** (before
+   argparse, before any mode) to reconfigure stdout/stderr;
+   `paths.apply_environment()` sets `PYTHONIOENCODING=utf-8:replace` for
+   every child. Separately, `subprocess.run(..., text=True)` decodes with
+   the *locale's* encoding — the same cp1252 — so `yt-dlp -J`'s JSON
+   (which carries the video's real title) could raise
+   `UnicodeDecodeError` on a non-Latin broadcast title, inside
+   `subprocess`, before `json.loads` ever ran. 38 capture sites across
+   `pipeline/` and `desktop/` now pass `encoding="utf-8", errors="replace"`
+   via a shared `pipeline/proc_text.PIPE_TEXT` / `paths.PIPE_TEXT`
+   constant. `pipeline/test_subprocess_text.py` is an AST walk that fails
+   the build if any new capture site decodes by locale — grep would have
+   matched the docstrings that discuss the hazard, so it parses instead.
+
+2. **The uninstaller waited forever.** Inno Setup has `MsgBox` (always
+   displays, ignores `/SUPPRESSMSGBOXES`) and `SuppressibleMsgBox`
+   (honours it, returns a supplied default). The data-deletion prompt
+   used the former, so an unattended uninstall — this CI job, any
+   upgrade, any managed rollout — hung on a dialog nobody could click
+   until the job's own 60-minute ceiling killed it. Fixed with
+   `SuppressibleMsgBox(..., IDNO)` — `IDNO` because a silent default that
+   deletes someone's results is exactly the silent decision this
+   installer promises never to make. `pipeline/test_windows_packaging.py`
+   now greps the `[Code]` section for a bare `MsgBox(` call (regex, minus
+   Pascal `{ }` comments) and fails if one exists.
+
+3. **An update left the service permanently off.** `apply_update()` sets
+   a stop flag before the installer replaces files, and that flag
+   deliberately *survives reboots* — that's what makes the tray's Pause
+   durable. Both are correct; they are not the same thing. The flag now
+   carries a `reason` (`supervisor.STOP_USER` vs `STOP_MAINTENANCE`).
+   `resume_after_maintenance()` runs once as the service starts and
+   clears only a maintenance stop, never a user's pause.
+
+4. **A cleanly-stopped service read as "Running."** Health, repair, the
+   tray and the web API each asked `not beat.get("stale")` to decide if
+   the service was up. Staleness only means *recent* — a service that
+   exits cleanly writes one last heartbeat saying `running: false`, and
+   that heartbeat is fresh for the next few minutes. So the health page
+   said `Running (pid 13484)` about a dead process, and "Resume" said
+   "already running" and started nothing — a button that reports success
+   and does nothing. `supervisor.is_running(beat)` is now the one place
+   that decides, and `pipeline/test_desktop_service.py` has an AST guard
+   (`test_nothing_judges_the_service_running_by_staleness_alone`) that
+   fails if any module outside `supervisor.py` goes back to the old
+   pattern.
+
+5. **`repair.start-worker` inherited its caller's stdout and hung.**
+   `close_fds=True` doesn't cover fds 0/1/2. Capturing the output of a
+   repair action that spawns the background service blocked until the
+   *service* exited (this hung the verification for this handoff, which
+   is how it was found); once the parent exited, the service's next
+   `print` hit a pipe with no reader. Streams now redirect to
+   `paths.supervisor_log()` instead of inheriting.
+
+   **Bonus, found by the CI run that finally went green rather than by a
+   crash:** `repair.autostart`, run from the console twin (as CI and any
+   terminal-based support step do), rebuilt the Run key from
+   `sys.executable` — which is whichever binary is calling — and
+   registered `OWCSCompTracker-cli.exe` for sign-in. One click on
+   "Repair automatic startup" would have flashed a console window at
+   every future sign-in, the one thing the two-exe split exists to
+   prevent. Fixed with `paths.gui_executable()`, the mirror of the
+   existing `cli_executable()`. CI's repair step now reads back the Run
+   key and the app's own `--check --json` and fails if either disagrees
+   with what was just "repaired" — a repair that exits 0 into a worse
+   state is exactly the failure mode a green run had been hiding.
+
+### Two things the user asked for directly, done this pass
+
+**"All users will be trusted to edit correctly because it is a
+prototype."** This settles the open question the previous handoff
+flagged rather than decided. Four routes — review decisions, layout
+edits, layout imports, intake — used to refuse to act on an unsigned
+request. All four gates are gone. What did **not** go: the *record*.
+`webapi.attribute(raw)` returns the name if given, or the literal string
+`"anonymous"` if not — never blank, never invented. Refusing a blank name
+never verified anything (the field is free text), so removing the
+refusal loses nothing; inventing a plausible-looking name to fill the
+column would have been the one genuinely harmful option, because it
+would put a false attribution into the audit trail the column exists
+for. If a future session is asked to tighten this back up, the four call
+sites are `review_decide`, `calibration_save`, `calibration_import`,
+`intake/submit` in `desktop/owcs_desktop/webapi.py` — all route through
+`attribute()` now.
+
+**"Continue making it into an application that can update the website
+and application."** Before this pass, "publish" meant regenerating
+`assets/data/public_data.v1.js` *inside the installed payload* and
+stopping — which updates only what the local control room serves.
+Nothing a member of the public could see. New
+`desktop/owcs_desktop/website.py` uploads the generated dataset to the
+site's repository over the **GitHub Contents API** (stdlib `urllib`
+only — no git binary to vendor, no working copy of the repo on a
+laptop, no merge to resolve). A GitHub token is a normal vault
+credential (`GITHUB_TOKEN`, DPAPI-protected like the others); the repo
+and branch are normal settings (`publishRepo` default
+`cvree/owcscomp.tracker`, `publishBranch` default `main`).
+
+Safety properties, each with a test that fails without it:
+
+* the demo fixture (`window.OWCS_PUBLIC = window.OWCS_PUBLIC || {…}`) is
+  refused **by name**, checked before the generic "does this define the
+  global" check — uploading it would replace the live site with sample
+  data that looks real;
+* every upload is **read back and compared** before being called
+  published — "published" means observed, not assumed;
+* every attempt (including refused ones) is appended to
+  `reports/publish-history.json` — a refused publish is exactly what
+  someone looks up later;
+* the token never appears in any route's response, in the history file,
+  or in an error string — `TestPublish` in
+  `pipeline/test_desktop_website.py` checks all three explicitly with a
+  canary token string.
+
+`autoPublishToSite` (default **off**) lets the background service finish
+the job itself: only for a job whose state is literally `PUBLISHED` (the
+pipeline's own gate, never guessed at), only when the setting is on,
+only when `website.describe()` says every precondition already holds,
+and it never raises — it runs inside the loop that has to outlive every
+individual failure, so an unreachable website is a log line, not a
+crash. The toggle lives in the Publishing panel next to the manual
+button, not buried in Settings.
+
+### A change made and then reverted, on purpose
+
+Tried making `calibrate.html`'s wizard POST a finished layout straight
+into the running desktop app (same-origin fetch to
+`/api/desktop/calibration/import`) instead of download → re-import by
+hand. Backed it out. `pipeline/test_calibrate_web.py::TestItWorksWithoutAServer`
+exists specifically so the page's stated promise — *your video never
+leaves the browser, this runs with no backend* — is verified rather
+than trusted, and it forbids the page from making any runtime network
+call at all, full stop. Even though the change would only have fired
+when the page detected it was being served by the app itself, weakening
+that test to allow it was not worth saving one download-and-reimport
+step. What survived from the attempt: a real gap in test coverage
+(`calibration_import` was never checked from the *import* side for
+stripping `hud_probe`), now closed.
+
+**If a future session wants this convenience**, the honest way to get
+it without touching that test: a *separate* page (not `calibrate.html`)
+that only exists inside the installed payload and is never linked from
+anything served publicly, so "does calibrate.html call an API" stays
+true by construction.
+
+### Traps hit this pass, worth not re-learning
+
+* **A test that got its own gate removed started actually writing.**
+  Removing the `calibration_save` attribution gate meant a test that used
+  to fail at the gate started running past it and rewriting
+  `layouts/owcs-demo.json` **in the repository**, because layouts are
+  written under `app_root()` and the test hadn't sandboxed that. Two
+  unrelated computer-vision suites (`test_ocr_hud.py`,
+  `test_slot_localize.py`) then failed against a layout nobody had
+  knowingly changed — confusing, because those suites touch nothing
+  discussed here. `pipeline/test_release_reproducibility.py::TestTheSuiteLeavesTheTreeClean`
+  already existed for exactly this shape of bug (it lists suites to
+  re-run and asserts the tree is clean after); `test_desktop_api.py` and
+  `test_desktop_website.py` are now in that list. **The lesson
+  generalizes: any suite that CAN write to a committed path belongs in
+  that guard's list, whether or not it does so today** — "doesn't
+  currently trigger the bug" is not the same as "safe."
+* **A Windows-shaped test passed on Linux and failed on Windows CI, in
+  the same run that was otherwise green.** The autostart regression test
+  built its fixture with extension-less filenames
+  (`OWCSCompTracker`), which is correct on Linux but not what
+  `gui_executable()` looks for on Windows (`OWCSCompTracker.exe`) — so
+  the test passed locally and failed in CI against code that was
+  actually correct. Fixed by parametrizing the test over both platform
+  shapes (pinning `sys.platform` and building the matching filename)
+  rather than trusting the host OS to be representative. This is the
+  same class of trap the previous handoff already warned about
+  ("write tests that assert invariants, not developer-machine
+  strings") — a POSIX-vs-Windows filename is the same shape of mistake
+  as a POSIX-vs-Windows path.
+* **Inno Setup's two message-box functions look interchangeable and are
+  not.** `MsgBox` always shows; only `SuppressibleMsgBox` (with an
+  explicit default) honours `/SUPPRESSMSGBOXES`. Anything added to
+  `[Code]` in `installer.iss` that might run unattended (an upgrade, a
+  managed deploy, CI) must use the latter.
+* **A "fake runner" test double can go stale the moment production adds
+  a kwarg.** Three fakes standing in for `subprocess.run` in test files
+  took a narrow, enumerated signature; adding `**paths.PIPE_TEXT` to a
+  real call site broke them immediately. A fake for `subprocess.run`
+  should accept `**kw` and ignore what it doesn't care about, not
+  enumerate every parameter it happened to know about when written.
+
+### What was NOT proven this pass (say so plainly, don't round up)
+
+* **No real VOD was downloaded or processed.** This container's egress
+  policy returns 403 for YouTube (`curl -sS "$HTTPS_PROXY/__agentproxy/status"`
+  confirms it's a policy denial, not a transient failure). Everything
+  about the pipeline, the readiness test, and the publish path was
+  proven against the synthetic broadcast the repo's own test suite
+  builds with ffmpeg, and — for the site publish — against a *scripted*
+  fake GitHub in `pipeline/test_desktop_website.py`. `website.publish()`
+  has never been fired at the real `api.github.com`, because that needs
+  a real fine-grained token this session doesn't have and shouldn't
+  fabricate. If a token is available in a future session, the honest
+  next step is one real publish against a scratch repository (not
+  `cvree/owcscomp.tracker` directly) to prove the Contents API
+  round-trip end to end, before trusting it against production.
+* **Nobody clicked through the setup wizard.** The wizard's routes are
+  proven wired (`pipeline/test_desktop_pages.py`'s dead-control checks),
+  and `--setup` is proven to open it in the frozen bundle, but no human
+  or scripted browser session walked API-keys → system-check →
+  storage → autostart → readiness-test end to end.
+* **A reboot was not literally tested** (CI cannot reboot a runner).
+  What's proven is the mechanism: `resume_after_maintenance()` clears a
+  maintenance stop when the service next starts, verified by starting a
+  fresh `Supervisor()` against a stop flag set with
+  `reason=STOP_MAINTENANCE` and asserting the flag is gone and work
+  gets claimed.
+* **Hero template coverage is still 8–17 of 52 heroes per broadcast
+  package.** This is by design, not a regression — templates come only
+  from real harvested footage, and an uncovered hero honestly reports
+  `UNKNOWN` rather than guessing — but it means detection on an
+  uncommon hero pick will legitimately come back unknown until more
+  broadcasts are harvested. Not something a code change fixes.
+
+### Working style that got results this pass, worth continuing
+
+* **Build and run the frozen bundle locally before every push**, against
+  a scratch `OWCS_HOME` (`export OWCS_HOME=/some/scratch/dir`). This
+  caught bugs 3, 4 and 5 above — CI would only have surfaced them after
+  a 20+ minute round trip each, and #5 was found because the *local*
+  verification hung, not because a test failed.
+  ```
+  python3 -m PyInstaller --noconfirm --distpath dist --workpath build packaging/owcs.spec
+  OWCS_HOME=/scratch dist/OWCSCompTracker/OWCSCompTracker-cli --check
+  OWCS_HOME=/scratch dist/OWCSCompTracker/OWCSCompTracker-cli --readiness
+  ```
+* **Prove a new guard test is non-vacuous before trusting it**: revert
+  the fix, confirm the new test fails, re-apply, confirm it passes.
+  Every behavioral test added this pass (the encoding round-trip, the
+  installer's `SuppressibleMsgBox` check, `is_running()`, the autostart
+  console-twin regression) was checked this way, not just written and
+  assumed correct.
+* **Run the full `pipeline/test_*.py` suite plus `check_packaging.py`
+  after every change**, not just the file that changed — the
+  layout-rewrite regression above was caught by two suites with no
+  apparent connection to what changed.
+* **When a direct instruction settles an open question the previous
+  handoff flagged, say so explicitly and move on** — don't re-litigate
+  it. The trusted-users question was raised, not re-argued, once the
+  user confirmed it.
+
+## HISTORICAL (superseded — 2026-07-31, sixth pass) — the site explains itself
 
 > Additive to the fifth pass below. The pipeline worked; the *site* was
 > still shaped like the tool that built it. This pass is entirely about
