@@ -38,6 +38,8 @@ REPO_ROOT = os.path.dirname(_PIPELINE_DIR)
 if _PIPELINE_DIR not in sys.path:
     sys.path.insert(0, _PIPELINE_DIR)
 
+import site_paths  # noqa: E402  (cross-drive-safe relative paths)
+
 import db as content_db  # noqa: E402
 
 from . import detection_runner as dr  # noqa: E402
@@ -277,10 +279,10 @@ def publish_job(store: js.JobStore, con, job: models.Job, segment: dict, *,
         message = (f"Publish {segment.get('map_name')} "
                   f"({segment.get('team_a')} vs {segment.get('team_b')})\n\n"
                   f"Job {job.job_key}. Export hash {new_hash}.")
-        files = [os.path.relpath(export_path, repo_root)]
+        files = [site_paths.site_relpath(export_path, repo_root)]
         team_cov = os.path.join(repo_root, "assets", "data", "team_coverage.v1.json")
         if os.path.exists(team_cov):
-            files.append(os.path.relpath(team_cov, repo_root))
+            files.append(site_paths.site_relpath(team_cov, repo_root))
         commit_info = create_publication_commit(
             branch, message, files, repo_root=repo_root, runner=runner, push=push)
         result.update(commit_info)

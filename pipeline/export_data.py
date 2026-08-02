@@ -24,6 +24,7 @@ from typing import Any
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import db  # noqa: E402
+import site_paths  # noqa: E402  (cross-drive-safe relative paths)
 
 OUT_PATH = os.path.join(db.REPO_ROOT, "assets", "js", "data.js")
 SOURCES_PATH = os.path.join(db.REPO_ROOT, "data", "sources",
@@ -1828,7 +1829,7 @@ def check_reproducible(con, public: bool = False) -> int:
 
     problems: list[str] = []
     for path, fresh in targets:
-        rel = os.path.relpath(path, db.REPO_ROOT).replace(os.sep, "/")
+        rel = site_paths.site_relpath(path, db.REPO_ROOT)
         if not os.path.exists(path):
             problems.append(f"{rel}: MISSING — nothing to compare against; "
                             f"run the exporter and commit the result")

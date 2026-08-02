@@ -67,8 +67,10 @@ Transport = Callable[[str], bytes]
 def _site_relpath(path: str, start: str = REPO_ROOT) -> str:
     """Relative path for a committed asset, GitHub-Pages-safe: forward
     slashes ALWAYS, even on Windows where os.path.relpath emits backslashes
-    (which the browser can never resolve as a URL path separator)."""
-    return os.path.relpath(path, start).replace(os.sep, "/")
+    (which the browser can never resolve as a URL path separator) — and
+    never raising across Windows drives. See pipeline/site_paths.py."""
+    import site_paths
+    return site_paths.site_relpath(path, start)
 
 
 def _now_iso(now: dt.datetime | None = None) -> str:

@@ -198,10 +198,25 @@ def _classify_faceit(raw: str, parts: list[str]) -> dict[str, Any]:
 def _as_local_path(raw: str) -> str | None:
     """A filesystem path, or None. Handles file:// and Windows drive paths."""
     if raw.lower().startswith("file://"):
-        parsed = urllib.parse.urlsplit(raw)
+        # Normalise separators BEFORE parsing. `file://C:\videos\x.mp4` has no
+        # forward slash after the authority, so urlsplit takes the ENTIRE
+        # remainder as the host and leaves the path empty — the drive-letter
+        # test below would never fire and the file would be reported missing.
+        parsed = urllib.parse.urlsplit(raw.replace("\\", "/"))
         path = urllib.parse.unquote(parsed.path)
-        if re.match(r"^/[A-Za-z]:", path):     # file:///C:/x -> C:/x
-            path = path[1:]
+        netloc = urllib.parse.unquote(parsed.netloc or "")
+        # `file://C:\videos\x.mp4` — what Windows itself hands you when you
+        # drag a file into an address bar, and what a `file://` + path
+        # concatenation produces. urlsplit reads `C:` as the HOST, leaving
+        # path as `\videos\x.mp4`, which resolves nowhere. Put the drive
+        # back. (A UNC path `file://server/share` keeps its host, so only a
+        # drive-letter netloc is treated this way.)
+        if re.fullmatch(r"[A-Za-z]:", netloc):
+            return netloc + path
+        if netloc:                              # UNC: file://server/share/x
+            return "\\\\" + netloc + path.replace("/", "\\")
+        if re.match(r"^/[A-Za-z]:", path):      # file:///C:/x -> C:/x
+            return path[1:]
         return os.path.abspath(path)
     if re.match(r"^[A-Za-z]:[\\/]", raw) or raw.startswith("\\\\"):
         # A drive-letter or UNC path is already absolute. Do NOT run it

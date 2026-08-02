@@ -342,11 +342,14 @@ def classify_download_error(exc: BaseException) -> tuple[str, str]:
 
 
 def _site_relpath(path: str, start: str) -> str:
-    """Forward-slash relative path regardless of platform. A stored Windows
-    backslash path silently fails to resolve anywhere paths are joined with
-    '/' — the same real bug already found and fixed once in
-    `team_assets.publish_candidate`; normalized here from the start."""
-    return os.path.relpath(path, start).replace("\\", "/")
+    """Forward-slash relative path regardless of platform, and total.
+
+    See pipeline/site_paths.py: besides the backslash problem this always
+    guarded against, os.path.relpath RAISES across Windows drives, which took
+    out ten suites on the first real Windows CI run and would take out any
+    user whose media root is on a second drive."""
+    import site_paths
+    return site_paths.site_relpath(path, start)
 
 
 # ------------------------------------------------------------------- hashing

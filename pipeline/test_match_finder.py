@@ -19,6 +19,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from automation import link_intake as li  # noqa: E402
 from automation import job_store as js  # noqa: E402
 from automation import match_finder as mf  # noqa: E402
+import site_paths  # noqa: E402  (cross-drive-safe relative paths)
 
 
 RSS_FIXTURE = b"""<?xml version="1.0" encoding="UTF-8"?>
@@ -269,9 +270,9 @@ class TestScanOrchestration(unittest.TestCase):
             old_ledger, old_snap = mf.LEDGER_REL, mf.SNAPSHOT_REL
             # keep the real ledger + snapshot untouched: point the module at
             # a tmp dir for both, so no committed production data can leak in
-            mf.LEDGER_REL = os.path.relpath(
+            mf.LEDGER_REL = site_paths.site_relpath(
                 os.path.join(tmp, "match_finder.json"), mf._repo_root())
-            mf.SNAPSHOT_REL = os.path.relpath(
+            mf.SNAPSHOT_REL = site_paths.site_relpath(
                 os.path.join(tmp, "never-written-snapshot.json"),
                 mf._repo_root())
             try:
@@ -289,9 +290,9 @@ class TestScanOrchestration(unittest.TestCase):
         runner = FakeRunner(stdout=json.dumps(FLAT_FIXTURE))
         with tempfile.TemporaryDirectory() as tmp:
             old_ledger, old_snap = mf.LEDGER_REL, mf.SNAPSHOT_REL
-            mf.LEDGER_REL = os.path.relpath(
+            mf.LEDGER_REL = site_paths.site_relpath(
                 os.path.join(tmp, "match_finder.json"), mf._repo_root())
-            mf.SNAPSHOT_REL = os.path.relpath(
+            mf.SNAPSHOT_REL = site_paths.site_relpath(
                 os.path.join(tmp, "never-written-snapshot.json"),
                 mf._repo_root())
             try:
@@ -408,7 +409,7 @@ class TestStreamsUrlResolution(unittest.TestCase):
         runner = FakeRunner(stdout=json.dumps(FLAT_FIXTURE))
         with tempfile.TemporaryDirectory() as tmp:
             old = mf.LEDGER_REL
-            mf.LEDGER_REL = os.path.relpath(
+            mf.LEDGER_REL = site_paths.site_relpath(
                 os.path.join(tmp, "l.json"), mf._repo_root())
             try:
                 mf.scan([CHANNEL], fetch=lambda u: RSS_FIXTURE, runner=runner,

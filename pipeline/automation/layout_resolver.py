@@ -53,6 +53,7 @@ if _PIPELINE_DIR not in sys.path:
     sys.path.insert(0, _PIPELINE_DIR)
 
 import capture  # noqa: E402
+import site_paths  # noqa: E402  (cross-drive-safe relative paths)
 import cv2  # noqa: E402
 import gameplay_state as gs  # noqa: E402
 
@@ -336,7 +337,7 @@ def harvest_markers(frames: list[tuple[float, str]], layout: dict,
         pick = rows[len(rows) // 2]     # a mid-run example, not an edge case
         dest = os.path.join(out_dir, f"marker_{state}_{int(pick['offset'])}.png")
         shutil.copyfile(pick["frame"], dest)
-        saved[state] = {"framePath": os.path.relpath(dest, REPO_ROOT).replace("\\", "/"),
+        saved[state] = {"framePath": site_paths.site_relpath(dest, REPO_ROOT),
                         "offset": pick["offset"], "detectedState": pick["state"],
                         "reason": pick["reason"], "examples": len(rows)}
     missing = [s for s in MARKER_STATES if s not in saved]
@@ -377,14 +378,14 @@ def calibrate_new_layout(frames: list[tuple[float, str]], source_id: str, *,
     with open(layout_path, "w", encoding="utf-8") as f:
         json.dump(result["layout"], f, indent=1)
         f.write("\n")
-    payload["layoutPath"] = os.path.relpath(layout_path, REPO_ROOT).replace("\\", "/")
+    payload["layoutPath"] = site_paths.site_relpath(layout_path, REPO_ROOT)
     if result.get("frames_bgr"):
         sheet = os.path.join(out_dir, "sheet.png")
         try:
             cs.draw_sheet(result["frames_bgr"],
                           {"slots_a": result["boxes_a"],
                            "slots_b": result["boxes_b"]}, sheet)
-            payload["reviewSheet"] = os.path.relpath(sheet, REPO_ROOT).replace("\\", "/")
+            payload["reviewSheet"] = site_paths.site_relpath(sheet, REPO_ROOT)
         except Exception as exc:  # noqa: BLE001 — a missing sheet must not
             # lose a good calibration; the numbers are the evidence of record.
             payload["reviewSheetError"] = f"{type(exc).__name__}: {exc}"
@@ -451,7 +452,7 @@ def resolve_layout(store: js.JobStore, job: models.Job, *,
 
     record: dict = {
         "resolvedAt": _utcnow_iso(),
-        "scanPath": (os.path.relpath(scan_path, REPO_ROOT).replace("\\", "/")
+        "scanPath": (site_paths.site_relpath(scan_path, REPO_ROOT)
                      if scan_path else None),
         "framesSampled": len(frames_bgr),
         "candidates": [{"layoutId": r["layoutId"], "score": r["fingerprint"]["score"],
@@ -469,7 +470,7 @@ def resolve_layout(store: js.JobStore, job: models.Job, *,
         best = match["best"]
         record.update({
             "layoutId": best["layoutId"],
-            "layoutPath": os.path.relpath(best["path"], REPO_ROOT).replace("\\", "/"),
+            "layoutPath": site_paths.site_relpath(best["path"], REPO_ROOT),
             "source": "committed-layout-reuse",
             "approvalRequired": False,
             "confidence": best["fingerprint"]["score"],
@@ -564,7 +565,7 @@ def approve_layout(store: js.JobStore, job_key: str, *, confirm: bool = False,
     shutil.copyfile(os.path.join(REPO_ROOT, rel), dest)
     approved = dict(record, approvalRequired=False, approvedAt=_utcnow_iso(),
                     approvedBy=approved_by, layoutId=layout_id,
-                    layoutPath=os.path.relpath(dest, REPO_ROOT).replace("\\", "/"),
+                    layoutPath=site_paths.site_relpath(dest, REPO_ROOT),
                     source="approved-calibration")
     store.update_payload(job_key, {"layout": approved,
                                    "expectedLayoutId": layout_id})

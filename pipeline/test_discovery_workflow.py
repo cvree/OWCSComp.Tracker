@@ -37,6 +37,7 @@ import os
 import re
 import shlex
 import subprocess
+import shutil
 import sys
 import tempfile
 import unittest
@@ -461,6 +462,21 @@ class TestTextIoIsPortable(unittest.TestCase):
             self.assertIn(needed, text, f".gitattributes is missing {needed}")
 
 
+#: These tests execute `bash` pipelines to prove the shell semantics that
+#: discovery.yml depends on. That workflow runs on `ubuntu-latest` and nowhere
+#: else, so on Windows this would be asserting the behaviour of a shell/
+#: interpreter combination that never occurs in production — Git Bash exists
+#: there but `python3` does not, and Windows paths inside a bash pipeline are
+#: their own quoting problem. Skipped explicitly, with the reason visible in
+#: the run, rather than silently passing or noisily failing.
+_BASH = shutil.which("bash")
+_SKIP_SHELL = unittest.skipIf(
+    sys.platform == "win32" or not _BASH,
+    "bash pipefail semantics are only asserted where discovery.yml runs "
+    "(ubuntu-latest); no POSIX bash available here")
+
+
+@_SKIP_SHELL
 class TestPipefailMechanism(unittest.TestCase):
     """Prove the actual shell mechanism, independent of the YAML: this is
     what discovery #28 got wrong and what the fix relies on."""
@@ -471,7 +487,7 @@ class TestPipefailMechanism(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             out = os.path.join(d, "run-output.txt")
             res = subprocess.run(
-                ["bash", "-c", f"python3 -c 'import sys; print(\"partial\"); "
+                ["bash", "-c", f"{shlex.quote(sys.executable)} -c 'import sys; print(\"partial\"); "
                               f"sys.exit(1)' | tee {_sh(out)}"],
                 capture_output=True, text=True)
             self.assertEqual(res.returncode, 0,
@@ -485,7 +501,7 @@ class TestPipefailMechanism(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             out = os.path.join(d, "run-output.txt")
             res = subprocess.run(
-                ["bash", "-c", f"set -euo pipefail; python3 -c 'import sys; "
+                ["bash", "-c", f"set -euo pipefail; {shlex.quote(sys.executable)} -c 'import sys; "
                               f"print(\"partial\"); sys.exit(1)' 2>&1 | tee {_sh(out)}"],
                 capture_output=True, text=True)
             self.assertNotEqual(res.returncode, 0,
@@ -497,7 +513,7 @@ class TestPipefailMechanism(unittest.TestCase):
             subprocess.run(
                 ["bash", "-c",
                  f"set -euo pipefail; "
-                 f"(python3 -c 'import sys; print(\"to stderr\", file=sys.stderr)'; true) "
+                 f"({shlex.quote(sys.executable)} -c 'import sys; print(\"to stderr\", file=sys.stderr)'; true) "
                  f"2>&1 | tee {_sh(out)}"],
                 capture_output=True, text=True)
             with open(out, encoding="utf-8") as f:

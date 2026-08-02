@@ -28,6 +28,7 @@ import cv2
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import db  # noqa: E402
+import site_paths  # noqa: E402  (cross-drive-safe relative paths)
 import capture  # noqa: E402
 
 DEFAULT_OUT = os.path.join(db.REPO_ROOT, "reports", "layout_debug")
@@ -195,13 +196,13 @@ def write_layout_html(html_path: str, layout: dict, layout_path: str,
                      f"{sinfo['note']}</div>")
     esc = lambda v: (str(v).replace("&", "&amp;").replace("<", "&lt;")
                      .replace(">", "&gt;"))
-    rel_layout = os.path.relpath(layout_path, db.REPO_ROOT) \
+    rel_layout = site_paths.site_relpath(layout_path, db.REPO_ROOT) \
         if os.path.isabs(layout_path) else layout_path
     html_dir = os.path.dirname(os.path.abspath(html_path))
     imgs = "".join(
         f"<h3>{esc(os.path.basename(p))}</h3>"
-        f"<a href='{esc(os.path.relpath(p, html_dir).replace(os.sep, '/'))}'>"
-        f"<img src='{esc(os.path.relpath(p, html_dir).replace(os.sep, '/'))}'>"
+        f"<a href='{esc(site_paths.site_relpath(p, html_dir))}'>"
+        f"<img src='{esc(site_paths.site_relpath(p, html_dir))}'>"
         "</a>"
         for p in images)
     if warns:
@@ -217,8 +218,8 @@ def write_layout_html(html_path: str, layout: dict, layout_path: str,
                              "slots_b")}, indent=1)
     rerun_frames = frames_dir or "<frames_dir>"
     if os.path.isabs(rerun_frames):
-        rerun_frames = os.path.relpath(rerun_frames, db.REPO_ROOT)
-    out_rel = os.path.relpath(html_dir, db.REPO_ROOT)
+        rerun_frames = site_paths.site_relpath(rerun_frames, db.REPO_ROOT)
+    out_rel = site_paths.site_relpath(html_dir, db.REPO_ROOT)
     html = (
         "<!DOCTYPE html><html><head><meta charset='utf-8'>"
         "<title>layout debug</title>"
