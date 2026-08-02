@@ -7,7 +7,8 @@ This is the surface a browser talks to. The properties worth locking down are
 the ones a screenshot cannot show:
 
   * no route, on any path including error paths, can return a stored API key;
-  * a route that mutates something attributable refuses to act anonymously;
+  * a route that mutates something records who did it, and records
+    `anonymous` rather than inventing a name when nobody signed it;
   * a layout name is never used to reach outside the layouts directory;
   * an update is refused unless its published checksum matches;
   * the intake box classifies every documented link shape correctly, and
@@ -138,15 +139,46 @@ class TestSettingsRoutes(TempHome):
 
 
 # ---------------------------------------------------------- attribution
-class TestAttributionIsRequired(TempHome):
-    """Anything that changes the record must say who changed it."""
+class TestAttributionIsRecordedNotDemanded(TempHome):
+    """Every change still says who made it. None of them refuse to happen.
 
-    def test_review_decisions_need_a_reviewer(self):
+    While this is a prototype the owner has decided every visitor is trusted
+    to edit correctly, so the name fields no longer gate anything. That is a
+    change to the GATE, not to the RECORD: an unsigned action still writes
+    its row, and writes `anonymous` in the column that was left blank.
+
+    Refusing unsigned edits never protected anything — the field was free
+    text that nothing verified, so anyone could type any name. Inventing a
+    name to fill the column would have been the one genuinely harmful
+    option, because it would put a false attribution into the audit trail.
+    """
+
+    def test_an_unsigned_action_records_anonymous_rather_than_a_blank(self):
+        self.assertEqual(webapi.attribute(""), webapi.ANONYMOUS)
+        self.assertEqual(webapi.attribute(None), webapi.ANONYMOUS)
+        self.assertEqual(webapi.attribute("   "), webapi.ANONYMOUS)
+
+    def test_a_name_that_is_given_is_kept_exactly(self):
+        self.assertEqual(webapi.attribute("  Connor  "), "Connor")
+
+    def test_no_name_is_ever_invented(self):
+        """The only substitute for a missing name is one that says so."""
+        self.assertIn("anon", webapi.ANONYMOUS.lower())
+
+    def test_a_review_decision_without_a_name_is_not_refused_for_that(self):
         _code, payload = webapi.handle_post(
             "/api/desktop/review/decide",
             {"kind": "stint", "id": 1, "decision": "approve", "reviewer": ""})
+        # It may still fail because there is no such stint in this empty
+        # database — but never because nobody signed it.
+        self.assertNotIn("name", str(payload.get("error", "")).lower())
+
+    def test_the_decision_itself_is_still_validated(self):
+        """Trusting the person is not the same as trusting the payload."""
+        _code, payload = webapi.handle_post(
+            "/api/desktop/review/decide",
+            {"kind": "stint", "id": 1, "decision": "maybe", "reviewer": ""})
         self.assertFalse(payload["ok"])
-        self.assertIn("reviewer name", payload["error"])
 
     def test_an_unknown_decision_is_refused(self):
         _code, payload = webapi.handle_post(
@@ -160,22 +192,40 @@ class TestAttributionIsRequired(TempHome):
             {"kind": "wishes", "id": 1, "decision": "approve", "reviewer": "A"})
         self.assertFalse(payload["ok"])
 
-    def test_layout_edits_need_an_editor(self):
-        _code, payload = webapi.handle_post(
-            "/api/desktop/calibration/save",
-            {"name": "owcs-demo", "boxes": [{"id": "slots_a/0",
-                                             "rect": [1, 2, 3, 4]}],
-             "editor": ""})
-        self.assertFalse(payload["ok"])
-        self.assertIn("name is required", payload["error"])
+    def test_a_layout_edit_without_a_name_is_not_refused_for_that(self):
+        # Against a COPY of the layouts, never the committed ones. Now that
+        # this edit is no longer refused it actually writes, and layouts are
+        # written under app_root() — so without this the test rewrote
+        # layouts/owcs-demo.json in the repository and broke two unrelated
+        # computer-vision suites. It did exactly that once.
+        import shutil
+        sandbox = os.path.join(self._tmp.name, "app")
+        os.makedirs(sandbox, exist_ok=True)
+        shutil.copytree(os.path.join(REPO, "layouts"),
+                        os.path.join(sandbox, "layouts"))
+        old = os.environ.get("OWCS_APP_ROOT")
+        os.environ["OWCS_APP_ROOT"] = sandbox
+        try:
+            _code, payload = webapi.handle_post(
+                "/api/desktop/calibration/save",
+                {"name": "owcs-demo",
+                 "boxes": [{"id": "slots_a/0", "rect": [1, 2, 3, 4]}],
+                 "editor": ""})
+        finally:
+            if old is None:
+                os.environ.pop("OWCS_APP_ROOT", None)
+            else:
+                os.environ["OWCS_APP_ROOT"] = old
+        self.assertNotIn("a name is required", str(payload.get("error", "")))
 
-    def test_intake_needs_a_requester(self):
+    def test_intake_without_a_name_is_accepted(self):
+        """The gate that most obviously stood in a new user's way."""
         code, payload = webapi.handle_post(
             "/api/desktop/intake/submit",
             {"input": "https://www.youtube.com/watch?v=jkSiX___Qwc",
              "requestedBy": ""})
-        self.assertEqual(code, 400)
-        self.assertIn("name is required", payload["error"])
+        self.assertNotEqual(code, 400, payload)
+        self.assertNotIn("name is required", str(payload.get("error", "")))
 
 
 # ---------------------------------------------------------- calibration

@@ -2,15 +2,19 @@
    identity.js — "who are you?", asked once instead of every single time.
 
    Every action that changes the record is attributed: review decisions,
-   layout edits, imports, intake. That is the point of the project — a
-   published composition can be traced to the frame it came from AND to the
-   person who signed it off — and it is not negotiable.
+   layout edits, imports, intake. A published composition can be traced to
+   the frame it came from AND to whoever signed it off.
 
-   What WAS negotiable is making someone retype their name into a different
-   box on every screen, several times a session. That is friction with no
-   safety value: it does not verify anything, it just annoys the one person
-   who is already doing the work. So the name is remembered locally and
-   pre-filled everywhere, and the attribution is unchanged.
+   Giving a name is OPTIONAL. While this is a prototype every visitor is
+   trusted to edit correctly, so nothing is refused for arriving unsigned —
+   the audit row simply records `anonymous`. That is deliberate rather than
+   lax: this field is free text that nothing verifies, so refusing a blank
+   one protected nothing, while filling it in with a guess would put a false
+   name into the very trail the column exists for.
+
+   What it still avoids is making someone retype their name into a different
+   box on every screen. So the name is remembered locally and pre-filled
+   everywhere, for the people who do want their work credited.
 
    Stored in localStorage, per browser. It is a label, not a credential:
    nothing is authenticated by it and nothing should be. It exists so an

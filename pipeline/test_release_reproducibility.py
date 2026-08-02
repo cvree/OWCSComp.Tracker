@@ -497,6 +497,15 @@ class TestTheSuiteLeavesTheTreeClean(unittest.TestCase):
     noise instead of the real broadcast package, a release archive shipped
     test output as evidence, and every test run produced a diff an operator
     had to decide whether to commit.
+
+    A third joined them later, and it is the reason this list is not just
+    history. `test_desktop_api.py` exercises the calibration editor, which
+    writes layouts under `app_root()`. While unsigned edits were REFUSED the
+    call never got as far as writing; the moment they were allowed, the same
+    test started rewriting `layouts/owcs-demo.json` in the repository — and
+    two unrelated computer-vision suites began failing against a layout
+    nobody had knowingly changed. Any suite that can write to a committed
+    path belongs here, whether or not it does so today.
     """
 
     PROTECTED = ("templates", "layouts", "reports", "assets/data",
@@ -515,7 +524,8 @@ class TestTheSuiteLeavesTheTreeClean(unittest.TestCase):
             self.skipTest(f"tree already dirty before this check: {before} "
                           f"— commit or revert, then re-run")
         # Run the two suites that historically wrote into committed paths.
-        for name in ("test_pipeline_synthetic.py", "test_capture_trial.py"):
+        for name in ("test_pipeline_synthetic.py", "test_capture_trial.py",
+                     "test_desktop_api.py", "test_desktop_website.py"):
             script = os.path.join(HERE, name)
             if not os.path.exists(script):
                 continue

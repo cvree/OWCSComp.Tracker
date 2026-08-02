@@ -39,10 +39,30 @@ from typing import Any, Callable
 from urllib.parse import parse_qs
 
 from . import (__version__, autostart, backup, credentials, health, paths,
-               repair, storage, supervisor, updates)
+               repair, storage, supervisor, updates, website)
 from .settings import Settings, SettingsError
 
 PREFIX = "/api/desktop/"
+
+#: Recorded when an action arrives without a name on it.
+#:
+#: This project attributes every change that touches the record. It used to
+#: REFUSE changes that arrived unsigned, which is a different thing, and the
+#: owner has decided that while this is a prototype every visitor is trusted
+#: to edit correctly. So the gate is gone and the record is not: an unsigned
+#: action still writes a row saying what changed, when, and against which
+#: evidence — it just says `anonymous` in the one column that was blank.
+#:
+#: The distinction matters. Refusing the edit protected nothing (the field
+#: was never verified — anyone could type any name), while inventing a name
+#: to fill the column would corrupt exactly the audit trail the column
+#: exists for. `anonymous` is the only honest third option.
+ANONYMOUS = "anonymous"
+
+
+def attribute(raw: Any) -> str:
+    """The name to record against an action. Never blank, never invented."""
+    return str(raw or "").strip()[:120] or ANONYMOUS
 
 #: Anything shaped like a key, redacted before it can reach a log or a page.
 _SECRET_RE = re.compile(r"\b[A-Za-z0-9_\-]{24,}\b")
@@ -296,10 +316,7 @@ def review_decide(*, kind: str, item_id: int, decision: str,
                   reviewer: str) -> dict[str, Any]:
     """Record a human decision. Always sets manual_override so a later
     detector run can never silently overwrite it."""
-    reviewer = (reviewer or "").strip()
-    if not reviewer:
-        return {"ok": False, "error": "a reviewer name is required — every "
-                                      "decision is attributed"}
+    reviewer = attribute(reviewer)
     if decision not in ("approve", "reject"):
         return {"ok": False, "error": "decision must be approve or reject"}
 
@@ -540,10 +557,7 @@ def calibration_import(layout: Any, *, name: str,
     `calibration_source: "browser-import"`, so results from it go through
     review rather than being trusted automatically.
     """
-    importer = (importer or "").strip()
-    if not importer:
-        return {"ok": False, "error": "a name is required — imported layouts "
-                                      "are attributed"}
+    importer = attribute(importer)
     if not isinstance(layout, dict):
         return {"ok": False, "error": "that file is not a layout"}
 
@@ -617,10 +631,7 @@ def calibration_save(name: str, boxes: list[dict[str, Any]], *,
     and when, and marks the layout `manual-edit` so nothing downstream claims
     a hand-adjusted layout was computationally calibrated.
     """
-    editor = (editor or "").strip()
-    if not editor:
-        return {"ok": False, "error": "a name is required — layout edits are "
-                                      "attributed"}
+    editor = attribute(editor)
     if not isinstance(boxes, list) or not boxes:
         return {"ok": False, "error": "no boxes supplied"}
     path = _layout_path(name)
@@ -741,6 +752,10 @@ def publish_status() -> dict[str, Any]:
         {"id": s["id"], "createdAt": s["createdAt"], "reason": s["reason"],
          "valid": s["valid"], "bytes": s["totalBytes"]}
         for s in backup.list_snapshots()[:20]]
+    # The other half of "published": whether the LIVE site has it. Everything
+    # above describes the copy inside this install, which is what the local
+    # control room serves and what a user would never call published.
+    info["site"] = website.describe()
     return info
 
 
@@ -973,14 +988,28 @@ def handle_post(path: str, body: dict[str, Any] | None
             started, detail = TASK.start("publish", export_public)
             return (200 if started else 409), {"ok": started, "detail": detail}
 
+        if route == "publish/site":
+            # Regenerate first, then upload. Doing them as one action is the
+            # difference between "publish" meaning one button and meaning two
+            # buttons in an order the user has to remember.
+            by = attribute(body.get("by"))
+            note = str(body.get("message") or "")
+
+            def _export_then_publish() -> dict[str, Any]:
+                export = export_public()
+                if not export.get("ok"):
+                    return {"ok": False, "stage": "export", **export}
+                sent = website.publish(message=note, by=by)
+                return {"stage": "site", "backup": export.get("backup"),
+                        **sent}
+
+            started, detail = TASK.start("publish-site", _export_then_publish)
+            return (200 if started else 409), {"ok": started, "detail": detail}
+
         if route == "intake/submit":
             from . import intake
             text = str(body.get("input") or "")
-            requested_by = str(body.get("requestedBy") or "").strip()
-            if not requested_by:
-                return 400, {"ok": False,
-                             "error": "a name is required — every intake is "
-                                      "attributed in the audit trail"}
+            requested_by = attribute(body.get("requestedBy"))
             # Submitting can take a while (a playlist listing is a network
             # call), so it runs as the shared background task.
             started, detail = TASK.start(

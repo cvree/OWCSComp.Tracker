@@ -82,8 +82,9 @@
         </div>
         <div class="note" id="intakeVerdict"></div>
         <div class="field">
-          <label for="intakeBy">Your name</label>
-          <div class="help">Recorded against this intake in the audit trail.</div>
+          <label for="intakeBy">Your name <span class="pill info">optional</span></label>
+          <div class="help">Recorded against this intake. Leave it blank and
+            the audit trail records <code>anonymous</code>.</div>
           <input type="text" id="intakeBy" data-identity autocomplete="name" />
         </div>
         <div class="btnrow">
@@ -112,8 +113,9 @@
       <p class="app-sub">Detections the app refused to publish on its own, with the evidence it based that on. Approving one marks it human-reviewed; a later detector run can never silently overwrite your decision.</p>
       <div class="dcard">
         <div class="field" style="max-width:320px">
-          <label for="reviewer">Your name</label>
-          <div class="help">Required — every decision is attributed.</div>
+          <label for="reviewer">Your name <span class="pill info">optional</span></label>
+          <div class="help">Recorded against your decision. Leave it blank and
+            the audit trail records <code>anonymous</code>.</div>
           <input type="text" id="reviewer" data-identity autocomplete="name" />
         </div>
         <div class="note" id="reviewNote"></div>
@@ -175,13 +177,44 @@
       <div class="app-head"><h1>Publishing</h1></div>
       <p class="app-sub">The public dataset the website renders. Every publish takes a verified backup first and replaces the file atomically, so a failure mid-write can never leave a half-written dataset on the site.</p>
       <div class="dcard">
+        <h2>Put it on the website</h2>
+        <p class="help">Regenerates the public dataset and uploads it to the
+          repository the site is built from. The site rebuilds itself a minute
+          or two later. Nothing is uploaded unless it passes the same checks
+          the local publish does, and the upload is read back afterwards to
+          confirm what actually landed.</p>
+        <dl class="kv" id="siteInfo"></dl>
+        <div id="siteBlockers"></div>
+        <div class="field" style="max-width:420px">
+          <label for="publishMessage">Note for the commit <span class="pill info">optional</span></label>
+          <div class="help">Shows up in the site's history. Blank is fine.</div>
+          <input type="text" id="publishMessage" placeholder="e.g. Nepal — TWIS vs Crazy Raccoon" />
+        </div>
+        <div class="field" style="max-width:320px">
+          <label for="publishBy">Your name <span class="pill info">optional</span></label>
+          <input type="text" id="publishBy" data-identity autocomplete="name" />
+        </div>
+        <div class="btnrow">
+          <button class="btn btn-primary" id="publishSite">Publish to the website</button>
+        </div>
+        <div class="note" id="siteNote"></div>
+        <div class="out" id="siteOut"></div>
+      </div>
+      <div class="dcard">
         <h2>Current public dataset</h2>
+        <p class="help">The copy inside this installation — what the pages
+          above serve locally. Regenerating rebuilds it from your database
+          without sending anything anywhere.</p>
         <dl class="kv" id="publishInfo"></dl>
         <div class="btnrow">
-          <button class="btn btn-primary" id="publishExport">Regenerate public data</button>
+          <button class="btn btn-ghost" id="publishExport">Regenerate locally only</button>
         </div>
         <div class="note" id="publishNote"></div>
         <div class="out" id="publishOut"></div>
+      </div>
+      <div class="dcard">
+        <h2>Recent uploads</h2>
+        <div id="siteHistory" class="rowlist"></div>
       </div>
       <div class="dcard">
         <h2>Publication history</h2>

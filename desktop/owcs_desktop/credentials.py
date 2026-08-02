@@ -41,6 +41,14 @@ KNOWN_KEYS: dict[str, dict[str, str]] = {
                 "Everything else works without it.",
         "url": "https://developers.faceit.com/",
     },
+    "GITHUB_TOKEN": {
+        "label": "GitHub token (publishing)",
+        "help": "Optional. Lets the app publish finished results to the "
+                "public website. A fine-grained token with Contents:write on "
+                "that one repository is all it needs. Everything else works "
+                "without it; you just publish by hand instead.",
+        "url": "https://github.com/settings/personal-access-tokens/new",
+    },
     "YOUTUBE_API_KEY": {
         "label": "YouTube Data API key",
         "help": "Optional. Speeds up broadcast discovery. Without it the app "

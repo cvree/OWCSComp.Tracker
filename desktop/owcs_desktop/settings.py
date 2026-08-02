@@ -115,6 +115,19 @@ SCHEMA: dict[str, dict[str, Any]] = {
         "label": "Control room port",
         "help": "The local-only port the control room is served on.",
     },
+    "publishRepo": {
+        "default": "cvree/owcscomp.tracker",
+        "type": str,
+        "label": "Website repository",
+        "help": "owner/name of the repository the public site is served from. "
+                "Publishing uploads the generated dataset here.",
+    },
+    "publishBranch": {
+        "default": "main",
+        "type": str,
+        "label": "Website branch",
+        "help": "The branch GitHub Pages builds the public site from.",
+    },
     "checkForUpdates": {
         "default": True,
         "type": bool,

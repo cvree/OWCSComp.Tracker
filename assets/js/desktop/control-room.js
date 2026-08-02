@@ -187,7 +187,6 @@
 
   $('intakeSubmit').addEventListener('click', async () => {
     const by = $('intakeBy').value.trim();
-    if (!by) { note($('intakeNote'), 'bad', 'Enter your name — every intake is attributed.'); return; }
     const btn = $('intakeSubmit');
     btn.disabled = true;
     note($('intakeNote'), 'warn', 'Working…');
@@ -263,7 +262,6 @@
     const noteNode = el('div', { class: 'note' });
     const act = (decision) => async () => {
       const reviewer = $('reviewer').value.trim();
-      if (!reviewer) { note(noteNode, 'bad', 'Enter your name above first.'); return; }
       const res = await D.post('review/decide', {
         kind: item.kind, id: item.id, decision: decision, reviewer: reviewer
       });
@@ -508,7 +506,68 @@
         el('div', { class: 'detail', text: JSON.stringify(r).slice(0, 300) })
       ])
     ])));
+
+    renderSite(p.site || {});
   };
+
+  /* The live website half. Everything that stops a publish is listed as a
+     specific, fixable thing rather than the button being greyed out with no
+     explanation — "not ready" is useless if it does not say what to do. */
+  function renderSite(site) {
+    const info = $('siteInfo');
+    clear(info);
+    [['Repository', site.repo || 'not set'],
+     ['Branch', site.branch || '—'],
+     ['GitHub token', site.hasToken ? 'saved' : 'not saved'],
+     ['Files to upload', (site.files || []).map((f) => f.path).join(', ') || '—']]
+      .forEach(([k, v]) => { info.appendChild(el('dt', { text: k })); info.appendChild(el('dd', { text: String(v) })); });
+
+    const blockers = $('siteBlockers');
+    clear(blockers);
+    (site.blockers || []).forEach((b) => blockers.appendChild(
+      el('div', { class: 'note bad', text: b })));
+    $('publishSite').disabled = !site.ready;
+
+    const hist = $('siteHistory');
+    clear(hist);
+    if (!(site.history || []).length) {
+      hist.appendChild(el('div', { class: 'empty', text: 'Nothing has been uploaded to the website from this machine yet.' }));
+    }
+    (site.history || []).forEach((h) => hist.appendChild(el('div', { class: 'row' }, [
+      el('div', { class: 'grow' }, [
+        el('div', { class: 'name', text: (h.ok ? 'Published' : 'Refused') + ' — ' + (h.at || '') }),
+        el('div', { class: 'detail', text: h.ok
+          ? `${(h.files || []).length} file(s) to ${h.repo}@${h.branch}, by ${h.by}`
+          : (h.error || 'no reason recorded') })
+      ]),
+      el('span', { class: 'pill ' + (h.ok ? 'ok' : 'bad'), text: h.ok ? 'ok' : 'failed' })
+    ])));
+  }
+
+  $('publishSite').addEventListener('click', async () => {
+    const btn = $('publishSite');
+    btn.disabled = true;
+    note($('siteNote'), 'warn', 'Regenerating, verifying and uploading…');
+    $('siteOut').textContent = '';
+    const started = await D.post('publish/site', {
+      by: $('publishBy').value.trim(),
+      message: $('publishMessage').value.trim()
+    });
+    if (!started.ok) { outcome($('siteNote'), started); btn.disabled = false; return; }
+    await D.pollTask((s) => {
+      if (s && s.running) note($('siteNote'), 'warn', 'Working… ' + Math.round(s.elapsedSeconds || 0) + 's');
+    });
+    const final = await D.get('task');
+    btn.disabled = false;
+    const r = final.result || {};
+    note($('siteNote'), r.ok ? 'ok' : 'bad',
+      r.ok ? (r.detail || 'Published to the website.')
+           : (r.error || final.error || 'The publish failed.'));
+    $('siteOut').textContent = (r.files || [])
+      .map((f) => `${f.status.padEnd(10)} ${f.path}${f.commit ? '  ' + f.commit.slice(0, 10) : ''}`)
+      .join('\n');
+    RENDERERS.publish();
+  });
 
   $('publishExport').addEventListener('click', async () => {
     const btn = $('publishExport');

@@ -267,12 +267,26 @@ class TestImportPath(unittest.TestCase):
         js = read(os.path.join(REPO, "assets", "js", "desktop", "control-room.js"))
         self.assertIn("calibration/import", js)
 
-    def test_an_anonymous_import_is_refused(self):
+    def test_an_anonymous_import_is_accepted_and_recorded_as_anonymous(self):
+        """Anyone may contribute a calibration, signed or not.
+
+        What must not happen is the import landing with NOTHING in the
+        attribution column — the layout still has to say where it came from,
+        because `browser-import` provenance is what keeps its results in
+        review instead of in production.
+        """
         result = webapi.calibration_import(self.good_layout(),
                                            name="wizard-test-layout",
                                            importer="")
-        self.assertFalse(result["ok"])
-        self.assertIn("name is required", result["error"])
+        self.assertTrue(result["ok"], result)
+        with open(os.path.join(REPO, "layouts", "wizard-test-layout.json"),
+                  "r", encoding="utf-8") as handle:
+            doc = json.load(handle)
+        self.assertIn(webapi.ANONYMOUS, json.dumps(doc),
+                      "the import recorded no attribution at all")
+        self.assertNotIn("hud_probe", doc,
+                         "a browser import must never claim pipeline "
+                         "calibration")
 
     def test_a_non_layout_is_refused(self):
         for bad in (None, [], "hello", {"nope": 1}):
@@ -404,8 +418,8 @@ class TestAnyoneCanContribute(unittest.TestCase):
 
 
 class TestIdentityIsRememberedNotWeakened(unittest.TestCase):
-    """Attribution is asked for once instead of every time. It is still
-    required everywhere it was required before."""
+    """Attribution is asked for once instead of every time, and it is
+    optional — but it is still RECORDED everywhere it was recorded before."""
 
     IDENTITY = os.path.join(REPO, "assets", "js", "identity.js")
 
@@ -448,19 +462,63 @@ class TestIdentityIsRememberedNotWeakened(unittest.TestCase):
         self.assertGreaterEqual(source.count("catch"), 2,
                                 "localStorage access is not guarded")
 
-    def test_the_server_still_requires_attribution(self):
-        """The decisive check: remembering a name client-side must not have
-        removed the server-side requirement."""
-        result = webapi.review_decide(kind="stint", item_id=1,
-                                      decision="approve", reviewer="")
-        self.assertFalse(result["ok"])
-        self.assertIn("reviewer name", result["error"])
-        self.assertFalse(webapi.calibration_save(
-            "owcs-demo", [{"id": "slots_a/0", "rect": [1, 1, 5, 5]}],
-            editor="")["ok"])
-        self.assertFalse(webapi.calibration_import(
-            {"frame_width": 1, "frame_height": 1, "slots_a": [], "slots_b": []},
-            name="x", importer="")["ok"])
+    def test_an_unsigned_change_is_recorded_as_anonymous_not_refused(self):
+        """The decisive check, restated for the trusted-user prototype.
+
+        Client-side remembering must not have quietly become client-side
+        ENFORCEMENT, and dropping the requirement must not have dropped the
+        record. So: an unsigned change goes through, and the name that lands
+        in the audit column is `anonymous` — never blank, never invented.
+        """
+        import shutil
+
+        # A sandbox app root: calibration_save WRITES, and with the gate gone
+        # it now really writes. Pointed at the repository it would edit a
+        # committed layout.
+        with tempfile.TemporaryDirectory(prefix="owcs-test-attr-") as tmp:
+            app = os.path.join(tmp, "app")
+            os.makedirs(app, exist_ok=True)
+            shutil.copytree(os.path.join(REPO, "layouts"),
+                            os.path.join(app, "layouts"))
+            old_app = os.environ.get("OWCS_APP_ROOT")
+            old_home = os.environ.get(paths.HOME_ENV)
+            os.environ["OWCS_APP_ROOT"] = app
+            os.environ[paths.HOME_ENV] = os.path.join(tmp, "home")
+            try:
+                paths.ensure_layout()
+                self.assertEqual(webapi.attribute(""), webapi.ANONYMOUS)
+
+                decision = webapi.review_decide(
+                    kind="stint", item_id=1, decision="approve", reviewer="")
+                self.assertNotIn("name", str(decision.get("error", "")).lower())
+
+                saved = webapi.calibration_save(
+                    "owcs-demo", [{"id": "slots_a/0", "rect": [1, 1, 5, 5]}],
+                    editor="")
+                self.assertNotIn("a name is required",
+                                 str(saved.get("error", "")))
+                if saved.get("ok"):
+                    with open(os.path.join(app, "layouts", "owcs-demo.json"),
+                              "r", encoding="utf-8") as handle:
+                        doc = json.load(handle)
+                    stamped = json.dumps(doc)
+                    self.assertIn(webapi.ANONYMOUS, stamped,
+                                  "the edit was saved with no attribution "
+                                  "recorded at all")
+
+                imported = webapi.calibration_import(
+                    {"frame_width": 1, "frame_height": 1,
+                     "slots_a": [], "slots_b": []},
+                    name="x", importer="")
+                self.assertNotIn("a name is required",
+                                 str(imported.get("error", "")))
+            finally:
+                for key, previous in (("OWCS_APP_ROOT", old_app),
+                                      (paths.HOME_ENV, old_home)):
+                    if previous is None:
+                        os.environ.pop(key, None)
+                    else:
+                        os.environ[key] = previous
 
 
 if __name__ == "__main__":
