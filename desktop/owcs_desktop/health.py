@@ -114,18 +114,32 @@ def _check_python() -> dict[str, Any]:
 
 
 def _check_module(mod: str, label: str) -> dict[str, Any]:
-    if importlib.util.find_spec(mod) is None:
-        return _check(f"runtime.{mod}", label, FAIL,
-                      f"{label} is not installed. Detection cannot run.",
-                      repair="repair.dependencies")
+    """Is this module importable, and does it actually work?
+
+    Just imports it. It used to call `importlib.util.find_spec()` first, to
+    tell "not installed" apart from "installed but broken" — which is a real
+    distinction, but not worth what it cost: inside a PyInstaller bundle,
+    probing a C-extension package with find_spec and THEN importing it makes
+    the frozen importer load the extension twice, and it refuses with
+    "cannot load module more than once per process". NumPy then appears
+    broken, and OpenCV fails behind it because it imports NumPy.
+
+    ImportError still separates the two cases well enough for the message,
+    and one import cannot trip over itself.
+    """
     try:
-        module = __import__(mod)
-        version = getattr(module, "__version__", "") or "present"
-    except Exception as exc:  # a broken install imports but explodes
+        module = importlib.import_module(mod)
+    except ImportError as exc:
+        return _check(f"runtime.{mod}", label, FAIL,
+                      f"{label} could not be imported: {exc}. "
+                      f"Detection cannot run.",
+                      repair="repair.dependencies")
+    except Exception as exc:  # imports, then explodes on its own initialisation
         return _check(f"runtime.{mod}", label, FAIL,
                       f"{label} is installed but failed to load: "
                       f"{type(exc).__name__}: {exc}",
                       repair="repair.dependencies")
+    version = getattr(module, "__version__", "") or "present"
     return _check(f"runtime.{mod}", label, OK, f"{label} {version}")
 
 

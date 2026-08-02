@@ -30,15 +30,24 @@ import sys
 
 sys.path.insert(0, os.path.abspath("packaging"))
 from payload import collect_datas, HIDDEN_IMPORTS, EXCLUDES  # noqa: E402
+from PyInstaller.utils.hooks import collect_submodules  # noqa: E402
 
 REPO = os.path.abspath(".")
+
+# NumPy 2.x reaches into its own submodules lazily, so PyInstaller's static
+# analysis misses some of them and the frozen build dies at import with
+# "No module named 'numpy._core._exceptions'" — which then takes OpenCV down
+# with it, since cv2 imports numpy. Collecting the package wholesale is the
+# supported fix and costs a few MB. Caught by build_windows.py's verify stage
+# running the frozen exe's own --check before the installer was wrapped.
+_HIDDEN = HIDDEN_IMPORTS + collect_submodules("numpy")
 
 a = Analysis(
     [os.path.join(REPO, "desktop", "owcs_app.py")],
     pathex=[REPO, os.path.join(REPO, "desktop"), os.path.join(REPO, "pipeline")],
     binaries=[],
     datas=collect_datas(REPO),
-    hiddenimports=HIDDEN_IMPORTS,
+    hiddenimports=_HIDDEN,
     hookspath=[],
     runtime_hooks=[],
     excludes=EXCLUDES,
