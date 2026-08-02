@@ -16,6 +16,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
 import discover_owcs_vods as dv  # noqa: E402
+import layout_registry as lr     # noqa: E402
 import video_ingest as vi        # noqa: E402
 
 TMP = os.path.join(ROOT, "work", "test_discover")
@@ -122,7 +123,14 @@ def main():
               and s.get("platform") == "youtube"
               and s.get("url") == "https://www.youtube.com/watch?v=AAAAAAAAAA1"
               and s.get("enabled") is True
-              and s.get("layout") == dv.DEFAULT_LAYOUT)
+              and s.get("layout") == lr.default_layout())
+        # The stronger property, and the one that actually matters: a
+        # discovered source must never be registered against a STARTER layout.
+        # It used to default to layouts/owcs_youtube_2026.json, whose
+        # rectangles are hand-guessed, so every auto-discovered VOD was
+        # written pointing at a layout that could not read it.
+        check("saved layout is calibrated, not a starter",
+              lr.is_calibrated(os.path.join(ROOT, s.get("layout", ""))))
         check("_readme preserved", "_readme" in data)
 
         print("duplicates:")

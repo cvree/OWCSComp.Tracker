@@ -76,8 +76,14 @@ ALLOWED_HOSTS = frozenset({
 
 REQUIRED_TOOLS = ("ffmpeg", "ffprobe", "yt-dlp")
 
-DEFAULT_MEDIA_ROOT = os.path.join(
-    os.path.dirname(_PIPELINE_DIR), "data", "worker", "jobs")
+# Where downloaded broadcast media lands. Repo-relative by default (what a
+# source checkout and CI expect); OWCS_MEDIA_ROOT relocates it, which is how
+# the installed Windows application keeps multi-gigabyte downloads on per-user
+# writable storage instead of under Program Files. Same override shape as
+# OWCS_DB / OWCS_AUTOMATION_DB elsewhere in the pipeline.
+DEFAULT_MEDIA_ROOT = os.environ.get(
+    "OWCS_MEDIA_ROOT",
+    os.path.join(os.path.dirname(_PIPELINE_DIR), "data", "worker", "jobs"))
 DEFAULT_MIN_FREE_GB = 5.0
 
 

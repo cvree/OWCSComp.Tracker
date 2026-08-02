@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Control room — OWCS Comp Tracker</title>
+<meta name="robots" content="noindex" />
+<link rel="icon" href="desktop/assets/owcs.png" />
+<link rel="stylesheet" href="assets/css/style.css" />
+<link rel="stylesheet" href="assets/css/desktop.css" />
+</head>
+<body data-page="control-room" data-shell="control">
+
+<div class="app-shell">
+  <!-- ------------------------------------------------------- sidebar -->
+  <aside class="app-side">
+    <div class="app-brand">
+      <img src="desktop/assets/owcs.png" alt="" />
+      <b>OWCS Comp Tracker<span id="brandVersion">control room</span></b>
+    </div>
+    <nav class="app-nav" id="nav" aria-label="Control room sections">
+      <button data-view="overview" aria-current="true">Overview <span class="navcount" id="cnt-overview" data-empty="1"></span></button>
+      <button data-view="intake">Add a broadcast</button>
+      <button data-view="queue">Queue <span class="navcount" id="cnt-queue" data-empty="1"></span></button>
+      <button data-view="review">Review inbox <span class="navcount" id="cnt-review" data-empty="1"></span></button>
+      <button data-view="calibration">Calibration</button>
+      <button data-view="publish">Publishing</button>
+      <button data-view="health">Health &amp; repair <span class="navcount" id="cnt-health" data-empty="1"></span></button>
+      <button data-view="storage">Storage</button>
+      <button data-view="backups">Backups</button>
+      <button data-view="updates">Updates</button>
+      <button data-view="credentials">Credentials</button>
+      <button data-view="logs">Logs</button>
+      <button data-view="settings">Settings</button>
+    </nav>
+    <div style="margin-top:16px;padding:0 8px">
+      <div class="stat" id="workerCard">
+        <div class="k">Background service</div>
+        <div class="v" id="workerState"><span class="dot idle"></span>—</div>
+        <div class="d" id="workerDetail">checking…</div>
+        <div class="btnrow" style="margin-top:8px">
+          <button class="btn btn-sm btn-ghost" id="workerToggle">Pause</button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ---------------------------------------------------------- main -->
+  <main class="app-main">
+
+    <!-- overview -->
+    <section class="view active" data-view="overview">
+      <div class="app-head"><h1>Overview</h1></div>
+      <p class="app-sub">Everything the application is doing right now. This page refreshes itself; you never need to reload it.</p>
+      <div class="statusbar" id="overviewStats"></div>
+      <div class="dgrid">
+        <div class="dcard">
+          <h2>Needs you</h2>
+          <p class="hint">Work the app has deliberately stopped on, because the next step is a decision rather than a computation.</p>
+          <div id="needsYou" class="rowlist"></div>
+        </div>
+        <div class="dcard">
+          <h2>Recent activity</h2>
+          <div id="recentJobs" class="rowlist"></div>
+        </div>
+      </div>
+      <div class="dcard">
+        <h2>Where things are kept</h2>
+        <dl class="kv" id="pathList"></dl>
+      </div>
+    </section>
+
+    <!-- intake -->
+    <section class="view" data-view="intake">
+      <div class="app-head"><h1>Add a broadcast</h1></div>
+      <p class="app-sub">One box. Paste a YouTube VOD or playlist, a FACEIT matchroom or tournament, or the path to a video file on this PC — the app works out which it is and takes it from there.</p>
+      <div class="dcard">
+        <div class="field">
+          <label for="intakeInput">Link or file path</label>
+          <div class="help">Examples: <code>https://www.youtube.com/watch?v=…</code> · <code>https://www.faceit.com/en/ow2/room/1-…</code> · <code>D:\broadcasts\owcs-finals.mp4</code></div>
+          <input type="text" id="intakeInput" placeholder="Paste here" autocomplete="off" spellcheck="false" />
+        </div>
+        <div class="note" id="intakeVerdict"></div>
+        <div class="field">
+          <label for="intakeBy">Your name</label>
+          <div class="help">Recorded against this intake in the audit trail.</div>
+          <input type="text" id="intakeBy" autocomplete="name" />
+        </div>
+        <div class="btnrow">
+          <button class="btn btn-primary" id="intakeSubmit" disabled>Add to the queue</button>
+        </div>
+        <div class="note" id="intakeNote"></div>
+        <div class="out" id="intakeOut"></div>
+      </div>
+    </section>
+
+    <!-- queue -->
+    <section class="view" data-view="queue">
+      <div class="app-head"><h1>Queue</h1></div>
+      <p class="app-sub">Every job and how far through it is. Nothing here needs a command; the background service drives all of it.</p>
+      <div class="dcard">
+        <div class="btnrow" style="margin-top:0">
+          <button class="btn btn-sm btn-ghost" id="queueRefresh">Refresh</button>
+        </div>
+        <div id="queueList" class="rowlist"></div>
+      </div>
+    </section>
+
+    <!-- review -->
+    <section class="view" data-view="review">
+      <div class="app-head"><h1>Review inbox</h1></div>
+      <p class="app-sub">Detections the app refused to publish on its own, with the evidence it based that on. Approving one marks it human-reviewed; a later detector run can never silently overwrite your decision.</p>
+      <div class="dcard">
+        <div class="field" style="max-width:320px">
+          <label for="reviewer">Your name</label>
+          <div class="help">Required — every decision is attributed.</div>
+          <input type="text" id="reviewer" autocomplete="name" />
+        </div>
+        <div class="note" id="reviewNote"></div>
+      </div>
+      <div id="reviewList" class="rowlist"></div>
+    </section>
+
+    <!-- calibration -->
+    <section class="view" data-view="calibration">
+      <div class="app-head"><h1>Calibration</h1></div>
+      <p class="app-sub">Broadcast layouts are worked out automatically. When one cannot reach production confidence, drag the boxes here instead — no files to edit.</p>
+      <div class="dcard">
+        <h2>Installed layouts</h2>
+        <div id="layoutList" class="rowlist"></div>
+      </div>
+      <div class="dcard" id="editorCard" style="display:none">
+        <h2>Layout editor — <span id="editorName"></span></h2>
+        <p class="hint">Drag a box to move it, drag its corner to resize. Arrow keys nudge by one pixel, with Shift by ten. Saving takes a backup first and records the edit against your name.</p>
+        <div class="calwrap">
+          <div class="calstage" id="calStage">
+            <canvas id="calCanvas" width="1280" height="720"></canvas>
+          </div>
+          <div>
+            <div class="field">
+              <label for="calEditor">Your name</label>
+              <input type="text" id="calEditor" autocomplete="name" />
+            </div>
+            <div class="callist rowlist" id="calList"></div>
+            <div class="btnrow">
+              <button class="btn btn-primary" id="calSave">Save layout</button>
+              <button class="btn btn-ghost" id="calReset">Discard changes</button>
+            </div>
+            <div class="note" id="calNote"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- publish -->
+    <section class="view" data-view="publish">
+      <div class="app-head"><h1>Publishing</h1></div>
+      <p class="app-sub">The public dataset the website renders. Every publish takes a verified backup first and replaces the file atomically, so a failure mid-write can never leave a half-written dataset on the site.</p>
+      <div class="dcard">
+        <h2>Current public dataset</h2>
+        <dl class="kv" id="publishInfo"></dl>
+        <div class="btnrow">
+          <button class="btn btn-primary" id="publishExport">Regenerate public data</button>
+        </div>
+        <div class="note" id="publishNote"></div>
+        <div class="out" id="publishOut"></div>
+      </div>
+      <div class="dcard">
+        <h2>Publication history</h2>
+        <div id="publishRuns" class="rowlist"></div>
+      </div>
+    </section>
+
+    <!-- health -->
+    <section class="view" data-view="health">
+      <div class="app-head"><h1>Health &amp; repair</h1></div>
+      <p class="app-sub">Every check the setup wizard runs, any time you want it, with the same one-click fixes.</p>
+      <div class="dcard">
+        <div class="btnrow" style="margin-top:0">
+          <button class="btn btn-ghost" id="healthRefresh">Run checks</button>
+          <button class="btn btn-primary" id="healthReadiness">Run the end-to-end readiness test</button>
+        </div>
+        <div class="note" id="healthNote"></div>
+        <div class="out" id="healthOut"></div>
+        <div id="healthList" class="rowlist" style="margin-top:12px"></div>
+      </div>
+      <div class="dcard">
+        <h2>All repair actions</h2>
+        <div id="repairList" class="rowlist"></div>
+      </div>
+    </section>
+
+    <!-- storage -->
+    <section class="view" data-view="storage">
+      <div class="app-head"><h1>Storage</h1></div>
+      <p class="app-sub">Only finished source video is ever deleted. Evidence crops, reports, quarantined detections, databases and backups are never pruned.</p>
+      <div class="dcard">
+        <div class="statusbar" id="storageStats"></div>
+        <div id="storageAreas" class="rowlist"></div>
+      </div>
+      <div class="dcard">
+        <h2>Cleanup plan</h2>
+        <p class="hint">What a cleanup would remove right now, and why.</p>
+        <div id="prunePlan" class="rowlist"></div>
+        <div class="btnrow">
+          <button class="btn btn-primary" id="pruneRun">Free up space now</button>
+        </div>
+        <div class="note" id="storageNote"></div>
+      </div>
+    </section>
+
+    <!-- backups -->
+    <section class="view" data-view="backups">
+      <div class="app-head"><h1>Backups</h1></div>
+      <p class="app-sub">A snapshot is taken automatically before every publish and every layout edit. Restoring one saves the current state first, so a rollback is itself reversible.</p>
+      <div class="dcard">
+        <div class="btnrow" style="margin-top:0">
+          <button class="btn btn-primary" id="backupCreate">Take a backup now</button>
+        </div>
+        <div class="note" id="backupNote"></div>
+        <div id="backupList" class="rowlist" style="margin-top:12px"></div>
+      </div>
+    </section>
+
+    <!-- updates -->
+    <section class="view" data-view="updates">
+      <div class="app-head"><h1>Updates</h1></div>
+      <p class="app-sub">Updates are checked, downloaded and verified against their published checksum. Nothing installs itself — you see the installer.</p>
+      <div class="dcard">
+        <dl class="kv" id="updateInfo"></dl>
+        <div class="btnrow">
+          <button class="btn btn-ghost" id="updateCheck">Check now</button>
+          <button class="btn btn-primary" id="updateDownload" disabled>Download &amp; verify</button>
+          <button class="btn btn-primary" id="updateApply" disabled>Install</button>
+        </div>
+        <div class="note" id="updateNote"></div>
+      </div>
+    </section>
+
+    <!-- credentials -->
+    <section class="view" data-view="credentials">
+      <div class="app-head"><h1>Credentials</h1></div>
+      <p class="app-sub">Keys are stored through Windows and encrypted for your Windows account. No page, log or export ever shows a value — this one included.</p>
+      <div class="dcard">
+        <div id="credList"></div>
+        <div class="note" id="credNote"></div>
+      </div>
+    </section>
+
+    <!-- logs -->
+    <section class="view" data-view="logs">
+      <div class="app-head"><h1>Logs</h1></div>
+      <p class="app-sub">What the background service has been doing. Key-shaped text is redacted before it reaches this page.</p>
+      <div class="dcard">
+        <div class="btnrow" style="margin-top:0">
+          <button class="btn btn-sm btn-ghost" id="logRefresh">Refresh</button>
+        </div>
+        <div id="logList"></div>
+      </div>
+    </section>
+
+    <!-- settings -->
+    <section class="view" data-view="settings">
+      <div class="app-head"><h1>Settings</h1></div>
+      <p class="app-sub">Changes take effect on the background service's next cycle.</p>
+      <div class="dcard">
+        <div id="settingsFields"></div>
+        <div class="btnrow">
+          <button class="btn btn-primary" id="settingsSave">Save settings</button>
+          <button class="btn btn-ghost" id="openSetup">Re-run setup wizard</button>
+        </div>
+        <div class="note" id="settingsNote"></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="assets/js/desktop/api.js"></script>
+<script src="assets/js/desktop/control-room.js"></script>
+</body>
+</html>

@@ -65,6 +65,49 @@ PIPE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, PIPE_DIR)
 import db  # noqa: E402
 
+# The desktop application's own API surface (health, credentials, storage,
+# backups, updates, repair, review inbox, calibration editor). Lives in
+# desktop/owcs_desktop so the pipeline never depends on it: if the desktop
+# layer is absent, serve.py still serves the site and the pipeline API exactly
+# as before, and every /api/desktop/* route simply 404s.
+sys.path.insert(0, os.path.join(db.REPO_ROOT, "desktop"))
+try:
+    from owcs_desktop import webapi as desktop_api  # noqa: E402
+except Exception:  # pragma: no cover - source checkouts without the layer
+    class _NoDesktopApi:
+        PREFIX = "/api/desktop/"
+
+        @staticmethod
+        def handle_get(path, query=""):
+            return (503, {"ok": False, "error": "the desktop application layer "
+                                                "is not installed"})
+
+        @staticmethod
+        def handle_post(path, body):
+            return (503, {"ok": False, "error": "the desktop application layer "
+                                                "is not installed"})
+
+    desktop_api = _NoDesktopApi()  # type: ignore[assignment]
+
+
+def python_cmd() -> list[str]:
+    """The command prefix for running one of this repo's Python scripts.
+
+    Normally just the interpreter. Inside the frozen Windows application
+    there IS no separate python.exe — `sys.executable` is
+    OWCSCompTracker.exe — so every job this server starts has to re-enter
+    the application in its `--run-script` mode instead. Without this, every
+    button in the control room fails with "unrecognized arguments" once
+    installed, while working perfectly from a source checkout.
+    """
+    if getattr(sys, "frozen", False):
+        try:
+            from owcs_desktop import paths as _dpaths
+            return _dpaths.python_command()
+        except Exception:
+            return [os.path.abspath(sys.executable), "--run-script"]
+    return [sys.executable]
+
 REPO = db.REPO_ROOT
 AUTO_RUNS_PATH = os.path.join(REPO, "data", "auto_runs.json")
 SOURCES_PATH = os.path.join(REPO, "data", "sources", "video_sources.json")
@@ -266,7 +309,7 @@ def launch(cmds: list[list[str]], kind: str, label: str,
 
 # ------------------------------------------------------------ job builders
 def _py(script: str, *args: str) -> list[str]:
-    return [sys.executable, os.path.join("pipeline", script), *args]
+    return [*python_cmd(), os.path.join("pipeline", script), *args]
 
 
 def load_sources() -> list[dict]:
@@ -323,7 +366,7 @@ def build_run_cmd(p: dict) -> tuple[list[str] | None, str | None]:
 
 def _cli(*args: str) -> list[str]:
     """argv for this repo's automation CLI, honouring the test DB override."""
-    cmd = [sys.executable, os.path.join("pipeline", "automation", "cli.py")]
+    cmd = [*python_cmd(), os.path.join("pipeline", "automation", "cli.py")]
     if AUTOMATION_DB:
         cmd += ["--db", AUTOMATION_DB]
     return cmd + list(args)
@@ -435,7 +478,7 @@ def build_action_cmd(action: str, p: dict
         # downloads video, never approves anything), so no name required.
         return _cli("find-matches"), None, "scan for OWCS matches", JOB_TIMEOUT
     if action == "export-public":
-        return ([sys.executable, os.path.join("pipeline", "export_data.py"),
+        return ([*python_cmd(), os.path.join("pipeline", "export_data.py"),
                  "--public"], None, "export public data", JOB_TIMEOUT)
     if action == "intake-export":
         return _cli("intake-export", "--save"), None, \
@@ -458,7 +501,7 @@ def build_intake_cmd(p: dict) -> tuple[list[str] | None, str | None, dict | None
         parsed = ali.parse_link(url)
     except ali.LinkIntakeError as e:
         return None, f"[{e.code}] {e}", None
-    cmd = [sys.executable, os.path.join("pipeline", "automation", "cli.py")]
+    cmd = [*python_cmd(), os.path.join("pipeline", "automation", "cli.py")]
     if AUTOMATION_DB:
         cmd += ["--db", AUTOMATION_DB]
     cmd += ["convert-link", "--url", parsed["canonicalUrl"],
@@ -514,7 +557,7 @@ def _hero_report_dir(run: str) -> str:
 
 def build_test_cmds() -> list[list[str]]:
     tests = sorted(globmod.glob(os.path.join(PIPE_DIR, "test_*.py")))
-    return [[sys.executable, os.path.relpath(t, REPO)] for t in tests]
+    return [[*python_cmd(), os.path.relpath(t, REPO)] for t in tests]
 
 
 # ----------------------------------------------------------------- handler
@@ -545,6 +588,10 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
     def do_GET(self):  # noqa: N802
         path, _, query = self.path.partition("?")
+        if path.startswith(desktop_api.PREFIX):
+            handled = desktop_api.handle_get(path, query)
+            if handled is not None:
+                return self._json(*handled)
         if path == "/api/ping":
             with LOCK:
                 return self._json(200, {"ok": True,
@@ -706,6 +753,13 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         return super().do_GET()
 
     def do_POST(self):  # noqa: N802
+        if self.path.startswith(desktop_api.PREFIX):
+            body = self._read_body()
+            if body is None:
+                return self._json(400, {"error": "bad JSON body"})
+            handled = desktop_api.handle_post(self.path, body)
+            if handled is not None:
+                return self._json(*handled)
         if self.path == "/api/run":
             p = self._read_body()
             if p is None:

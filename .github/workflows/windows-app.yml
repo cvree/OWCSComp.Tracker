@@ -1,0 +1,374 @@
+# =====================================================================
+# OWCS Comp Tracker — Windows application: test, build, clean-machine verify
+# ---------------------------------------------------------------------
+# This is the workflow that proves the claims the installer makes. It runs
+# on a GitHub-hosted windows-latest runner, which is the closest thing to a
+# fresh Windows PC that CI can offer: nothing of this project is installed
+# on it, and every dependency has to come from the build.
+#
+# Three jobs:
+#
+#   test       the full offline suite on Windows. The suite is written for
+#              any platform, but path handling, subprocess quoting and the
+#              SQLite/file-locking behaviour genuinely differ there, so a
+#              Linux-only CI does not prove the Windows app works.
+#
+#   build      fetch ffmpeg/ffprobe/yt-dlp, PyInstaller, Inno Setup,
+#              checksums. build_windows.py runs the FROZEN executable's own
+#              --check before wrapping it, so a missing hidden import fails
+#              the build instead of shipping.
+#
+#   clean-install
+#              a second, untouched runner that has never seen the source:
+#              it downloads only the installer artifact, installs it
+#              SILENTLY (/VERYSILENT), and then verifies the installed
+#              application on its own terms — health checks, the real
+#              end-to-end readiness test (which builds a broadcast with the
+#              bundled ffmpeg and drives the whole pipeline over it), the
+#              control-room HTTP surface, autostart registration, and a
+#              clean uninstall. It never uses the repository's Python; if
+#              the bundle is incomplete, this job fails.
+#
+# The installer and its SHA256SUMS are uploaded as artifacts on every run,
+# and attached to the GitHub Release on a tag — which is where the
+# application's in-app updater looks for them.
+# =====================================================================
+name: windows-app
+
+on:
+  # No `paths:` filter on push. A tag push is what produces a release, and
+  # GitHub evaluates a paths filter against the tagged commit's own diff —
+  # which would silently skip the release build whenever the tag landed on a
+  # commit that happened not to touch these directories. Building main and
+  # every v* tag unconditionally is the cost of never missing a release.
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+    paths:
+      - "desktop/**"
+      - "packaging/**"
+      - "pipeline/**"
+      - "assets/js/desktop/**"
+      - "assets/css/desktop.css"
+      - "control-room.html"
+      - "setup.html"
+      - ".github/workflows/windows-app.yml"
+  workflow_dispatch:
+    inputs:
+      run_clean_install:
+        description: "Run the clean-machine install verification"
+        type: boolean
+        default: true
+
+# Building the installer is expensive; one run per ref is enough and a
+# superseded push should not queue behind its own predecessor.
+concurrency:
+  group: windows-app-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  PYTHON_VERSION: "3.12"
+
+jobs:
+  # ------------------------------------------------------------- tests
+  test:
+    name: Test suite on Windows
+    runs-on: windows-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install ffmpeg (the suite's video stages need it)
+        run: choco install ffmpeg -y --no-progress
+
+      - name: Run every test suite
+        shell: pwsh
+        run: |
+          $failed = @()
+          $passed = 0
+          Get-ChildItem pipeline/test_*.py | ForEach-Object {
+            Write-Host "=== $($_.Name)"
+            python $_.FullName
+            if ($LASTEXITCODE -ne 0) { $failed += $_.Name } else { $passed++ }
+          }
+          Write-Host "`n$passed passed, $($failed.Count) failed"
+          if ($failed.Count -gt 0) {
+            Write-Host "FAILED: $($failed -join ', ')"
+            exit 1
+          }
+
+      - name: Packaging + reproducibility gate
+        run: python pipeline/check_packaging.py
+
+  # ------------------------------------------------------------- build
+  build:
+    name: Build the installer
+    runs-on: windows-latest
+    needs: test
+    timeout-minutes: 60
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      installer: ${{ steps.build.outputs.installer }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+
+      - name: Install build dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller==6.11.1 pillow pystray
+
+      - name: Read the application version
+        id: version
+        shell: pwsh
+        run: |
+          $v = python -c "import sys; sys.path.insert(0,'desktop'); import owcs_desktop; print(owcs_desktop.__version__)"
+          Write-Host "version=$v"
+          "version=$v" >> $env:GITHUB_OUTPUT
+
+      - name: Install Inno Setup
+        run: choco install innosetup -y --no-progress
+
+      - name: Build (vendor, PyInstaller, verify the frozen exe, installer)
+        id: build
+        shell: pwsh
+        run: |
+          python packaging/build_windows.py
+          $exe = Get-ChildItem dist/installer/*.exe | Select-Object -First 1
+          "installer=$($exe.Name)" >> $env:GITHUB_OUTPUT
+
+      - name: Upload the installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-installer
+          path: |
+            dist/installer/*.exe
+            dist/installer/SHA256SUMS
+          if-no-files-found: error
+          retention-days: 30
+
+  # ----------------------------------------------- clean-machine verify
+  clean-install:
+    name: Clean-machine install + end-to-end verification
+    runs-on: windows-latest
+    needs: build
+    timeout-minutes: 60
+    if: >-
+      github.event_name != 'workflow_dispatch' ||
+      inputs.run_clean_install
+    steps:
+      # DELIBERATELY NO CHECKOUT of the application source, and no
+      # setup-python. This runner gets the installer and nothing else, which
+      # is the whole point: anything the app needs must be inside it.
+      - name: Download the installer
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-installer
+          path: installer
+
+      - name: Show what this machine does NOT have
+        shell: pwsh
+        run: |
+          foreach ($tool in @("python","ffmpeg","ffprobe","yt-dlp")) {
+            $found = Get-Command $tool -ErrorAction SilentlyContinue
+            if ($found) { Write-Host "$tool -> $($found.Source)" }
+            else        { Write-Host "$tool -> not installed" }
+          }
+
+      - name: Verify the published checksum before running anything
+        shell: pwsh
+        run: |
+          $sums = Get-Content installer/SHA256SUMS
+          $exe = Get-ChildItem installer/*.exe | Select-Object -First 1
+          $actual = (Get-FileHash $exe.FullName -Algorithm SHA256).Hash.ToLower()
+          $expected = ($sums | Where-Object { $_ -match [regex]::Escape($exe.Name) }) -split '\s+' | Select-Object -First 1
+          Write-Host "expected $expected"
+          Write-Host "actual   $actual"
+          if ($actual -ne $expected) { throw "the installer does not match its published checksum" }
+
+      - name: Install silently (one file, no prompts)
+        shell: pwsh
+        run: |
+          $exe = Get-ChildItem installer/*.exe | Select-Object -First 1
+          $dir = "$env:LOCALAPPDATA\OWCSCompTracker-Test"
+          # /VERYSILENT is the unattended path; a real user double-clicks and
+          # gets the wizard. Tasks are named so autostart registration is
+          # exercised exactly as the checkbox would.
+          $p = Start-Process -FilePath $exe.FullName `
+            -ArgumentList "/VERYSILENT","/SUPPRESSMSGBOXES","/NORESTART","/DIR=$dir","/TASKS=startupicon","/LOG=$env:RUNNER_TEMP\install.log" `
+            -Wait -PassThru
+          Write-Host "installer exit code: $($p.ExitCode)"
+          if ($p.ExitCode -ne 0) {
+            Get-Content "$env:RUNNER_TEMP\install.log" -Tail 60
+            throw "the silent install failed"
+          }
+          "OWCS_APP_DIR=$dir" >> $env:GITHUB_ENV
+
+      - name: The installed application exists and reports its version
+        shell: pwsh
+        run: |
+          $exe = "$env:OWCS_APP_DIR\OWCSCompTracker.exe"
+          if (-not (Test-Path $exe)) { throw "the application was not installed at $exe" }
+          $size = (Get-ChildItem $env:OWCS_APP_DIR -Recurse -File | Measure-Object Length -Sum).Sum
+          Write-Host "installed size: $([math]::Round($size/1MB)) MB"
+          & $exe --version
+          if ($LASTEXITCODE -ne 0) { throw "--version failed" }
+
+      - name: Autostart was registered
+        shell: pwsh
+        run: |
+          $entry = Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name OWCSCompTracker -EA SilentlyContinue
+          if (-not $entry) { throw "the startup entry was not created" }
+          Write-Host "Run key: $($entry.OWCSCompTracker)"
+
+      - name: Health checks pass with nothing else installed
+        shell: pwsh
+        run: |
+          & "$env:OWCS_APP_DIR\OWCSCompTracker.exe" --check
+          if ($LASTEXITCODE -ne 0) {
+            throw "the installed application reports failing health checks on a clean machine"
+          }
+
+      - name: The real end-to-end readiness test, using only bundled tools
+        shell: pwsh
+        timeout-minutes: 30
+        run: |
+          & "$env:OWCS_APP_DIR\OWCSCompTracker.exe" --readiness
+          if ($LASTEXITCODE -ne 0) {
+            throw "the installed application could not process a broadcast end to end"
+          }
+
+      - name: The control room serves, and the background service runs
+        shell: pwsh
+        run: |
+          $exe = "$env:OWCS_APP_DIR\OWCSCompTracker.exe"
+          $server = Start-Process -FilePath $exe -ArgumentList "--control-room","--port","8757" -PassThru
+          try {
+            $ok = $false
+            foreach ($i in 1..40) {
+              Start-Sleep -Seconds 2
+              try {
+                $ping = Invoke-RestMethod "http://127.0.0.1:8757/api/ping" -TimeoutSec 5
+                if ($ping.ok) { $ok = $true; break }
+              } catch { }
+            }
+            if (-not $ok) { throw "the control room never answered on 127.0.0.1:8757" }
+
+            $overview = Invoke-RestMethod "http://127.0.0.1:8757/api/desktop/overview" -TimeoutSec 20
+            Write-Host "version=$($overview.version) health.ok=$($overview.health.ok)"
+            if (-not $overview.health.ok) { throw "the installed app reports failing health over its API" }
+
+            foreach ($page in @("control-room.html","setup.html","index.html")) {
+              $r = Invoke-WebRequest "http://127.0.0.1:8757/$page" -TimeoutSec 20
+              if ($r.StatusCode -ne 200) { throw "$page did not serve" }
+              Write-Host "$page served ($($r.RawContentLength) bytes)"
+            }
+
+            # The service is a separate process: starting it and then killing
+            # the control room must leave it running. That is the "closing the
+            # window does not stop processing" claim, actually tested.
+            Invoke-RestMethod "http://127.0.0.1:8757/api/desktop/worker/start" -Method Post -Body "{}" -ContentType "application/json" -TimeoutSec 30 | Out-Null
+            Start-Sleep -Seconds 12
+            $beat = Invoke-RestMethod "http://127.0.0.1:8757/api/desktop/overview" -TimeoutSec 20
+            if (-not $beat.worker.running) { throw "the background service did not start" }
+            Write-Host "background service pid $($beat.worker.heartbeat.pid) is running"
+          } finally {
+            if (-not $server.HasExited) { Stop-Process -Id $server.Id -Force -EA SilentlyContinue }
+          }
+
+      - name: Processing survives the control room closing
+        shell: pwsh
+        run: |
+          # The control room was just killed. The service is a different
+          # process and must still be alive and heart-beating.
+          Start-Sleep -Seconds 8
+          $beatFile = "$env:LOCALAPPDATA\OWCS Comp Tracker\state\supervisor.heartbeat.json"
+          if (-not (Test-Path $beatFile)) { throw "no heartbeat file at $beatFile" }
+          $beat = Get-Content $beatFile | ConvertFrom-Json
+          $proc = Get-Process -Id $beat.pid -EA SilentlyContinue
+          if (-not $proc) { throw "the background service died with the control room window" }
+          Write-Host "service pid $($beat.pid) still running after the UI closed"
+          & "$env:OWCS_APP_DIR\OWCSCompTracker.exe" --stop-service
+
+      - name: One-click repair actions run against the installed app
+        shell: pwsh
+        run: |
+          $exe = "$env:OWCS_APP_DIR\OWCSCompTracker.exe"
+          foreach ($action in @("repair.databases","repair.storage","repair.autostart")) {
+            Write-Host "=== $action"
+            & $exe --repair $action
+            if ($LASTEXITCODE -ne 0) { throw "$action failed" }
+          }
+
+      - name: Uninstall cleanly
+        shell: pwsh
+        run: |
+          $uninst = Get-ChildItem "$env:OWCS_APP_DIR\unins*.exe" | Select-Object -First 1
+          if (-not $uninst) { throw "no uninstaller was installed" }
+          $p = Start-Process -FilePath $uninst.FullName `
+            -ArgumentList "/VERYSILENT","/SUPPRESSMSGBOXES","/NORESTART" -Wait -PassThru
+          Start-Sleep -Seconds 5
+          if ($p.ExitCode -ne 0) { throw "uninstall exited $($p.ExitCode)" }
+          if (Test-Path "$env:OWCS_APP_DIR\OWCSCompTracker.exe") { throw "the application was left behind" }
+          $entry = Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name OWCSCompTracker -EA SilentlyContinue
+          if ($entry) { throw "the startup entry survived uninstall" }
+          Write-Host "uninstalled cleanly, startup entry removed"
+
+      - name: Upload the install log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: clean-install-log
+          path: ${{ runner.temp }}/install.log
+          if-no-files-found: ignore
+
+  # ----------------------------------------------------------- release
+  release:
+    name: Attach the installer to the release
+    runs-on: ubuntu-latest
+    needs: [build, clean-install]
+    if: startsWith(github.ref, 'refs/tags/v')
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: windows-installer
+          path: dist
+
+      - name: Publish
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/*.exe
+            dist/SHA256SUMS
+          fail_on_unmatched_files: true
+          body: |
+            Windows installer for OWCS Comp Tracker ${{ needs.build.outputs.version }}.
+
+            Verified on a clean `windows-latest` runner with no Python,
+            ffmpeg or yt-dlp installed: silent install, health checks, the
+            full end-to-end readiness test, the control-room API, background
+            service survival, the repair actions and a clean uninstall.
+
+            Verify your download against `SHA256SUMS` before running it.

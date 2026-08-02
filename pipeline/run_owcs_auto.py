@@ -35,7 +35,21 @@ import video_ingest as vi  # noqa: E402
 import download_vod_clip as dvc  # noqa: E402
 import preflight as pf  # noqa: E402
 
-DEFAULT_LAYOUT = "layouts/owcs_youtube_2026.json"
+import layout_registry as lr  # noqa: E402
+
+# The automatic default is resolved from the layouts actually installed, and
+# is only ever a CALIBRATED one. It used to be hardcoded to
+# layouts/owcs_youtube_2026.json — a documented STARTER whose rectangles are
+# hand-guessed — so every run that did not pass --layout ran detection against
+# guesses. That never crashed; it produced UNKNOWNs and the occasional
+# plausible-but-wrong read, which is the worse failure. See
+# pipeline/layout_registry.py.
+def _default_layout() -> str:
+    """Resolved lazily: importing this module must not fail on a checkout
+    that has no calibrated layout yet; only *running* without one should."""
+    return lr.default_layout()
+
+
 AUTO_RUNS_PATH = os.path.join(db.REPO_ROOT, "data", "auto_runs.json")
 MAX_RUNS_KEPT = 20
 
@@ -625,7 +639,7 @@ def run_auto(source=None, local=None, start=0, end=None, every=30,
     # ---- resolve input --------------------------------------------------
     if local:
         mode, name, url = "local", os.path.splitext(os.path.basename(local))[0], None
-        layout_path = layout or DEFAULT_LAYOUT
+        layout_path = layout or _default_layout()
         probe_fn = probe_fn or _probe_local
     elif source:
         src = vi.find_source(sources_path, source)
@@ -635,7 +649,7 @@ def run_auto(source=None, local=None, start=0, end=None, every=30,
             raise SystemExit(f"source '{source}' is not a youtube source")
         mode, name = "youtube", source
         url = src.get("url") or src.get("vodUrl")
-        layout_path = layout or src.get("layout") or DEFAULT_LAYOUT
+        layout_path = layout or src.get("layout") or _default_layout()
         probe_fn = probe_fn or vi.probe_vod
     else:
         raise SystemExit("provide --source or --local")
@@ -897,8 +911,9 @@ def main(argv=None) -> int:
     ap.add_argument("--start", default="0", help="seconds or H:MM:SS")
     ap.add_argument("--end", required=True, help="seconds or H:MM:SS")
     ap.add_argument("--every", type=int, default=30)
-    ap.add_argument("--layout", help=f"layout json (default source layout "
-                    f"or {DEFAULT_LAYOUT})")
+    ap.add_argument("--layout", help="layout json (default: the source's own "
+                    "layout, else the calibrated default from "
+                    "pipeline/layout_registry.py)")
     ap.add_argument("--height", type=int, default=None,
                     help="clip height; default: the layout's frame_height")
     ap.add_argument("--force-clip", "--force", action="store_true",

@@ -1,0 +1,39 @@
+# PyInstaller Windows version resource for OWCSCompTracker.exe.
+#
+# Windows shows these strings in the file's Properties -> Details tab, in
+# SmartScreen prompts and in Task Manager. An executable with no version
+# resource looks anonymous, which is exactly the shape SmartScreen and most
+# antivirus heuristics distrust most.
+#
+# The version numbers are kept in step with desktop/owcs_desktop/__init__.py
+# by packaging/build_windows.py, which rewrites this file before the build.
+# pipeline/test_windows_packaging.py asserts they match.
+VSVersionInfo(
+  ffi=FixedFileInfo(
+    filevers=(1, 0, 0, 0),
+    prodvers=(1, 0, 0, 0),
+    mask=0x3f,
+    flags=0x0,
+    OS=0x40004,
+    fileType=0x1,
+    subtype=0x0,
+    date=(0, 0)
+  ),
+  kids=[
+    StringFileInfo([
+      StringTable(
+        '040904B0',
+        [StringStruct('CompanyName', 'OWCS Comp Tracker'),
+         StringStruct('FileDescription', 'OWCS Comp Tracker'),
+         StringStruct('FileVersion', '1.0.0.0'),
+         StringStruct('InternalName', 'OWCSCompTracker'),
+         StringStruct('LegalCopyright',
+                      'Independent fan project. Not affiliated with or '
+                      'endorsed by Blizzard, Overwatch, OWCS or FACEIT.'),
+         StringStruct('OriginalFilename', 'OWCSCompTracker.exe'),
+         StringStruct('ProductName', 'OWCS Comp Tracker'),
+         StringStruct('ProductVersion', '1.0.0.0')])
+    ]),
+    VarFileInfo([VarStruct('Translation', [1033, 1200])])
+  ]
+)

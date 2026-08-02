@@ -389,6 +389,74 @@ def check_reports(root: str) -> None:
             f"{rel} missing")
 
 
+def check_calibrated_default(root: str) -> None:
+    """A calibrated layout must exist, and it must be what the automatic
+    tools reach for.
+
+    `run_owcs_auto.py` and `discover_owcs_vods.py` used to default to
+    layouts/owcs_youtube_2026.json — a documented STARTER whose rectangles
+    are hand-guessed. Detection against it never crashes; it silently reads
+    whatever pixels sit under a guessed box. This gate makes the repository
+    unable to ship in that state again.
+    """
+    print("automatic layout default is calibrated:")
+    sys.path.insert(0, os.path.join(root, "pipeline"))
+    try:
+        import layout_registry as lr
+    except ImportError as exc:
+        bad(f"pipeline/layout_registry.py does not import: {exc}")
+        return
+    calibrated = lr.calibrated_layouts(os.path.join(root, "layouts"))
+    if not calibrated:
+        bad("no calibrated layout is installed — nothing can read a broadcast")
+        return
+    ok(f"{len(calibrated)} calibrated layout(s): "
+       + ", ".join(c["name"] for c in calibrated))
+    try:
+        default = lr.default_layout(os.path.join(root, "layouts"))
+    except lr.NoCalibratedLayout as exc:
+        bad(str(exc).splitlines()[0])
+        return
+    if lr.is_calibrated(os.path.join(root, default)):
+        ok(f"default layout {default} is calibrated")
+    else:
+        bad(f"default layout {default} is a starter, not a calibrated layout")
+
+    for module in ("run_owcs_auto.py", "discover_owcs_vods.py"):
+        path = os.path.join(root, "pipeline", module)
+        if not os.path.exists(path):
+            continue
+        with open(path, "r", encoding="utf-8") as f:
+            text = f.read()
+        if 'DEFAULT_LAYOUT = "layouts/' in text:
+            bad(f"{module} hardcodes a layout as its automatic default; it "
+                f"must resolve one through layout_registry so a starter can "
+                f"never be used unattended")
+        else:
+            ok(f"{module} resolves its default through layout_registry")
+
+
+def check_desktop_payload(root: str) -> None:
+    """Everything the Windows installer promises to ship must be present."""
+    print("windows application payload:")
+    sys.path.insert(0, os.path.join(root, "packaging"))
+    try:
+        import payload
+    except ImportError as exc:
+        bad(f"packaging/payload.py does not import: {exc}")
+        return
+    missing = payload.missing_required(root)
+    if missing:
+        for rel in missing:
+            bad(f"required payload missing: {rel}")
+    else:
+        ok(f"all {len(payload.PAYLOAD)} payload entries resolve")
+    for rel in ("desktop/owcs_app.py", "desktop/assets/owcs.ico",
+                "packaging/installer.iss", "packaging/owcs.spec",
+                "control-room.html", "setup.html"):
+        ok(f"{rel} present") if exists(root, rel) else bad(f"{rel} missing")
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--root", default=os.path.dirname(
@@ -398,6 +466,8 @@ def main(argv=None) -> int:
     root = os.path.abspath(args.root)
     print(f"packaging check on {root}\n")
     check_layouts(root)
+    check_calibrated_default(root)
+    check_desktop_payload(root)
     check_video_sources(root)
     check_template_coverage(root)
     check_db(root)

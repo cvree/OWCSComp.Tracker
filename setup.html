@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Setup — OWCS Comp Tracker</title>
+<meta name="robots" content="noindex" />
+<link rel="icon" href="desktop/assets/owcs.png" />
+<link rel="stylesheet" href="assets/css/style.css" />
+<link rel="stylesheet" href="assets/css/desktop.css" />
+</head>
+<body data-page="setup" data-shell="control">
+
+<div class="wiz">
+  <div class="app-brand" style="border:0;padding-bottom:18px">
+    <img src="desktop/assets/owcs.png" alt="" />
+    <b>OWCS Comp Tracker<span>First-time setup</span></b>
+  </div>
+
+  <ol class="wizsteps" id="steps">
+    <li data-step="welcome">Welcome</li>
+    <li data-step="checks">System</li>
+    <li data-step="storage">Storage</li>
+    <li data-step="keys">Keys</li>
+    <li data-step="startup">Startup</li>
+    <li data-step="test">Test run</li>
+    <li data-step="done">Finish</li>
+  </ol>
+
+  <!-- ------------------------------------------------------- welcome -->
+  <section class="wizstep active" data-step="welcome">
+    <h2>Let's get you processing broadcasts.</h2>
+    <p class="lead">
+      This takes about two minutes. Everything runs on this PC — there is no
+      account to make, no server to pay for, and nothing to install by hand.
+      Nothing you do here can be undone later from the control room.
+    </p>
+    <div class="dcard">
+      <h2>What this app does</h2>
+      <div class="rowlist">
+        <div class="row"><div class="grow"><div class="name">1 · You paste a link</div>
+          <div class="detail">A YouTube VOD or playlist, a FACEIT room, match or tournament, or a video file on this PC.</div></div></div>
+        <div class="row"><div class="grow"><div class="name">2 · It does the rest, in the background</div>
+          <div class="detail">Downloads the broadcast, works out the HUD layout by itself, tells gameplay apart from replays and desk segments, reads all ten hero portraits and tracks every swap across the map.</div></div></div>
+        <div class="row"><div class="grow"><div class="name">3 · Only proven results get published</div>
+          <div class="detail">A reading has to repeat, and clear a confidence floor, before it counts. Anything uncertain waits for you in a review inbox with the evidence attached.</div></div></div>
+      </div>
+    </div>
+    <div class="btnrow"><button class="btn btn-primary" data-next>Start setup</button></div>
+  </section>
+
+  <!-- -------------------------------------------------------- checks -->
+  <section class="wizstep" data-step="checks">
+    <h2>Checking this PC</h2>
+    <p class="lead">Everything below ships inside the application, so this
+      should pass on a machine with nothing else installed. Anything that
+      does not, you can fix right here.</p>
+    <div class="dcard">
+      <div id="checkList" class="rowlist"><div class="empty"><span class="spin"></span>Running checks…</div></div>
+      <div class="note" id="checkNote"></div>
+      <div class="btnrow">
+        <button class="btn btn-ghost" id="recheck">Run checks again</button>
+        <button class="btn btn-ghost" data-back>Back</button>
+        <button class="btn btn-primary" data-next id="checksNext">Continue</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ------------------------------------------------------- storage -->
+  <section class="wizstep" data-step="storage">
+    <h2>Where the video goes</h2>
+    <p class="lead">Broadcasts are large. The app keeps itself inside the
+      budget you set here, and deletes only source video it has already
+      finished with — never evidence, reports or results.</p>
+    <div class="dcard">
+      <div id="storageFields"></div>
+      <div class="note" id="storageNote"></div>
+      <div class="btnrow">
+        <button class="btn btn-ghost" data-back>Back</button>
+        <button class="btn btn-primary" id="saveStorage">Save and continue</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------------------------------------------------------- keys -->
+  <section class="wizstep" data-step="keys">
+    <h2>API keys <span class="pill info">optional</span></h2>
+    <p class="lead">
+      Both are optional — the app works without either. Keys are stored
+      through Windows, encrypted for your Windows account only, and are never
+      written to a settings file, a log, or anything the app publishes.
+    </p>
+    <div class="dcard">
+      <div id="keyFields"></div>
+      <div class="note" id="keyNote"></div>
+      <div class="btnrow">
+        <button class="btn btn-ghost" data-back>Back</button>
+        <button class="btn btn-primary" data-next>Continue</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ------------------------------------------------------- startup -->
+  <section class="wizstep" data-step="startup">
+    <h2>Running in the background</h2>
+    <p class="lead">The processing service is separate from this window.
+      Closing the control room never stops a job, and a reboot picks up
+      exactly where it left off.</p>
+    <div class="dcard">
+      <div id="startupFields"></div>
+      <div class="note" id="startupNote"></div>
+      <div class="btnrow">
+        <button class="btn btn-ghost" data-back>Back</button>
+        <button class="btn btn-primary" id="saveStartup">Save and continue</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------------------------------------------------------- test -->
+  <section class="wizstep" data-step="test">
+    <h2>The real test</h2>
+    <p class="lead">
+      This builds a broadcast video on this PC and runs the whole pipeline
+      over it — download bookkeeping, layout detection, gameplay
+      segmentation, hero reading, clip extraction and export. It is the same
+      end-to-end suite the project's own CI runs, not a simulation of one.
+      It takes a few minutes.
+    </p>
+    <div class="dcard">
+      <div class="btnrow" style="margin-top:0">
+        <button class="btn btn-primary" id="runTest">Run the readiness test</button>
+        <button class="btn btn-ghost" id="skipTest">Skip for now</button>
+      </div>
+      <div class="note" id="testNote"></div>
+      <div class="out" id="testOut"></div>
+      <div class="btnrow">
+        <button class="btn btn-ghost" data-back>Back</button>
+        <button class="btn btn-primary" data-next id="testNext" disabled>Continue</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------------------------------------------------------- done -->
+  <section class="wizstep" data-step="done">
+    <h2>Ready.</h2>
+    <p class="lead">The background service is running. Paste a link in the
+      control room and it will take it from there.</p>
+    <div class="dcard">
+      <div class="field">
+        <label for="setupBy">Your name <span class="pill info">for the audit trail</span></label>
+        <div class="help">Recorded against approvals and review decisions you make, so every published result says who signed it off.</div>
+        <input type="text" id="setupBy" placeholder="e.g. Connor" autocomplete="name" />
+      </div>
+      <div class="note" id="doneNote"></div>
+      <div class="btnrow">
+        <button class="btn btn-ghost" data-back>Back</button>
+        <button class="btn btn-primary" id="finish">Finish setup</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script src="assets/js/desktop/api.js"></script>
+<script src="assets/js/desktop/setup.js"></script>
+</body>
+</html>
