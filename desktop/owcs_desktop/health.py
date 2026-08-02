@@ -72,7 +72,7 @@ def binary_version(path: str) -> str:
     for flag in ("-version", "--version"):
         try:
             proc = subprocess.run([path, flag], capture_output=True, text=True,
-                                  timeout=20)
+                                  timeout=20, **paths.PIPE_TEXT)
         except (OSError, subprocess.SubprocessError):
             continue
         text = (proc.stdout or proc.stderr or "").strip()
@@ -406,7 +406,8 @@ def run_readiness_test(*, timeout: int = 1800, app: str | None = None,
         try:
             proc = runner.run(paths.python_command() + [script],
                               cwd=app, env=env,
-                              capture_output=True, text=True, timeout=timeout)
+                              capture_output=True, text=True, timeout=timeout,
+                              **paths.PIPE_TEXT)
         except subprocess.TimeoutExpired:
             results.append({"suite": rel, "label": label, "status": "timeout",
                             "detail": f"did not finish within {timeout}s"})

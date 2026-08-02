@@ -51,6 +51,7 @@ _PIPELINE_DIR = os.path.dirname(_HERE)
 REPO_ROOT = os.path.dirname(_PIPELINE_DIR)
 if _PIPELINE_DIR not in sys.path:
     sys.path.insert(0, _PIPELINE_DIR)
+import proc_text  # noqa: E402  (UTF-8 subprocess decoding)
 
 import capture  # noqa: E402
 import site_paths  # noqa: E402  (cross-drive-safe relative paths)
@@ -183,7 +184,8 @@ def extract_sample_frames(video_path: str, out_dir: str, *,
         cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
                "-ss", str(t), "-i", video_path, "-frames:v", "1", path]
         try:
-            runner.run(cmd, check=True, capture_output=True, text=True)
+            runner.run(cmd, check=True, capture_output=True, text=True,
+                       **proc_text.PIPE_TEXT)
         except Exception:  # noqa: BLE001 — one unreadable offset is not fatal
             continue
         if os.path.exists(path) and os.path.getsize(path) > 0:

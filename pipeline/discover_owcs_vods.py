@@ -32,6 +32,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import db  # noqa: E402
+import proc_text  # noqa: E402  (UTF-8 subprocess decoding)
 import video_ingest as vi  # noqa: E402
 
 DEFAULT_CHANNEL = "https://www.youtube.com/@ow_esports/streams"
@@ -65,7 +66,8 @@ def fetch_channel_entries(channel_url: str, limit: int,
     cmd = ["yt-dlp", "--flat-playlist", "--playlist-end", str(limit),
            "-J", "--no-warnings", channel_url]
     try:
-        res = runner.run(cmd, check=True, capture_output=True, text=True)
+        res = runner.run(cmd, check=True, capture_output=True, text=True,
+                         **proc_text.PIPE_TEXT)
     except FileNotFoundError:
         raise SystemExit(YTDLP_INSTALL_HINT)
     except subprocess.CalledProcessError as e:

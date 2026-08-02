@@ -27,6 +27,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+import proc_text  # noqa: E402  (UTF-8 subprocess decoding)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.dirname(HERE)
@@ -69,7 +70,7 @@ def _run(args: list[str], *, block_cv2: bool = False, timeout: float = 30,
     else:
         cmd = [sys.executable, CLI, *args]
     return subprocess.run(cmd, cwd=REPO_ROOT, capture_output=True, text=True,
-                         timeout=timeout, env=full_env)
+                         timeout=timeout, env=full_env, **proc_text.PIPE_TEXT)
 
 
 def _loaded_heavy_modules(args: list[str], *, block_cv2: bool = False) -> set[str]:
@@ -90,7 +91,8 @@ def _loaded_heavy_modules(args: list[str], *, block_cv2: bool = False) -> set[st
         f"print({marker!r} + ','.join(loaded))\n"
     )
     res = subprocess.run([sys.executable, "-c", script], cwd=REPO_ROOT,
-                        capture_output=True, text=True, timeout=30)
+                        capture_output=True, text=True, timeout=30,
+                            **proc_text.PIPE_TEXT)
     for line in res.stdout.splitlines():
         if line.startswith(marker):
             rest = line[len(marker):].strip()

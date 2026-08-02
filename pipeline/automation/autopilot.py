@@ -47,6 +47,7 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 _PIPELINE_DIR = os.path.dirname(_HERE)
 if _PIPELINE_DIR not in sys.path:
     sys.path.insert(0, _PIPELINE_DIR)
+import proc_text  # noqa: E402  (UTF-8 subprocess decoding)
 
 from . import job_store as js  # noqa: E402
 from . import link_intake as li  # noqa: E402
@@ -111,7 +112,8 @@ def _sample_segment_frames(scan_path: str, segment: dict, count: int
         cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
                "-ss", str(t), "-i", scan_path, "-frames:v", "1", path]
         try:
-            subprocess.run(cmd, check=True, capture_output=True, text=True)
+            subprocess.run(cmd, check=True, capture_output=True, text=True,
+                           **proc_text.PIPE_TEXT)
         except Exception:  # noqa: BLE001 — one bad seek is not fatal
             continue
         if os.path.exists(path):

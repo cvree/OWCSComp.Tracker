@@ -248,7 +248,7 @@ def expand_playlist(playlist_id: str, *, limit: int = 100,
         proc = runner.run(
             [ytdlp, "--flat-playlist", "-J", "--no-warnings",
              "--playlist-end", str(int(limit)), url],
-            capture_output=True, text=True, timeout=180)
+            capture_output=True, text=True, timeout=180, **paths.PIPE_TEXT)
     except (OSError, subprocess.SubprocessError) as exc:
         return {"ok": False, "error": f"could not read the playlist: {exc}"}
     if proc.returncode != 0:
@@ -372,7 +372,8 @@ def _submit_faceit_match(match_id: str, classification: dict, *,
     try:
         proc = runner.run(
             paths.python_command() + [script, "--room-url", url],
-            cwd=app, env=env, capture_output=True, text=True, timeout=600)
+            cwd=app, env=env, capture_output=True, text=True, timeout=600,
+            **paths.PIPE_TEXT)
     except (OSError, subprocess.SubprocessError) as exc:
         return {"ok": False, "error": str(exc), "classification": classification}
     output = ((proc.stdout or "") + (proc.stderr or "")).strip()

@@ -63,6 +63,7 @@ import db  # noqa: E402
 import capture  # noqa: E402
 import json  # noqa: E402
 import ytdlp_opts as yo  # noqa: E402  (stdlib-only auth/redaction/ladder policy)
+import proc_text  # noqa: E402  (UTF-8 subprocess decoding)
 
 DEFAULT_SOURCES = os.path.join(db.REPO_ROOT, "data", "sources", "video_sources.json")
 WORK_DIR = capture.WORK_DIR
@@ -217,7 +218,7 @@ def _ytdlp_dump_json(url: str, retries: int = PROBE_RETRIES,
     for attempt in range(1 + max(0, retries)):
         try:
             out = subprocess.run(cmd, check=True, capture_output=True,
-                                 text=True)
+                                 text=True, **proc_text.PIPE_TEXT)
             return json.loads(out.stdout)
         except subprocess.CalledProcessError as e:
             last = e
@@ -303,7 +304,8 @@ def _download_section_frame(url: str, offset: int, out_path: str,
            "--no-playlist", "--force-keyframes-at-cuts",
            "--download-sections", section, "-o", clip, url]
     try:
-        runner.run(cmd, check=True, capture_output=True, text=True)
+        runner.run(cmd, check=True, capture_output=True, text=True,
+                   **proc_text.PIPE_TEXT)
     except subprocess.CalledProcessError as e:
         log(f"  per-timestamp: yt-dlp failed at offset {fmt_hms(offset)}. "
             f"exact command:")
@@ -414,7 +416,8 @@ def _run_live(cmd: list[str], prefix: str, runner=subprocess,
     lines attached as .output so callers can log them.
     """
     if not hasattr(runner, "Popen"):
-        return runner.run(cmd, check=True, capture_output=True, text=True)
+        return runner.run(cmd, check=True, capture_output=True, text=True,
+                          **proc_text.PIPE_TEXT)
     import queue
     import threading
     import time
@@ -426,10 +429,11 @@ def _run_live(cmd: list[str], prefix: str, runner=subprocess,
     try:
         proc = runner.Popen(cmd, stdout=subprocess.PIPE,
                             stderr=subprocess.STDOUT, text=True, bufsize=1,
-                            **popen_kw)
+                            **proc_text.PIPE_TEXT, **popen_kw)
     except TypeError:  # a fake Popen (tests) may not accept start_new_session
         proc = runner.Popen(cmd, stdout=subprocess.PIPE,
-                            stderr=subprocess.STDOUT, text=True, bufsize=1)
+                            stderr=subprocess.STDOUT, text=True, bufsize=1,
+                            **proc_text.PIPE_TEXT)
     q: queue.Queue = queue.Queue()
 
     def _reader():
@@ -609,7 +613,7 @@ def _direct_media_url(url: str, height: int, runner=subprocess,
     cmd = ["yt-dlp", *js_runtime_args(), "-g", "-f", fmt,
            "--no-playlist", url]
     res = runner.run(cmd, check=True, capture_output=True, text=True,
-                     timeout=timeout)
+                     timeout=timeout, **proc_text.PIPE_TEXT)
     lines = [ln.strip() for ln in (res.stdout or "").splitlines()
              if ln.strip().startswith("http")]
     if not lines:
@@ -872,7 +876,8 @@ def probe_clip_valid(path: str, min_bytes: int = MIN_CLIP_BYTES,
            "-show_entries", "stream=codec_type", "-of",
            "default=nw=1:nk=1", path]
     try:
-        res = runner.run(cmd, check=True, capture_output=True, text=True)
+        res = runner.run(cmd, check=True, capture_output=True, text=True,
+                         **proc_text.PIPE_TEXT)
     except FileNotFoundError:
         # ffprobe not installed — size check passed, don't block on this.
         return True, f"ok ({size} bytes; ffprobe unavailable, size-checked)"
@@ -895,7 +900,8 @@ def probe_clip_resolution(path: str, runner=subprocess) -> dict | None:
            "-show_entries", "format=duration",
            "-of", "json", path]
     try:
-        res = runner.run(cmd, check=True, capture_output=True, text=True)
+        res = runner.run(cmd, check=True, capture_output=True, text=True,
+                         **proc_text.PIPE_TEXT)
         data = json.loads(getattr(res, "stdout", "") or "{}")
         stream = (data.get("streams") or [{}])[0]
         w, h = stream.get("width"), stream.get("height")
@@ -1375,7 +1381,8 @@ def _extract_frame_local(clip_path: str, offset: int, clip_start: int,
     cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
            "-ss", str(local_t), "-i", clip_path, "-frames:v", "1", out_path]
     try:
-        runner.run(cmd, check=True, capture_output=True, text=True)
+        runner.run(cmd, check=True, capture_output=True, text=True,
+                   **proc_text.PIPE_TEXT)
     except subprocess.CalledProcessError as e:
         log(f"local-window: ffmpeg frame extract failed at offset "
             f"{fmt_hms(offset)}. exact command:")

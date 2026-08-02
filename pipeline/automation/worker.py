@@ -30,6 +30,7 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 _PIPELINE_DIR = os.path.dirname(_HERE)
 if _PIPELINE_DIR not in sys.path:
     sys.path.insert(0, _PIPELINE_DIR)
+import proc_text  # noqa: E402  (UTF-8 subprocess decoding)
 
 # `video_ingest`/`download_vod_clip` transitively import cv2 (via
 # capture.py). NEVER import them at module level — this module must stay
@@ -115,7 +116,7 @@ def tool_version(tool: str, *, runner=subprocess) -> str | None:
     for flag in ("--version", "-version"):
         try:
             res = runner.run([tool, flag], capture_output=True, text=True,
-                             timeout=15)
+                             timeout=15, **proc_text.PIPE_TEXT)
             out = (res.stdout or res.stderr or "").strip().splitlines()
             if out:
                 return out[0][:200]
@@ -818,7 +819,7 @@ def check_gh_auth(*, runner=subprocess, which=shutil.which) -> dict:
                 "detail": "gh CLI not found on PATH"}
     try:
         res = runner.run(["gh", "auth", "status"], capture_output=True,
-                         text=True, timeout=15)
+                         text=True, timeout=15, **proc_text.PIPE_TEXT)
         text = _redact((res.stdout or "") + (res.stderr or ""))
         return {"installed": True, "authenticated": res.returncode == 0,
                 "detail": text.strip()[:500]}

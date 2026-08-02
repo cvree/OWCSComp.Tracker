@@ -39,6 +39,7 @@ REPO = os.path.dirname(HERE)
 PACKAGING = os.path.join(REPO, "packaging")
 sys.path.insert(0, PACKAGING)
 sys.path.insert(0, os.path.join(REPO, "desktop"))
+import proc_text  # noqa: E402  (UTF-8 subprocess decoding)
 
 import payload  # noqa: E402
 import owcs_desktop  # noqa: E402
@@ -120,7 +121,8 @@ class TestIcon(unittest.TestCase):
         about what the application looks like."""
         result = subprocess.run(
             [sys.executable, os.path.join(REPO, "desktop", "build_icon.py"),
-             "--check"], capture_output=True, text=True, cwd=REPO)
+             "--check"], capture_output=True, text=True, cwd=REPO,
+                 **proc_text.PIPE_TEXT)
         self.assertEqual(result.returncode, 0,
                          result.stdout + result.stderr)
 

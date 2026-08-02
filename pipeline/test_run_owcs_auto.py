@@ -356,7 +356,7 @@ def main():
 
     class CmdRunner:  # fake without Popen: captures cmd, creates -o file
         def __init__(self): self.cmds = []
-        def run(self, cmd, check=True, capture_output=True, text=True):
+        def run(self, cmd, check=True, capture_output=True, text=True, **kw):
             self.cmds.append(cmd)
             out = cmd[cmd.index("-o") + 1]
             os.makedirs(os.path.dirname(out), exist_ok=True)
@@ -390,7 +390,7 @@ def main():
 
     print("yt-dlp ext-append rename fix (clip.mp4.webm -> clip.mp4):")
     class ExtRunner(CmdRunner):
-        def run(self, cmd, check=True, capture_output=True, text=True):
+        def run(self, cmd, check=True, capture_output=True, text=True, **kw):
             self.cmds.append(cmd)
             out = cmd[cmd.index("-o") + 1]
             os.makedirs(os.path.dirname(out), exist_ok=True)
@@ -546,7 +546,7 @@ def main():
 
     class OnlyRun:  # fake runner without Popen -> old captured path
         def __init__(self): self.cmds = []
-        def run(self, cmd, check=True, capture_output=True, text=True):
+        def run(self, cmd, check=True, capture_output=True, text=True, **kw):
             self.cmds.append(cmd)
             import types
             return types.SimpleNamespace(returncode=0, stdout="", stderr="")

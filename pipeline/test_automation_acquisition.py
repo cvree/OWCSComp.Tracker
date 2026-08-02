@@ -23,6 +23,7 @@ import unittest
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
+import proc_text  # noqa: E402  (UTF-8 subprocess decoding)
 
 import video_ingest as vi  # noqa: E402
 from automation import job_store as js  # noqa: E402
@@ -335,7 +336,8 @@ class TestRealDownloadResumeAndProxy(unittest.TestCase):
                 if cmd[0] == "yt-dlp":
                     raise AssertionError("must not re-download a complete file")
                 return subprocess.run(cmd, capture_output=True, text=True,
-                                      check=kw.get("check", False))
+                                      check=kw.get("check", False),
+                                                   **proc_text.PIPE_TEXT)
         res = vi.download_full_video("https://youtu.be/x", out,
                                      runner=NeverRunner())
         self.assertTrue(res["reused"])
@@ -361,7 +363,8 @@ class TestRealDownloadResumeAndProxy(unittest.TestCase):
                         stderr = ""
                     return R()
                 return subprocess.run(cmd, capture_output=True, text=True,
-                                      check=kw.get("check", False))
+                                      check=kw.get("check", False),
+                                                   **proc_text.PIPE_TEXT)
         res = vi.download_full_video("https://youtu.be/x", out,
                                      runner=FakeYtDlp())
         self.assertTrue(res["resumed"])

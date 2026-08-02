@@ -37,6 +37,7 @@ _PIPELINE_DIR = os.path.dirname(_HERE)
 REPO_ROOT = os.path.dirname(_PIPELINE_DIR)
 if _PIPELINE_DIR not in sys.path:
     sys.path.insert(0, _PIPELINE_DIR)
+import proc_text  # noqa: E402  (UTF-8 subprocess decoding)
 
 import site_paths  # noqa: E402  (cross-drive-safe relative paths)
 
@@ -121,7 +122,8 @@ def regenerate_and_validate_export(*, repo_root: str = REPO_ROOT,
     pipeline_dir = os.path.join(repo_root, "pipeline")
     export_script = os.path.join(pipeline_dir, "export_data.py")
     export_res = runner.run([sys.executable, export_script, "--public"],
-                            cwd=repo_root, capture_output=True, text=True)
+                            cwd=repo_root, capture_output=True, text=True,
+                                **proc_text.PIPE_TEXT)
     if export_res.returncode != 0:
         raise PublishRefusal("export_validation_failed",
                              f"export_data.py --public failed:\n"
@@ -138,7 +140,8 @@ def regenerate_and_validate_export(*, repo_root: str = REPO_ROOT,
     # the result so they stay visible.
     validate_script = os.path.join(pipeline_dir, "validate_data.py")
     validate_res = runner.run([sys.executable, validate_script],
-                              cwd=repo_root, capture_output=True, text=True)
+                              cwd=repo_root, capture_output=True, text=True,
+                                  **proc_text.PIPE_TEXT)
     if validate_res.returncode != 0:
         raise PublishRefusal("export_validation_failed",
                              f"validate_data.py reported ERROR(s):\n"
@@ -154,7 +157,7 @@ def run_offline_tests(test_files: list[str], *, repo_root: str = REPO_ROOT,
     failures = []
     for path in test_files:
         res = runner.run([sys.executable, path], cwd=repo_root,
-                         capture_output=True, text=True)
+                         capture_output=True, text=True, **proc_text.PIPE_TEXT)
         if res.returncode != 0:
             failures.append({"file": path, "tail": (res.stdout + res.stderr)[-1500:]})
     if failures:
@@ -167,7 +170,7 @@ def run_offline_tests(test_files: list[str], *, repo_root: str = REPO_ROOT,
 def run_packaging_check(*, repo_root: str = REPO_ROOT, runner=subprocess) -> dict:
     script = os.path.join(repo_root, "pipeline", "check_packaging.py")
     res = runner.run([sys.executable, script], cwd=repo_root,
-                     capture_output=True, text=True)
+                     capture_output=True, text=True, **proc_text.PIPE_TEXT)
     if res.returncode != 0:
         raise PublishRefusal("export_validation_failed",
                              f"check_packaging.py failed:\n{res.stdout[-2000:]}")
@@ -185,7 +188,8 @@ def scan_for_secrets(text: str) -> list[str]:
 
 def staged_media_files(*, repo_root: str = REPO_ROOT, runner=subprocess) -> list[str]:
     res = runner.run(["git", "diff", "--cached", "--name-only"],
-                     cwd=repo_root, capture_output=True, text=True)
+                     cwd=repo_root, capture_output=True, text=True,
+                         **proc_text.PIPE_TEXT)
     files = [f for f in (res.stdout or "").splitlines() if f.strip()]
     return [f for f in files if f.lower().endswith(MEDIA_EXTENSIONS)]
 
@@ -210,7 +214,8 @@ def create_publication_commit(branch: str, message: str, files: list[str], *,
     pushes. Raises PublishRefusal on any git failure so the caller can
     surface it as a refused publication rather than a half-done commit."""
     def _run(cmd):
-        res = runner.run(cmd, cwd=repo_root, capture_output=True, text=True)
+        res = runner.run(cmd, cwd=repo_root, capture_output=True, text=True,
+                         **proc_text.PIPE_TEXT)
         if res.returncode != 0:
             raise PublishRefusal("git_operation_failed",
                                  f"{' '.join(cmd)} failed: {res.stderr or res.stdout}")
@@ -219,7 +224,8 @@ def create_publication_commit(branch: str, message: str, files: list[str], *,
     _run(["git", "checkout", "-b", branch])
     _run(["git", "add", *files])
     status = runner.run(["git", "diff", "--cached", "--name-only"],
-                        cwd=repo_root, capture_output=True, text=True)
+                        cwd=repo_root, capture_output=True, text=True,
+                            **proc_text.PIPE_TEXT)
     if not (status.stdout or "").strip():
         raise PublishRefusal("export_validation_failed",
                              "nothing changed in the public export — refusing "
@@ -231,7 +237,8 @@ def create_publication_commit(branch: str, message: str, files: list[str], *,
                              f"media file(s) staged for commit: {media}")
     _run(["git", "commit", "-m", message])
     sha = runner.run(["git", "rev-parse", "HEAD"], cwd=repo_root,
-                     capture_output=True, text=True).stdout.strip()
+                     capture_output=True, text=True,
+                         **proc_text.PIPE_TEXT).stdout.strip()
     if push:
         _run(["git", "push", "-u", "origin", branch])
     return {"branch": branch, "commitSha": sha, "pushed": push, "secretsFound": secrets}

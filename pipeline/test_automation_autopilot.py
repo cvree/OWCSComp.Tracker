@@ -28,6 +28,7 @@ import unittest
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
+import proc_text  # noqa: E402  (UTF-8 subprocess decoding)
 from automation import autopilot as ap  # noqa: E402
 from automation import job_store as js  # noqa: E402
 from automation import locks as lk  # noqa: E402
@@ -374,7 +375,7 @@ class TestCliWiring(unittest.TestCase):
         return subprocess.run(
             [sys.executable, self.cli, "--db", self.db, *args],
             capture_output=True, text=True, timeout=120,
-            cwd=os.path.dirname(HERE))
+            cwd=os.path.dirname(HERE), **proc_text.PIPE_TEXT)
 
     def test_convert_link_offline_stops_at_source_gate(self):
         res = self.run_cli("convert-link", "--url",

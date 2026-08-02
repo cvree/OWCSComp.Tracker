@@ -48,6 +48,7 @@ WORKFLOWS_DIR = os.path.join(REPO_ROOT, ".github", "workflows")
 WORKFLOW_PATH = os.path.join(WORKFLOWS_DIR, "discovery.yml")
 if HERE not in sys.path:
     sys.path.insert(0, HERE)   # so `import export_data` resolves
+import proc_text  # noqa: E402  (UTF-8 subprocess decoding)
 
 
 def _sh(path: str) -> str:
@@ -348,7 +349,8 @@ class TestCiReproducibilityGateIsReal(unittest.TestCase):
         res = subprocess.run(
             [sys.executable, os.path.join(HERE, "export_data.py"),
              "--check", "--public"],
-            cwd=REPO_ROOT, capture_output=True, text=True)
+            cwd=REPO_ROOT, capture_output=True, text=True,
+                **proc_text.PIPE_TEXT)
         self.assertEqual(res.returncode, 0,
                          f"committed exports do not match a fresh export:\n"
                          f"{(res.stdout + res.stderr)[-3000:]}")
@@ -489,7 +491,7 @@ class TestPipefailMechanism(unittest.TestCase):
             res = subprocess.run(
                 ["bash", "-c", f"{shlex.quote(sys.executable)} -c 'import sys; print(\"partial\"); "
                               f"sys.exit(1)' | tee {_sh(out)}"],
-                capture_output=True, text=True)
+                capture_output=True, text=True, **proc_text.PIPE_TEXT)
             self.assertEqual(res.returncode, 0,
                             "this is the bug: tee's exit code hides the "
                             "failing command's real status")
@@ -503,7 +505,7 @@ class TestPipefailMechanism(unittest.TestCase):
             res = subprocess.run(
                 ["bash", "-c", f"set -euo pipefail; {shlex.quote(sys.executable)} -c 'import sys; "
                               f"print(\"partial\"); sys.exit(1)' 2>&1 | tee {_sh(out)}"],
-                capture_output=True, text=True)
+                capture_output=True, text=True, **proc_text.PIPE_TEXT)
             self.assertNotEqual(res.returncode, 0,
                                "pipefail must surface the real python failure")
 
@@ -515,7 +517,7 @@ class TestPipefailMechanism(unittest.TestCase):
                  f"set -euo pipefail; "
                  f"({shlex.quote(sys.executable)} -c 'import sys; print(\"to stderr\", file=sys.stderr)'; true) "
                  f"2>&1 | tee {_sh(out)}"],
-                capture_output=True, text=True)
+                capture_output=True, text=True, **proc_text.PIPE_TEXT)
             with open(out, encoding="utf-8") as f:
                 content = f.read()
             self.assertIn("to stderr", content)
@@ -547,7 +549,8 @@ class TestPipefailMechanism(unittest.TestCase):
                      f"--db {_sh(db_path)} coverage --window 1 2>&1 | tee {_sh(out)}; "
                      f"test -s {_sh(out)}")
             res = subprocess.run(["bash", "-c", script], cwd=REPO_ROOT,
-                                capture_output=True, text=True)
+                                capture_output=True, text=True,
+                                    **proc_text.PIPE_TEXT)
             self.assertEqual(res.returncode, 0, res.stderr)
             self.assertTrue(os.path.getsize(out) > 0)
 

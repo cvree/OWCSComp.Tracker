@@ -18,6 +18,7 @@ import unittest
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
+import proc_text  # noqa: E402  (UTF-8 subprocess decoding)
 from automation import job_store as js  # noqa: E402
 from automation import models  # noqa: E402
 from automation import publish as pub  # noqa: E402
@@ -159,7 +160,8 @@ class TestDryRunPublish(PublishTestBase):
         self.assertTrue(result["ok"])
         self.assertEqual(self.store.get(job.job_key).state, sm.APPROVED)
         branches = subprocess.run(["git", "branch"], cwd=self.repo_root,
-                                  capture_output=True, text=True).stdout
+                                  capture_output=True, text=True,
+                                      **proc_text.PIPE_TEXT).stdout
         self.assertNotIn("data/publish-", branches)
 
     def test_refusal_recorded_on_job(self):
@@ -217,7 +219,8 @@ class TestRealPublish(PublishTestBase):
         self.assertTrue(result["ok"], result)
         show = subprocess.run(["git", "show", "--name-only", "--pretty=format:",
                               result["commitSha"]], cwd=self.repo_root,
-                              capture_output=True, text=True).stdout
+                              capture_output=True, text=True,
+                                  **proc_text.PIPE_TEXT).stdout
         self.assertNotIn("clip.mp4", show)
 
     def test_no_change_refuses_empty_commit(self):

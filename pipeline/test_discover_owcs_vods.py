@@ -52,7 +52,7 @@ class FakeRunner:
         self.payload = payload
         self.fail = fail                         # exception class to raise
 
-    def run(self, cmd, check=True, capture_output=True, text=True):
+    def run(self, cmd, check=True, capture_output=True, text=True, **kw):
         self.cmds.append(cmd)
         if self.fail:
             raise self.fail(cmd[0])

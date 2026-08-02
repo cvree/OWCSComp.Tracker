@@ -45,6 +45,7 @@ from . import broadcast_matching as bmatch
 from . import config as cfg
 from . import link_intake as li
 from . import job_store as js
+import proc_text  # noqa: E402  (UTF-8 subprocess decoding)
 
 SCHEMA = "matchfinder.v1"
 RSS_URL = "https://www.youtube.com/feeds/videos.xml?channel_id={cid}"
@@ -176,7 +177,8 @@ def fetch_streams_tab(channel_url: str, limit: int = DEFAULT_LIMIT,
     cmd = ["yt-dlp", "--flat-playlist", "--playlist-end", str(limit),
            "-J", "--no-warnings", url]
     try:
-        res = runner.run(cmd, capture_output=True, text=True, timeout=120)
+        res = runner.run(cmd, capture_output=True, text=True, timeout=120,
+                         **proc_text.PIPE_TEXT)
     except FileNotFoundError:
         return [], "streams-tab: yt-dlp not found on PATH"
     except Exception as exc:  # noqa: BLE001

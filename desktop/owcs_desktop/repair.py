@@ -74,7 +74,8 @@ def repair_dependencies(*, runner=subprocess) -> dict[str, Any]:
         try:
             proc = runner.run(
                 [sys.executable, "-m", "pip", "install", "-r", requirements],
-                capture_output=True, text=True, timeout=1800)
+                capture_output=True, text=True, timeout=1800,
+                **paths.PIPE_TEXT)
         except (OSError, subprocess.SubprocessError) as exc:
             return _fail(f"Could not run the dependency installer: {exc}")
         if proc.returncode != 0:

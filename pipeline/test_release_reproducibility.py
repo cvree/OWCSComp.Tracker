@@ -42,6 +42,7 @@ import unittest
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
+import proc_text  # noqa: E402  (UTF-8 subprocess decoding)
 REPO = os.path.dirname(HERE)
 
 HAVE_GIT = bool(shutil.which("git")) and os.path.isdir(os.path.join(REPO, ".git"))
@@ -240,7 +241,7 @@ class TestPackagingGateOnTheExtraction(ArchiveTestCase):
             [sys.executable, os.path.join(self.root, "pipeline",
                                           "check_packaging.py"),
              "--root", self.root],
-            capture_output=True, text=True)
+            capture_output=True, text=True, **proc_text.PIPE_TEXT)
         self.assertEqual(res.returncode, 0,
                          f"packaging failed on a fresh extraction:\n"
                          f"{res.stdout[-3000:]}")
@@ -295,7 +296,8 @@ class TestPackagingGateOnTheExtraction(ArchiveTestCase):
                                           "cli.py"),
              "--db", os.path.join(self.root, "data", "automation.sqlite"),
              "worker-doctor", "--json"],
-            capture_output=True, text=True, cwd=self.root)
+            capture_output=True, text=True, cwd=self.root,
+                **proc_text.PIPE_TEXT)
         # Exit code reflects READINESS (a missing yt-dlp is a legitimate
         # not-ready), so the assertion is on the report, not the status.
         report = json.loads(res.stdout)
@@ -312,7 +314,8 @@ class TestPackagingGateOnTheExtraction(ArchiveTestCase):
         res = subprocess.run(
             [sys.executable, os.path.join(self.root, "pipeline", "automation",
                                           "cli.py"), "--help"],
-            capture_output=True, text=True, cwd=self.root)
+            capture_output=True, text=True, cwd=self.root,
+                **proc_text.PIPE_TEXT)
         self.assertEqual(res.returncode, 0, res.stderr)
         for cmd in ("ingest-link", "link-status", "approve-source",
                     "resolve-layout", "approve-layout", "propose-identity",
@@ -330,7 +333,8 @@ class TestPackagingGateOnTheExtraction(ArchiveTestCase):
                  "ingest-link", "--url",
                  "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
                  "--no-metadata", "--json"],
-                capture_output=True, text=True, cwd=self.root)
+                capture_output=True, text=True, cwd=self.root,
+                    **proc_text.PIPE_TEXT)
             self.assertEqual(res.returncode, 0, res.stderr)
             out = json.loads(res.stdout)
             self.assertEqual(out["videoId"], "dQw4w9WgXcQ")
@@ -353,7 +357,8 @@ class TestKnownDetectionReproducesFromTheExtraction(ArchiveTestCase):
         if not os.path.exists(script):
             self.skipTest("detection regression suite not in the archive")
         res = subprocess.run([sys.executable, script],
-                             capture_output=True, text=True, cwd=self.root)
+                             capture_output=True, text=True, cwd=self.root,
+                                 **proc_text.PIPE_TEXT)
         self.assertEqual(res.returncode, 0,
                          f"a known detection did not reproduce from a clean "
                          f"extraction:\n{(res.stdout + res.stderr)[-4000:]}")
@@ -500,7 +505,8 @@ class TestTheSuiteLeavesTheTreeClean(unittest.TestCase):
     def _dirty(self) -> list[str]:
         res = subprocess.run(["git", "status", "--porcelain", "--"]
                              + list(self.PROTECTED),
-                             cwd=REPO, capture_output=True, text=True)
+                             cwd=REPO, capture_output=True, text=True,
+                                 **proc_text.PIPE_TEXT)
         return [ln for ln in (res.stdout or "").splitlines() if ln.strip()]
 
     def test_the_working_tree_is_clean_before_and_after_a_test_run(self):
@@ -514,7 +520,8 @@ class TestTheSuiteLeavesTheTreeClean(unittest.TestCase):
             if not os.path.exists(script):
                 continue
             res = subprocess.run([sys.executable, script], cwd=REPO,
-                                 capture_output=True, text=True)
+                                 capture_output=True, text=True,
+                                     **proc_text.PIPE_TEXT)
             self.assertEqual(res.returncode, 0,
                              f"{name} failed:\n{(res.stdout + res.stderr)[-2000:]}")
         after = self._dirty()

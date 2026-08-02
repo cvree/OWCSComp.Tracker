@@ -41,6 +41,33 @@ if _REPO not in sys.path:
 from owcs_desktop import __version__, paths  # noqa: E402
 
 
+def _force_utf8_io() -> None:
+    """Make this process's stdout/stderr able to print any text at all.
+
+    A frozen console application on Windows gets a pipe for stdout, and
+    Python picks the ANSI code page for it — cp1252 on an English install.
+    That encoding has no U+2192, so the readiness test crashed with a
+    UnicodeEncodeError while printing its own suite label ("capture → detect")
+    *after* the pipeline had run perfectly. The user saw a machine that could
+    not process a broadcast; what actually happened is that a status line
+    could not be spelled.
+
+    Nothing may depend on the console's code page. `errors="replace"` keeps
+    that true even for a stream that genuinely cannot be reconfigured: text
+    is worth degrading, never worth crashing over.
+    """
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError, OSError):
+            # Not a reconfigurable TextIOWrapper (pythonw with no console,
+            # a redirected null device, a test double). Leave it alone.
+            pass
+
+
+_force_utf8_io()
+
+
 def _prepare() -> None:
     """Everything every mode needs: writable layout, environment, payload."""
     paths.ensure_layout()

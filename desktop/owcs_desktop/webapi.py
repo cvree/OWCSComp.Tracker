@@ -758,7 +758,8 @@ def export_public() -> dict[str, Any]:
         proc = subprocess.run(
             paths.python_command()
             + [os.path.join("pipeline", "export_data.py"), "--public"],
-            cwd=app, env=env, capture_output=True, text=True, timeout=900)
+            cwd=app, env=env, capture_output=True, text=True, timeout=900,
+            **paths.PIPE_TEXT)
     except (OSError, subprocess.SubprocessError) as exc:
         return {"ok": False, "error": mask(str(exc)), "backup": snapshot["id"]}
     if proc.returncode != 0:

@@ -27,6 +27,8 @@ import tempfile
 import unittest
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+import proc_text  # noqa: E402  (UTF-8 subprocess decoding)
 REPO_ROOT = os.path.dirname(HERE)
 CLI = os.path.join(HERE, "automation", "cli.py")
 
@@ -34,7 +36,7 @@ CLI = os.path.join(HERE, "automation", "cli.py")
 def _cli(db_path: str, *args: str, timeout: float = 30) -> subprocess.CompletedProcess:
     cmd = [sys.executable, CLI, "--db", db_path, *args]
     return subprocess.run(cmd, cwd=REPO_ROOT, capture_output=True, text=True,
-                         timeout=timeout)
+                         timeout=timeout, **proc_text.PIPE_TEXT)
 
 
 class TestSegmentCommandsUseTheAutomationDb(unittest.TestCase):
@@ -77,7 +79,8 @@ seg.store_candidates(store.con, "wiringtestvid", "m-cr-zeta-ccuf",
 store.close()
 """
         res = subprocess.run([sys.executable, "-c", script], cwd=REPO_ROOT,
-                            capture_output=True, text=True, timeout=15)
+                            capture_output=True, text=True, timeout=15,
+                                **proc_text.PIPE_TEXT)
         self.assertEqual(res.returncode, 0, res.stderr)
 
         # 3. `segment-list` (real CLI, real separate db file) must find it —
@@ -114,7 +117,8 @@ seg.store_candidates(store.con, "vidx", "m-cr-zeta-ccuf",
 store.close()
 """
         res = subprocess.run([sys.executable, "-c", script], cwd=REPO_ROOT,
-                            capture_output=True, text=True, timeout=15)
+                            capture_output=True, text=True, timeout=15,
+                                **proc_text.PIPE_TEXT)
         self.assertEqual(res.returncode, 0, res.stderr)
         rows = json.loads(_cli(self.db_path, "segment-list", "--json").stdout)
         segment_id = rows[0]["id"]

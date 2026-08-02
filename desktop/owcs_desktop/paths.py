@@ -37,6 +37,19 @@ APP_NAME = "OWCS Comp Tracker"
 #: Environment variable that relocates the entire writable data root.
 HOME_ENV = "OWCS_HOME"
 
+#: The decoding half of the UTF-8 contract `apply_environment()` sets up.
+#:
+#: `subprocess.run(..., text=True)` decodes with `locale.getencoding()`, which
+#: on Windows is the ANSI code page. A child that writes UTF-8 — every Python
+#: child, because of PYTHONIOENCODING, and ffmpeg and yt-dlp because they
+#: always do — then comes back as mojibake or, for a byte that is simply not
+#: mapped, a UnicodeDecodeError that aborts a download halfway. Spread these
+#: kwargs over every captured subprocess: `**paths.PIPE_TEXT`.
+#:
+#: `errors="replace"` is deliberate. A hero name or a video title with an
+#: unexpected byte in it must not be able to fail a job.
+PIPE_TEXT = {"encoding": "utf-8", "errors": "replace"}
+
 # --------------------------------------------------------------- app root
 _THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -292,6 +305,15 @@ def apply_environment(*, env: dict | None = None) -> dict:
     _set("OWCS_DB", content_db())
     _set("OWCS_AUTOMATION_DB", automation_db())
     _set("OWCS_MEDIA_ROOT", sub("media"))
+
+    # Every child Python process writes UTF-8, whatever the console code page
+    # is. Without this a pipeline script on an English Windows install encodes
+    # its output as cp1252 and dies on the first arrow, accent or hero name it
+    # tries to print. Set unconditionally rather than through `_set`: this is
+    # not a preference to be inherited, it is the contract the capture side
+    # below decodes against — see PIPE_TEXT.
+    env["PYTHONIOENCODING"] = "utf-8:replace"
+    applied["PYTHONIOENCODING"] = env["PYTHONIOENCODING"]
 
     # Put the vendored binaries at the FRONT of PATH so the app always uses
     # the versions it shipped with, never whatever unrelated ffmpeg happens to

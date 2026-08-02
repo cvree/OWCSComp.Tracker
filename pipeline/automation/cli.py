@@ -27,6 +27,7 @@ import sys
 _PIPELINE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if _PIPELINE_DIR not in sys.path:
     sys.path.insert(0, _PIPELINE_DIR)
+import proc_text  # noqa: E402  (UTF-8 subprocess decoding)
 
 import db as content_db  # noqa: E402  (pipeline/db.py)
 from automation import broadcast_discovery as bdisc  # noqa: E402
@@ -906,7 +907,8 @@ def si_sample_frames(scan_path: str, segment: dict, count: int
         cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
                "-ss", str(t), "-i", scan_path, "-frames:v", "1", path]
         try:
-            subprocess.run(cmd, check=True, capture_output=True, text=True)
+            subprocess.run(cmd, check=True, capture_output=True, text=True,
+                           **proc_text.PIPE_TEXT)
         except Exception:  # noqa: BLE001 — one bad seek is not fatal
             continue
         if os.path.exists(path):

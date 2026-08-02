@@ -37,6 +37,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import db  # noqa: E402
+import proc_text  # noqa: E402  (UTF-8 subprocess decoding)
 
 MIN_PY = (3, 10)
 DB_REMEDY = "python pipeline/init_db.py --with-sample"
@@ -52,7 +53,8 @@ def _tool_version(exe: str, args: list[str] | None = None,
     """(found, first-line-of-version-output)."""
     try:
         res = runner.run([exe, *(args or ["-version"])], check=True,
-                         capture_output=True, text=True, timeout=20)
+                         capture_output=True, text=True, timeout=20,
+                         **proc_text.PIPE_TEXT)
         first = ((res.stdout or res.stderr or "").strip().splitlines()
                  or ["(no output)"])[0]
         return True, first[:120]

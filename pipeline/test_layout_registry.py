@@ -29,6 +29,7 @@ import unittest
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
+import proc_text  # noqa: E402  (UTF-8 subprocess decoding)
 
 import layout_registry as lr  # noqa: E402
 
@@ -155,7 +156,7 @@ class TestPackagingGate(unittest.TestCase):
         import subprocess
         result = subprocess.run(
             [sys.executable, os.path.join(HERE, "check_packaging.py")],
-            capture_output=True, text=True, cwd=REPO)
+            capture_output=True, text=True, cwd=REPO, **proc_text.PIPE_TEXT)
         self.assertEqual(result.returncode, 0,
                          result.stdout[-3000:] + result.stderr[-2000:])
 

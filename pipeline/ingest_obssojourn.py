@@ -24,6 +24,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import db  # noqa: E402
+import proc_text  # noqa: E402  (UTF-8 subprocess decoding)
 
 SOURCES_PATH = os.path.join(db.REPO_ROOT, "data", "sources",
                             "video_sources.json")
@@ -35,7 +36,7 @@ def clip_duration(clip: str) -> float | None:
         out = subprocess.run(
             ["ffprobe", "-v", "error", "-show_entries", "format=duration",
              "-of", "default=noprint_wrappers=1:nokey=1", clip],
-            capture_output=True, text=True, timeout=30)
+            capture_output=True, text=True, timeout=30, **proc_text.PIPE_TEXT)
         return float(out.stdout.strip())
     except Exception:
         return None

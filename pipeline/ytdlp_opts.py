@@ -496,7 +496,11 @@ def is_retryable(code: str | None) -> bool:
 def _run(cmd: list[str], *, runner=subprocess, timeout: float = 20
          ) -> tuple[int, str]:
     try:
-        res = runner.run(cmd, capture_output=True, text=True, timeout=timeout)
+        # Inlined rather than `proc_text.PIPE_TEXT`: this module promises to
+        # import nothing but the stdlib, so callers that have no pipeline
+        # directory on sys.path can still read the dependency plan.
+        res = runner.run(cmd, capture_output=True, text=True, timeout=timeout,
+                         encoding="utf-8", errors="replace")
         return res.returncode, ((res.stdout or "") + (res.stderr or "")).strip()
     except (FileNotFoundError, OSError, subprocess.SubprocessError) as exc:
         return 127, f"{type(exc).__name__}: {exc}"

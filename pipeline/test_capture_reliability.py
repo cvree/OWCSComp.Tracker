@@ -145,7 +145,7 @@ def main():
             self.n = 0
 
         def run(self, cmd, check=True, capture_output=True, text=True,
-                timeout=None):
+                timeout=None, **kw):
             self.n += 1
             if self.n == 1:
                 raise subprocess.CalledProcessError(
@@ -176,7 +176,7 @@ def main():
             self.cmds = []
 
         def run(self, cmd, check=True, capture_output=True, text=True,
-                timeout=None):
+                timeout=None, **kw):
             self.cmds.append(list(cmd))
             if "-g" in cmd:
                 return types.SimpleNamespace(
@@ -208,7 +208,7 @@ def main():
     # failure of the direct path never masks the original error
     class AllFailRunner:
         def run(self, cmd, check=True, capture_output=True, text=True,
-                timeout=None):
+                timeout=None, **kw):
             raise subprocess.CalledProcessError(1, cmd, output="nope")
 
     got = None
@@ -250,7 +250,7 @@ def main():
     print("resolution probe")
 
     class ProbeRunner:
-        def run(self, cmd, check=True, capture_output=True, text=True):
+        def run(self, cmd, check=True, capture_output=True, text=True, **kw):
             return types.SimpleNamespace(returncode=0, stdout=json.dumps({
                 "streams": [{"width": 640, "height": 360,
                              "codec_name": "h264"}],
