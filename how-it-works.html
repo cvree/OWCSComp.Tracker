@@ -82,7 +82,8 @@
           replay would otherwise create a composition that never happened. Every surviving
           portrait slot is template-matched, and the detector records its best candidate, the
           runner-up and the margin between them. Too close to call returns
-          <code>UNKNOWN</code>.</p></div></li>
+          <code>UNKNOWN</code> — and so does a hero the package has no portrait for, which is
+          most of the roster today (see <a href="#limits">what we don't claim</a>).</p></div></li>
       <li><span class="hs-num mono">04</span><div>
         <h3>Human review</h3>
         <p>Proposed identities (which teams, which map, which players) and the detections
@@ -142,6 +143,16 @@
       <li><b>Coverage is small.</b> This is a young project with a handful of fully processed
         maps. Rates derived from them are honest arithmetic over a small sample — read them as
         “what happened in these maps”, not “the state of the meta”.</li>
+      <li><b>The detector does not know all 52 heroes.</b> A hero can only be recognised from
+        portraits harvested out of real broadcast footage, and the best-covered broadcast
+        package currently has templates for <b>8 of 52</b>. Those eight are validated against
+        1,861 frames that were never used to build them — 99.7% correct, zero confident wrong
+        answers — but a hero with no template is reported <code>UNKNOWN</code> and never
+        appears in a published composition. Wider coverage needs more footage, not more code.</li>
+      <li><b>Two heroes are hard to tell apart at broadcast resolution.</b> Measured rather than
+        assumed: with Juno's templates removed from the set, 38% of real Juno portraits are read
+        as Kiriko instead of <code>UNKNOWN</code>. At 35×35 pixels in greyscale they are both a
+        dark-haired figure on a light field. Every other covered hero refuses correctly.</li>
       <li><b>Series scores are not invented.</b> Where a scoreline was never imported as a
         fact, the site shows “–”.</li>
       <li><b>Timing is sample-accurate, not frame-accurate.</b> Round boundaries and swap

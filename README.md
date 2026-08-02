@@ -111,6 +111,10 @@ VOD ──► calibrate_source.py ──► layouts/<src>.json  (+ calibration s
 VOD ──► harvest_templates.py ──► templates/<src>/   (real portraits, variants)
         (--cluster, human-label once, --labels emits per-hero templates)
 
+                     ── the whole loop, one command: ──
+        python3 pipeline/template_forge.py --from-report reports/ingest/<id> \
+            --layout layouts/<id>.json --promote-to templates/<id>
+
 reports/ingest/<id>/ ──► template_evidence.py ──► labelled crops + timestamps
         (stint consensus over hundreds of agreeing frames, marked as such —
          never presented as human labelling)

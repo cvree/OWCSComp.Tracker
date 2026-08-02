@@ -493,8 +493,17 @@ def format_forge(report: dict) -> str:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(
-        description="forge a provable hero template set from real evidence")
-    ap.add_argument("--evidence", required=True, help="evidence manifest json")
+        description="forge a provable hero template set from real evidence",
+        epilog="The whole loop from a processed broadcast to a validated, "
+               "promoted template set is one command:\n"
+               "  python3 pipeline/template_forge.py "
+               "--from-report reports/ingest/<id> --layout "
+               "layouts/<id>.json --promote-to templates/<id>",
+        formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--evidence", help="evidence manifest json")
+    ap.add_argument("--from-report", metavar="DIR",
+                    help="build the evidence manifest from an ingest report "
+                         "first (reports/ingest/<id>), instead of --evidence")
     ap.add_argument("--out", required=True, help="staging template dir")
     ap.add_argument("--build-fraction", type=float,
                     default=DEFAULT_BUILD_FRACTION)
@@ -509,11 +518,29 @@ def main(argv=None) -> int:
     ap.add_argument("--json", action="store_true")
     args = ap.parse_args(argv)
 
-    manifest = te.load(args.evidence)
     layout = None
+    layout_id = None
     if args.layout:
         import capture
         layout = capture.load_layout(args.layout)
+        layout_id = os.path.splitext(os.path.basename(args.layout))[0]
+
+    if args.from_report:
+        if not layout_id:
+            ap.error("--from-report needs --layout so the evidence records "
+                     "which package it was captured with")
+        manifest = te.build_from_report(args.from_report,
+                                        layout_id=layout_id)
+        log(f"evidence: {manifest['counts']['labeled']} labelled crop(s) "
+            f"from {args.from_report} "
+            f"({manifest['counts']['excluded']} excluded with reasons)")
+        if args.evidence:
+            te.save(manifest, args.evidence)
+            log(f"evidence manifest written to {args.evidence}")
+    elif args.evidence:
+        manifest = te.load(args.evidence)
+    else:
+        ap.error("supply --evidence <manifest.json> or --from-report <dir>")
     report = forge(manifest, args.out,
                    build_fraction=args.build_fraction,
                    holdout_gap=args.holdout_gap,

@@ -166,16 +166,34 @@ broadcast.
   UNVERIFIABLE; `owcs_nd5lllwdky0` has none. They are honestly reported as
   such rather than assumed fine. Re-forging them needs their own ingest
   evidence, which does not exist in this repository.
-* **Nobody clicked the new UI.** The Hero coverage view's routes are proven
-  wired by `test_desktop_pages.py`'s dead-control checks and its data by
-  `test_desktop_api.py`, but no browser session rendered it.
+* **No Windows run.** Everything was verified on Linux (100 offline suites,
+  the packaging gate, the export reproducibility gate) and in headless
+  Chromium against a live `serve.py`. The frozen bundle was not rebuilt this
+  pass; nothing here touches the packaging or service code, but the
+  `windows-app` workflow has not run against these commits.
+
+### Verified in a real browser, not just asserted
+
+Headless Chromium against a live `pipeline/serve.py`: the **Hero coverage**
+view renders 260 grid cells across five packages, the eight validated heroes
+are green and the rest correctly amber/grey, the detector profile
+(`portrait ROI [0,0,1,0.714] · UNKNOWN below 0.6`), the leave-one-out
+false-match rate and both named confusable pairs are all shown, the
+harvest-plan button returns the real database answer, and the Overview
+header carries `HERO DETECTION 8/52 proven`. Zero console errors, zero page
+errors.
 
 ### For the next session, in priority order
 
 1. **Get one more broadcast.** Everything above is one source deep, and
-   almost every remaining limitation dissolves with a second. The path is
-   already automated end to end: `ingest_map.py` → `template_evidence.py` →
-   `template_forge.py --promote-to`.
+   almost every remaining limitation dissolves with a second. The whole loop
+   is one command once a map has been ingested:
+   ```
+   python3 pipeline/template_forge.py --from-report reports/ingest/<id> \
+       --layout layouts/<id>.json --promote-to templates/<id>
+   ```
+   It builds the evidence manifest, gates every crop, writes provenance,
+   validates on held-out frames, and promotes only the heroes that passed.
 2. **Re-measure the thresholds** against two sources before trusting 0.60.
 3. **A better `juno` template** is the whole remaining false-match story.
 4. **Re-forge `owcs_8c105lnzlam` and the root set** once they have evidence,
