@@ -322,11 +322,21 @@ def _check_supervisor() -> dict[str, Any]:
     if beat is None:
         return _check("worker.heartbeat", "Background service", WARN,
                       "Not running.", repair="repair.start-worker")
+    # Asked in this order deliberately. The service writes a last heartbeat
+    # saying `running: false` as it exits, and that record then goes stale
+    # like any other — so testing staleness first describes an orderly
+    # shutdown as "stopped or wedged", which sends the user looking for a
+    # fault that is not there. What the heartbeat SAYS outranks how old it is.
+    if not beat.get("running"):
+        return _check(
+            "worker.heartbeat", "Background service", WARN,
+            "Stopped. Start it to begin processing again.",
+            repair="repair.start-worker", **beat)
     if beat.get("stale"):
         return _check(
             "worker.heartbeat", "Background service", WARN,
             f"Last heartbeat {beat.get('ageSeconds', '?')}s ago — the service "
-            "looks stopped or wedged.",
+            "was processing and stopped answering. It looks wedged or killed.",
             repair="repair.start-worker", **beat)
     return _check("worker.heartbeat", "Background service", OK,
                   f"Running (pid {beat.get('pid')}), "

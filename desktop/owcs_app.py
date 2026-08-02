@@ -164,11 +164,16 @@ def _mode_stop_service(_args: argparse.Namespace) -> int:
     The installer runs this before replacing files: a running supervisor holds
     ffmpeg.exe and the bundled Python open, and an upgrade that tried to
     overwrite them would fail halfway through with the app in pieces.
+
+    Stopped as MAINTENANCE, so the service starts itself again afterwards. A
+    user's Pause is a preference and outlives a reboot; this is a means to an
+    end, and leaving it behind would turn "upgrade the app" into "silently
+    switch processing off".
     """
     import time
     from owcs_desktop import supervisor
 
-    supervisor.request_stop()
+    supervisor.request_stop(reason=supervisor.STOP_MAINTENANCE)
     deadline = time.time() + 45
     while time.time() < deadline:
         beat = supervisor.read_heartbeat()

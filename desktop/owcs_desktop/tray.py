@@ -286,7 +286,7 @@ class TrayApp:
         beat = svc.read_heartbeat()
         if beat is None:
             return "Service: not running"
-        if beat.get("stale"):
+        if beat.get("stale") or not svc.is_running(beat):
             return "Service: stopped"
         if beat.get("currentJob"):
             return f"Service: processing {beat['currentJob']}"

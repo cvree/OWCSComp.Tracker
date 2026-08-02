@@ -213,7 +213,9 @@ def apply_update(path: str, *, runner=subprocess) -> dict[str, Any]:
         return {"ok": False,
                 "error": "applying an update is a Windows operation; the "
                          f"verified installer is at {path}"}
-    supervisor.request_stop()
+    # Maintenance, not a pause: the installer needs the files unlocked, and
+    # the service must come back by itself once it has them.
+    supervisor.request_stop(reason=supervisor.STOP_MAINTENANCE)
     try:
         # The installer is interactive by design — the user sees exactly what
         # is being installed, and the app never replaces itself invisibly.

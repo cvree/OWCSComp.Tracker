@@ -196,27 +196,108 @@ def read_heartbeat(*, path: str | None = None) -> dict[str, Any] | None:
 
 
 # ------------------------------------------------------------- stop flag
-def request_stop(*, path: str | None = None) -> str:
-    """Ask a running supervisor to finish its current step and exit. Used by
-    the tray's Quit and by the updater before it replaces files."""
-    p = path or os.path.join(paths.sub("state"), "supervisor.stop")
+#: The user asked for processing to stop — Pause, or Quit from the tray.
+#: Survives restarts and reboots: a pause that undid itself at the next
+#: sign-in would be a pause the user could not rely on.
+STOP_USER = "user"
+#: Something is about to replace the application's files — the in-app updater,
+#: or the installer's `--stop-service`. The stop is a means to an end, and the
+#: end is a working install. Cleared automatically when the service next
+#: starts, because nobody asked for processing to be off.
+STOP_MAINTENANCE = "maintenance"
+
+
+def _stop_path(path: str | None = None) -> str:
+    return path or os.path.join(paths.sub("state"), "supervisor.stop")
+
+
+def request_stop(*, path: str | None = None, reason: str = STOP_USER) -> str:
+    """Ask a running supervisor to finish its current step and exit.
+
+    `reason` decides whether the stop outlives the process that asked for it.
+    See STOP_USER / STOP_MAINTENANCE — getting this wrong in the maintenance
+    direction means an update installs successfully and processing never
+    comes back, with nothing on screen to say why.
+    """
+    p = _stop_path(path)
     os.makedirs(os.path.dirname(p), exist_ok=True)
+    payload = {"at": _iso(), "reason": reason, "pid": os.getpid()}
     with open(p, "w", encoding="utf-8") as f:
-        f.write(_iso())
+        json.dump(payload, f, indent=2)
     return p
 
 
-def clear_stop(*, path: str | None = None) -> None:
-    p = path or os.path.join(paths.sub("state"), "supervisor.stop")
+def read_stop(*, path: str | None = None) -> dict[str, Any] | None:
+    """The stop record, or None when processing is not stopped.
+
+    Older builds wrote a bare ISO timestamp. Those are read as STOP_USER —
+    the conservative direction: an unreadable or unrecognised flag keeps
+    processing paused rather than quietly resuming it.
+    """
+    p = _stop_path(path)
     try:
-        os.unlink(p)
+        with open(p, "r", encoding="utf-8") as f:
+            raw = f.read()
+    except OSError:
+        return None
+    try:
+        doc = json.loads(raw)
+    except ValueError:
+        doc = None
+    if not isinstance(doc, dict):
+        return {"at": raw.strip(), "reason": STOP_USER, "legacy": True}
+    doc.setdefault("reason", STOP_USER)
+    return doc
+
+
+def clear_stop(*, path: str | None = None) -> None:
+    try:
+        os.unlink(_stop_path(path))
     except OSError:
         pass
 
 
 def stop_requested(*, path: str | None = None) -> bool:
-    return os.path.exists(
-        path or os.path.join(paths.sub("state"), "supervisor.stop"))
+    return os.path.exists(_stop_path(path))
+
+
+def is_running(beat: dict[str, Any] | None) -> bool:
+    """Is the background service actually processing right now?
+
+    Four callers each answered this themselves and all four answered it the
+    same wrong way: `not beat.get("stale")`. Staleness only asks whether the
+    heartbeat is RECENT. A service that stopped cleanly writes one last
+    heartbeat on its way out saying `running: false`, and for the next few
+    minutes that record is perfectly fresh — so "not stale" reported a
+    stopped service as running.
+
+    What that cost: the health page said "Running (pid 13484)" about a
+    process that had exited, and Resume answered "The background service is
+    already running" and started nothing. A button that reports success and
+    does nothing is the exact failure mode this application is not allowed
+    to have.
+
+    So: recent, AND saying it is running, AND a process that still exists.
+    `read_heartbeat()` folds the third into `stale`.
+    """
+    if not beat or beat.get("stale"):
+        return False
+    return bool(beat.get("running"))
+
+
+def resume_after_maintenance(*, path: str | None = None) -> bool:
+    """Clear a maintenance stop, leaving a user's pause alone.
+
+    Called once as the service starts. An update stops the service so its
+    files can be replaced; without this the flag is still there at the next
+    sign-in, the supervisor exits without claiming work, and the application
+    looks installed and healthy while doing nothing at all.
+    """
+    record = read_stop(path=path)
+    if record is None or record.get("reason") != STOP_MAINTENANCE:
+        return False
+    clear_stop(path=path)
+    return True
 
 
 # ------------------------------------------------------------- the engine
@@ -446,11 +527,20 @@ class Supervisor:
         None. The loop body never propagates an exception — the service is
         expected to outlive every individual failure.
         """
-        # The stop flag is NOT cleared here. "Pause processing" has to survive
-        # a restart or a reboot, or the tray's Pause would silently undo
-        # itself the next time Windows signed the user in. The flag is cleared
-        # deliberately by Resume (repair.start-worker), which is the only place
-        # that should mean "start working again".
+        # A USER's stop flag is NOT cleared here. "Pause processing" has to
+        # survive a restart or a reboot, or the tray's Pause would silently
+        # undo itself the next time Windows signed the user in. It is cleared
+        # deliberately by Resume (repair.start-worker), which is the only
+        # place that should mean "start working again".
+        #
+        # A MAINTENANCE stop is different, and telling them apart is the
+        # whole point of the reason field: the updater stops the service so
+        # the installer can replace its files. Nobody asked for processing to
+        # be off. Left in place, the flag is still there at the next sign-in
+        # and the service exits without claiming work — an application that
+        # updated successfully, reports itself healthy, and does nothing.
+        if resume_after_maintenance():
+            self._log("clearing the stop left by an update — resuming work")
         self._log(f"starting (version {SUPERVISOR_VERSION}, pid {os.getpid()})")
         self.recover()
         write_heartbeat(self.heartbeat_payload())

@@ -23,6 +23,7 @@ from __future__ import annotations
 import datetime as dt
 import json
 import os
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -166,6 +167,208 @@ class TestSupervisorLoop(TempHome):
                          "the stop request was ignored")
         supervisor.clear_stop()
         self.assertFalse(supervisor.stop_requested())
+
+    def test_a_users_pause_survives_a_restart(self):
+        """The behaviour the reason field must not break."""
+        sup, _ = self.build(jobs=[FakeJob(f"j{i}") for i in range(5)])
+        supervisor.request_stop(reason=supervisor.STOP_USER)
+        result = sup.run_forever(max_iterations=5, sleep=lambda s: None)
+        self.assertEqual(result["iterations"], 0)
+        self.assertTrue(supervisor.stop_requested(),
+                        "a user's pause must still be set after a restart")
+
+    def test_an_update_does_not_leave_processing_switched_off(self):
+        """The regression: apply_update() stops the service so the installer
+        can replace its files. If that flag is still there at the next
+        sign-in, the app is installed, healthy, and doing nothing."""
+        sup, _ = self.build(jobs=[FakeJob(f"j{i}") for i in range(5)])
+        supervisor.request_stop(reason=supervisor.STOP_MAINTENANCE)
+        result = sup.run_forever(max_iterations=5, sleep=lambda s: None)
+        self.assertFalse(supervisor.stop_requested(),
+                         "the maintenance stop outlived the update")
+        self.assertGreater(result["iterations"], 0,
+                           "the service came back but claimed no work")
+
+    def test_an_unreadable_flag_keeps_processing_paused(self):
+        """Conservative direction: garbage means paused, not resumed."""
+        path = supervisor._stop_path()
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w", encoding="utf-8") as f:
+            f.write("\x00 not json at all")
+        self.assertEqual(supervisor.read_stop()["reason"],
+                         supervisor.STOP_USER)
+        self.assertFalse(supervisor.resume_after_maintenance())
+        self.assertTrue(supervisor.stop_requested())
+
+    def test_a_flag_from_an_older_build_is_read_as_a_users_pause(self):
+        """Older builds wrote a bare ISO timestamp with no reason."""
+        path = supervisor._stop_path()
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w", encoding="utf-8") as f:
+            f.write("2026-08-02T12:00:00+00:00")
+        record = supervisor.read_stop()
+        self.assertEqual(record["reason"], supervisor.STOP_USER)
+        self.assertTrue(record.get("legacy"))
+        self.assertFalse(supervisor.resume_after_maintenance())
+
+    def test_a_cleanly_stopped_service_does_not_read_as_running(self):
+        """The heartbeat a service writes as it exits is FRESH and says
+        running:false. Judging by staleness alone called that "Running"."""
+        beat = {"pid": os.getpid(), "running": False, "stale": False}
+        self.assertFalse(supervisor.is_running(beat))
+        self.assertFalse(supervisor.is_running(None))
+        self.assertFalse(supervisor.is_running(
+            {"pid": os.getpid(), "running": True, "stale": True}))
+        self.assertTrue(supervisor.is_running(
+            {"pid": os.getpid(), "running": True, "stale": False}))
+
+    def test_resume_actually_starts_a_stopped_service(self):
+        """Resume must never answer "already running" about a dead process.
+
+        This is the shape the user forbade: a button that reports success
+        and does nothing.
+        """
+        from owcs_desktop import repair
+
+        supervisor.write_heartbeat({
+            "at": supervisor._iso(), "pid": os.getpid(),
+            "running": False, "processed": 0,
+        })
+        spawned = []
+        result = repair.repair_start_worker(
+            spawn=lambda *a, **kw: spawned.append((a, kw)))
+        self.assertTrue(result["ok"], result)
+        self.assertEqual(len(spawned), 1,
+                         "Resume reported success without starting anything")
+
+    def test_the_health_check_does_not_report_a_stopped_service_as_running(self):
+        from owcs_desktop import health
+
+        supervisor.write_heartbeat({
+            "at": supervisor._iso(), "pid": os.getpid(),
+            "running": False, "processed": 0,
+        })
+        check = health._check_supervisor()
+        self.assertEqual(check["status"], "warn", check["detail"])
+        self.assertEqual(check.get("repair"), "repair.start-worker")
+
+    def test_an_orderly_shutdown_is_not_described_as_a_fault(self):
+        """A stopped service and a wedged one need different words.
+
+        The last heartbeat a service writes says running:false, and then it
+        ages like any other — so testing staleness first sent the user
+        hunting a fault that was never there.
+        """
+        from owcs_desktop import health
+
+        old = (supervisor._utcnow() - dt.timedelta(
+            seconds=supervisor.HEARTBEAT_STALE_SECONDS + 60)).isoformat()
+
+        def put(**doc) -> None:
+            # Written directly: write_heartbeat() stamps `at` and `pid` with
+            # the here and now, which is exactly what this test must not have.
+            with open(paths.heartbeat_file(), "w", encoding="utf-8") as f:
+                json.dump(doc, f)
+
+        put(at=old, pid=0, running=False, processed=3)
+        stopped = health._check_supervisor()
+        self.assertNotIn("wedged", stopped["detail"].lower())
+        self.assertIn("stopped", stopped["detail"].lower())
+
+        # A service that WAS working and went quiet is the other case.
+        put(at=old, pid=0, running=True, currentJob="j1", processed=3)
+        wedged = health._check_supervisor()
+        self.assertIn("wedged", wedged["detail"].lower())
+
+    def test_nothing_judges_the_service_running_by_staleness_alone(self):
+        """A guard, because this was the same mistake in four places.
+
+        Each of health, repair, tray and the web API decided for itself
+        whether the service was up, and each decided it the same wrong way.
+        """
+        import ast
+
+        root = os.path.join(REPO, "desktop", "owcs_desktop")
+        offenders = []
+        for name in sorted(os.listdir(root)):
+            if not name.endswith(".py") or name == "supervisor.py":
+                continue
+            path = os.path.join(root, name)
+            with open(path, "r", encoding="utf-8") as f:
+                source = f.read()
+            lines = source.splitlines()
+            for node in ast.walk(ast.parse(source, filename=name)):
+                # `not <something>.get("stale")` used as a truth test.
+                if not isinstance(node, ast.UnaryOp) or \
+                        not isinstance(node.op, ast.Not):
+                    continue
+                call = node.operand
+                if (isinstance(call, ast.Call)
+                        and isinstance(call.func, ast.Attribute)
+                        and call.func.attr == "get"
+                        and call.args
+                        and isinstance(call.args[0], ast.Constant)
+                        and call.args[0].value == "stale"):
+                    offenders.append(
+                        f"{name}:{node.lineno}: {lines[node.lineno - 1].strip()}")
+        self.assertEqual(
+            offenders, [],
+            "a fresh heartbeat is not a running service — ask "
+            "supervisor.is_running(beat):\n  " + "\n  ".join(offenders))
+
+    def test_the_service_does_not_inherit_the_callers_streams(self):
+        """A background service holding its parent's stdout is not detached.
+
+        Two failures came out of that: anything capturing this action's
+        output blocked until the SERVICE exited, and once the parent was gone
+        the service's next print went to a pipe with no reader — a
+        BrokenPipeError inside the loop that must outlive every failure.
+        """
+        from owcs_desktop import repair
+
+        captured = {}
+        repair.repair_start_worker(
+            spawn=lambda *a, **kw: captured.update(kw))
+        self.assertEqual(captured.get("stdin"), subprocess.DEVNULL,
+                         "the service can still read the caller's stdin")
+        self.assertIsNotNone(captured.get("stdout"),
+                             "the service inherits the caller's stdout")
+        self.assertNotEqual(captured.get("stdout"), sys.stdout)
+        self.assertIsNotNone(captured.get("stderr"))
+
+    def test_a_service_started_that_way_still_leaves_a_log(self):
+        """Detaching the streams must not cost the diagnostics."""
+        from owcs_desktop import repair
+
+        captured = {}
+        repair.repair_start_worker(spawn=lambda *a, **kw: captured.update(kw))
+        stdout = captured.get("stdout")
+        if stdout is subprocess.DEVNULL:
+            self.skipTest("no writable log on this machine")
+        self.assertEqual(os.path.abspath(stdout.name),
+                         os.path.abspath(paths.supervisor_log()))
+        self.assertEqual(captured.get("stderr"), subprocess.STDOUT,
+                         "a traceback on stderr would be thrown away")
+
+    def test_the_updater_stops_for_maintenance_not_as_a_pause(self):
+        """Checked at the call site, because the default is STOP_USER and a
+        missing argument here is invisible until someone updates."""
+        import ast
+        import inspect
+
+        from owcs_desktop import updates
+        tree = ast.parse(inspect.getsource(updates.apply_update))
+        reasons = [
+            kw.value for node in ast.walk(tree)
+            if isinstance(node, ast.Call)
+            and isinstance(node.func, ast.Attribute)
+            and node.func.attr == "request_stop"
+            for kw in node.keywords if kw.arg == "reason"
+        ]
+        self.assertEqual(len(reasons), 1,
+                         "apply_update must ask for exactly one stop, with a "
+                         "reason")
+        self.assertEqual(reasons[0].attr, "STOP_MAINTENANCE")
 
 
 class TestHeartbeat(TempHome):

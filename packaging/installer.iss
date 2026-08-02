@@ -156,10 +156,24 @@ begin
     DataDir := ExpandConstant('{localappdata}\{#AppName}');
     if DirExists(DataDir) then
     begin
-      if MsgBox('Also delete your processed results, evidence, downloads and ' +
-                'settings?' + #13#10 + #13#10 + DataDir + #13#10 + #13#10 +
-                'Choose No to keep them for a future reinstall.',
-                mbConfirmation, MB_YESNO or MB_DEFBUTTON2) = IDYES then
+      { SuppressibleMsgBox, NOT MsgBox. Inno has both, and the difference is
+        the whole uninstall: MsgBox ALWAYS displays, even under /VERYSILENT
+        /SUPPRESSMSGBOXES. An unattended uninstall — which is what an upgrade,
+        a managed deployment and the clean-machine CI job all perform — then
+        stops dead on a modal dialog with nobody there to click it. It does
+        not fail; it waits forever.
+
+        SuppressibleMsgBox returns the Default argument instead of displaying
+        when message boxes are suppressed. IDNO is the right default twice
+        over: it is what the button layout already offered a human, and
+        deleting someone's processed results because a script uninstalled an
+        app is exactly the decision this installer promises never to make
+        silently. }
+      if SuppressibleMsgBox(
+           'Also delete your processed results, evidence, downloads and ' +
+           'settings?' + #13#10 + #13#10 + DataDir + #13#10 + #13#10 +
+           'Choose No to keep them for a future reinstall.',
+           mbConfirmation, MB_YESNO or MB_DEFBUTTON2, IDNO) = IDYES then
         DelTree(DataDir, True, True, True);
     end;
   end;

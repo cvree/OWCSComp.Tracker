@@ -179,6 +179,45 @@ class TestInstallerScript(unittest.TestCase):
         self.assertEqual(deltree, 1,
                          "more than one place deletes user data")
 
+    def test_an_unattended_uninstall_cannot_stop_on_a_dialog(self):
+        """Inno has MsgBox and SuppressibleMsgBox, and only one is safe here.
+
+        `MsgBox` ALWAYS displays, even under /VERYSILENT /SUPPRESSMSGBOXES.
+        An unattended uninstall — an upgrade, a managed deployment, the
+        clean-machine CI job — then stops on a modal dialog with nobody to
+        click it. It does not fail and time out quickly; it waits forever,
+        which is how this was found: the uninstall step sat at "in_progress"
+        until the job's own 60-minute limit killed it.
+
+        Parsed as code rather than grepped, because the [Code] section
+        explains this hazard in a comment that mentions MsgBox by name.
+        """
+        code = self.text.split("[Code]", 1)[-1]
+        # Strip Pascal { ... } comments before looking for calls.
+        code = re.sub(r"\{[^}]*\}", "", code, flags=re.S)
+        bare = re.findall(r"(?<![A-Za-z])MsgBox\s*\(", code)
+        self.assertEqual(
+            bare, [],
+            "MsgBox() blocks forever during a silent uninstall — use "
+            "SuppressibleMsgBox(Text, Typ, Buttons, Default) instead")
+
+    def test_the_silent_default_keeps_the_users_data(self):
+        """Suppressed, the prompt must answer No, not Yes.
+
+        The default argument is what an unattended uninstall acts on, so it
+        is the only thing standing between a scripted uninstall and someone's
+        processed broadcasts.
+        """
+        match = re.search(r"SuppressibleMsgBox\((.*?)\)\s*=\s*IDYES",
+                          self.text, re.S)
+        self.assertIsNotNone(
+            match, "the data-deletion prompt is not a SuppressibleMsgBox")
+        args = match.group(1)
+        self.assertRegex(
+            args, r",\s*IDNO\s*$",
+            "the suppressed default must be IDNO — a silent uninstall that "
+            "defaults to IDYES deletes the user's results without asking")
+
     def test_the_running_service_is_stopped_before_files_are_replaced(self):
         """A live supervisor holds ffmpeg.exe and the bundled Python open; an
         upgrade that did not stop it first would fail halfway through."""

@@ -201,7 +201,7 @@ def repair_start_worker(*, spawn: Callable[..., Any] | None = None
     from . import supervisor
 
     beat = supervisor.read_heartbeat()
-    if beat and not beat.get("stale"):
+    if supervisor.is_running(beat):
         return _ok(f"The background service is already running "
                    f"(pid {beat.get('pid')}).")
 
@@ -221,7 +221,33 @@ def repair_start_worker(*, spawn: Callable[..., Any] | None = None
                                   "close_fds": True}
         if sys.platform == "win32":  # no console window for a background service
             kwargs["creationflags"] = 0x08000000  # CREATE_NO_WINDOW
-        spawner(command, **kwargs)
+        # Detach the child's standard streams from whoever started it.
+        #
+        # `close_fds` does not cover 0/1/2 — those are inherited regardless,
+        # and a background service that keeps its parent's stdout open is not
+        # detached in the way that matters. Two things went wrong with it:
+        # anything that captured the output of this repair action waited for
+        # EOF that only arrived when the SERVICE exited, and once the parent
+        # was gone the service's next `print` was writing into a pipe with no
+        # reader — a BrokenPipeError inside the loop that is supposed to
+        # outlive every individual failure.
+        #
+        # The supervisor already keeps its own log; pointing the raw streams
+        # at the same file detaches them without losing a traceback that gets
+        # printed rather than logged.
+        log_handle = None
+        try:
+            log_handle = open(paths.supervisor_log(), "a", encoding="utf-8")
+        except OSError:
+            pass  # unwritable log is not a reason to refuse to start
+        kwargs["stdin"] = subprocess.DEVNULL
+        kwargs["stdout"] = log_handle or subprocess.DEVNULL
+        kwargs["stderr"] = subprocess.STDOUT if log_handle else subprocess.DEVNULL
+        try:
+            spawner(command, **kwargs)
+        finally:
+            if log_handle is not None:
+                log_handle.close()
     except OSError as exc:
         return _fail(f"Could not start the background service: {exc}")
     return _ok("Started the background service.")

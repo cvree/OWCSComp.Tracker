@@ -698,7 +698,7 @@ def overview() -> dict[str, Any]:
         "dataRoot": paths.data_root(),
         "frozen": paths.is_frozen(),
         "worker": {
-            "running": bool(beat and not beat.get("stale")),
+            "running": supervisor.is_running(beat),
             "heartbeat": beat,
         },
         "health": {"ok": checks["ok"], "counts": checks["counts"],
