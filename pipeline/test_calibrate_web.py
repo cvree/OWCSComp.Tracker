@@ -267,6 +267,23 @@ class TestImportPath(unittest.TestCase):
         js = read(os.path.join(REPO, "assets", "js", "desktop", "control-room.js"))
         self.assertIn("calibration/import", js)
 
+    def test_an_import_can_never_claim_pipeline_calibration(self):
+        """The safety boundary, checked from the import side.
+
+        `hud_probe` is what marks a layout production-trusted. A layout that
+        arrived from a browser must never carry one, however it got here.
+        """
+        layout = self.good_layout()
+        layout["hud_probe"] = {"chips_a": [1], "chips_b": [1]}
+        result = webapi.calibration_import(layout, name="wizard-strip-test",
+                                           importer="")
+        self.assertTrue(result["ok"], result)
+        with open(os.path.join(REPO, "layouts", "wizard-strip-test.json"),
+                  "r", encoding="utf-8") as handle:
+            saved = json.load(handle)
+        self.assertNotIn("hud_probe", saved,
+                         "an imported layout claimed pipeline calibration")
+
     def test_an_anonymous_import_is_accepted_and_recorded_as_anonymous(self):
         """Anyone may contribute a calibration, signed or not.
 
