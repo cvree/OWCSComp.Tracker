@@ -115,6 +115,15 @@ SCHEMA: dict[str, dict[str, Any]] = {
         "label": "Control room port",
         "help": "The local-only port the control room is served on.",
     },
+    "autoPublishToSite": {
+        "default": False,
+        "type": bool,
+        "label": "Publish to the website automatically",
+        "help": "When a broadcast finishes and passes every gate, upload it to "
+                "the public site without waiting to be asked. Off by default: "
+                "pushing to a public website is worth deciding once, "
+                "deliberately. Needs a GitHub token on the Credentials page.",
+    },
     "publishRepo": {
         "default": "cvree/owcscomp.tracker",
         "type": str,

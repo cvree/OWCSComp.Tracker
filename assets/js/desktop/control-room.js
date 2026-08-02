@@ -528,6 +528,8 @@
       el('div', { class: 'note bad', text: b })));
     $('publishSite').disabled = !site.ready;
 
+    $('autoPublishToggle').checked = !!site.autoPublish;
+
     const hist = $('siteHistory');
     clear(hist);
     if (!(site.history || []).length) {
@@ -543,6 +545,17 @@
       el('span', { class: 'pill ' + (h.ok ? 'ok' : 'bad'), text: h.ok ? 'ok' : 'failed' })
     ])));
   }
+
+  $('autoPublishToggle').addEventListener('change', async (ev) => {
+    const res = await D.post('settings',
+      { settings: { autoPublishToSite: ev.target.checked } });
+    note($('siteNote'), res.ok ? 'ok' : 'bad',
+      res.ok ? (ev.target.checked
+        ? 'Finished broadcasts will be published to the website automatically.'
+        : 'Automatic publishing is off. Use the button above when you want to.')
+             : (res.error || 'Could not save that setting.'));
+    if (!res.ok) ev.target.checked = !ev.target.checked;
+  });
 
   $('publishSite').addEventListener('click', async () => {
     const btn = $('publishSite');

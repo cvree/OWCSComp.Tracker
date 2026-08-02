@@ -264,6 +264,7 @@ def describe() -> dict[str, Any]:
         "hasToken": has_token,
         "files": [{k: v for k, v in f.items() if k != "body"}
                   for f in local["files"]],
+        "autoPublish": bool(Settings().get("autoPublishToSite")),
         "ready": not blockers,
         "blockers": blockers,
         "history": history(10),

@@ -496,12 +496,64 @@ class Supervisor:
             summary = (result or {}).get("stopDetail") or (result or {}).get("reason") or ""
             self._log(f"advanced {job.job_key} -> "
                       f"{(result or {}).get('state', '?')} {summary}"[:400])
-            return {"action": "advanced", "job": job.job_key, "result": result}
+            published = self._maybe_publish_site(result)
+            return {"action": "advanced", "job": job.job_key, "result": result,
+                    "site": published}
         finally:
             try:
                 store.close()
             except Exception:
                 pass
+
+    def _maybe_publish_site(self, result: dict | None) -> dict[str, Any] | None:
+        """Put a finished broadcast on the public website, if asked to.
+
+        The last step of "self-running" that was still a step: everything up
+        to PUBLISHED happened on its own, and then the dataset sat inside the
+        installation waiting for somebody to remember the Publishing page.
+
+        Deliberately narrow:
+
+          * only for a job that actually reached PUBLISHED — the state the
+            pipeline's own gates hand out, not a guess made here;
+          * only when the user has switched it on. It defaults off because
+            pushing to a public website is worth deciding once, on purpose;
+          * only when `website.describe()` says every precondition holds, so a
+            missing token is a log line rather than a stack trace;
+          * never raising. This runs inside the loop that must outlive every
+            individual failure, and a website being unreachable is not a
+            reason to stop processing video.
+        """
+        try:
+            if str((result or {}).get("state") or "") != "PUBLISHED":
+                return None
+            if not bool(self.settings.get("autoPublishToSite")):
+                return None
+
+            from . import website
+            state = website.describe()
+            if not state["ready"]:
+                self._log("auto-publish is on, but the website is not ready: "
+                          + "; ".join(state["blockers"]))
+                return None
+
+            from .webapi import export_public
+            export = export_public()
+            if not export.get("ok"):
+                self._log("auto-publish: regenerating the dataset failed, "
+                          "nothing was uploaded: "
+                          f"{str(export.get('error'))[:300]}")
+                return None
+
+            sent = website.publish(
+                by="the background service",
+                message="data: automatic publish after processing")
+            self._log("auto-publish: "
+                      + (sent.get("detail") or sent.get("error") or "")[:300])
+            return sent
+        except Exception as exc:  # the loop's contract: never raise
+            self._log(f"auto-publish failed: {type(exc).__name__}: {exc}")
+            return None
 
     # ------------------------------------------------------------ the loop
     def heartbeat_payload(self) -> dict[str, Any]:

@@ -350,6 +350,57 @@ class TestSupervisorLoop(TempHome):
         self.assertEqual(captured.get("stderr"), subprocess.STDOUT,
                          "a traceback on stderr would be thrown away")
 
+    def test_auto_publish_is_off_until_it_is_switched_on(self):
+        """Pushing to a public website is worth deciding once, on purpose."""
+        sup, _ = self.build(jobs=[FakeJob("j1")])
+        self.assertFalse(Settings().get("autoPublishToSite"))
+        self.assertIsNone(sup._maybe_publish_site({"state": "PUBLISHED"}))
+
+    def test_auto_publish_only_fires_for_a_job_that_reached_published(self):
+        """The pipeline's own gates decide what is publishable, not this."""
+        sup, _ = self.build()
+        Settings().update({"autoPublishToSite": True})
+        for state in ("DOWNLOADED", "NEEDS_REVIEW", "APPROVED", "FAILED", ""):
+            with self.subTest(state=state):
+                self.assertIsNone(sup._maybe_publish_site({"state": state}))
+
+    def test_auto_publish_says_so_rather_than_crashing_with_no_token(self):
+        sup, _ = self.build()
+        logged: list[str] = []
+        sup._log = logged.append
+        Settings().update({"autoPublishToSite": True})
+        self.assertIsNone(sup._maybe_publish_site({"state": "PUBLISHED"}))
+        self.assertTrue(any("not ready" in m for m in logged), logged)
+
+    def test_auto_publish_never_takes_the_service_down_with_it(self):
+        """It runs inside the loop that must outlive every failure."""
+        sup, _ = self.build()
+        Settings().update({"autoPublishToSite": True})
+
+        class Boom:
+            def describe(self):
+                raise RuntimeError("the internet exploded")
+
+        import owcs_desktop
+        import owcs_desktop.website  # bind the submodule attribute first
+        real = owcs_desktop.website
+        owcs_desktop.website = Boom()
+        try:
+            logged: list[str] = []
+            sup._log = logged.append
+            self.assertIsNone(sup._maybe_publish_site({"state": "PUBLISHED"}))
+            self.assertTrue(any("auto-publish failed" in m for m in logged),
+                            logged)
+        finally:
+            owcs_desktop.website = real
+
+    def test_a_normal_advance_still_reports_its_outcome(self):
+        """The publish hook must not change what process_once returns."""
+        sup, _ = self.build(jobs=[FakeJob("j1")])
+        outcome = sup.process_once()
+        self.assertEqual(outcome["action"], "advanced")
+        self.assertIsNone(outcome["site"])
+
     def test_the_updater_stops_for_maintenance_not_as_a_pause(self):
         """Checked at the call site, because the default is STOP_USER and a
         missing argument here is invisible until someone updates."""
