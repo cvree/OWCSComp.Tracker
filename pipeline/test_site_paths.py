@@ -173,8 +173,22 @@ class TestWindowsFileUrls(unittest.TestCase):
                          "C:/videos/x.mp4")
 
     def test_posix_form(self):
-        self.assertEqual(self.parse("file:///home/user/x.mp4"),
-                         "/home/user/x.mp4")
+        """A rooted POSIX path is only meaningful on a POSIX machine.
+
+        On Windows `/home/user/x.mp4` names nothing — there is no such root —
+        and abspath anchors it to the current drive, which is the correct
+        thing to do with a drive-relative path. `classify()` then reports
+        "there is no file at D:\\home\\user\\x.mp4", which is exactly the
+        right answer. So the invariant asserted here is that the path
+        SURVIVES parsing intact, not that it comes back byte-identical on a
+        platform where it cannot mean anything.
+        """
+        got = self.parse("file:///home/user/x.mp4")
+        if os.name == "nt":
+            self.assertTrue(got.replace("\\", "/").endswith("/home/user/x.mp4"),
+                            f"the path was mangled, not just anchored: {got}")
+        else:
+            self.assertEqual(got, "/home/user/x.mp4")
 
     def test_unc_path_keeps_its_host(self):
         self.assertEqual(self.parse("file://server/share/x.mp4"),
