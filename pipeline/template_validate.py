@@ -201,18 +201,22 @@ def validate(templates_dir: str, manifest: dict, *,
         _source_key(manifest.get("cropsDir")),
     } - {""}
 
-    # Even sampling for the cap, computed up front so both the positive and
-    # the contamination bookkeeping see the same set of crops.
+    # Even sampling for the cap, computed up front so both the scoring and
+    # the contamination bookkeeping see the same set of crops. Keyed by the
+    # crop's position in the manifest rather than by filename, because two
+    # slots can legitimately hold the same hero and produce distinct crops.
+    kept_indices: set[int] | None = None
     if limit_per_hero:
-        capped: dict[str, set] = {}
-        grouped: dict[str, list[dict]] = defaultdict(list)
-        for record in manifest.get("crops", []):
+        grouped: dict[str, list[int]] = defaultdict(list)
+        for i, record in enumerate(manifest.get("crops", [])):
             if record.get("hero"):
-                grouped[record["hero"]].append(record)
-        for hero, records in grouped.items():
-            capped[hero] = {id(r) for r in _spread(records, limit_per_hero)}
-    else:
-        capped = {}
+                grouped[record["hero"]].append(i)
+        kept_indices = set()
+        for hero, indices in grouped.items():
+            crops = manifest["crops"]
+            chosen = _spread([dict(crops[i], _i=i) for i in indices],
+                             limit_per_hero)
+            kept_indices.update(r["_i"] for r in chosen)
 
     per_hero: dict[str, dict] = {}
     for hero_id in sorted(files_by_hero):
@@ -235,20 +239,19 @@ def validate(templates_dir: str, manifest: dict, *,
     false_match = {"trials": 0, "unknown": 0, "matched": 0,
                    "matchedAs": Counter(), "byHero": Counter(),
                    "examples": []}
-    seen_per_hero: Counter = Counter()
     missing_crops = 0
 
-    for record in manifest.get("crops", []):
+    for index, record in enumerate(manifest.get("crops", [])):
         hero = record.get("hero")
         if not hero:
+            continue
+        if kept_indices is not None and index not in kept_indices:
             continue
         path = te.crop_path(manifest, record, repo_root=repo_root)
         if not os.path.exists(path):
             missing_crops += 1
             continue
 
-        if capped and id(record) not in capped.get(hero, ()):
-            continue
         known = hero in files_by_hero
         if known:
             entry = per_hero[hero]
@@ -264,7 +267,6 @@ def validate(templates_dir: str, manifest: dict, *,
             missing_crops += 1
             continue
         gray = cv2.cvtColor(colour, cv2.COLOR_BGR2GRAY)
-        seen_per_hero[hero] += 1
         read = detect.read_slot(gray, lib, floor=profile["floor"],
                                 min_margin=profile["minMargin"],
                                 roi=profile["roi"])
