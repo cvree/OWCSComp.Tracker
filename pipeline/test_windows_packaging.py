@@ -367,6 +367,29 @@ class TestCleanMachineWorkflow(unittest.TestCase):
             self.skipTest("PyYAML is not installed")
         self.doc = yaml.safe_load(self.text)
 
+    def test_it_checks_what_the_repairs_left_behind_not_just_their_exit_codes(self):
+        """A repair can exit 0 into a worse state than it started in.
+
+        repair.autostart did exactly that: run through the console twin — as
+        this job runs it — it re-registered OWCSCompTracker-cli.exe as the
+        sign-in command, so every later sign-in flashed a console window. It
+        exited 0 every time. The only evidence was a path inside the JSON,
+        printed and read by nobody.
+        """
+        job = self.doc["jobs"]["clean-install"]
+        repair_step = [s for s in job["steps"]
+                       if "repair" in str(s.get("name", "")).lower()]
+        self.assertTrue(repair_step, "no repair step in the clean-machine job")
+        body = repair_step[0]["run"]
+        self.assertIn("CurrentVersion\\Run", body,
+                      "the job never looks at what repair.autostart wrote")
+        self.assertIn("OWCSCompTracker-cli.exe", body,
+                      "nothing fails the job when the console twin is "
+                      "registered for startup")
+        self.assertIn("stale", body,
+                      "the job does not check the app agrees its own repaired "
+                      "startup entry is current")
+
     def test_the_clean_install_job_does_not_check_out_the_source(self):
         """The whole value of this job is that it has nothing but the
         installer. A checkout would let a missing bundled file be satisfied

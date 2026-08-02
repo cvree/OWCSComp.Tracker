@@ -350,6 +350,33 @@ jobs:
             if ($LASTEXITCODE -ne 0) { throw "$action failed" }
           }
 
+          # A repair that "succeeds" into a worse state than it started in.
+          # These repairs run through the CONSOLE twin — that is what this job
+          # does and what any support step from a terminal does — and the Run
+          # key used to be built from whichever binary was executing. So
+          # repairing autostart quietly re-registered OWCSCompTracker-cli.exe
+          # and every later sign-in flashed a console window, which is the one
+          # thing the windowed twin exists to prevent. It exited 0 throughout;
+          # the only evidence was a path in the JSON nobody was reading.
+          $entry = (Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" `
+                      -Name OWCSCompTracker).OWCSCompTracker
+          Write-Host "Run key after repair: $entry"
+          if ($entry -match "OWCSCompTracker-cli\.exe") {
+            throw "repair.autostart registered the console binary; every sign-in would flash a console window"
+          }
+          if ($entry -notmatch [regex]::Escape("$env:OWCS_APP_DIR\OWCSCompTracker.exe")) {
+            throw "repair.autostart did not register the installed windowed executable"
+          }
+
+          # And the app must now agree with itself: a health check that still
+          # reports the entry stale means the two halves compute it differently.
+          $report = & $exe --check --json | ConvertFrom-Json
+          $auto = $report.checks | Where-Object { $_.id -eq "autostart" }
+          Write-Host "autostart check: $($auto.status) — $($auto.detail)"
+          if ($auto.stale) {
+            throw "the app calls its own freshly repaired startup entry stale"
+          }
+
       - name: Uninstall cleanly
         shell: pwsh
         run: |
