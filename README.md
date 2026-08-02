@@ -111,6 +111,16 @@ VOD ──► calibrate_source.py ──► layouts/<src>.json  (+ calibration s
 VOD ──► harvest_templates.py ──► templates/<src>/   (real portraits, variants)
         (--cluster, human-label once, --labels emits per-hero templates)
 
+reports/ingest/<id>/ ──► template_evidence.py ──► labelled crops + timestamps
+        (stint consensus over hundreds of agreeing frames, marked as such —
+         never presented as human labelling)
+                     ──► template_forge.py ──► staging templates + provenance
+        (build slice / dead zone / holdout, quality gate, no hero promoted
+         until it survives held-out validation)
+                     ──► template_validate.py ──► reports/validation/<id>.json
+        (per hero: VALIDATED / WEAK / FAILED / UNVERIFIABLE, plus the
+         leave-one-hero-out test that an UNCOVERED hero reads UNKNOWN)
+
 VOD ──► ingest_map.py ──► SQLite (staged, idempotent) + reports/ingest/<id>/
         gameplay_state.py  : live vs replay/scoreboard/desk/transition
         detect.py          : ranked template match, runner-up, margin, UNKNOWN
@@ -126,8 +136,15 @@ Key modules (all under `pipeline/`):
 |---|---|
 | `calibrate_source.py` | computational HUD calibration (HSV chip rows + RANSAC grid fit + pixel-evidence verification); writes a reusable, resolution-independent layout profile + annotated sheet; **refuses** below confidence 0.55 with reasons |
 | `gameplay_state.py` | structural gameplay filter + layout reject markers (HIGHLIGHTS / REPLAY / scoreboard) so replays and scoreboards never create comps |
-| `harvest_templates.py` | clusters real slot crops across a map, human labels once, emits multi-variant per-hero templates (alive/dead/ult states) |
-| `detect.py` | ranked candidate + runner-up + margin per slot; returns `UNKNOWN` instead of guessing |
+| `harvest_templates.py` | clusters real slot crops across a map, human labels once, emits multi-variant per-hero templates (alive/dead/ult states); quality-gated before the diversity pick, and a second harvest replaces only the heroes it labels |
+| `template_quality.py` | the gate a crop must pass to become a template: size, sharpness, contrast, flatness, overlay bands, confusion with another hero's template, and traceable provenance. ACCEPT / REVIEW / REJECT |
+| `template_evidence.py` | labelled crops from a real ingest run, by stint consensus. Every crop records `labelSource`, so nothing downstream can present detector consensus as human ground truth |
+| `template_forge.py` | build → gate → provenance → held-out validation → gated promotion, in the one order that produces a trustworthy result. Templates are cut only from a build slice; a dead zone separates it from the holdout |
+| `template_validate.py` | scores a set on frames it has never seen. `UNVERIFIABLE` when provenance cannot prove separation — never rounded up to a pass. Includes the leave-one-hero-out false-match test |
+| `hero_coverage.py` | 52-hero readiness per package: covered / sound / traceable / proven, never collapsed into one number, with the blocker and next action per hero |
+| `hero_gap_finder.py` | where the missing heroes have already been recorded (from `hero_stints`), and what is in footage that a package cannot name (persistent UNKNOWN clusters → unlabelled review candidates) |
+| `portrait_roi.py` | finds the portrait sub-rectangle of a calibrated slot from the footage itself, so a template describes the hero rather than the player currently on that hero |
+| `detect.py` | ranked candidate + runner-up + margin per slot; returns `UNKNOWN` instead of guessing. Per-layout detector profile (`portrait_roi`, `unknown_floor`, `min_margin`) |
 | `ingest_map.py` | full-map driver: adaptive sampling, per-slot temporal hysteresis, emblem-based rounds, side-swap tracking, evidence crops, staged idempotent DB writes |
 | `build_ingest_report.py` | the full-map report + change-point review pages |
 | `export_data.py` | `--public` writes the production `public_data.v1.js` from the DB (comps only from approved stints with evidence chains) |
@@ -317,8 +334,32 @@ New CV tables (`pipeline/schema.sql`): `ingest_runs`, `slot_observations`,
   renders its honest fallback).
 - **Round times ±1 sample.** Round boundaries come from clustering the
   center point-emblem at the 5 s sample rate.
+- **Hero coverage is 8 of 52 on the best package, not 52 of 52.** Those
+  eight (`templates/owcs_jksix_qwc`) are fully provenanced and validated on
+  held-out frames from the Nepal broadcast — 1,861 trials, zero confident
+  wrong answers — and the control room's **Hero coverage** page shows the
+  real number per package. The other 44 heroes have never appeared in a
+  broadcast this pipeline has processed, so no amount of reprocessing
+  covers them; they need footage that contains them.
+  `pipeline/hero_gap_finder.py` says which is which.
+- **`juno` and `kiriko` are confusable in that package.** With `juno`
+  removed from the set, 38% of real `juno` portraits are read as `kiriko`
+  rather than UNKNOWN — they are both a dark-haired figure on a light field
+  at 35x35 in grayscale. Named in the validation report rather than averaged
+  into a pass. A colour-based veto was built, measured against the real
+  crops, and **removed** because it blocked none of the actual leaks while
+  vetoing legitimate reads; the honest fix is a better `juno` template from
+  a second broadcast.
+- **The detector thresholds are fitted to one broadcast.** `unknown_floor`
+  0.60 on `owcs_jksix_qwc` was chosen from 2,008 held-out crops of a single
+  source. Re-measure when a second one is harvested.
 - **Template labeling is human-in-the-loop** by design (evidence recorded in
   `work/nepal_labels.json`); the pipeline quarantines what it can't prove.
+  Evidence labels produced by `template_evidence.py` are **detector
+  consensus over a temporal stint**, not a human's eyes — strong (hundreds
+  of agreeing frames decide each label, so no single template can influence
+  the crop it is tested on) but it cannot catch a systematically mislabelled
+  set. Every crop records which it is.
 - **720p capture.** The layout profile is resolution-independent, but the
   reject-marker template crops are cut at 720p (re-cut for other
   resolutions).

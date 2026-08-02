@@ -404,6 +404,45 @@
         kids.push(el('div', { class: 'detail', text:
           `${seen[action]} hero(es) → ${action}` })));
     }
+
+    /* "44 missing" is not actionable. Which of those 44 this pipeline has
+       already recorded footage of — and where — is. Fetched on demand
+       because it costs a database sweep per package. */
+    const gapNote = el('div', { class: 'note' });
+    kids.push(el('div', { class: 'btnrow', style: 'margin-top:6px' }, [
+      el('button', {
+        class: 'btn btn-sm btn-ghost',
+        text: 'Where can the missing heroes be found?',
+        onclick: async (ev) => {
+          ev.target.disabled = true;
+          const plan = await D.get('heroes/gaps?layout=' + encodeURIComponent(lay.layoutId));
+          ev.target.disabled = false;
+          clear(gapNote);
+          if (plan.offline || !plan.available) {
+            gapNote.className = 'note bad';
+            gapNote.textContent = plan.error || 'The harvest plan is unavailable.';
+            return;
+          }
+          gapNote.className = 'note';
+          gapNote.appendChild(el('div', { text: plan.note }));
+          (plan.reachable || []).slice(0, 12).forEach((h) => {
+            const s = h.bestSource || {};
+            gapNote.appendChild(el('div', { class: 'detail', text:
+              `${h.name}: seen in ${s.matchId} slot ${s.slot} at `
+              + `${D.clock(s.start)}–${D.clock(s.end)} (${s.observations} samples)`
+              + (s.vodUrl ? ' · ' + s.vodUrl : ' · no VOD URL recorded') }));
+          });
+          if (!(plan.reachable || []).length) {
+            gapNote.appendChild(el('div', { class: 'detail', text:
+              'None of the missing heroes appear in any broadcast this '
+              + 'pipeline has processed. They need new footage that '
+              + 'contains them — reprocessing what is already here cannot '
+              + 'cover them.' }));
+          }
+        }
+      })
+    ]));
+    kids.push(gapNote);
     return el('div', { class: 'revitem' }, kids);
   }
 

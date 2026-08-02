@@ -637,6 +637,98 @@ class TestLegacyHarvestIsGatedToo(Temp):
         self.assertTrue(any(fn.startswith("kiriko") for fn in survivors))
 
 
+# --------------------------------------------------------- the gap finder
+class TestGapFinder(Temp):
+    """Finding what a package cannot name, without naming it."""
+
+    def setUp(self):
+        super().setUp()
+        import test_pipeline_synthetic as syn
+        self.syn = syn
+        self.frames = os.path.join(self.tmp, "frames")
+        self.tdir = os.path.join(self.tmp, "templates")
+        os.makedirs(self.frames)
+        os.makedirs(self.tdir)
+        self.covered = syn.COMP_A1[:3] + syn.COMP_B1[:3]
+        for h in self.covered:
+            cv2.imwrite(os.path.join(self.tdir, f"{h}.png"), syn.hero_icon(h))
+        for i in range(30):
+            cv2.imwrite(os.path.join(self.frames, f"{i:06d}.png"),
+                        syn.make_frame(syn.COMP_A1, syn.COMP_B1, offset=i))
+        self.layout = {"frame_width": syn.W, "frame_height": syn.H,
+                       "slots_a": syn.SLOTS_A, "slots_b": syn.SLOTS_B}
+
+    def test_it_finds_exactly_the_uncovered_slots(self):
+        import hero_gap_finder as gf
+        scan = gf.scan_frames(self.frames, self.layout, self.tdir)
+        self.assertEqual(scan["framesScanned"], 30)
+        slots = sorted(c["slot"] for c in scan["clusters"])
+        self.assertEqual(slots, ["a4", "a5", "b4", "b5"],
+                         "the finder should surface one candidate per slot "
+                         "holding a hero with no template, and nothing else")
+
+    def test_a_covered_slot_is_never_offered_as_a_candidate(self):
+        import hero_gap_finder as gf
+        scan = gf.scan_frames(self.frames, self.layout, self.tdir)
+        for cluster in scan["clusters"]:
+            self.assertNotIn(cluster["slot"], ("a1", "a2", "a3",
+                                               "b1", "b2", "b3"))
+
+    def test_a_one_frame_flicker_is_not_a_candidate(self):
+        """Persistence is what separates a hero from a dissolve."""
+        import hero_gap_finder as gf
+        full = os.path.join(self.tmp, "full")
+        os.makedirs(full)
+        for h in self.syn.ALL_HEROES:
+            cv2.imwrite(os.path.join(full, f"{h}.png"),
+                        self.syn.hero_icon(h))
+        blip = os.path.join(self.tmp, "blip")
+        os.makedirs(blip)
+        for i in range(30):
+            frame = self.syn.make_frame(self.syn.COMP_A1, self.syn.COMP_B1,
+                                        offset=i)
+            if i == 7:            # one frame of something unrecognisable
+                x, y, w, h = self.syn.SLOTS_A[0]
+                frame[y:y + h, x:x + w] = np.random.default_rng(1).integers(
+                    0, 256, (h, w, 3), dtype=np.uint8)
+            cv2.imwrite(os.path.join(blip, f"{i:06d}.png"), frame)
+        scan = gf.scan_frames(blip, self.layout, full)
+        self.assertEqual(scan["clusters"], [],
+                         "a single unrecognisable frame was offered as an "
+                         "uncovered hero")
+
+    def test_candidates_are_written_unlabelled(self):
+        import hero_gap_finder as gf
+        scan = gf.scan_frames(self.frames, self.layout, self.tdir)
+        payload = gf.write_candidates(scan, os.path.join(self.tmp, "cand"),
+                                      layout_id="syn")
+        self.assertEqual(len(payload["items"]), 4)
+        for item in payload["items"]:
+            self.assertIsNone(item["heroId"],
+                              "the finder guessed a hero name; it cannot "
+                              "know one, and a guess becomes a template")
+            self.assertTrue(os.path.exists(os.path.join(
+                self.tmp, "cand", "_review", item["file"])))
+
+    def test_the_plan_never_invents_a_source(self):
+        import db
+        import hero_gap_finder as gf
+        con = db.connect()
+        try:
+            db.init_schema(con)
+            plan = gf.plan_from_db(con, "owcs_jksix_qwc")
+        finally:
+            con.close()
+        for hero in plan["reachable"]:
+            self.assertTrue(hero["bestSource"]["matchId"],
+                            "a harvest target with no real match behind it")
+        self.assertEqual(
+            len(plan["reachable"]) + len(plan["neverSeen"]),
+            plan["rosterSize"] - plan["covered"],
+            "every missing hero must be accounted for as either reachable "
+            "or never-seen — silently dropping one hides a gap")
+
+
 # ------------------------------------------------- coverage never lies
 class TestCoverageNeverRoundsUp(unittest.TestCase):
     def test_the_readiness_line_reports_both_numbers(self):

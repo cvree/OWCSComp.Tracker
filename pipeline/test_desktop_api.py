@@ -64,6 +64,34 @@ class TestRouting(TempHome):
                 self.assertEqual(code, 200, f"{route} -> {code}: {payload}")
                 self.assertIsInstance(payload, dict)
 
+    def test_the_gap_plan_needs_a_layout_and_says_so(self):
+        """A route that quietly answers for the wrong package is worse than
+        one that refuses."""
+        code, payload = webapi.handle_get("/api/desktop/heroes/gaps")
+        self.assertEqual(code, 400)
+        self.assertIn("layout", payload["error"])
+
+        code, payload = webapi.handle_get(
+            "/api/desktop/heroes/gaps", "layout=owcs_jksix_qwc")
+        self.assertEqual(code, 200)
+        self.assertTrue(payload["available"], payload.get("error"))
+        self.assertEqual(payload["layoutId"], "owcs_jksix_qwc")
+        # Every missing hero is either somewhere we have footage of, or
+        # named as never-seen. Dropping one silently would hide a gap.
+        self.assertEqual(
+            len(payload["reachable"]) + len(payload["neverSeen"]),
+            payload["rosterSize"] - payload["covered"])
+
+    def test_coverage_never_reports_a_number_it_cannot_back(self):
+        code, payload = webapi.handle_get("/api/desktop/heroes/coverage")
+        self.assertEqual(code, 200)
+        self.assertTrue(payload["available"], payload.get("error"))
+        for layout in payload["layouts"]:
+            self.assertLessEqual(layout["validated"], layout["covered"],
+                                 f"{layout['layoutId']} reports more heroes "
+                                 f"validated than it has templates for")
+            self.assertLessEqual(layout["covered"], layout["rosterSize"])
+
     def test_a_non_desktop_path_is_not_claimed(self):
         """Returning None is what lets serve.py keep serving its own API."""
         self.assertIsNone(webapi.handle_get("/api/ping"))

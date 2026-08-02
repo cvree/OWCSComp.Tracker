@@ -267,7 +267,56 @@ def _check_assets() -> list[dict[str, Any]]:
             f"{len(sets)} broadcast set(s), {total} templates",
             count=len(sets), total=total,
             sets=[{"name": n, "templates": c} for n, c in sets]))
+    out.extend(_check_hero_readiness())
     return out
+
+
+def _check_hero_readiness() -> list[dict[str, Any]]:
+    """How many heroes can actually be recognised, as its own check.
+
+    `assets.templates` above counts FILES, and a file count reads as a
+    clean green tick while a package can still see 8 of 52 heroes. That is
+    the exact shape of reassurance this project is supposed to refuse, so
+    the honest number gets its own line.
+
+    Never FAIL: a partially covered package processes broadcasts perfectly
+    well, it just reports UNKNOWN for the heroes it has no template for.
+    That is a limitation to be visible about, not a fault that should block
+    the application from running.
+    """
+    try:
+        import sys as _sys
+        pdir = paths.pipeline_dir()
+        if pdir not in _sys.path:
+            _sys.path.insert(0, pdir)
+        import hero_coverage as hc          # noqa: PLC0415
+        import db as pdb                    # noqa: PLC0415
+    except Exception as exc:
+        return [_check("assets.heroReadiness", "Hero detection readiness",
+                       WARN, f"could not be measured: {exc}")]
+    try:
+        con = pdb.connect()
+        try:
+            pdb.init_schema(con)
+            report = hc.all_layouts(con, with_quality=False)
+        finally:
+            con.close()
+    except Exception as exc:
+        return [_check("assets.heroReadiness", "Hero detection readiness",
+                       WARN, f"could not be measured: {exc}")]
+
+    roster = report["rosterSize"] or 0
+    proven = len(report["provenSomewhere"])
+    covered = len(report["detectableSomewhere"])
+    status = OK if (roster and proven >= roster) else WARN
+    return [_check(
+        "assets.heroReadiness", "Hero detection readiness", status,
+        f"{proven}/{roster} heroes validated on held-out frames; "
+        f"{covered}/{roster} have a template at all. "
+        f"Best package: {report['bestLayoutReadiness'] or 'none'}. "
+        f"Uncovered heroes are reported UNKNOWN, never guessed.",
+        proven=proven, covered=covered, rosterSize=roster,
+        bestLayout=report["bestLayout"])]
 
 
 # ----------------------------------------------------------- credentials

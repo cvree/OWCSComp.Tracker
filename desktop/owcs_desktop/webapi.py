@@ -709,7 +709,8 @@ def _pipeline_import(name: str):
     return __import__(name)
 
 
-def hero_coverage(*, layout: str | None = None) -> dict[str, Any]:
+def hero_coverage(*, layout: str | None = None,
+                  with_quality: bool = True) -> dict[str, Any]:
     """52-hero detection readiness, per broadcast package.
 
     Deliberately never returns a single "percent ready". Coverage (is there
@@ -729,12 +730,35 @@ def hero_coverage(*, layout: str | None = None) -> dict[str, Any]:
     con = pdb.connect()
     try:
         pdb.init_schema(con)
-        report = (hc.layout_coverage(con, layout) if layout
-                  else hc.all_layouts(con))
+        report = (hc.layout_coverage(con, layout, with_quality=with_quality)
+                  if layout
+                  else hc.all_layouts(con, with_quality=with_quality))
     finally:
         con.close()
     report["available"] = True
     return report
+
+
+def hero_gap_plan(*, layout: str) -> dict[str, Any]:
+    """Where to get the heroes a package cannot see.
+
+    Kept out of `hero_coverage` because it costs a database sweep per
+    layout and the coverage page only needs it for the package the operator
+    is actually looking at.
+    """
+    try:
+        gf = _pipeline_import("hero_gap_finder")
+        pdb = _pipeline_import("db")
+    except Exception as exc:                      # pragma: no cover - env
+        return {"available": False, "error": mask(str(exc))}
+    con = pdb.connect()
+    try:
+        pdb.init_schema(con)
+        plan = gf.plan_from_db(con, layout)
+    finally:
+        con.close()
+    plan["available"] = True
+    return plan
 
 
 def template_review_inbox(*, limit: int = 200) -> dict[str, Any]:
@@ -824,7 +848,9 @@ def overview() -> dict[str, Any]:
 
 def _overview_heroes() -> dict[str, Any]:
     try:
-        report = hero_coverage()
+        # Cheap form: the header polls this every few seconds, and the
+        # quality audit correlates every template against every other one.
+        report = hero_coverage(with_quality=False)
     except Exception as exc:                      # pragma: no cover - env
         return {"available": False, "error": mask(str(exc))}
     if not report.get("available"):
@@ -953,6 +979,12 @@ def handle_get(path: str, query: str = "") -> tuple[int, dict[str, Any]] | None:
                 layout=(params.get("layout") or [None])[0])
         if route == "templates/review":
             return 200, template_review_inbox()
+        if route == "heroes/gaps":
+            layout = (params.get("layout") or [None])[0]
+            if not layout:
+                return 400, {"ok": False,
+                             "error": "heroes/gaps needs ?layout=<layout id>"}
+            return 200, hero_gap_plan(layout=layout)
         if route == "calibration":
             name = (params.get("name") or [""])[0]
             if name:

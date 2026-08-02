@@ -97,8 +97,18 @@ def _quality_by_file(templates_dir: str, provenance: dict | None) -> dict:
 
 
 def layout_coverage(con, layout_id: str, *,
-                    repo_root: str = db.REPO_ROOT) -> dict:
-    """The four-question readiness report for one broadcast package."""
+                    repo_root: str = db.REPO_ROOT,
+                    with_quality: bool = True) -> dict:
+    """The four-question readiness report for one broadcast package.
+
+    `with_quality=False` skips the per-template quality audit, which is the
+    expensive part (every template is correlated against every other one in
+    the set). The header poll and the health check use the cheap form —
+    they need the counts, not the per-file verdicts — while the coverage
+    page, which an operator is actively reading, pays for the full answer.
+    A hero that would be BLOCKED on quality reads UNPROVEN in the cheap
+    form, which understates readiness rather than overstating it.
+    """
     layout_path = os.path.join(LAYOUTS_DIR, f"{layout_id}.json")
     layout = {}
     if os.path.exists(layout_path):
@@ -114,7 +124,8 @@ def layout_coverage(con, layout_id: str, *,
     files = tb.scan_template_dir(templates_dir) if templates_dir else {}
     provenance = tb.load_provenance(templates_dir) if templates_dir else None
     prov_files = {e.get("file") for e in (provenance or {}).get("entries", [])}
-    quality = _quality_by_file(templates_dir, provenance) if templates_dir else {}
+    quality = (_quality_by_file(templates_dir, provenance)
+               if (templates_dir and with_quality) else {})
     validation = load_validation(layout_id, repo_root=repo_root)
     verdicts = {h: e.get("verdict")
                 for h, e in (validation.get("heroes") or {}).items()}
@@ -220,13 +231,15 @@ def readiness_line(covered: int, validated: int, roster_size: int) -> str:
             f"{validated} validated on held-out frames")
 
 
-def all_layouts(con, *, repo_root: str = db.REPO_ROOT) -> dict:
+def all_layouts(con, *, repo_root: str = db.REPO_ROOT,
+                with_quality: bool = True) -> dict:
     """Readiness across every committed layout, plus the honest headline."""
     reports = []
     for fn in sorted(os.listdir(os.path.join(repo_root, "layouts"))):
         if not fn.endswith(".json"):
             continue
-        reports.append(layout_coverage(con, fn[:-5], repo_root=repo_root))
+        reports.append(layout_coverage(con, fn[:-5], repo_root=repo_root,
+                                       with_quality=with_quality))
     roster_size = reports[0]["rosterSize"] if reports else 0
     detectable = sorted({h["id"] for r in reports for h in r["heroes"]
                          if h["templates"]})

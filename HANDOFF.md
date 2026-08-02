@@ -1,6 +1,188 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
-## CURRENT STATUS (authoritative — 2026-08-02, seventh pass) — the Windows app closes the loop and is merged
+## CURRENT STATUS (authoritative — 2026-08-02, eighth pass) — hero coverage becomes a claim that has to be earned
+
+> Additive to the seventh pass below. That pass finished the *application*.
+> This one goes after the thing the previous handoff listed as its biggest
+> honest gap — "hero template coverage is still 8–17 of 52 heroes" — and
+> finds that the number was the *least* of the problem. Coverage was
+> measurable. Whether any of it **worked** was not, and when the machinery
+> to measure that got built, it found four real defects, three of them
+> shipping in production template sets.
+
+### The headline, stated the way the coverage page states it
+
+**8/52 heroes covered · 8 validated on held-out frames**, on the best
+package (`owcs_jksix_qwc`). Not 52/52. Not close to it. What changed is
+that those eight are now *proven* rather than *present*, and that the
+repository can now tell the difference — per hero, per package, in the UI.
+
+| | before this pass | after |
+|---|---|---|
+| templates in the package | 40 files, 8 heroes | 32 files, 8 heroes |
+| traceable to a source frame | 0 | 32 of 32 |
+| scored on frames they never saw | never | 1,861 trials |
+| held-out accuracy | unmeasured | 99.73% (1,856 / 1,861) |
+| confident WRONG answers | unmeasured | **0** |
+| an uncovered hero reads UNKNOWN | assumed | 95.4% of the time, measured |
+
+That last row is the one that mattered most, and it is covered below.
+
+### Four defects the measurement found
+
+**1. Three committed templates were not portraits.**
+`templates/owcs_jksix_qwc/mauga.v1.png` was a 35x35 block of solid grey
+(std 0.06). `kiriko.v4` and `sym.v4` were near-black fade frames. The cause
+is `harvest_templates.pick_variants`, which picked maximally-*different*
+crops with no quality floor — and a fade-to-black is maximally different
+from a portrait *by construction*, so it wins that contest every time it
+appears in the candidate pool. `pipeline/template_quality.py` is the gate
+that now runs first, in both the old tool and the new forge, and
+`test_the_committed_production_set_has_no_rejects` is the regression guard
+that would have caught this on the day it was committed.
+
+**2. The templates were templates for a PLAYER, not a hero.**
+The calibrated 52x52 slot includes a flat separator bar and the player-name
+strip under the portrait. Held-out validation caught enemy Lúcio being read
+as `juno` at 0.695 — purely because the strip said `OX` rather than
+`YASTRO`. `pipeline/portrait_roi.py` finds the boundary from the footage
+itself rather than by eye: over 400 real crops, rows 25-29 of 35 have a
+within-row variance under 10% of the busiest row (a flat bar), so the
+portrait ends at 25/35 = **0.714**. Applied as `portrait_roi` on the layout,
+to template and probe alike, 1,891 held-out crops went **98.36% → 99.84%**
+with every confident wrong answer removed.
+
+**3. `MIN_MARGIN` was 0.04, and the MEDIAN impostor margin is 0.071.**
+This is the big one. To test it, `template_validate.leave_one_out` removes
+one hero's templates and feeds that hero's own real crops back in — every
+one of them *must* come back UNKNOWN, because a set without that hero
+genuinely cannot know what it is looking at. With the old thresholds,
+**34.3% came back as a confident wrong hero.** The previous handoff's claim
+that "an uncovered hero honestly reports UNKNOWN" was, in practice, false —
+and at 8-of-52 coverage that is not an edge case, it is what happens on
+every frame to 44 heroes.
+
+Measured over 2,008 held-out crops:
+
+| floor / margin | correct | wrong | unknown portraits correctly refused |
+|---|---|---|---|
+| 0.35 / 0.04 (old) | 99.80% | 1 | **58.1%** |
+| 0.35 / 0.12 | 99.80% | 1 | 86.1% |
+| 0.60 / 0.12 (now) | 98.51% | 0 | **97.4%** |
+| 0.70 / 0.12 | 98.01% | 0 | 97.4% |
+
+`MIN_MARGIN` is now **0.12** globally (no measured recall cost, +28 points
+of impostor rejection) and `owcs_jksix_qwc` sets `unknown_floor: 0.60`.
+Paying 1.3% of correct reads to stop a package from naming the 44 heroes it
+cannot know is the trade this project exists to make.
+
+**4. One build window leaves holes for heroes who come and go.**
+Lúcio holds one slot all map and swaps in and out of another. Building every
+template from a single early window put all four Lúcio templates inside the
+first appearance, and 9% of held-out Lúcio frames came back UNKNOWN. The
+forge now takes the build slice **per stint**. Lúcio: 221/221, zero unknown.
+
+### What got built
+
+Six new modules, each doing one thing, deliberately so that the thing which
+builds templates and the thing which judges them cannot share a source of
+truth:
+
+* **`template_quality.py`** — ACCEPT / REVIEW / REJECT for one crop. Size,
+  sharpness, contrast, flatness, overlay bands, correlation with another
+  hero's template (the only thing that can catch a mislabelled cluster),
+  duplication, and provenance. Official hero art is rejected **by name** as
+  a template source.
+* **`template_evidence.py`** — labelled crops from a real ingest run. Labels
+  come from *stint consensus*: 307 agreeing reads decide a slot's hero, and
+  that label then applies to every crop in the stint **including the ones
+  the detector got wrong**, which is what makes the label independent of
+  the template being tested. Every crop records `labelSource`, and the
+  manifest says in as many words that this is not human labelling.
+* **`template_validate.py`** — held-out scoring. A crop counts only if no
+  template of that hero was cut from the same source within `--min-gap`
+  seconds of it, re-derived from the written provenance rather than from
+  the forge's say-so. Four verdicts, and `UNVERIFIABLE` (no provenance → no
+  provable separation) is never rounded up to a pass.
+* **`template_forge.py`** — runs the above in the one order that produces a
+  trustworthy result: build slice → dead zone → holdout, gate, provenance,
+  validate, and promote **only** the heroes that earned it.
+* **`hero_coverage.py`** — four questions per hero (covered / sound /
+  traceable / proven), never collapsed into one number, with the blocker and
+  the next action for each.
+* **`hero_gap_finder.py`** — the other half of coverage: which missing heroes
+  this pipeline has *already recorded footage of* (from `hero_stints`, with
+  the match, slot and offsets), and what is present in footage that a
+  package cannot name (persistent UNKNOWN clusters → **unlabelled** review
+  candidates; it cannot know which hero it is looking at and does not
+  pretend to).
+
+Plus, in the control room: a **Hero coverage** view with a 52-cell grid per
+package, colour-coded by state, every cell carrying its blocker and next
+action; the template-review inbox; the false-match rate and the named
+confusable pairs; and a button that answers "where can the missing heroes be
+found?" from the database. `assets.heroReadiness` is a new health check,
+because `assets.templates` counted *files* and read as a green tick while a
+package could see 8 of 52.
+
+### A thing that was built, measured, and thrown away
+
+Juno and Kiriko are the entire remaining false-match problem (38% of Juno
+crops read as Kiriko when Juno is absent). Their hue centroids are 0.98
+apart — nearly the full width of the space — so a colour veto looked
+obvious, and one was implemented end to end. Measured against the real
+crops it **blocked 0 of 53 leaks** while vetoing legitimate reads: the
+specific Juno crops that leak are chromatically Kiriko-like, and the
+group-level separation that motivated it does not survive at the individual
+crop. Using the per-hero centroid instead blocked 52 of 53 leaks at the
+price of vetoing 35% of correct reads. Both were removed rather than
+shipped. A mechanism that provides false confidence is worse than no
+mechanism, and the honest fix is a better Juno template from a second
+broadcast.
+
+### What was NOT achieved (say it plainly)
+
+* **52/52 is not close.** 44 of 52 heroes have never appeared in any
+  broadcast this pipeline has processed. This container's egress policy
+  returns 403 for YouTube (`curl -sS "$HTTPS_PROXY/__agentproxy/status"`
+  confirms a policy denial), so no new footage could be harvested. Every
+  number above comes from the one broadcast already committed to the
+  repository, `reports/ingest/qad-twis-nepal`. **Reprocessing what is here
+  cannot cover the other 44** — that needs footage containing them, and
+  `hero_gap_finder.py --layout <id>` says exactly that rather than
+  suggesting busywork.
+* **Every threshold is fitted to one source.** `unknown_floor` 0.60 came
+  from 2,008 crops of a single broadcast, and at that floor the lowest
+  correct read (0.403) and the highest wrong read (0.442) overlap. It is a
+  judgement call with the evidence written next to it in the layout file,
+  not a clean separation. Re-measure on the second source.
+* **Ground truth is detector consensus, not human eyes.** Strong — a stint's
+  label is decided by hundreds of agreeing frames, so no single template can
+  influence the crop it is tested on — but it cannot catch a *systematically*
+  mislabelled set. `template_evidence.py --labels human.json` accepts real
+  human labels and marks them differently; nobody has supplied any.
+* **The other three packages are untouched.** `owcs_8c105lnzlam` (7 heroes)
+  and the root `templates/` set (17) are unprovenanced and therefore
+  UNVERIFIABLE; `owcs_nd5lllwdky0` has none. They are honestly reported as
+  such rather than assumed fine. Re-forging them needs their own ingest
+  evidence, which does not exist in this repository.
+* **Nobody clicked the new UI.** The Hero coverage view's routes are proven
+  wired by `test_desktop_pages.py`'s dead-control checks and its data by
+  `test_desktop_api.py`, but no browser session rendered it.
+
+### For the next session, in priority order
+
+1. **Get one more broadcast.** Everything above is one source deep, and
+   almost every remaining limitation dissolves with a second. The path is
+   already automated end to end: `ingest_map.py` → `template_evidence.py` →
+   `template_forge.py --promote-to`.
+2. **Re-measure the thresholds** against two sources before trusting 0.60.
+3. **A better `juno` template** is the whole remaining false-match story.
+4. **Re-forge `owcs_8c105lnzlam` and the root set** once they have evidence,
+   which will move 24 heroes from UNPROVEN to READY or expose that they were
+   never as good as their file count suggested.
+
+## HISTORICAL (superseded — 2026-08-02, seventh pass) — the Windows app closes the loop and is merged
 
 > Additive to the sixth pass below. That pass made the *site* explain
 > itself. This one finishes the *application*: the clean-machine CI job
@@ -377,7 +559,7 @@ Two suites fail in a container without `ffmpeg`/`yt-dlp` on PATH
 this pass; everything else passes plus `check_packaging.py`.
 
 
-## CURRENT STATUS (authoritative — 2026-07-29, fifth pass) — making the finder actually work
+## HISTORICAL (superseded — 2026-07-29, fifth pass) — making the finder actually work
 
 > Additive to the fourth pass below. The fourth pass BUILT the match
 > finder; this pass made it work in the two places it didn't.
