@@ -575,26 +575,38 @@ class TestFrozenMode(unittest.TestCase):
         """
         from owcs_desktop import autostart, paths
 
-        with tempfile.TemporaryDirectory() as tmp:
-            gui = os.path.join(tmp, "OWCSCompTracker")
-            cli = os.path.join(tmp, paths.CLI_EXE_NAME)
-            for p in (gui, cli):
-                with open(p, "w", encoding="utf-8") as f:
-                    f.write("")
-            # Running as the console twin, exactly as the repair action does.
-            sys.frozen = True
-            original = sys.executable
-            try:
-                sys.executable = cli
-                command = autostart.launch_command()
-            finally:
-                sys.executable = original
+        # Run BOTH platform shapes wherever this suite runs. The binaries are
+        # named OWCSCompTracker.exe on Windows and OWCSCompTracker elsewhere,
+        # and the first version of this test built its fixture with the local
+        # convention: it passed on Linux, then failed on Windows against
+        # perfectly correct code because gui_executable() looked for a name
+        # the fixture had not created and fell back to sys.executable.
+        for platform in ("win32", "linux"):
+            suffix = ".exe" if platform == "win32" else ""
+            with self.subTest(platform=platform), \
+                    tempfile.TemporaryDirectory() as tmp:
+                gui = os.path.join(tmp, paths.GUI_EXE_NAME + suffix)
+                cli = os.path.join(tmp, paths.CLI_EXE_NAME + suffix)
+                for p in (gui, cli):
+                    with open(p, "w", encoding="utf-8") as f:
+                        f.write("")
+                # Running as the console twin, as the repair action does.
+                sys.frozen = True
+                original_exe, original_platform = sys.executable, sys.platform
+                try:
+                    sys.executable = cli
+                    sys.platform = platform
+                    command = autostart.launch_command()
+                finally:
+                    sys.executable = original_exe
+                    sys.platform = original_platform
 
-        self.assertIn("OWCSCompTracker", command)
-        self.assertNotIn(paths.CLI_EXE_NAME, command,
-                         "autostart would launch the console binary at "
-                         "sign-in and flash a console window")
-        self.assertTrue(command.endswith("--tray"), command)
+                self.assertIn(paths.GUI_EXE_NAME, command)
+                self.assertNotIn(
+                    paths.CLI_EXE_NAME, command,
+                    "autostart would launch the console binary at sign-in "
+                    "and flash a console window")
+                self.assertTrue(command.endswith("--tray"), command)
 
     def test_the_installers_run_key_and_the_apps_agree(self):
         """Two places write the same registry value, and if they disagree the
