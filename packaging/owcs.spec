@@ -56,26 +56,48 @@ a = Analysis(
 
 pyz = PYZ(a.pure)
 
-exe = EXE(
-    pyz,
-    a.scripts,
-    [],
+# TWO executables from one Analysis, for the same reason Python ships both
+# python.exe and pythonw.exe.
+#
+# A GUI-subsystem (`console=False`) binary is what the tray app and the
+# background service must be: anything else flashes a console window at every
+# sign-in. But Windows does not attach such a binary to the calling console
+# and the shell does not WAIT for it, so `& app.exe --check; $LASTEXITCODE`
+# is meaningless — the clean-machine CI job watched `--version` print the
+# right answer and then reported failure, because PowerShell had already moved
+# on and was reading a stale exit code.
+#
+# That is not only a CI problem. `--check`, `--readiness`, `--repair` and
+# `--stop-service` are real modes: the uninstaller depends on --stop-service
+# actually finishing, and a support conversation depends on --check printing
+# something and exiting non-zero when it fails. Those need a console binary.
+#
+# Same Analysis, so the interpreter, OpenCV, NumPy and the payload are
+# collected once and shared; only a second small bootloader is added.
+_COMMON = dict(
     exclude_binaries=True,
-    name="OWCSCompTracker",
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
     upx=False,          # UPX-packed binaries trip more AV engines than they save
-    # windowed=True: no console window when the tray app or the service
-    # starts. Diagnostics go to the log file the control room shows, which is
-    # where a non-technical user can actually find them.
-    console=False,
     icon=os.path.join(REPO, "desktop", "assets", "owcs.ico"),
     version=os.path.join(REPO, "packaging", "version_info.txt"),
 )
 
+#: What a user double-clicks, what autostart runs, what the tray and the
+#: background service are. No console window, ever.
+exe_gui = EXE(pyz, a.scripts, [], name="OWCSCompTracker",
+              console=False, **_COMMON)
+
+#: The same application, console subsystem: real stdout, and a shell that
+#: waits for it and sees its exit code. Used by the installer, the CI
+#: verification, and anyone diagnosing a problem.
+exe_cli = EXE(pyz, a.scripts, [], name="OWCSCompTracker-cli",
+              console=True, **_COMMON)
+
 coll = COLLECT(
-    exe,
+    exe_gui,
+    exe_cli,
     a.binaries,
     a.datas,
     strip=False,

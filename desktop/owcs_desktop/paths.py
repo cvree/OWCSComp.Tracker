@@ -91,6 +91,29 @@ def pipeline_dir() -> str:
     return os.path.join(app_root(), "pipeline")
 
 
+#: Name of the console-subsystem twin built alongside the windowed
+#: executable. See packaging/owcs.spec for why there are two.
+CLI_EXE_NAME = "OWCSCompTracker-cli"
+
+
+def cli_executable() -> str:
+    """The executable to use when an exit code or console output matters.
+
+    Frozen, the main binary is GUI-subsystem so no console window appears at
+    sign-in — but Windows neither attaches it to the calling console nor makes
+    the shell wait for it, so its exit code cannot be read. The build produces
+    a console twin for exactly those uses. Falls back to the main executable
+    if the twin is missing, so an older or hand-assembled install degrades
+    rather than breaking.
+    """
+    if not is_frozen():
+        return os.path.abspath(sys.executable)
+    exe_dir = os.path.dirname(os.path.abspath(sys.executable))
+    suffix = ".exe" if sys.platform == "win32" else ""
+    twin = os.path.join(exe_dir, CLI_EXE_NAME + suffix)
+    return twin if os.path.isfile(twin) else os.path.abspath(sys.executable)
+
+
 def python_command() -> list[str]:
     """The command prefix that runs one of this project's Python scripts.
 
@@ -107,7 +130,9 @@ def python_command() -> list[str]:
     everywhere instead of `sys.executable` directly.
     """
     if is_frozen():
-        return [os.path.abspath(sys.executable), "--run-script"]
+        # The console twin: these are subprocesses whose output is captured
+        # and whose exit code decides whether a stage succeeded.
+        return [cli_executable(), "--run-script"]
     return [os.path.abspath(sys.executable)]
 
 

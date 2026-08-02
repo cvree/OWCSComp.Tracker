@@ -251,10 +251,17 @@ jobs:
         shell: pwsh
         run: |
           $exe = "$env:OWCS_APP_DIR\OWCSCompTracker.exe"
+          $cli = "$env:OWCS_APP_DIR\OWCSCompTracker-cli.exe"
           if (-not (Test-Path $exe)) { throw "the application was not installed at $exe" }
+          if (-not (Test-Path $cli)) { throw "the console companion was not installed at $cli" }
           $size = (Get-ChildItem $env:OWCS_APP_DIR -Recurse -File | Measure-Object Length -Sum).Sum
           Write-Host "installed size: $([math]::Round($size/1MB)) MB"
-          & $exe --version
+          # The console twin, not the windowed binary: Windows does not
+          # attach a GUI-subsystem process to the caller's console and the
+          # shell does not wait for it, so $LASTEXITCODE would be a stale
+          # value from whatever ran before. That is exactly how this job
+          # once watched --version print correctly and then reported failure.
+          & $cli --version
           if ($LASTEXITCODE -ne 0) { throw "--version failed" }
 
       - name: Autostart was registered
@@ -267,7 +274,7 @@ jobs:
       - name: Health checks pass with nothing else installed
         shell: pwsh
         run: |
-          & "$env:OWCS_APP_DIR\OWCSCompTracker.exe" --check
+          & "$env:OWCS_APP_DIR\OWCSCompTracker-cli.exe" --check
           if ($LASTEXITCODE -ne 0) {
             throw "the installed application reports failing health checks on a clean machine"
           }
@@ -276,7 +283,7 @@ jobs:
         shell: pwsh
         timeout-minutes: 30
         run: |
-          & "$env:OWCS_APP_DIR\OWCSCompTracker.exe" --readiness
+          & "$env:OWCS_APP_DIR\OWCSCompTracker-cli.exe" --readiness
           if ($LASTEXITCODE -ne 0) {
             throw "the installed application could not process a broadcast end to end"
           }
@@ -331,12 +338,12 @@ jobs:
           $proc = Get-Process -Id $beat.pid -EA SilentlyContinue
           if (-not $proc) { throw "the background service died with the control room window" }
           Write-Host "service pid $($beat.pid) still running after the UI closed"
-          & "$env:OWCS_APP_DIR\OWCSCompTracker.exe" --stop-service
+          & "$env:OWCS_APP_DIR\OWCSCompTracker-cli.exe" --stop-service
 
       - name: One-click repair actions run against the installed app
         shell: pwsh
         run: |
-          $exe = "$env:OWCS_APP_DIR\OWCSCompTracker.exe"
+          $exe = "$env:OWCS_APP_DIR\OWCSCompTracker-cli.exe"
           foreach ($action in @("repair.databases","repair.storage","repair.autostart")) {
             Write-Host "=== $action"
             & $exe --repair $action

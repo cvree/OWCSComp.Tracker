@@ -135,9 +135,11 @@ def stage_exe() -> None:
          os.path.join("packaging", "owcs.spec"), "--noconfirm",
          "--distpath", DIST, "--workpath", os.path.join(DIST, "build")],
         stage="exe")
-    exe = os.path.join(BUNDLE, "OWCSCompTracker.exe")
-    if not os.path.exists(exe):
-        raise SystemExit(f"[build:exe] PyInstaller did not produce {exe}")
+    suffix = ".exe" if os.name == "nt" else ""
+    for name in ("OWCSCompTracker", "OWCSCompTracker-cli"):
+        produced = os.path.join(BUNDLE, name + suffix)
+        if not os.path.exists(produced):
+            raise SystemExit(f"[build:exe] PyInstaller did not produce {produced}")
     size = sum(
         os.path.getsize(os.path.join(root, name))
         for root, _dirs, files in os.walk(BUNDLE) for name in files)
@@ -147,9 +149,16 @@ def stage_exe() -> None:
 # ---------------------------------------------------------------- verify
 def stage_verify() -> None:
     """Run the frozen application's own checks, here, before shipping it."""
-    exe = os.path.join(BUNDLE, "OWCSCompTracker.exe")
+    # The CONSOLE twin. A GUI-subsystem binary is not awaited by the caller
+    # and its exit code cannot be read, so verifying with it would report
+    # success no matter what the application actually said.
+    suffix = ".exe" if os.name == "nt" else ""
+    exe = os.path.join(BUNDLE, "OWCSCompTracker-cli" + suffix)
     if not os.path.exists(exe):
-        raise SystemExit("[build:verify] there is no bundle to verify")
+        raise SystemExit(f"[build:verify] the console companion is missing: {exe}")
+    windowed = os.path.join(BUNDLE, "OWCSCompTracker" + suffix)
+    if not os.path.exists(windowed):
+        raise SystemExit(f"[build:verify] the main executable is missing: {windowed}")
 
     # A throwaway data root so the build agent's own profile is untouched and
     # the checks see a genuinely fresh installation.

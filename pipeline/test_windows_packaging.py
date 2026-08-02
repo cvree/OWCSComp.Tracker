@@ -528,5 +528,92 @@ class TestVendoredBinaries(unittest.TestCase):
         self.assertTrue(p.vendor_dir().endswith(os.path.join("vendor", "bin")))
 
 
+
+class TestTwoExecutables(unittest.TestCase):
+    """A GUI-subsystem binary is not awaited by its caller on Windows and its
+    exit code cannot be read. The tray and the service must be GUI-subsystem
+    (no console flash at sign-in); --check, --readiness, --repair and
+    --stop-service must be readable. Hence two binaries, exactly as Python
+    ships python.exe and pythonw.exe.
+
+    The clean-machine job once watched `--version` print the right answer and
+    then reported failure, because PowerShell had already moved on and was
+    reading a stale $LASTEXITCODE. That is what these lock down.
+    """
+
+    def setUp(self) -> None:
+        self.spec = read(os.path.join(PACKAGING, "owcs.spec"))
+
+    def test_the_spec_builds_both(self):
+        self.assertIn('name="OWCSCompTracker"', self.spec)
+        self.assertIn('name="OWCSCompTracker-cli"', self.spec)
+        self.assertIn("console=False", self.spec)
+        self.assertIn("console=True", self.spec)
+
+    def test_both_are_collected(self):
+        collect = self.spec[self.spec.index("COLLECT("):]
+        self.assertIn("exe_gui", collect)
+        self.assertIn("exe_cli", collect)
+
+    def test_they_share_one_analysis(self):
+        """Two Analysis passes would double the build time and could ship two
+        different payloads."""
+        self.assertEqual(self.spec.count("Analysis("), 1)
+
+    def test_autostart_uses_the_windowed_one(self):
+        """A console window appearing at every sign-in is exactly what the
+        windowed build exists to prevent."""
+        from owcs_desktop import autostart
+        command = autostart.launch_command()
+        self.assertNotIn("-cli", command)
+
+    def test_the_uninstaller_uses_the_console_one(self):
+        """It must actually FINISH before files are deleted."""
+        iss = read(os.path.join(PACKAGING, "installer.iss"))
+        block = iss[iss.index("[UninstallRun]"):]
+        self.assertIn("AppExeCli", block)
+        self.assertIn("--stop-service", block)
+
+    def test_the_shortcuts_use_the_windowed_one(self):
+        iss = read(os.path.join(PACKAGING, "installer.iss"))
+        icons = iss[iss.index("[Icons]"):iss.index("[Registry]")]
+        self.assertNotIn("AppExeCli", icons)
+
+    def test_the_build_verifies_with_the_console_one(self):
+        build = read(os.path.join(PACKAGING, "build_windows.py"))
+        verify = build[build.index("def stage_verify"):build.index("def find_iscc")]
+        self.assertIn("OWCSCompTracker-cli", verify,
+                      "the build verifies with a binary whose exit code it "
+                      "cannot read, so it would pass regardless")
+
+    def test_the_clean_machine_job_reads_exit_codes_from_the_console_one(self):
+        flow = read(os.path.join(REPO, ".github", "workflows",
+                                 "windows-app.yml"))
+        job = flow[flow.index("clean-install:"):]
+        for mode in ("--check", "--readiness", "--stop-service", "--version"):
+            with self.subTest(mode=mode):
+                for line in job.splitlines():
+                    if mode in line and "OWCSCompTracker" in line:
+                        self.assertIn(
+                            "OWCSCompTracker-cli", line,
+                            f"{mode} is run against the windowed binary, whose "
+                            f"exit code PowerShell cannot read")
+
+    def test_subprocess_launches_prefer_the_console_twin(self):
+        from owcs_desktop import paths
+        source = read(os.path.join(REPO, "desktop", "owcs_desktop", "paths.py"))
+        self.assertIn("def cli_executable", source)
+        self.assertIn("cli_executable()", source)
+        # Unfrozen it is simply the interpreter.
+        self.assertEqual(paths.cli_executable(),
+                         os.path.abspath(sys.executable))
+
+    def test_a_missing_twin_degrades_rather_than_crashing(self):
+        source = read(os.path.join(REPO, "desktop", "owcs_desktop", "paths.py"))
+        self.assertIn("if os.path.isfile(twin) else", source,
+                      "a bundle without the twin would fail instead of "
+                      "falling back to the main executable")
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

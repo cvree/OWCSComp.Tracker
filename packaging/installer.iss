@@ -35,6 +35,10 @@
 #define AppName        "OWCS Comp Tracker"
 #define AppPublisher   "OWCS Comp Tracker"
 #define AppExe         "OWCSCompTracker.exe"
+; The console-subsystem twin. A GUI-subsystem binary is not awaited by the
+; caller and its exit code cannot be read, so anything that must FINISH
+; before setup continues uses this one. See packaging/owcs.spec.
+#define AppExeCli      "OWCSCompTracker-cli.exe"
 #define AppUrl         "https://github.com/cvree/owcscomp.tracker"
 
 [Setup]
@@ -117,7 +121,7 @@ Filename: "{app}\{#AppExe}"; Parameters: "--setup"; \
 [UninstallRun]
 ; Ask the running service to stop before files are removed, so an upgrade or
 ; uninstall never fails on a locked ffmpeg.exe.
-Filename: "{app}\{#AppExe}"; Parameters: "--stop-service"; \
+Filename: "{app}\{#AppExeCli}"; Parameters: "--stop-service"; \
   Flags: runhidden skipifdoesntexist; RunOnceId: "StopService"
 
 [Code]
