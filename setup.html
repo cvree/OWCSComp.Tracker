@@ -149,7 +149,7 @@
       <div class="field">
         <label for="setupBy">Your name <span class="pill info">for the audit trail</span></label>
         <div class="help">Recorded against approvals and review decisions you make, so every published result says who signed it off.</div>
-        <input type="text" id="setupBy" placeholder="e.g. Connor" autocomplete="name" />
+        <input type="text" id="setupBy" data-identity placeholder="e.g. Connor" autocomplete="name" />
       </div>
       <div class="note" id="doneNote"></div>
       <div class="btnrow">
@@ -160,6 +160,7 @@
   </section>
 </div>
 
+<script src="assets/js/identity.js"></script>
 <script src="assets/js/desktop/api.js"></script>
 <script src="assets/js/desktop/setup.js"></script>
 </body>

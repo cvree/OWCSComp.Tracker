@@ -84,7 +84,7 @@
         <div class="field">
           <label for="intakeBy">Your name</label>
           <div class="help">Recorded against this intake in the audit trail.</div>
-          <input type="text" id="intakeBy" autocomplete="name" />
+          <input type="text" id="intakeBy" data-identity autocomplete="name" />
         </div>
         <div class="btnrow">
           <button class="btn btn-primary" id="intakeSubmit" disabled>Add to the queue</button>
@@ -114,7 +114,7 @@
         <div class="field" style="max-width:320px">
           <label for="reviewer">Your name</label>
           <div class="help">Required — every decision is attributed.</div>
-          <input type="text" id="reviewer" autocomplete="name" />
+          <input type="text" id="reviewer" data-identity autocomplete="name" />
         </div>
         <div class="note" id="reviewNote"></div>
       </div>
@@ -134,7 +134,7 @@
           not calibrated by the full pipeline.</p>
         <div class="field" style="max-width:320px">
           <label for="importBy">Your name</label>
-          <input type="text" id="importBy" autocomplete="name" />
+          <input type="text" id="importBy" data-identity autocomplete="name" />
         </div>
         <div class="btnrow" style="margin-top:0">
           <input type="file" id="importFile" accept="application/json,.json" hidden />
@@ -157,7 +157,7 @@
           <div>
             <div class="field">
               <label for="calEditor">Your name</label>
-              <input type="text" id="calEditor" autocomplete="name" />
+              <input type="text" id="calEditor" data-identity autocomplete="name" />
             </div>
             <div class="callist rowlist" id="calList"></div>
             <div class="btnrow">
@@ -294,6 +294,7 @@
   </main>
 </div>
 
+<script src="assets/js/identity.js"></script>
 <script src="assets/js/desktop/api.js"></script>
 <script src="assets/js/desktop/control-room.js"></script>
 </body>

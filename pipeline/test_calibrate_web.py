@@ -360,5 +360,108 @@ class TestDiscoverability(unittest.TestCase):
         self.assertNotIn('content="noindex"', read(PAGE))
 
 
+
+class TestAnyoneCanContribute(unittest.TestCase):
+    """Contribution is deliberately open. A calibration for a broadcast
+    nobody has covered is the most useful thing anyone can send, and
+    gatekeeping it would mean fewer broadcasts get read.
+
+    Open does NOT mean trusted: what arrives still carries `browser_probe`
+    rather than `hud_probe`, so it cannot enter production without review.
+    That separation is what makes it safe to let anyone submit.
+    """
+
+    def test_the_wizard_offers_a_share_path(self):
+        html = read(PAGE)
+        self.assertIn('id="share"', html)
+        self.assertIn("anyone may send one", html)
+
+    def test_sharing_needs_no_account_backend_or_approval(self):
+        """The public site is static. A share button that implied an upload
+        endpoint would be a fake button."""
+        wizard = read(WIZARD)
+        self.assertIn("issues/new", wizard,
+                      "sharing does not go anywhere a static site can reach")
+        self.assertNotIn("fetch(", wizard)
+
+    def test_the_submission_carries_the_layout_and_its_provenance(self):
+        wizard = read(WIZARD)
+        self.assertIn("browser_probe", wizard)
+        self.assertIn("JSON.stringify(layout", wizard)
+        self.assertIn("review", wizard,
+                      "the submission does not say the layout needs review")
+
+    def test_an_oversized_submission_is_refused_not_truncated(self):
+        """A silently cut-off URL would submit half a layout."""
+        wizard = read(WIZARD)
+        self.assertIn("url.length >", wizard)
+        self.assertIn("too large", wizard)
+
+    def test_a_name_is_optional_for_sharing_but_offered(self):
+        html = read(PAGE)
+        self.assertIn('id="shareBy"', html)
+        self.assertIn("optional", html)
+
+
+class TestIdentityIsRememberedNotWeakened(unittest.TestCase):
+    """Attribution is asked for once instead of every time. It is still
+    required everywhere it was required before."""
+
+    IDENTITY = os.path.join(REPO, "assets", "js", "identity.js")
+
+    def test_the_helper_exists_and_is_loaded_where_names_are_collected(self):
+        self.assertTrue(os.path.exists(self.IDENTITY))
+        for page in ("calibrate.html", "control-room.html", "setup.html"):
+            with self.subTest(page=page):
+                self.assertIn("assets/js/identity.js",
+                              read(os.path.join(REPO, page)),
+                              f"{page} collects a name but does not remember it")
+
+    def test_every_name_field_is_marked_for_binding(self):
+        room = read(os.path.join(REPO, "control-room.html"))
+        for field in ("reviewer", "calEditor", "intakeBy", "importBy"):
+            with self.subTest(field=field):
+                self.assertRegex(
+                    room, rf'id="{field}" data-identity',
+                    f"{field} is not bound to the remembered identity")
+
+    def test_it_stores_a_name_and_nothing_else(self):
+        """A label, not a credential. Nothing is authenticated by it, so it
+        must never grow into somewhere secrets get kept — this checks what
+        the module DOES, not what its prose says about itself."""
+        source = read(self.IDENTITY)
+        stored = re.findall(r"setItem\(([^,]+),", source)
+        self.assertEqual(
+            [s.strip() for s in stored], ["KEY"],
+            f"identity.js writes something other than the name: {stored}")
+        self.assertEqual(re.findall(r"const KEY = '([^']+)'", source),
+                         ["owcs.identity.name"])
+        for forbidden in ("password", "secret", "apikey", "api_key", "bearer"):
+            with self.subTest(term=forbidden):
+                self.assertNotIn(forbidden, source.lower(),
+                                 f"identity.js mentions {forbidden}; it holds "
+                                 f"a display name and must hold nothing else")
+
+    def test_storage_being_unavailable_does_not_break_the_page(self):
+        """Private browsing throws on localStorage access."""
+        source = read(self.IDENTITY)
+        self.assertGreaterEqual(source.count("catch"), 2,
+                                "localStorage access is not guarded")
+
+    def test_the_server_still_requires_attribution(self):
+        """The decisive check: remembering a name client-side must not have
+        removed the server-side requirement."""
+        result = webapi.review_decide(kind="stint", item_id=1,
+                                      decision="approve", reviewer="")
+        self.assertFalse(result["ok"])
+        self.assertIn("reviewer name", result["error"])
+        self.assertFalse(webapi.calibration_save(
+            "owcs-demo", [{"id": "slots_a/0", "rect": [1, 1, 5, 5]}],
+            editor="")["ok"])
+        self.assertFalse(webapi.calibration_import(
+            {"frame_width": 1, "frame_height": 1, "slots_a": [], "slots_b": []},
+            name="x", importer="")["ok"])
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

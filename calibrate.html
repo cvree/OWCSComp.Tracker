@@ -183,7 +183,18 @@
         <li>
           <strong>Want it shipped with the tracker?</strong> Send it in — real
           calibrations for new broadcasts are the most useful thing anyone can
-          contribute.
+          contribute, and anyone may send one.
+          <div class="field" style="margin:10px 0 0;max-width:320px">
+            <label for="shareBy">Your name <span class="pill info">optional</span></label>
+            <div class="help">So the layout can be credited to you.</div>
+            <input type="text" id="shareBy" data-identity autocomplete="name" />
+          </div>
+          <div class="btnrow" style="margin-top:8px">
+            <button class="btn btn-ghost" id="share">Share this layout →</button>
+          </div>
+          <div class="help" style="margin-top:6px">Opens a pre-filled
+            submission with your layout in it. Nothing is sent until you press
+            submit there, and you can read every line first.</div>
         </li>
       </ol>
       <p class="cal-honest">
@@ -201,6 +212,7 @@
 
 </div>
 
+<script src="assets/js/identity.js"></script>
 <script src="assets/js/calibrate/engine.js"></script>
 <script src="assets/js/calibrate/wizard.js"></script>
 </body>

@@ -513,7 +513,66 @@
     $('nextSteps').hidden = false;
   });
 
+  /**
+   * Share the layout with the project.
+   *
+   * Anyone visiting the site may send one — a calibration for a broadcast
+   * nobody has covered yet is the single most useful contribution there is,
+   * and gatekeeping it would mean fewer broadcasts get read. What arrives is
+   * still reviewed like any browser-built layout: it carries `browser_probe`,
+   * not `hud_probe`, so it cannot enter production trusted.
+   *
+   * A pre-filled issue is the whole mechanism. The public site is static —
+   * there is no backend to receive an upload — and inventing one would mean
+   * a server, an account, and a moderation queue. This costs nothing, works
+   * today, and the submitter reads every line before anything is sent.
+   */
+  $('share').addEventListener('click', () => {
+    const name = ($('layoutName').value.trim() || 'my-broadcast')
+      .toLowerCase().replace(/[^a-z0-9_-]+/g, '-').replace(/^-+|-+$/g, '');
+    const by = $('shareBy').value.trim();
+    const layout = E.toLayout(
+      Object.assign({}, result, { boxesA: boxes.a, boxesB: boxes.b }),
+      { name, adjusted });
+
+    const body = [
+      `**Broadcast:** ${name}`,
+      by ? `**Calibrated by:** ${by}` : '',
+      `**Frame size:** ${result.frameW}×${result.frameH}`,
+      `**Frames used:** ${shots.length}`,
+      `**Confidence:** ${Math.round((result.confidence || 0) * 100)}%`,
+      `**Adjusted by hand:** ${adjusted ? 'yes' : 'no'}`,
+      '',
+      'Built with the browser calibration wizard (`calibrate.html`).',
+      'Carries `browser_probe`, not `hud_probe`, so it is not',
+      'production-calibrated and its detections go through review.',
+      '',
+      '```json',
+      JSON.stringify(layout, null, 2),
+      '```',
+    ].filter(Boolean).join('\n');
+
+    const url = 'https://github.com/cvree/owcscomp.tracker/issues/new'
+      + '?title=' + encodeURIComponent(`Layout: ${name}`)
+      + '&body=' + encodeURIComponent(body);
+
+    if (url.length > 7500) {
+      // Some browsers and proxies truncate very long URLs silently, which
+      // would submit a layout with its JSON cut in half. Say so rather than
+      // let that happen.
+      note($('doneNote'), 'warn',
+        'This layout is too large to pre-fill a submission with. Download it '
+        + 'and attach the file to a new issue instead.');
+      return;
+    }
+    window.open(url, '_blank', 'noopener');
+    note($('doneNote'), 'ok',
+      'Opened a pre-filled submission in a new tab. Nothing is sent until you '
+      + 'press submit there.');
+  });
+
   $('startOver').addEventListener('click', () => { window.location.reload(); });
 
+  if (window.OWCSIdentity) window.OWCSIdentity.bindAll('[data-identity]');
   show(0);
 })();

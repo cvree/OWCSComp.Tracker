@@ -280,5 +280,6 @@
     setTimeout(() => { window.location.href = 'control-room.html'; }, 900);
   });
 
+  if (window.OWCSIdentity) window.OWCSIdentity.bindAll('[data-identity]');
   show(0);
 })();

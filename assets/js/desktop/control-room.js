@@ -853,6 +853,10 @@
   $('openSetup').addEventListener('click', () => { window.location.href = 'setup.html'; });
 
   /* --------------------------------------------------------- start up */
+  // Attribution is unchanged; it is just asked for ONCE. See
+  // assets/js/identity.js.
+  if (window.OWCSIdentity) window.OWCSIdentity.bindAll('[data-identity]');
+
   const initial = location.hash.slice(1);
   switchTo(document.querySelector(`#nav button[data-view="${initial}"]`) ? initial : 'overview');
   refreshOverview();
