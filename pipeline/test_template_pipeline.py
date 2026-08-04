@@ -43,6 +43,7 @@ import template_evidence as te  # noqa: E402
 import template_forge as tf  # noqa: E402
 import template_quality as tq  # noqa: E402
 import template_validate as tv  # noqa: E402
+import site_paths  # noqa: E402
 
 NEPAL = os.path.join(ROOT, "reports", "ingest", "qad-twis-nepal")
 HAS_NEPAL = os.path.exists(os.path.join(NEPAL, "observations.jsonl"))
@@ -311,7 +312,10 @@ class TestHeldOutIsEnforced(Temp):
                             "labelSource": te.LABEL_CONSENSUS})
         return {
             "evidenceSetVersion": te.MANIFEST_VERSION,
-            "sourceReport": "src", "cropsDir": os.path.relpath(crops, ROOT),
+            # site_relpath, like the real manifest writer: the temp dir is on
+            # C: while a Windows CI checkout is on D:, and os.path.relpath
+            # raises rather than returning anything across drives.
+            "sourceReport": "src", "cropsDir": site_paths.site_relpath(crops, ROOT),
             "layoutId": "test", "crops": records, "excluded": [],
             "counts": {"labeled": len(records)}, "stints": [],
             "labelPolicy": {"method": "test"},
@@ -516,6 +520,70 @@ class TestPortraitRoiDiscovery(Temp):
         result = proi.discover([gray(portrait(1, size=35))] * 3)
         self.assertIsNone(result["roi"])
         self.assertFalse(result["confident"])
+
+    def test_a_leading_band_is_found_and_cut(self):
+        """The defect this module shipped with: it searched the bottom 55%
+        only, so a package whose furniture sits ABOVE the portrait was
+        confidently reported as "all portrait" and left uncalibrated. That
+        is the real shape of `owcs_8c105lnzlam` — a team-tinted bar over
+        rows 0-12 of 54 — and including it made a template describe the
+        SIDE as much as the hero.
+        """
+        crops = []
+        rng = np.random.default_rng(7)
+        for i in range(40):
+            img = gray(portrait(300 + i, size=54))
+            # Flat along each row, but a different level per crop — a tinted
+            # bar, not hero art. Hero art would be busy within the row.
+            img[0:13, :] = 40 + (i % 5) * 30
+            crops.append(img)
+        result = proi.discover(crops)
+        self.assertTrue(result["confident"], result["reason"])
+        self.assertIsNotNone(result["roi"], result["reason"])
+        self.assertAlmostEqual(result["roi"][1], 13 / 54, places=2,
+                               msg="the leading band was not cut")
+        self.assertEqual(result["evidence"]["leadingBandRows"], [0, 12])
+
+    def test_a_flat_run_that_does_not_start_at_the_top_is_not_a_header(self):
+        """Cutting from row 0 to reach a band that starts lower down would
+        delete real portrait above it, so only a run anchored at row 0
+        counts as furniture."""
+        crops = []
+        rng = np.random.default_rng(11)
+        for i in range(40):
+            img = gray(portrait(500 + i, size=54))
+            img[0:6, :] = rng.integers(0, 256, (6, 54), dtype=np.uint8)
+            img[6:16, :] = 70          # flat, but not at the top
+            crops.append(img)
+        result = proi.discover(crops)
+        self.assertEqual((result["evidence"] or {}).get("leadingBandRows"), None)
+        if result["roi"]:
+            self.assertEqual(result["roi"][1], 0.0,
+                             "a mid-slot flat run was treated as a header")
+
+    def test_a_slot_that_is_flat_everywhere_proposes_nothing(self):
+        """A dead HUD or a fade-to-black must not yield "keep the middle
+        sliver" — that is a capture problem, not an ROI."""
+        crops = [np.full((54, 54), 60, dtype=np.uint8) for _ in range(40)]
+        result = proi.discover(crops)
+        self.assertIsNone(result["roi"], result["reason"])
+
+    def test_both_real_packages_keep_their_measured_roi(self):
+        """Regression lock on the two committed layouts. The Nepal value is
+        load-bearing (it removed every confident wrong answer) and must not
+        move when the leading-band search is added."""
+        expected = {
+            "owcs_jksix_qwc": [0.0, 0.0, 1.0, 0.714],
+            "owcs_8c105lnzlam": [0.0, 0.241, 1.0, 1.0],
+        }
+        for layout_id, roi in expected.items():
+            path = os.path.join(ROOT, "layouts", f"{layout_id}.json")
+            if not os.path.exists(path):
+                continue
+            with open(path, "r", encoding="utf-8") as f:
+                layout = json.load(f)
+            with self.subTest(layout=layout_id):
+                self.assertEqual(layout.get("portrait_roi"), roi)
 
     def test_the_roi_is_applied_to_templates_and_probes_alike(self):
         roi = detect.portrait_roi({"portrait_roi": [0.0, 0.0, 1.0, 0.7]})

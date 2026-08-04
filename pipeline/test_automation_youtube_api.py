@@ -289,5 +289,31 @@ class TestCaching(unittest.TestCase):
                 self.assertNotIn("TOP-SECRET-KEY", str(exc))
 
 
+# --------------------------------------------------------------- environment
+# These are OFFLINE suites, and several of them assert what happens when
+# there is NO API key: a link is recorded but not approved, a client raises
+# YouTubeAuthError, the doctor reports the key as absent. `YouTubeClient`
+# falls back to `os.environ["YOUTUBE_API_KEY"]` when constructed with
+# api_key=None, which is right for the CLI and wrong for a test — on a
+# developer machine that exports a real key, those tests do not merely fail,
+# they stop testing the no-key path and would reach for the live API.
+#
+# CI has no key, so this was invisible there and broke only on the machines
+# where the project is actually operated.
+_BORROWED_ENV: "dict[str, str]" = {}
+_KEYS_UNDER_TEST = ("YOUTUBE_API_KEY", "FACEIT_API_KEY")
+
+
+def setUpModule() -> None:
+    for key in _KEYS_UNDER_TEST:
+        if key in os.environ:
+            _BORROWED_ENV[key] = os.environ.pop(key)
+
+
+def tearDownModule() -> None:
+    os.environ.update(_BORROWED_ENV)
+    _BORROWED_ENV.clear()
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

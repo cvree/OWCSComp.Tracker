@@ -296,6 +296,71 @@ class TestEveryWorkflowIsWellFormed(unittest.TestCase):
                     f"so a run that shipped nothing still reports success")
 
 
+class TestAPolicyDenialDoesNotDiscardTheData(unittest.TestCase):
+    """A permission denial is not a transient error, and must not be treated
+    like one.
+
+    With "Allow GitHub Actions to create and approve pull requests" turned
+    off, `gh pr create` fails identically on every run, forever. The orphaned
+    -branch guard above then deleted the branch and exited 1 — so an hourly
+    workflow spent months regenerating a complete, validated dataset and
+    throwing it away, while reporting red for a reason no re-run could fix.
+    A permanently red workflow is a workflow nobody reads.
+
+    The fallback keeps the data on ONE force-updated staging branch. That
+    preserves the guard's actual concern (no accumulating refs) without
+    paying for it in lost data.
+    """
+
+    WORKFLOW = "discovery.yml"
+
+    def setUp(self) -> None:
+        self.text = _workflow_text(self.WORKFLOW)
+
+    def test_the_denial_is_detected_by_its_message(self):
+        self.assertIn("not permitted to create or approve pull requests",
+                      self.text,
+                      "the workflow cannot distinguish a policy denial from a "
+                      "transient failure, so it will keep discarding data")
+
+    def test_the_denial_branch_stages_instead_of_deleting(self):
+        self.assertIn('git push --force origin "HEAD:$STAGING"', self.text,
+                      "a denied run must keep its validated data somewhere")
+
+    def test_the_staging_branch_is_a_single_fixed_name(self):
+        """The whole reason the old code deleted branches. A dated branch per
+        hourly run would accumulate; one force-updated ref cannot."""
+        self.assertRegex(self.text, r'STAGING="auto/[a-z-]+"',
+                         "the staging branch must be one fixed name")
+        self.assertNotRegex(
+            self.text, r'STAGING="[^"]*\$\(date',
+            "a dated staging branch accumulates one ref per run — that is the "
+            "exact failure the orphaned-branch guard exists to prevent")
+
+    def test_the_dated_branch_is_still_cleaned_up(self):
+        denial = self.text.split("not permitted to create or approve")[1]
+        self.assertIn('git push origin --delete "$BR"', denial,
+                      "the per-run branch must still be removed after its "
+                      "commit is moved to staging")
+
+    def test_the_denial_is_reported_rather_than_hidden(self):
+        """Exiting 0 is only defensible if the run says loudly what happened
+        and how to fix it — otherwise it is a silent failure, which is worse
+        than a noisy one."""
+        self.assertIn("GITHUB_STEP_SUMMARY", self.text)
+        for phrase in ("Settings", "Allow GitHub", "create and approve"):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, self.text,
+                              "the run must name the exact setting to change")
+
+    def test_a_transient_failure_still_fails_loudly(self):
+        """The escape hatch must not swallow the case it was carved out of."""
+        tail = self.text.split("not permitted to create or approve")[1]
+        self.assertIn("exit 1", tail,
+                      "the unknown-failure path must still delete the branch "
+                      "and fail — only the policy denial is exempt")
+
+
 class TestCiReproducibilityGateIsReal(unittest.TestCase):
     """ci.yml once ran the exporter and then `git diff --stat … || true`.
     `|| true` means the step could never fail: the gate CLAIMED to enforce
