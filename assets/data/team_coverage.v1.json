@@ -1,6 +1,6 @@
 {
  "window_days": 30,
- "generated_at": "2026-07-25T23:32:07+00:00",
+ "generated_at": "2026-08-05T16:53:21+00:00",
  "teams": [
   {
    "id": "qadsiah",
@@ -8,12 +8,11 @@
    "region": "EMEA",
    "status": "active",
    "states": [
-    "broadcast-located",
     "composition-captured",
     "logo-candidate",
     "schedule-discovered"
    ],
-   "matches": 1,
+   "matches": 0,
    "broadcastsLocated": 0,
    "capturedMaps": 1,
    "blockingIssue": "no faceit_team_id / official source has verified this identity yet",
@@ -142,12 +141,11 @@
    "region": "EMEA",
    "status": "active",
    "states": [
-    "broadcast-located",
     "composition-captured",
     "logo-verified",
     "schedule-discovered"
    ],
-   "matches": 1,
+   "matches": 0,
    "broadcastsLocated": 0,
    "capturedMaps": 1,
    "blockingIssue": "no faceit_team_id / official source has verified this identity yet",
@@ -184,7 +182,7 @@
   "roster_verified": 0,
   "logo_candidate": 2,
   "logo_verified": 5,
-  "broadcast_located": 4,
+  "broadcast_located": 2,
   "composition_captured": 2,
   "needs_review": 0,
   "unsupported": 0
