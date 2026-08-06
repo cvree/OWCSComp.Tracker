@@ -1,6 +1,125 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
-## CURRENT STATUS (authoritative — 2026-08-02, eighth pass) — hero coverage becomes a claim that has to be earned
+## CURRENT STATUS (authoritative — 2026-08-03, ninth pass) — the second broadcast finally gets to disagree with the first
+
+> Additive to the eighth pass below. That pass proved the *one* validated
+> package honestly. This one asks the question that decides what every new
+> broadcast costs — **do templates work on footage they were not cut from?**
+> — and in answering it finds that three of the eighth pass's conclusions
+> were conclusions about one broadcast wearing the clothes of general
+> results.
+
+### The headline
+
+**Templates do not transfer, but they are not noise either, and the thing
+stopping them is architectural rather than a threshold.**
+
+`templates/owcs_jksix_qwc` (8 heroes, 99.73% held-out on its own footage)
+scored against `reports/ingest/cr-zeta-ccuf-m1-scan` — different event,
+different channel, different HUD package — with each side cropped to its
+own portrait region:
+
+| | |
+|---|---|
+| recall at the layout's floor (0.60) | **0 of 200 (0.0%)** |
+| correct hero ranked FIRST (floor ignored) | **165 of 200 (82.5%)** |
+| median correlation | 0.150 |
+| false match on 1,113 unknown-hero crops | **0 (0.0%, ceiling 2.0%)** |
+
+So: the set carries real hero identity across broadcasts (82.5% against a
+1-in-8 baseline), is nowhere near confident enough to publish from, and —
+the part that matters most — **stays silent instead of guessing** on 1,113
+portraits of heroes it has never seen. Coverage does **not** accumulate
+across VODs today, and it cannot be made to by lowering the floor: 0.15 is
+far below even the 0.35 default that was measured naming 34% of unknown
+portraits as heroes.
+
+`pipeline/template_transfer.py` is the measurement, kept so the answer
+updates itself when a third broadcast exists rather than being re-derived.
+
+### Three defects the second broadcast exposed
+
+**1. `portrait_roi.py` could only find furniture at the BOTTOM.** It
+searched from 45% down, on the stated reasoning that a flat run across the
+top is "a letterbox or a dark helmet". `owcs_8c105lnzlam` is the mirror
+image — a team-tinted bar over rows 0-12 of 54, portrait to the bottom edge
+— so the tool returned *"no flat band: the whole box looks like portrait"*,
+**confidently**, for a slot that is 24% furniture. A package can be left
+uncalibrated by a tool that believes it answered. Both ends are searched
+now, and the ROI carries a `y0`.
+
+The cut is measured, by the test the module exists for (build a template
+from side-a crops, score against side-b crops of the same hero, so a
+template describing the SIDE rather than the hero is exposed): cass
+-0.023→0.258, jetcat 0.261→0.515, mizuki 0.407→0.424, tracer 0.321→0.614.
+Four of four improved, median **+0.267**.
+
+**2. The flatness threshold was one broadcast's furniture.** "Under 10% of
+the *busiest* row" fits a solid separator bar (~1% of peak) and misses a
+tinted header with an edge and a gradient (10-20% of peak). The peak is
+also a single row that moves with one ult flash. Against the **median** row
+the two real packages separate with room on both sides — furniture 0.025-
+0.301, dimmest portrait row 0.637-0.743 — so the rule is now 35% of the
+median. Nepal's ROI is unchanged at 0.714 (locked by a test).
+
+**3. Copying jksix's `unknown_floor` would have shipped a 3.7% false-match
+rate.** Derived per package instead, on 833 leave-one-out trials from this
+package's own footage:
+
+| floor | false match |
+|---|---|
+| 0.35 (default) | 21.0% |
+| 0.60 (**jksix's value**) | **3.7%** |
+| 0.65 | **0.0%** |
+
+`owcs_8c105lnzlam` now carries `portrait_roi [0, 0.241, 1, 1.0]` and
+`unknown_floor 0.65`, each with its evidence in the layout file. Its
+leave-one-out false-match rate went **29.7% → 0.0%**. Its heroes are still
+UNPROVEN (no provenance), and the coverage page still says so.
+
+### The concrete blocker to a shared hero library
+
+One `portrait_roi` is applied to template and probe alike, which is correct
+inside a package and meaningless across two: jksix frames
+portrait-above-name-strip, 8c105lnzlam frames tinted-bar-above-portrait, so
+one ROI crops one side to a face and the other to a chin. Run the transfer
+pair that way — the way the detector runs today — and ranking collapses
+from 82.5% to **0.0%**. Any shared-library work must make the ROI a
+property of the PACKAGE a crop came from, not of the detector run.
+
+### Two pipes that were red for reasons nobody was reading
+
+* **`windows-app` CI**: 11 errors, all `os.path.relpath` across drives (the
+  runner checks out on D:, tempfiles land on C:) — the same bug `78ebcee`
+  fixed once, reintroduced by `template_evidence`'s `cropsDir`. Routed
+  through `site_paths.site_relpath`, and the three template modules are now
+  in the AST guard's `GUARDED` list so it cannot come back that way again.
+* **`discovery` (hourly)**: failing every run on *"GitHub Actions is not
+  permitted to create or approve pull requests"* — a repository setting, not
+  a transient error. The orphaned-branch guard was treating it as one:
+  deleting the branch and exiting 1, throwing away a complete validated
+  regeneration every hour and keeping the workflow permanently red. A policy
+  denial now force-pushes to one fixed staging branch
+  (`auto/discovery-staging` — no refs accumulate) and reports the exact
+  setting to change. **Someone still has to flip that setting** for the loop
+  to propose its own data: Settings → Actions → General → Workflow
+  permissions.
+
+### What was NOT done
+
+* No new footage: the 64 "likely" broadcasts in `matchfinder.v1.json` are
+  still untracked, and one map is still the entire published dataset.
+* `owcs_nd5lllwdky0` and `owcs_youtube_2026` got **no** ROI or floor —
+  there is no ingest evidence in the repo for either, and deriving a
+  threshold requires that package's own footage. Copying is exactly what
+  defect 3 shows to be wrong.
+* The "foreign set as a labeller" idea is motivated by the 82.5%, not
+  built. A labeller wrong one time in six needs the same margin discipline
+  as everything else here.
+
+---
+
+## CURRENT STATUS (2026-08-02, eighth pass) — hero coverage becomes a claim that has to be earned
 
 > Additive to the seventh pass below. That pass finished the *application*.
 > This one goes after the thing the previous handoff listed as its biggest

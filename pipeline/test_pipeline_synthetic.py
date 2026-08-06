@@ -15,6 +15,7 @@ Run:  python3 pipeline/test_pipeline_synthetic.py
 Exits non-zero on any failure.
 """
 from __future__ import annotations
+import hashlib
 import json
 import os
 import shutil
@@ -62,8 +63,27 @@ ALL_HEROES = sorted(set(COMP_A1 + COMP_B1 + COMP_A2 + COMP_B2))
 
 
 def hero_icon(hero_id: str) -> np.ndarray:
-    """Deterministic, visually distinct 64x64 icon per hero id."""
-    rng = np.random.default_rng(abs(hash(hero_id)) % (2**32))
+    """Deterministic, visually distinct 64x64 icon per hero id.
+
+    The seed comes from a STABLE digest, not `hash()`. Python randomises
+    string hashing per process (PYTHONHASHSEED), so `hash("juno")` returns a
+    different value every run — which made every icon in this fixture a
+    fresh random image on each invocation, and "deterministic" in the line
+    above simply false outside a single process.
+
+    Nothing looked broken because the icons stayed visually distinct *most*
+    of the time. But every suite built on these fixtures was really running
+    against new art each time, so a roll of the dice that made an uncovered
+    hero's icon correlate with a covered hero's template produced a genuine
+    failure that could not be reproduced by re-running: `TestGapFinder` in
+    test_template_pipeline.py failed roughly one run in twelve, reporting
+    three uncovered slots instead of four.
+
+    A test that is a different test on every run cannot lock behaviour,
+    which is the whole job of the detection-regression suite next door.
+    """
+    digest = hashlib.sha256(hero_id.encode("utf-8")).digest()
+    rng = np.random.default_rng(int.from_bytes(digest[:4], "big"))
     img = rng.integers(30, 226, size=(SLOT_H, SLOT_W, 3), dtype=np.uint8)
     img = cv2.GaussianBlur(img, (5, 5), 0)
     cv2.putText(img, hero_id[:3].upper(), (4, 40),

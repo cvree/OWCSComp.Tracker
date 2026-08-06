@@ -64,6 +64,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import db  # noqa: E402
 import template_bootstrap as tb  # noqa: E402
 import template_evidence as te  # noqa: E402
+import site_paths  # noqa: E402  (cross-drive-safe relative paths)
 
 VALIDATED, WEAK, FAILED, UNVERIFIABLE = (
     "VALIDATED", "WEAK", "FAILED", "UNVERIFIABLE")
@@ -378,8 +379,8 @@ def validate(templates_dir: str, manifest: dict, *,
     counts = Counter(e["verdict"] for e in per_hero.values())
     return {
         "generatedAt": _utcnow_iso(),
-        "templatesDir": os.path.relpath(templates_dir, repo_root).replace("\\", "/")
-        if os.path.isabs(templates_dir) else templates_dir,
+        "templatesDir": (site_paths.site_relpath(templates_dir, repo_root)
+                         if os.path.isabs(templates_dir) else templates_dir),
         "evidence": {
             "sourceReport": manifest.get("sourceReport"),
             "layoutId": manifest.get("layoutId"),

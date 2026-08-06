@@ -29,18 +29,68 @@
   "hud_probe": {
     "_adjust": "chips_a/chips_b = the ult-charge % readout above each portrait (same cell as the chip box derived alongside slots_a/slots_b: chip_x = slot_x - 54, same y/w/h). Verified against a real t=365s frame: median sat 108-164, val 188-228 across all 10 cells; sat_min/val_min set with margin below the observed minimum.",
     "chips_a": [
-      [40, 103, 54, 54],
-      [147, 103, 54, 54],
-      [254, 103, 54, 54],
-      [361, 103, 54, 54],
-      [468, 103, 54, 54]
+      [
+        40,
+        103,
+        54,
+        54
+      ],
+      [
+        147,
+        103,
+        54,
+        54
+      ],
+      [
+        254,
+        103,
+        54,
+        54
+      ],
+      [
+        361,
+        103,
+        54,
+        54
+      ],
+      [
+        468,
+        103,
+        54,
+        54
+      ]
     ],
     "chips_b": [
-      [1349, 103, 54, 54],
-      [1456, 103, 54, 54],
-      [1562, 103, 54, 54],
-      [1669, 103, 54, 54],
-      [1776, 103, 54, 54]
+      [
+        1349,
+        103,
+        54,
+        54
+      ],
+      [
+        1456,
+        103,
+        54,
+        54
+      ],
+      [
+        1562,
+        103,
+        54,
+        54
+      ],
+      [
+        1669,
+        103,
+        54,
+        54
+      ],
+      [
+        1776,
+        103,
+        54,
+        54
+      ]
     ],
     "sat_min": 90,
     "val_min": 150
@@ -127,6 +177,55 @@
       54,
       54
     ]
+  ],
+  "portrait_roi": [
+    0.0,
+    0.241,
+    1.0,
+    1.0
+  ],
+  "_portrait_roi_note": [
+    "Fractions of each slot box that actually hold the hero portrait.",
+    "This package's furniture is at the TOP, not the bottom: the",
+    "calibrated 54x54 slot opens with a team-tinted bar and the",
+    "portrait runs to the lower edge — the mirror image of",
+    "owcs_jksix_qwc, whose portrait sits above a player-name strip.",
+    "Derived, not guessed: pipeline/portrait_roi.py over 400 real",
+    "crops from reports/ingest/cr-zeta-ccuf-m1-scan found rows 0-12",
+    "of 54 flat along their own width (within-row variance under 35%",
+    "of the median row) while differing sharply between crops, which",
+    "is what a tinted bar does and hero art does not. 13/54 = 0.241.",
+    "Measured effect, by the test this ROI exists for — build a",
+    "template from side-a crops, score it against side-b crops of the",
+    "same hero, so a template that describes the SIDE rather than the",
+    "hero is exposed:",
+    "  cass    -0.023 -> 0.258   (+0.280)",
+    "  jetcat   0.261 -> 0.515   (+0.254)",
+    "  mizuki   0.407 -> 0.424   (+0.018)",
+    "  tracer   0.321 -> 0.614   (+0.293)",
+    "Four heroes of four improved; median gain +0.267 of correlation.",
+    "It also cut this package's leave-one-out false-match rate from",
+    "29.7% to 21.0% before any threshold change (see unknown_floor)."
+  ],
+  "unknown_floor": 0.65,
+  "_unknown_floor_note": [
+    "Per-layout override of detect.UNKNOWN_FLOOR (0.35), measured on",
+    "THIS package's own footage. owcs_jksix_qwc's 0.60 was NOT copied:",
+    "at 0.60 this package still names 3.7% of the heroes it has no",
+    "template for, which is above the 2% ceiling in template_validate.",
+    "Leave-one-out over 833 trials from reports/ingest/cr-zeta-ccuf-m1",
+    "-scan, with portrait_roi applied, against 747 recall probes:",
+    "  floor 0.35 -> 21.0% false match",
+    "  floor 0.55 -> 15.0% false match",
+    "  floor 0.60 ->  3.7% false match   (jksix's value)",
+    "  floor 0.65 ->  0.0% false match",
+    "  floor 0.70 ->  0.0% false match",
+    "0.65 is where false matches reach zero. The recall side of that",
+    "sweep moved 99.5% -> 99.2%, but those templates were cut from",
+    "this same footage, so recall here is an OPTIMISTIC upper bound",
+    "for pricing the floor and is not a validation result — this",
+    "package still has no provenance and remains UNPROVEN. Re-measure",
+    "when a second Champions Clash broadcast is ingested."
   ],
   "match_threshold": 0.6,
   "templates_dir": "templates/owcs_8c105lnzlam"

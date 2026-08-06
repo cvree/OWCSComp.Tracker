@@ -101,6 +101,12 @@ class TestNoModuleCallsRelpathDirectly(unittest.TestCase):
     """
 
     #: Modules that record paths into payloads, exports, reports or HTML.
+    #:
+    #: The template modules joined this list after they reintroduced the exact
+    #: bug the list exists to prevent: `template_evidence` wrote `cropsDir`
+    #: with a raw `relpath`, and eleven Windows CI checks died on it because
+    #: the runner checks out on D: while tempfiles land on C:. Anything that
+    #: writes a path into a manifest belongs here on the day it is written.
     GUARDED = (
         "automation/worker.py",
         "automation/team_assets.py",
@@ -108,6 +114,9 @@ class TestNoModuleCallsRelpathDirectly(unittest.TestCase):
         "automation/publish.py",
         "build_layout_debug.py",
         "export_data.py",
+        "template_evidence.py",
+        "template_validate.py",
+        "template_bootstrap.py",
     )
 
     def test_guarded_modules_use_the_helper(self):
@@ -150,6 +159,46 @@ class TestNoModuleCallsRelpathDirectly(unittest.TestCase):
                 self.assertRegex(
                     text, r"import site_paths",
                     f"{rel} uses site_relpath but never imports site_paths")
+
+
+class TestEvidenceManifestSurvivesTwoDrives(unittest.TestCase):
+    """The cross-drive path has to survive being WRITTEN and then READ BACK.
+
+    Storing an absolute path when no relative one exists is only half a fix.
+    The consumer joins that string to the repo root to find the crop, so if
+    the join silently produced `D:/repo/C:/tmp/...` the manifest would be
+    written happily and every crop would be reported missing later — a much
+    worse failure than the ValueError, because it looks like bad data rather
+    than a bad path.
+    """
+
+    def setUp(self) -> None:
+        import template_evidence
+        self.te = template_evidence
+
+    def test_an_absolute_crops_dir_still_resolves_to_the_crop(self):
+        crops = os.path.abspath(os.path.join(os.sep, "tmp", "media", "crops"))
+        # The stored value is produced the same way the real writer produces
+        # it, under the condition that makes it absolute in the first place.
+        with CrossDrive():
+            stored = site_paths.site_relpath(crops, os.sep + "elsewhere")
+        self.assertTrue(os.path.isabs(stored), "precondition: stored is absolute")
+        got = self.te.crop_path({"cropsDir": stored},
+                                {"file": "t0001805.0_a1.png"},
+                                repo_root=os.path.abspath(os.sep + "repo"))
+        self.assertTrue(got.endswith("t0001805.0_a1.png"))
+        self.assertIn("crops", got)
+        self.assertTrue(os.path.isabs(got),
+                        f"the join lost the absolute crops dir: {got}")
+        self.assertNotIn("repo", got,
+                         f"the repo root was glued in front of an absolute "
+                         f"crops dir, so the crop will be reported missing: {got}")
+
+    def test_the_writer_does_not_raise_when_no_relative_path_exists(self):
+        with CrossDrive():
+            out = site_paths.site_relpath(os.path.join(os.sep + "tmp", "c"),
+                                          os.path.join(os.sep + "repo"))
+        self.assertTrue(out)
 
 
 class TestWindowsFileUrls(unittest.TestCase):

@@ -1,0 +1,69 @@
+{
+ "generatedAt": "2026-08-04T01:50:51+00:00",
+ "templatesDir": "templates/owcs_jksix_qwc",
+ "evidence": {
+  "sourceReport": "reports/ingest/cr-zeta-ccuf-m1-scan",
+  "layoutId": "owcs_8c105lnzlam",
+  "labelPolicy": "stint consensus over consecutive same-slot reads"
+ },
+ "samePackage": false,
+ "detector": {
+  "floor": 0.6,
+  "minMargin": 0.12,
+  "templateRoi": [
+   0.0,
+   0.0,
+   1.0,
+   0.714
+  ],
+  "probeRoi": [
+   0.0,
+   0.241,
+   1.0,
+   1.0
+  ]
+ },
+ "overlapHeroes": [
+  "lucio"
+ ],
+ "totals": {
+  "trials": 200,
+  "recalled": 0,
+  "recallRate": 0.0,
+  "rankedFirst": 165,
+  "rankingRate": 0.825
+ },
+ "falseMatch": {
+  "trials": 1113,
+  "unknown": 1113,
+  "matched": 0,
+  "rate": 0.0,
+  "ceiling": 0.02,
+  "matchedAs": {}
+ },
+ "missingCrops": 0,
+ "heroes": {
+  "lucio": {
+   "heroId": "lucio",
+   "trials": 200,
+   "recalled": 0,
+   "recallRate": 0.0,
+   "rankedFirst": 165,
+   "rankingRate": 0.825,
+   "medianScore": 0.1504,
+   "rankedAs": {
+    "lucio": 165,
+    "sym": 33,
+    "mauga": 1,
+    "shion": 1
+   }
+  }
+ },
+ "verdict": {
+  "transfers": false,
+  "discriminates": false,
+  "partialSignal": true,
+  "safe": true,
+  "summary": "PARTIAL signal: 82.5% ranked first \u2014 well above chance, so the templates do carry hero identity across broadcasts, but 0.0% clear the floor and a labeller wrong one time in 6 still needs the margin discipline used everywhere else here"
+ }
+}

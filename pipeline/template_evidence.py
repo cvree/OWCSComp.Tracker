@@ -65,6 +65,7 @@ from collections import Counter, defaultdict
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import db  # noqa: E402
+import site_paths  # noqa: E402  (cross-drive-safe relative paths)
 
 MANIFEST_VERSION = 1
 
@@ -273,8 +274,13 @@ def build_from_report(report_dir: str, *, layout_id: str,
     return {
         "evidenceSetVersion": MANIFEST_VERSION,
         "generatedAt": _utcnow_iso(),
-        "sourceReport": os.path.relpath(report_dir, db.REPO_ROOT).replace("\\", "/"),
-        "cropsDir": os.path.relpath(crops_dir, db.REPO_ROOT).replace("\\", "/"),
+        # site_relpath, not os.path.relpath: an evidence set can legitimately
+        # be built from a report on another drive (the desktop app encourages
+        # a media root on a second disk, and the Windows CI runner checks out
+        # on D: while tempfiles land on C:). relpath RAISES across drives —
+        # an absolute path is the honest answer when no relative one exists.
+        "sourceReport": site_paths.site_relpath(report_dir, db.REPO_ROOT),
+        "cropsDir": site_paths.site_relpath(crops_dir, db.REPO_ROOT),
         "sourceVideo": source_video,
         "layoutId": layout_id,
         "labelPolicy": {
@@ -329,6 +335,14 @@ def load(path: str) -> dict:
 
 def crop_path(manifest: dict, record: dict, *,
               repo_root: str = db.REPO_ROOT) -> str:
+    """Absolute path of one crop.
+
+    `cropsDir` is repo-relative whenever a relative path exists, and absolute
+    when the crops live on another drive (see `site_relpath` at the write
+    site). `os.path.join` already does the right thing with an absolute
+    second component, so both shapes resolve without a special case here —
+    but the behaviour is load-bearing, so it is named rather than assumed.
+    """
     return os.path.join(repo_root, manifest["cropsDir"], record["file"])
 
 

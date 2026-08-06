@@ -33,6 +33,40 @@ the slot, and cut immediately above it. If there is no such run, the slot is
 all portrait and no ROI is proposed. Refusing to guess is a real answer here:
 a wrong ROI would silently throw away the top of a portrait.
 
+### Furniture is not always at the bottom
+
+That rule was written from one broadcast, and it encoded that broadcast's
+geometry as an assumption: the search started at 45% down, on the reasoning
+that "a flat run across the top is a letterbox or a dark helmet, not a name
+strip". The second broadcast processed by this pipeline
+(`reports/ingest/cr-zeta-ccuf-m1-scan`, layout `owcs_8c105lnzlam`) has the
+opposite shape — rows 0-12 of 54 are flat, the portrait runs to the bottom,
+and this module confidently reported **"no ROI: the whole box looks like
+portrait"** for a slot that is 24% furniture. A package can therefore be
+left uncalibrated by a tool that believes it answered.
+
+The band it missed is not a helmet. It is flat along each row and varies
+hugely between crops, which is what a team-tinted bar does and what hero art
+does not — and cutting it is measurable, by the exact test this module
+exists for. A template must describe the HERO, not the side it came from, so
+build a template from side-a crops and score it against side-b crops of the
+same hero:
+
+    hero      full slot   top 24% cut    delta
+    cass         -0.023         0.258   +0.280
+    jetcat        0.261         0.515   +0.254
+    mizuki        0.407         0.424   +0.018
+    tracer        0.321         0.614   +0.293
+
+Four heroes of four improved; the median gain was +0.267 of correlation, and
+cass went from *anti-correlated* to usable. So both ends are searched now,
+and the ROI carries a `y0` as well as a `y1`.
+
+The original warning still stands and is still enforced: a leading band is
+only cut when it is flat by the same criterion, tall enough to be furniture
+rather than a dark eyebrow, and confined to the top of the slot. Everything
+else is refused, because a wrong leading cut removes the top of a face.
+
 Nothing here writes a layout. It proposes an ROI and shows the evidence; a
 human (or the calibration wizard) puts it in the layout file.
 
@@ -51,16 +85,33 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 # A row counts as "flat" when its mean within-row variance is below this
-# fraction of the crop's busiest row. Portrait rows sit at 0.3-1.0 of the
-# maximum; the separator bar on real footage sits at ~0.02.
-FLAT_RATIO = 0.10
+# fraction of the MEDIAN row's.
+#
+# It was originally a fraction of the busiest row, and that quietly encoded
+# one broadcast's furniture. A solid separator bar sits at ~1% of the peak,
+# so 10% of the peak caught it easily; a team-tinted header bar has an edge
+# and a gradient and sits at 10-20% of the peak, so the same threshold
+# declared it portrait. The peak is also a single row and moves with one
+# bright ult flash, which is a poor thing to measure everything against.
+#
+# Against the median the two real packages separate with room on both sides:
+#
+#   package               furniture rows   dimmest portrait row
+#   owcs_jksix_qwc         0.025 - 0.138                  0.637
+#   owcs_8c105lnzlam       0.096 - 0.301                  0.743
+#
+# 0.35 sits in the gap for both, nearer the furniture than the portrait.
+FLAT_RATIO = 0.35
 # The flat band must be at least this many rows, as a fraction of the slot.
 # One flat row is noise or a dark eyebrow; four in a row is furniture.
 MIN_BAND_FRACTION = 0.08
-# Only look for the band in the bottom part of the slot. A flat run across
-# the top is a letterbox or a dark helmet, not a name strip, and cutting
-# there would remove the portrait rather than the furniture.
+# Only look for the TRAILING band in the bottom part of the slot.
 SEARCH_FROM = 0.45
+# ...and for the LEADING band in the top part. The two windows do not
+# overlap, so one flat run can never be claimed as both, and a slot that is
+# flat everywhere (a dead HUD, a fade-to-black) proposes nothing rather than
+# proposing to keep the middle sliver of nothing.
+SEARCH_LEAD_TO = 0.45
 # Never propose an ROI that keeps less than this much of the slot — that
 # would mean the "portrait" is a sliver and the geometry is wrong, which is
 # a calibration problem, not an ROI problem.
@@ -81,6 +132,7 @@ def row_profile(images) -> "tuple[list[float], list[float]]":
 def discover(images, *, flat_ratio: float = FLAT_RATIO,
              min_band_fraction: float = MIN_BAND_FRACTION,
              search_from: float = SEARCH_FROM,
+             search_lead_to: float = SEARCH_LEAD_TO,
              min_keep: float = MIN_KEEP) -> dict:
     """Propose a `portrait_roi` for a pile of same-shaped slot crops."""
     if len(images) < MIN_SAMPLES:
@@ -94,59 +146,102 @@ def discover(images, *, flat_ratio: float = FLAT_RATIO,
                            f"distinct shapes) — resample them first")}
     h, _w = images[0].shape[:2]
     within, across = row_profile(images)
-    peak = max(within) or 1.0
-    flat = [v / peak < flat_ratio for v in within]
+    import statistics
+    # The median row, not the busiest one: a single ult flash or a white
+    # banner must not move the reference every row is judged against.
+    reference = statistics.median(within) or 1.0
+    flat = [v / reference < flat_ratio for v in within]
 
-    start = int(round(search_from * h))
-    best = None                      # (length, first_row)
-    run_start = None
-    for r in range(start, h):
-        if flat[r]:
-            if run_start is None:
-                run_start = r
-        else:
-            if run_start is not None:
+    def longest_flat_run(lo: int, hi: int):
+        """(length, first_row) of the longest flat run in rows [lo, hi)."""
+        best_run = None
+        run_start = None
+        for r in range(lo, hi):
+            if flat[r]:
+                if run_start is None:
+                    run_start = r
+            elif run_start is not None:
                 length = r - run_start
-                if best is None or length > best[0]:
-                    best = (length, run_start)
+                if best_run is None or length > best_run[0]:
+                    best_run = (length, run_start)
                 run_start = None
-    if run_start is not None:
-        length = h - run_start
-        if best is None or length > best[0]:
-            best = (length, run_start)
+        if run_start is not None:
+            length = hi - run_start
+            if best_run is None or length > best_run[0]:
+                best_run = (length, run_start)
+        return best_run
+
+    min_band = max(2, round(min_band_fraction * h))
+    start = int(round(search_from * h))
+    best = longest_flat_run(start, h)
+
+    # The LEADING band: furniture above the portrait (a team-tinted bar, an
+    # ult meter). Only counted when it actually starts at the top of the
+    # slot — a flat run that begins in the middle is not a header, and
+    # cutting from row 0 to reach it would delete real portrait above it.
+    lead = longest_flat_run(0, int(round(search_lead_to * h)))
+    lead_rows = 0
+    if lead is not None and lead[1] == 0 and lead[0] >= min_band:
+        lead_rows = lead[0]
 
     evidence = {
         "rows": h,
         "withinRowVariance": [round(v, 1) for v in within],
         "acrossCropVariance": [round(v, 1) for v in across],
         "flatRows": [i for i, f in enumerate(flat) if f],
+        "leadingBandRows": ([0, lead_rows - 1] if lead_rows else None),
         "samples": len(images),
     }
 
-    if best is None or best[0] < max(2, round(min_band_fraction * h)):
+    trailing = best if (best is not None and best[0] >= min_band) else None
+    if trailing is None and not lead_rows:
         return {"roi": None, "confident": True, "evidence": evidence,
-                "reason": ("no flat band in the lower part of the slot — the "
+                "reason": ("no flat band at either end of the slot — the "
                            "whole box looks like portrait, so no ROI is "
                            "proposed and matching is unchanged")}
-    length, first = best
-    keep = first / float(h)
+
+    y0 = lead_rows / float(h)
+    y1 = (trailing[1] / float(h)) if trailing else 1.0
+    keep = y1 - y0
     if keep < min_keep:
+        where = []
+        if lead_rows:
+            where.append(f"a leading band of {lead_rows} row(s)")
+        if trailing:
+            where.append(f"a trailing band starting at row {trailing[1]}")
         return {"roi": None, "confident": False, "evidence": evidence,
-                "reason": (f"the flat band starts at row {first} of {h} "
-                           f"({keep * 100:.0f}% in), which would leave a "
-                           f"sliver of portrait — that is a slot-geometry "
-                           f"problem, not something an ROI should paper over")}
-    roi = [0.0, 0.0, 1.0, round(keep, 3)]
-    return {
+                "reason": (f"{' and '.join(where)} would leave only "
+                           f"{keep * 100:.0f}% of {h} rows as portrait — that "
+                           f"is a slot-geometry problem, not something an ROI "
+                           f"should paper over")}
+
+    reasons = []
+    if lead_rows:
+        reasons.append(
+            f"rows 0-{lead_rows - 1} of {h} are flat along their own width "
+            f"yet differ sharply between crops — furniture above the "
+            f"portrait (a team-tinted bar or meter), not hero art, and a "
+            f"template that includes it describes the SIDE as much as the "
+            f"hero")
+    if trailing:
+        length, first = trailing
+        reasons.append(
+            f"rows {first}-{first + length - 1} of {h} are flat "
+            f"(within-row variance under {flat_ratio:.0%} of the median "
+            f"row) — a separator bar, with the player-name strip below it, "
+            f"so a template cut through it describes the PLAYER as much as "
+            f"the hero")
+    roi = [0.0, round(y0, 3), 1.0, round(y1, 3)]
+    result = {
         "roi": roi, "confident": True, "evidence": evidence,
-        "bandRows": [first, first + length - 1],
-        "reason": (f"rows {first}-{first + length - 1} of {h} are flat "
-                   f"(within-row variance under {flat_ratio:.0%} of the "
-                   f"busiest row) — a separator bar, with the player-name "
-                   f"strip below it. Keeping the top {keep * 100:.0f}% cuts "
-                   f"both, so a template describes the hero rather than the "
-                   f"player currently on that hero."),
+        "reason": ("; ".join(reasons)
+                   + f". Keeping rows {int(round(y0 * h))}-"
+                     f"{int(round(y1 * h)) - 1} ({keep * 100:.0f}% of the "
+                     f"slot) cuts them off template and probe alike."),
     }
+    if trailing:
+        result["bandRows"] = [trailing[1], trailing[1] + trailing[0] - 1]
+    return result
 
 
 def load_crops(crops_dir: str, *, limit: int = 400):
