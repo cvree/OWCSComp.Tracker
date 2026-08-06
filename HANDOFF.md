@@ -1,6 +1,103 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
-## CURRENT STATUS (authoritative — 2026-08-02, eighth pass) — hero coverage becomes a claim that has to be earned
+## CURRENT STATUS (authoritative — 2026-08-06, ninth pass) — an optional LLM advisor, fenced so it cannot become evidence
+
+> Additive to the eighth pass below; nothing in it is changed or retracted.
+> This pass answers a product question — "should users be able to add their
+> own Claude/Gemini/ChatGPT key to improve calibration and the website?" —
+> and the answer that shipped is deliberately narrower than the question.
+
+### What was asked for vs what was built, and why
+
+The ask was an API-key feature that improves **calibration** and the
+**website**. Both of those, taken literally, are the wrong places:
+
+- **Calibration is geometry, not language.** `calibrate_source.py` finds
+  saturated chip blobs, RANSACs a uniform-pitch 5-slot grid over blob
+  *edges*, places portraits by local texture, and refuses below a 0.55
+  confidence floor with explicit reasons. Models are poor at pixel-accurate
+  box regression and — worse for this repo — cannot report their own
+  uncertainty the way that pipeline already does. Replacing any of it would
+  trade a reproducible measurement for a confident guess.
+- **The website has no server to hold a key.** It is static on GitHub
+  Pages, and `calibrate.html` promises in its own copy that nothing is
+  uploaded. A key in the browser means `localStorage` plus a direct
+  provider call (Anthropic gates that behind a header literally named
+  `anthropic-dangerous-direct-browser-access`), and asking the public to
+  paste a billing credential into a fan site is the phishing pattern even
+  when done honestly. **The public site was left completely untouched.**
+
+What *is* language-shaped is the residue both of those leave behind: OCR
+text no fuzzy matcher can place, and correct-but-opaque failure reasons.
+That is what shipped.
+
+### What shipped
+
+| file | what it is |
+|---|---|
+| `pipeline/llm_advisor.py` | the whole feature — provider abstraction (Claude/OpenAI/Gemini over stdlib `urllib`, no SDK), closed-vocabulary name suggestions, calibration triage, offline rule fallback |
+| `pipeline/test_llm_advisor.py` | 74 offline checks against a fake transport; most of them test refusals |
+| `desktop/owcs_desktop/credentials.py` | three new `KNOWN_KEYS` entries — the control room UI is data-driven from `describe()`, so it surfaced with no JS change |
+| `pipeline/calibrate_source.py` | `--explain` flag; wording only, never geometry |
+| `README.md` | the boundary, stated publicly, plus an honest-limits entry |
+
+### The five rules, enforced in code rather than in a prompt
+
+1. **Advisory only.** Every return value carries `advisory: true`,
+   `binding: false` and a `provenance` block naming provider + model.
+   `assert_never_binding()` raises if one reaches a persistence path — that
+   is the tripwire that keeps this true as the repo grows.
+2. **Closed vocabulary.** `suggest_team`/`suggest_player` may only return an
+   id from the caller-supplied list. Anything else — an invented team, a
+   reformatted id, a near-miss — is refused and downgraded to an
+   abstention. This is the guard that protects `player_identify.py`'s
+   central promise that the pipeline cannot invent a person.
+3. **Gap-filling only.** Both suggesters take the deterministic result and
+   refuse to run when it already resolved. The fuzzy matcher is never
+   second-guessed.
+4. **Off by default.** No key ⇒ triage falls back to a rule table that
+   ships to everyone, and name matching behaves exactly as before. A dead
+   or misconfigured provider degrades to the same rules. There is no code
+   path where a missing key is an error.
+5. **Never logs a key.** Provider selection reports NAMES only; keys travel
+   in headers (Gemini's too — not the query string, so it cannot land in a
+   proxy access log). Asserted in the tests.
+
+### Verified
+
+- `pipeline/test_llm_advisor.py` — **74/74**.
+- Full offline suite — **101/101 suites pass** (`for t in pipeline/test_*.py`),
+  with `opencv-python-headless` installed. Two suites
+  (`test_calibration_dashboard`, `test_calibration_health`) fail on a box
+  *without* cv2; confirmed pre-existing by stashing this branch's changes.
+- `check_packaging.py` — 43 checks, 8 pre-existing warnings.
+- `export_data.py --check --public` — both exports reproducible.
+- End-to-end with **no key at all**: `calibrate_source.py --frames-dir
+  <blank frame> --explain` refuses at 0.00 and prints actionable offline
+  triage.
+- Gap-filling proven against the real teams table: `FLCNS` and `ZET4 DIV`
+  both return `None` from `match_team` and are resolved by a stubbed
+  advisor to `falcons`/`zeta`; a stub answering `khaos_esports` (not in the
+  table) is **refused**.
+
+### Honest gaps
+
+- **Live suggestion quality is unmeasured.** Everything above is tested
+  against a fake provider. There is no labelled set of real OCR misreads to
+  score a real model on, so the advisor's *usefulness* is unproven even
+  though its *safety* is tested. Treat a suggestion as a prompt to go look.
+- **No UI consumes `suggest_team`/`suggest_player` yet.** They are reachable
+  from the CLI (`--suggest-team`) and ready for the review inbox, but the
+  human-gate screen that would show a suggestion next to its evidence crop
+  is not built. That is the natural next pass, and it is deliberately the
+  point at which a human sees it — not a point at which anything is stored.
+- **`MIN_SUGGESTION_CONFIDENCE` (0.70) is a judgement call**, not a measured
+  threshold, unlike `unknown_floor` which was fitted to 2,008 held-out
+  crops. Re-measure if this ever feeds anything automated.
+
+---
+
+## CURRENT STATUS (2026-08-02, eighth pass) — hero coverage becomes a claim that has to be earned
 
 > Additive to the seventh pass below. That pass finished the *application*.
 > This one goes after the thing the previous handoff listed as its biggest

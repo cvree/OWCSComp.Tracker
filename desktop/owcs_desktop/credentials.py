@@ -55,6 +55,34 @@ KNOWN_KEYS: dict[str, dict[str, str]] = {
                 "falls back to the free RSS + streams-tab scan.",
         "url": "https://console.cloud.google.com/apis/library/youtube.googleapis.com",
     },
+    # --- language-model advisor (pipeline/llm_advisor.py) -----------------
+    # Set at most one of these. They buy exactly two things: plain-English
+    # explanations when calibration is refused, and a suggestion when OCR
+    # text matches no known team or player. Both are ADVISORY — a suggestion
+    # is shown to you for confirmation and is never recorded as a fact, and
+    # nothing here touches HUD geometry, hero detection or any published
+    # number. These calls cost money on your own account, which is why they
+    # are off until a key is present.
+    "ANTHROPIC_API_KEY": {
+        "label": "Claude API key (advisor)",
+        "help": "Optional. Plain-English help when calibration is refused, "
+                "and suggestions for team/player names OCR could not place. "
+                "Suggestions always need your confirmation and never enter "
+                "the evidence chain. Everything works without it.",
+        "url": "https://console.anthropic.com/settings/keys",
+    },
+    "OPENAI_API_KEY": {
+        "label": "OpenAI API key (advisor)",
+        "help": "Optional. Same advisor features as the Claude key — set "
+                "one, not all three. Never enters the evidence chain.",
+        "url": "https://platform.openai.com/api-keys",
+    },
+    "GEMINI_API_KEY": {
+        "label": "Gemini API key (advisor)",
+        "help": "Optional. Same advisor features as the Claude key — set "
+                "one, not all three. Never enters the evidence chain.",
+        "url": "https://aistudio.google.com/app/apikey",
+    },
 }
 
 #: Extra entropy mixed into DPAPI so another application running as the same

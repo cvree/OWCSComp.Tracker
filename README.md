@@ -182,6 +182,59 @@ Architecture, guarantees and build instructions:
 
 ---
 
+## Optional: the language-model advisor
+
+Two jobs here are language problems wearing computer-vision clothing: an
+OCR'd nameplate reading `TW1STED M1NDS` that `difflib` cannot place, and a
+calibration refusal like `b3 portrait box has almost no detail (texture 31)`
+that is precise, correct and useless to a human. `pipeline/llm_advisor.py`
+optionally points a model at those two, and **only** those two.
+
+Add a Claude, OpenAI or Gemini key in the control room's **Credentials**
+page (or export `ANTHROPIC_API_KEY` / `OPENAI_API_KEY` / `GEMINI_API_KEY`);
+it is stored in the same vault as the FACEIT and GitHub tokens, with the
+same honest protection labels. Then:
+
+```bash
+python3 pipeline/llm_advisor.py --check          # which providers are set
+python3 pipeline/calibrate_source.py ... --explain
+```
+
+**Where the boundary is, and why the code — not the prompt — enforces it:**
+
+- **It never measures anything.** HUD geometry comes from the RANSAC grid
+  fit in `calibrate_source.py`, which is deterministic and reproducible from
+  the VOD. Models are bad at pixel coordinates; this one is never asked for
+  any. `--explain` rewrites the *wording* of a result, never the result.
+- **Suggestions are closed-vocabulary.** `suggest_team`/`suggest_player` may
+  only return an id from the list they were handed. A model that answers
+  with anything else — an invented team, a reformatted id — is refused and
+  downgraded to an abstention. It is structurally unable to invent a team or
+  a person, which is the guarantee `player_identify.py` exists to protect.
+- **It only fills gaps.** Both suggesters take the deterministic result and
+  refuse to run if it already resolved. The fuzzy matcher is never
+  second-guessed.
+- **Nothing it says is a fact.** Every return value carries `advisory:
+  true`, `binding: false` and a `provenance` block naming the provider and
+  model. `assert_never_binding()` raises if one reaches a persistence path.
+  A suggestion is addressed to the same human gate that already confirms
+  template labels — it is not written to the DB, a layout, or an export, and
+  it never appears on the public site.
+- **It is off by default and free to ignore.** With no key, calibration
+  triage falls back to a rule table that ships to everyone, and name
+  matching behaves exactly as it always has. There is no code path where a
+  missing key is an error, and a dead or misconfigured provider degrades to
+  those same offline rules rather than failing a run.
+
+No provider SDK enters `requirements.txt` — transport is stdlib `urllib`,
+injectable, so all 74 checks in `pipeline/test_llm_advisor.py` run offline
+with no key. Most of them test the refusals.
+
+The public site does not participate in any of this. It is static, has no
+server to hold a key, and has no business asking a visitor for one.
+
+---
+
 ## Quick start
 
 Requirements: **Python 3.12+**, `pip install -r requirements.txt`, and
@@ -370,6 +423,13 @@ New CV tables (`pipeline/schema.sql`): `ingest_runs`, `slot_observations`,
 - **Scheduled GitHub workflows are manual-only** (`workflow_dispatch`). The
   capture/FACEIT auto-commit pipelines are intentionally off-cron so they
   can't race CI or mutate the committed milestone unattended.
+- **The LLM advisor is a convenience, not a measurement**, and is scoped to
+  stay that way — closed-vocabulary suggestions behind a human gate, plus
+  wording help on calibration failures. It has been exercised against a
+  fake provider across 74 offline checks, but its *live* suggestion quality
+  has not been measured against a labelled set of real OCR misreads. Until
+  it has, treat a suggestion as a prompt to go look, not as evidence. It
+  contributes nothing to any published number.
 
 ---
 

@@ -605,6 +605,10 @@ def main(argv=None) -> int:
     ap.add_argument("--templates-dir", help="override templates_dir")
     ap.add_argument("--force", action="store_true",
                     help="write even below the confidence floor")
+    ap.add_argument("--explain", action="store_true",
+                    help="translate the reasons above into plain-English "
+                         "next steps (offline rules; uses the optional LLM "
+                         "advisor when a key is configured)")
     args = ap.parse_args(argv)
 
     if args.frames_dir:
@@ -623,6 +627,12 @@ def main(argv=None) -> int:
           f"({'OK' if res['ok'] else 'REFUSED'})")
     for r in res["reasons"]:
         print(f"  reason: {r}")
+    if args.explain:
+        # Wording only — the advisor never sees a frame and never touches
+        # the geometry above. Falls back to offline rules with no key.
+        import llm_advisor
+        print(llm_advisor.format_advice(llm_advisor.explain_calibration(
+            res["reasons"], res["confidence"], res["ok"])))
     if not res.get("layout"):
         print("[calibrate] no chip rows -> nothing written")
         return 2
