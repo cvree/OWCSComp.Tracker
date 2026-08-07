@@ -168,11 +168,41 @@
     </div>`;
   }
 
-  function layoutBlock(l) {
+  /* A broadcast the tracker has never seen is the NORMAL case for anyone
+     adding a new production, not an error — but it used to surface as
+     "approve-layout", a command that keeps refusing because there is
+     nothing to approve. When automatic calibration refused, the only thing
+     that moves the job forward is calibrating by hand, so that is what the
+     panel offers, with the VOD already attached. */
+  function calibrateInvite(job, blocked) {
+    const url = job && job.canonicalUrl
+      ? `calibrate.html?from=portal&url=${encodeURIComponent(job.canonicalUrl)}`
+      : "calibrate.html?from=portal";
+    return `<div class="new-bcast">
+      <h4>This broadcast is new to the tracker</h4>
+      <p>Automatic calibration could not place the ten hero portraits on
+        this production${blocked ? ` — <em>${esc(blocked)}</em>` : ""}. That is
+        not a failure of the job: it just means nobody has taught the tracker
+        this broadcast's HUD yet. Do it once, in your browser, and every future
+        broadcast from this production is recognised automatically.</p>
+      <div class="nb-actions">
+        <a class="nb-go" href="${esc(url)}">Calibrate this broadcast →</a>
+        <span class="nb-note">2 minutes · nothing uploaded · no install</span>
+      </div>
+      <p class="nb-after">Afterwards, drop the layout file into
+        <code>layouts/</code> and re-run resolve:</p>
+      <code class="ik-cmd">python pipeline/automation/cli.py resolve-layout --job ${esc(job.jobKey)}</code>
+    </div>`;
+  }
+
+  function layoutBlock(l, job) {
     if (!l || (!l.layoutId && !l.decision)) {
+      if (job && job.state === "NEEDS_LAYOUT") return calibrateInvite(job, null);
       return `<p class="ik-warn">No layout resolved yet — run
         <code>resolve-layout</code> after the download completes.</p>`;
     }
+    const refused = l.blocked || (l.calibration && l.calibration.refusal);
+    if (refused) return calibrateInvite(job, refused);
     const rows = (l.candidates || []).slice(0, 6).map((c) =>
       `<tr><td>${esc(c.layoutId)}</td><td>${esc(c.score)}</td>
         <td>${esc(c.gameplayFrames)}</td></tr>`).join("");
@@ -185,9 +215,11 @@
         ? `<p class="ik-warn">Calibration confidence ${esc(cal.confidence)}
             (floor ${esc(cal.floor)})${cal.reviewSheet
               ? ` · <a href="${esc(cal.reviewSheet)}">review sheet</a>` : ""}</p>` : ""}
-      ${cal.refusal ? `<p class="ik-block">REFUSED: ${esc(cal.refusal)}</p>` : ""}
       ${l.approvalRequired
-        ? `<code class="ik-cmd">python pipeline/automation/cli.py approve-layout --job &lt;job&gt; --confirm</code>`
+        ? `<p class="ik-warn">A layout was calibrated from this VOD and needs a
+             human to bless it before detection may use it.</p>
+           <code class="ik-cmd">python pipeline/automation/cli.py approve-layout --job ${
+             esc(job && job.jobKey || "<job>")} --confirm --approved-by "&lt;your name&gt;"</code>`
         : ""}`;
   }
 
@@ -311,7 +343,7 @@
       <p class="ik-warn"><b>Next command</b></p>
       <code class="ik-cmd">${esc(job.nextCommand || "—")}</code>
       ${actionButtons(job)}
-      ${layoutBlock(job.layout)}
+      ${layoutBlock(job.layout, job)}
       ${timeline(job)}
       ${segs || `<p class="ik-warn">No segment candidates yet.</p>`}
     </section>`;
@@ -451,7 +483,10 @@
       ? `<p class="ik-warn">last scan ${esc(report.generatedAt)} —
           <b>${esc(s.total || 0)}</b> found ·
           <b>${esc(s.likely || 0)}</b> likely broadcasts ·
-          <b>${esc(s.tracked || 0)}</b> already in the pipeline</p>`
+          <b>${esc(s.tracked || 0)}</b> already in the pipeline${
+        s.ignoredTooShort
+          ? ` · <b>${esc(s.ignoredTooShort)}</b> Shorts and clips under five
+              minutes left out (they cannot contain a map)` : ""}</p>`
       : "";
     const errHtml = errs.map((e) => `<p class="mf-err">source error: ${esc(e)}</p>`).join("");
     if (!cands.length) {

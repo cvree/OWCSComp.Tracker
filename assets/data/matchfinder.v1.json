@@ -12,9 +12,12 @@
         "confidence": "unlikely",
         "reasons": [
           "-10 no livestream timing metadata",
+          "-15 no duration and no livestream metadata \u2014 nothing says this is long-form",
           "-10 no team/competition relationship signal"
         ],
-        "score": -20
+        "refusalReason": null,
+        "refused": false,
+        "score": -35
       },
       "liveBroadcastStatus": null,
       "publishedAt": "2026-08-06T19:15:52+00:00",
@@ -37,10 +40,13 @@
         "confidence": "unlikely",
         "reasons": [
           "-10 no livestream timing metadata",
+          "-15 no duration and no livestream metadata \u2014 nothing says this is long-form",
           "-10 no team/competition relationship signal",
           "-30 instructional/promotional-title signal"
         ],
-        "score": -50
+        "refusalReason": null,
+        "refused": false,
+        "score": -65
       },
       "liveBroadcastStatus": null,
       "publishedAt": "2026-08-04T20:45:38+00:00",
@@ -63,10 +69,13 @@
         "confidence": "unlikely",
         "reasons": [
           "-10 no livestream timing metadata",
+          "-15 no duration and no livestream metadata \u2014 nothing says this is long-form",
           "-10 no team/competition relationship signal",
           "-30 instructional/promotional-title signal"
         ],
-        "score": -50
+        "refusalReason": null,
+        "refused": false,
+        "score": -65
       },
       "liveBroadcastStatus": null,
       "publishedAt": "2026-08-03T19:14:09+00:00",
@@ -91,6 +100,8 @@
           "+25 livestream metadata (upcoming)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 40
       },
       "liveBroadcastStatus": "upcoming",
@@ -117,6 +128,8 @@
           "+25 livestream metadata (upcoming)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 40
       },
       "liveBroadcastStatus": "upcoming",
@@ -141,10 +154,13 @@
         "confidence": "unlikely",
         "reasons": [
           "-10 no livestream timing metadata",
+          "-15 no duration and no livestream metadata \u2014 nothing says this is long-form",
           "+15 tournament/broadcast terminology in title/description",
           "-30 instructional/promotional-title signal"
         ],
-        "score": -25
+        "refusalReason": null,
+        "refused": false,
+        "score": -40
       },
       "liveBroadcastStatus": null,
       "publishedAt": "2026-08-02T19:32:37+00:00",
@@ -168,10 +184,11 @@
         "reasons": [
           "+25 livestream metadata (completed)",
           "+20 substantial duration (31849s)",
-          "+15 tournament/broadcast terminology in title/description",
-          "-30 instructional/promotional-title signal"
+          "-10 no team/competition relationship signal"
         ],
-        "score": 30
+        "refusalReason": null,
+        "refused": false,
+        "score": 35
       },
       "liveBroadcastStatus": "completed",
       "publishedAt": "2026-08-02T19:12:39+00:00",
@@ -195,10 +212,13 @@
         "confidence": "unlikely",
         "reasons": [
           "-10 no livestream timing metadata",
-          "+15 tournament/broadcast terminology in title/description",
+          "-15 no duration and no livestream metadata \u2014 nothing says this is long-form",
+          "-10 no team/competition relationship signal",
           "-30 instructional/promotional-title signal"
         ],
-        "score": -25
+        "refusalReason": null,
+        "refused": false,
+        "score": -65
       },
       "liveBroadcastStatus": null,
       "publishedAt": "2026-08-02T17:09:06+00:00",
@@ -221,9 +241,12 @@
         "confidence": "unlikely",
         "reasons": [
           "-10 no livestream timing metadata",
+          "-15 no duration and no livestream metadata \u2014 nothing says this is long-form",
           "-10 no team/competition relationship signal"
         ],
-        "score": -20
+        "refusalReason": null,
+        "refused": false,
+        "score": -35
       },
       "liveBroadcastStatus": null,
       "publishedAt": "2026-08-02T11:29:49+00:00",
@@ -246,9 +269,12 @@
         "confidence": "unlikely",
         "reasons": [
           "-10 no livestream timing metadata",
+          "-15 no duration and no livestream metadata \u2014 nothing says this is long-form",
           "-10 no team/competition relationship signal"
         ],
-        "score": -20
+        "refusalReason": null,
+        "refused": false,
+        "score": -35
       },
       "liveBroadcastStatus": null,
       "publishedAt": "2026-08-02T10:07:22+00:00",
@@ -272,10 +298,11 @@
         "reasons": [
           "+25 livestream metadata (completed)",
           "+20 substantial duration (24861s)",
-          "+15 tournament/broadcast terminology in title/description",
-          "-30 instructional/promotional-title signal"
+          "-10 no team/competition relationship signal"
         ],
-        "score": 30
+        "refusalReason": null,
+        "refused": false,
+        "score": 35
       },
       "liveBroadcastStatus": "completed",
       "publishedAt": "2026-08-01T16:39:00+00:00",
@@ -299,9 +326,12 @@
         "confidence": "unlikely",
         "reasons": [
           "-10 no livestream timing metadata",
+          "-15 no duration and no livestream metadata \u2014 nothing says this is long-form",
           "-10 no team/competition relationship signal"
         ],
-        "score": -20
+        "refusalReason": null,
+        "refused": false,
+        "score": -35
       },
       "liveBroadcastStatus": null,
       "publishedAt": "2026-08-01T15:07:13+00:00",
@@ -321,12 +351,16 @@
       "job": null,
       "lastSeenAt": "2026-08-07T19:39:16+00:00",
       "likeness": {
-        "confidence": "likely",
+        "confidence": "unlikely",
         "reasons": [
           "-10 no livestream timing metadata",
+          "-15 no duration and no livestream metadata \u2014 nothing says this is long-form",
           "+15 tournament/broadcast terminology in title/description"
         ],
-        "score": 5
+        "refusalReason": null,
+        "refused": false,
+        "rescoredFrom": "likely",
+        "score": -10
       },
       "liveBroadcastStatus": null,
       "publishedAt": "2026-08-01T13:39:23+00:00",
@@ -349,10 +383,13 @@
         "confidence": "unlikely",
         "reasons": [
           "-10 no livestream timing metadata",
+          "-15 no duration and no livestream metadata \u2014 nothing says this is long-form",
           "+15 tournament/broadcast terminology in title/description",
           "-30 instructional/promotional-title signal"
         ],
-        "score": -25
+        "refusalReason": null,
+        "refused": false,
+        "score": -40
       },
       "liveBroadcastStatus": null,
       "publishedAt": "2026-07-31T23:18:45+00:00",
@@ -376,10 +413,11 @@
         "reasons": [
           "+25 livestream metadata (completed)",
           "+20 substantial duration (25656s)",
-          "+15 tournament/broadcast terminology in title/description",
-          "-30 instructional/promotional-title signal"
+          "+15 tournament/broadcast terminology in title/description"
         ],
-        "score": 30
+        "refusalReason": null,
+        "refused": false,
+        "score": 60
       },
       "liveBroadcastStatus": "completed",
       "publishedAt": "2026-07-31T16:58:30+00:00",
@@ -403,10 +441,12 @@
         "confidence": "unlikely",
         "reasons": [
           "-10 no livestream timing metadata",
-          "+15 tournament/broadcast terminology in title/description",
-          "-30 instructional/promotional-title signal"
+          "-15 no duration and no livestream metadata \u2014 nothing says this is long-form",
+          "-10 no team/competition relationship signal"
         ],
-        "score": -25
+        "refusalReason": null,
+        "refused": false,
+        "score": -35
       },
       "liveBroadcastStatus": null,
       "publishedAt": "2026-07-31T14:14:06+00:00",
@@ -426,12 +466,16 @@
       "job": null,
       "lastSeenAt": "2026-08-04T18:19:55+00:00",
       "likeness": {
-        "confidence": "likely",
+        "confidence": "unlikely",
         "reasons": [
           "-10 no livestream timing metadata",
+          "-15 no duration and no livestream metadata \u2014 nothing says this is long-form",
           "+15 tournament/broadcast terminology in title/description"
         ],
-        "score": 5
+        "refusalReason": null,
+        "refused": false,
+        "rescoredFrom": "likely",
+        "score": -10
       },
       "liveBroadcastStatus": null,
       "publishedAt": "2026-07-31T11:56:38+00:00",
@@ -451,12 +495,16 @@
       "job": null,
       "lastSeenAt": "2026-08-03T12:44:11+00:00",
       "likeness": {
-        "confidence": "likely",
+        "confidence": "unlikely",
         "reasons": [
           "-10 no livestream timing metadata",
+          "-15 no duration and no livestream metadata \u2014 nothing says this is long-form",
           "+15 tournament/broadcast terminology in title/description"
         ],
-        "score": 5
+        "refusalReason": null,
+        "refused": false,
+        "rescoredFrom": "likely",
+        "score": -10
       },
       "liveBroadcastStatus": null,
       "publishedAt": "2026-07-31T09:15:44+00:00",
@@ -479,10 +527,13 @@
         "confidence": "unlikely",
         "reasons": [
           "-10 no livestream timing metadata",
+          "-15 no duration and no livestream metadata \u2014 nothing says this is long-form",
           "-10 no team/competition relationship signal",
           "-30 instructional/promotional-title signal"
         ],
-        "score": -50
+        "refusalReason": null,
+        "refused": false,
+        "score": -65
       },
       "liveBroadcastStatus": null,
       "publishedAt": "2026-07-30T21:32:35+00:00",
@@ -502,12 +553,16 @@
       "job": null,
       "lastSeenAt": "2026-08-02T16:14:27+00:00",
       "likeness": {
-        "confidence": "likely",
+        "confidence": "unlikely",
         "reasons": [
           "-10 no livestream timing metadata",
+          "-15 no duration and no livestream metadata \u2014 nothing says this is long-form",
           "+15 tournament/broadcast terminology in title/description"
         ],
-        "score": 5
+        "refusalReason": null,
+        "refused": false,
+        "rescoredFrom": "likely",
+        "score": -10
       },
       "liveBroadcastStatus": null,
       "publishedAt": "2026-07-30T00:07:09+00:00",
@@ -530,9 +585,12 @@
         "confidence": "unlikely",
         "reasons": [
           "-10 no livestream timing metadata",
+          "-15 no duration and no livestream metadata \u2014 nothing says this is long-form",
           "-10 no team/competition relationship signal"
         ],
-        "score": -20
+        "refusalReason": null,
+        "refused": false,
+        "score": -35
       },
       "liveBroadcastStatus": null,
       "publishedAt": "2026-07-29T17:19:52+00:00",
@@ -555,9 +613,12 @@
         "confidence": "unlikely",
         "reasons": [
           "-10 no livestream timing metadata",
+          "-15 no duration and no livestream metadata \u2014 nothing says this is long-form",
           "-10 no team/competition relationship signal"
         ],
-        "score": -20
+        "refusalReason": null,
+        "refused": false,
+        "score": -35
       },
       "liveBroadcastStatus": null,
       "publishedAt": "2026-07-28T18:33:28+00:00",
@@ -580,10 +641,13 @@
         "confidence": "unlikely",
         "reasons": [
           "-10 no livestream timing metadata",
+          "-15 no duration and no livestream metadata \u2014 nothing says this is long-form",
           "-10 no team/competition relationship signal",
           "-30 instructional/promotional-title signal"
         ],
-        "score": -50
+        "refusalReason": null,
+        "refused": false,
+        "score": -65
       },
       "liveBroadcastStatus": null,
       "publishedAt": "2026-07-23T18:49:43+00:00",
@@ -606,10 +670,13 @@
         "confidence": "unlikely",
         "reasons": [
           "-10 no livestream timing metadata",
+          "-15 no duration and no livestream metadata \u2014 nothing says this is long-form",
           "-10 no team/competition relationship signal",
           "-30 instructional/promotional-title signal"
         ],
-        "score": -50
+        "refusalReason": null,
+        "refused": false,
+        "score": -65
       },
       "liveBroadcastStatus": null,
       "publishedAt": "2026-07-22T19:23:45+00:00",
@@ -632,10 +699,13 @@
         "confidence": "unlikely",
         "reasons": [
           "-10 no livestream timing metadata",
+          "-15 no duration and no livestream metadata \u2014 nothing says this is long-form",
           "-10 no team/competition relationship signal",
           "-30 instructional/promotional-title signal"
         ],
-        "score": -50
+        "refusalReason": null,
+        "refused": false,
+        "score": -65
       },
       "liveBroadcastStatus": null,
       "publishedAt": "2026-07-20T19:36:51+00:00",
@@ -658,10 +728,13 @@
         "confidence": "unlikely",
         "reasons": [
           "-10 no livestream timing metadata",
+          "-15 no duration and no livestream metadata \u2014 nothing says this is long-form",
           "-10 no team/competition relationship signal",
           "-30 instructional/promotional-title signal"
         ],
-        "score": -50
+        "refusalReason": null,
+        "refused": false,
+        "score": -65
       },
       "liveBroadcastStatus": null,
       "publishedAt": "2026-07-16T21:01:19+00:00",
@@ -684,10 +757,13 @@
         "confidence": "unlikely",
         "reasons": [
           "-10 no livestream timing metadata",
+          "-15 no duration and no livestream metadata \u2014 nothing says this is long-form",
           "-10 no team/competition relationship signal",
           "-30 instructional/promotional-title signal"
         ],
-        "score": -50
+        "refusalReason": null,
+        "refused": false,
+        "score": -65
       },
       "liveBroadcastStatus": null,
       "publishedAt": "2026-07-14T23:23:50+00:00",
@@ -710,10 +786,13 @@
         "confidence": "unlikely",
         "reasons": [
           "-10 no livestream timing metadata",
+          "-15 no duration and no livestream metadata \u2014 nothing says this is long-form",
           "-10 no team/competition relationship signal",
           "-30 instructional/promotional-title signal"
         ],
-        "score": -50
+        "refusalReason": null,
+        "refused": false,
+        "score": -65
       },
       "liveBroadcastStatus": null,
       "publishedAt": "2026-07-14T18:40:46+00:00",
@@ -736,10 +815,13 @@
         "confidence": "unlikely",
         "reasons": [
           "-10 no livestream timing metadata",
+          "-15 no duration and no livestream metadata \u2014 nothing says this is long-form",
           "-10 no team/competition relationship signal",
           "-30 instructional/promotional-title signal"
         ],
-        "score": -50
+        "refusalReason": null,
+        "refused": false,
+        "score": -65
       },
       "liveBroadcastStatus": null,
       "publishedAt": "2026-07-09T20:32:05+00:00",
@@ -765,6 +847,8 @@
           "+20 substantial duration (25087s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -791,6 +875,8 @@
           "+20 substantial duration (40894s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -817,6 +903,8 @@
           "+20 substantial duration (2502s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -843,6 +931,8 @@
           "+20 substantial duration (34113s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -869,6 +959,8 @@
           "+20 substantial duration (24414s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -895,6 +987,8 @@
           "+20 substantial duration (20606s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -921,6 +1015,8 @@
           "+20 substantial duration (28383s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -947,6 +1043,8 @@
           "+20 substantial duration (25657s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -973,6 +1071,8 @@
           "+20 substantial duration (27361s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -999,6 +1099,8 @@
           "+20 substantial duration (28697s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1025,6 +1127,8 @@
           "+20 substantial duration (28455s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1051,6 +1155,8 @@
           "+20 substantial duration (25714s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1077,6 +1183,8 @@
           "+20 substantial duration (42373s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1103,6 +1211,8 @@
           "+20 substantial duration (42899s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1129,6 +1239,8 @@
           "+20 substantial duration (37659s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1155,6 +1267,8 @@
           "+20 substantial duration (20974s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1181,6 +1295,8 @@
           "+20 substantial duration (42899s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1207,6 +1323,8 @@
           "+20 substantial duration (20389s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1233,6 +1351,8 @@
           "+20 substantial duration (33100s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1259,6 +1379,8 @@
           "+20 substantial duration (35152s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1285,6 +1407,8 @@
           "+20 substantial duration (26826s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1311,6 +1435,8 @@
           "+20 substantial duration (23139s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1337,6 +1463,8 @@
           "+20 substantial duration (35667s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1363,6 +1491,8 @@
           "+20 substantial duration (24335s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1389,6 +1519,8 @@
           "+20 substantial duration (22581s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1415,6 +1547,8 @@
           "+20 substantial duration (24105s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1441,6 +1575,8 @@
           "+20 substantial duration (28484s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1467,6 +1603,8 @@
           "+20 substantial duration (29782s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1493,6 +1631,8 @@
           "+20 substantial duration (26566s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1519,6 +1659,8 @@
           "+20 substantial duration (26418s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1545,6 +1687,8 @@
           "+20 substantial duration (26540s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1571,6 +1715,8 @@
           "+20 substantial duration (29536s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1597,6 +1743,8 @@
           "+20 substantial duration (21470s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1623,6 +1771,8 @@
           "+20 substantial duration (21281s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1649,6 +1799,8 @@
           "+20 substantial duration (13430s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1675,6 +1827,8 @@
           "+20 substantial duration (29771s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1701,6 +1855,8 @@
           "+20 substantial duration (32256s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1727,6 +1883,8 @@
           "+20 substantial duration (27641s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1753,6 +1911,8 @@
           "+20 substantial duration (35937s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1779,6 +1939,8 @@
           "+20 substantial duration (20453s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1805,6 +1967,8 @@
           "+20 substantial duration (17370s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1831,6 +1995,8 @@
           "+20 substantial duration (20197s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1857,6 +2023,8 @@
           "+20 substantial duration (5058s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1883,6 +2051,8 @@
           "+20 substantial duration (20937s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1909,6 +2079,8 @@
           "+20 substantial duration (27485s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1935,6 +2107,8 @@
           "+20 substantial duration (27492s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1961,6 +2135,8 @@
           "+20 substantial duration (33613s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -1987,6 +2163,8 @@
           "+20 substantial duration (33495s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -2013,6 +2191,8 @@
           "+20 substantial duration (29919s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -2039,6 +2219,8 @@
           "+20 substantial duration (29877s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -2065,6 +2247,8 @@
           "+20 substantial duration (26562s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -2091,6 +2275,8 @@
           "+20 substantial duration (26283s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -2117,6 +2303,8 @@
           "+20 substantial duration (20697s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -2143,6 +2331,8 @@
           "+20 substantial duration (22819s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -2169,6 +2359,8 @@
           "+20 substantial duration (22024s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -2195,6 +2387,8 @@
           "+20 substantial duration (24828s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -2221,6 +2415,8 @@
           "+20 substantial duration (23736s)",
           "+15 tournament/broadcast terminology in title/description"
         ],
+        "refusalReason": null,
+        "refused": false,
         "score": 60
       },
       "liveBroadcastStatus": "completed",
@@ -2245,7 +2441,8 @@
   "schema": "matchfinder.v1",
   "sourceErrors": [],
   "summary": {
-    "likely": 66,
+    "ignoredTooShort": 0,
+    "likely": 62,
     "total": 86,
     "tracked": 0
   }

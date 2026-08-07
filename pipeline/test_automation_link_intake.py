@@ -327,8 +327,11 @@ class TestBroadcastLikeness(IntakeTestCase):
                                duration="PT28S", live="none"),
             channels=REGISTRY)
         self.assertEqual(res["likeness"]["confidence"], "unlikely")
-        self.assertTrue(any("broadcast-likeness WARNING" in w
-                            for w in res["warnings"]))
+        # 28 seconds is under the hard floor, so this is a REFUSAL rather
+        # than a score to weigh — the warning says so in those words.
+        self.assertTrue(res["likeness"]["refused"])
+        self.assertTrue(any(w.startswith("REFUSED") for w in res["warnings"]),
+                        res["warnings"])
         # Official channel is NOT enough when the video isn't a broadcast.
         self.assertEqual(res["source"]["state"], li.SOURCE_PENDING)
         self.assertEqual(res["source"]["reasonCode"], "broadcast_likeness_failed")
@@ -445,6 +448,130 @@ class TestLinkStatus(IntakeTestCase):
     def test_empty_status_is_explicit(self):
         self.assertEqual(li.link_status(self.store), [])
         self.assertIn("no intake jobs", li.format_status([]))
+
+
+class TestFiveMinuteFloor(IntakeTestCase):
+    """The hard length gate. Everything else in the likeness score is a
+    signal another signal can outvote; this one cannot be, because a
+    professional series cannot happen in under five minutes."""
+
+    def _ingest(self, *, url="https://youtu.be/dQw4w9WgXcQ", **kw):
+        return li.ingest_link(self.store, url,
+                              client=fake_client(**kw), channels=REGISTRY)
+
+    def test_four_minute_upload_is_refused_however_matchy_the_title(self):
+        res = self._ingest(title="OWCS 2026 Grand Finals | Team A vs Team B | Day 3",
+                           duration="PT4M", live="completed")
+        self.assertTrue(res["likeness"]["refused"])
+        self.assertEqual(res["likeness"]["confidence"], "unlikely")
+        self.assertEqual(res["source"]["state"], li.SOURCE_PENDING)
+
+    def test_six_minute_upload_clears_the_floor(self):
+        res = self._ingest(duration="PT6M")
+        self.assertFalse(res["likeness"]["refused"])
+
+    def test_a_shorts_url_is_refused_on_its_spelling_alone(self):
+        res = self._ingest(url="https://www.youtube.com/shorts/dQw4w9WgXcQ",
+                           title="OWCS 2026 Playoffs Day 1 Team A vs Team B",
+                           duration="PT4H", live="completed")
+        self.assertTrue(res["likeness"]["refused"])
+        self.assertIn("/shorts/", res["likeness"]["refusalReason"])
+
+    def test_a_shorts_url_is_still_the_same_job_as_the_watch_url(self):
+        """Refusing on the spelling must not fork identity — the same video
+        pasted both ways is still one job."""
+        a = li.parse_link("https://www.youtube.com/shorts/dQw4w9WgXcQ")
+        b = li.parse_link("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+        self.assertEqual(a["videoId"], b["videoId"])
+        self.assertEqual(a["canonicalUrl"], b["canonicalUrl"])
+        self.assertTrue(a["isShortsUrl"])
+        self.assertFalse(b["isShortsUrl"])
+
+    def test_next_command_offers_no_approval_route_for_a_refused_video(self):
+        self._ingest(duration="PT30S")
+        job = self.store.get(li.job_key_for("dQw4w9WgXcQ"))
+        self.assertIn("none —", li.next_command(job))
+        self.assertTrue(any("too short" in r
+                            for r in li.blocking_reasons(job)))
+
+    def test_approving_a_refused_video_by_hand_is_refused_too(self):
+        self._ingest(duration="PT30S")
+        key = li.job_key_for("dQw4w9WgXcQ")
+        with self.assertRaises(li.LinkIntakeError) as caught:
+            li.approve_source(self.store, key, approved_by="Connor", confirm=True)
+        self.assertEqual(caught.exception.code, "too_short_to_process")
+
+    def test_force_is_the_documented_escape_hatch(self):
+        self._ingest(duration="PT30S")
+        key = li.job_key_for("dQw4w9WgXcQ")
+        res = li.approve_source(self.store, key, approved_by="Connor",
+                                confirm=True, force=True)
+        self.assertEqual(res["source"]["state"], li.SOURCE_APPROVED)
+
+    def test_rejecting_a_refused_video_never_needs_force(self):
+        self._ingest(duration="PT30S")
+        key = li.job_key_for("dQw4w9WgXcQ")
+        res = li.approve_source(self.store, key, approved_by="Connor",
+                                confirm=True, reject=True)
+        self.assertEqual(res["source"]["state"], li.SOURCE_REJECTED)
+
+
+class TestNewBroadcastHasAWayForward(IntakeTestCase):
+    """NEEDS_LAYOUT is the expected state for a production nobody has
+    calibrated yet, and the two situations behind it need opposite advice.
+    Answering both with `approve-layout` is what dead-ended new broadcasts:
+    when the resolver refused, there is nothing to approve and that command
+    can only keep saying no."""
+
+    def _job_in_needs_layout(self, layout):
+        li.ingest_link(self.store, "https://youtu.be/dQw4w9WgXcQ",
+                       client=fake_client(), channels=REGISTRY)
+        key = li.job_key_for("dQw4w9WgXcQ")
+        self.store.update_payload(key, {"layout": layout})
+        self.store.transition(key, sm.DOWNLOADING)
+        self.store.transition(key, sm.DOWNLOADED)
+        self.store.transition(key, sm.NEEDS_LAYOUT)
+        return self.store.get(key)
+
+    def test_a_calibrated_candidate_asks_for_approval(self):
+        job = self._job_in_needs_layout(
+            {"approvalRequired": True, "calibration": {"confidence": 0.91}})
+        self.assertIn("approve-layout", li.next_command(job))
+
+    def test_a_refused_calibration_sends_you_to_the_wizard(self):
+        job = self._job_in_needs_layout(
+            {"approvalRequired": True,
+             "blocked": "confidence 0.31 below floor 0.62",
+             "calibration": {"refusal": "confidence 0.31 below floor 0.62"}})
+        cmd = li.next_command(job)
+        self.assertNotIn("approve-layout", cmd)
+        self.assertIn("calibrate.html", cmd)
+        self.assertIn("resolve-layout", cmd)
+        self.assertTrue(any("new to the tracker" in r
+                            for r in li.blocking_reasons(job)),
+                        li.blocking_reasons(job))
+
+    def test_the_wizard_link_carries_the_broadcast(self):
+        job = self._job_in_needs_layout({"blocked": "no HUD found"})
+        self.assertIn("watch?v=dQw4w9WgXcQ", li.next_command(job))
+
+
+class TestStatesReadAsEnglish(unittest.TestCase):
+    """`-> ARCHIVED` means "queued, ready to download". Read as English it
+    means the opposite, which is exactly how a successful retry got read as
+    a job being shelved."""
+
+    def test_every_state_has_a_plain_label(self):
+        for state in sm.ALL_STATES:
+            self.assertIn(state, sm.LABELS, f"{state} has no plain-English label")
+
+    def test_describe_pairs_the_code_with_the_meaning(self):
+        text = sm.describe(sm.ARCHIVED)
+        self.assertIn("ARCHIVED", text)
+        self.assertIn("ready to download", text)
+
+    def test_an_unknown_state_still_renders(self):
+        self.assertEqual(sm.describe("WAT"), "WAT")
 
 
 if __name__ == "__main__":

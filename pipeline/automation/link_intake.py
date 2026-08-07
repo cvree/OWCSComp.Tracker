@@ -119,7 +119,12 @@ def parse_link(url: str) -> dict[str, Any]:
     """Canonicalize one pasted URL.
 
     Returns {"videoId", "canonicalUrl", "startSeconds", "playlistId",
-             "host", "originalUrl", "droppedParams"}.
+             "host", "originalUrl", "droppedParams", "isShortsUrl"}.
+
+    `isShortsUrl` records that the link arrived in /shorts/ form. Identity is
+    unaffected — a Short and a watch?v= URL for the same id are the same
+    video — but the spelling is evidence about length, and the broadcast gate
+    refuses on it.
 
     Raises LinkIntakeError with a stable code for every rejection:
       empty_url / unsupported_scheme / unsupported_host / no_video_id /
@@ -184,6 +189,7 @@ def parse_link(url: str) -> dict[str, Any]:
         "host": host,
         "originalUrl": raw,
         "droppedParams": dropped,
+        "isShortsUrl": bool(parts and parts[0].lower() == "shorts"),
     }
 
 
@@ -364,8 +370,17 @@ def ingest_link(store: js.JobStore, url: str, *,
             "description": metadata.get("description"),
             "liveBroadcastStatus": metadata.get("liveBroadcastStatus"),
             "durationSeconds": metadata.get("durationSeconds"),
+            "isShortsUrl": parsed["isShortsUrl"],
         })
-        if likeness["confidence"] == "unlikely":
+        if likeness.get("refused"):
+            # Not a warning to weigh against others: the pipeline will not
+            # process this, and saying so plainly beats letting someone
+            # approve the source by hand and wait for a download that can
+            # only end in an empty result.
+            warnings.append(
+                f"REFUSED — {likeness['refusalReason']}. Nothing to convert "
+                f"here; paste the full broadcast VOD instead.")
+        elif likeness["confidence"] == "unlikely":
             warnings.append(
                 f"broadcast-likeness WARNING (score {likeness['score']}): "
                 f"this looks like a promo/guide/short/unrelated upload, not "
@@ -508,6 +523,7 @@ def _advance_to_ready(store: js.JobStore, job: models.Job) -> models.Job:
 def approve_source(store: js.JobStore, job_key: str, *,
                    approved_by: str, reason: str | None = None,
                    confirm: bool = False, reject: bool = False,
+                   force: bool = False,
                    now: str | None = None) -> dict[str, Any]:
     """The ONE step a human must take for a non-registry source.
 
@@ -516,6 +532,11 @@ def approve_source(store: js.JobStore, job_key: str, *,
     trail), then advances an approved job to ARCHIVED so a worker can claim
     it. `reject=True` records an explicit refusal instead and leaves the job
     un-downloadable.
+
+    A video the length gate REFUSED cannot be approved without `force=True`.
+    Approving one costs a download and a segmentation pass to arrive at the
+    obvious answer, so the default is to say no and explain why; the escape
+    hatch stays for the operator who genuinely knows better.
     """
     job = store.get(job_key)
     if job is None:
@@ -524,6 +545,13 @@ def approve_source(store: js.JobStore, job_key: str, *,
         raise LinkIntakeError(
             "confirmation_required",
             "pass --confirm — there is no default that approves a source")
+    likeness = job.payload.get("likeness") or {}
+    if likeness.get("refused") and not reject and not force:
+        raise LinkIntakeError(
+            "too_short_to_process",
+            f"{likeness.get('refusalReason')} — approving this would download "
+            f"a video that cannot contain a map. Paste the full broadcast VOD "
+            f"instead, or pass --force if you are certain.")
     if not (approved_by or "").strip():
         raise LinkIntakeError(
             "approver_required",
@@ -558,13 +586,48 @@ def approve_source(store: js.JobStore, job_key: str, *,
 
 
 # --------------------------------------------------------------- status view
+def layout_next_step(job: models.Job) -> str:
+    """What to do about a job sitting in NEEDS_LAYOUT.
+
+    There are two completely different situations behind that one state, and
+    answering both with `approve-layout` is what dead-ended every genuinely
+    new broadcast:
+
+      * the resolver CALIBRATED a candidate and wants a human to bless it —
+        `approve-layout` is exactly right;
+      * the resolver REFUSED (it could not find the HUD confidently enough
+        to propose anything) — there is nothing to approve, and telling
+        someone to approve it sends them to a command that will keep saying
+        no. The answer there is to calibrate the broadcast by hand, which is
+        what the browser wizard exists for.
+    """
+    key = job.job_key
+    layout = job.payload.get("layout") or {}
+    url = (job.payload.get("intake") or {}).get("canonicalUrl") or job.source_url or ""
+    blocked = layout.get("blocked") or (layout.get("calibration") or {}).get("refusal")
+    if blocked:
+        return (f"this broadcast is new — automatic calibration could not place "
+                f"the HUD ({blocked}). Teach it once in the browser: open "
+                f"calibrate.html?url={url} , drop in 4-6 screenshots of live "
+                f"play, and put the layout it gives you in layouts/ . Then: "
+                f"python pipeline/automation/cli.py resolve-layout --job {key}")
+    if layout.get("approvalRequired"):
+        return (f"python pipeline/automation/cli.py approve-layout "
+                f"--job {key} --confirm --approved-by \"<your name>\"")
+    return f"python pipeline/automation/cli.py resolve-layout --job {key}"
+
+
 def next_command(job: models.Job) -> str:
     """The EXACT next command an operator should run for this job. The intake
     panel and `link-status` both render this — one authoritative answer."""
     key = job.job_key
     source = job.payload.get("source") or {}
+    likeness = job.payload.get("likeness") or {}
     if source.get("state") == SOURCE_REJECTED:
         return "none — this source was explicitly rejected"
+    if likeness.get("refused") and source.get("state") != SOURCE_APPROVED:
+        return (f"none — {likeness.get('refusalReason')}. Paste the full "
+                f"broadcast VOD instead.")
     if source.get("state") != SOURCE_APPROVED:
         return (f"python pipeline/automation/cli.py approve-source "
                 f"--job {key} --approved-by \"<your name>\" --confirm")
@@ -575,8 +638,7 @@ def next_command(job: models.Job) -> str:
         sm.DOWNLOADING: (f"python pipeline/automation/cli.py resume-job "
                          f"(if the worker crashed)"),
         sm.DOWNLOADED: f"python pipeline/automation/cli.py resolve-layout --job {key}",
-        sm.NEEDS_LAYOUT: (f"python pipeline/automation/cli.py approve-layout "
-                          f"--job {key} --confirm"),
+        sm.NEEDS_LAYOUT: layout_next_step(job),
         sm.SEGMENTING: "wait — candidate generation in progress",
         sm.NEEDS_REVIEW: (f"open intake.html (or: python pipeline/automation/cli.py "
                           f"segment-list --video-id {job.payload.get('videoId')})"),
@@ -616,12 +678,22 @@ def blocking_reasons(job: models.Job) -> list[str]:
         out.append(f"broadcast is {meta['liveBroadcastStatus']} — only "
                    f"completed VODs are processed")
     likeness = job.payload.get("likeness") or {}
-    if likeness.get("confidence") == "unlikely":
+    if likeness.get("refused"):
+        out.append(f"too short to be a broadcast — {likeness.get('refusalReason')}")
+    elif likeness.get("confidence") == "unlikely":
         out.append(f"broadcast-likeness gate failed (score {likeness.get('score')})")
     if job.state == sm.NEEDS_REVIEW:
         out.append("awaiting human review of segments/compositions")
     if job.state == sm.NEEDS_LAYOUT:
-        out.append("no known broadcast layout matched — calibration awaiting approval")
+        layout = job.payload.get("layout") or {}
+        blocked = layout.get("blocked") or (layout.get("calibration") or {}).get("refusal")
+        out.append(
+            f"this broadcast is new to the tracker and automatic calibration "
+            f"could not place the HUD ({blocked}) — calibrate it once by hand "
+            f"in the browser wizard (calibrate.html)"
+            if blocked else
+            "no known broadcast layout matched — a layout was calibrated from "
+            "this VOD and is awaiting human approval")
     if job.state == sm.NEEDS_TEMPLATES:
         out.append("hero-template coverage insufficient for this broadcast package")
     if job.last_error_code and job.state not in sm.TERMINAL_STATES:
@@ -835,7 +907,7 @@ def format_status(rows: list[dict]) -> str:
         lines.append(f"    video      : {r['videoId']}  {r['canonicalUrl']}")
         lines.append(f"    title      : {r['title'] or '(metadata unavailable)'}")
         lines.append(f"    channel    : {r['channelTitle'] or '?'} ({r['channelId'] or '?'})")
-        lines.append(f"    state      : {r['state']}")
+        lines.append(f"    state      : {sm.describe(r['state'])}")
         lines.append(f"    source     : {r['sourceState']} — {r['sourceReason']}"
                      + (f" [by {r['sourceDecidedBy']}]" if r["sourceDecidedBy"] else ""))
         if r["durationSeconds"]:

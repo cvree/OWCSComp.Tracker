@@ -766,13 +766,14 @@ def cmd_approve_source(args: argparse.Namespace) -> int:
         try:
             result = li.approve_source(
                 store, args.job, approved_by=args.approved_by,
-                reason=args.reason, confirm=args.confirm, reject=args.reject)
+                reason=args.reason, confirm=args.confirm, reject=args.reject,
+                force=args.force)
         except li.LinkIntakeError as exc:
             print(f"[intake] approve-source FAILED [{exc.code}] {exc}")
             return 1
         verb = "REJECTED" if args.reject else "APPROVED"
         print(f"[intake] {args.job}: source {verb} by {args.approved_by}")
-        print(f"  job state   : {result['state']}")
+        print(f"  job state   : {sm.describe(result['state'])}")
         print(f"  reason      : {result['source']['reason']}")
         print(f"  next command: {result['nextCommand']}")
         return 0
@@ -1032,14 +1033,37 @@ def cmd_release_job(args: argparse.Namespace) -> int:
 
 
 def cmd_retry_job(args: argparse.Namespace) -> int:
+    """Retry, and then say what actually happened.
+
+    This printed a bare `-> ARCHIVED`, which is a SUCCESS — the job was put
+    back at the front of the automatic work — but reads in English like the
+    job was shelved. Running it a second time then (correctly) refused,
+    confirming the wrong conclusion. Both paths now spell out the state and
+    hand over the next command.
+    """
     from automation import ops
     store = js.JobStore(args.db)
     try:
         job = ops.retry_job(store, args.job, force=args.force)
-        print(f"[automation] {args.job} -> {job.state} (next_retry_at={job.next_retry_at})")
+        print(f"[automation] {args.job} retried -> {sm.describe(job.state)}")
+        if job.next_retry_at:
+            print(f"[automation]   not before : {job.next_retry_at}")
+        print(f"[automation]   next       : {li.next_command(job)}")
         return 0
     except (KeyError, ValueError) as exc:
         print(f"[automation] retry-job FAILED: {exc}")
+        # "Not retryable" is usually because the job is already moving. Say
+        # where it is and what advances it, instead of leaving the operator
+        # holding an error with no way forward.
+        try:
+            job = store.get(args.job)
+        except Exception:  # noqa: BLE001 — diagnostics must not mask the error
+            job = None
+        if job is not None:
+            print(f"[automation]   state now  : {sm.describe(job.state)}")
+            if job.state not in (sm.FAILED, sm.RETRY_SCHEDULED, sm.FAILED_PERMANENT):
+                print("[automation]   nothing has failed — there is no retry to run.")
+            print(f"[automation]   next       : {li.next_command(job)}")
         return 1
     finally:
         store.close()
@@ -1852,6 +1876,9 @@ def main(argv: list[str] | None = None) -> int:
                       help="record an explicit refusal instead of an approval")
     as_p.add_argument("--confirm", action="store_true",
                       help="required — there is no default that approves a source")
+    as_p.add_argument("--force", action="store_true",
+                      help="approve even a video the length gate refused "
+                           "(under five minutes / a Shorts URL)")
     as_p.set_defaults(func=cmd_approve_source)
 
     # ---- Beta closed-loop: Phase 1 job spine + Phase E worker ------------

@@ -339,6 +339,28 @@ code.ik-cmd[data-copied="1"]::after { content: "copied"; color: var(--st-ok); bo
 }
 .cmd-help a { border-bottom: 1px dotted var(--amber); }
 
+/* --------------------------------------------- a broadcast it has not seen */
+/* NEEDS_LAYOUT is the expected state for every new production, so it is
+   dressed as an invitation rather than an error. */
+.new-bcast {
+  border: 1px solid rgba(255, 169, 43, .45); border-radius: 12px;
+  background: linear-gradient(150deg, rgba(255, 169, 43, .1), transparent 60%), var(--bg-raise);
+  padding: 15px 18px; margin: 12px 0;
+}
+.new-bcast h4 { margin: 0 0 6px; font-size: .96rem; color: var(--amber); font-family: var(--display); }
+.new-bcast p { margin: 0 0 10px; font-size: .84rem; color: var(--muted); max-width: 74ch; }
+.new-bcast em { color: var(--text); font-style: normal; }
+.nb-actions { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; margin-bottom: 10px; }
+.nb-go {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--amber); border: 1px solid var(--amber); color: #1a1206;
+  border-radius: 9px; padding: 9px 17px; text-decoration: none;
+  font: 600 .86rem var(--display); letter-spacing: .02em;
+}
+.nb-go:hover { background: #ffb84f; text-decoration: none; }
+.nb-note { font-size: .76rem; color: var(--muted); }
+.new-bcast .nb-after { margin: 0 0 6px; font-size: .8rem; }
+
 /* ----------------------------------------------------------- calibration */
 .cal-invite {
   display: grid; grid-template-columns: 1fr auto; gap: 18px 24px; align-items: center;

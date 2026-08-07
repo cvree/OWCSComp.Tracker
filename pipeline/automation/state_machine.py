@@ -125,6 +125,49 @@ def _build_transitions() -> dict[str, frozenset[str]]:
 TRANSITIONS: dict[str, frozenset[str]] = _build_transitions()
 
 
+# --------------------------------------------------------------- plain words
+# These names were chosen from the roadmap's vocabulary, and two of them mean
+# roughly the opposite of what they say in ordinary English: ARCHIVED is the
+# START of the automatic work (a linked VOD, queued, nothing downloaded yet),
+# and PROCESSING covers the wait after a layout is approved. An operator who
+# reads `-> ARCHIVED` in their terminal reasonably concludes their job has
+# been filed away and given up on.
+#
+# Renaming the states would break every stored row and every export, so the
+# labels live beside them instead, and every human-facing surface prints
+# both.
+LABELS: dict[str, str] = {
+    DISCOVERED: "found, not yet authorized",
+    SCHEDULED: "authorized, waiting to be queued",
+    AWAITING_BROADCAST: "waiting for the stream to start",
+    LIVE: "streaming now — VODs are processed after it ends",
+    RECORDING: "capturing the live stream",
+    ARCHIVED: "queued — ready to download, nothing downloaded yet",
+    DOWNLOADING: "downloading the VOD",
+    DOWNLOADED: "VOD on disk, working out the HUD layout next",
+    SEGMENTING: "finding the maps inside the broadcast",
+    PROCESSING: "reading the broadcast",
+    NEEDS_LAYOUT: "new broadcast — needs a HUD layout before it can be read",
+    NEEDS_TEMPLATES: "needs hero templates cut for this layout",
+    NEEDS_REVIEW: "waiting for you to review the maps it proposed",
+    READY_FOR_DETECTION: "approved segment queued for detection",
+    APPROVED: "detection done and reviewed — ready to publish",
+    PUBLISHED: "published",
+    PARTIAL: "finished with gaps",
+    FAILED: "failed — retryable",
+    RETRY_SCHEDULED: "retry scheduled",
+    FAILED_PERMANENT: "given up on — retry needs --force",
+    IGNORED: "not being pursued",
+    CANCELLED: "cancelled by an operator",
+}
+
+
+def describe(state: str) -> str:
+    """`"ARCHIVED (queued — ready to download…)"`, for anything a human reads."""
+    label = LABELS.get(state)
+    return f"{state} ({label})" if label else str(state)
+
+
 def is_valid_state(state: str) -> bool:
     return state in ALL_STATES
 

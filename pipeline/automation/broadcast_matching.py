@@ -124,9 +124,26 @@ LIKENESS_WEIGHT_MATCH_FORMATTING = 15       # "vs", "BoN", "Game N", "Map N", a 
 LIKENESS_PENALTY_INSTRUCTIONAL_TERMS = -30
 LIKENESS_PENALTY_NO_MATCH_SIGNAL = -10       # neither tournament terms nor match formatting
 
+LIKENESS_PENALTY_UNKNOWN_DURATION = -15     # no duration AND no livestream metadata
+
 LIKENESS_SUBSTANTIAL_DURATION_SECONDS = MIN_PLAUSIBLE_DURATION_SECONDS  # 20 minutes
 LIKENESS_SHORTS_DURATION_SECONDS = 60                                    # sub-60s is Shorts territory
 LIKENESS_THRESHOLD = 0  # score >= this -> "likely" a broadcast; below -> "unlikely"
+
+# --- The hard floor --------------------------------------------------------
+# Everything above is a weighted signal that another signal can outvote. This
+# one cannot be outvoted, because there is no such thing as a five-minute
+# broadcast of a professional Overwatch series: the shortest single map runs
+# longer than this. Shorts, clips, promos, player-interview cutdowns and
+# "top 5 plays" uploads all live under it, they all carry OWCS branding in
+# the title, and the weighted score kept calling them likely on the strength
+# of that branding alone.
+#
+# A video is REFUSED — not merely scored down — when its duration is known
+# and under this, or when the URL itself says /shorts/. Refused videos never
+# reach the match finder's list and can never auto-approve a source.
+# Unknown duration is NOT a refusal: not knowing is not evidence.
+MIN_BROADCAST_DURATION_SECONDS = 5 * 60
 
 _TOURNAMENT_TERMS = (
     "tournament", "stage", "match", "day 1", "day 2", "day 3", "group",
@@ -145,16 +162,44 @@ _INSTRUCTIONAL_TERMS = (
 _MATCH_FORMAT_RE = re.compile(r"\bvs\b|\bbo[1-9]\b|\bgame\s*\d+\b|\bmap\s*\d+\b|\b\d+\s*-\s*\d+\b")
 
 
+def too_short_refusal(video: dict) -> str | None:
+    """The one signal nothing else can outvote. Returns the refusal reason,
+    or None when the video clears the floor (or its length is unknown)."""
+    if video.get("isShortsUrl"):
+        return ("refused: this is a /shorts/ URL — YouTube Shorts are capped "
+                "far below the length of any real broadcast")
+    dur = video.get("durationSeconds")
+    if dur is None:
+        return None
+    try:
+        dur = int(dur)
+    except (TypeError, ValueError):
+        return None
+    if dur < MIN_BROADCAST_DURATION_SECONDS:
+        return (f"refused: {dur}s long, under the "
+                f"{MIN_BROADCAST_DURATION_SECONDS // 60}-minute floor — a single "
+                f"map of a pro series runs longer than this, so no video this "
+                f"short is a broadcast")
+    return None
+
+
 def broadcast_likeness(video: dict) -> dict:
     """Score how much a video LOOKS like a broadcast, independent of any
     specific match/event target. Pure; every signal recorded in `reasons`.
-    Returns {"score": int, "confidence": "likely"|"unlikely", "reasons": [...]}."""
+
+    Returns {"score", "confidence": "likely"|"unlikely", "reasons": [...],
+             "refused": bool, "refusalReason": str|None}.
+
+    `refused` is the hard floor (see MIN_BROADCAST_DURATION_SECONDS): a
+    refused video is always "unlikely" no matter what its title claims, and
+    callers are expected to drop it rather than rank it."""
     score = 0
     reasons: list[str] = []
     text = f"{video.get('title') or ''} {video.get('description') or ''}"
     norm = _norm_text(text)
     status = video.get("liveBroadcastStatus")
     dur = video.get("durationSeconds")
+    refusal = too_short_refusal(video)
 
     if status in ("live", "upcoming", "completed"):
         score += LIKENESS_WEIGHT_LIVESTREAM_METADATA
@@ -173,6 +218,15 @@ def broadcast_likeness(video: dict) -> dict:
         else:
             score += LIKENESS_PENALTY_SHORT_DURATION
             reasons.append(f"{LIKENESS_PENALTY_SHORT_DURATION} duration too short for a broadcast ({dur}s)")
+    elif status not in ("live", "upcoming", "completed"):
+        # Neither a length nor any sign it was ever streamed. This is the
+        # shape of a plain channel upload — a promo, a clip, an interview —
+        # and it was reaching "likely" on tournament branding alone, which
+        # is how the match finder filled up with things that are not
+        # matches. A real VOD nearly always carries one or the other.
+        score += LIKENESS_PENALTY_UNKNOWN_DURATION
+        reasons.append(f"{LIKENESS_PENALTY_UNKNOWN_DURATION} no duration and no "
+                       f"livestream metadata — nothing says this is long-form")
 
     has_tournament_terms = any(t in norm for t in _TOURNAMENT_TERMS)
     has_match_format = bool(_MATCH_FORMAT_RE.search(norm))
@@ -192,8 +246,13 @@ def broadcast_likeness(video: dict) -> dict:
         score += LIKENESS_PENALTY_INSTRUCTIONAL_TERMS
         reasons.append(f"{LIKENESS_PENALTY_INSTRUCTIONAL_TERMS} instructional/promotional-title signal")
 
-    confidence = "likely" if score >= LIKENESS_THRESHOLD else "unlikely"
-    return {"score": score, "confidence": confidence, "reasons": reasons}
+    if refusal:
+        # Stated first, because it is the only reason that decided anything.
+        reasons.insert(0, refusal)
+    confidence = ("unlikely" if refusal
+                  else ("likely" if score >= LIKENESS_THRESHOLD else "unlikely"))
+    return {"score": score, "confidence": confidence, "reasons": reasons,
+            "refused": bool(refusal), "refusalReason": refusal}
 
 
 def confidence_band(score: int) -> str:

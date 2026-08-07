@@ -341,10 +341,16 @@ class TestReportAndSnapshot(unittest.TestCase):
         self.assertEqual(job["jobKey"], li.job_key_for("bcast001AAA"))
         self.assertIn("state", job)
         self.assertIn("nextCommand", job)
-        self.assertIsNone(by_id["promo002BBB"]["job"])
+        # promo002BBB is 45 seconds long. It stays in the LEDGER (so a
+        # rescan does not rediscover it as new) but the report does not
+        # offer it as something to convert — there is no map inside 45
+        # seconds. An untracked real broadcast still reports job=None.
+        self.assertNotIn("promo002BBB", by_id)
+        self.assertIsNone(by_id["strm003CCCC"]["job"])
         self.assertEqual(report["summary"]["tracked"], 1)
-        self.assertEqual(report["summary"]["total"], 3)
+        self.assertEqual(report["summary"]["total"], 2)
         self.assertEqual(report["summary"]["likely"], 2)
+        self.assertEqual(report["summary"]["ignoredTooShort"], 1)
 
     def test_an_unopenable_db_still_reports_every_candidate(self):
         """The guard that stops a scheduled scan from committing an empty
@@ -354,12 +360,59 @@ class TestReportAndSnapshot(unittest.TestCase):
         # A DIRECTORY as the DB path: sqlite cannot open it. (A path inside a
         # missing directory would NOT work here — JobStore creates parents.)
         report = mf.build_report(self._tmp.name, ledger=self._ledger())
-        self.assertEqual(report["summary"]["total"], 3)
+        # Two of the three ledger rows are broadcasts; the third is a
+        # 45-second promo the length gate refuses either way.
+        self.assertEqual(report["summary"]["total"], 2)
         self.assertEqual(report["summary"]["tracked"], 0)
         self.assertTrue(all(c["job"] is None for c in report["candidates"]))
         self.assertTrue(any("join unavailable" in e
                             for e in report["sourceErrors"]),
                         "a degraded join must be reported, not hidden")
+
+    def test_archived_rows_are_rejudged_against_todays_rules(self):
+        """A candidate that scrolled out of the feed window is never
+        re-scanned, so tightening the gate would otherwise only ever apply
+        to videos found afterwards."""
+        stale = {"schema": mf.SCHEMA, "generatedAt": "2026-01-01T00:00:00+00:00",
+                 "channels": [CHANNEL], "sourceErrors": [], "candidates": [{
+                     "videoId": "oldpromo001", "url": "https://x",
+                     "title": "We asked the players who gets out of the group #OWCS",
+                     "durationSeconds": None, "liveBroadcastStatus": None,
+                     # the verdict the rules of the day gave it
+                     "likeness": {"score": 5, "confidence": "likely", "reasons": []},
+                 }]}
+        report = mf.build_report(ledger=stale, store=self.store)
+        lk = report["candidates"][0]["likeness"]
+        self.assertEqual(lk["confidence"], "unlikely")
+        self.assertEqual(lk["rescoredFrom"], "likely")
+
+    def test_rejudging_can_only_tighten_never_promote(self):
+        """The ledger drops descriptions, so a re-score sees strictly less
+        evidence than the original did. It must never use that to upgrade a
+        verdict."""
+        stale = {"schema": mf.SCHEMA, "generatedAt": "2026-01-01T00:00:00+00:00",
+                 "channels": [CHANNEL], "sourceErrors": [], "candidates": [{
+                     "videoId": "oldguide001", "url": "https://x",
+                     # title alone looks fine; the DESCRIPTION was what
+                     # revealed it as a guide, and it is no longer stored
+                     "title": "OWCS 2026 Playoffs Day 1 — Team A vs Team B",
+                     "durationSeconds": 7200, "liveBroadcastStatus": "completed",
+                     "likeness": {"score": -5, "confidence": "unlikely",
+                                  "reasons": ["-30 instructional/promotional-title signal"]},
+                 }]}
+        report = mf.build_report(ledger=stale, store=self.store)
+        self.assertEqual(report["candidates"][0]["likeness"]["confidence"], "unlikely")
+
+    def test_a_short_already_in_the_pipeline_keeps_its_row(self):
+        """Hiding a job somebody is actually working on would be worse than
+        showing a short video."""
+        li.ingest_link(self.store,
+                       "https://www.youtube.com/watch?v=promo002BBB",
+                       client=None, requested_by="test")
+        report = mf.build_report(ledger=self._ledger(), store=self.store)
+        by_id = {c["videoId"]: c for c in report["candidates"]}
+        self.assertIn("promo002BBB", by_id)
+        self.assertIsNotNone(by_id["promo002BBB"]["job"])
 
     def test_report_never_raises(self):
         # even a hostile ledger shape produces a valid empty report
@@ -374,7 +427,7 @@ class TestReportAndSnapshot(unittest.TestCase):
         with open(path, encoding="utf-8") as f:
             loaded = json.load(f)
         self.assertEqual(loaded["schema"], mf.SCHEMA)
-        self.assertEqual(len(loaded["candidates"]), 3)
+        self.assertEqual(len(loaded["candidates"]), 2)  # the 45s promo is dropped
         # nothing secret can be in the snapshot: only public metadata
         blob = json.dumps(loaded)
         self.assertNotIn("cookie", blob.lower())

@@ -621,12 +621,58 @@ class TestBroadcastLikeness(unittest.TestCase):
         r = bm.broadcast_likeness(v)
         self.assertEqual(r["confidence"], "likely")
 
+    def test_five_minute_floor_overrules_every_other_signal(self):
+        """The one signal that IS allowed to dominate. Everything a promo can
+        fake — official channel, tournament branding, a 'Team A vs Team B'
+        title, completed-livestream metadata — is present here, and it is
+        still refused, because no professional series is four minutes long."""
+        v = video(title="OWCS 2026 Grand Finals | Team A vs Team B | Day 3",
+                  description="Full broadcast", liveBroadcastStatus="completed",
+                  durationSeconds=4 * 60)
+        r = bm.broadcast_likeness(v)
+        self.assertTrue(r["refused"])
+        self.assertEqual(r["confidence"], "unlikely")
+        self.assertIn("floor", r["refusalReason"])
+
+    def test_just_over_the_floor_is_judged_on_its_signals_again(self):
+        v = video(title="OWCS 2026 Grand Finals | Team A vs Team B | Day 3",
+                  description="Full broadcast", liveBroadcastStatus="completed",
+                  durationSeconds=6 * 60)
+        r = bm.broadcast_likeness(v)
+        self.assertFalse(r["refused"])
+        self.assertEqual(r["confidence"], "likely")
+
+    def test_a_shorts_url_is_refused_without_any_duration_at_all(self):
+        v = video(title="OWCS 2026 Playoffs Day 1", liveBroadcastStatus="completed",
+                  durationSeconds=None)
+        v["isShortsUrl"] = True
+        r = bm.broadcast_likeness(v)
+        self.assertTrue(r["refused"])
+
+    def test_unknown_length_and_no_stream_metadata_is_not_a_broadcast(self):
+        """The false positive that filled the match finder with interviews:
+        an RSS-only upload has no duration and no livestream metadata, and
+        was reaching 'likely' on tournament branding alone."""
+        v = video(title="We asked the Group A players who gets out of Group B",
+                  description="", liveBroadcastStatus="none",
+                  durationSeconds=None, actualStartAt=None, scheduledStartAt=None)
+        r = bm.broadcast_likeness(v)
+        self.assertEqual(r["confidence"], "unlikely")
+        self.assertFalse(r["refused"], "unknown length is not evidence — "
+                                       "it must down-rank, never hard-refuse")
+
+    def test_unknown_length_still_passes_when_it_was_a_livestream(self):
+        v = video(title="OWCS 2026 Stage 2 Playoffs Day 3 — Team A vs Team B",
+                  liveBroadcastStatus="completed", durationSeconds=None)
+        r = bm.broadcast_likeness(v)
+        self.assertEqual(r["confidence"], "likely")
+
     def test_does_not_rely_on_duration_alone(self):
         # A LONG video with only instructional signals must still be
-        # unlikely (duration alone can't save it); a SHORT video with strong
-        # tournament/livestream signals scores lower than a real broadcast
-        # but duration is only one of several independent signals — no
-        # single signal dominates the outcome by itself.
+        # unlikely (duration alone can't save it). Below the five-minute
+        # floor duration DOES decide on its own — deliberately, see
+        # MIN_BROADCAST_DURATION_SECONDS — but above it duration is only one
+        # of several independent signals.
         long_instructional = video(
             title="Full tutorial: every perk explained in depth", description="",
             liveBroadcastStatus="none", durationSeconds=1800,

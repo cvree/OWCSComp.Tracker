@@ -374,6 +374,46 @@ def scan(channels: list[dict] | None = None, *, limit: int = DEFAULT_LIMIT,
 
 
 # --------------------------------------------------------------- report
+def _current_verdict(row: dict) -> dict:
+    """Re-judge one archived candidate against TODAY's rules.
+
+    The ledger keeps every broadcast the finder has ever seen, including
+    ones that scrolled out of the feed window years of scans ago. Those rows
+    are never re-scanned, so their likeness verdict is frozen at whatever
+    the rules said on the day they were found — which meant tightening the
+    gate only ever affected videos discovered afterwards, and the ninety
+    already in the list kept their old verdicts forever.
+
+    The verdict is therefore recomputed here, from fields the row already
+    carries. Two rules keep this honest:
+
+      * it can only ever TIGHTEN. The stored verdict was scored with the
+        full description, which the ledger deliberately does not keep, so a
+        re-score sees strictly less evidence; taking the worse of the two
+        means missing evidence can never promote something.
+      * the ledger file is not rewritten. This is the report's judgement,
+        and a row whose verdict moved says so.
+    """
+    stored = row.get("likeness") or {}
+    fresh = bmatch.broadcast_likeness({
+        "title": row.get("title"),
+        "description": None,                 # dropped from the ledger by design
+        "durationSeconds": row.get("durationSeconds"),
+        "liveBroadcastStatus": row.get("liveBroadcastStatus"),
+    })
+    verdict = dict(fresh)
+    if stored.get("confidence") == "unlikely":
+        verdict["confidence"] = "unlikely"
+    if stored.get("refused"):
+        verdict["refused"] = True
+        verdict["refusalReason"] = stored.get("refusalReason") or verdict.get("refusalReason")
+    if stored.get("confidence") and stored["confidence"] != verdict["confidence"]:
+        verdict["rescoredFrom"] = stored["confidence"]
+    out = dict(row)
+    out["likeness"] = verdict
+    return out
+
+
 def build_report(db_path: str | None = None, *,
                  ledger: dict | None = None,
                  store: "js.JobStore | None" = None) -> dict:
@@ -421,6 +461,19 @@ def build_report(db_path: str | None = None, *,
         finally:
             if own_store and store is not None:
                 store.close()
+        rows = [_current_verdict(r) for r in rows]
+        # Shorts, clips and promo cutdowns are REFUSED by the length gate,
+        # not merely ranked low. They stay in the ledger — the verdict and
+        # its reason are part of the audit trail, and re-scanning must not
+        # rediscover them as new — but they are not offered as something to
+        # convert, because there is nothing in them to convert. A job that
+        # already exists keeps its row: hiding a broadcast someone is
+        # actually working on would be worse than showing a short one.
+        def _refused(r: dict) -> bool:
+            return bool((r.get("likeness") or {}).get("refused")) and not r.get("job")
+
+        ignored = [r for r in rows if _refused(r)]
+        rows = [r for r in rows if not _refused(r)]
         likely = sum(1 for r in rows
                      if (r.get("likeness") or {}).get("confidence") == "likely")
         errors = list(led.get("sourceErrors") or [])
@@ -431,12 +484,13 @@ def build_report(db_path: str | None = None, *,
                 "sourceErrors": errors,
                 "candidates": rows,
                 "summary": {"total": len(rows), "likely": likely,
-                            "tracked": tracked}}
+                            "tracked": tracked, "ignoredTooShort": len(ignored)}}
     except Exception as exc:  # noqa: BLE001 — a status read must never 500
         return {"schema": SCHEMA, "generatedAt": None, "channels": [],
                 "sourceErrors": [f"report: {type(exc).__name__}: {exc}"],
                 "candidates": [],
-                "summary": {"total": 0, "likely": 0, "tracked": 0}}
+                "summary": {"total": 0, "likely": 0, "tracked": 0,
+                            "ignoredTooShort": 0}}
 
 
 def export_snapshot(report: dict, path: str | None = None) -> str:
@@ -454,9 +508,11 @@ def format_report(report: dict) -> str:
     """Terminal rendering of the report (the CLI's output)."""
     lines = []
     s = report.get("summary") or {}
+    ignored = s.get("ignoredTooShort") or 0
     lines.append(f"[match-finder] {s.get('total', 0)} candidate(s) — "
                  f"{s.get('likely', 0)} likely broadcast(s), "
-                 f"{s.get('tracked', 0)} already in the pipeline")
+                 f"{s.get('tracked', 0)} already in the pipeline"
+                 + (f", {ignored} Shorts/short upload(s) ignored" if ignored else ""))
     for err in report.get("sourceErrors") or []:
         lines.append(f"  SOURCE ERROR: {err}")
     for c in report.get("candidates") or []:
