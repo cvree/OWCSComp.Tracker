@@ -45,6 +45,10 @@
       ? `<a class="btn btn--gold" href="match.html?id=${esc(featured.id)}">See a verified match</a>`
       : `<a class="btn btn--gold" href="matches.html">Browse matches</a>`,
     `<a class="btn" href="stats.html">Hero pick rates</a>`,
+    /* The portal is the only thing on this site a visitor can *use* rather
+       than read, so it earns a place in the hero rather than a link near
+       the footer. */
+    `<a class="btn" href="portal.html">Run it on a broadcast</a>`,
     `<a class="btn btn--ghost" href="how-it-works.html">How it works →</a>`,
   ].join("");
 

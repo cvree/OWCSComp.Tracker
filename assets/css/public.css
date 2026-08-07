@@ -1594,3 +1594,53 @@ html.palette-open { overflow: hidden; }
   }
   .pub-nav-toggle { padding: 9px 10px; }
 }
+
+/* =====================================================================
+   The operator-portal band on the front page.
+
+   The portal is the part of this project that does something rather than
+   displays something, and it used to sit in a small card near the footer.
+   This gives it the width and the numbered shape of a real invitation,
+   directly under the hero, without stealing the gold from the verified-data
+   story the page opens with.
+   ===================================================================== */
+.portal-band {
+  display: grid; gap: var(--sp-4); padding: var(--sp-5);
+  background:
+    radial-gradient(680px 240px at 88% -40%, rgba(217, 169, 79, .09), transparent 62%),
+    var(--surface-1);
+  border-color: var(--line-strong);
+}
+.portal-band .ph-eyebrow {
+  font-family: var(--font-serif); font-size: 12px; letter-spacing: .3em;
+  text-transform: uppercase; color: var(--gold);
+  display: inline-flex; align-items: center; gap: 10px;
+}
+.portal-band .ph-eyebrow::before {
+  content: ""; width: 26px; height: 1px;
+  background: linear-gradient(90deg, var(--gold), transparent);
+}
+.portal-band h2 { margin: var(--sp-2) 0 var(--sp-3); }
+.portal-band .lede { max-width: 74ch; margin: 0 0 var(--sp-4); }
+.pb-steps {
+  list-style: none; margin: 0 0 var(--sp-4); padding: 0;
+  display: grid; gap: 8px; counter-reset: pb;
+}
+.pb-steps li {
+  counter-increment: pb; position: relative; padding-left: 34px;
+  font-size: 14px; color: var(--tx-2);
+}
+.pb-steps li b { color: var(--tx-1); }
+.pb-steps li::before {
+  content: counter(pb); position: absolute; left: 0; top: -1px;
+  width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center;
+  border: 1px solid var(--etch); color: var(--gold);
+  font-size: 11.5px; font-weight: 700;
+}
+.pb-honest {
+  margin: 0; font-size: 13px; max-width: 88ch;
+  border-top: 1px solid var(--line); padding-top: var(--sp-3);
+}
+@media (min-width: 900px) {
+  .pb-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px var(--sp-5); }
+}

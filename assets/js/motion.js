@@ -98,6 +98,19 @@
       const loop = (t) => { lenis.raf(t); requestAnimationFrame(loop); };
       requestAnimationFrame(loop);
     }
+    /* How much sticky chrome is pinned to the top of THIS page. It was a
+       flat 70px, which is about right for a bare nav and wrong everywhere a
+       second bar sits under it — the portal's journey rail put every jumped-to
+       heading behind it. Measured per click, because a rail can appear,
+       disappear or wrap. */
+    const stickyOffset = () => {
+      let h = 0;
+      document.querySelectorAll(".nav, .pub-header, .pj").forEach((el) => {
+        if (getComputedStyle(el).position !== "sticky") return;
+        h += el.getBoundingClientRect().height;
+      });
+      return (h || 56) + 14;
+    };
     // in-page anchors go through Lenis so they aren't fought by the lerp
     document.addEventListener("click", (e) => {
       const a = e.target.closest && e.target.closest('a[href^="#"]');
@@ -105,7 +118,7 @@
       const target = document.getElementById(a.getAttribute("href").slice(1));
       if (!target) return;
       e.preventDefault();
-      lenis.scrollTo(target, { offset: -70 });
+      lenis.scrollTo(target, { offset: -stickyOffset() });
     });
   }
 

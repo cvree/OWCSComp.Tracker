@@ -34,8 +34,13 @@
     { href: "stats.html", label: "Stats" },
     { href: "how-it-works.html", label: "How it works" },
   ];
+  /* The two pages where a visitor *does* something rather than reads
+     something. Calibration sits beside the portal because it is the one
+     operator surface that works fully on the hosted site — no server, no
+     install — and it is the most useful thing an outsider can contribute. */
   const ADMIN = [
     { href: "portal.html", label: "Portal" },
+    { href: "calibrate.html", label: "Calibrate" },
   ];
 
   /* ---- header ------------------------------------------------------ */
@@ -143,6 +148,7 @@
      ["Tournaments", "tournaments.html", "Events and brackets"],
      ["How it works", "how-it-works.html", "What verified means"],
      ["Operator portal", "portal.html", "Paste a broadcast link"],
+     ["Calibrate a broadcast", "calibrate.html", "Teach the tracker a new HUD layout"],
     ].forEach(([label, href, sub]) => add("page", label, sub, href, label + " " + sub));
 
     const wrap = document.createElement("div");
@@ -273,6 +279,7 @@
             <li><a href="how-it-works.html">How it works (start here)</a></li>
             <li><a href="how-it-works.html#glossary">What the badges mean</a></li>
             <li><a href="portal.html">Operator portal (paste a link)</a></li>
+            <li><a href="calibrate.html">Calibrate a new broadcast</a></li>
             <li><a href="runs.html">Vision lab (runs)</a></li>
             <li><a href="sources.html">Sources</a></li>
             <li><a href="admin.html">Review &amp; corrections</a></li>

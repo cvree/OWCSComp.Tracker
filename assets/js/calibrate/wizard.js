@@ -34,6 +34,65 @@
     el.textContent = msg || '';
   }
 
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+  /* ------------------------------------------------------- 0. handoff
+     The portal can send someone here mid-flow, carrying the broadcast they
+     were trying to convert. Arriving with the wizard already knowing which
+     VOD it is for — and with a button straight to it — is the difference
+     between "another page to work out" and "carry on where you were".      */
+
+  const params = (() => {
+    try { return new URLSearchParams(window.location.search); }
+    catch (err) { return new URLSearchParams(''); }
+  })();
+  const handoffUrl = (params.get('url') || '').trim();
+  const fromPortal = params.get('from') === 'portal' || !!handoffUrl;
+
+  /** A YouTube id, purely so the layout can be given a sensible default name. */
+  function videoIdOf(url) {
+    const m = url.match(/[?&]v=([\w-]{6,})/) || url.match(/youtu\.be\/([\w-]{6,})/)
+      || url.match(/youtube\.com\/live\/([\w-]{6,})/);
+    return m ? m[1] : '';
+  }
+
+  if (fromPortal) {
+    const back = $('calBack');
+    if (back) {
+      back.href = 'portal.html';
+      back.textContent = '← Back to the operator portal';
+    }
+    const ret = $('backToPortal');
+    if (ret) {
+      ret.href = 'portal.html' + (handoffUrl
+        ? '?url=' + encodeURIComponent(handoffUrl) : '');
+    }
+  }
+
+  if (handoffUrl) {
+    const box = $('calHandoff');
+    if (box) {
+      box.hidden = false;
+      box.innerHTML =
+        '<b>Calibrating for this broadcast</b>'
+        + '<a class="cal-handoff-url" href="' + esc(handoffUrl) + '" target="_blank"'
+        + ' rel="noopener noreferrer">' + esc(handoffUrl) + ' ↗</a>'
+        + '<span>The wizard needs pictures, not a link — open the VOD, grab four to'
+        + ' six screenshots of live play, and drop them below. The steps are spelled'
+        + ' out under “I only have a YouTube link”.</span>';
+    }
+    /* That question is now the reason they are here, so it starts open. */
+    const det = $('ytDetails');
+    if (det) det.open = true;
+    const open = $('ytOpen');
+    if (open) {
+      open.hidden = false;
+      open.innerHTML = ' <a class="btn btn-ghost btn-tiny" href="' + esc(handoffUrl)
+        + '" target="_blank" rel="noopener noreferrer">Open the VOD ↗</a>';
+    }
+  }
+
   function show(i) {
     stepIndex = Math.max(0, Math.min(STEPS.length - 1, i));
     STEPS.forEach((name, n) => {
@@ -488,15 +547,75 @@
     box.appendChild(dl);
   }
 
-  $('download').addEventListener('click', () => {
+  /** The cleaned-up layout id, and the layout itself, from the name field. */
+  function cleanName() {
     const raw = $('layoutName').value.trim() || 'my-broadcast';
     const name = raw.toLowerCase().replace(/[^a-z0-9_-]+/g, '-')
       .replace(/^-+|-+$/g, '') || 'my-broadcast';
     $('layoutName').value = name;
+    return name;
+  }
 
-    const layout = E.toLayout(
+  function buildLayout(name) {
+    return E.toLayout(
       Object.assign({}, result, { boxesA: boxes.a, boxesB: boxes.b }),
       { name, adjusted });
+  }
+
+  /**
+   * Where the file has to end up, spelled out per platform.
+   *
+   * "Put it in layouts/" assumes the reader knows where the project is and
+   * how to move a file into it from a terminal. Half of them do not, which
+   * is exactly the gap that made the old walkthrough stall here.
+   */
+  function renderMoveHint(name) {
+    const row = $('calMoveRow');
+    if (!row) return;
+    const win = /Win/i.test(navigator.platform || navigator.userAgent || '');
+    const cmd = win
+      ? 'move "%USERPROFILE%\\Downloads\\' + name + '.json" layouts\\'
+      : 'mv ~/Downloads/' + name + '.json layouts/';
+    row.innerHTML =
+      '<p class="cal-cmdrow-lead">Or move it from the terminal, run from inside the'
+      + ' project folder:</p>'
+      + '<div class="cal-cmd"><code>' + esc(cmd) + '</code>'
+      + '<button type="button" class="cal-cmd-copy" data-copy="' + esc(cmd)
+      + '">copy</button></div>';
+  }
+
+  document.addEventListener('click', (ev) => {
+    const btn = ev.target.closest && ev.target.closest('.cal-cmd-copy');
+    if (!btn) return;
+    const text = btn.getAttribute('data-copy') || '';
+    const done = () => {
+      btn.textContent = 'copied';
+      setTimeout(() => { btn.textContent = 'copy'; }, 1500);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, done);
+    } else { done(); }
+  });
+
+  $('copyJson').addEventListener('click', () => {
+    const name = cleanName();
+    const text = JSON.stringify(buildLayout(name), null, 2) + '\n';
+    const finish = (ok) => {
+      note($('doneNote'), ok ? 'ok' : 'warn', ok
+        ? 'Layout copied. Paste it into a new file called ' + name + '.json inside '
+          + 'the project\'s layouts/ folder.'
+        : 'Could not reach the clipboard. Use “Download my layout” instead.');
+      $('nextSteps').hidden = false;
+      renderMoveHint(name);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => finish(true), () => finish(false));
+    } else { finish(false); }
+  });
+
+  $('download').addEventListener('click', () => {
+    const name = cleanName();
+    const layout = buildLayout(name);
 
     const blob = new Blob([JSON.stringify(layout, null, 2) + '\n'],
       { type: 'application/json' });
@@ -511,6 +630,7 @@
 
     note($('doneNote'), 'ok', `Saved ${name}.json to your downloads.`);
     $('nextSteps').hidden = false;
+    renderMoveHint(name);
   });
 
   /**
@@ -572,6 +692,15 @@
   });
 
   $('startOver').addEventListener('click', () => { window.location.reload(); });
+
+  /* A layout arriving from the portal gets named after the broadcast it came
+     from, so the file is recognisable a month later without anyone having to
+     invent a naming scheme on the spot. */
+  const vid = videoIdOf(handoffUrl);
+  if (vid) {
+    $('layoutName').value = ('owcs-' + vid).toLowerCase()
+      .replace(/[^a-z0-9_-]+/g, '-');
+  }
 
   if (window.OWCSIdentity) window.OWCSIdentity.bindAll('[data-identity]');
   show(0);

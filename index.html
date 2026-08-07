@@ -33,6 +33,39 @@
     <p class="home-honesty" id="home-coverage"></p>
   </div>
 
+  <!-- 1b · the portal, up front -----------------------------------------
+       The tracker is not only a place to read numbers; it is a machine
+       anyone can point at a broadcast. That is the most interesting thing
+       here, so it stops being a footnote at the bottom of the page. -->
+  <section class="section" aria-labelledby="h-portal">
+    <div class="card portal-band">
+      <div class="pb-main">
+        <span class="ph-eyebrow">The operator portal</span>
+        <h2 id="h-portal">Point it at a broadcast yourself.</h2>
+        <p class="lede">Paste one YouTube link. It downloads the VOD, works out where that
+          production puts the HUD, separates live play from replays and the desk, reads all
+          ten hero portraits and tracks every mid-map swap — stopping only at the two points
+          where a human has to say yes.</p>
+        <ol class="pb-steps">
+          <li><b>Paste</b> a link, or pick one the match finder already found</li>
+          <li><b>Run it</b> — a guided, five-minute, one-time setup on your own machine</li>
+          <li><b>Calibrate</b> in the browser if the broadcast is new to the tracker</li>
+          <li><b>Review and publish</b> from the page, with the evidence attached</li>
+        </ol>
+        <div class="cluster">
+          <a class="btn btn--gold" href="portal.html">Open the operator portal</a>
+          <a class="btn" href="portal.html#setup">See the setup walkthrough</a>
+          <a class="btn btn--ghost" href="calibrate.html">Calibrate a broadcast</a>
+        </div>
+      </div>
+      <p class="pb-honest dim">Everything is free and open, and none of it runs on a server
+        we pay for. On this hosted copy the portal is read-only — a static site has nothing
+        behind it to download a video — so it walks you through starting a control room on
+        your own computer instead of pretending to work. The calibration wizard is the
+        exception: that one genuinely runs here, in your tab.</p>
+    </div>
+  </section>
+
   <!-- 2 · what you can do here ------------------------------------------ -->
   <section class="section" aria-labelledby="h-start">
     <h2 id="h-start">Start here</h2>
@@ -66,41 +99,23 @@
     <div class="limit-grid" id="home-limits"></div>
   </section>
 
-  <!-- 6 · operators ------------------------------------------------------ -->
-  <section class="section" aria-labelledby="h-run">
-    <h2 id="h-run">Run it on a broadcast yourself</h2>
+  <!-- 6 · contribute ------------------------------------------------------ -->
+  <section class="section" aria-labelledby="h-add">
+    <h2 id="h-add">Teach it to read a broadcast it has never seen</h2>
     <div class="card home-operator">
       <div class="stack-sm">
-        <p style="margin:0">The whole pipeline is free and open: paste a YouTube link into the
-          <b>operator portal</b> and it downloads the VOD, calibrates the HUD, finds the maps,
-          proposes the teams and reads the compositions — stopping at each point where a human
-          has to confirm something.</p>
-        <p class="dim" style="margin:0;font-size:13px">On this hosted copy the portal is
-          read-only: there is no server behind a static site, so it builds the exact command
-          for you to run against your own checkout instead of pretending to work.</p>
-      </div>
-      <div class="cluster">
-        <a class="btn btn--gold" href="portal.html">Open the operator portal</a>
-        <a class="btn" href="how-it-works.html#pipeline">What each stage does</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="wrap">
-      <p class="eyebrow">Add a broadcast</p>
-      <h2 class="h2">Teach it to read a broadcast it has never seen</h2>
-      <div class="prose">
-        <p>Every production puts the hero portraits somewhere slightly different, so
-          each new broadcast needs calibrating once. The calibration wizard does that
-          in your browser: drop in a video or a few screenshots, it finds the ten hero
-          slots, you check them, and it hands you the layout file.</p>
-        <p class="dim" style="margin:0;font-size:13px">Nothing is uploaded and nothing
-          is installed — the detection runs on your own machine, in the tab. This one
-          genuinely works on the hosted site.</p>
+        <p style="margin:0">Every production puts the hero portraits somewhere slightly
+          different, so each new broadcast needs calibrating once. The wizard does that in
+          your browser: drop in a video or a few screenshots, it finds the ten hero slots,
+          you check them on zoomed crops, and it hands you the layout file.</p>
+        <p class="dim" style="margin:0;font-size:13px">Nothing is uploaded and nothing is
+          installed — the detection runs on your own machine, in the tab. A calibration for
+          a broadcast nobody has covered yet is the single most useful thing anyone can
+          contribute, and anyone may send one.</p>
       </div>
       <div class="cluster">
         <a class="btn btn--gold" href="calibrate.html">Calibrate a broadcast</a>
+        <a class="btn" href="how-it-works.html#pipeline">What each stage does</a>
       </div>
     </div>
   </section>

@@ -15,7 +15,7 @@
 <div class="cal-wrap">
 
   <header class="cal-head">
-    <a class="cal-back" href="index.html">← OWCS Comp Tracker</a>
+    <a class="cal-back" id="calBack" href="index.html">← OWCS Comp Tracker</a>
     <h1>Teach the tracker a new broadcast</h1>
     <p class="cal-lead">
       Every broadcast puts the hero portraits in a slightly different place.
@@ -23,6 +23,9 @@
       <strong>everything happens inside this browser tab</strong> — your video
       is never uploaded anywhere.
     </p>
+    <!-- Filled in when the operator portal hands a specific broadcast over,
+         so the wizard opens already knowing which VOD it is calibrating. -->
+    <div class="cal-handoff" id="calHandoff" hidden></div>
   </header>
 
   <ol class="cal-steps" id="steps">
@@ -51,21 +54,36 @@
 
     <div class="note" id="sourceNote"></div>
 
-    <details class="cal-details">
+    <details class="cal-details" id="ytDetails">
       <summary>I only have a YouTube link</summary>
       <p>
         A browser tab is not allowed to download from YouTube, so this page
-        cannot take a link directly. Two ways round it:
+        cannot take a link directly — but the screenshot route takes about a
+        minute and works just as well.
       </p>
-      <ul>
-        <li><strong>Easiest:</strong> play the VOD, pause on a moment of live
-          play with both teams' heroes on screen, and press
-          <kbd>PrtScn</kbd> (Windows) or <kbd>⌘⇧4</kbd> (Mac). Do that 4–6
-          times at different points in the map, then drop those images above.</li>
-        <li><strong>Or:</strong> install the desktop app, paste the link, and
-          it does all of this by itself — including the download.
-          <a href="docs/WINDOWS-APP.md">How that works</a>.</li>
-      </ul>
+      <ol class="cal-recipe">
+        <li>Open the VOD in a second tab.<span class="cal-recipe-cta"
+            id="ytOpen" hidden></span></li>
+        <li>Scrub to a moment of <strong>live play</strong> — both teams' hero
+          portraits along the top of the screen. Not the desk, not a replay,
+          not a kill cam.</li>
+        <li>Pause, then press <kbd>PrtScn</kbd> (Windows) or
+          <kbd>⌘</kbd><kbd>⇧</kbd><kbd>4</kbd> then <kbd>Space</kbd> (Mac) to
+          capture the window.</li>
+        <li>Do that <strong>4–6 times</strong> at different points in the map.</li>
+        <li>Drag those images onto the box above.</li>
+      </ol>
+      <p class="cal-recipe-note">
+        Full screen is best, and any resolution is fine as long as every shot
+        comes from the same broadcast — the tracker measures where the
+        portraits sit as a fraction of the frame, not in pixels.
+      </p>
+      <p>
+        <strong>Or skip all of it:</strong> with the tracker running on your own
+        machine, the pipeline downloads and calibrates the VOD itself from the
+        link — <a href="portal.html#setup">the portal walks through setting that
+        up</a>.
+      </p>
     </details>
   </section>
 
@@ -164,6 +182,7 @@
 
     <div class="btnrow">
       <button class="btn btn-primary btn-xl" id="download">Download my layout</button>
+      <button class="btn btn-ghost" id="copyJson">Copy it as text instead</button>
     </div>
     <div class="note" id="doneNote"></div>
 
@@ -171,14 +190,19 @@
       <h3>What to do with it</h3>
       <ol>
         <li>
+          <strong>Running the tracker from the source code?</strong> Move the
+          downloaded file into the <code>layouts/</code> folder inside the
+          project — the one that already has
+          <code>owcs_youtube_2026.json</code> in it. Nothing else to do: the
+          layout resolver picks up every file in there on the next broadcast
+          you convert.
+          <div class="cal-cmdrow" id="calMoveRow"></div>
+        </li>
+        <li>
           <strong>Using the desktop app?</strong> Open it, go to
           <em>Calibration</em>, and press <em>Import a layout</em>. Pick the
           file you just downloaded. That's it — it will use it on the next
           broadcast you paste in.
-        </li>
-        <li>
-          <strong>Running from the source code?</strong> Put the file in the
-          <code>layouts/</code> folder next to the others.
         </li>
         <li>
           <strong>Want it shipped with the tracker?</strong> Send it in — real
@@ -205,6 +229,7 @@
         than being trusted automatically.
       </p>
       <div class="btnrow">
+        <a class="btn btn-primary" id="backToPortal" href="portal.html">Back to the portal →</a>
         <button class="btn btn-ghost" id="startOver">Calibrate another broadcast</button>
       </div>
     </div>

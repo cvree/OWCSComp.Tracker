@@ -420,10 +420,12 @@
       action = `${watch} ${stateChip(job.state)}`;
     } else if (apiMode) {
       action = `<div class="ik-btns" style="margin:0">
-        ${watch}<button class="go mf-ingest" data-url="${esc(c.url)}">Ingest</button></div>`;
+        ${watch}<button class="go mf-ingest" data-url="${esc(c.url)}"
+          title="Fills the box at the top and starts converting straight away">Convert this</button></div>`;
     } else {
       action = `<div class="ik-btns" style="margin:0">
-        ${watch}<button class="mf-cmd" data-url="${esc(c.url)}">Copy command</button></div>`;
+        ${watch}<button class="mf-cmd" data-url="${esc(c.url)}"
+          title="Fills the box at the top of the page with this link">Use this link</button></div>`;
     }
     return `<div class="mf-cand">
       <span class="ik-chip likeness-why ${likely ? "ok" : "warn"}"
@@ -531,12 +533,19 @@
       const url = ingest.getAttribute("data-url");
       if (urlBox) {
         urlBox.value = url;
+        /* Let the rest of the page react exactly as if it had been typed:
+           the link verdict, the calibration handoff and the command preview
+           all hang off this one event. */
+        urlBox.dispatchEvent(new Event("input", { bubbles: true }));
         urlBox.scrollIntoView({ behavior: "smooth", block: "center" });
+        urlBox.focus({ preventScroll: true });
       }
       if (ingest.classList.contains("mf-ingest")) {
         submitLink(new Event("submit"));
       } else {
         previewCommand();
+        setNote("Link loaded above. Press “Build my command” for the one-liner, or "
+          + "start a control room (step 2) and this becomes a single button.");
       }
     }
   });
@@ -576,10 +585,16 @@
         <span>generated <b>${esc(data.generatedAt || "—")}</b></span>`;
     }
     if (!jobs.length) {
-      root.innerHTML = `<p class="muted">No intake jobs yet. Paste a broadcast
-        link:</p><code class="ik-cmd">python pipeline/automation/cli.py ingest-link --url "&lt;youtube-url&gt;"</code>
-        <p class="muted">Then regenerate this page:</p>
-        <code class="ik-cmd">python pipeline/automation/cli.py intake-export --save</code>`;
+      root.innerHTML = apiMode
+        ? `<p class="muted">Nothing in the pipeline yet — paste a broadcast link at the
+           top of this page and press <b>Convert</b>. Each stage, and each point where
+           you have to decide something, appears here as it happens.</p>`
+        : `<p class="muted">Nothing in the pipeline on this deployment. Jobs appear here
+           once a broadcast has been converted on a machine running the control room —
+           <a href="#setup">step 2 sets one up</a>. The equivalent commands, if you would
+           rather drive it by hand:</p>
+           <code class="ik-cmd">python pipeline/automation/cli.py ingest-link --url "&lt;youtube-url&gt;"</code>
+           <code class="ik-cmd">python pipeline/automation/cli.py intake-export --save</code>`;
       return;
     }
     root.innerHTML = jobs.map(jobBlock).join("");
@@ -587,6 +602,11 @@
 
   /* ---- data loading: live control-room report, else static snapshot ---- */
   let apiMode = false;
+  /* Why the LIVE report could not be built, when there is a control room
+     but it answered with an error. Kept so the fallback can say something
+     more useful than "nothing here yet" to someone whose server is running
+     perfectly well and is simply missing a dependency. */
+  let liveError = null;
 
   function loadStatic() {
     return fetch("assets/data/intake.v1.json", { cache: "no-store" })
@@ -596,13 +616,32 @@
         /* A missing snapshot on static hosting is the normal state, not a
            failure — say so, and keep the real error for anything else. */
         const missing = /HTTP 404/.test(err.message);
-        document.getElementById("ik-root").innerHTML = missing
-          ? `<p class="muted">No broadcast has been put through the pipeline on this deployment,
-             so there is nothing to review here. Jobs appear once you run the intake locally:</p>
-             <code class="ik-cmd">python pipeline/automation/cli.py convert-link --url "&lt;youtube-url&gt;"</code>
-             <code class="ik-cmd">python pipeline/automation/cli.py intake-export --save</code>
-             <p class="muted">Published results are on the
-             <a href="index.html">public site</a>.</p>`
+        const root = document.getElementById("ik-root");
+        if (apiMode && liveError) {
+          /* The control room is up but could not read its own automation
+             DB. Naming the dependency beats a generic empty state — this is
+             nearly always an incomplete install. */
+          root.innerHTML = `<p class="ik-block">Your control room is running, but it could
+             not build a live pipeline report — <b>${esc(liveError)}</b></p>
+             <p class="muted">Almost always a missing dependency. From inside the project
+             folder, in the same terminal you started the server from (stop it with
+             <b>Ctrl+C</b> first):</p>
+             <code class="ik-cmd">pip install -r requirements.txt</code>
+             <p class="muted">Then start it again with
+             <code>python pipeline/serve.py</code> and reload this page.</p>`;
+          return;
+        }
+        root.innerHTML = missing
+          ? (apiMode
+            ? `<p class="muted">Nothing in the pipeline yet — paste a broadcast link at the
+               top of this page and press <b>Convert</b>. Each stage, and each point where
+               you have to decide something, appears here as it happens.</p>`
+            : `<p class="muted">No broadcast has been put through the pipeline on this deployment,
+               so there is nothing to review here. This fills in once you convert one on your own
+               machine — <a href="#setup">step 2 walks through setting that up</a>, and after it
+               you drive every stage from buttons on this page rather than from commands.</p>
+               <p class="muted">Published results are on the
+               <a href="index.html">public site</a>.</p>`)
           : `<p class="muted">Could not read the intake snapshot (${esc(err.message)}).
              Regenerate it with:</p>
              <code class="ik-cmd">python pipeline/automation/cli.py intake-export --save</code>`;
@@ -614,9 +653,10 @@
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
       .then((data) => {
         if (data && data.error) throw new Error(data.error);
+        liveError = null;
         render(data);
       })
-      .catch(loadStatic);
+      .catch((err) => { liveError = err && err.message; return loadStatic(); });
   }
 
   const reload = () => (apiMode ? loadLive() : loadStatic());
@@ -752,7 +792,20 @@
     ev.preventDefault();
     const url = (urlBox && urlBox.value || "").trim();
     if (!url) return;
-    if (!apiMode) { previewCommand(); return; }
+    if (!apiMode) {
+      /* Static hosting: the honest outcome is a command. Handing someone a
+         command without saying where it goes is exactly the dead end this
+         page used to be, so point at the walkthrough in the same breath. */
+      previewCommand();
+      setNote("That is the command for this link — click it to copy. It has to run on a "
+        + "computer with the project on it; step 2 below sets that up from scratch, or "
+        + "start the control room and this button does the work for you.");
+      const setup = document.getElementById("setup");
+      if (setup && setup.scrollIntoView) {
+        setup.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      return;
+    }
     if (goBtn) goBtn.disabled = true;
     setNote("submitting link…");
     fetch("/api/intake/link", {
@@ -781,6 +834,16 @@
     if (autoBox) autoBox.addEventListener("change", previewCommand);
   }
 
+  /* Tell the rest of the page which mode it is in. portal-guide.js turns
+     this into the one-sentence banner and decides whether the terminal
+     walkthrough is needed at all — the two files stay decoupled, so the
+     panel still works on pages that do not carry the guide. */
+  function announceMode(running) {
+    document.dispatchEvent(new CustomEvent("owcs:portal-mode", {
+      detail: { api: apiMode, running: !!running },
+    }));
+  }
+
   /* ---- boot: probe the control room, then load ------------------------- */
   fetch("/api/ping", { cache: "no-store" })
     .then((r) => (r.ok ? r.json() : Promise.reject(new Error("no api"))))
@@ -789,21 +852,25 @@
       if (apiMode) {
         if (goBtn) goBtn.disabled = !!ping.running;
         setNote(ping.running
-          ? "control room detected — a job is already running (one at a time); wait or cancel it on the Run page."
-          : "control room detected — pasting a link will run convert-link locally, to the first human gate.",
+          ? "A job is already running — one at a time. Wait for it, or cancel it on the Run page."
+          : "Ready. Pressing Convert downloads the broadcast and runs the pipeline on this "
+            + "machine, up to the first point a human has to decide something.",
           "ok");
+        previewCommand();     /* nothing to preview in live mode: hides it */
+        announceMode(ping.running);
       }
     })
     .catch(() => {
       apiMode = false;
-      setNote("static hosting — no server here, so this form only builds the exact "
-        + "command to copy into your own terminal.");
-      if (goBtn) { goBtn.disabled = false; goBtn.textContent = "Show command"; }
+      setNote("No control room is running here, so this page can build the command but "
+        + "not run it. Step 2 below shows you exactly where to put it.");
+      if (goBtn) { goBtn.disabled = false; goBtn.textContent = "Build my command"; }
       /* No server here to launch a live scan either — but GitHub Actions
          already refreshes the committed snapshot on a schedule, so relabel
          honestly rather than leaving a button that implies it'll scan now. */
       const scanBtn = document.getElementById("mf-scan");
       if (scanBtn) scanBtn.textContent = "Check for updates";
+      announceMode(false);
     })
     .then(reload)
     .then(loadDownloadStatus)
