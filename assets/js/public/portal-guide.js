@@ -158,6 +158,48 @@
       prompt: "PS>",
       py: "python",
       pip: "pip",
+      /* Everything that has to exist BEFORE the first command, with the
+         download in reach. A brand-new Windows machine fails step 1, and
+         burying that behind an "it didn't do that" drawer meant the guide
+         only worked for people who did not need it. */
+      prereq: {
+        title: "Before you start: three things Windows does not come with",
+        lead: "All free, all official, all safe to accept every default — "
+          + "except one checkbox, which is called out below because missing it "
+          + "is the single most common way this goes wrong.",
+        items: [
+          {
+            name: "Python 3.12 or newer",
+            why: "The tracker is a Python program.",
+            href: "https://www.python.org/downloads/windows/",
+            label: "Get Python for Windows ↗",
+            warn: "On the installer's <b>first</b> screen, tick "
+              + "<b>Add python.exe to PATH</b> before pressing Install. Miss it and "
+              + "every command below answers <code>'python' is not recognized</code>.",
+          },
+          {
+            name: "Git",
+            why: "How you fetch the project. Accept every default the installer offers.",
+            href: "https://git-scm.com/download/win",
+            label: "Get Git for Windows ↗",
+            alt: "Would rather not? <a href=\"https://github.com/cvree/OWCSComp.Tracker/"
+              + "archive/refs/heads/main.zip\" target=\"_blank\" rel=\"noopener noreferrer\">"
+              + "Download the project as a ZIP</a>, right-click it → <b>Extract All</b>, "
+              + "then open the extracted folder in File Explorer, click the address bar, "
+              + "type <code>powershell</code> and press Enter. That skips steps 2 and 3 "
+              + "entirely — you are already in the folder.",
+          },
+          {
+            name: "ffmpeg",
+            why: "Reads the video frames. Nothing to download by hand — step 5 below "
+              + "installs it for you.",
+          },
+        ],
+        after: "After installing any of these, <b>close PowerShell and open it "
+          + "again</b>. A window that was already open cannot see a program installed "
+          + "after it started — this is why a command can still say “not recognized” "
+          + "immediately after you installed it.",
+      },
       open: {
         keys: [
           "Press the <kbd>Windows</kbd> key.",
@@ -279,6 +321,38 @@
       prompt: "$",
       py: "python3",
       pip: "pip3",
+      prereq: {
+        title: "Before you start: what macOS does not already have",
+        lead: "macOS brings git along with the developer tools, and will offer to "
+          + "install them the first time you need them. Python is the one to get "
+          + "ahead of — the version Apple ships is too old.",
+        items: [
+          {
+            name: "Python 3.12 or newer",
+            why: "macOS ships 3.9, which the tracker cannot run on.",
+            href: "https://www.python.org/downloads/macos/",
+            label: "Get Python for macOS ↗",
+            warn: "The python.org installer needs no options — accept the defaults. "
+              + "It installs alongside Apple's copy rather than replacing it, and adds "
+              + "the <code>python3</code> the commands below use.",
+          },
+          {
+            name: "Git",
+            why: "Already there in spirit: the first time you run a git command macOS "
+              + "offers to install the Command Line Tools. Click Install, wait, and run "
+              + "the command again. Nothing to download in advance.",
+          },
+          {
+            name: "Homebrew",
+            why: "Only needed for ffmpeg in step 5. If you do not have it, that step "
+              + "links a direct download instead.",
+            href: "https://brew.sh",
+            label: "brew.sh ↗",
+          },
+        ],
+        after: "After installing Python, <b>close Terminal and open it again</b> so the "
+          + "new version is the one it finds.",
+      },
       open: {
         keys: [
           "Press <kbd>⌘</kbd> + <kbd>Space</kbd>.",
@@ -384,6 +458,29 @@
       prompt: "$",
       py: "python3",
       pip: "pip3",
+      prereq: {
+        title: "Before you start",
+        lead: "Nothing to download from a website. Current distributions already carry "
+          + "everything, and where they do not, the step that needs it installs it.",
+        items: [
+          {
+            name: "Python 3.12 or newer",
+            why: "Almost certainly already installed — step 1 checks, and names the "
+              + "package to install if it is too old.",
+          },
+          {
+            name: "git",
+            why: "Usually present. If not: <code>sudo apt install git</code>, or your "
+              + "distribution's equivalent.",
+          },
+          {
+            name: "ffmpeg",
+            why: "Installed by step 5's command.",
+          },
+        ],
+        after: "If you install Python from your package manager, open a fresh terminal "
+          + "afterwards so it picks the new version up.",
+      },
       open: {
         keys: [
           "Press <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>T</kbd>.",
@@ -499,6 +596,31 @@
     </div>`;
   }
 
+  /* The downloads, before the terminal. Collapsed once ticked, because the
+     second time round you already have them. */
+  function prereqCard(recipe, done) {
+    const p = recipe.prereq;
+    if (!p) return "";
+    const items = p.items.map((it) => `<li>
+      <div class="dl-head">
+        <b>${esc(it.name)}</b>
+        ${it.href ? `<a class="pbtn dl-get" href="${esc(it.href)}" target="_blank"
+          rel="noopener noreferrer">${esc(it.label)}</a>` : ""}
+      </div>
+      <p>${it.why}</p>
+      ${it.warn ? `<p class="dl-warn"><b>Watch out:</b> ${it.warn}</p>` : ""}
+      ${it.alt ? `<p class="dl-alt">${it.alt}</p>` : ""}
+    </li>`).join("");
+    return `<div class="g-prereq" data-done="${done ? 1 : 0}">
+      <h3>${esc(p.title)}</h3>
+      <p class="dl-lead">${esc(p.lead)}</p>
+      <ol class="dl-list">${items}</ol>
+      <p class="dl-after">${p.after}</p>
+      <label class="g-tick"><input type="checkbox" data-tick="prereq"
+        ${done ? "checked" : ""} /> I have these — collapse this</label>
+    </div>`;
+  }
+
   function stepCard(recipe, step, done) {
     const trouble = (step.trouble || []).length
       ? `<details class="g-trouble"><summary>It didn't do that</summary><dl>${
@@ -542,8 +664,10 @@
         ${done.size ? `<button type="button" id="g-reset">Start the walkthrough over</button>` : ""}
       </div>
 
+      ${prereqCard(r, done.has("prereq"))}
+
       <div class="term-open">
-        <h3>First: open ${esc(r.app)}</h3>
+        <h3>Then: open ${esc(r.app)}</h3>
         <ol>${r.open.keys.map((k) => `<li>${k}</li>`).join("")}</ol>
         <p class="looks">${r.open.looks}</p>
       </div>
@@ -584,7 +708,7 @@
     }
     if (ev.target.id === "g-skip") {
       const set = doneSet();
-      ["py", "clone", "cd", "deps", "ffmpeg"].forEach((id) => set.add(id));
+      ["prereq", "py", "clone", "cd", "deps", "ffmpeg"].forEach((id) => set.add(id));
       saveDone(set);
       renderGuide();
       return;
@@ -601,7 +725,7 @@
     const set = doneSet();
     if (tick.checked) set.add(tick.dataset.tick); else set.delete(tick.dataset.tick);
     saveDone(set);
-    const li = tick.closest(".gstep");
+    const li = tick.closest(".gstep, .g-prereq");
     if (li) li.dataset.done = tick.checked ? "1" : "0";
   });
 

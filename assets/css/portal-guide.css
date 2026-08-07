@@ -129,6 +129,67 @@
 }
 .os-detected { font-size: .76rem; color: var(--muted); margin: 0 0 18px; }
 
+/* ------------------------------------------------ prerequisite downloads */
+/* The card a brand-new machine needs before any command can work. It is
+   deliberately the loudest thing in the walkthrough: the old guide put
+   "install Python" inside a collapsed troubleshooting drawer on the step it
+   breaks, which helped exactly the people who did not need it. */
+.g-prereq {
+  border: 1px solid rgba(255, 169, 43, .42); border-radius: 12px;
+  background: linear-gradient(160deg, rgba(255, 169, 43, .09), transparent 58%), var(--bg-raise);
+  padding: 17px 20px; margin: 0 0 18px;
+}
+.g-prereq h3 { margin: 0 0 6px; font-size: 1rem; color: var(--amber); }
+.g-prereq .dl-lead { margin: 0 0 14px; font-size: .85rem; color: var(--muted); max-width: 72ch; }
+.dl-list { list-style: none; margin: 0; padding: 0; counter-reset: dl; }
+.dl-list > li {
+  counter-increment: dl; position: relative;
+  padding: 0 0 14px 34px; margin: 0 0 14px;
+  border-bottom: 1px solid var(--line);
+}
+.dl-list > li:last-child { border-bottom: 0; margin-bottom: 0; padding-bottom: 0; }
+.dl-list > li::before {
+  content: counter(dl); position: absolute; left: 0; top: 0;
+  width: 23px; height: 23px; border-radius: 50%; display: grid; place-items: center;
+  border: 1px solid var(--amber); color: var(--amber); background: var(--amber-soft);
+  font: 700 .72rem var(--display);
+}
+.dl-head {
+  display: flex; flex-wrap: wrap; gap: 8px 14px;
+  align-items: center; justify-content: space-between; margin-bottom: 5px;
+}
+.dl-head b { font-size: .92rem; font-family: var(--display); }
+.dl-get {
+  padding: 7px 15px; font-size: .8rem;
+  background: var(--amber); border-color: var(--amber); color: #1a1206;
+}
+.dl-get:hover { background: #ffb84f; }
+.dl-list p { margin: 0; font-size: .84rem; color: var(--muted); max-width: 76ch; }
+.dl-list p + p { margin-top: 7px; }
+.dl-warn {
+  border-left: 2px solid var(--amber); padding: 2px 0 2px 11px;
+  color: var(--text) !important;
+}
+.dl-warn b { color: var(--amber); }
+.dl-alt { border-left: 2px solid var(--line-bright); padding: 2px 0 2px 11px; }
+.dl-list code, .dl-after code {
+  font-family: var(--mono); font-size: .94em; color: var(--text);
+  background: rgba(255, 255, 255, .06); border-radius: 4px; padding: 1px 5px;
+}
+.dl-after {
+  margin: 15px 0 0; font-size: .84rem; color: var(--muted);
+  border-top: 1px solid var(--line); padding-top: 12px; max-width: 76ch;
+}
+.dl-after b { color: var(--text); }
+.g-prereq[data-done="1"] { opacity: .6; }
+.g-prereq[data-done="1"] .dl-lead,
+.g-prereq[data-done="1"] .dl-list,
+.g-prereq[data-done="1"] .dl-after { display: none; }
+@media (max-width: 560px) {
+  .dl-head { align-items: flex-start; }
+  .dl-get { width: 100%; justify-content: center; }
+}
+
 /* ------------------------------------------------- "open your terminal" */
 .term-open {
   border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px;
