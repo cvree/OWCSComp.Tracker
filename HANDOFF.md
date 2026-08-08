@@ -1,6 +1,116 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
-## CURRENT STATUS (authoritative — 2026-08-08, tenth pass) — one product, one workflow, one design system
+## CURRENT STATUS (authoritative — 2026-08-08, eleventh pass) — stop downloading broadcasts to look at them
+
+> Additive to the tenth pass below. The detection, calibration, evidence and
+> review architecture is unchanged; what changed is how many bytes it costs
+> to reach it.
+
+### The problem
+
+`capture.py` downloaded an entire ~720p broadcast — gigabytes for a
+nine-hour OWCS stream — to keep about a hundred sampled frames, and threw
+the file away afterwards. Calibrating a HUD needs about a dozen frames and
+paid the same price. Every re-calibration paid it again.
+
+Nothing about the task requires the file. An MP4 on a CDN is served with
+byte ranges, and ffmpeg can seek in one: give it a direct media URL and
+`-ss` BEFORE `-i` and it range-requests its way to the frame. A few hundred
+kilobytes, not a few gigabytes.
+
+### What was built
+
+`pipeline/remote_frames.py` — ONE `yt-dlp -g` per source resolves a direct
+video-only media URL (1080p preferred; audio is irrelevant to reading a
+HUD), and everything after that is ffmpeg against that URL. Frames are
+cached deterministically by video + timestamp + resolution, with a
+provenance manifest that deliberately does not record the signed URL.
+
+`plan_batches` is the economic decision, as a pure function: offsets 60
+seconds apart are separate seeks, because a range read across the gap
+transfers the gap; a one-second dense burst is ONE contiguous read, because
+those bytes were coming anyway. A run is split before it can exceed
+`DEFAULT_BATCH_SPAN`, so a dense pass can never quietly become a download.
+
+`pipeline/calibrate_remote.py` — the adaptive scan, and the new default
+calibration workflow. 60s → 30s → 15s, where the last rung only looks near
+offsets that already showed HUD structure. It stops as soon as a trial
+calibration clears `calibrate_source`'s own floor with margin.
+
+Two properties are easy to lose and are pinned by tests:
+
+* **the existing filter chooses the frames.** The layout-free chip screen
+  only nominates candidates; once a provisional layout exists, everything
+  acquired goes through `gameplay_state.classify_frame` and only
+  `gameplay` survives. Desk, replays, scoreboards and breaks are rejected
+  by the same code production detection trusts.
+* **the floor is not this module's to relax.** Survivors are handed to
+  `calibrate_source.py --frames-dir` — the real CLI, in-process — so the
+  confidence floor, the refusal, the marker preservation, the annotated
+  sheet and the provenance block are exactly what they were.
+
+`select_and_calibrate` is deliberately acquisition-agnostic. That is what
+makes the benchmark honest: both paths run identical downstream logic and
+differ only in how the frames arrived.
+
+### The scaling fix the benchmark found
+
+The first implementation fetched a whole pass before evaluating it. On a
+nine-hour broadcast that is 540 offsets — ~135 MB to answer a question two
+dozen frames settle. Fixed by `spread_first` (visit the ladder by recursive
+bisection, so the first 24 samples sweep the WHOLE broadcast rather than
+its first 24 minutes) plus chunked evaluation every 24 frames. The scan's
+cost now tracks how fast it finds evidence, not how long the broadcast is.
+
+### The full-map timeline is untouched, and now cheaper to run
+
+`ingest_map`'s baseline + 1-second dense recapture is the thing that makes
+the hero timeline accurate and it was explicitly not to be replaced by
+30/60-second sampling. It is not. Two changes around it:
+
+* `FrameServer.prefetch` pulls each contiguous dense run in one ffmpeg call
+  instead of one per second — and `test_dense_recapture.py` requires the
+  result to be **byte-identical** to the per-frame path, which it is. If it
+  ever stops being identical the batching must go, and the test says so.
+* `FrameServer` can source those offsets by HTTP range (`--remote-url`), so
+  a swap can be re-checked without a local clip. The local path is
+  unaffected.
+
+### Measured (`docs/CAPTURE-BENCHMARK.md`)
+
+Against a broadcast-shaped fixture built from this repo's own committed
+OWCS frames, served over a byte-range HTTP server that counts what it
+sends:
+
+| | 30 min | 60 min |
+|---|---|---|
+| old (full download) | 136.2 MB | 272.7 MB |
+| new (sparse) | 13.4 MB | 19.8 MB |
+| reduction | 10.2x | 13.8x |
+
+The interesting result is not the bandwidth. At 60 minutes the two paths
+disagree by 61px, and measured against the committed reference layout the
+FULL-DOWNLOAD path is the one that drifted — 82px, more than a portrait
+width, i.e. boxes on the wrong heroes — while the sparse path held 21px in
+both runs. `calibrate_source`'s grid fit can latch onto a spurious
+edge blob when handed more, noisier frames; feeding it fewer, better-spread
+ones turns out to be a correctness property, not only a bandwidth one. That
+sensitivity is pre-existing and was left alone on purpose.
+
+`test_calibrate_remote.py` now requires the sparse layout to land within
+30px of the committed reference, slot by slot. It measures 15px.
+
+### Not measured here
+
+The real-VOD leg. YouTube is blocked by this environment's network policy,
+so `benchmark_capture.py --url` has not been run; the one untested link is
+`yt-dlp -g` and whether googlevideo honours ranges as reliably as the test
+server. The command to run it is in `docs/CAPTURE-BENCHMARK.md`. If a CDN
+refuses ranges, `remote_frames` says so and `capture.py --full-download`
+still works.
+
+
+## HISTORICAL (superseded — 2026-08-08, tenth pass) — one product, one workflow, one design system
 
 > Additive to the ninth pass below. Nothing in the pipeline's safety,
 > evidence or promotion architecture was changed; a product layer was built

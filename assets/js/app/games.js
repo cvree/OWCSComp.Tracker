@@ -70,6 +70,18 @@
         command: "python3 pipeline/build_hero_templates.py --layout " + (run.layout || "<layout>"),
         link: null,
       });
+    } else if (det.status === "skipped" && /layout|calibrat/i.test(reason)) {
+      out.push({
+        title: "This broadcast has not been calibrated yet",
+        why: "The tracker needs to learn where this production puts the hero portraits " +
+          "before it can read them. It works that out from a handful of frames — it does " +
+          "not need the video.",
+        fixLabel: "Calibrate it (no download)",
+        command: "python3 pipeline/calibrate_remote.py --url \"" +
+          (run.url || "<broadcast-url>") + "\" --source-id " + (run.source || "<source>") +
+          " --out layouts/" + String(run.source || "source").replace(/-/g, "_") + ".json",
+        link: "calibrate.html",
+      });
     } else if (det.status === "skipped") {
       out.push({
         title: "Hero detection did not run",
