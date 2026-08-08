@@ -14,7 +14,7 @@ Local MP4 (no network, no yt-dlp):
 
 Every step prints a numbered banner with what it is doing, where output
 goes, and OK/FAILED. Afterwards:
-  python -m http.server 8000     ->  http://localhost:8000/sources.html
+  python -m http.server 8000     ->  http://localhost:8000/tools.html#sources
 
 Detection runs only if the layout's hero templates exist ("if ready");
 results go to reports/auto/<run>/detections.json for review — this command
@@ -533,7 +533,7 @@ def build_report_html(record: dict, debug_images: list[str]) -> str:
             f"<pre>python pipeline/promote_detections.py --run {run_id} --write \\\n"
             "  --match &lt;match_id&gt; --map-order 1 "
             "--team-a &lt;team&gt; --team-b &lt;team&gt;</pre>"
-            "<p class='muted'>Manual corrections in admin.html always override "
+            "<p class='muted'>Manual corrections from the review workspace always override "
             "CV. FACEIT supplies match/map structure only — never the comp.</p>")
     return ("<!DOCTYPE html><html><head><meta charset='utf-8'>"
             f"<title>{_esc(record.get('run'))} — auto run report</title>"
@@ -557,8 +557,8 @@ def build_report_html(record: dict, debug_images: list[str]) -> str:
             "<a href='crops.html'>hero crop report</a> · "
             "<a href='hero_crops.html'>hero crop review + label</a> · "
             "<a href='layout_debug/'>raw debug images</a> · "
-            "<a href='../../../runs.html'>all runs</a> · "
-            "<a href='../../../sources.html'>sources</a></p>"
+            "<a href='../../../tools.html#runs'>processing history</a> · "
+            "<a href='../../../tools.html#sources'>broadcast sources</a></p>"
             "</body></html>")
 
 
@@ -898,7 +898,7 @@ def run_auto(source=None, local=None, start=0, end=None, every=30,
     if record["ok"]:
         log(f"{record['runStatus'].upper()} — report: {report_rel}index.html")
         log("next: python pipeline/serve.py  ->  "
-            "http://localhost:8000/runs.html")
+            "http://localhost:8000/games.html")
     return record
 
 

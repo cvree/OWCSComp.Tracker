@@ -4,194 +4,124 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>How it works — OWCS Comp Tracker</title>
-<meta name="description" content="What a verified composition is, how a broadcast becomes data, what every badge on the site means, and what this tracker refuses to claim.">
+<meta name="description" content="How a broadcast becomes reviewed match data, what published means here, what this site does not claim, and how to run your own copy.">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Cinzel:wght@500;600&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-<noscript><link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Cinzel:wght@500;600&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
-<!-- Ambience libraries, declared instead of <script>-loaded: three.js is 616 KB,
-     and a deferred <script> lands in front of DOMContentLoaded — which is when
-     the shell builds the header, nav and footer. motion.js fetches these on idle
-     after first paint, and only on devices that can actually use WebGL. -->
-<meta name="owcs-ambience" content="assets/vendor/three.min.js,assets/vendor/vanta.net.min.js">
-<link rel="stylesheet" href="assets/css/public.css">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/owcs.css">
 </head>
-<body class="pub">
+<body>
 <a class="skip-link" href="#main">Skip to content</a>
-<main class="pub-main" id="main">
 
-  <div class="page-head rv">
-    <span class="ph-eyebrow">The manual</span>
-    <h1>How it works</h1>
-    <p class="lede">Everything on this site is derived from broadcast video, so the only thing
-      that makes a number worth reading is being able to see where it came from. This page is
-      that explanation: what gets measured, who checks it, what each label means, and what we
-      refuse to claim.</p>
-    <nav class="doc-toc" aria-label="On this page">
-      <a href="#verified">What “verified” means</a>
-      <a href="#pipeline">The five stages</a>
-      <a href="#evidence">The evidence chain</a>
-      <a href="#swaps">Swaps &amp; the rejection ledger</a>
-      <a href="#glossary">Every badge on the site</a>
-      <a href="#numbers">How the stats are counted</a>
-      <a href="#limits">What we don't claim</a>
-      <a href="#run">Run it yourself</a>
-    </nav>
+<main id="main" class="shell">
+
+  <div class="page-head">
+    <p class="eyebrow">In plain language</p>
+    <h1>How a broadcast becomes data you can trust</h1>
+    <p class="lede">No jargon, no computer-vision vocabulary. If any of this is unclear, that
+      is a bug in the writing — the product is meant to be usable without reading it at all.</p>
   </div>
 
-  <div class="doc">
+  <section class="band" aria-labelledby="h-steps">
+    <div class="sec-head"><h2 id="h-steps">The six steps</h2></div>
+    <div class="card"><div class="flow" id="steps"></div></div>
+    <p class="dim small u-mt-4" style="max-width:70ch">Steps one to five are the machine.
+      Step six is a person, and it is not optional: nothing appears on a public page until
+      someone has looked at what the detector read and said yes.</p>
+  </section>
 
-    <h2 id="verified">What “verified” means here</h2>
-    <p>A <b>composition</b> is one team's five heroes at one moment on one map. The tracker never
-      asks a person to type that in from memory, and never takes it from a scoreboard site.
-      It reads the ten hero portraits in the broadcast HUD directly, by matching each portrait
-      against real hero crops harvested from the same broadcast.</p>
-    <p>A composition is published only if it is in one of two states:</p>
-    <ul>
-      <li><b>Human reviewed</b> — a person looked at the crops the detector used and confirmed
-        the read (or corrected it; a correction always beats the machine, and the original
-        machine read is kept alongside it rather than deleted).</li>
-      <li><b>Auto-high</b> — the detector's match was strong and stable enough across
-        consecutive samples to clear the high-confidence gate on its own.</li>
-    </ul>
-    <p>Anything else — a low-confidence read, a slot the detector could not identify, a run that
-      is still in progress — <b>is not shown at all</b>. It is not shown greyed out, or with an
-      asterisk. It stays out of the public dataset and out of every average computed from it.
-      That is the single rule the whole site is built around.</p>
+  <section class="band" aria-labelledby="h-published">
+    <div class="sec-head"><h2 id="h-published">What “published” means here</h2></div>
+    <div class="grid grid--2">
+      <div class="card">
+        <h3>A published line-up has all four of these</h3>
+        <ul class="stack u-mt-4" style="padding-left:1.1em;color:var(--tx-2)">
+          <li>Five heroes read off the actual broadcast frame, not entered by hand from memory.</li>
+          <li>A confidence score the detector was willing to stand behind, or a person's explicit approval.</li>
+          <li>The image file it was read from, kept and linked.</li>
+          <li>A named review status of <b>reviewed</b> or <b>auto-high</b>. Anything else is withheld.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Where the facts come from</h3>
+        <p class="dim u-mt-3">Two separate sources that never mix:</p>
+        <ul class="stack u-mt-3" style="padding-left:1.1em;color:var(--tx-2)">
+          <li><b>Hero compositions</b> only ever come from reading the video, or from a
+            person correcting that reading. FACEIT can never supply a composition.</li>
+          <li><b>Match facts</b> — teams, maps, scores, bans — come from FACEIT, official
+            pages, or manual entry.</li>
+        </ul>
+        <p class="dim small u-mt-4">Keeping them apart is why a score being wrong can never
+          make a composition wrong, and vice versa.</p>
+      </div>
+    </div>
+  </section>
 
-    <h2 id="pipeline">The five stages</h2>
-    <p>Two of these stages are a human saying yes. That is deliberate: the expensive failure
-      mode for a tracker is not being slow, it is being confidently wrong.</p>
-    <ol class="how-steps" style="margin-top:var(--sp-3)">
-      <li><span class="hs-num mono">01</span><div>
-        <h3>Register the broadcast</h3>
-        <p>A VOD is added — pasted in as a link, or found automatically on the official OWCS
-          channels using their public feeds (no API key, no quota). Registering a link imports
-          metadata only; nothing is downloaded or trusted yet.</p></div></li>
-      <li><span class="hs-num mono">02</span><div>
-        <h3>Calibrate the HUD</h3>
-        <p>Every broadcast lays its hero portraits out slightly differently. The calibrator
-          computes where the ten portrait boxes actually sit, verifies the fit against real
-          pixels, and <b>refuses</b> to continue below its confidence threshold instead of
-          guessing a layout. A human approves the resulting layout profile.</p></div></li>
-      <li><span class="hs-num mono">03</span><div>
-        <h3>Read the map</h3>
-        <p>Frames are sampled across the map. Each frame is first classified as live gameplay or
-          not — replays, killcams, scoreboards and desk segments are thrown away, because a
-          replay would otherwise create a composition that never happened. Every surviving
-          portrait slot is template-matched, and the detector records its best candidate, the
-          runner-up and the margin between them. Too close to call returns
-          <code>UNKNOWN</code> — and so does a hero the package has no portrait for, which is
-          most of the roster today (see <a href="#limits">what we don't claim</a>).</p></div></li>
-      <li><span class="hs-num mono">04</span><div>
-        <h3>Human review</h3>
-        <p>Proposed identities (which teams, which map, which players) and the detections
-          themselves pass a human gate. Approvals are audited: they record who approved what and
-          when. Nothing on this site was approved by the machine that produced it.</p></div></li>
-      <li><span class="hs-num mono">05</span><div>
-        <h3>Publish with receipts</h3>
-        <p>Approved compositions are exported to the public dataset together with the run,
-          frames and crops behind them. If any link of that chain is missing, the export drops
-          the composition rather than shipping an unprovable one.</p></div></li>
-    </ol>
+  <section class="band" aria-labelledby="h-correct">
+    <div class="sec-head"><h2 id="h-correct">What happens when the machine is wrong</h2></div>
+    <div class="card">
+      <p>It gets corrected, and the original reading is kept.</p>
+      <p class="dim">A correction never deletes what the detector saw. It is recorded as an
+        additional, attributed, reversible layer: the hero it read, the confidence it had, the
+        frame it read from, who overruled it, when, and why. Both sit side by side in the
+        record, and the correction file is committed to git — so the history of every change
+        is public and permanent.</p>
+      <p class="dim">This is deliberate. A tracker that quietly overwrites its own mistakes
+        cannot be audited, and a tracker that cannot be audited is just an opinion.</p>
+      <div class="row u-mt-4">
+        <a class="btn btn--sm" href="review.html">See the review workspace</a>
+      </div>
+    </div>
+  </section>
 
-    <h2 id="evidence">The evidence chain</h2>
-    <p>Every published composition can be walked backwards, and the site links each hop:</p>
-    <p class="mono" style="color:var(--tx-1)">composition → capture run → sampled frames →
-      hero crops → review status</p>
-    <p>On any match page, the <b>Evidence</b> tab shows that chain for real: the capture window,
-      the resolution actually captured (flagged if it differs from what was requested), the
-      frames that were sampled, and the exact HUD crops the detector compared. The
-      <b>Review</b> tab shows what is still held back and what commands would move it forward.</p>
-    <p>If you ever see a number on this site you can't trace to frames, that is a bug worth
-      reporting — not a feature.</p>
+  <section class="band" aria-labelledby="h-limits">
+    <div class="sec-head"><h2 id="h-limits">What this site does <em>not</em> claim</h2></div>
+    <div class="grid grid--2" id="limits"></div>
+  </section>
 
-    <h2 id="swaps">Swaps and the rejection ledger</h2>
-    <p>A mid-map hero swap is the hardest thing to read off a broadcast, because a dead player's
-      dimmed portrait, a killcam or a single noisy frame can all look like a switch. The tracker
-      treats a swap as a <b>temporal</b> event: a slot must hold its new hero across several
-      consecutive samples, with enough margin, before the change is confirmed.</p>
-    <p>Candidates that fail that test are not silently dropped — they are recorded with the
-      reason they were thrown out, and shown publicly on the
-      <a href="swaps.html">swap intelligence page</a>. A tracker that only publishes its hits is
-      impossible to audit; the rejection ledger is how you can tell the difference between
-      “nothing happened” and “we didn't look”.</p>
+  <section class="band" id="run-it-yourself" aria-labelledby="h-run">
+    <div class="sec-head"><h2 id="h-run">Running your own copy</h2></div>
+    <div class="card">
+      <p>The published site is a static file. It has no server, so it cannot download a
+        video — which is why submitting a game here hands you a command instead of pretending
+        to work.</p>
+      <p class="dim">To actually process a broadcast you run the tracker on your own machine.
+        It is free and open, and it does not phone anything home.</p>
+      <ol class="stack u-mt-4" style="padding-left:1.2em;color:var(--tx-2)">
+        <li>Install Python 3.11 or newer, plus <code>ffmpeg</code> and <code>yt-dlp</code>.</li>
+        <li>Clone the repository and run <code>pip install -r requirements.txt</code>.</li>
+        <li>Start the local portal:
+          <pre class="console u-mt-3" style="max-height:none">python3 pipeline/serve.py</pre>
+        </li>
+        <li>Open the address it prints. Every page you have seen here works the same way,
+          except now Submit really submits and Review really writes.</li>
+      </ol>
+      <div class="row u-mt-4">
+        <button class="btn btn--sm" data-copy="python3 pipeline/serve.py">Copy the command</button>
+        <a class="btn btn--sm btn--ghost" href="tools.html">Diagnostics</a>
+      </div>
+    </div>
+  </section>
 
-    <h2 id="glossary">Every badge on the site</h2>
-    <p>These are the labels you will meet on match, team and stat pages. They are rendered here
-      by the same code that renders them everywhere else, so this list cannot drift out of date.</p>
-    <div class="gloss" id="gloss-root"></div>
+  <section class="band" aria-labelledby="h-terms">
+    <div class="sec-head"><h2 id="h-terms">Words you will see</h2></div>
+    <div class="card"><dl class="u-mt-0" id="glossary" style="display:grid;
+      grid-template-columns:minmax(150px,auto) 1fr;gap:var(--s-3) var(--s-5);margin:0"></dl></div>
+  </section>
 
-    <h2 id="numbers">How the stats are counted</h2>
-    <ul>
-      <li><b>The unit is one team on one map.</b> A hero played by a team for a whole map counts
-        once, no matter how many frames it appeared in — so a long map can't inflate a pick rate.</li>
-      <li><b>Pick rate</b> = the appearances of that hero ÷ all team-map appearances in the
-        current filter. <b>Win rate</b> = wins ÷ <i>decided</i> maps; a map with no recorded
-        winner counts as a pick and not as a loss.</li>
-      <li><b>Win rate is blank, not zero,</b> when nothing has been decided yet. Zero is a
-        claim; blank is the truth.</li>
-      <li><b>Bans are match facts,</b> imported from official sources and always labelled as
-        such. They are never inferred from video and never mixed into pick rates.</li>
-      <li><b>Withheld matches contribute nothing.</b> If a match is held back from publication,
-        it is excluded from every aggregate on the site, not just from its own page.</li>
-    </ul>
-
-    <h2 id="limits">What we don't claim</h2>
-    <ul>
-      <li><b>Coverage is small.</b> This is a young project with a handful of fully processed
-        maps. Rates derived from them are honest arithmetic over a small sample — read them as
-        “what happened in these maps”, not “the state of the meta”.</li>
-      <li><b>The detector does not know all 52 heroes.</b> A hero can only be recognised from
-        portraits harvested out of real broadcast footage, and the best-covered broadcast
-        package currently has templates for <b>8 of 52</b>. Those eight are validated against
-        1,861 frames that were never used to build them — 99.7% correct, zero confident wrong
-        answers — but a hero with no template is reported <code>UNKNOWN</code> and never
-        appears in a published composition. Wider coverage needs more footage, not more code.</li>
-      <li><b>Two heroes are hard to tell apart at broadcast resolution.</b> Measured rather than
-        assumed: with Juno's templates removed from the set, 38% of real Juno portraits are read
-        as Kiriko instead of <code>UNKNOWN</code>. At 35×35 pixels in greyscale they are both a
-        dark-haired figure on a light field. Every other covered hero refuses correctly.</li>
-      <li><b>Series scores are not invented.</b> Where a scoreline was never imported as a
-        fact, the site shows “–”.</li>
-      <li><b>Timing is sample-accurate, not frame-accurate.</b> Round boundaries and swap
-        timestamps come from sampling every few seconds and can be off by about one sample.</li>
-      <li><b>Match facts and compositions never cross over.</b> Schedules, teams and scores come
-        from official or manually entered facts; compositions come only from reviewed capture.
-        Neither is ever used to fill a gap in the other.</li>
-      <li><b>Rosters can be empty.</b> A team with no confirmed line-up shows nothing rather
-        than plausible-looking names.</li>
-      <li><b>Art and marks.</b> Hero portraits shown as evidence are broadcast crops. Teams
-        without a verified official mark get a designed crest, never a guessed logo.</li>
-    </ul>
-
-    <h2 id="run">Run it yourself</h2>
-    <p>The whole pipeline is plain Python and OpenCV with no paid services, and the site is
-      static HTML that any host can serve. From a checkout you can paste a broadcast link into
-      the <a href="portal.html">operator portal</a> and drive every stage from the browser, or
-      run the same commands directly:</p>
-    <p><code>python pipeline/automation/cli.py convert-link --url "&lt;youtube-url&gt;"</code></p>
-    <p>On a hosted copy like this one there is no server behind the page, so the portal turns
-      read-only and builds the exact command for you instead of pretending to work. That is also
-      why the portal is a separate page from the site you're reading: nothing in the results
-      needs it.</p>
-
-    <p class="dim" style="font-size:13px;border-top:1px solid var(--line);padding-top:var(--sp-4)">
-      Independent fan project. Not affiliated with or endorsed by Blizzard Entertainment,
-      Overwatch, OWCS or FACEIT. Data recorded from public broadcasts.</p>
-  </div>
 </main>
 
 <script src="assets/vendor/lenis.min.js" defer></script>
 <script src="assets/vendor/gsap.min.js" defer></script>
 <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
-<script src="assets/js/motion.js" defer></script>
+<script src="assets/js/app/motion.js" defer></script>
+<script src="assets/data/hero_art.v1.js"></script>
 <script src="assets/data/public_data.v1.js"></script>
-<script src="assets/data/public_fixture.v1.js"></script>
-<script src="assets/js/public/core.js"></script>
-<script src="assets/js/public/assets.js"></script>
-<script src="assets/js/public/shell.js"></script>
-<script src="assets/js/public/page-how.js"></script>
+<script src="assets/js/app/core.js"></script>
+<script src="assets/js/app/games.js"></script>
+<script src="assets/js/app/api.js"></script>
+<script src="assets/js/app/shell.js"></script>
+<script src="assets/js/app/page-how.js"></script>
 </body>
 </html>

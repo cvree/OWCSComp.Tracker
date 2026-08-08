@@ -4,79 +4,42 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Team — OWCS Comp Tracker</title>
-<meta name="description" content="Team profile: verified hero pool, pick and win rates, match history — every number evidence-linked.">
+<meta name="description" content="One team: roster, hero pool and every game with approved composition data.">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Cinzel:wght@500;600&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-<noscript><link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Cinzel:wght@500;600&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
-<!-- Ambience libraries, declared instead of <script>-loaded: three.js is 616 KB,
-     and a deferred <script> lands in front of DOMContentLoaded — which is when
-     the shell builds the header, nav and footer. motion.js fetches these on idle
-     after first paint, and only on devices that can actually use WebGL. -->
-<meta name="owcs-ambience" content="assets/vendor/three.min.js,assets/vendor/vanta.net.min.js">
-<link rel="stylesheet" href="assets/css/public.css">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/owcs.css">
 </head>
-<body class="pub">
+<body data-page="team">
 <a class="skip-link" href="#main">Skip to content</a>
-<main class="pub-main" id="main">
-  <div id="t-crumbs"></div>
-  <header class="team-head rv" id="t-head" aria-label="Team header"></header>
 
-  <section class="section" aria-label="Team summary">
-    <div class="stat-cards" id="t-cards"></div>
-  </section>
-
-  <section class="section" aria-label="Footage and calibration" id="t-calib-sec" hidden>
-    <h2>Footage &amp; calibration</h2>
-    <p class="dim" style="margin-top:0;max-width:64ch">Why you can trust this team's comps: the broadcast HUD was
-      auto-calibrated and every hero read from the frames. These are the real calibration numbers behind the data.</p>
-    <div id="t-calib"></div>
-  </section>
-
-  <section class="section" aria-label="Maps played" id="t-maps-sec" hidden>
-    <h2>Maps played <span class="h-count" id="t-maps-count"></span></h2>
-    <div id="t-maps"></div>
-  </section>
-
-  <section class="section" aria-label="Coverage" id="t-coverage-sec" hidden>
-    <h2>Tracking coverage</h2>
-    <div id="t-coverage"></div>
-  </section>
-
-  <section class="section" aria-label="Roster" id="t-roster-sec" hidden>
-    <h2>Roster <span class="h-count" id="t-roster-count"></span>
-      <span class="badge badge--src" data-src="faceit" id="t-roster-src" style="vertical-align:4px" hidden>match facts</span></h2>
-    <div id="t-roster"></div>
-  </section>
-
-  <section class="section" aria-label="Hero bans" id="t-bans-sec">
-    <h2>Hero bans <span class="badge badge--src" data-src="faceit" style="vertical-align:4px">match facts</span></h2>
-    <div id="t-bans"></div>
-  </section>
-
-  <section class="section" aria-label="Hero pool">
-    <h2>Hero pool <span class="h-count" id="t-pool-count"></span></h2>
-    <div class="stat-note rv"><span aria-hidden="true">⛨</span>
-      <span>Heroes this team has actually fielded in <b>verified comps</b> (reviewed or auto-high only). Portraits are upscaled from real broadcast HUD crops — heroes without a harvested crop show a monogram tile.</span></div>
-    <div id="t-pool" style="margin-top:16px"></div>
-  </section>
-
-  <section class="section" aria-label="Matches">
-    <h2>Matches <span class="h-count" id="t-match-count"></span></h2>
-    <div id="t-matches"></div>
-  </section>
+<main id="main" class="shell shell--wide">
+  <div id="crumbs" class="u-mt-5"></div>
+  <div id="head"></div>
+  <div id="body" class="u-mt-6"></div>
 </main>
+
+<div class="lightbox" id="lightbox" hidden>
+  <div data-close style="position:absolute;inset:0"></div>
+  <figure class="lightbox__box" role="dialog" aria-modal="true" aria-label="Evidence frame" style="margin:0">
+    <img id="lightbox-img" src="" alt="">
+    <figcaption id="lightbox-cap"></figcaption>
+    <div class="row u-mt-4"><button class="btn btn--sm" data-close>Close</button></div>
+  </figure>
+</div>
 
 <script src="assets/vendor/lenis.min.js" defer></script>
 <script src="assets/vendor/gsap.min.js" defer></script>
 <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
-<script src="assets/js/motion.js" defer></script>
+<script src="assets/js/app/motion.js" defer></script>
+<script src="assets/data/hero_art.v1.js"></script>
 <script src="assets/data/public_data.v1.js"></script>
-<script src="assets/data/public_fixture.v1.js"></script>
-<script src="assets/js/public/core.js"></script>
-<script src="assets/js/public/assets.js"></script>
-<script src="assets/js/public/shell.js"></script>
-<script src="assets/js/public/stats.js"></script>
-<script src="assets/js/public/page-team.js"></script>
+<script src="assets/js/app/core.js"></script>
+<script src="assets/js/app/games.js"></script>
+<script src="assets/js/app/api.js"></script>
+<script src="assets/js/app/evidence.js"></script>
+<script src="assets/js/app/shell.js"></script>
+<script src="assets/js/app/page-profiles.js"></script>
 </body>
 </html>

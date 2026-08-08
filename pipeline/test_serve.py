@@ -140,10 +140,10 @@ def main() -> int:
     check("sources lists only youtube sources (incl. disabled, flagged)",
           code == 200 and [s["id"] for s in j["sources"]]
           == ["src-a", "src-off"])
-    req = urllib.request.urlopen(f"http://127.0.0.1:{port}/runs.html",
+    req = urllib.request.urlopen(f"http://127.0.0.1:{port}/games.html",
                                  timeout=5)
-    check("static pages still served", req.status == 200
-          and b"expandable" in req.read() or True)
+    check("static pages still served",
+          req.status == 200 and b"owcs.css" in req.read())
     code, j = api(port, "/api/nope", {})
     check("unknown POST endpoint -> 404", code == 404)
 
@@ -487,23 +487,31 @@ def main() -> int:
           and kwseen.get("errors") == "replace"
           and ("start_new_session" in kwseen or "creationflags" in kwseen))
 
-    print("run.html renders the foolproof states:")
-    with open(os.path.join(serve.REPO, "run.html"), encoding="utf-8") as f:
+    print("the product renders the foolproof states:")
+    with open(os.path.join(serve.REPO, "assets", "js", "app", "page-game.js"),
+              encoding="utf-8") as f:
         page = f.read()
-    check("cancel button + /api/cancel wired", 'id="cancelBtn"' in page
-          and "/api/cancel" in page)
-    with open(os.path.join(serve.REPO, "assets", "css", "style.css"),
+    check("cancel control + /api/cancel wired", 'id="cancel-run"' in page
+          and "cancelRun" in page)
+    with open(os.path.join(serve.REPO, "assets", "js", "app", "api.js"),
+              encoding="utf-8") as f:
+        api_js = f.read()
+    check("no tracker behind the page is a NAMED state, not a silent failure",
+          '"readonly"' in api_js and '"connected"' in api_js
+          and "No tracker is running behind this page" in api_js)
+    check("a live view that loses the API says so instead of freezing",
+          "recorded state, not a live one" in page)
+    with open(os.path.join(serve.REPO, "assets", "css", "owcs.css"),
               encoding="utf-8") as f:
         css = f.read()
-    check("all job states styled (shared design system)",
-          all(f"pill-v2.{s}" in css for s in
-              ["queued", "running", "ok", "partial", "failed",
-               "canceled", "timeout"]))
-    check("unreachable-API error state with terminal fallback command",
-          'id="apiLost"' in page and 'id="fallbackCmd"' in page
-          and "unreachable" in page)
-    check("no-API static fallback still present", 'id="fallback"' in page
-          and "python pipeline/serve.py" in page)
+    check("every job state has a visual treatment (shared design system)",
+          all(f'data-state="{s}"' in css for s in
+              ["published", "review", "working", "queued", "blocked"]))
+    with open(os.path.join(serve.REPO, "how-it-works.html"),
+              encoding="utf-8") as f:
+        how = f.read()
+    check("the no-API fallback command is documented on the site",
+          "python3 pipeline/serve.py" in how)
 
     print("test job builds one command per suite:")
     cmds = serve.build_test_cmds()

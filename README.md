@@ -38,30 +38,49 @@ and `review.html` (every confirmed/rejected change point with crops).
 
 ---
 
-## The public site ("nocturne" redesign)
+## The product
 
-The fan-facing site is a dark-gothic esports intelligence surface — still
-plain HTML/CSS/JS, still GitHub-Pages-safe, still evidence-first. Pages:
+There is one product and one workflow, and every page belongs to a step of
+it:
 
-| page | what it shows |
+**Submit a game → Automatic processing → Review what was detected →
+Approve or correct → Published match stats**
+
+The navigation has five entries, in that order. Everything else is reached
+from the screen it belongs to.
+
+| page | what it is for |
 |---|---|
-| `index.html` | **the front door** — what the site is in one screen, the honest size of the dataset (computed, never rounded up), the featured verified map with both line-ups and its confirmed swaps, the five-step explanation, the published limits, and the way in to every surface. Reading the data never touches the pipeline. |
-| `how-it-works.html` | **the manual** — what "verified" means, the five pipeline stages, the evidence chain, the swap rejection ledger, a glossary of every badge on the site (rendered by the site's own chip helpers so it can't drift), how the stats are counted, and what the tracker refuses to claim |
-| `portal.html` | **the operator portal** — the paste-a-link box, the auto match finder (every OWCS broadcast, one click to ingest), the live pipeline with every human gate as a button. Static hosting keeps it read-only and builds the command instead. (`intake.html` redirects here.) |
-| `tournaments.html` / `tournament.html` | events, brackets, standings |
-| `calendar.html` | the season by day: official stage windows (from `config/owcs_calendar.json`, with their unverified-dates status shown honestly), the month grid of tracked matches, a "next up" list, and "time TBA" wherever only a date is known |
-| `matches.html` / `match.html` | schedule and the match page with comps, **confirmed swaps with before/after crops**, bans, evidence chain, review queue |
-| `teams.html` / `team.html` | directory + team dossier (record, hero pool, calibration provenance) |
-| `heroes.html` / `hero.html` | hero analytics directory + per-hero dossier (rates, teams, swap activity, portrait provenance) |
-| `comps.html` | every verified five-hero lineup, grouped and counted, with map results and evidence links |
-| `swaps.html` | swap intelligence — confirmed swaps with evidence, plus the rejected-noise honesty ledger |
-| `maps.html` / `stats.html` | map meta + the sortable pick/win-rate table with drill-downs |
+| `index.html` | **Dashboard** — one obvious "Submit a game", what needs a person, what is processing, what is blocked, what was recently published, and a small honest system-health strip. |
+| `games.html` | **Games** — one row per game whatever state it is in. This replaced the separate matches / runs / sources / tournaments lists, which were four views of the same thing. Also carries the official season schedule, collapsed, as "nobody has submitted this yet". |
+| `submit.html` | **Submit** — one required field. The link is classified as you type (offline; a connected tracker's own classifier takes over when there is one), known broadcasts autofill the rest, advanced options stay shut, and there is exactly one final button. |
+| `review.html` | **Review** — the human gate, and the best screen in the product. Every detection beside the frame it was read from, confidence as a bar, a fast hero picker, whole-map and whole-line-up approval, swap and map-boundary confirmation, and a full keyboard (`j`/`k` move, `a` approve, `c` correct, `f` flag, `⇧A` approve every clean read). |
+| `game.html` | **One game**, in whatever state it is in: the six-step progression with live output while it runs, the blocker and its exact fix when it is stuck, and the published maps and line-ups once it is approved. |
+| `stats.html` | **Stats** — heroes, compositions, maps, teams and swaps as five tabs over the same approved dataset. |
+| `teams.html` · `team.html` · `hero.html` | nested profiles, reached from a game or a stats table. |
+| `how-it-works.html` | the explainer, in plain language, rendering the product's own step definitions so it cannot drift. |
+| `tools.html` | everything technical, off the main path: broadcast sources, processing history, calibration health, download authentication, storage, publishing, the evidence archive. |
+| `calibrate.html` | the in-browser calibration wizard — the one operator tool that works fully on the published copy. |
+| `404.html` | the legacy-URL map. Every page the redesign removed names where it went, and goes there. |
 
-**Site search** (`assets/js/public/shell.js`): every public page carries a
-search button plus `/` and ⌘/Ctrl-K shortcuts. It indexes matches, teams,
-heroes, maps, tournaments and the site's own pages straight from
-`public_data.v1.js` — no service, no index file to rebuild — and jumps to
-the page. Arrow keys move, Enter opens, Esc closes.
+Two datasets, never merged: `assets/data/public_data.v1.js` is the
+**published** record (approved, evidence-backed, safe to state as fact) and
+`assets/js/data.js` is the **working** record (runs, sources, what is
+happening). The demo fixture is a test asset under `pipeline/fixtures/` and
+no page can load it — an empty export renders an honest empty state, never
+invented games.
+
+**Site search** (`assets/js/app/shell.js`): every page carries a search
+button plus `/` and ⌘/Ctrl-K. It indexes games, teams, heroes and the
+product's own pages straight from the export — no service, no index file to
+rebuild. Arrow keys move, Enter opens, Esc closes.
+
+**Motion** (`assets/js/app/motion.js`): Lenis smooth scroll, one entrance
+reveal per element, a scroll hairline, and nothing else. The WebGL ambience
+layer (three.js + Vanta, 630 KB) and the cursor effects were removed in the
+2026 redesign: they cost more than the rest of the page combined and made
+targets move away from the pointer. `prefers-reduced-motion` and Save-Data
+disable everything, and a reveal can never permanently withhold content.
 
 Screenshots live in [`docs/screenshots/`](docs/screenshots/).
 
@@ -244,20 +263,22 @@ Requirements: **Python 3.12+**, `pip install -r requirements.txt`, and
 ### Preview the site locally
 
 ```bash
-python pipeline/serve.py            # public site at http://localhost:8000/
-                                    # operator portal at /portal.html
-# or any static server:
-python -m http.server 8000          # then open match.html?id=m-qad-twis-s2po
+python pipeline/serve.py            # the dashboard at http://localhost:8000/
+                                    # submit a game at /submit.html
+                                    # review detections at /review.html
+# or any static server (read-only: no video can be processed):
+python -m http.server 8000          # then open game.html?id=m-qad-twis-s2po
 ```
 
-The public pages load `assets/data/public_data.v1.js` first and fall back to
-the demo fixture only if it is absent — so a fresh clone shows the real
-Nepal match immediately.
+Every page detects whether a tracker is running behind it and says so.
+Served by `serve.py` the buttons really work; served statically they explain
+that nothing is listening and hand you the exact command instead of
+pretending.
 
 ### Run the tests (offline, no network, no VOD)
 
 ```bash
-for t in pipeline/test_*.py; do python "$t"; done   # 29 suites
+for t in pipeline/test_*.py; do python "$t"; done   # 101 suites
 python pipeline/check_packaging.py                  # reproducibility gate
 ```
 
@@ -317,18 +338,17 @@ identity proposals through the same `accept-proposed` gate a human uses.
 
 Don't have a link? The **auto match finder** finds one for you, on
 permanently free sources (channel RSS + the streams tab — no API key, no
-quota): `python pipeline/automation/cli.py find-matches`, or the "Scan for
-new matches" button on the portal. `--queue-likely` is the agentic mode:
+quota): `python pipeline/automation/cli.py find-matches`, or the "broadcasts we
+already know about" shortcuts on the submit form. `--queue-likely` is the agentic mode:
 every likely broadcast is registered through the same intake gate as a
 pasted URL, metadata only, nothing downloaded or approved.
 
 **The whole pipeline runs from the browser**: `python pipeline/serve.py`,
-open `portal.html` (the operator portal — `index.html` is the public site),
-paste the link or click **Ingest** on a found match, watch the live log — then drive every
-stage from the page itself (retry, autopilot, approve source, approve
+open `submit.html`, paste the link or pick a found broadcast, watch the live
+log on the game's own page — then drive every stage from the product itself (retry, autopilot, approve source, approve
 layout, propose/accept identity, detect, publish, export). Audited
 approvals require a typed name and a confirm; nothing is ever approved
-automatically. The page also carries a **download-authentication panel**
+automatically. `tools.html` carries the **download-authentication panel**
 (yt-dlp version, cookie mode, JS runtime, `curl_cffi`, API-key presence,
 last probe result, live fallback rung, per-layout detection readiness) —
 without exposing a single secret value. On static hosting it stays

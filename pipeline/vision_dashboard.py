@@ -595,7 +595,7 @@ def _links_section(P: dict, cmds: dict) -> str:
         one("candidate_detections.html", P["cand_detect"], "cand_dryrun"),
     ]
     return ('<div class="links">' + " ".join(rows) +
-            ' <a href="../../../runs.html">all runs</a>'
+            ' <a href="../../../tools.html#runs">processing history</a>'
             ' <a href="index.html">this run</a></div>'
             '<p class="note">A "(missing)" link shows the command that '
             'creates it when you hover it.</p>')

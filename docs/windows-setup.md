@@ -55,12 +55,12 @@ python pipeline/extract_calibration_frames.py --source <slug> --start 1:30:00 --
 # 5. Layout debug images
 python pipeline/build_layout_debug.py --layout layouts/owcs_youtube_2026.json --frames-dir work/calib_real --out work/layout_debug
 
-# 6. Export site data, serve, open http://localhost:8000
+# 6. Export site data, serve, open http://localhost:8000 (the dashboard)
 python pipeline/export_data.py
 python -m http.server 8000
 ```
 
-Saved sources are visible on the site at `sources.html`.
+Saved sources are visible on the site at `tools.html#sources`.
 
 Note: the channel /streams listing is metadata-only, so `date` may show as
 `TBD` for some entries — you can edit it later in
@@ -78,10 +78,11 @@ python pipeline/run_owcs_auto.py --source owcs-afcxdimpsle --start 1:30:00 --end
 # Same pipeline from your own local MP4 (no network)
 python pipeline/run_owcs_auto.py --local work/clips/day1_0130_0135.mp4 --start 0 --end 5:00 --every 30
 
-python -m http.server 8000   # open http://localhost:8000/sources.html
+python -m http.server 8000   # open http://localhost:8000/games.html
 ```
 
-Run status + report links appear under "Automatic runs" on sources.html.
+Run status + report links appear under **Processing history** on
+`tools.html#runs`, and every game gets its own page at `game.html`.
 Detection runs only when the layout's hero templates are calibrated; until
 then it reports skipped/error and the run still finishes.
 

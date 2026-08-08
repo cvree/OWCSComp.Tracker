@@ -3,7 +3,7 @@
 detect_bans.py — generalized, OCR-based hero-ban detection.
 
 Every hero ban in this project has always been TEXT: parsed out of a
-FACEIT matchroom, or hand-picked by a human in fact-admin.html. No code
+FACEIT matchroom, or hand-picked by a human. No code
 path has ever looked at a broadcast's pick/ban SCREEN. This module does,
 and — deliberately — without hard-coding any one broadcast's ban-row
 coordinates, so it works on "any overlay system":

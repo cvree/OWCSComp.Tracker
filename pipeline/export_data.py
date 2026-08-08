@@ -259,7 +259,7 @@ def load_ingest_runs(con) -> list[dict]:
     — calibration health, team identity, CV ban detections, round/swap
     counts, all linked to that run's evidence report. This is the newer,
     richer sibling of load_auto_runs (which only covers the older capture/
-    detect batch path) and is what runs.html leads with."""
+    detect batch path) and is what the processing history leads with."""
     try:
         rows = con.execute(
             "SELECT * FROM ingest_runs ORDER BY created_at DESC").fetchall()
@@ -1509,9 +1509,14 @@ def build_public_payload(con) -> dict:
                          "lastSynced": now}] if vurl else [],
             "captureStatus": "needs-review",
             "captureRunId": run_ids[0] if run_ids else None,
-            "summary": (f"{len(maps_out)} map(s) captured and ingested by "
-                        "the CV pipeline; series score not yet recorded — "
-                        "only verified data is shown."),
+            # Plain language: this string is read by a fan on the game
+            # page, not by an operator. "the CV pipeline" told them nothing
+            # they could act on and everything about our internals.
+            "summary": (
+                f"{len(maps_out)} map"
+                f"{' was' if len(maps_out) == 1 else 's were'} read off the "
+                "broadcast. The series scoreline was not recorded, so it is "
+                "not shown — only what was actually read and confirmed is."),
             "maps": maps_out,
         })
 
@@ -1548,7 +1553,7 @@ def build_public_payload(con) -> dict:
     # A match can publish its calendar facts before its compositions are
     # processed (roadmap I3). Any content-DB match in the rolling discovery
     # window that hasn't already been emitted from a CV run is added here with
-    # its real scheduled time and an honest capture state, so calendar.html
+    # its real scheduled time and an honest capture state, so the schedule
     # populates the moment FACEIT discovery upserts a match — no comps invented.
     emitted_ids = {mo["id"] for mo in matches_out}
     # Tournaments invented as stubs below start life as "upcoming" because a

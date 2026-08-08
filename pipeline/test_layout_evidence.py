@@ -101,9 +101,9 @@ def main() -> int:
     check("shows the exact no-re-download re-run commands",
           "build_layout_debug.py --layout" in html
           and "build_crop_report.py --layout" in html)
-    check("links crops.html + run report + runs.html",
+    check("links crops.html + run report + the processing history",
           "crops.html" in html and "index.html" in html
-          and "runs.html" in html)
+          and "tools.html#runs" in html)
     bad = dict(lay); bad["slots_a"] = lay["slots_a"][:3]
     html2 = open(bld.write_layout_html(
         os.path.join(report_dir, "layout.html"), bad, lay_path, made,

@@ -38,7 +38,8 @@ HERO_OFFICIAL_MANIFEST = os.path.join(HEROES_DIR, "official", "manifest.json")
 OUT_PATH = os.path.join(ROOT, "assets", "data", "asset_manifest.json")
 SOURCES_PATH = os.path.join(ROOT, "assets", "data", "team_asset_sources.json")
 PUBLIC_DATA = os.path.join(ROOT, "assets", "data", "public_data.v1.js")
-FIXTURE_DATA = os.path.join(ROOT, "assets", "data", "public_fixture.v1.js")
+FIXTURE_DATA = os.path.join(ROOT, "pipeline", "fixtures",
+                            "public_fixture.v1.js")
 
 # Known aliases per hero id (Phase D3). Two evidence classes only, never a
 # guess: (1) this repo's OWN internal hero id, when it is itself already a

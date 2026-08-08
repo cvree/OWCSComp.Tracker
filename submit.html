@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Submit a game — OWCS Comp Tracker</title>
+<meta name="description" content="Paste a link to an Overwatch Champions Series broadcast and the tracker will read the hero compositions off it, ready for a human to review.">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/owcs.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<main id="main" class="shell">
+
+  <div class="page-head">
+    <p class="eyebrow">Step one of everything</p>
+    <h1>Submit a game</h1>
+    <p class="lede">One link is enough. Everything below the link is optional — fill in what
+      you know and the tracker works the rest out from the video itself.</p>
+  </div>
+
+  <div id="mode-status" style="max-width:70ch"></div>
+
+  <form id="submit-form" class="stack-lg u-mt-6" novalidate>
+
+    <!-- 1. the link ------------------------------------------------- -->
+    <section class="card" aria-labelledby="h-link">
+      <h2 id="h-link" style="font-size:1.15rem">1 · Where is the game?</h2>
+      <p class="dim small u-mt-3" style="max-width:62ch">A YouTube link to the broadcast —
+        the whole stream is fine, you can narrow it down later. A FACEIT match link or a
+        video file already on this computer also work.</p>
+
+      <div class="field u-mt-5">
+        <label for="link">Broadcast link</label>
+        <input class="input input--xl" id="link" name="link" type="url" inputmode="url"
+               autocomplete="off" spellcheck="false"
+               placeholder="https://www.youtube.com/watch?v=…"
+               aria-describedby="link-verdict">
+        <div id="link-verdict" aria-live="polite"></div>
+      </div>
+
+      <div id="suggestions" class="u-mt-5"></div>
+    </section>
+
+    <!-- 2. what game is it ------------------------------------------ -->
+    <section class="card" aria-labelledby="h-what">
+      <h2 id="h-what" style="font-size:1.15rem">2 · What game is it?</h2>
+      <p class="dim small u-mt-3" style="max-width:62ch">Optional. This only labels the result —
+        the hero compositions come from the video no matter what you type here. Anything you
+        leave blank stays blank rather than being guessed.</p>
+
+      <div class="field-row u-mt-5">
+        <div class="field">
+          <label for="tournament">Tournament or event</label>
+          <input class="input" id="tournament" name="tournament" type="text"
+                 list="tournament-list" autocomplete="off" placeholder="e.g. OWCS 2026 Stage 2 Playoffs">
+          <datalist id="tournament-list"></datalist>
+        </div>
+        <div class="field">
+          <label for="region">Region</label>
+          <select id="region" name="region"></select>
+        </div>
+      </div>
+
+      <div class="field-row u-mt-4">
+        <div class="field">
+          <label for="teamA">Team A</label>
+          <input class="input" id="teamA" name="teamA" type="text" list="team-list"
+                 autocomplete="off" placeholder="Leave blank if unsure">
+        </div>
+        <div class="field">
+          <label for="teamB">Team B</label>
+          <input class="input" id="teamB" name="teamB" type="text" list="team-list"
+                 autocomplete="off" placeholder="Leave blank if unsure">
+        </div>
+      </div>
+      <datalist id="team-list"></datalist>
+
+      <div class="field u-mt-4">
+        <label for="faceit">FACEIT match link <span class="dim">— optional</span></label>
+        <input class="input" id="faceit" name="faceit" type="url" autocomplete="off"
+               spellcheck="false" placeholder="https://www.faceit.com/en/ow2/room/1-…"
+               aria-describedby="faceit-hint">
+        <p class="hint" id="faceit-hint">If the match is on FACEIT, this fills in the teams,
+          maps and scores for you. It never supplies hero compositions — those only ever come
+          from reading the video.</p>
+      </div>
+    </section>
+
+    <!-- 3. advanced, closed by default ------------------------------ -->
+    <details class="diag" id="advanced">
+      <summary>Advanced options — time window, sampling, layout</summary>
+      <div class="diag__body">
+        <p class="dim small" style="max-width:62ch;margin-bottom:var(--s-4)">Leave all of this
+          alone unless you have a reason. The defaults sample the whole video and let the
+          tracker find the maps itself.</p>
+        <div class="field-row">
+          <div class="field">
+            <label for="start">Start at</label>
+            <input class="input" id="start" name="start" type="text" placeholder="0:30:05"
+                   pattern="^\d{1,2}:\d{2}(:\d{2})?$" aria-describedby="start-hint">
+            <p class="hint" id="start-hint">Position in the video, as h:mm:ss.</p>
+          </div>
+          <div class="field">
+            <label for="end">End at</label>
+            <input class="input" id="end" name="end" type="text" placeholder="0:46:18"
+                   pattern="^\d{1,2}:\d{2}(:\d{2})?$">
+          </div>
+          <div class="field">
+            <label for="every">Sample every</label>
+            <input class="input" id="every" name="every" type="number" min="1" max="600"
+                   placeholder="5" aria-describedby="every-hint">
+            <p class="hint" id="every-hint">Seconds between frames. Smaller is slower and more thorough.</p>
+          </div>
+        </div>
+        <div class="field u-mt-4">
+          <label class="switch">
+            <input type="checkbox" id="lowres" name="lowres" checked>
+            <span class="switch__track" aria-hidden="true"></span>
+            <span>Download at a lower resolution (much faster, still readable)</span>
+          </label>
+        </div>
+      </div>
+    </details>
+
+    <!-- 4. the one action ------------------------------------------- -->
+    <section class="card card--raised" aria-labelledby="h-go">
+      <h2 id="h-go" style="font-size:1.15rem">3 · Start</h2>
+      <div id="ready-summary" class="u-mt-3"></div>
+      <div class="row u-mt-5">
+        <button class="btn btn--primary btn--lg" id="go" type="submit">Start processing</button>
+        <a class="btn btn--ghost" href="games.html">Cancel</a>
+      </div>
+      <div id="submit-result" class="u-mt-5"></div>
+    </section>
+
+  </form>
+
+  <section class="band" id="pending-band" hidden aria-labelledby="h-pending">
+    <div class="sec-head"><h2 id="h-pending">Prepared on this device</h2></div>
+    <p class="dim small" style="max-width:66ch;margin-bottom:var(--s-4)">Submissions you made
+      while this page had nothing behind it. They are kept in this browser only — run the
+      command on a machine with the tracker installed and the game enters the pipeline there.</p>
+    <div class="stack" id="pending"></div>
+  </section>
+
+</main>
+
+<script src="assets/vendor/lenis.min.js" defer></script>
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="assets/js/app/motion.js" defer></script>
+<script src="assets/data/hero_art.v1.js"></script>
+<script src="assets/data/public_data.v1.js"></script>
+<!-- the working record, for the "broadcasts we already know about" shortcuts -->
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app/core.js"></script>
+<script src="assets/js/app/games.js"></script>
+<script src="assets/js/app/api.js"></script>
+<script src="assets/js/app/shell.js"></script>
+<script src="assets/js/app/page-submit.js"></script>
+</body>
+</html>

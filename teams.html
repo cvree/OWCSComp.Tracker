@@ -4,51 +4,42 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Teams — OWCS Comp Tracker</title>
-<meta name="description" content="Every OWCS team the tracker has verified comps for — record, hero pool and match history, all evidence-linked.">
+<meta name="description" content="Every team the tracker knows about, with what each one has actually been seen playing.">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Cinzel:wght@500;600&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-<noscript><link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Cinzel:wght@500;600&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
-<!-- Ambience libraries, declared instead of <script>-loaded: three.js is 616 KB,
-     and a deferred <script> lands in front of DOMContentLoaded — which is when
-     the shell builds the header, nav and footer. motion.js fetches these on idle
-     after first paint, and only on devices that can actually use WebGL. -->
-<meta name="owcs-ambience" content="assets/vendor/three.min.js,assets/vendor/vanta.net.min.js">
-<link rel="stylesheet" href="assets/css/public.css">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/owcs.css">
 </head>
-<body class="pub">
+<body data-page="teams">
 <a class="skip-link" href="#main">Skip to content</a>
-<main class="pub-main" id="main">
-  <div class="page-head rv">
-    <span class="ph-eyebrow">Directory</span>
-    <h1>Teams</h1>
-    <p class="lede">Every roster the tracker has verified compositions for. Open a team for its
-      record, hero pool and match history — every number links to the frames behind it.</p>
-  </div>
 
-  <div class="stack rv">
-    <div class="seg-region" id="region-seg" role="group" aria-label="Region"></div>
-    <div class="split">
-      <div class="filter-summary" id="tm-summary" aria-live="polite"></div>
-      <span class="freshness" id="freshness"></span>
-    </div>
-  </div>
-
-  <section class="section" aria-label="Teams">
-    <div class="grid-cards" id="tm-grid"></div>
-  </section>
+<main id="main" class="shell shell--wide">
+  <div id="crumbs" class="u-mt-5"></div>
+  <div id="head"></div>
+  <div id="body" class="u-mt-6"></div>
 </main>
+
+<div class="lightbox" id="lightbox" hidden>
+  <div data-close style="position:absolute;inset:0"></div>
+  <figure class="lightbox__box" role="dialog" aria-modal="true" aria-label="Evidence frame" style="margin:0">
+    <img id="lightbox-img" src="" alt="">
+    <figcaption id="lightbox-cap"></figcaption>
+    <div class="row u-mt-4"><button class="btn btn--sm" data-close>Close</button></div>
+  </figure>
+</div>
 
 <script src="assets/vendor/lenis.min.js" defer></script>
 <script src="assets/vendor/gsap.min.js" defer></script>
 <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
-<script src="assets/js/motion.js" defer></script>
+<script src="assets/js/app/motion.js" defer></script>
+<script src="assets/data/hero_art.v1.js"></script>
 <script src="assets/data/public_data.v1.js"></script>
-<script src="assets/data/public_fixture.v1.js"></script>
-<script src="assets/js/public/core.js"></script>
-<script src="assets/js/public/assets.js"></script>
-<script src="assets/js/public/shell.js"></script>
-<script src="assets/js/public/stats.js"></script>
-<script src="assets/js/public/page-teams.js"></script>
+<script src="assets/js/app/core.js"></script>
+<script src="assets/js/app/games.js"></script>
+<script src="assets/js/app/api.js"></script>
+<script src="assets/js/app/evidence.js"></script>
+<script src="assets/js/app/shell.js"></script>
+<script src="assets/js/app/page-profiles.js"></script>
 </body>
 </html>

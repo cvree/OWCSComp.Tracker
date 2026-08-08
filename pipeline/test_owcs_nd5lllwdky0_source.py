@@ -5,7 +5,7 @@ NA/EMEA Stage 2 Playoffs Day 3 calibration source (owcs-nd5lllwdky0).
 
 No network, no yt-dlp, no ffmpeg. Covers:
   * the source is registered in video_sources.json and shows up in the
-    exported data (sources.html / run.html dropdown / assets/data)
+    exported data (Tools -> Broadcast sources / assets/data)
   * layouts/owcs_nd5lllwdky0.json is structurally valid and its slots stay
     in bounds after scaling to every resolution this VOD is known to
     actually downloads at (640x360, 854x480) plus native 1920x1080
@@ -98,7 +98,7 @@ def main() -> int:
     check("video_ingest.find_source resolves it by id",
           vi.find_source(SOURCES_PATH, SOURCE_ID) is not None)
 
-    print("exported data (sources.html / run.html dropdown):")
+    print("exported data (Tools -> Broadcast sources):")
     exported = export_data.load_video_sources(SOURCES_PATH)
     exp_by_id = {s["id"]: s for s in exported}
     check(f"{SOURCE_ID} present in load_video_sources()",

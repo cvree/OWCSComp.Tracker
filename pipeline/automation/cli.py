@@ -405,7 +405,7 @@ def _write_team_coverage_export(window_days: int) -> None:
 
 
 def _run_export() -> None:
-    """Regenerate the production public export so calendar.html updates."""
+    """Regenerate the production public export so the site updates."""
     import subprocess
     script = os.path.join(_PIPELINE_DIR, "export_data.py")
     print("[automation] regenerating public export (export_data.py --public)…")
@@ -1321,7 +1321,7 @@ INTAKE_EXPORT_PATH = os.path.join(
 
 def _save_intake_export(store: "js.JobStore",
                         job_key: str | None = None) -> None:
-    """Write assets/data/intake.v1.json (what intake.html renders) — shared
+    """Write assets/data/intake.v1.json — shared
     by intake-export --save, convert-link and autopilot so the panel is
     never stale after an automatic pass."""
     report = li.build_intake_report(store, job_key=job_key)
@@ -1338,7 +1338,7 @@ def cmd_intake_export(args: argparse.Namespace) -> int:
     """`intake-export [--save]` — the operator review panel's data source:
     every pasted link's stage, next command, blockers, segment timeline,
     thumbnails and proposed identity. Read-only; `--save` writes the small,
-    non-sensitive JSON `intake.html` reads."""
+    non-sensitive JSON the submit page reads."""
     store = js.JobStore(args.db)
     try:
         report = li.build_intake_report(store, job_key=args.job)
@@ -1410,7 +1410,7 @@ def cmd_process_approved_job(args: argparse.Namespace) -> int:
 def _run_autopilot(store: "js.JobStore", args: argparse.Namespace,
                    job_key: str) -> dict:
     """Shared driver for `autopilot` and `convert-link`: run the free-agent
-    loop, then refresh the intake panel export so intake.html is never
+    loop, then refresh the intake panel export so the submit page is never
     stale after an automatic pass."""
     from automation import autopilot as ap
     from automation import worker
@@ -1945,7 +1945,7 @@ def main(argv: list[str] | None = None) -> int:
     jc_p.add_argument("--window-hours", type=int, default=24)
     jc_p.add_argument("--json", action="store_true")
     jc_p.add_argument("--save", action="store_true",
-                      help="write assets/data/job_coverage.v1.json for beta-ops.html")
+                      help="write assets/data/job_coverage.v1.json")
     jc_p.set_defaults(func=cmd_job_coverage)
 
     # --media-root/--min-free-gb default to None here (never `worker.X` —

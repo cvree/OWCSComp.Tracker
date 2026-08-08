@@ -3,8 +3,57 @@
 
    This page is the one part of the project a complete newcomer may meet
    first, so it is deliberately wider-spaced and larger-typed than the
-   operator surfaces. It layers on style.css + desktop.css tokens.
+   rest of the product. It layers on owcs.css.
+
+   The wizard predates the current design system and speaks an older
+   vocabulary (--amber, --muted, .btn-primary, .note.ok). Rather than
+   rewrite a working, well-tested tool as part of a redesign it does not
+   need, the block below maps that vocabulary onto the current tokens —
+   one small, explicit adapter instead of a second stylesheet.
    ===================================================================== */
+
+:root {
+  --amber: var(--gold);
+  --amber-soft: rgba(217, 169, 79, .12);
+  --bg-raise: var(--s1);
+  --display: var(--f-display);
+  --mono: var(--f-mono);
+  --muted: var(--tx-3);
+  --text: var(--tx);
+  --line-bright: var(--line-3);
+  --st-ok: var(--emerald);
+  --st-bad: var(--red);
+}
+
+/* generic controls the wizard markup uses */
+.btnrow { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-4); }
+.btn-primary {
+  background: linear-gradient(160deg, var(--gold-hi), var(--gold));
+  color: var(--gold-ink); border-color: transparent; font-weight: 700;
+}
+.btn-primary:hover { background: linear-gradient(160deg, #ffdc9c, var(--gold-hi)); }
+.btn-ghost { background: transparent; color: var(--tx-2); }
+.btn-ghost:hover { background: var(--s2); color: var(--tx); }
+.field { display: grid; gap: var(--s-2); margin: var(--s-4) 0; }
+.field label { font: 600 12.5px/1.3 var(--f-body); color: var(--tx-2); }
+.help { font-size: 12.5px; color: var(--tx-3); }
+.pill {
+  display: inline-flex; align-items: center; padding: 2px 8px;
+  border-radius: var(--r-pill); font: 600 11px/1.6 var(--f-body);
+  background: rgba(139, 149, 171, .14); color: var(--tx-2);
+}
+.pill.info { color: #a8e6f8; background: rgba(76, 198, 234, .13); }
+
+/* the wizard's own inline status line — one element, three states */
+.note:empty { display: none; }
+.note {
+  display: block; margin-top: var(--s-3); padding: var(--s-3) var(--s-4);
+  border: 1px solid var(--line-2); border-radius: var(--r-2);
+  background: var(--s1); color: var(--tx-2); font-size: 13.5px;
+}
+.note.ok { border-color: rgba(53, 207, 141, .4); color: #93ecc4; }
+.note.bad { border-color: rgba(255, 95, 107, .45); color: #ffb2b8; }
+.note.warn { border-color: rgba(240, 168, 58, .42); color: #ffcc82; }
 
 .cal-wrap { max-width: 940px; margin: 0 auto; padding: 26px 22px 90px; }
 

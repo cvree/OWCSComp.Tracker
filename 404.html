@@ -3,41 +3,104 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Page not found — OWCS Comp Tracker</title>
+<title>Page moved — OWCS Comp Tracker</title>
 <meta name="robots" content="noindex">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Cinzel:wght@500;600&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-<noscript><link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Cinzel:wght@500;600&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
-<!-- Ambience libraries, declared instead of <script>-loaded: three.js is 616 KB,
-     and a deferred <script> lands in front of DOMContentLoaded — which is when
-     the shell builds the header, nav and footer. motion.js fetches these on idle
-     after first paint, and only on devices that can actually use WebGL. -->
-<meta name="owcs-ambience" content="assets/vendor/three.min.js,assets/vendor/vanta.net.min.js">
-<link rel="stylesheet" href="assets/css/public.css">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/owcs.css">
 </head>
-<body class="pub">
+<body>
 <a class="skip-link" href="#main">Skip to content</a>
-<main class="pub-main" id="main" style="display:grid;place-items:center;min-height:70vh;text-align:center">
-  <div class="stack" style="max-width:52ch">
-    <span class="ph-eyebrow" style="justify-self:center">404</span>
-    <h1>That page isn't here.</h1>
-    <p class="lede" style="margin-inline:auto">The link may be old, or that match, team or hero
-      isn't in the dataset yet. Press <kbd>/</kbd> to search everything the tracker has, or take
-      one of these.</p>
-    <div class="cluster" style="justify-content:center;gap:10px;margin-top:8px">
-      <a class="btn btn--gold" href="index.html">Home</a>
-      <a class="btn" href="matches.html">Matches</a>
-      <a class="btn" href="stats.html">Hero stats</a>
-      <a class="btn" href="teams.html">Teams</a>
-      <a class="btn btn--ghost" href="how-it-works.html">How it works</a>
+
+<main id="main" class="shell">
+  <div class="page-head">
+    <p class="eyebrow" id="eyebrow">Not found</p>
+    <h1 id="title">This page is not here</h1>
+    <p class="lede" id="lede">The site was rebuilt around one workflow — submit a game,
+      watch it process, review what was detected, publish it — and a lot of separate pages
+      were folded into fewer, better ones.</p>
+    <div class="row u-mt-5" id="actions">
+      <a class="btn btn--primary" href="index.html">Go to the dashboard</a>
+      <a class="btn btn--ghost" href="games.html">Browse games</a>
     </div>
   </div>
+
+  <section class="band" aria-labelledby="h-where">
+    <div class="sec-head"><h2 id="h-where">Where everything went</h2></div>
+    <div class="table-wrap"><table class="tbl">
+      <thead><tr><th>You were looking for</th><th>It is now</th></tr></thead>
+      <tbody id="map"></tbody>
+    </table></div>
+  </section>
 </main>
-<script src="assets/data/public_data.v1.js"></script>
-<script src="assets/data/public_fixture.v1.js"></script>
-<script src="assets/js/public/core.js"></script>
-<script src="assets/js/public/assets.js"></script>
-<script src="assets/js/public/shell.js"></script>
+
+<script>
+/* The whole legacy URL space, in one place.
+
+   Deleting twenty pages breaks twenty bookmarks. GitHub Pages serves this
+   file for any unknown path, so this is the only place that has to know
+   the old names — no redirect stub per page, which was the alternative
+   and would have left twenty files of clutter behind. */
+(function () {
+  "use strict";
+  var MOVED = {
+    "matches.html":       ["games.html", "Games — every game in one list"],
+    "match.html":         ["games.html", "Games — open the game from there"],
+    "runs.html":          ["tools.html#runs", "Tools → Processing history"],
+    "sources.html":       ["tools.html#sources", "Tools → Broadcast sources"],
+    "portal.html":        ["submit.html", "Submit a game"],
+    "intake.html":        ["submit.html", "Submit a game"],
+    "run.html":           ["submit.html", "Submit a game (progress lives on the game page)"],
+    "admin.html":         ["review.html", "Review — correct a detection there"],
+    "fact-admin.html":    ["review.html", "Review"],
+    "calibration.html":   ["tools.html#calibration", "Tools → Calibration"],
+    "heroes.html":        ["stats.html?tab=heroes", "Stats → Heroes"],
+    "maps.html":          ["stats.html?tab=maps", "Stats → Maps"],
+    "comps.html":         ["stats.html?tab=comps", "Stats → Compositions"],
+    "swaps.html":         ["stats.html?tab=swaps", "Stats → Swaps"],
+    "team-coverage.html": ["stats.html?tab=teams", "Stats → Teams"],
+    "tournaments.html":   ["games.html", "Games — filter by event"],
+    "tournament.html":    ["games.html", "Games — filter by event"],
+    "calendar.html":      ["games.html", "Games"],
+    "prep.html":          ["stats.html", "Stats"],
+    "team-prep.html":     ["stats.html?tab=teams", "Stats → Teams"],
+    "beta-ops.html":      ["tools.html", "Tools & diagnostics"]
+  };
+
+  var here = (location.pathname.split("/").pop() || "").toLowerCase();
+  var hit = MOVED[here];
+
+  var rows = [];
+  for (var k in MOVED) {
+    if (!Object.prototype.hasOwnProperty.call(MOVED, k)) continue;
+    rows.push("<tr><td><code>" + k + "</code></td><td><a href=\"" + MOVED[k][0] + "\">" +
+      MOVED[k][1] + "</a></td></tr>");
+  }
+  document.getElementById("map").innerHTML = rows.join("");
+
+  if (!hit) return;
+
+  /* A known old address: say where it went, offer the link, and follow it
+     shortly. Never an instant redirect — a page that vanishes before it
+     can be read is how people lose track of where they are. */
+  var target = hit[0];
+  document.getElementById("eyebrow").textContent = "Moved";
+  document.getElementById("title").textContent = "That page is now " + hit[1];
+  document.getElementById("lede").textContent =
+    "The site was rebuilt around one workflow, and " + here + " was folded into a better " +
+    "place. Taking you there in a moment.";
+  document.getElementById("actions").innerHTML =
+    '<a class="btn btn--primary" href="' + target + '">Go there now</a>' +
+    '<a class="btn btn--ghost" href="index.html">Dashboard instead</a>';
+
+  var t = setTimeout(function () { location.replace(target); }, 2600);
+  /* Any interaction cancels the jump — the visitor is clearly reading. */
+  ["click", "keydown", "wheel", "touchstart"].forEach(function (ev) {
+    addEventListener(ev, function () { clearTimeout(t); }, { once: true, passive: true });
+  });
+})();
+</script>
 </body>
 </html>

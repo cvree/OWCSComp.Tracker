@@ -4,9 +4,9 @@ serve.py — the local control room: the static website PLUS a local-only API
 so runs, evidence rebuilds, and the test suite can be started and watched
 from the browser instead of the terminal.
 
-  python pipeline/serve.py            ->  http://localhost:8000/ (public site)
-                                          /portal.html (paste a link)
-                                          /run.html    (control room)
+  python pipeline/serve.py            ->  http://localhost:8000/ (the dashboard)
+                                          /submit.html (paste a link)
+                                          /review.html (confirm detections)
 
 This replaces `python -m http.server 8000`. It is NOT a hosted backend:
 stdlib only, binds 127.0.0.1 by default, executes only this repo's own
@@ -864,8 +864,8 @@ def main(argv=None) -> int:
     JOB_TIMEOUT = args.timeout
     httpd = http.server.ThreadingHTTPServer((args.host, args.port), Handler)
     log(f"public site:    http://{args.host}:{args.port}/")
-    log(f"operator portal: http://{args.host}:{args.port}/portal.html")
-    log(f"control room:    http://{args.host}:{args.port}/run.html")
+    log(f"submit a game:  http://{args.host}:{args.port}/submit.html")
+    log(f"review queue:   http://{args.host}:{args.port}/review.html")
     log(f"serving {REPO} · one job at a time · Ctrl+C to stop")
     try:
         httpd.serve_forever()

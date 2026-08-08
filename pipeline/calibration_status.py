@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 calibration_status.py — one honest health readout per video source for the
-Calibration Lab (calibration.html / GET /api/calibration).
+the Tools page (tools.html#calibration / GET /api/calibration).
 
 For every real source in data/sources/video_sources.json this reports what
 the auto-calibration + template pipeline actually has on disk and in the

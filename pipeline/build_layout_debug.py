@@ -235,7 +235,7 @@ def write_layout_html(html_path: str, layout: dict, layout_path: str,
         f"--frames-dir {esc(rerun_frames)} --report-dir {esc(out_rel)}</pre>"
         "<p><a href='crops.html'>hero crop report</a> · "
         "<a href='index.html'>run report</a> · "
-        "<a href='../../../runs.html'>all runs</a></p>"
+        "<a href='../../../tools.html#runs'>processing history</a></p>"
         f"<h2>Slot coordinates</h2><pre>{esc(slots_pre)}</pre>"
         f"<h2>Annotated frames ({len(images)})</h2>"
         + (imgs or "<p class='muted'>No annotated frames.</p>")

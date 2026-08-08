@@ -109,7 +109,7 @@ The prep page is intentionally defensive: missing comps, bans, maps, or replay c
 ## Manual comp corrections (admin path)
 
 When CV is wrong or hasn't run, comps can be set by hand:
-1. Open `admin.html` locally, click together the opener (exactly 5) and any
+1. Open `review.html` locally, click together the opener (exactly 5) and any
    swap-ins per match/map/team, and download the generated JSON.
 2. Commit it as `corrections/corrections.json`.
 3. The pipeline (workflow step or `python3 pipeline/apply_corrections.py`)
@@ -171,7 +171,7 @@ code) but honest that the comp is not yet known.
    FACEIT facts, no comp yet, and a replay code or room link.
 2. Copy the replay code and watch that map in Overwatch
    (Main Menu → Watch → Replays → enter code).
-3. Open `admin.html`, pick the match/map/team, click the 5 opener heroes
+3. Open `review.html`, pick the match/map/team, click the 5 opener heroes
    (and any swaps), export `corrections.json`, commit it.
 4. `apply_corrections.py` writes them as `source='manual'` snapshots that
    override any CV data without deleting it; `export_data.py` republishes.
@@ -226,7 +226,7 @@ skipped. Run `python3 pipeline/ingest_faceit_batch.py` to ingest all rooms
 only — hero comps still come from corrections/CV.
 
 ### Where to add manual corrections
-Build them in `admin.html`, save as `corrections/corrections.json`, commit.
+Build them in `review.html`, save as `corrections/corrections.json`, commit.
 `apply_corrections.py` writes them as `source='manual'` snapshots that override
 CV without deleting it. See the "Manual comp corrections" section above.
 
@@ -306,7 +306,7 @@ From the Data API match object the parser reads:
 ### Are replay codes visible in public cached data?
 **No.** Neither the public HTML shell nor the public Data API match object
 contains OW2 replay codes. Replay codes therefore remain a tracker/manual field
-(entered via `admin.html`), not a FACEIT-sourced one, until a source that
+(entered via `review.html`), not a FACEIT-sourced one, until a source that
 carries them is found.
 
 ### How to run the real validation (networked machine)
@@ -339,11 +339,11 @@ Then sanitize player names and save as
 ### Two manual paths — keep them straight
 - **Manual comp corrections** → `corrections/corrections.json`, applied by
   `apply_corrections.py`, written as `source='manual'` **comp snapshots**.
-  This is the only manual way to set hero picks. Authored in `admin.html`.
+  This is the only manual way to set hero picks. Authored in `review.html`.
 - **Manual match facts** → `corrections/match_facts.json`, applied by
   `apply_match_facts.py`, written as `source='manual_facts'` on
   `map_results` + `hero_bans`. Fills replay codes / bans / pick-veto that the
-  public FACEIT API omits. **Never creates comps.** Authored in `fact-admin.html`.
+  public FACEIT API omits. **Never creates comps.** Authored in `fact-review.html`.
 
 ### Source-list management
 ```bash
@@ -372,10 +372,10 @@ with automated FACEIT matches — one map half-reviewed — so every M4 surface 
 something to show without live FACEIT.
 
 ### Admin tools (static, never write to disk)
-- `admin.html` — comp corrections. Prefills from
-  `admin.html?match=<id>&mapOrder=<n>&team=<teamId>`.
-- `fact-admin.html` — manual facts (distinct blue theme). Prefills from
-  `fact-admin.html?match=<id>&mapOrder=<n>`.
+- `review.html` — comp corrections. Prefills from
+  `review.html?match=<id>&mapOrder=<n>&team=<teamId>`.
+- `fact-review.html` — manual facts (distinct blue theme). Prefills from
+  `fact-review.html?match=<id>&mapOrder=<n>`.
 Both generate JSON you paste/commit into `corrections/`. The Missing Comps
 workbench links straight to them with the right params.
 

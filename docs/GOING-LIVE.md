@@ -65,8 +65,8 @@ Open these and click around — all are static and load from the committed data:
 - `/` — landing (headline numbers are computed live from the verified dataset)
 - `/stats.html` — hero pick/win rates, click any row for the per-team drill-down
 - `/teams.html` → `/team.html?id=qadsiah` — team directory → team page
-- `/matches.html`, `/tournaments.html`, `/match.html?id=m-qad-twis-s2po`
-- `/calibration.html` — shows the static (no-server) calibration view
+- `/`, `/games.html`, `/game.html?id=m-qad-twis-s2po`, `/stats.html`
+- `/tools.html#calibration` — shows the static (no-server) calibration view
 
 > **Why a project-site subpath is safe here:** every asset/link in the repo is
 > relative (`assets/…`, `stats.html`), so the site works unchanged under

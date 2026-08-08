@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Review — OWCS Comp Tracker</title>
+<meta name="description" content="Confirm or correct what the detector read: every hero prediction shown next to the frame it came from, with a one-key approve and a fast hero picker.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/owcs.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<main id="main" class="shell shell--wide">
+
+  <div class="page-head page-head--tight">
+    <p class="eyebrow">Human gate</p>
+    <h1>Review</h1>
+    <p class="lede">Every hero the detector read, shown next to the actual frame it read it
+      from. Confirm what is right, correct what is not, flag what you are unsure about.
+      Nothing reaches the public pages until you do.</p>
+  </div>
+
+  <div id="mode-status" style="max-width:74ch"></div>
+
+  <div class="rw u-mt-6">
+    <aside class="rw__queue" aria-label="Games waiting for review">
+      <h2>Waiting for review</h2>
+      <div id="queue"></div>
+      <div class="card-head" style="border-top:1px solid var(--line);border-bottom:0">
+        <label class="label" for="reviewer" style="flex:0 0 auto">Signed as</label>
+        <input class="input" id="reviewer" type="text" placeholder="your name"
+               autocomplete="name" style="min-height:32px;font-size:12.5px">
+      </div>
+    </aside>
+
+    <div id="workspace" aria-live="polite"></div>
+  </div>
+
+</main>
+
+<!-- hero picker, opened over a slot -->
+<div class="lightbox" id="picker-modal" hidden>
+  <div data-close style="position:absolute;inset:0"></div>
+  <div class="lightbox__box" role="dialog" aria-modal="true" aria-labelledby="picker-title"
+       style="width:min(94vw,720px)">
+    <div class="u-flex u-between u-center u-gap-3">
+      <h2 id="picker-title" style="font-size:1.05rem">Correct this hero</h2>
+      <button class="btn btn--sm btn--quiet" data-close aria-label="Close">Esc</button>
+    </div>
+    <p class="dim small u-mt-3" id="picker-context"></p>
+    <div class="picker u-mt-4">
+      <div class="picker__search">
+        <label class="visually-hidden" for="picker-q">Search heroes</label>
+        <input class="input" id="picker-q" type="search" autocomplete="off"
+               placeholder="Type a hero name — Enter picks the first match">
+      </div>
+      <div class="picker__grid" id="picker-grid" role="listbox" aria-label="Heroes"></div>
+    </div>
+  </div>
+</div>
+
+<div class="lightbox" id="lightbox" hidden>
+  <div data-close style="position:absolute;inset:0"></div>
+  <figure class="lightbox__box" role="dialog" aria-modal="true" aria-label="Evidence frame"
+          style="margin:0">
+    <img id="lightbox-img" src="" alt="">
+    <figcaption id="lightbox-cap"></figcaption>
+    <div class="row u-mt-4"><button class="btn btn--sm" data-close>Close</button></div>
+  </figure>
+</div>
+
+<script src="assets/vendor/lenis.min.js" defer></script>
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="assets/js/app/motion.js" defer></script>
+<script src="assets/data/hero_art.v1.js"></script>
+<script src="assets/data/public_data.v1.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app/core.js"></script>
+<script src="assets/js/app/games.js"></script>
+<script src="assets/js/app/api.js"></script>
+<script src="assets/js/app/evidence.js"></script>
+<script src="assets/js/app/shell.js"></script>
+<script src="assets/js/app/page-review.js"></script>
+</body>
+</html>

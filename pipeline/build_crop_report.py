@@ -285,7 +285,7 @@ def process(frames_dir: str, layout: dict, report_dir: str,
             + (f"<a href='{_esc(layout_href)}'>layout debug</a> · "
                if layout_href else "")
             + f"<a href='{_esc(run_report_href)}'>run report</a> · "
-            "<a href='../../../runs.html'>all runs</a></p>"
+            "<a href='../../../tools.html#runs'>processing history</a></p>"
             + "".join(sections or
                       ["<p class='muted'>No readable frames.</p>"])
             + "</body></html>")

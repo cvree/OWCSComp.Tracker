@@ -42,15 +42,15 @@ Two independent halves:
 
 - Landing with live verified headline numbers; **Matches, Teams (directory +
   per-team story), Maps showcase, Stats, Tournaments** — all on the public
-  "arena" shell (`assets/css/public.css`, `assets/js/public/*`).
+  "arena" shell (`assets/css/owcs.css`, `assets/js/app/*`).
 - **Real hero portraits** upscaled from actual broadcast crops
   (`assets/img/heroes/`, `build_hero_portraits.py`), with provenance.
 - **Clickable teams** → per-team page telling the story: recency,
   **autocalibration provenance** (confidence, HUD probe, template coverage),
   maps played with round counts, bans, portrait hero pool.
 - **Stats drill-down**: click a hero → per-team pick/win breakdown.
-- **Maps showcase** (`maps.html`): per-map pick-rate meta + bans, auto-built.
-- **Calibration Lab** (`calibration.html`): per-source health dashboard.
+- **Maps showcase** (`stats.html?tab=maps`): per-map pick-rate meta + bans, auto-built.
+- **Calibration Lab** (`tools.html#calibration`): per-source health dashboard.
 - Deploy is fully automatic: **push to `main` → live in ~2 min.**
   `.nojekyll`, `404.html`, favicon all in place. Repo is public + Pages
   source = "GitHub Actions" (`pages.yml`, `enablement:true`).
@@ -176,11 +176,11 @@ automated website.**
 ```
 Public site (done):   index/tournaments/tournament/matches/match/teams/team/
                       maps/stats/calibration/404.html
-                      assets/css/public.css  assets/js/public/*  assets/img/heroes/*
+                      assets/css/owcs.css  assets/js/app/*  assets/img/heroes/*
 Data contract + export: docs/PUBLIC_DATA_CONTRACT.md  pipeline/export_data.py
 Detection:            pipeline/detect.py  comp_solver.py  gameplay_state.py
 Phase/verify:         pipeline/recapture_planner.py  match_confirm.py
-Calibration:          pipeline/calibrate_source.py  calibration_status.py  calibration.html
+Calibration:          pipeline/calibrate_source.py  calibration_status.py  tools.html#calibration
 Sources/ingest:       pipeline/obssojourn_source.py  prep_obssojourn_match.py
                       ingest_obssojourn.py  ingest_map.py  harvest_templates.py
 DB + facts:           data/owcs.sqlite  pipeline/schema.sql  ingest_faceit*.py

@@ -57,7 +57,9 @@ except ImportError:
 REQUIRED_IN_ARCHIVE = (
     "data/owcs.sqlite",
     "assets/data/public_data.v1.js",
-    "assets/data/public_fixture.v1.js",
+    # NOT the demo fixture. It moved to pipeline/fixtures/ when the site
+    # stopped loading it: a release renders production data or an honest
+    # empty state, so a missing fixture can no longer break a release.
     "layouts/owcs_jksix_qwc.json",
     "templates/owcs_jksix_qwc",
     "pipeline/check_packaging.py",
@@ -193,7 +195,7 @@ class TestPortablePaths(ArchiveTestCase):
     def test_no_committed_data_file_bakes_in_an_absolute_path(self):
         hits = []
         for rel in ("assets/data/public_data.v1.js",
-                    "assets/data/public_fixture.v1.js",
+                    "pipeline/fixtures/public_fixture.v1.js",
                     "assets/data/team_coverage.v1.json",
                     "config/automation.yml",
                     "config/broadcast_channels.json",

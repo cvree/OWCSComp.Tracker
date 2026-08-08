@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Game — OWCS Comp Tracker</title>
+<meta name="description" content="One Overwatch Champions Series game: where it is in processing, what was detected, and — once approved — the verified hero compositions with the evidence behind them.">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/owcs.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<main id="main" class="shell shell--wide">
+  <div id="crumbs" class="u-mt-5"></div>
+  <div id="head"></div>
+  <div id="body" class="u-mt-6"></div>
+</main>
+
+<div class="lightbox" id="lightbox" hidden>
+  <div class="lightbox__scrim" data-close style="position:absolute;inset:0"></div>
+  <figure class="lightbox__box" role="dialog" aria-modal="true" aria-label="Evidence frame"
+          style="margin:0">
+    <img id="lightbox-img" src="" alt="">
+    <figcaption id="lightbox-cap"></figcaption>
+    <div class="row u-mt-4"><button class="btn btn--sm" data-close>Close</button></div>
+  </figure>
+</div>
+
+<script src="assets/vendor/lenis.min.js" defer></script>
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="assets/js/app/motion.js" defer></script>
+<script src="assets/data/hero_art.v1.js"></script>
+<script src="assets/data/public_data.v1.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app/core.js"></script>
+<script src="assets/js/app/games.js"></script>
+<script src="assets/js/app/api.js"></script>
+<script src="assets/js/app/evidence.js"></script>
+<script src="assets/js/app/shell.js"></script>
+<script src="assets/js/app/page-game.js"></script>
+</body>
+</html>

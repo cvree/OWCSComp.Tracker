@@ -15,8 +15,9 @@ Checks:
      (map_result winner=twis, hero_stints, confirmed hero_swaps)
   4. the production public export exists, is non-demo, and its evidence
      paths (capture runs' frames, comp-snapshot evidence frames) resolve
-  5. the dev fixture's evidence paths resolve (click-through rule)
-  6. public HTML pages load public_data.v1.js BEFORE public_fixture.v1.js
+  5. the test fixture's evidence paths resolve (click-through rule)
+  6. no shipped page loads the demo fixture, and every page that renders
+     published data loads the production export
   7. the ingest report + review pages exist for the milestone
 
 Exit 0 = packaged correctly; exit 1 = something is missing/broken.
@@ -58,9 +59,18 @@ def exists(root: str, rel: str) -> bool:
     return os.path.exists(os.path.join(root, rel))
 
 
+#: The demo fixture is a TEST asset, not a site asset. It lives under
+#: pipeline/fixtures/ so that no page can load it by accident and no
+#: deployment can ship it — the published site renders production data or
+#: an honest empty state, never invented games.
+FIXTURE_REL = os.path.join("pipeline", "fixtures", "public_fixture.v1.js")
+
+
 def load_public(root: str, fname: str) -> dict | None:
     """Parse a window.OWCS_PUBLIC = {...}; assignment file to a dict."""
-    p = os.path.join(root, "assets", "data", fname)
+    p = (os.path.join(root, FIXTURE_REL)
+         if fname == "public_fixture.v1.js"
+         else os.path.join(root, "assets", "data", fname))
     if not os.path.exists(p):
         return None
     with open(p, encoding="utf-8") as f:
@@ -338,7 +348,7 @@ def check_public_export(root: str) -> None:
 
 
 def check_fixture(root: str) -> None:
-    print("dev fixture -> evidence resolves:")
+    print("test fixture -> evidence resolves:")
     d = load_public(root, "public_fixture.v1.js")
     if d is None:
         bad("public_fixture.v1.js missing or unparseable")
@@ -362,22 +372,43 @@ def check_fixture(root: str) -> None:
         bad(f"{dangling}/{checked} fixture evidence path(s) do not resolve")
 
 
+#: Pages that render published data and therefore MUST load the
+#: production export. Operator-only surfaces are not listed: they are
+#: allowed to exist without it.
+DATA_PAGES = ("index.html", "games.html", "game.html", "stats.html",
+              "review.html", "team.html", "teams.html", "hero.html",
+              "submit.html", "tools.html", "how-it-works.html")
+
+
 def check_pages(root: str) -> None:
-    print("public pages -> data load order:")
-    for page in ("match.html", "stats.html", "matches.html",
-                 "tournament.html", "tournaments.html"):
+    print("pages -> real data only:")
+    # Nothing shipped may load the demo fixture. This used to be a
+    # load-ORDER rule ("production first, fixture as a fallback"), which
+    # meant a broken or empty export silently fell back to invented games
+    # on the live site. The product now shows an honest empty state
+    # instead, so the fixture has no business being reachable at all.
+    leaked = []
+    for page in sorted(f for f in os.listdir(root) if f.endswith(".html")):
+        with open(os.path.join(root, page), encoding="utf-8") as fh:
+            body = fh.read()
+        if "public_fixture" in body:
+            leaked.append(page)
+    if leaked:
+        bad("these pages load the DEMO fixture: " + ", ".join(leaked))
+    else:
+        ok("no page loads the demo fixture")
+
+    for page in DATA_PAGES:
         p = os.path.join(root, page)
         if not os.path.exists(p):
             bad(f"{page} missing")
             continue
         with open(p, encoding="utf-8") as fh:
-            s = fh.read()
-        i_prod = s.find("public_data.v1.js")
-        i_fix = s.find("public_fixture.v1.js")
-        if 0 <= i_prod < i_fix:
-            ok(f"{page}: production data before fixture")
+            body = fh.read()
+        if "public_data.v1.js" in body:
+            ok(f"{page}: loads the production export")
         else:
-            bad(f"{page}: production data not loaded before fixture")
+            bad(f"{page}: does not load the production export")
 
 
 def check_reports(root: str) -> None:

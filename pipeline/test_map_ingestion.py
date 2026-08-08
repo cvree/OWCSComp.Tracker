@@ -394,19 +394,22 @@ def test_packaging() -> None:
             if tpath:
                 check(f"{fn}: reject marker asset {tpath}",
                       os.path.exists(os.path.join(REPO, tpath)))
-    # public pages: production data first, guarded fixture second
-    for page in ("match.html", "stats.html", "matches.html",
-                 "tournament.html", "tournaments.html"):
+    # Pages render the production export and nothing else. The demo
+    # fixture is a test asset living under pipeline/fixtures/, so no page
+    # can load it — an empty export shows an honest empty state instead of
+    # invented games.
+    for page in ("index.html", "games.html", "game.html", "stats.html",
+                 "review.html"):
         with open(os.path.join(REPO, page), encoding="utf-8") as f:
             s = f.read()
-        i_prod = s.find("public_data.v1.js")
-        i_fix = s.find("public_fixture.v1.js")
-        check(f"{page} loads production data before fixture",
-              0 < i_prod < i_fix)
-    with open(os.path.join(REPO, "assets", "data",
+        check(f"{page} loads the production export",
+              "assets/data/public_data.v1.js" in s)
+        check(f"{page} does not load the demo fixture",
+              "public_fixture" not in s)
+    with open(os.path.join(REPO, "pipeline", "fixtures",
                            "public_fixture.v1.js"), encoding="utf-8") as f:
         fx = f.read()
-    check("fixture never overwrites production data",
+    check("the fixture still guards its own assignment (test loads only)",
           "window.OWCS_PUBLIC = window.OWCS_PUBLIC ||" in fx)
 
 

@@ -31,6 +31,10 @@ import unittest
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 REPO = os.path.dirname(HERE)
+#: The demo dataset is a test fixture, not a site asset — it lives outside
+#: assets/ so that no page can load it and no deployment can ship it.
+FIXTURE_PATH = os.path.join(REPO, "pipeline", "fixtures",
+                            "public_fixture.v1.js")
 
 import db as content_db  # noqa: E402
 import export_data as ex  # noqa: E402
@@ -47,7 +51,8 @@ REQUIRED_KEYS = (
 
 
 def load_public(fname: str) -> dict:
-    path = os.path.join(REPO, "assets", "data", fname)
+    path = (FIXTURE_PATH if fname == "public_fixture.v1.js"
+            else os.path.join(REPO, "assets", "data", fname))
     with open(path, encoding="utf-8") as f:
         src = f.read()
     m = re.search(r"window\.OWCS_PUBLIC\s*=\s*(?:window\.OWCS_PUBLIC\s*\|\|\s*)?", src)
@@ -456,8 +461,7 @@ class TestFixtureToProductionSwitching(unittest.TestCase):
     def test_production_assigns_unconditionally_and_fixture_only_fills_in(self):
         prod = open(os.path.join(REPO, "assets", "data", "public_data.v1.js"),
                     encoding="utf-8").read()
-        fix = open(os.path.join(REPO, "assets", "data", "public_fixture.v1.js"),
-                   encoding="utf-8").read()
+        fix = open(FIXTURE_PATH, encoding="utf-8").read()
         self.assertRegex(prod, r"window\.OWCS_PUBLIC\s*=\s*\{")
         self.assertNotIn("window.OWCS_PUBLIC || ", prod)
         self.assertRegex(fix, r"window\.OWCS_PUBLIC\s*=\s*window\.OWCS_PUBLIC\s*\|\|")
@@ -466,30 +470,35 @@ class TestFixtureToProductionSwitching(unittest.TestCase):
         self.assertIs(load_public("public_fixture.v1.js")["meta"]["demo"], True)
         self.assertIs(load_public("public_data.v1.js")["meta"]["demo"], False)
 
-    def test_every_public_page_loads_production_before_the_fixture(self):
-        pages = [p for p in os.listdir(REPO) if p.endswith(".html")]
-        checked = 0
-        for page in sorted(pages):
-            src = open(os.path.join(REPO, page), encoding="utf-8").read()
-            if "public_fixture.v1.js" not in src:
-                continue
-            i_prod = src.find("public_data.v1.js")
-            i_fix = src.find("public_fixture.v1.js")
-            self.assertNotEqual(i_prod, -1,
-                                f"{page} loads the fixture but not production")
-            self.assertLess(i_prod, i_fix,
-                            f"{page} loads the fixture before production — real "
-                            f"data would be shadowed by demo data")
-            checked += 1
-        self.assertGreater(checked, 5, "expected several public pages")
+    def test_no_shipped_page_loads_the_demo_fixture(self):
+        """The demo dataset is a TEST asset and nothing else.
+
+        This used to be a load-ORDER rule: production first, fixture as a
+        guarded fallback. That meant a broken, empty or missing export
+        silently published invented games to the live site under a small
+        ribbon. The product now renders an honest empty state instead, so
+        the fixture must not be reachable from a page at all — and it does
+        not even live under assets/ any more.
+        """
+        offenders = [p for p in sorted(os.listdir(REPO)) if p.endswith(".html")
+                     and "public_fixture"
+                     in open(os.path.join(REPO, p), encoding="utf-8").read()]
+        self.assertEqual(offenders, [],
+                         "these pages load the demo fixture: " + ", ".join(offenders))
+
+    def test_pages_that_show_published_data_load_the_production_export(self):
+        for page in ("index.html", "games.html", "game.html", "stats.html",
+                     "review.html", "teams.html", "team.html", "hero.html"):
+            with self.subTest(page=page):
+                src = open(os.path.join(REPO, page), encoding="utf-8").read()
+                self.assertIn("assets/data/public_data.v1.js", src)
 
     def test_the_fixture_never_overwrites_a_defined_production_dataset(self):
         """The guard that makes "production preferred" actually work: the
         fixture must assign with `window.OWCS_PUBLIC || {...}`, so a page
         that already loaded production keeps it. Without this, every page
         would silently render demo data over a real conversion."""
-        src = open(os.path.join(REPO, "assets", "data",
-                                "public_fixture.v1.js"), encoding="utf-8").read()
+        src = open(FIXTURE_PATH, encoding="utf-8").read()
         self.assertIn("window.OWCS_PUBLIC = window.OWCS_PUBLIC ||", src)
         prod = open(os.path.join(REPO, "assets", "data",
                                  "public_data.v1.js"), encoding="utf-8").read()
@@ -551,7 +560,7 @@ class TestCalendarContract(unittest.TestCase):
 
     Before this existed, `config/owcs_calendar.json` was loaded by
     `sync-calendar` into the automation DB's `source_events` ledger and
-    stopped there — nothing exported it, so calendar.html could only ever
+    stopped there — nothing exported it, so the site could only ever
     show matches that had already been ingested and had no idea a stage was
     even running.
     """
@@ -666,17 +675,25 @@ class TestCalendarContract(unittest.TestCase):
         self.assertEqual(run(["completed"], stub=False),
                          ("upcoming", "upcoming"))
 
-    def test_calendar_page_is_wired_to_the_new_data(self):
-        page = open(os.path.join(REPO, "calendar.html"), encoding="utf-8").read()
-        js = open(os.path.join(REPO, "assets", "js", "public",
-                               "page-calendar.js"), encoding="utf-8").read()
-        for node in ("cal-events", "cal-next-up", "cal-now", "cal-grid",
-                     "cal-agenda"):
-            self.assertIn(node, page, f"calendar.html lost #{node}")
+    def test_the_season_schedule_still_reaches_a_page(self):
+        """The calendar stopped being a destination in the 2026 redesign —
+        nobody opens a calendar as a task — but the exported events did not
+        stop mattering. They surface under the games list as "on the
+        official schedule, nobody has submitted it yet", which is the only
+        question that list can usefully answer about a future event.
+
+        This guards the wiring, not the page: an export that carries
+        calendarEvents while no page reads them is a silent data loss.
+        """
+        page = open(os.path.join(REPO, "games.html"), encoding="utf-8").read()
+        js = open(os.path.join(REPO, "assets", "js", "app",
+                               "page-games.js"), encoding="utf-8").read()
+        self.assertIn('id="upcoming"', page,
+                      "games.html has nowhere to render the schedule")
         self.assertIn("calendarEvents", js,
-                      "the calendar page must read the exported events")
+                      "the games page must read the exported events")
         self.assertIn("timeKnown", js,
-                      "the calendar page must honour the time-known flag")
+                      "the games page must honour the time-known flag")
         self.assertIn("time TBA", js)
 
 

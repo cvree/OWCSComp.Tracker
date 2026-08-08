@@ -3,121 +3,76 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>OWCS Comp Tracker — verified pro Overwatch compositions</title>
-<meta name="description" content="Which heroes pro Overwatch teams actually played, read off the broadcast frame by frame, reviewed by a human, and linked to the evidence. Independent OWCS fan project.">
+<title>OWCS Comp Tracker — turn a broadcast into reviewed match data</title>
+<meta name="description" content="Submit an Overwatch Champions Series broadcast, watch it get read frame by frame, confirm what the detector saw, and publish trustworthy hero composition data.">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Cinzel:wght@500;600&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-<noscript><link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Cinzel:wght@500;600&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
-<!-- Ambience libraries, declared instead of <script>-loaded: three.js is 616 KB,
-     and a deferred <script> lands in front of DOMContentLoaded — which is when
-     the shell builds the header, nav and footer. motion.js fetches these on idle
-     after first paint, and only on devices that can actually use WebGL. -->
-<meta name="owcs-ambience" content="assets/vendor/three.min.js,assets/vendor/vanta.net.min.js">
-<link rel="stylesheet" href="assets/css/public.css">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/owcs.css">
 </head>
-<body class="pub">
+<body>
 <a class="skip-link" href="#main">Skip to content</a>
-<main class="pub-main" id="main">
 
-  <!-- 1 · what this is ------------------------------------------------- -->
-  <div class="home-hero rv">
-    <span class="ph-eyebrow">Independent OWCS intelligence</span>
-    <h1>Every hero pick in pro Overwatch —<br><span class="gold-word">proven, not guessed.</span></h1>
-    <p class="lede">Schedules and scores are everywhere. <b>What the teams actually played</b>
-      is not. This site reads the hero portraits straight off the OWCS broadcast, frame by
-      frame, has a human check the reads, and then shows you the exact crops it decided from.
-      If a composition can't show its receipts, it isn't published.</p>
-    <div class="cluster home-cta" id="home-cta"></div>
-    <p class="home-honesty" id="home-coverage"></p>
-  </div>
+<main id="main">
 
-  <!-- 1b · the portal, up front -----------------------------------------
-       The tracker is not only a place to read numbers; it is a machine
-       anyone can point at a broadcast. That is the most interesting thing
-       here, so it stops being a footnote at the bottom of the page. -->
-  <section class="section" aria-labelledby="h-portal">
-    <div class="card portal-band">
-      <div class="pb-main">
-        <span class="ph-eyebrow">The operator portal</span>
-        <h2 id="h-portal">Point it at a broadcast yourself.</h2>
-        <p class="lede">Paste one YouTube link. It downloads the VOD, works out where that
-          production puts the HUD, separates live play from replays and the desk, reads all
-          ten hero portraits and tracks every mid-map swap — stopping only at the two points
-          where a human has to say yes.</p>
-        <ol class="pb-steps">
-          <li><b>Paste</b> a link, or pick one the match finder already found</li>
-          <li><b>Run it</b> — a guided, five-minute, one-time setup on your own machine</li>
-          <li><b>Calibrate</b> in the browser if the broadcast is new to the tracker</li>
-          <li><b>Review and publish</b> from the page, with the evidence attached</li>
-        </ol>
-        <div class="cluster">
-          <a class="btn btn--gold" href="portal.html">Open the operator portal</a>
-          <a class="btn" href="portal.html#setup">See the setup walkthrough</a>
-          <a class="btn btn--ghost" href="calibrate.html">Calibrate a broadcast</a>
-        </div>
+  <!-- What this is, in one screen. A first-time visitor should not have
+       to scroll to learn what the product does or how to start. -->
+  <section class="shell shell--wide">
+    <div class="page-head">
+      <p class="eyebrow">OWCS data portal</p>
+      <h1>Turn an Overwatch broadcast into<br><span style="color:var(--gold-hi)">reviewed match data.</span></h1>
+      <p class="lede">Paste a link to a game. The tracker downloads it, finds the live play,
+        reads all ten hero portraits off the HUD and tracks every mid-map swap — then stops
+        and asks a person to confirm what it saw. Nothing is published until someone says yes.</p>
+      <div class="row u-mt-5">
+        <a class="btn btn--primary btn--lg" href="submit.html">Submit a game</a>
+        <a class="btn btn--ghost btn--lg" href="games.html">Browse games</a>
       </div>
-      <p class="pb-honest dim">Everything is free and open, and none of it runs on a server
-        we pay for. On this hosted copy the portal is read-only — a static site has nothing
-        behind it to download a video — so it walks you through starting a control room on
-        your own computer instead of pretending to work. The calibration wizard is the
-        exception: that one genuinely runs here, in your tab.</p>
+      <div id="mode-status" class="u-mt-5" style="max-width:70ch"></div>
     </div>
   </section>
 
-  <!-- 2 · what you can do here ------------------------------------------ -->
-  <section class="section" aria-labelledby="h-start">
-    <h2 id="h-start">Start here</h2>
-    <p class="lede" style="margin-bottom:var(--sp-4)">Four ways in. Each one is a different
-      question about the same verified data.</p>
-    <div class="grid-cards" id="home-doors"></div>
-  </section>
-
-  <!-- 3 · the actual product, on the front page -------------------------- -->
-  <section class="section" aria-labelledby="h-featured">
-    <h2 id="h-featured">The verified map</h2>
-    <p class="lede" style="margin-bottom:var(--sp-4)">This is what a finished result looks like —
-      both line-ups, every confirmed mid-map swap, and a link to the frames behind each read.</p>
-    <div id="home-featured"></div>
-  </section>
-
-  <!-- 4 · how it works, short version ------------------------------------ -->
-  <section class="section" aria-labelledby="h-how">
-    <h2 id="h-how">How a broadcast becomes data</h2>
-    <p class="lede" style="margin-bottom:var(--sp-4)">Five steps. Two of them are a human
-      saying yes — that is on purpose.
-      <a href="how-it-works.html">Read the long version →</a></p>
-    <ol class="how-steps" id="home-steps"></ol>
-  </section>
-
-  <!-- 5 · limits --------------------------------------------------------- -->
-  <section class="section" aria-labelledby="h-limits">
-    <h2 id="h-limits">What this site does <em>not</em> claim</h2>
-    <p class="lede" style="margin-bottom:var(--sp-4)">A tracker that hides its limits is just a
-      rumour with a stylesheet. These are ours, in plain language.</p>
-    <div class="limit-grid" id="home-limits"></div>
-  </section>
-
-  <!-- 6 · contribute ------------------------------------------------------ -->
-  <section class="section" aria-labelledby="h-add">
-    <h2 id="h-add">Teach it to read a broadcast it has never seen</h2>
-    <div class="card home-operator">
-      <div class="stack-sm">
-        <p style="margin:0">Every production puts the hero portraits somewhere slightly
-          different, so each new broadcast needs calibrating once. The wizard does that in
-          your browser: drop in a video or a few screenshots, it finds the ten hero slots,
-          you check them on zoomed crops, and it hands you the layout file.</p>
-        <p class="dim" style="margin:0;font-size:13px">Nothing is uploaded and nothing is
-          installed — the detection runs on your own machine, in the tab. A calibration for
-          a broadcast nobody has covered yet is the single most useful thing anyone can
-          contribute, and anyone may send one.</p>
-      </div>
-      <div class="cluster">
-        <a class="btn btn--gold" href="calibrate.html">Calibrate a broadcast</a>
-        <a class="btn" href="how-it-works.html#pipeline">What each stage does</a>
-      </div>
+  <!-- Where everything stands right now. -->
+  <section class="shell shell--wide band" aria-labelledby="h-now">
+    <div class="sec-head">
+      <h2 id="h-now">Where everything stands</h2>
+      <a class="sec-link" href="games.html">All games →</a>
     </div>
+    <div class="grid grid--4" id="tiles"></div>
+  </section>
+
+  <!-- Only what needs a person. This block hides itself when it is empty. -->
+  <section class="shell shell--wide band" id="attention-band" hidden aria-labelledby="h-attn">
+    <div class="sec-head">
+      <h2 id="h-attn">Waiting on you</h2>
+      <a class="sec-link" href="review.html">Open the review queue →</a>
+    </div>
+    <div class="stack" id="attention"></div>
+  </section>
+
+  <section class="shell shell--wide band" aria-labelledby="h-recent">
+    <div class="sec-head">
+      <h2 id="h-recent">Recent games</h2>
+      <a class="sec-link" href="games.html">All games →</a>
+    </div>
+    <div class="grid grid--2" id="recent"></div>
+  </section>
+
+  <section class="shell shell--wide band" aria-labelledby="h-published">
+    <div class="sec-head">
+      <h2 id="h-published">Recently published</h2>
+      <a class="sec-link" href="stats.html">Explore the data →</a>
+    </div>
+    <div id="published"></div>
+  </section>
+
+  <section class="shell shell--wide band" aria-labelledby="h-health">
+    <div class="sec-head">
+      <h2 id="h-health">System health</h2>
+      <a class="sec-link" href="tools.html">Tools &amp; diagnostics →</a>
+    </div>
+    <div id="health"></div>
   </section>
 
 </main>
@@ -125,13 +80,14 @@
 <script src="assets/vendor/lenis.min.js" defer></script>
 <script src="assets/vendor/gsap.min.js" defer></script>
 <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
-<script src="assets/js/motion.js" defer></script>
+<script src="assets/js/app/motion.js" defer></script>
+<script src="assets/data/hero_art.v1.js"></script>
 <script src="assets/data/public_data.v1.js"></script>
-<script src="assets/data/public_fixture.v1.js"></script>
-<script src="assets/js/public/core.js"></script>
-<script src="assets/js/public/assets.js"></script>
-<script src="assets/js/public/shell.js"></script>
-<script src="assets/js/public/stats.js"></script>
-<script src="assets/js/public/page-home.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app/core.js"></script>
+<script src="assets/js/app/games.js"></script>
+<script src="assets/js/app/api.js"></script>
+<script src="assets/js/app/shell.js"></script>
+<script src="assets/js/app/page-dashboard.js"></script>
 </body>
 </html>

@@ -60,12 +60,12 @@
   if (fromPortal) {
     const back = $('calBack');
     if (back) {
-      back.href = 'portal.html';
-      back.textContent = '← Back to the operator portal';
+      back.href = 'submit.html';
+      back.textContent = '← Back to submitting a game';
     }
     const ret = $('backToPortal');
     if (ret) {
-      ret.href = 'portal.html' + (handoffUrl
+      ret.href = 'submit.html' + (handoffUrl
         ? '?url=' + encodeURIComponent(handoffUrl) : '');
     }
   }

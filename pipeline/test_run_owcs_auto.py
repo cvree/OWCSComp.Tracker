@@ -223,8 +223,8 @@ def main():
     check("success report has step table + status pill",
           "PARTIAL" in html_ok and ">probe<" in html_ok
           and ">layout-debug<" in html_ok)
-    check("success report links runs.html + layout_debug",
-          "runs.html" in html_ok and "layout_debug/" in html_ok)
+    check("success report links the processing history + layout_debug",
+          "tools.html#runs" in html_ok and "layout_debug/" in html_ok)
     rep_fail = os.path.join(ROOT, "reports", "auto",
                             rec3["run"], "index.html")
     check("failure ALSO produces a report page", os.path.exists(rep_fail))

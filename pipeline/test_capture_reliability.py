@@ -329,25 +329,39 @@ def main():
           roa.run_status_of({"ok": True, "detection": {"status": "ok"},
                              "filtered": True}) == "ok")
 
-    # ---- 10. pages carry the new capture workflow ------------------------
-    print("run.html / runs.html")
-    with open(os.path.join(ROOT, "run.html"), encoding="utf-8") as f:
-        rh = f.read()
-    check("run.html has the readiness panel wired to /api/preflight",
-          "/api/preflight" in rh and 'id="readyList"' in rh)
-    check("run.html has fast + normal + force capture buttons",
-          'id="startFastBtn"' in rh and 'id="startBtn"' in rh
-          and 'id="forceBtn"' in rh)
-    check("run.html has latest-report/crops + rebuild evidence",
-          'id="latestReport"' in rh and 'id="latestCrops"' in rh
-          and 'id="rebuildBtn"' in rh and "/api/latest-run" in rh)
-    check("run.html timeline includes the preflight step",
-          "Preflight" in rh)
-    with open(os.path.join(ROOT, "runs.html"), encoding="utf-8") as f:
-        rns = f.read()
-    check("runs.html links report + layout + crops per run",
-          "index.html" in rns and "layout.html" in rns
-          and "crops.html" in rns)
+    # ---- 10. the product surfaces still carry the capture workflow -------
+    # The 2026 redesign folded run.html and runs.html into the product:
+    # starting a job lives on submit.html, watching one lives on the game
+    # page, and the run archive lives under Tools. The capability has to
+    # survive that move — this checks the wiring, not the old page names.
+    print("submit / game / tools carry the capture workflow")
+    with open(os.path.join(ROOT, "assets", "js", "app", "api.js"),
+              encoding="utf-8") as f:
+        api = f.read()
+    check("the API layer still exposes preflight, run, status and cancel",
+          all(e in api for e in ("/api/preflight", "/api/run", "/api/status",
+                                 "/api/cancel", "/api/sources")))
+    with open(os.path.join(ROOT, "assets", "js", "app", "page-game.js"),
+              encoding="utf-8") as f:
+        pg = f.read()
+    check("the game page tails the live job log and can cancel it",
+          "runStatus" in pg and "cancelRun" in pg and 'id="live-log"' in pg)
+    check("the game page names the blocker and its exact fix",
+          "blockerSection" in pg and "Copy the fix" not in pg
+          and "b.command" in pg)
+    with open(os.path.join(ROOT, "assets", "js", "app", "games.js"),
+              encoding="utf-8") as f:
+        gj = f.read()
+    check("a run with no live gameplay is reported as a blocker, "
+          "not a silent partial",
+          "No live gameplay was found" in gj)
+    check("a 403/sign-in download refusal is reported as a blocker",
+          "YouTube refused the download" in gj)
+    with open(os.path.join(ROOT, "assets", "js", "app", "page-tools.js"),
+              encoding="utf-8") as f:
+        pt = f.read()
+    check("tools keeps the run archive with its report links",
+          "autoRuns" in pt and "reportDir" in pt)
 
     shutil.rmtree(TMP, ignore_errors=True)
     print()

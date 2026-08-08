@@ -1,6 +1,112 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
-## CURRENT STATUS (authoritative — 2026-08-06, ninth pass) — an optional LLM advisor, fenced so it cannot become evidence
+## CURRENT STATUS (authoritative — 2026-08-08, tenth pass) — one product, one workflow, one design system
+
+> Additive to the ninth pass below. Nothing in the pipeline's safety,
+> evidence or promotion architecture was changed; a product layer was built
+> over it and the twenty-one pages that were competing with each other were
+> deleted.
+
+### The problem this pass fixed
+
+The repo had grown three front ends — a public "nocturne" fan site
+(`public.css` + `assets/js/public/*`), a control room (`style.css` +
+`data.js` + `app.js`), and a portal guide (`portal-guide.css`) — across
+twenty-nine HTML pages with eight top-level navigation entries. A dataset
+that existed got a page: tournaments, calendar, heroes, maps, comps, swaps,
+team-coverage, sources, runs, calibration, beta-ops, prep. A newcomer could
+not tell what the product *was*, and the one thing it does — turn a
+broadcast into reviewed data — was a link at the bottom of the front page.
+
+### The information architecture now
+
+Five nav entries, in workflow order: **Dashboard · Games · Submit · Review ·
+Stats**. That is the whole primary navigation, asserted by
+`pipeline/test_site.py` so it cannot creep back.
+
+| was | is |
+|---|---|
+| `matches.html`, `match.html`, `runs.html`, `sources.html`, `tournaments.html`, `tournament.html`, `calendar.html` | `games.html` (one row per game, whatever state) + `game.html` |
+| `portal.html`, `intake.html`, `run.html` | `submit.html` (start) + `game.html` (watch, live log, blockers) |
+| `admin.html`, `fact-admin.html` | `review.html` |
+| `heroes.html`, `hero.html`, `maps.html`, `comps.html`, `swaps.html`, `team-coverage.html` | `stats.html` (five tabs) + nested `hero.html` / `team.html` |
+| `calibration.html`, `beta-ops.html`, `prep.html`, `team-prep.html` | `tools.html` (seven collapsed sections) |
+
+`404.html` is now the legacy-URL map: every removed page names where it went
+and takes you there, cancelled by any interaction. One file instead of
+twenty-one redirect stubs.
+
+### What was deleted
+
+Twenty-one pages, `assets/js/public/` (21 files), `app.js`, `ui.js`, the old
+`motion.js`, `landing-hero.js` (already orphaned), `public.css`,
+`portal-guide.css`, and — the big one — `three.min.js` + `vanta.net.min.js`
+(630 KB of WebGL for a background texture that a static gradient does
+better). `style.css` survives, renamed `appliance.css`, because it is what
+the packaged Windows app's two screens are built on and rewriting those was
+not this pass's job.
+
+Net: **−21 pages, −630 KB of vendored JS, −3 design systems, +1.**
+
+### The review workspace
+
+The best screen in the product, and the one the whole architecture exists
+to serve. Every detection sits beside the frame it was read from;
+confidence is a bar, not a sentence; the hero picker is search-first;
+`j`/`k` move, `a` approves, `c` corrects, `f` flags, `⇧A` approves every
+clean read on the map. A "clean" read is `mean ≥ 0.90` with `min ≥ 0.81` —
+the same floor the pipeline's own auto-publish gate uses, mirrored so the
+word means one thing.
+
+**The rule it enforces:** a human decision never overwrites raw detection
+evidence. Every decision records what the detector said (hero, confidence,
+observation count, detector version, evidence paths) *and* what the person
+said, with a name and a timestamp. Approvals/rejections go to the desktop
+API, which sets `manual_override`. Hero corrections deliberately do **not**
+have a live write path — they export as `corrections/corrections.json`, the
+same file `apply_corrections.py` already reads, so the change lands in git
+with its justification and can be undone by deleting a line.
+
+### Demo data can no longer reach a page
+
+`public_fixture.v1.js` moved from `assets/data/` to `pipeline/fixtures/`.
+The old rule was a load *order* ("production first, fixture as a
+fallback"), which meant a broken or empty export silently published
+invented games under a small ribbon. Pages now render the production export
+or an honest empty state. `check_packaging.py` and
+`test_public_export_contracts.py` assert no page can load the fixture.
+
+### Motion
+
+Kept: Lenis smooth scroll, one entrance reveal per element, a scroll
+hairline, count-up. Removed: the Vanta/three.js ambience, decrypting
+headings, magnetic buttons, tilt and spotlight — cursor effects that make
+targets move away from the pointer. `prefers-reduced-motion` and Save-Data
+disable everything, and the reveal system still cannot permanently withhold
+content (`.rv-in` first, watchdog, `beforeprint`). Two real bugs found by
+driving it in a browser and fixed: the workspace re-played its entrance
+animation after every decision (removed), and `motion.js` was hijacking
+programmatic `focus({preventScroll:true})` and throwing the reviewer a
+thousand pixels up the page after every approval (now gated on
+`:focus-visible`).
+
+### Testing
+
+`test_public_site.py` and `test_static_pages.py` (709 lines asserting the
+shape of the old three-stack world) are replaced by
+`pipeline/test_site.py`, which guards, in order of what would hurt most to
+lose: the credibility rules, the information architecture, "no demo data
+can reach a page", and the basics that rot silently (skip links, focus
+rings, reduced motion, empty states, self-hosted assets, no dead links).
+
+Verified in headless Chromium at 1440px and 390px: every page, zero console
+errors, zero horizontal overflow, no permanently-invisible content, the
+submit flow end to end in both connected and read-only modes, the review
+workspace driven entirely by keyboard, the evidence lightbox, the mobile nav
+sheet, `prefers-reduced-motion`, and the 404 redirect map.
+
+
+## HISTORICAL (superseded — 2026-08-06, ninth pass) — an optional LLM advisor, fenced so it cannot become evidence
 
 > Additive to the eighth pass below; nothing in it is changed or retracted.
 > This pass answers a product question — "should users be able to add their
@@ -97,7 +203,7 @@ That is what shipped.
 
 ---
 
-## CURRENT STATUS (2026-08-02, eighth pass) — hero coverage becomes a claim that has to be earned
+## HISTORICAL (superseded — 2026-08-02, eighth pass) — hero coverage becomes a claim that has to be earned
 
 > Additive to the seventh pass below. That pass finished the *application*.
 > This one goes after the thing the previous handoff listed as its biggest

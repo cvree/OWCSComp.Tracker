@@ -357,7 +357,7 @@ jobs:
           python3 pipeline/test_automation_calendar_export.py
           python3 pipeline/test_automation_match_repair.py
           python3 pipeline/test_match_export_coverage.py
-          python3 pipeline/test_public_site.py
+          python3 pipeline/test_site.py
 
       - name: Open data-update PR if the calendar or team data changed
         id: pr

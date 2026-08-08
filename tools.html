@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tools &amp; diagnostics — OWCS Comp Tracker</title>
+<meta name="description" content="The advanced operator surface: broadcast sources, processing history, calibration health, download authentication, storage and publishing.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/owcs.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<main id="main" class="shell shell--wide">
+
+  <div class="page-head page-head--tight">
+    <p class="eyebrow">For operators</p>
+    <h1>Tools &amp; diagnostics</h1>
+    <p class="lede">Everything technical, in one place, off the main path. Nothing here is
+      needed to submit, review or read a game — it is for when something has gone wrong, or
+      when you are running your own copy.</p>
+  </div>
+
+  <div id="mode-status" style="max-width:74ch"></div>
+
+  <nav class="row u-mt-5" aria-label="Sections on this page">
+    <a class="btn btn--sm btn--ghost" href="#sources">Broadcast sources</a>
+    <a class="btn btn--sm btn--ghost" href="#runs">Processing history</a>
+    <a class="btn btn--sm btn--ghost" href="#calibration">Calibration</a>
+    <a class="btn btn--sm btn--ghost" href="#downloads">Downloads</a>
+    <a class="btn btn--sm btn--ghost" href="#storage">Storage</a>
+    <a class="btn btn--sm btn--ghost" href="#publish">Publishing</a>
+    <a class="btn btn--sm btn--ghost" href="#evidence">Evidence archive</a>
+  </nav>
+
+  <section class="band" id="sources" aria-labelledby="h-src">
+    <div class="sec-head"><h2 id="h-src">Broadcast sources</h2>
+      <a class="sec-link" href="submit.html">Submit a game →</a></div>
+    <div id="sources-body"></div>
+  </section>
+
+  <section class="band" id="runs" aria-labelledby="h-runs">
+    <div class="sec-head"><h2 id="h-runs">Processing history</h2>
+      <a class="sec-link" href="games.html">Games list →</a></div>
+    <div id="runs-body"></div>
+  </section>
+
+  <section class="band" id="calibration" aria-labelledby="h-cal">
+    <div class="sec-head"><h2 id="h-cal">Calibration</h2>
+      <a class="sec-link" href="calibrate.html">Open the calibration wizard →</a></div>
+    <div id="calibration-body"></div>
+  </section>
+
+  <section class="band" id="downloads" aria-labelledby="h-dl">
+    <div class="sec-head"><h2 id="h-dl">Downloads and authentication</h2></div>
+    <div id="downloads-body"></div>
+  </section>
+
+  <section class="band" id="storage" aria-labelledby="h-store">
+    <div class="sec-head"><h2 id="h-store">Storage and health</h2></div>
+    <div id="storage-body"></div>
+  </section>
+
+  <section class="band" id="publish" aria-labelledby="h-pub">
+    <div class="sec-head"><h2 id="h-pub">Publishing</h2></div>
+    <div id="publish-body"></div>
+  </section>
+
+  <section class="band" id="evidence" aria-labelledby="h-ev">
+    <div class="sec-head"><h2 id="h-ev">Evidence archive</h2></div>
+    <div id="evidence-body"></div>
+  </section>
+
+</main>
+
+<script src="assets/vendor/lenis.min.js" defer></script>
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="assets/js/app/motion.js" defer></script>
+<script src="assets/data/hero_art.v1.js"></script>
+<script src="assets/data/public_data.v1.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app/core.js"></script>
+<script src="assets/js/app/games.js"></script>
+<script src="assets/js/app/api.js"></script>
+<script src="assets/js/app/shell.js"></script>
+<script src="assets/js/app/page-tools.js"></script>
+</body>
+</html>

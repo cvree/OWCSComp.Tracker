@@ -30,7 +30,8 @@ operator's private job database.
 
 **Every event carries `verified` unchanged.** The committed seed is
 entirely `verified: false` (the official schedule site was unreachable when
-it was written), and `calendar.html` says so on every band — placeholder
+it was written), and the schedule block on `games.html` says so on every
+row — placeholder
 dates are never presented as confirmed. To verify a window, edit
 `config/owcs_calendar.json`, set `verified: true` against an official
 source, and re-export.
@@ -140,7 +141,7 @@ python pipeline/automation/cli.py find-matches --queue-likely  # agentic mode:
 Artifacts: `data/match_finder.json` (the accumulating ledger — a broadcast
 that leaves the feed window is kept) and `assets/data/matchfinder.v1.json`
 (the static snapshot the portal renders on GitHub Pages). In the control
-room the operator portal (`portal.html`) shows the live report
+room the submit page (`submit.html`) shows the live report
 (`GET /api/matchfinder`) with an **Ingest** button per candidate that feeds
 the exact paste-link flow, and a **Scan for new matches** button that runs
 this command (`POST /api/action {action: "find-matches"}`).
@@ -197,11 +198,11 @@ That ingests the link and runs every automatic stage in a row — metadata +
 registry authorization, full-VOD download + 360p proxy, layout resolution,
 segmentation, and (new) segment-clip extraction — stopping honestly at the
 FIRST gate that belongs to a human, with the exact next command printed.
-`assets/data/intake.v1.json` is refreshed automatically, so `portal.html`
+`assets/data/intake.v1.json` is refreshed automatically, so `submit.html`
 always shows the live stage.
 
 **Or from the browser:** run `python pipeline\serve.py`, open
-`http://localhost:8000/portal.html`, paste the link, watch the live log.
+`http://localhost:8000/submit.html`, paste the link, watch the live log.
 The page POSTs `/api/intake/link`, which launches the same `convert-link`
 command locally (static hosting keeps the read-only behavior and only
 prints the command for you to copy).
@@ -211,7 +212,7 @@ each and names it:
 
 1. `approve-source --confirm` — a link not on a verified official channel.
 2. `approve-layout --confirm` — a freshly-calibrated layout (review the sheet).
-3. Segment identity review — approve in `portal.html`/CLI as before, **or**
+3. Segment identity review — approve in `review.html`/CLI as before, **or**
    re-run with `--auto-accept`, which accepts machine proposals through the
    SAME `accept-proposed` gate (a blocking review task or an UNKNOWN field
    still refuses and waits for you; recorded with your `--accepted-by` name).
@@ -282,7 +283,7 @@ python pipeline\template_bootstrap.py --layout layouts\<layout-id>.json
 # 7. Propose map / mode / teams / sides / order / players, with evidence.
 python pipeline\automation\cli.py propose-identity --job <job-key>
 
-# 8. Render the operator review panel, then open portal.html in a browser.
+# 8. Render the operator review panel, then open review.html in a browser.
 python pipeline\automation\cli.py intake-export --save
 
 # 9. Approve each real map segment. Either accept the proposal wholesale:
@@ -351,7 +352,7 @@ transport + fixtures).
 | B2 poll FACEIT (championships → matches → teams/players/status/result) | `faceit_api.py` + `discovery.sync_faceit` | ✅ |
 | B3 official OWCS calendar adapter | `config/owcs_calendar.json` + `owcs_calendar.py` | ✅ |
 | B4 source reconciliation (never silently overwrites) | `reconcile.py` | ✅ |
-| B5 generate the public calendar | `export_data.py` (discovered-window matches) → `public_data.v1.js` → `calendar.html` | ✅ |
+| B5 generate the public calendar | `export_data.py` (discovered-window matches) → `public_data.v1.js` → `games.html` | ✅ |
 | Rolling 14-day window + future horizon | `discovery.in_window` (config `lookback_days` / `schedule_horizon_days`) | ✅ |
 | Delayed / rescheduled / cancelled / forfeited / completed / duplicate handling | `faceit_api.map_status` + `discovery.upsert_match` | ✅ |
 | Idempotent upsert with stable public ids (`faceit-<matchId>`) | `discovery.upsert_match` (alias-safe team resolution) | ✅ |
@@ -377,7 +378,7 @@ python pipeline/automation/cli.py coverage
 python pipeline/automation/cli.py sync-all --dry-run --fixture-dir pipeline/fixtures/automation
 ```
 
-`--export` regenerates `public_data.v1.js` after a live sync so `calendar.html`
+`--export` regenerates `public_data.v1.js` after a live sync so `games.html`
 updates. Dry-run performs all API retrieval + reconciliation but writes nothing.
 
 ### Hourly workflow
@@ -632,7 +633,7 @@ silent omission.
 | Human approval is the ONLY non-automatic step | `approve_candidate(..., confirm=True)` — no code path anywhere promotes past `validated` without it | ✅ |
 | Never hotlinked, never guessed | candidates are fetched once into gitignored `data/asset_staging/`; only a published, human-approved asset reaches the committed `assets/img/teams/<id>/` tree | ✅ |
 | Public export independent of composition capture | `export_data.build_public_payload` — teams list is every row in `teams`, not `teams_needed` | ✅ |
-| Team Coverage control-room dashboard | `team-coverage.html` + `assets/js/public/page-team-coverage.js`, reading the small committed `assets/data/team_coverage.v1.json` | ✅ |
+| Team Coverage control-room dashboard | `team-coverage.html` + `assets/js/app/page-team-coverage.js`, reading the small committed `assets/data/team_coverage.v1.json` | ✅ |
 | Idempotent CLI/workflow modes | `cli.py team-coverage` / `collect-team-assets` / `approve-team-asset` / `publish-team-assets`; `discovery.yml` `mode=team-coverage` / `mode=team-assets-dryrun` | ✅ |
 
 ### Known, documented limitations
@@ -822,7 +823,7 @@ and were handled explicitly, never patched with a blanket guess:
 ### Where it's used
 
 `hero.html`'s new "Official presentation" panel (full artwork + source link
-+ attribution + aliases) and `heroes.html`'s "not yet sighted" directory
++ attribution + aliases) and `stats.html?tab=heroes`'s "not yet sighted" directory
 cards (official portrait instead of a bare monogram — these cards carry no
 comp/evidence claim, so real art is a strict readability upgrade). The
 "in the meta" (verified-pick) cards and the hero dossier's header/portrait-
@@ -891,7 +892,7 @@ SCHEDULED` = "retryable"), because an equivalent already existed.
 | Scoped publication commit + push, never touching main directly | `publish.create_publication_commit` (fresh branch only; PR open/CI wait/merge/Pages stay the existing, already-working human/CI flow — not reimplemented) | ✅ |
 | `publication_runs` recorded (Phase I table — previously schema-only) | `publish.publish_job` inserts `db_hash`/`export_hash`/`branch`/`source_commit`/`state` | ✅ |
 | Operator command: `process-approved-job --job <id> [--publish]` | `cli.py cmd_process_approved_job` — dry-run by default, `--publish` to actually commit + push | ✅ |
-| Beta ops dashboard (Phase 7) | `beta-ops.html` + `assets/js/public/page-beta-ops.js`, fed by `cli.py job-coverage --save` -> `assets/data/job_coverage.v1.json` — read-only (GitHub Pages has no server); every row names the exact CLI command to run next | ✅ |
+| Beta ops dashboard (Phase 7) | `tools.html` + `assets/js/app/page-beta-ops.js`, fed by `cli.py job-coverage --save` -> `assets/data/job_coverage.v1.json` — read-only (GitHub Pages has no server); every row names the exact CLI command to run next | ✅ |
 | New CLI surface | `create-job`, `list-jobs`, `show-job`, `claim-job`, `release-job`, `retry-job`, `cancel-job`, `reset-stale-lock`, `resume-job`, `run-job`, `job-coverage [--save]`, `worker-run`, `worker-doctor`, `segment-list`, `segment-approve`, `segment-reject`, `detect-job [--write]`, `process-approved-job [--publish]` | ✅ |
 | Windows-worker preflight checklist (Python, repo deps, tool versions, disk, cache/artifact-dir writability, `gh` auth, API-key presence — value NEVER read into the report) | `worker.doctor_report` / `cli.py worker-doctor` | ✅ |
 
@@ -934,7 +935,7 @@ dispatch for every state, coverage-report shape). Plus extensions to
 `test_automation_state_machine.py` (the new states/edges), `test_automation_
 job_store.py` (`update_payload`/`cancel`/`retry_job`/`record_error`),
 `test_automation_locks.py` (`reset_stale`), and `test_public_site.py`
-(`beta-ops.html` stays on the control-room shell). All offline, no network/
+(`tools.html` stays on the control-room shell). All offline, no network/
 key required — fixtures/mocked transports throughout, exactly like every
 other automation suite.
 

@@ -99,7 +99,7 @@ clearer combat frames) and run it again. Green/confidence ≥ 0.55 means it's
 good enough to proceed.
 
 You can watch this health readout live in the browser too: run
-`python pipeline/serve.py`, open `http://localhost:8000/calibration.html`.
+`python pipeline/serve.py`, open `http://localhost:8000/tools.html#calibration`.
 
 ---
 

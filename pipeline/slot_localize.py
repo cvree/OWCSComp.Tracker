@@ -490,7 +490,7 @@ def render_html(run: str, meta: dict, frames: list[dict], agg: dict,
         "<p><a href='ocr_hud.html'>OCR HUD</a> · "
         "<a href='vision_dashboard.html'>vision dashboard</a> · "
         "<a href='index.html'>run report</a> · "
-        "<a href='../../../runs.html'>all runs</a></p>"
+        "<a href='../../../tools.html#runs'>processing history</a></p>"
         "</body></html>")
 
 

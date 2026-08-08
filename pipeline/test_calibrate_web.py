@@ -380,10 +380,20 @@ class TestImportPath(unittest.TestCase):
 
 
 class TestDiscoverability(unittest.TestCase):
-    def test_the_public_site_links_to_the_wizard(self):
-        """A calibration tool nobody can find is not a feature."""
-        self.assertIn("calibrate.html", read(os.path.join(REPO, "index.html")),
-                      "the front page does not link to the calibration wizard")
+    def test_the_site_links_to_the_wizard_from_every_page(self):
+        """A calibration tool nobody can find is not a feature.
+
+        The 2026 redesign took calibration off the front page — a first-time
+        visitor has no idea what a HUD layout is and does not need one — and
+        put it where someone who needs it is already standing: the Tools
+        page, and the footer of every single page via the shared shell.
+        """
+        shell = read(os.path.join(REPO, "assets", "js", "app", "shell.js"))
+        self.assertIn("calibrate.html", shell,
+                      "the shared footer does not link the calibration wizard, "
+                      "so no page does")
+        self.assertIn("calibrate.html", read(os.path.join(REPO, "tools.html")),
+                      "the Tools page does not link the calibration wizard")
 
     def test_the_wizard_is_indexable(self):
         """Unlike the control room, this page is FOR the public, so it must

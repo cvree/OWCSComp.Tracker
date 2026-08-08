@@ -13,7 +13,7 @@ into two buckets by confidence:
                 the same 5 heroes for that team — cross-frame agreement, so a
                 single lucky frame can't promote itself.
   needs-review  anything else. These NEVER become comps automatically; they go
-                to a review queue JSON that admin.html lists for a human.
+                to a review queue JSON that review.html lists for a human.
 
 Even a `high` snapshot is only WRITTEN to the DB when the run is explicitly
 paired to a match + map + teams (--match/--map-order/--team-a/--team-b) and

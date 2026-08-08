@@ -46,7 +46,7 @@ def main() -> None:
           isinstance(man.get("heroes"), dict) and isinstance(man.get("teams"), dict))
 
     prod = load_data("assets/data/public_data.v1.js")
-    fix = load_data("assets/data/public_fixture.v1.js")
+    fix = load_data("pipeline/fixtures/public_fixture.v1.js")
 
     print("every hero resolves to a real image or an intentional fallback:")
     hero_ids = {h["id"] for h in prod["heroes"]} | {h["id"] for h in fix["heroes"]}
@@ -106,31 +106,42 @@ def main() -> None:
                 missing.append(p)
     check(f"all logoUrl files exist ({len(missing)} missing)", not missing)
 
-    print("client registry (assets.js):")
-    reg = read("assets/js/public/assets.js")
-    check("registry exists with crest + hero face + role icons",
-          "teamCrest" in reg and "heroFace" in reg and "roleIcon" in reg)
+    print("client registry (app/core.js):")
+    core = read("assets/js/app/core.js")
+    check("registry exists with crest + hero face",
+          "teamCrest" in core and "heroFace" in core)
     check("crest is inline SVG (cannot 404)",
-          "<svg" in reg and "viewBox" in reg)
+          "<svg" in core and "viewBox" in core)
     check("registry documents the never-guess rule",
-          "never a guess" in reg.lower() or "never a guessed" in reg.lower())
+          "never a guess" in core.lower())
     check("verified images keep intrinsic dimensions (no layout shift)",
-          'width=' in reg and 'height=' in reg)
-    core = read("assets/js/public/core.js")
-    check("core.js team plates delegate to the registry",
-          "P.assets" in core and "teamMark" in core)
-    check("core.js hero tiles delegate to the registry",
-          "heroFace" in core)
+          "width=" in core and "height=" in core)
+    check("team plates go through the registry",
+          "teamPlate" in core and "teamCrest" in core)
+    check("hero tiles go through the registry",
+          "heroTile" in core and "heroFace" in core)
     check("broken-image fallback hook still present",
-          "imgFallback" in core or "img-fallback" in core)
+          "data-fallback" in core and "dataset.fallback" in core)
 
-    print("pages load the registry:")
+    print("hero art index is committed and current:")
+    idx = os.path.join(ROOT, "assets", "data", "hero_art.v1.js")
+    check("hero_art.v1.js exists", os.path.exists(idx))
+    import subprocess
+    import proc_text
+    r = subprocess.run([sys.executable,
+                        os.path.join(ROOT, "pipeline",
+                                     "build_hero_art_index.py"), "--check"],
+                       capture_output=True, **proc_text.PIPE_TEXT)
+    check("hero art index matches what is on disk "
+          f"({r.stdout.strip() or r.stderr.strip()})", r.returncode == 0)
+
+    print("pages load the shared layer:")
     pages = [p for p in os.listdir(ROOT)
              if p.endswith(".html")
-             and "assets/js/public/core.js" in read(p)]
-    unwired = [p for p in pages if "assets/js/public/assets.js" not in read(p)]
-    check(f"every core.js page also loads assets.js ({len(unwired)} unwired: {unwired})",
-          not unwired)
+             and "assets/js/app/core.js" in read(p)]
+    unwired = [p for p in pages if "assets/data/hero_art.v1.js" not in read(p)]
+    check(f"every core.js page also loads the hero art index "
+          f"({len(unwired)} unwired: {unwired})", not unwired)
 
     print("manifest builder is committed + rerunnable:")
     check("pipeline/build_asset_manifest.py exists",

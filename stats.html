@@ -4,81 +4,65 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Stats — OWCS Comp Tracker</title>
-<meta name="description" content="Hero pick, win and ban rates computed only from verified OWCS comps — every number links to its evidence.">
+<meta name="description" content="Hero pick rates, map records, full compositions and confirmed mid-map swaps — every number counted only from line-ups a person has approved.">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Cinzel:wght@500;600&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-<noscript><link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Cinzel:wght@500;600&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
-<!-- Ambience libraries, declared instead of <script>-loaded: three.js is 616 KB,
-     and a deferred <script> lands in front of DOMContentLoaded — which is when
-     the shell builds the header, nav and footer. motion.js fetches these on idle
-     after first paint, and only on devices that can actually use WebGL. -->
-<meta name="owcs-ambience" content="assets/vendor/three.min.js,assets/vendor/vanta.net.min.js">
-<link rel="stylesheet" href="assets/css/public.css">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/owcs.css">
 </head>
-<body class="pub">
+<body>
 <a class="skip-link" href="#main">Skip to content</a>
-<main class="pub-main" id="main">
-  <div class="page-head rv">
-    <span class="ph-eyebrow">Pro meta</span>
-    <h1>Statistics</h1>
-    <p class="lede">Pick and win rates computed <b>only</b> from comps a human reviewed or that cleared the high-confidence gate. Every number links to the matches and frames behind it — if we can't prove it, we don't count it.</p>
+
+<main id="main" class="shell shell--wide">
+
+  <div class="page-head page-head--tight">
+    <p class="eyebrow">Approved data only</p>
+    <h1>Stats</h1>
+    <p class="lede">Everything on this page is counted from compositions a person has
+      confirmed against the broadcast frame. Detections still waiting for review are not
+      in these numbers — which is why the sample is small and honest rather than large
+      and guessed.</p>
   </div>
 
-  <div class="stack rv">
-    <div class="seg-region" id="region-seg" role="group" aria-label="Region"></div>
-    <form class="filterbar" id="s-filters" aria-label="Filter statistics">
-      <label>Tournament
-        <select id="sf-tournament"><option value="all">All tournaments</option></select>
-      </label>
-      <label>Team
-        <select id="sf-team"><option value="all">All teams</option></select>
-      </label>
-      <label>Map
-        <select id="sf-map"><option value="all">All maps</option></select>
-      </label>
-      <div class="fb-actions"><button type="button" class="btn btn--ghost" id="sf-reset">Reset</button></div>
-    </form>
-    <div class="split">
-      <div class="filter-summary" id="sf-summary" aria-live="polite"></div>
-      <span class="freshness" id="freshness"></span>
-    </div>
+  <div id="coverage" class="u-mt-5"></div>
+
+  <div role="tablist" aria-label="Stats views" class="u-mt-6">
+    <button role="tab" data-tab="heroes" aria-controls="p-heroes" id="t-heroes">Heroes</button>
+    <button role="tab" data-tab="comps" aria-controls="p-comps" id="t-comps">Compositions</button>
+    <button role="tab" data-tab="maps" aria-controls="p-maps" id="t-maps">Maps</button>
+    <button role="tab" data-tab="teams" aria-controls="p-teams" id="t-teams">Teams</button>
+    <button role="tab" data-tab="swaps" aria-controls="p-swaps" id="t-swaps">Swaps</button>
   </div>
 
-  <section class="section" aria-label="Summary">
-    <div class="stat-cards" id="s-cards"></div>
-  </section>
+  <div id="p-heroes" role="tabpanel" aria-labelledby="t-heroes" tabindex="0"></div>
+  <div id="p-comps" role="tabpanel" aria-labelledby="t-comps" tabindex="0" hidden></div>
+  <div id="p-maps" role="tabpanel" aria-labelledby="t-maps" tabindex="0" hidden></div>
+  <div id="p-teams" role="tabpanel" aria-labelledby="t-teams" tabindex="0" hidden></div>
+  <div id="p-swaps" role="tabpanel" aria-labelledby="t-swaps" tabindex="0" hidden></div>
 
-  <section class="section" aria-label="Meta snapshot">
-    <h2>Meta snapshot</h2>
-    <p class="dim" style="margin-top:0;max-width:62ch">The most-played hero per role, ranked within role so tank reads as clearly as damage. Card width and gold mark the leader.</p>
-    <div class="meta-snap" id="s-meta"></div>
-  </section>
-
-  <section class="section" aria-label="Hero pick and win rates">
-    <h2>Hero pick &amp; win rates <span class="h-count" id="s-hero-count"></span></h2>
-    <div class="stat-note rv"><span aria-hidden="true">⛨</span>
-      <span>Counted from <b>verified comps only</b> (review status “reviewed” or “auto-high”; manual corrections override CV reads). Unreviewed detections are excluded until a human signs off.</span></div>
-    <div id="s-hero-table" style="margin-top:16px"></div>
-  </section>
-
-  <section class="section" aria-label="Hero bans">
-    <h2>Hero bans <span class="badge badge--src" data-src="faceit" style="vertical-align:4px">match facts</span></h2>
-    <p class="dim" style="margin-top:0;max-width:62ch">Bans are imported match facts (FACEIT / manual entry) — a different, clearly-labeled source than the vision-verified comps above.</p>
-    <div id="s-ban-table"></div>
-  </section>
 </main>
+
+<div class="lightbox" id="lightbox" hidden>
+  <div data-close style="position:absolute;inset:0"></div>
+  <figure class="lightbox__box" role="dialog" aria-modal="true" aria-label="Evidence frame" style="margin:0">
+    <img id="lightbox-img" src="" alt="">
+    <figcaption id="lightbox-cap"></figcaption>
+    <div class="row u-mt-4"><button class="btn btn--sm" data-close>Close</button></div>
+  </figure>
+</div>
 
 <script src="assets/vendor/lenis.min.js" defer></script>
 <script src="assets/vendor/gsap.min.js" defer></script>
 <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
-<script src="assets/js/motion.js" defer></script>
+<script src="assets/js/app/motion.js" defer></script>
+<script src="assets/data/hero_art.v1.js"></script>
 <script src="assets/data/public_data.v1.js"></script>
-<script src="assets/data/public_fixture.v1.js"></script>
-<script src="assets/js/public/core.js"></script>
-<script src="assets/js/public/assets.js"></script>
-<script src="assets/js/public/shell.js"></script>
-<script src="assets/js/public/stats.js"></script>
-<script src="assets/js/public/page-stats.js"></script>
+<script src="assets/js/app/core.js"></script>
+<script src="assets/js/app/games.js"></script>
+<script src="assets/js/app/api.js"></script>
+<script src="assets/js/app/evidence.js"></script>
+<script src="assets/js/app/shell.js"></script>
+<script src="assets/js/app/page-stats.js"></script>
 </body>
 </html>

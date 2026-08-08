@@ -6,16 +6,16 @@
 <title>Calibrate a broadcast — OWCS Comp Tracker</title>
 <meta name="description" content="Teach the tracker to read a new Overwatch broadcast. Runs entirely in your browser — nothing is uploaded." />
 <link rel="icon" href="desktop/assets/owcs.png" />
-<link rel="stylesheet" href="assets/css/style.css" />
-<link rel="stylesheet" href="assets/css/desktop.css" />
+<link rel="stylesheet" href="assets/css/owcs.css" />
 <link rel="stylesheet" href="assets/css/calibrate.css" />
 </head>
 <body data-page="calibrate">
+<a class="skip-link" href="#calMain">Skip to content</a>
 
-<div class="cal-wrap">
+<div class="cal-wrap" id="calMain">
 
   <header class="cal-head">
-    <a class="cal-back" id="calBack" href="index.html">← OWCS Comp Tracker</a>
+    <a class="cal-back" id="calBack" href="tools.html#calibration">← Tools &amp; diagnostics</a>
     <h1>Teach the tracker a new broadcast</h1>
     <p class="cal-lead">
       Every broadcast puts the hero portraits in a slightly different place.
@@ -81,8 +81,7 @@
       <p>
         <strong>Or skip all of it:</strong> with the tracker running on your own
         machine, the pipeline downloads and calibrates the VOD itself from the
-        link — <a href="portal.html#setup">the portal walks through setting that
-        up</a>.
+        link — <a href="how-it-works.html#run-it-yourself">how to run your own copy</a>.
       </p>
     </details>
   </section>
@@ -229,7 +228,7 @@
         than being trusted automatically.
       </p>
       <div class="btnrow">
-        <a class="btn btn-primary" id="backToPortal" href="portal.html">Back to the portal →</a>
+        <a class="btn btn-primary" id="backToPortal" href="submit.html">Submit a game with it →</a>
         <button class="btn btn-ghost" id="startOver">Calibrate another broadcast</button>
       </div>
     </div>

@@ -1,7 +1,7 @@
 # Public data contract (`public.v1`)
 
 Every fan-facing page reads exactly one dataset: `window.OWCS_PUBLIC`, loaded
-from a single script file before `assets/js/public/core.js`. Pages never
+from a single script file before `assets/js/app/core.js`. Pages never
 compute stats server-side and never fetch anything at runtime — this is the
 whole "backend".
 
@@ -117,7 +117,7 @@ overridesId? / overriddenBy?, correction?{note, author, appliedAt}}`
 4. Every snapshot carries `evidenceRunId` (+ `evidenceFrame`) — the UI links
    comp → run → frames → crops → review status. Missing chain ⇒ not shown.
 
-### Stats (`assets/js/public/stats.js`)
+### Stats (`assets/js/app/stats.js`)
 `OWCS_STATS.computeHeroStats(filters)` counts one **(map, team)
 appearance** per hero (multiple snapshots collapse — long maps don't
 multiply-count). Win rate only counts maps with a decided winner. Every row

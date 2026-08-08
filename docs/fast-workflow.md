@@ -20,7 +20,7 @@ python pipeline/run_owcs_auto.py --source owcs-afcxdimpsle --start 1:30:00 --end
 10s (3 frames). Detection will be **skipped with an explained reason**
 (480p frames vs a 1080p layout) — that is expected: this mode only proves
 capture → frames → report → website work. Open
-`http://localhost:8000/runs.html` afterwards.
+`http://localhost:8000/tools.html#runs` afterwards.
 
 ## 2. Normal recommended run (calibration-quality frames, still small)
 

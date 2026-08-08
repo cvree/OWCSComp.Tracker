@@ -2,7 +2,7 @@
 """
 apply_corrections.py — the manual/admin path for comp data.
 
-Reads corrections/corrections.json (authored by hand or with admin.html)
+Reads corrections/corrections.json (authored by hand or in the review workspace)
 and writes them into the DB as comp snapshots with source='manual', which
 OVERRIDE any CV/replay-derived snapshots for that map+team at export time.
 The CV data is never deleted — corrections are additive and reversible by
