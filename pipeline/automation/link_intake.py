@@ -640,8 +640,14 @@ def next_command(job: models.Job) -> str:
         sm.DOWNLOADED: f"python pipeline/automation/cli.py resolve-layout --job {key}",
         sm.NEEDS_LAYOUT: layout_next_step(job),
         sm.SEGMENTING: "wait — candidate generation in progress",
-        sm.NEEDS_REVIEW: (f"open intake.html (or: python pipeline/automation/cli.py "
-                          f"segment-list --video-id {job.payload.get('videoId')})"),
+        # Name the page that exists. `intake.html` is a redirect stub kept
+        # for old bookmarks, and sending someone to a stub when the review
+        # UI is a scroll away on the portal is a needless extra hop.
+        sm.NEEDS_REVIEW: (f"review the proposed maps at "
+                          f"http://localhost:8000/portal.html#pipeline "
+                          f"(start it with `python pipeline/serve.py`), or from "
+                          f"the terminal: python pipeline/automation/cli.py "
+                          f"segment-list --video-id {job.payload.get('videoId')}"),
         sm.READY_FOR_DETECTION: f"python pipeline/automation/cli.py detect-job {key}",
         sm.PROCESSING: "wait — detection in progress",
         sm.NEEDS_TEMPLATES: (f"python pipeline/automation/cli.py template-coverage "

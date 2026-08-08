@@ -116,6 +116,50 @@
 .pbtn--quiet { background: transparent; color: var(--muted); }
 .pbtn--quiet:hover { color: var(--text); }
 
+/* ------------------------------------------------- machine readiness card */
+.ready {
+  border: 1px solid var(--line); border-left-width: 3px; border-radius: 12px;
+  padding: 14px 17px; margin: 12px 0 0; background: var(--bg-raise);
+}
+.ready[hidden] { display: none; }
+.ready.is-ok { border-color: rgba(46, 189, 107, .5); background: var(--st-ok-soft); }
+.ready.is-ok .rk-head b { color: var(--st-ok); }
+.ready.is-warn { border-color: rgba(232, 161, 60, .5); background: var(--st-warn-soft); }
+.ready.is-warn .rk-head b { color: var(--st-warn); }
+.ready.is-bad { border-color: rgba(255, 92, 100, .55); background: var(--st-bad-soft); }
+.ready.is-bad .rk-head b { color: var(--st-bad); }
+.rk-head {
+  display: flex; flex-wrap: wrap; gap: 8px 14px;
+  align-items: center; justify-content: space-between;
+}
+.rk-head b { font-size: .92rem; font-family: var(--display); }
+.rk-lead { margin: 8px 0 0; font-size: .82rem; color: var(--muted); max-width: 76ch; }
+.rk-list { list-style: none; margin: 12px 0 0; padding: 0; }
+.rk-row { display: flex; gap: 10px; padding: 9px 0; border-top: 1px solid var(--line); }
+.rk-row:first-child { border-top: 0; padding-top: 4px; }
+.rk-mark {
+  flex: 0 0 auto; width: 19px; height: 19px; border-radius: 50%;
+  display: grid; place-items: center; font-size: .68rem; font-weight: 700;
+  border: 1px solid var(--line-bright); color: var(--muted); margin-top: 1px;
+}
+.rk-row.is-ok .rk-mark { border-color: var(--st-ok); color: var(--st-ok); }
+.rk-row.is-warn .rk-mark { border-color: var(--st-warn); color: var(--st-warn); }
+.rk-row.is-bad .rk-mark { border-color: var(--st-bad); color: var(--st-bad); }
+.rk-body { min-width: 0; flex: 1 1 auto; }
+.rk-body b { font-size: .85rem; display: block; }
+.rk-detail {
+  font-size: .78rem; color: var(--muted); display: block; margin-top: 1px;
+  overflow-wrap: anywhere;
+}
+.rk-fix { margin-top: 7px; }
+.rk-fix-lbl {
+  font: 600 .68rem var(--display); letter-spacing: .1em;
+  text-transform: uppercase; color: var(--amber); display: block; margin-bottom: 3px;
+}
+.rk-note { margin: 5px 0 0; font-size: .78rem; color: var(--muted); max-width: 76ch; }
+.rk-more { margin-top: 10px; }
+.rk-more summary { cursor: pointer; font-size: .8rem; color: var(--muted); }
+
 /* ------------------------------------------------------------- OS picker */
 .os-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 6px; }
 .os-tabs button {
@@ -128,6 +172,15 @@
   color: var(--amber); border-color: var(--amber); background: var(--amber-soft);
 }
 .os-detected { font-size: .76rem; color: var(--muted); margin: 0 0 18px; }
+
+/* --------------------------------------------------- stale-clone nudge */
+.g-update {
+  border: 1px solid var(--line-bright); border-radius: 12px;
+  padding: 13px 16px; margin: 0 0 18px; background: var(--bg-raise);
+  font-size: .84rem; color: var(--muted); max-width: 76ch;
+}
+.g-update b { color: var(--text); }
+.g-update .term { margin: 10px 0 0; }
 
 /* ------------------------------------------------ prerequisite downloads */
 /* The card a brand-new machine needs before any command can work. It is

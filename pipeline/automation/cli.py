@@ -1667,6 +1667,10 @@ def cmd_status(args: argparse.Namespace) -> int:
 
 
 def main(argv: list[str] | None = None) -> int:
+    # Before ANY print: this CLI's output contains characters cp1252 cannot
+    # encode, and a redirected stdout on Windows would otherwise die with
+    # UnicodeEncodeError rather than run the command.
+    proc_text.enable_utf8_stdio()
     p = argparse.ArgumentParser(description="OWCS automation operator CLI")
     p.add_argument("--db", default=js.DEFAULT_DB, help="automation DB path")
     sub = p.add_subparsers(dest="command", required=True)

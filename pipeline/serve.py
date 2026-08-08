@@ -64,6 +64,7 @@ import time
 PIPE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, PIPE_DIR)
 import db  # noqa: E402
+import proc_text  # noqa: E402  (UTF-8 in from subprocesses, UTF-8 out to the console)
 
 # The desktop application's own API surface (health, credentials, storage,
 # backups, updates, repair, review inbox, calibration editor). Lives in
@@ -851,6 +852,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
 def main(argv=None) -> int:
     global JOB_TIMEOUT
+    proc_text.enable_utf8_stdio()   # see proc_text: cp1252 cannot hold "→"
     ap = argparse.ArgumentParser(description="OWCS local control room")
     ap.add_argument("--port", type=int, default=8000)
     ap.add_argument("--host", default="127.0.0.1",

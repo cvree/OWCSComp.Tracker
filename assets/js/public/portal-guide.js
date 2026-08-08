@@ -175,7 +175,17 @@
             label: "Get Python for Windows ↗",
             warn: "On the installer's <b>first</b> screen, tick "
               + "<b>Add python.exe to PATH</b> before pressing Install. Miss it and "
-              + "every command below answers <code>'python' is not recognized</code>.",
+              + "every command below answers <code>'python' is not recognized</code>. "
+              + "Pick the plain <b>3.12</b> or <b>3.13</b> installer — the newest "
+              + "release is usually a month or two ahead of the ready-built image "
+              + "libraries this uses, and installing it means step 4 tries to compile "
+              + "them and fails asking for Visual C++.",
+            alt: "<b>Do not install Python from the Microsoft Store.</b> Windows ships "
+              + "a decoy <code>python</code> that opens the Store instead of running "
+              + "anything, and the Store copy installs packages somewhere the rest of "
+              + "this cannot see. If typing <code>python</code> opens the Store: "
+              + "<b>Settings → Apps → Advanced app settings → App execution aliases</b>, "
+              + "and switch <b>python.exe</b> and <b>python3.exe</b> off.",
           },
           {
             name: "Git",
@@ -232,8 +242,12 @@
           id: "clone",
           title: "Download the tracker",
           why: "This copies the whole project into a folder called <code>"
-            + FOLDER + "</code> inside wherever PowerShell currently is — normally "
-            + "your user folder, e.g. <code>C:\\Users\\you\\" + FOLDER + "</code>.",
+            + FOLDER + "</code> inside wherever PowerShell currently is — which, in a "
+            + "window you just opened, is your user folder: <code>C:\\Users\\you\\"
+            + FOLDER + "</code>. That is the right place. <b>Do not put it in OneDrive, "
+            + "Documents or Desktop</b> — those are synced folders, and OneDrive will "
+            + "try to upload every multi-gigabyte broadcast you download, locking the "
+            + "files while it does.",
           cmd: "git clone " + REPO,
           expect: "A few lines ending in <code>Resolving deltas: 100% … done.</code>",
           trouble: [
@@ -267,14 +281,24 @@
           id: "deps",
           title: "Install what it needs",
           why: "Reads <code>requirements.txt</code> and fetches the image and video "
-            + "libraries the detector uses. A few minutes the first time; instant afterwards.",
-          cmd: "pip install -r requirements.txt",
+            + "libraries the detector uses, including yt-dlp. A few minutes the first "
+            + "time; instant afterwards. <code>python -m pip</code> rather than plain "
+            + "<code>pip</code> on purpose — a machine with two Pythons has two pips, "
+            + "and the wrong one installs where nothing can find it.",
+          cmd: "python -m pip install -r requirements.txt",
           expect: "A wall of scrolling text ending in <code>Successfully installed …</code>.",
           trouble: [
-            ["<code>pip</code> is not recognised",
-              "Use <code>python -m pip install -r requirements.txt</code> instead."],
-            ["Permission denied",
+            ["<b>Microsoft Visual C++ 14.0 or greater is required</b>",
+              "Your Python is newer than the ready-built libraries. Nothing needs "
+              + "compiling here — install Python <b>3.12</b> or <b>3.13</b> from "
+              + "python.org instead, reopen PowerShell, and run this again."],
+            ["No matching distribution found",
+              "Same cause as above: too new a Python. Use 3.12 or 3.13."],
+            ["Permission denied, or Access is denied",
               "Add <code>--user</code> to the end of the command."],
+            ["It hangs, or SSL errors",
+              "Usually a corporate network or a VPN intercepting the connection. Try "
+              + "off the VPN."],
           ],
         },
         {
@@ -282,16 +306,47 @@
           title: "Install ffmpeg",
           why: "The tool that actually reads video frames. Without it the portal still "
             + "runs, but it cannot open a downloaded broadcast.",
-          cmd: "winget install Gyan.FFmpeg",
-          expect: "<code>Successfully installed</code>. Close PowerShell and reopen it "
-            + "afterwards so the new tool is on the path — then <code>cd " + FOLDER
-            + "</code> again.",
+          cmd: "winget install --id Gyan.FFmpeg -e --accept-source-agreements "
+            + "--accept-package-agreements",
+          expect: "<code>Successfully installed</code>. <b>Then close PowerShell and "
+            + "open a new one</b>, and <code>cd " + FOLDER + "</code> again — a window "
+            + "that was already open cannot see ffmpeg yet, and this is the single most "
+            + "common reason the next step says it is still missing.",
           trouble: [
             ["<code>winget</code> is not recognised",
-              "You are on an older Windows. Download a build from "
+              "An older Windows 10. Install <b>App Installer</b> from the Microsoft "
+              + "Store, or download a build from "
               + "<a href=\"https://www.gyan.dev/ffmpeg/builds/\" target=\"_blank\" "
-              + "rel=\"noopener noreferrer\">gyan.dev/ffmpeg/builds</a>, unzip it, and add its "
-              + "<code>bin</code> folder to your PATH."],
+              + "rel=\"noopener noreferrer\">gyan.dev/ffmpeg/builds</a> "
+              + "(<i>ffmpeg-release-essentials.zip</i>), unzip it to "
+              + "<code>C:\\ffmpeg</code>, and add <code>C:\\ffmpeg\\bin</code> to your "
+              + "PATH under <b>Settings → System → About → Advanced system settings → "
+              + "Environment Variables</b>."],
+            ["It asks you to agree to terms and stops",
+              "The command above already accepts them; if you typed a shorter version, "
+              + "copy this one instead."],
+            ["Installed, but the next step still says ffmpeg is missing",
+              "The terminal is stale. Close it, open a new PowerShell, "
+              + "<code>cd " + FOLDER + "</code>, and re-run the check."],
+          ],
+        },
+        {
+          id: "check",
+          title: "Check everything at once",
+          why: "<b>The step that saves the afternoon.</b> This inspects every tool the "
+            + "pipeline needs and prints one verdict per line. Finding every problem now "
+            + "beats discovering them one at a time, each of them several minutes into a "
+            + "job. Anything it marks FAIL comes with the exact command that fixes it.",
+          cmd: "python pipeline/preflight.py",
+          expect: "A list of lines ending in <code>READY for capture</code>. If it ends "
+            + "in <code>NOT READY — fix: …</code> instead, run the command shown under "
+            + "each FAIL line, then run this again until it says READY.",
+          trouble: [
+            ["It says ffmpeg is missing, but you just installed it",
+              "This terminal started before ffmpeg existed and cannot see it. Close it, "
+              + "open a new PowerShell, <code>cd " + FOLDER + "</code>, and run this again."],
+            ["<code>can't open file … preflight.py</code>",
+              "You are not inside the project folder — go back to step 3."],
           ],
         },
         {
@@ -567,6 +622,11 @@
     const saved = store.get(OS_KEY);
     if (saved && RECIPES[saved]) return saved;
     const ua = (navigator.userAgent || "") + " " + (navigator.platform || "");
+    /* Windows is matched positively, and is also the fallback. Everyone
+       operating this is on Windows, so an unrecognised browser landing on
+       the Windows walkthrough is right far more often than it is wrong —
+       and it is the only walkthrough that assumes nothing is installed. */
+    if (/Windows|Win32|Win64|WOW64/i.test(ua)) return "windows";
     if (/Mac|iPhone|iPad|iPod/i.test(ua)) return "mac";
     if (/Linux|X11|CrOS/i.test(ua) && !/Android/i.test(ua)) return "linux";
     return "windows";
@@ -660,9 +720,16 @@
 
       <div class="g-shortcuts">
         <span>Been here before?</span>
-        <button type="button" id="g-skip">I already have the project — just show me the last two steps</button>
+        <button type="button" id="g-skip">I already have the project — skip to the last two steps</button>
         ${done.size ? `<button type="button" id="g-reset">Start the walkthrough over</button>` : ""}
       </div>
+
+      ${done.has("clone") ? `<div class="g-update">
+        <b>Coming back after a while?</b> Fetch the latest version first — fixes
+        land here often, and an old copy runs into problems that no longer exist.
+        Run this from inside the project folder.
+        ${termCard(r, "git pull")}
+      </div>` : ""}
 
       ${prereqCard(r, done.has("prereq"))}
 
@@ -811,7 +878,7 @@
 
   document.addEventListener("owcs:portal-mode", (ev) => {
     const d = (ev && ev.detail) || {};
-    if (d.api) { showLive(!!d.running); stopWatch(); }
+    if (d.api) { showLive(!!d.running); stopWatch(); loadReadiness(); }
     else { showStatic(); startWatch(); }
   });
 
@@ -847,6 +914,104 @@
     if (ev.target.id !== "g-reload") return;
     const u = (($("ik-url") || {}).value || "").trim();
     location.href = "portal.html" + (u ? "?url=" + encodeURIComponent(u) : "");
+  });
+
+  /* ================================================================== */
+  /*  3b · is this machine actually ready?                              */
+  /* ================================================================== */
+
+  /* A control room answering /api/ping only proves Python started. It does
+     not prove ffmpeg is installed, that cv2 imported, or that yt-dlp is
+     there — and each of those fails LATER, one at a time, several minutes
+     into a job, which is how a five-minute setup turns into an afternoon.
+     /api/preflight already knows all of it; this puts the whole answer on
+     the page before the first link is pasted. */
+
+  const READY_LABELS = {
+    python: "Python", ffmpeg: "ffmpeg (reads video frames)",
+    ffprobe: "ffprobe (checks clips)", "yt-dlp": "yt-dlp (downloads the VOD)",
+    "js-runtime": "JavaScript runtime (helps yt-dlp)",
+    opencv: "OpenCV (the detector itself)", database: "Local database",
+    source: "Source", layout: "Layout", writable: "Folder permissions",
+  };
+
+  function readyRow(c) {
+    const cls = c.status === "fail" ? "bad" : c.status === "warn" ? "warn" : "ok";
+    const mark = c.status === "fail" ? "✕" : c.status === "warn" ? "!" : "✓";
+    return `<li class="rk-row is-${cls}">
+      <span class="rk-mark" aria-hidden="true">${mark}</span>
+      <div class="rk-body">
+        <b>${esc(READY_LABELS[c.name] || c.name)}</b>
+        <span class="rk-detail">${esc(c.detail || "")}</span>
+        ${c.status !== "ok" && (c.remedy || c.note)
+          ? `<div class="rk-fix">
+              <span class="rk-fix-lbl">Fix it:</span>
+              ${c.remedy ? `<code class="ik-cmd">${esc(c.remedy)}</code>` : ""}
+              ${c.note ? `<p class="rk-note">${esc(c.note)}</p>` : ""}
+             </div>` : ""}
+      </div>
+    </li>`;
+  }
+
+  function renderReady(res) {
+    const host = $("portal-ready");
+    if (!host) return;
+    host.hidden = false;
+    const checks = (res && res.checks) || [];
+    const bad = checks.filter((c) => c.status === "fail");
+    const warn = checks.filter((c) => c.status === "warn");
+    const rows = checks.filter((c) => c.status !== "ok" || !bad.length);
+
+    if (!checks.length) {
+      host.className = "ready is-warn";
+      host.innerHTML = `<div class="rk-head"><b>Could not check this machine</b>
+        <button type="button" class="pbtn pbtn--quiet rk-recheck">Try again</button></div>
+        <p class="rk-lead">Run <code>python pipeline/preflight.py</code> in the
+        terminal for the full answer.</p>`;
+      return;
+    }
+    if (!bad.length && !warn.length) {
+      host.className = "ready is-ok";
+      host.innerHTML = `<div class="rk-head">
+          <b>✓ Everything this needs is installed and working</b>
+          <button type="button" class="pbtn pbtn--quiet rk-recheck">Re-check</button>
+        </div>
+        <details class="rk-more"><summary>Show the ${checks.length} checks</summary>
+          <ul class="rk-list">${checks.map(readyRow).join("")}</ul></details>`;
+      return;
+    }
+    host.className = "ready is-" + (bad.length ? "bad" : "warn");
+    host.innerHTML = `<div class="rk-head">
+        <b>${bad.length
+          ? `${bad.length} thing${bad.length === 1 ? "" : "s"} still to install`
+          : `Ready, with ${warn.length} thing${warn.length === 1 ? "" : "s"} worth knowing`}</b>
+        <button type="button" class="pbtn pbtn--quiet rk-recheck">Re-check</button>
+      </div>
+      <p class="rk-lead">${bad.length
+        ? "The pipeline will stop on these. Every fix below is a whole command — "
+          + "click to copy it, run it in the terminal, then press Re-check. "
+          + "Some need the terminal closed and reopened first."
+        : "None of these stop a job; they make one slower or less reliable."}</p>
+      <ul class="rk-list">${rows.map(readyRow).join("")}</ul>`;
+  }
+
+  function loadReadiness() {
+    const host = $("portal-ready");
+    if (!host) return;
+    host.hidden = false;
+    host.className = "ready is-busy";
+    host.innerHTML = `<div class="rk-head"><b>Checking this machine…</b></div>`;
+    fetch("/api/preflight", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
+      .then(renderReady)
+      .catch(() => renderReady(null));
+  }
+
+  document.addEventListener("click", (ev) => {
+    if (ev.target.closest && ev.target.closest(".rk-recheck")) {
+      ev.preventDefault();
+      loadReadiness();
+    }
   });
 
   /* ================================================================== */

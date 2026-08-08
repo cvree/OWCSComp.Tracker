@@ -226,6 +226,11 @@
         </div>
       </div>
 
+      <!-- Everything this machine needs, checked in one pass and answered in
+           one place. Written by portal-guide.js from /api/preflight; absent
+           on static hosting, where there is no machine to check. -->
+      <section class="ready" id="portal-ready" hidden aria-live="polite"></section>
+
       <code class="ik-cmd" id="ik-cmd-preview" hidden></code>
       <pre id="ik-live-log" hidden></pre>
       <div class="flow-strip" aria-label="pipeline stages">

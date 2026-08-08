@@ -42,10 +42,27 @@ import proc_text  # noqa: E402  (UTF-8 subprocess decoding)
 MIN_PY = (3, 10)
 DB_REMEDY = "python pipeline/init_db.py --with-sample"
 
+# A remedy is meant to be COPIED, so `remedy` holds a whole command that
+# works as written on a clean Windows install and NOTHING else — no
+# parentheses, no "then do X". Advice that is not itself runnable goes in
+# `note`, which is printed beside the command and never copied with it.
+# Mixing the two produced remedies that could not be pasted anywhere.
+#
+# `python -m pip` rather than `pip`, because a machine with more than one
+# Python has more than one `pip`, and the wrong one installs into an
+# interpreter this process is not running.
+PIP_REMEDY = "python -m pip install -r requirements.txt"
+FFMPEG_REMEDY = ("winget install --id Gyan.FFmpeg -e "
+                 "--accept-source-agreements --accept-package-agreements")
+REOPEN_NOTE = ("Then CLOSE this terminal and open a new one — a window that "
+               "was already open cannot see a program installed after it "
+               "started.")
 
-def _check(name: str, status: str, detail: str, remedy: str = "") -> dict:
+
+def _check(name: str, status: str, detail: str, remedy: str = "",
+           note: str = "") -> dict:
     return {"name": name, "status": status, "detail": detail,
-            "remedy": remedy}
+            "remedy": remedy, "note": note}
 
 
 def _tool_version(exe: str, args: list[str] | None = None,
@@ -71,37 +88,53 @@ def check_python() -> dict:
     ok = (v.major, v.minor) >= MIN_PY
     return _check("python", "ok" if ok else "fail",
                   f"Python {v.major}.{v.minor}.{v.micro}",
-                  "" if ok else f"install Python >= "
-                               f"{MIN_PY[0]}.{MIN_PY[1]}")
+                  "",
+                  "" if ok else
+                  f"Install Python {MIN_PY[0]}.{MIN_PY[1]} or newer from "
+                  f"python.org, and tick \"Add python.exe to PATH\" on the "
+                  f"installer's first screen.")
 
 
 def check_ffmpeg(runner=subprocess) -> dict:
     ok, line = _tool_version("ffmpeg", runner=runner)
     return _check("ffmpeg", "ok" if ok else "fail", line,
-                  "" if ok else "install ffmpeg (Windows: winget install "
-                                "ffmpeg) and ensure it is on PATH")
+                  "" if ok else FFMPEG_REMEDY,
+                  "" if ok else REOPEN_NOTE)
 
 
 def check_ffprobe(runner=subprocess) -> dict:
     ok, line = _tool_version("ffprobe", runner=runner)
     return _check("ffprobe", "ok" if ok else "warn", line,
-                  "" if ok else "ffprobe ships with ffmpeg — reinstall "
-                                "ffmpeg; clip validation falls back to a "
-                                "byte-size check without it")
+                  "" if ok else FFMPEG_REMEDY,
+                  "" if ok else "ffprobe ships alongside ffmpeg, so this "
+                                "means the ffmpeg install is incomplete. "
+                                + REOPEN_NOTE)
 
 
 def check_ytdlp(runner=subprocess) -> dict:
     ok, line = _tool_version("yt-dlp", ["--version"], runner=runner)
     return _check("yt-dlp", "ok" if ok else "warn",
                   f"yt-dlp {line}" if ok else line,
-                  "" if ok else "install with `pip install yt-dlp` — only "
-                                "needed for YouTube capture; local MP4 mode "
-                                "works without it")
+                  "" if ok else PIP_REMEDY,
+                  "" if ok else "yt-dlp is in requirements.txt. Only YouTube "
+                                "capture needs it — local MP4 files work "
+                                "without it.")
 
 
 def check_js_runtime(which=shutil.which) -> dict:
-    import video_ingest as vi
-    name, path = vi.detect_js_runtime(which)
+    # `video_ingest` reaches cv2 through `capture`, and a machine that is
+    # MISSING cv2 is precisely the machine someone runs this on. Importing it
+    # unguarded meant the readiness check died of the fault it exists to
+    # report — a traceback about cv2 while checking for a JS runtime, with
+    # the ffmpeg and yt-dlp lines never printed at all. The probe itself is a
+    # PATH lookup, so it is repeated here rather than depended upon.
+    try:
+        import video_ingest as vi
+        name, path = vi.detect_js_runtime(which)
+    except Exception:  # noqa: BLE001 — any import failure, not just cv2's
+        name, path = next((("deno" if n == "deno" else "node", p)
+                           for n in ("deno", "node") for p in [which(n)] if p),
+                          (None, None))
     if name == "deno":
         return _check("js-runtime", "ok", f"deno at {path}")
     if name == "node":
@@ -111,9 +144,10 @@ def check_js_runtime(which=shutil.which) -> dict:
     return _check("js-runtime", "warn",
                   "no Deno/Node found — yt-dlp may stall on some YouTube "
                   "formats",
-                  "install Node.js (winget install OpenJS.NodeJS.LTS) or "
-                  "Deno; the capture ladder + direct-url fallback still "
-                  "apply without one")
+                  "winget install --id OpenJS.NodeJS.LTS -e "
+                  "--accept-source-agreements --accept-package-agreements",
+                  "Optional. The download ladder and the direct-url fallback "
+                  "still work without it, just less reliably. " + REOPEN_NOTE)
 
 
 def check_opencv() -> dict:
@@ -123,7 +157,7 @@ def check_opencv() -> dict:
     except Exception as e:
         return _check("opencv", "fail",
                       f"cv2 import failed: {type(e).__name__}: {e}",
-                      "pip install opencv-python-headless")
+                      PIP_REMEDY)
 
 
 REQUIRED_TABLES = ("heroes", "teams", "matches", "comp_snapshots")
@@ -269,17 +303,40 @@ def run_checks(source: str | None = None, layout: str | None = None,
     ok is True when nothing FAILED (warnings are allowed — the run degrades
     honestly). need_youtube=False relaxes yt-dlp to informational (local MP4
     runs don't need it)."""
+    def _safe(name, fn, *a, **kw) -> dict:
+        """Run one check without letting it take the other nine with it.
+
+        This is the tool someone runs BECAUSE their install is broken, so a
+        check throwing is an expected input, not an impossible one. An
+        unguarded raise used to replace the whole readiness report with a
+        traceback about whichever check happened to be first — the operator
+        then never learned that ffmpeg was missing too.
+        """
+        try:
+            return fn(*a, **kw)
+        except Exception as e:  # noqa: BLE001 — reporting beats propagating
+            return _check(name, "fail",
+                          f"the {name} check itself failed: "
+                          f"{type(e).__name__}: {e}",
+                          PIP_REMEDY,
+                          "A check that cannot run is usually an incomplete "
+                          "install. If reinstalling the requirements does not "
+                          "clear it, this one is a bug worth reporting.")
+
     checks = [
-        check_python(),
-        check_ffmpeg(),
-        check_ffprobe(),
-        check_ytdlp(),
-        check_js_runtime(),
-        check_opencv(),
-        check_database(db_path, fix=fix_db),
-        check_source(source, sources_path),
-        check_layout(resolve_layout(source, layout, sources_path)),
-        check_writable(),
+        _safe("python", check_python),
+        _safe("ffmpeg", check_ffmpeg),
+        _safe("ffprobe", check_ffprobe),
+        _safe("yt-dlp", check_ytdlp),
+        _safe("js-runtime", check_js_runtime),
+        _safe("opencv", check_opencv),
+        _safe("database", check_database, db_path, fix=fix_db),
+        _safe("source", check_source, source, sources_path),
+        # resolve_layout reads the sources file, so it can throw too; fold
+        # both halves into the one guarded call.
+        _safe("layout", lambda: check_layout(
+            resolve_layout(source, layout, sources_path))),
+        _safe("writable", check_writable),
     ]
     if need_youtube and source:
         # a youtube capture NEEDS yt-dlp — escalate its warn to fail
@@ -294,6 +351,7 @@ def run_checks(source: str | None = None, layout: str | None = None,
 
 
 def main(argv=None) -> int:
+    proc_text.enable_utf8_stdio()
     ap = argparse.ArgumentParser(description="Capture readiness checks")
     ap.add_argument("--source", help="also check this source id + its layout")
     ap.add_argument("--layout", help="check this layout path explicitly")
@@ -313,6 +371,8 @@ def main(argv=None) -> int:
             print(f"  {icon[c['status']]}  {c['name']:<10} {c['detail']}")
             if c["remedy"]:
                 print(f"        -> {c['remedy']}")
+            if c.get("note"):
+                print(f"           {c['note']}")
         print()
         print("READY for capture" if res["ok"] else
               f"NOT READY — fix: {', '.join(res['failed'])}")
