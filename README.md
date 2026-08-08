@@ -291,11 +291,57 @@ python pipeline/export_data.py --public   # writes assets/data/public_data.v1.js
 The committed `data/owcs.sqlite` already contains the ingested Nepal
 milestone, so this works on a fresh clone without re-processing any video.
 
+### Acquisition: sparse first, download only what needs depth
+
+The pipeline no longer fetches a broadcast to look at it. The shape is:
+
+```
+YouTube VOD
+  └─ sparse remote frames  (pipeline/remote_frames.py — HTTP range, ~60s apart)
+      └─ gameplay filtering (gameplay_state.py, unchanged)
+          └─ automatic HUD calibration (calibrate_source.py, unchanged)
+              └─ download ONLY the identified map window
+                  └─ baseline hero detection      ┐  ingest_map.py,
+                      └─ 1s dense recapture       ├─ the adaptive pass,
+                          └─ temporal consensus   ┘  unchanged
+                              └─ evidence → review → publish
+```
+
+Calibrating a HUD needs about a dozen frames. It used to cost the whole
+broadcast; it now costs those frames:
+
+```bash
+# calibrate a broadcast the tracker has never seen — no VOD download
+python pipeline/calibrate_remote.py --url "<youtube-url>" \
+  --source-id owcs-jksix-qwc --out layouts/owcs_jksix_qwc.json \
+  --windows-out work/owcs-jksix-qwc.windows.json
+```
+
+It samples at 60s, densifies to 30s and then only around offsets that
+already showed HUD structure, and stops as soon as a trial calibration
+clears `calibrate_source`'s own confidence floor with margin. Frames are
+cached under `work/remote_frames/<video>/<height>p/` keyed by video +
+timestamp + resolution, so a re-run costs nothing. `--windows-out` records
+where the live play was, which is the window the deep pass should download.
+
+`pipeline/capture.py` samples remotely by default too; `--full-download`
+restores the old behaviour for a CDN that will not serve byte ranges.
+
+Measure it yourself — the benchmark runs both paths and compares the
+layouts they produce:
+
+```bash
+python pipeline/benchmark_capture.py --fixture          # offline, real HTTP
+python pipeline/benchmark_capture.py --url "<youtube-url>" --yes
+```
+
 ### Re-process the Nepal map from scratch
 
 Requires the local clip (`work/clips/nepal_720p.mp4`; the 7 GB VOD and clips
 are **not** shipped — see *Downloading a VOD* below). Clip `t=0` maps to
-stream offset 1795 s.
+stream offset 1795 s. The calibration step below is the pre-2026 form, kept
+because it is exactly reproducible from the committed clip; `calibrate_remote`
+above is what a NEW broadcast should use.
 
 ```bash
 python pipeline/calibrate_source.py --clip work/clips/nepal_720p.mp4 \
@@ -380,6 +426,12 @@ throttling.
 direct-URL and `--download-sections` fetches. What works: download the full
 720p60 file (chunked, fast; loop to resume the `.part` after 403s — only the
 map's byte prefix is needed), then cut the window locally with ffmpeg.
+
+That is the DEEP pass, and it now only happens for a window the sparse scan
+has already identified as live play. If even the range-based sparse scan is
+refused on a given broadcast, `capture.py --full-download` and the clip
+route above still work — `remote_frames` reports the failure and says so
+rather than silently falling back to gigabytes.
 
 ---
 

@@ -11,7 +11,58 @@ no always-on server, no backend. A large language model may help you build
 templates or eyeball failures during development, but it is never the
 production frame classifier.
 
+## Acquisition: never fetch what you are not going to look at
+
+Before any of the stages below, there is a decision about how many bytes
+this costs. A HUD calibration reads about a dozen frames; a full-map hero
+timeline reads a few thousand from a fifteen-minute window. Neither needs
+the nine-hour broadcast, and until 2026 both paid for it anyway.
+
+```
+YouTube VOD
+  └─ sparse remote frames        pipeline/remote_frames.py
+     one `yt-dlp -g` to resolve a direct media URL, then HTTP-range seeks
+     with ffmpeg — ~60s apart, video-only, 1080p preferred, cached by
+     video + timestamp + resolution
+      └─ gameplay filtering       gameplay_state.py (unchanged)
+          └─ HUD calibration      calibrate_source.py (unchanged)
+              └─ the sparse scan reports WHERE the live play was
+                  └─ download ONLY that window   download_vod_clip.py
+                      └─ baseline detection + 1s dense recapture
+                         ingest_map.py — the adaptive pass, unchanged
+                          └─ temporal consensus → evidence → review
+```
+
+`pipeline/calibrate_remote.py` drives the top half. It starts at 60-second
+sampling, densifies to 30 seconds when that yields too few clean frames,
+and only then densifies further — and only around offsets that already
+showed HUD structure, because gameplay clusters and the pre-show will never
+improve by being sampled twice as hard. It stops as soon as a trial
+calibration clears `calibrate_source`'s own confidence floor with margin.
+
+Two properties are worth stating explicitly because they are easy to lose:
+
+* **The frames that calibrate are chosen by the existing filter.** The
+  layout-free chip screen only nominates candidates; once a provisional
+  layout exists, every acquired frame goes through
+  `gameplay_state.classify_frame` and only `gameplay` survives.
+* **The confidence floor is not this module's to relax.** The survivors are
+  handed to `calibrate_source.py --frames-dir`, which refuses exactly as it
+  always did.
+
+`pipeline/benchmark_capture.py` measures the difference, holding everything
+after acquisition identical so only the acquisition varies. `--fixture`
+runs it offline over a real byte-range HTTP server that counts what it
+sends.
+
+Batching matters as much as sparseness. Sixty-second samples are fetched as
+individual seeks, because a contiguous read across a one-minute gap would
+transfer the minute; a one-second dense burst is fetched as ONE contiguous
+read, because the bytes between those frames were coming anyway.
+`remote_frames.plan_batches` is that decision, as a pure function.
+
 ## The four stages
+
 
 The layer is split into four small modules so each stage is independently
 runnable and testable. They live in `pipeline/` and are driven by

@@ -8,6 +8,30 @@ VOD or touches FACEIT.
 
 Everything runs on a handful of frames, never the whole 6-hour stream.
 
+## The short version (2026): one command, no download
+
+Steps 1–3 below are now a single command that fetches only the frames it
+needs, straight out of the broadcast over HTTP range requests:
+
+```
+python3 pipeline/calibrate_remote.py --url "<broadcast-url>" \
+    --source-id owcs-afcxdimpsle --out layouts/owcs_afcxdimpsle.json \
+    --windows-out work/owcs-afcxdimpsle.windows.json
+```
+
+It samples at 60s, densifies to 30s if that finds too few clean frames, and
+then only densifies around offsets that already showed HUD structure. It
+throws away desk/replay/scoreboard frames with the SAME
+`gameplay_state.classify_frame` production detection uses, and hands the
+survivors to `calibrate_source.py --frames-dir` — so the confidence floor,
+the refusal, the annotated sheet and the provenance block are all exactly
+what they were. `--windows-out` records where the live play was, which is
+the window the deep pass should download.
+
+The manual five steps below still work and are still the right thing when
+you already have a clip on disk, or when a broadcast will not serve byte
+ranges. Step 4 (hero templates) is unchanged either way.
+
 ## The five steps
 
 ### 1. Sample 10–20 frames from a gameplay window

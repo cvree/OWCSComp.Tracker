@@ -124,6 +124,28 @@
       '<span class="stat__v" style="font-size:1.3rem">Open →</span>' +
       '<span class="stat__note">teach the tracker a new broadcast</span></a>' +
       "</div>" +
+      /* The command a new broadcast actually needs. It samples the
+         broadcast about sixty seconds apart over a range request, keeps
+         only the frames the gameplay filter accepts, and stops as soon as
+         the calibration is confident — so it costs a few megabytes rather
+         than the whole VOD. */
+      '<div class="u-mt-5">' + P.note("info",
+        "Calibrating a new broadcast does not need the video",
+        "<p>Point this at any broadcast URL. It samples it remotely, throws away the " +
+        "desk and replay frames, and calibrates from what is left — then tells you " +
+        "which windows contain live play, so the deep pass only downloads one of " +
+        "those instead of the whole stream.</p>" +
+        '<pre class="console u-mt-3" style="max-height:none">' +
+        esc('python3 pipeline/calibrate_remote.py --url "<broadcast-url>" \\\n' +
+            "  --source-id <source> --out layouts/<source>.json \\\n" +
+            "  --windows-out work/<source>.windows.json") + "</pre>",
+        '<button class="btn btn--sm" data-copy="' +
+        esc('python3 pipeline/calibrate_remote.py --url "<broadcast-url>" ' +
+            "--source-id <source> --out layouts/<source>.json " +
+            "--windows-out work/<source>.windows.json") +
+        '">Copy the command</button>' +
+        '<a class="btn btn--sm btn--ghost" href="calibrate.html">Use the browser wizard instead</a>'
+      ) + "</div>" +
       (missingTemplates.length
         ? '<div class="u-mt-5">' + P.note("warn", "Some broadcasts have no hero reference images",
           "<p>Detection cannot name a hero it has never seen a reference crop of. Build them " +

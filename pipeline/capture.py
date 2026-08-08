@@ -3,11 +3,22 @@
 capture.py — Stage 3A: VOD → gameplay frames.
 
 For each match with status='final', a vod_url, and no comp snapshots yet:
-  1. download the VOD with yt-dlp (~720p),
-  2. extract one frame every N seconds with ffmpeg,
-  3. keep only frames classified as LIVE GAMEPLAY (HUD anchor present,
-     replay marker absent), delete the rest,
-  4. delete the VOD (free-CI disk hygiene).
+  1. fetch ONLY the sampled frames from the broadcast, by HTTP range
+     (pipeline/remote_frames.py) — the whole VOD is never downloaded,
+  2. keep only frames classified as LIVE GAMEPLAY (HUD anchor present,
+     replay marker absent), delete the rest.
+
+WHY THIS NO LONGER DOWNLOADS THE VOD
+Sampling every five minutes of a nine-hour broadcast wants about a hundred
+frames. The old path fetched several gigabytes of video to produce them and
+then deleted it — paying for 100% of the bytes to keep 0.001% of the
+pixels, every single run. `remote_frames` resolves one direct media URL and
+seeks to each sample with an HTTP range request instead, which costs a few
+hundred kilobytes per frame and caches what it fetches.
+
+`--full-download` restores the old behaviour for the cases that genuinely
+need the file (a broadcast whose CDN refuses range requests, or an offline
+archive), and `--dry-run` on a local file is unchanged.
 
 Gameplay classification is deterministic template matching against small
 reference crops defined in a per-broadcast layout config (layouts/*.json):
@@ -33,6 +44,8 @@ Usage:
       # process a local file, print a keep/reject report, write nothing
   python3 pipeline/capture.py --layout ... --match m01
       # only this match id
+  python3 pipeline/capture.py --layout ... --full-download
+      # the old behaviour: fetch the whole VOD first
 
 Requires: yt-dlp and ffmpeg on PATH (pip install yt-dlp).
 """
@@ -292,15 +305,78 @@ def extract_frames(video_path: str, out_dir: str, interval: int) -> list[str]:
 
 
 def download_vod(url: str, out_path: str) -> None:
-    """~720p keeps HUD icons legible while staying small for free CI."""
+    """The WHOLE broadcast, ~720p. Only reached via --full-download now.
+
+    Kept because two situations still need a local file: a CDN that refuses
+    range requests, and archiving a broadcast that is about to disappear.
+    Neither is the common case, which is why it is no longer the default."""
     cmd = ["yt-dlp", "-f", "bv*[height<=720]+ba/b[height<=720]/b",
            "--no-playlist", "-o", out_path, url]
     subprocess.run(cmd, check=True)
 
 
+def sample_frames_remotely(url: str, frames_dir: str, interval: int,
+                           duration: float | None = None,
+                           height: int = 720, max_frames: int = 400,
+                           source_id: str | None = None,
+                           cache_root: str | None = None,
+                           resolver=None) -> dict:
+    """Fetch the sampled frames straight out of the remote broadcast.
+
+    Same output contract as `extract_frames`: one image per sample, named by
+    its offset, so everything downstream is unchanged. What differs is that
+    the bytes for the other 99.9% of the broadcast are never transferred.
+
+    Returns {"frames": [...paths], "offsets": [...], "stats": {...}}.
+    """
+    import remote_frames as rf
+
+    if duration is None:
+        try:
+            import video_ingest as vi
+            duration = float(vi.probe_vod(url).get("duration") or 0.0)
+        except Exception:            # noqa: BLE001 — a probe failure is data
+            duration = 0.0
+    if not duration:
+        raise ValueError(
+            "could not determine the broadcast's duration, so there is "
+            "nothing to sample across — pass a duration or use "
+            "--full-download")
+
+    offsets = [float(t) for t in range(0, int(duration), int(interval))]
+    if len(offsets) > max_frames:
+        # Thin the ladder evenly rather than truncating it: a capped run
+        # must still cover the whole broadcast, not just its first hour.
+        step = len(offsets) / float(max_frames)
+        offsets = [offsets[int(i * step)] for i in range(max_frames)]
+
+    src = rf.RemoteFrameSource(url, height=height, cache_root=cache_root,
+                               source_id=source_id,
+                               **({"resolver": resolver} if resolver else {}))
+    got = src.grab(offsets)
+    os.makedirs(frames_dir, exist_ok=True)
+    frames = []
+    for t in sorted(got):
+        path = got[t]
+        if not path:
+            continue
+        dest = os.path.join(frames_dir, f"{int(round(t)):06d}.png")
+        img = cv2.imread(path)
+        if img is None:
+            continue
+        cv2.imwrite(dest, img)
+        frames.append(dest)
+    return {"frames": frames, "offsets": sorted(got), "stats": src.report()}
+
+
 # ------------------------------------------------------------------ run
 def process_video(video_path: str, frames_dir: str, layout: dict,
-                  report_only: bool = False) -> dict:
+                  report_only: bool = False, frames: list | None = None) -> dict:
+    """Classify sampled frames as gameplay or not.
+
+    `frames` lets a caller supply frames it already has (the remote sparse
+    path does), so the classification half of this function is shared by
+    both acquisition modes rather than duplicated."""
     anchor = _load_template(layout, "anchor")
     replay = _load_template(layout, "replay")
     rejects = _load_reject_markers(layout)
@@ -308,7 +384,8 @@ def process_video(video_path: str, frames_dir: str, layout: dict,
         raise ValueError("layout must define an 'anchor' region+template")
 
     interval = layout.get("sample_interval_seconds", 300)
-    frames = extract_frames(video_path, frames_dir, interval)
+    if frames is None:
+        frames = extract_frames(video_path, frames_dir, interval)
 
     kept, rejected = [], []
     for fp in frames:
@@ -345,6 +422,12 @@ def main() -> None:
                     help="classify a local video file and report; no DB, no deletes")
     ap.add_argument("--max", type=int, default=2,
                     help="max VODs per run (free-CI budget)")
+    ap.add_argument("--full-download", action="store_true",
+                    help="fetch the entire VOD before sampling (the old "
+                         "behaviour; only needed when the CDN refuses range "
+                         "requests, or to archive the file)")
+    ap.add_argument("--height", type=int, default=720,
+                    help="max frame height to request (sparse mode)")
     args = ap.parse_args()
 
     layout = load_layout(args.layout)
@@ -366,16 +449,41 @@ def main() -> None:
         print("Nothing to capture: no final matches with a vod_url and no snapshots.")
         return
 
+    interval = layout.get("sample_interval_seconds", 300)
     for m in todo:
         mdir = os.path.join(WORK_DIR, m["id"])
         frames_dir = os.path.join(mdir, "frames")
-        video = os.path.join(mdir, "vod.mp4")
         os.makedirs(mdir, exist_ok=True)
-        print(f"[{m['id']}] downloading {m['vod_url']}")
-        download_vod(m["vod_url"], video)
-        print(f"[{m['id']}] extracting + classifying frames")
-        res = process_video(video, frames_dir, layout)
-        os.remove(video)  # disk hygiene for free CI
+
+        if args.full_download:
+            video = os.path.join(mdir, "vod.mp4")
+            print(f"[{m['id']}] --full-download: fetching the whole VOD "
+                  f"{m['vod_url']}")
+            download_vod(m["vod_url"], video)
+            print(f"[{m['id']}] extracting + classifying frames")
+            res = process_video(video, frames_dir, layout)
+            os.remove(video)  # disk hygiene for free CI
+        else:
+            print(f"[{m['id']}] sampling every {interval}s straight from "
+                  f"{m['vod_url']} (no VOD download)")
+            try:
+                acq = sample_frames_remotely(
+                    m["vod_url"], frames_dir, interval,
+                    height=args.height, source_id=m["id"])
+            except Exception as exc:      # noqa: BLE001
+                print(f"[{m['id']}] sparse acquisition FAILED — {exc}")
+                print(f"[{m['id']}] retry with --full-download if this "
+                      f"broadcast will not serve byte ranges")
+                continue
+            st = acq["stats"]
+            print(f"[{m['id']}] acquired {len(acq['frames'])} frame(s) "
+                  f"({st['framesFromCache']} from cache) in "
+                  f"{st['ffmpegCalls']} read(s), {st['ytdlpCalls']} yt-dlp call(s)"
+                  + (f", {st['bytesDownloaded'] / 1e6:.1f} MB"
+                     if st.get("bytesDownloaded") is not None else ""))
+            res = process_video(None, frames_dir, layout,
+                                frames=acq["frames"])
+
         print(f"[{m['id']}] kept {len(res['kept'])} gameplay frames "
               f"({len(res['rejected'])} rejected) → {frames_dir}")
         print(f"[{m['id']}] next: python3 pipeline/detect.py "

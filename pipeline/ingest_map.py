@@ -36,6 +36,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import shutil
 import statistics
 import subprocess
 import sys
@@ -81,14 +82,40 @@ def log(msg: str) -> None:
 
 # ------------------------------------------------------------ frame supply
 class FrameServer:
-    """Extract + cache frames from the local clip by STREAM offset."""
+    """Extract + cache frames by STREAM offset.
 
-    def __init__(self, clip: str, clip_offset: float, frames_dir: str):
+    Two backends, one contract — `get(t)` returns the frame at stream
+    offset t or None:
+
+      * **local clip** (the default, and unchanged): ffmpeg seeks the
+        downloaded file. This is what the full-map timeline has always
+        used, and its behaviour here is byte-for-byte what it was.
+      * **remote** (`remote_source=`): the same offsets fetched by HTTP
+        range straight from the broadcast, so a deep pass can run without
+        a local copy at all. Only reached when a caller asks for it.
+
+    `prefetch(ts)` is the improvement to the adaptive dense pass. The dense
+    pass asks for runs of consecutive one-second offsets around every
+    suspected hero change; fetching those one process at a time is how a
+    twenty-second window turns into twenty ffmpeg launches. Prefetching
+    pulls each contiguous run in ONE read — the same mechanism
+    `extract_baseline` has always used for the baseline ladder — and writes
+    to exactly the same cache paths, so `get()` then finds them already
+    there and every downstream observation is identical.
+    """
+
+    def __init__(self, clip: str | None, clip_offset: float, frames_dir: str,
+                 remote_source=None):
         self.clip = clip
         self.clip_offset = clip_offset
         self.dir = frames_dir
+        self.remote = remote_source
         os.makedirs(frames_dir, exist_ok=True)
         self._cache: dict[float, str | None] = {}
+        self.stats = {"singleReads": 0, "batchedReads": 0,
+                      "framesFromBatch": 0}
+        if self.remote is None and not clip:
+            raise ValueError("FrameServer needs a clip or a remote source")
 
     def path_for(self, t: float) -> str:
         return os.path.join(self.dir, f"t{t:09.1f}.jpg")
@@ -100,16 +127,96 @@ class FrameServer:
             return self._cache[t]
         out = self.path_for(t)
         if not os.path.exists(out):
-            ct = t - self.clip_offset
-            if ct < 0:
-                self._cache[t] = None
-                return None
-            cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error",
-                   "-ss", f"{ct:.3f}", "-i", self.clip, "-frames:v", "1",
-                   "-q:v", "2", "-y", out]
-            subprocess.run(cmd, check=False)
+            if self.remote is not None:
+                got = self.remote.grab([t]).get(t)
+                if got and got != out:
+                    _copy_frame(got, out)
+            else:
+                ct = t - self.clip_offset
+                if ct < 0:
+                    self._cache[t] = None
+                    return None
+                cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error",
+                       "-ss", f"{ct:.3f}", "-i", self.clip, "-frames:v", "1",
+                       "-q:v", "2", "-y", out]
+                subprocess.run(cmd, check=False)
+                self.stats["singleReads"] += 1
         self._cache[t] = out if os.path.exists(out) else None
         return self._cache[t]
+
+    def prefetch(self, ts, step: float = 1.0) -> int:
+        """Pull many offsets with as few reads as possible.
+
+        Optional by construction: every frame still lands at `path_for(t)`,
+        so a caller that skips this gets identical frames from `get()`, just
+        one process at a time. Returns how many frames it materialised.
+        """
+        wanted = sorted({round(float(t), 1) for t in ts})
+        wanted = [t for t in wanted if not os.path.exists(self.path_for(t))]
+        if not wanted:
+            return 0
+        if self.remote is not None:
+            got = self.remote.grab(wanted)
+            n = 0
+            for t, src in got.items():
+                if not src:
+                    continue
+                dest = self.path_for(t)
+                if src != dest:
+                    _copy_frame(src, dest)
+                if os.path.exists(dest):
+                    self._cache[t] = dest
+                    n += 1
+            self.stats["framesFromBatch"] += n
+            return n
+
+        made = 0
+        for run in _contiguous_runs(wanted, step):
+            if len(run) < 3:
+                # Two frames are not worth a filter graph; the per-frame
+                # seek is already the cheapest thing for them.
+                for t in run:
+                    if self.get(t):
+                        made += 1
+                continue
+            made += self._extract_run(run, step)
+        return made
+
+    def _extract_run(self, run: list[float], step: float) -> int:
+        """One ffmpeg call for a contiguous, uniformly-spaced run.
+
+        Exactly the mechanism `extract_baseline` uses for the baseline
+        ladder, applied to a dense window."""
+        t0 = run[0]
+        ct = t0 - self.clip_offset
+        if ct < 0:
+            return 0
+        dur = (run[-1] - t0) + step
+        pattern = os.path.join(self.dir, f"dense{int(t0 * 10):09d}_%05d.jpg")
+        cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error",
+               "-ss", f"{ct:.3f}", "-t", f"{dur:.3f}", "-i", self.clip,
+               "-vf", f"fps=1/{step}", "-q:v", "2", "-start_number", "0",
+               "-y", pattern]
+        subprocess.run(cmd, check=False)
+        self.stats["batchedReads"] += 1
+        made = 0
+        i = 0
+        while True:
+            src = pattern % i
+            if not os.path.exists(src):
+                break
+            t = round(t0 + i * step, 1)
+            dest = self.path_for(t)
+            if os.path.exists(dest):
+                os.remove(src)
+            else:
+                os.replace(src, dest)
+            if os.path.exists(dest):
+                self._cache[t] = dest
+                made += 1
+            i += 1
+        self.stats["framesFromBatch"] += made
+        return made
 
     def extract_baseline(self, start: float, end: float, every: float) -> list[float]:
         """Bulk-extract the baseline ladder in ONE ffmpeg call.
@@ -149,6 +256,25 @@ class FrameServer:
             ts.append(t)
             i += 1
         return ts
+
+
+def _contiguous_runs(ts: list[float], step: float) -> list[list[float]]:
+    """Split sorted offsets into runs spaced exactly `step` apart."""
+    runs: list[list[float]] = []
+    for t in ts:
+        if runs and abs(t - runs[-1][-1] - step) < 1e-6:
+            runs[-1].append(t)
+        else:
+            runs.append([t])
+    return runs
+
+
+def _copy_frame(src: str, dest: str) -> None:
+    try:
+        os.makedirs(os.path.dirname(dest), exist_ok=True)
+        shutil.copyfile(src, dest)
+    except OSError:
+        pass
 
 
 # ------------------------------------------------------------- observation
@@ -1027,7 +1153,22 @@ def run(args) -> dict:
                               args.ingest_id, "frames")
     os.makedirs(crops_dir, exist_ok=True)
 
-    fs = FrameServer(args.clip, args.clip_offset, frames_dir)
+    # The deep pass normally works on a downloaded window — that is the
+    # right shape for it, because a dense one-second sweep over the same
+    # fifteen minutes is exactly the case where a local file wins. When a
+    # caller has no clip (`--remote-url`), the same offsets are fetched by
+    # HTTP range instead, so a swap can be re-checked without ever
+    # downloading the broadcast.
+    remote_src = None
+    if getattr(args, "remote_url", None):
+        import remote_frames as rf
+        remote_src = rf.RemoteFrameSource(
+            args.remote_url, height=getattr(args, "remote_height", 1080),
+            source_id=args.source_id)
+        log(f"frames: HTTP range from the broadcast "
+            f"(video {remote_src.key}) — no clip downloaded")
+    fs = FrameServer(args.clip, args.clip_offset, frames_dir,
+                     remote_source=remote_src)
 
     # scale layout once against a probe frame
     probe_t = args.start
@@ -1097,6 +1238,26 @@ def run(args) -> dict:
     log(f"dense pass: {len(dense_windows)} windows "
         f"({len(unlock_windows)} post-unlock grace/recheck)")
     seen_ts = {o["t"] for o in observations}
+
+    # Work out every dense offset FIRST, then pull them in as few reads as
+    # possible. The windows and the offsets are exactly what they always
+    # were — this changes only how many processes fetch them, which is the
+    # difference between one ffmpeg launch per second of window and one per
+    # window. `get()` below still asks for each frame individually, and is
+    # still the thing that decides whether it exists.
+    dense_ts = []
+    for (t0, t1) in sorted(dense_windows):
+        t = t0 + DENSE_STEP
+        while t < t1:
+            rt = round(t, 1)
+            if rt not in seen_ts:
+                dense_ts.append(rt)
+            t += DENSE_STEP
+    if dense_ts and getattr(args, "batch_dense", True):
+        made = fs.prefetch(dense_ts, step=DENSE_STEP)
+        log(f"dense pass: prefetched {made}/{len(dense_ts)} frame(s) in "
+            f"{fs.stats['batchedReads']} batched read(s)")
+
     for (t0, t1) in sorted(dense_windows):
         t = t0 + DENSE_STEP
         while t < t1:
@@ -1329,7 +1490,17 @@ def run(args) -> dict:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--clip", required=True, help="local clip file")
+    ap.add_argument("--clip", help="local clip file (the normal deep-pass "
+                    "input; omit it and pass --remote-url instead)")
+    ap.add_argument("--remote-url", help="fetch frames by HTTP range from "
+                    "this broadcast instead of a downloaded clip")
+    ap.add_argument("--remote-height", type=int, default=1080,
+                    help="max frame height to request with --remote-url")
+    ap.add_argument("--no-batch-dense", dest="batch_dense",
+                    action="store_false", default=True,
+                    help="fetch dense-pass frames one ffmpeg call at a time "
+                         "(the pre-2026 behaviour; identical frames, more "
+                         "processes)")
     ap.add_argument("--clip-offset", type=float, default=0.0,
                     help="stream offset (s) of clip t=0")
     ap.add_argument("--start", type=float, required=True,
@@ -1362,6 +1533,9 @@ def main(argv=None) -> int:
     ap.add_argument("--ocr-engine", default="easyocr",
                     choices=["easyocr", "tesseract", "paddle", "none"])
     args = ap.parse_args(argv)
+    if not args.clip and not args.remote_url:
+        ap.error("give --clip (a downloaded window) or --remote-url "
+                 "(fetch the frames by range from the broadcast)")
     run(args)
     return 0
 
