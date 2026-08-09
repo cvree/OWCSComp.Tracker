@@ -50,7 +50,7 @@
       '<span class="eyebrow" style="margin:0;justify-self:start">' + esc(s[1]) + "</span>" +
       "<h3>" + esc(s[2]) + "</h3>" +
       '<p class="small dim" style="margin:0">' + esc(s[3]) + "</p>" +
-      '<span class="mono small" style="color:var(--lime)">jump to guide →</span>' +
+      '<span class="mono small" style="color:var(--cyan)">jump to guide →</span>' +
     "</a>").join("");
 
   const g = (host, title, intro, steps, opt) => {
@@ -217,9 +217,9 @@
               "this site reads.",
         command: "python3 pipeline/export_data.py" },
       { title: "Confirm the site is reading production, not a fixture",
-        body: "Reload any page and look at the ticker under the header: it must say " +
-              "<b>PRODUCTION</b>. If it says <b>DEMO FIXTURE</b> and a pink bar appears, the page " +
-              "is still on demo data.",
+        body: "Reload any page and read the dataset line under the header: it must say " +
+              "<b>Production dataset</b>. If it says <b>Demo fixture</b> and a labelled bar " +
+              "appears under it, the page is still on demo data.",
         note: "It is deliberately impossible to browse demo data here without being told." },
       { title: "Re-run the tests, then commit",
         body: "The suite checks referential integrity, evidence paths and the demo/production split.",

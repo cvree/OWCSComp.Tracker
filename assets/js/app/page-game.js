@@ -73,22 +73,44 @@
       blocked: ["Fix the blocker", "#blockers", "btn--primary"],
     }[game.state];
 
+    /* The fixture, not a sentence. Where the record names two teams the
+       header is a scoreboard — marks, names and the score — because that
+       is what a person scanning this page is looking for. Where it does
+       not, the broadcast title takes the h1 instead; inventing a
+       fixture out of a run id would be a lie. */
+    const named = a || b;
+    const scored = game.scoreA != null || game.scoreB != null;
+    const fixture = named
+      ? '<div class="matchbar u-mt-4">' +
+          '<div class="matchbar__side">' +
+            P.teamPlate(game.teamA, { size: "lg", link: !!a, win: game.winner === game.teamA }) +
+          "</div>" +
+          (scored
+            ? '<div class="matchbar__score">' + P.scorePlate(game.scoreA, game.scoreB,
+              game.winner === game.teamA ? "a" : game.winner === game.teamB ? "b" : null) + "</div>"
+            : '<div class="matchbar__score"><span class="game-card__vs">vs</span></div>') +
+          '<div class="matchbar__side matchbar__side--end">' +
+            P.teamPlate(game.teamB, { size: "lg", link: !!b, win: game.winner === game.teamB }) +
+          "</div>" +
+        "</div>"
+      : "";
+
     document.getElementById("head").innerHTML =
       '<div class="page-head page-head--tight">' +
-        '<div class="row">' + P.stateChip(game.state) +
+        (meta.length ? '<p class="eyebrow">' + meta.join(" · ") + "</p>" : "") +
+        '<h1' + (named ? ' class="visually-hidden"' : "") + ">" +
+          (named
+            ? esc((a ? a.name : "Team A")) + " vs " + esc((b ? b.name : "Team B"))
+            : esc(game.title)) + "</h1>" +
+        fixture +
+        '<div class="row u-mt-4">' + P.stateChip(game.state) +
         (game.state === "published" && game.compCount
           ? '<span class="chip" data-state="evidence"><span class="dot"></span>' +
             game.compCount + " verified line-up" + (game.compCount === 1 ? "" : "s") + "</span>"
           : "") + "</div>" +
-        '<h1 class="u-mt-4" style="font-size:clamp(1.8rem,3.6vw,2.8rem)">' +
-          (a || b
-            ? esc((a ? a.name : "Team A")) + ' <span class="dim" style="font-size:.6em">vs</span> ' +
-              esc((b ? b.name : "Team B"))
-            : esc(game.title)) + "</h1>" +
-        (meta.length ? '<p class="dim u-mt-3">' + meta.join(" · ") + "</p>" : "") +
         '<p class="lede u-mt-4">' + esc(P.STATE_WORDS[game.state].say) +
         (game.summary ? " " + esc(game.summary) : "") + "</p>" +
-        '<div class="row u-mt-5">' +
+        '<div class="row u-mt-4">' +
           '<a class="btn ' + primary[2] + '" href="' + esc(primary[1]) + '">' + esc(primary[0]) + "</a>" +
           (game.sourceUrl
             ? '<a class="btn btn--ghost" href="' + esc(game.sourceUrl) +

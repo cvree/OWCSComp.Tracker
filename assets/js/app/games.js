@@ -299,37 +299,87 @@
     g.steps.map((s) => '<span class="railflow__seg" data-state="' + s.state + '"></span>').join("") +
     "</span>";
 
+  /* One published composition per team for this match, newest first, so
+     a card can show the actual heroes instead of another chip. Nothing
+     is invented: if review has not approved anything, this is empty and
+     the card simply does not show a line-up. */
+  G.cardComps = function (g, limit) {
+    if (!g || !g.match) return [];
+    const out = [];
+    const seen = new Set();
+    P.publishedComps()
+      .filter((c) => c.matchId === g.id)
+      .forEach((c) => {
+        if (seen.has(c.teamId)) return;
+        seen.add(c.teamId);
+        out.push(c);
+      });
+    return out.slice(0, limit || 2);
+  };
+
+  /* The match is the point of the card. Tournament and stage sit on top
+     as a quiet label; teams, score, heroes and maps carry the weight;
+     pipeline state stays small. */
   G.card = function (g) {
-    const teams = g.teamA || g.teamB
-      ? '<div class="game-card__teams">' +
-        P.teamPlate(g.teamA, { win: g.winner === g.teamA }) +
-        '<span class="game-card__vs">vs</span>' +
-        P.teamPlate(g.teamB, { win: g.winner === g.teamB }) + "</div>"
+    const named = g.teamA || g.teamB;
+    const scored = g.scoreA != null || g.scoreB != null;
+
+    const context = [];
+    if (g.tournamentName) context.push(P.esc(g.tournamentName));
+    if (g.scheduledAt) context.push(P.esc(P.fmtDate(g.scheduledAt)));
+
+    const fixture = named
+      ? '<div class="game-card__fixture">' +
+        '<div class="game-card__side">' +
+          P.teamPlate(g.teamA, { win: g.winner === g.teamA }) + "</div>" +
+        (scored
+          ? P.scorePlate(g.scoreA, g.scoreB,
+            g.winner === g.teamA ? "a" : g.winner === g.teamB ? "b" : null)
+          : '<span class="game-card__vs">vs</span>') +
+        '<div class="game-card__side game-card__side--end">' +
+          P.teamPlate(g.teamB, { win: g.winner === g.teamB }) + "</div>" +
+        "</div>"
       : '<div class="game-card__title u-trunc">' + P.esc(g.title) + "</div>";
 
-    const meta = [];
-    if (g.tournamentName) meta.push(P.esc(g.tournamentName));
-    if (g.scheduledAt) meta.push(P.esc(P.fmtDate(g.scheduledAt)));
-    if (g.mapCount) meta.push(g.mapCount + (g.mapCount === 1 ? " map" : " maps"));
-    if (g.window) meta.push("window " + P.esc(g.window));
+    const comps = G.cardComps(g, 2);
+    const lineups = comps.length
+      ? '<div class="game-card__comps">' + comps.map((c) => {
+        const t = P.team(c.teamId);
+        return '<div class="game-card__comp">' +
+          '<span class="game-card__comp-k">' + P.esc(t ? (t.code || t.name) : "Line-up") + "</span>" +
+          P.compStrip(c.heroes, { size: "xs", tight: true }) + "</div>";
+      }).join("") + "</div>"
+      : "";
 
-    const cta = { published: "View match stats", review: "Review this game",
+    const mapNames = (g.maps || []).map((m) => {
+      const cat = P.mapInfo ? P.mapInfo(m.map) : null;
+      return cat && cat.name ? cat.name : m.map;
+    }).filter(Boolean).slice(0, 4);
+
+    const foot = [];
+    if (mapNames.length) foot.push(P.esc(mapNames.join(" · ")));
+    else if (g.mapCount) foot.push(g.mapCount + (g.mapCount === 1 ? " map" : " maps"));
+    if (g.window) foot.push("window " + P.esc(g.window));
+
+    const cta = { published: "View match", review: "Review this game",
       working: "Watch progress", queued: "See status", blocked: "Fix the blocker" }[g.state];
 
     return '<a class="game-card" href="' + P.esc(g.href) + '">' +
-      '<div class="game-card__top">' + P.stateChip(g.state) +
+      (context.length
+        ? '<div class="game-card__context">' + context.join(" · ") + "</div>" : "") +
+      fixture +
+      lineups +
+      '<div class="game-card__foot">' +
+        (foot.length ? '<div class="game-card__meta">' + foot.join(" · ") + "</div>" : "") +
+        '<span class="game-card__cta">' + P.esc(cta) + " <span aria-hidden=\"true\">→</span></span>" +
+      "</div>" +
+      '<div class="game-card__state">' + P.stateChip(g.state) +
       (g.state === "published" && g.compCount
         ? '<span class="chip" data-state="evidence"><span class="dot"></span>' + g.compCount +
           " verified line-up" + (g.compCount === 1 ? "" : "s") + "</span>"
         : "") +
-      '<span class="spacer"></span>' +
-      (g.scoreA != null || g.scoreB != null ? P.scorePlate(g.scoreA, g.scoreB,
-        g.winner === g.teamA ? "a" : g.winner === g.teamB ? "b" : null) : "") +
+      '<span class="spacer"></span>' + G.railflow(g) +
       "</div>" +
-      teams +
-      (meta.length ? '<div class="game-card__meta">' + meta.join(" · ") + "</div>" : "") +
-      G.railflow(g) +
-      '<div class="game-card__cta">' + P.esc(cta) + " <span aria-hidden=\"true\">→</span></div>" +
       "</a>";
   };
 

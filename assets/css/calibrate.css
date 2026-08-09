@@ -14,7 +14,7 @@
 
 :root {
   --amber: var(--gold);
-  --amber-soft: rgba(217, 169, 79, .12);
+  --amber-soft: var(--wash-gold);
   --bg-raise: var(--s1);
   --display: var(--f-display);
   --mono: var(--f-mono);
@@ -28,10 +28,10 @@
 /* generic controls the wizard markup uses */
 .btnrow { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-4); }
 .btn-primary {
-  background: linear-gradient(160deg, var(--gold-hi), var(--gold));
+  background: var(--gold);
   color: var(--gold-ink); border-color: transparent; font-weight: 700;
 }
-.btn-primary:hover { background: linear-gradient(160deg, #ffdc9c, var(--gold-hi)); }
+.btn-primary:hover { background: var(--gold-hi); }
 .btn-ghost { background: transparent; color: var(--tx-2); }
 .btn-ghost:hover { background: var(--s2); color: var(--tx); }
 .field { display: grid; gap: var(--s-2); margin: var(--s-4) 0; }
@@ -40,9 +40,9 @@
 .pill {
   display: inline-flex; align-items: center; padding: 2px 8px;
   border-radius: var(--r-pill); font: 600 11px/1.6 var(--f-body);
-  background: rgba(139, 149, 171, .14); color: var(--tx-2);
+  background: var(--wash-grey); color: var(--tx-2);
 }
-.pill.info { color: #a8e6f8; background: rgba(76, 198, 234, .13); }
+.pill.info { color: #96dcf2; background: var(--wash-cyan); }
 
 /* the wizard's own inline status line — one element, three states */
 .note:empty { display: none; }
@@ -51,9 +51,9 @@
   border: 1px solid var(--line-2); border-radius: var(--r-2);
   background: var(--s1); color: var(--tx-2); font-size: 13.5px;
 }
-.note.ok { border-color: rgba(53, 207, 141, .4); color: #93ecc4; }
-.note.bad { border-color: rgba(255, 95, 107, .45); color: #ffb2b8; }
-.note.warn { border-color: rgba(240, 168, 58, .42); color: #ffcc82; }
+.note.ok { border-color: rgba(53, 207, 141, .4); color: #7ee2b4; }
+.note.bad { border-color: rgba(229, 72, 77, .45); color: #ff9ea1; }
+.note.warn { border-color: rgba(232, 163, 61, .42); color: #f5c07a; }
 
 .cal-wrap { max-width: 940px; margin: 0 auto; padding: 26px 22px 90px; }
 
@@ -70,7 +70,7 @@
 /* ------------------------------------------------- portal handoff card */
 .cal-handoff {
   display: flex; flex-direction: column; gap: 5px; margin-top: 18px;
-  border: 1px solid rgba(255, 169, 43, .38); background: var(--amber-soft);
+  border: 1px solid rgba(243, 167, 47, .34); background: var(--amber-soft);
   border-radius: 12px; padding: 13px 16px;
 }
 /* `display:flex` outranks the UA `[hidden]` rule, so without this the card
@@ -99,7 +99,7 @@
 .cal-cmd {
   display: flex; align-items: center; gap: 10px;
   border: 1px solid var(--line-bright); border-radius: 8px;
-  background: #04070e; padding: 8px 10px;
+  background: var(--well); padding: 8px 10px;
 }
 .cal-cmd code {
   flex: 1 1 auto; min-width: 0; color: #d8e6ff;
@@ -170,7 +170,7 @@ kbd {
 .cal-video-wrap { margin-bottom: 18px; }
 .cal-video-wrap[hidden] { display: none; }
 #video {
-  width: 100%; max-height: 56vh; background: #04070e; display: block;
+  width: 100%; max-height: 56vh; background: var(--well); display: block;
   border: 1px solid var(--line); border-radius: 12px;
 }
 .cal-scrub { display: flex; align-items: center; gap: 12px; margin: 10px 0 4px; }
@@ -202,7 +202,7 @@ kbd {
 }
 .cal-progress > i {
   display: block; height: 100%; width: 0;
-  background: linear-gradient(90deg, var(--amber), #ff7a2b);
+  background: var(--gold);
   transition: width .3s ease;
 }
 .cal-progress-label { color: var(--muted); font-size: .88rem; margin: 0 0 14px; }
@@ -211,7 +211,7 @@ kbd {
 .cal-stage-wrap { margin-bottom: 16px; }
 .cal-stage {
   position: relative; border: 1px solid var(--line); border-radius: 12px;
-  overflow: hidden; background: #04070e; touch-action: none; user-select: none;
+  overflow: hidden; background: var(--well); touch-action: none; user-select: none;
 }
 .cal-stage canvas { display: block; width: 100%; height: auto; }
 
@@ -238,7 +238,7 @@ kbd {
 .cal-zoom figure { margin: 0; text-align: center; }
 .cal-zoom canvas {
   display: block; width: 72px; height: 72px; image-rendering: pixelated;
-  border: 2px solid var(--line); border-radius: 8px; background: #04070e;
+  border: 2px solid var(--line); border-radius: 8px; background: var(--well);
 }
 .cal-zoom figure[data-side="a"] canvas { border-color: rgba(255,169,43,.55); }
 .cal-zoom figure[data-side="b"] canvas { border-color: rgba(34,211,238,.55); }

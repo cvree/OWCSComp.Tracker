@@ -21,25 +21,31 @@
     renderHealth();
   });
 
-  /* ------------------------------------------------------------ tiles */
+  /* ------------------------------------------------------------ tiles
+     Analytics cards, not alert blocks. The number carries the semantic
+     colour; the surface stays neutral. A card only takes an accent edge
+     when its count is non-zero, so a clear queue reads as calm rather
+     than as four emergencies. */
   function renderTiles() {
     const c = G.counts();
     const comps = P.publishedComps().length;
-    const tile = (href, key, value, accent, note) =>
-      '<a class="stat rv" href="' + href + '" data-accent="' + accent + '">' +
+    const tile = (href, key, value, accent, note, cta) =>
+      '<a class="stat rv" href="' + href + '" data-accent="' + accent + '"' +
+      (value ? ' data-alert="1"' : "") + ">" +
       '<span class="stat__k">' + esc(key) + "</span>" +
       '<span class="stat__v" data-count-to="' + value + '">' + value + "</span>" +
-      '<span class="stat__note">' + note + "</span></a>";
+      '<span class="stat__note">' + note + "</span>" +
+      '<span class="stat__cta">' + esc(cta) + " <span aria-hidden=\"true\">→</span></span></a>";
 
     P.mount("tiles",
-      tile("review.html", "Needs your review", c.review, "amber",
-        c.review ? "Confirm or correct what was detected" : "Nothing waiting — you are clear") +
+      tile("review.html", "Needs review", c.review, "amber",
+        c.review ? "Requires confirmation" : "Nothing waiting", "Review queue") +
       tile("games.html?state=working", "Processing now", c.working, "cyan",
-        c.working ? "Reading video right now" : "Nothing is being processed") +
+        c.working ? "Reading video" : "Idle", "Watch progress") +
       tile("games.html?state=blocked", "Blocked", c.blocked, "red",
-        c.blocked ? "Stuck on something a person must fix" : "No blockers") +
+        c.blocked ? "A person must intervene" : "No blockers", "See what stopped") +
       tile("stats.html", "Published line-ups", comps, "gold",
-        "Approved compositions backed by evidence"));
+        "Evidence-backed compositions", "Explore the data"));
   }
 
   /* ------------------------------------------------- waiting on you */

@@ -1,6 +1,131 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
-## CURRENT STATUS (authoritative — 2026-08-09, twelfth pass) — the product gets a face: candy brutalism
+## CURRENT STATUS (authoritative — 2026-08-09, thirteenth pass) — the face gets quieter: broadcast tooling
+
+> Additive to the twelfth pass below, and orthogonal to everything under
+> it: this pass touched **no** pipeline, detector, database or safety-gate
+> code, and removed **no** product functionality. It is a visual pass over
+> the shared design system and the app shell.
+
+### What changed, in one sentence
+
+The candy-brutalist look was reverted and the design system was rebuilt
+around the direction the file always claimed in its own header —
+**professional esports broadcast tooling** — with the Overwatch data, not
+the interface chrome, carrying the visual weight.
+
+### Why
+
+The twelfth pass ran too many loud treatments at once: poster-scale
+uppercase headlines, a highlighter block behind the hero sentence, six
+saturated accents competing, zero radius, 2–5px structural borders, hard
+offset shadows, chunky uppercase buttons, two stacked navigation rows and
+a scrolling ticker. The result read as a gaming theme applied to a product
+rather than as an instrument — which is a credibility problem, because the
+single strongest claim this product makes is that a person checked the
+data.
+
+### What the system looks like now
+
+* **Palette.** Neutral dark surfaces (`#090a0d` → `#1c2028`), hairline
+  `#272b34` borders, one warm accent (`--gold: #f3a72f`). Colour is
+  semantic only: gold published, amber needs a human, cyan working,
+  emerald evidence, indigo machine-detected, red blocked. **`--lime`,
+  `--magenta` and decorative `--violet` no longer exist as tokens** — a
+  saturated colour on this site now always means something.
+* **Geometry.** Real radii again (4 / 6 / 8 / 12 / pill), one 1px border
+  weight, `--bw-2` and `--bw-3` kept only for the two places a heavier
+  rule earns itself.
+* **Depth.** Every `Npx Npx 0` shadow is gone. Most panels cast none;
+  elevated surfaces get `0 1px 2px` + `0 8px 30px` at low alpha.
+  Hierarchy comes from surface steps and borders.
+* **Type.** Saira Condensed is now *reserved* — page titles, section
+  headings, scores, large numerals. Nothing is uppercased by the system.
+  Archivo carries body, nav, forms and labels; IBM Plex Mono carries
+  technical metadata, timestamps and commands.
+* **Structure.** `owcs.css` is one pass with **no override layer**. The
+  token block is the source of truth and `:root` is declared exactly once;
+  `test_meta_hub.py` fails the build if a second one appears.
+
+### The shell: three rows of chrome became one
+
+The permanent `.subnav` row and the scrolling `.ticker` are both gone.
+
+* The five secondary destinations (Teams · Guides · How it works · Tools ·
+  Calibrate) moved into a `<details>` **overflow menu** at the end of the
+  primary nav — plus the design system — and are appended to the existing
+  mobile sheet at ≤880px, where there is no room for a second control. No
+  destination was lost.
+* The ticker became `.dataline`: one static row, built from the same
+  export values, that reads *Production dataset · Updated 1d ago · 8
+  published compositions · 1 of 6 games published · 1 waiting on review*.
+  It still refuses to render rather than printing placeholders, and
+  staleness is now stated **in the word "stale"** as well as in amber.
+
+### The data got promoted
+
+* **Dashboard hero** is compact and mixed-case; "reviewed match data" is
+  accent *colour*, not a yellow rectangle. Two buttons, then the tiles.
+* **Stat cards** are analytics tiles: neutral surface, semantic colour on
+  the number only, a "Review queue →" affordance, and an accent left edge
+  **only when the count is non-zero** — a clear queue now looks calm.
+* **Match cards** lead with tournament/stage, then team marks + score,
+  then the actual **published hero line-ups** (`G.cardComps`), then maps.
+  Pipeline state moved to a small footer rule under the match.
+* **Game detail** opens with a real scoreboard (`.matchbar`): two large
+  team plates and the score. The `<h1>` is kept for assistive tech.
+
+### The trust model is untouched
+
+Published / reviewed / auto-high / detected / manual / needs-review /
+rejected / partial / failed / stale / demo all keep their meanings and
+their glyphs. `.trust`, `.gate`, `.spine`, evidence crops, confidence
+meters and the `detected → corrected` diff all still render; they are just
+quieter. No check in `test_site.py` was weakened.
+
+### Files changed
+
+**`assets/css/owcs.css`** (1,619 → 1,588 lines) — rewritten as a single
+coherent pass. Section 23 (the brutal layer) is deleted; the components
+that only existed there (`.slab`, `.guide`, `.cmdline`, `.gate`, `.trust`,
+`.spine`, `.numeral`, `.role-key`, `.hl`) are folded into the main system
+in restrained form. New: `.dataline`, `.more`, `.matchbar`, `.stat__cta`,
+`.game-card__fixture` / `__comps` / `__state`.
+
+**`assets/js/app/shell.js`** — `buildTicker` → `buildDataline`; the rail
+became the overflow menu (desktop `<details>` + mobile sheet section),
+with Escape and outside-click handling.
+
+**`assets/js/app/games.js`** — `G.cardComps()` and a rebuilt `G.card()`.
+
+**`assets/js/app/page-dashboard.js`**, **`page-game.js`**,
+**`page-styleguide.js`**, **`page-guide.js`**, **`index.html`** and the
+per-page eyebrow accents.
+
+**`assets/css/calibrate.css`** — literal colours mapped onto the new
+tokens; the adapter block is unchanged.
+
+**`pipeline/test_meta_hub.py`** — rewritten to guard the *new* system: no
+override layer, one `:root`, real radii, no hard shadows, no decorative
+colour tokens, no `.ticker`, no `.subnav`, headings not uppercased, and
+the alert-edge-only-when-non-zero rule.
+
+**New: `pipeline/render_check.js`** — loads every product page in jsdom,
+runs its scripts, and asserts no script error, one nav row, no marquee, a
+single status line, and that **every class the page renders is one the
+stylesheet defines** (which is how an unstyled block survives a redesign).
+Needs `npm install jsdom`; it is the only check outside the python suites.
+
+### Known, and pre-existing
+
+`pipeline/test_serve.py` has two failures ("run with frames gone → 400
+with remedy", "evidence job = layout debug, crop report, THEN vision
+dashboard"). Both are job-ordering / on-disk-frames concerns in
+`serve.py`; neither is touched by this pass.
+
+---
+
+## Twelfth pass (superseded by the thirteenth, above) — candy brutalism
 
 > Additive to the eleventh pass below, and deliberately orthogonal to it:
 > this pass touched **no** pipeline, detector, database or safety-gate code.

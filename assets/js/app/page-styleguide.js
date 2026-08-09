@@ -23,16 +23,18 @@
 
   /* ------------------------------------------------------------ rules */
   set("#sg-rules", [
-    ["Structure over decoration",
-     "Borders, blocks and hard offset shadows carry the hierarchy. Nothing is rounded and nothing is blurred. If a panel needs a gradient to look like a panel, it is not a panel."],
+    ["Hierarchy from surface, not ornament",
+     "Depth is four surface steps and a hairline border. Most panels cast no shadow at all. If a block needs a heavy frame to read as a block, the spacing around it is wrong."],
     ["Status is never colour alone",
      "Every state carries a glyph, a word, or both. Colour is a second channel, never the only one. This is an accessibility rule, not a style preference."],
-    ["Candy fills take ink text",
-     "A saturated fill is always paired with near-black text. Neon against white is how a bold palette becomes an unreadable one."],
+    ["Restraint is the product's credibility",
+     "This tool claims its data has been checked by a person. A screen that shouts reads like a fan site; a screen that is quiet reads like an instrument."],
     ["Colour must encode something",
-     "State, role, provenance, evidence. Gold is published, amber needs a human, cyan is working, emerald is evidence, red is blocked. Colour that encodes nothing is bone, ink or grey."],
+     "State, role, provenance, evidence. Gold is published, amber needs a human, cyan is working, emerald is evidence, indigo is machine-detected, red is blocked. Colour that encodes nothing is grey."],
     ["Motion is orientation and feedback",
-     "Blocks snap into place, controls press under the cursor, and that is all. The ticker is the single perpetual movement in the system and it stops completely under reduced motion."],
+     "A short fade-and-rise on arrival, a one-pixel lift on hover, and that is all. There is no perpetual movement anywhere in the system, and every transition stops under reduced motion."],
+    ["The data supplies the personality",
+     "Team marks, hero portraits, scores and maps are the colour on a page. The interface around them stays neutral so they are the first thing the eye lands on."],
     ["Uncertainty is never buried",
      "Confidence scores, requested versus actual resolution, expected versus actual crop counts and review status are surfaced by components, not hidden behind them."],
   ].map((r) =>
@@ -43,7 +45,8 @@
   const sw = (v, note) =>
     '<div class="card" style="display:grid;grid-template-columns:44px minmax(0,1fr);' +
       'grid-template-rows:auto auto;gap:2px var(--s-3);align-items:center;padding:var(--s-2)">' +
-      '<span style="grid-row:1/3;width:44px;height:44px;border:2px solid var(--ink);' +
+      '<span style="grid-row:1/3;width:44px;height:44px;border:1px solid var(--line-2);' +
+        'border-radius:var(--r-2);' +
         "background:var(" + v + ')"></span>' +
       '<span class="mono small" style="align-self:end;color:var(--tx)">' + esc(v) + "</span>" +
       '<span class="small dim" style="align-self:start">' + esc(note) + "</span></div>";
@@ -54,14 +57,20 @@
       sw("--amber", "needs a human") +
       sw("--cyan", "working right now") +
       sw("--emerald", "evidence, proven") +
-      sw("--violet", "detected, machine-authored") +
+      sw("--indigo", "detected, machine-authored, not yet confirmed") +
       sw("--red", "blocked, failed") +
     "</div>" +
-    '<h3 class="u-mt-5">Candy accents — added by this system</h3>' +
+    '<p class="small dim u-mt-3">There is no seventh, decorative colour. Anything that encodes ' +
+    "nothing is one of the neutrals below — which is why a saturated colour on this site can be " +
+    "trusted to mean something.</p>" +
+    '<h3 class="u-mt-5">Neutrals — everything that is not a signal</h3>' +
     '<div class="grid grid--3 u-mt-3">' +
-      sw("--lime", "primary accent, current selection, live meta") +
-      sw("--magenta", "movers, demo data, heat") +
-      sw("--bone", "structural borders and ink-on-candy") +
+      sw("--bg", "page") +
+      sw("--s1", "card") +
+      sw("--s2", "raised, hover") +
+      sw("--s3", "active, selected") +
+      sw("--line", "hairline border — one weight, everywhere") +
+      sw("--tx-2", "secondary text") +
     "</div>" +
     '<h3 class="u-mt-5">Roles</h3>' +
     '<div class="role-key u-mt-3">' +
@@ -76,18 +85,18 @@
   set("#sg-type",
     '<div class="card" style="padding:var(--s-5);display:grid;gap:var(--s-4)">' +
       '<div><span class="stat__k">Display · Saira Condensed 700 · headlines</span>' +
-        '<p style="font-family:var(--f-display);font-weight:700;font-size:clamp(34px,7vw,84px);' +
-        'line-height:.86;letter-spacing:-.015em;text-transform:uppercase;margin:6px 0 0">' +
+        '<p style="font-family:var(--f-display);font-weight:600;font-size:clamp(34px,5vw,68px);' +
+        'line-height:1;letter-spacing:-.025em;margin:6px 0 0">' +
         "Reviewed, not guessed</p></div>" +
-      '<div><span class="stat__k">Section · clamp(1.6rem, 3.2vw, 2.6rem)</span>' +
+      '<div><span class="stat__k">Section · clamp(1.35rem, 2.2vw, 1.85rem)</span>' +
         '<h2 style="margin:6px 0 0">Where everything stands</h2></div>' +
       '<div><span class="stat__k">Body · Archivo 400 · max 68ch</span>' +
-        '<p class="lede" style="margin:6px 0 0">Body copy is deliberately not condensed and not ' +
-        "uppercase. The headlines are the poster; the data is the product, and the data has to " +
-        "stay readable at length on a phone.</p></div>" +
+        '<p class="lede" style="margin:6px 0 0">Saira Condensed is reserved for titles, section ' +
+        "headings, scores and large numbers. Everything read at length — body copy, navigation, " +
+        "forms, labels — is Archivo, in mixed case.</p></div>" +
       '<div><span class="stat__k">Mono · IBM Plex Mono · commands, evidence, timestamps</span>' +
         '<p class="mono" style="margin:6px 0 0">python3 pipeline/run_owcs_auto.py --url "…" --start 0:06:00</p></div>' +
-      '<div><span class="stat__k">Numerals · outlined, section signage</span>' +
+      '<div><span class="stat__k">Numerals · tabular, section signage</span>' +
         '<span class="numeral" style="display:block;margin-top:6px">04</span></div>' +
     "</div>");
 
@@ -124,22 +133,22 @@
   const heroes = (D && D.heroes ? D.heroes : []).slice(0, 5).map((h) => h.id);
   set("#sg-blocks",
     '<div style="display:grid;gap:var(--s-4)">' +
-      '<div class="slab"><p class="eyebrow" style="background:var(--ink);color:var(--lime);' +
-        'justify-self:start;margin:0">Slab</p>' +
-        "<h2>The loud section break.</h2>" +
-        "<p>A saturated full-width block with ink text. Two or three per page, never adjacent. " +
-        "It exists to stop a scroll, not to decorate one.</p></div>" +
+      '<div class="slab"><p class="eyebrow" style="justify-self:start;margin:0">Panel</p>' +
+        "<h2>The section panel</h2>" +
+        "<p>A raised surface with one accent edge, for a callout or an explainer that has to read " +
+        "as a single block. It stops a scroll by being a different surface, not by shouting.</p></div>" +
       '<div class="grid grid--3">' +
-        '<div class="stat stat--lime" style="padding:var(--s-4)">' +
-          '<span class="stat__k">Stat tile</span>' +
+        '<div class="stat" data-accent="gold" data-alert="1">' +
+          '<span class="stat__k">Stat card</span>' +
           '<span class="stat__v">128</span>' +
-          '<span class="stat__note small dim">Oversized tabular numeral, candy accent, mono label.</span></div>' +
-        '<div class="card card--hoverable" style="padding:var(--s-4)"><h3>Pressable block</h3>' +
-          '<p class="small dim u-mt-3" style="margin-bottom:0">Hover and keyboard focus both push ' +
-          "the block up-left and grow its hard shadow; active presses it in. Reduced motion swaps " +
-          "the transform for a border change.</p></div>" +
+          '<span class="stat__note">Neutral surface; semantic colour on the number only.</span>' +
+          '<span class="stat__cta">Where this leads <span aria-hidden="true">&#8594;</span></span></div>' +
+        '<div class="card card--hoverable" style="padding:var(--s-4)"><h3>Hoverable card</h3>' +
+          '<p class="small dim u-mt-3" style="margin-bottom:0">Hover and keyboard focus lift the ' +
+          "card one pixel and lighten its surface and border. Reduced motion keeps the colour " +
+          "change and drops the movement.</p></div>" +
         '<div class="card spine spine--emerald" style="padding:var(--s-4)"><h3>Spine</h3>' +
-          '<p class="small dim u-mt-3" style="margin-bottom:0">A 6px candy edge carrying state ' +
+          '<p class="small dim u-mt-3" style="margin-bottom:0">A 3px accent edge carrying state ' +
           "without adding another badge. The most reused signal in the system.</p></div>" +
       "</div>" +
       '<div class="grid grid--2">' +
@@ -158,7 +167,6 @@
       "</div></div>" +
       "<div><h3>Buttons</h3><div class='row u-mt-3'>" +
         '<button type="button" class="btn btn--primary">Primary</button>' +
-        '<button type="button" class="btn btn--lime">Accent</button>' +
         '<button type="button" class="btn btn--cyan">Guide</button>' +
         '<button type="button" class="btn btn--good">Approve</button>' +
         '<button type="button" class="btn btn--danger">Reject</button>' +
@@ -212,15 +220,15 @@
   /* ---------------------------------------------------------- motion */
   set("#sg-motion",
     '<div class="card" style="padding:var(--s-4);display:grid;gap:var(--s-3)">' +
-      '<p class="small" style="margin:0">Motion here is <b>structural</b>: blocks snap into place ' +
-      "from a hard offset, matching the physics of the shadows. No parallax, no drift, and no " +
-      "ambient movement except the ticker.</p>" +
+      '<p class="small" style="margin:0">Motion here is <b>orientation and feedback only</b>: a ' +
+      "short rise on arrival and a one-pixel lift under the cursor. No parallax, no drift, and " +
+      "no ambient movement anywhere in the system.</p>" +
       P.dl([
         ["Smooth scroll", "Lenis, one instance, owned by app/motion.js"],
         ["Entrances", "GSAP + ScrollTrigger, with a watchdog that force-reveals"],
-        ["Hover pressure", "transform + hard shadow, 110ms, cubic-bezier(.16,1.2,.3,1)"],
-        ["Ticker", "46s linear loop, pauses on hover and focus"],
-        ["Reduced motion", "ticker stops and wraps, transforms drop, reveals go inert"],
+        ["Hover", "1px lift + surface and border shift, 130ms, cubic-bezier(.2,.6,.3,1)"],
+        ["Dataset status", "a static provenance line — there is no marquee"],
+        ["Reduced motion", "transforms drop, transitions collapse, reveals go inert"],
         ["Save-Data", "the motion layer never boots at all"],
       ]) +
       '<p class="small dim" style="margin:0">Content is never withheld by an animation: reveals ' +
