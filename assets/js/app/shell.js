@@ -17,7 +17,10 @@
 
   const P = window.OWCS;
   const esc = P.esc;
-  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  /* Guarded. An unguarded matchMedia call here threw on every renderer
+     that does not implement it, which killed this whole module before it
+     built the header, nav, search or footer. See P.media in core.js. */
+  const reduced = P.media("(prefers-reduced-motion: reduce)");
 
   const NAV = [
     { href: "index.html", label: "Dashboard", match: ["index.html", ""] },
@@ -26,6 +29,26 @@
     { href: "review.html", label: "Review", match: ["review.html"], pip: "review" },
     { href: "stats.html", label: "Stats",
       match: ["stats.html", "hero.html", "team.html", "teams.html"] },
+  ];
+
+  /* The five-item nav is the product's answer to "what is this for" and
+     it stays five. The rail below it is NOT a second nav and must never
+     become one: hero, map and composition data are TABS on the stats
+     page, not destinations, and putting them here would rebuild exactly
+     the page-per-dataset architecture the redesign removed (test_site.py
+     enforces that, deliberately).
+
+     What the rail carries is the set of real destinations that existed
+     only in the footer — which is "reachable" in the sense that a
+     basement is reachable. Five secondary surfaces, horizontally
+     scrollable so they cost no vertical space on a phone and none of
+     them is ever truncated out of existence. */
+  const RAIL = [
+    { href: "teams.html", label: "Teams", match: ["teams.html", "team.html"] },
+    { href: "guide.html", label: "Guides", match: ["guide.html"] },
+    { href: "how-it-works.html", label: "How it works", match: ["how-it-works.html"] },
+    { href: "tools.html", label: "Tools", match: ["tools.html"] },
+    { href: "calibrate.html", label: "Calibrate", match: ["calibrate.html"] },
   ];
 
   /* --------------------------------------------------------- header */
@@ -73,6 +96,35 @@
     const skip = document.querySelector(".skip-link");
     if (skip) skip.after(hdr); else document.body.prepend(hdr);
 
+    /* secondary rail — the data layers, on every page */
+    const rail = document.createElement("nav");
+    rail.className = "subnav";
+    rail.setAttribute("aria-label", "Data layers");
+    rail.innerHTML = '<div class="subnav__in">' + RAIL.map((r) =>
+      '<a href="' + r.href + '"' +
+      (r.match.indexOf(here) >= 0 ? ' aria-current="page"' : "") + ">" +
+      esc(r.label) + "</a>").join("") + "</div>";
+    hdr.after(rail);
+
+    let tail = rail;
+    /* Demo data must never be mistakable for production. The header pill
+       is not enough on its own — a solid bar is. It renders only when
+       the loaded export says so, so it cannot be left on by accident. */
+    if (P.pub && P.pub.meta && P.pub.meta.demo) {
+      const ribbon = document.createElement("div");
+      ribbon.className = "slab slab--magenta";
+      ribbon.setAttribute("role", "note");
+      ribbon.style.cssText = "padding:8px var(--s-5);border-left:0;border-right:0;box-shadow:none";
+      ribbon.innerHTML = "<p><b>Demo data.</b> Every team, score and composition on this build " +
+        "is a labelled fixture. Production exports replace this dataset. " +
+        '<a href="how-it-works.html">What that means →</a></p>';
+      rail.after(ribbon);
+      tail = ribbon;
+    }
+
+    const tick = buildTicker();
+    if (tick) tail.after(tick);
+
     const nav = hdr.querySelector("#nav");
     const toggle = hdr.querySelector("#nav-toggle");
     toggle.addEventListener("click", () => {
@@ -94,6 +146,73 @@
       nav.classList.remove("open");
       toggle.setAttribute("aria-expanded", "false");
     });
+  }
+
+  /* --------------------------------------------------------- ticker
+     A broadcast lower-third carrying live facts about the dataset
+     itself: how fresh it is, which patch, how much is published, what
+     is waiting on a person, the top picks.
+
+     Every value is READ FROM THE EXPORT. There is no placeholder copy
+     in here, and if the dataset has too little to say the ticker is not
+     rendered at all rather than scrolling a row of dashes — an empty
+     ticker would be the most visible lie on the site. It is also the
+     only perpetual movement in the system: it pauses on hover and
+     focus, and stops dead under reduced motion (CSS). */
+  function buildTicker() {
+    const D = P.pub;
+    if (!D) return null;
+    const items = [];
+    const push = (label, value, cls) =>
+      items.push('<span class="ticker__item"><b>' + esc(label) + "</b> " +
+        '<span class="' + (cls || "") + '">' + esc(value) + "</span></span>");
+
+    const gen = P.dataAge();
+    if (gen) push("Data as of", P.fmtRel(gen) || P.fmtDateTime(gen), P.isStale(24) ? "down" : "");
+    const demo = !!(D.meta && D.meta.demo);
+    push("Dataset", demo ? "DEMO FIXTURE" : "PRODUCTION", demo ? "down" : "up");
+
+    /* current patch: newest entry in the exported patch list, or nothing */
+    const patches = (D.patches || []).slice()
+      .sort((a, b) => String(b.from || "").localeCompare(String(a.from || "")));
+    if (patches[0]) push("Patch", patches[0].name || patches[0].id, "up");
+
+    const comps = P.publishedComps();
+    push("Published comps", String(comps.length), comps.length ? "up" : "down");
+
+    if (P.games) {
+      const c = P.games.counts();
+      push("Games", c.published + " published / " + c.total + " tracked");
+      if (c.review) push("Waiting on you", String(c.review), "down");
+      if (c.blocked) push("Blocked", String(c.blocked), "down");
+    }
+
+    /* top three picks, straight from the published comps — one count,
+       never a second one that can drift from the stats page */
+    try {
+      const seen = new Map();     // key: mapId|teamId -> Set(heroId)
+      comps.forEach((c) => {
+        const k = c.mapId + "|" + c.teamId;
+        if (!seen.has(k)) seen.set(k, new Set());
+        (c.heroes || []).forEach((h) => seen.get(k).add(h));
+      });
+      const tally = new Map();
+      seen.forEach((set) => set.forEach((h) => tally.set(h, (tally.get(h) || 0) + 1)));
+      Array.from(tally.entries())
+        .sort((a, b) => b[1] - a[1] || String(a[0]).localeCompare(String(b[0])))
+        .slice(0, 3)
+        .forEach((row, i) => push("#" + (i + 1) + " pick", P.hero(row[0]).name, "up"));
+    } catch (e) { /* the ticker is orientation; it may never break a page */ }
+
+    if (items.length < 3) return null;
+    const el = document.createElement("div");
+    el.className = "ticker";
+    el.setAttribute("aria-label", "Dataset status");
+    /* doubled track so the CSS -50% translate loops seamlessly; the
+       clone is aria-hidden so a screen reader reads each fact once */
+    el.innerHTML = '<div class="ticker__track">' + items.join("") +
+      '<span aria-hidden="true" style="display:contents">' + items.join("") + "</span></div>";
+    return el;
   }
 
   /* --------------------------------------------------------- search */
@@ -127,6 +246,12 @@
      ["How it works", "how-it-works.html", "In plain language"],
      ["Tools & diagnostics", "tools.html", "For operators"],
      ["Calibrate a broadcast", "calibrate.html", "Teach the tracker a new HUD"],
+     ["Guides", "guide.html", "Step-by-step walkthroughs for every task"],
+     ["Guide: submit a game", "guide.html#submit", "From a pasted link to a queued job"],
+     ["Guide: review detections", "guide.html#review", "The human gates, in order"],
+     ["Guide: publish", "guide.html#publish", "Promote reviewed detections and export"],
+     ["Guide: when something is blocked", "guide.html#troubleshoot", "Each blocked state and the next command"],
+     ["Design system", "styleguide.html", "Every component, chip and evidence state"],
     ].forEach((r) => add("page", r[0], r[2], r[1], r[0] + " " + r[2]));
 
     const wrap = document.createElement("div");
@@ -254,8 +379,10 @@
           '<li><a href="stats.html?tab=comps">Compositions</a></li>' +
         "</ul></div>" +
         "<div><h2>Operators</h2><ul>" +
+          '<li><a href="guide.html">Guides — every step, walked through</a></li>' +
           '<li><a href="tools.html">Tools &amp; diagnostics</a></li>' +
           '<li><a href="calibrate.html">Calibrate a broadcast</a></li>' +
+          '<li><a href="styleguide.html">Design system</a></li>' +
           '<li><a href="how-it-works.html#run-it-yourself">Run your own copy</a></li>' +
         "</ul></div>" +
       "</div>" +

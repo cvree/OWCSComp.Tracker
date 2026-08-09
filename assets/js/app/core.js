@@ -406,6 +406,75 @@
     ta.remove();
   };
 
+  /* ---- optional platform APIs, guarded --------------------------------
+     `window.matchMedia` is not universally present: it is missing in
+     jsdom, in some embedded webviews, and in several headless renderers
+     and screenshot tools. Calling it unguarded at the top of a module —
+     which shell.js did — throws before a single line of that module
+     runs, so the header, nav, search and footer silently never build and
+     the page renders as bare unstyled sections. A progressive-enhancement
+     query must never be able to do that, so every read goes through here
+     and defaults to "no, the user did not ask for this". */
+  P.media = (query) => {
+    try { return !!(window.matchMedia && window.matchMedia(query).matches); }
+    catch (e) { return false; }
+  };
+  P.onMedia = (query, handler) => {
+    try {
+      if (!window.matchMedia) return;
+      const mq = window.matchMedia(query);
+      if (mq.addEventListener) mq.addEventListener("change", handler);
+      else if (mq.addListener) mq.addListener(handler);
+    } catch (e) { /* optional API; never fatal */ }
+  };
+
+  /* ---- the guide layer ------------------------------------------------
+     Product requirement: any technical step keeps a walkthrough within
+     reach, and the walkthrough has to be unmistakable rather than a
+     footnote. Two builders plus a delegated copy handler cover every
+     case on the site.
+
+     THE PAGE NEVER EXECUTES A COMMAND. On the hosted copy there is no
+     server behind a static site; on a local copy the tracker's own API
+     handles real actions. A guide builds the exact command and hands it
+     over — pretending otherwise is the one thing this project refuses
+     to do everywhere else, and it would be no more acceptable here. */
+  P.cmd = (command, note) =>
+    '<div class="cmdline"><code>' + esc(command) + "</code>" +
+    '<button type="button" class="cmdline__copy" data-copy="' + esc(command) + '">Copy</button>' +
+    (note ? '<p class="cmdline__note">' + note + "</p>" : "") + "</div>";
+
+  P.guide = (title, intro, steps, opt) => {
+    opt = opt || {};
+    const body = (steps || []).map((s) => {
+      const state = s.done ? ' data-done="1"' : (s.blocked ? ' data-blocked="1"' : "");
+      const parts = [];
+      if (s.body) parts.push('<p class="gs-body">' + s.body + "</p>");
+      if (s.command) parts.push(P.cmd(s.command, s.commandNote));
+      if (s.note) parts.push('<p class="gs-body dim">' + s.note + "</p>");
+      return "<li" + state + '><div><p class="gs-title">' + esc(s.title) + "</p>" +
+        parts.join("") + "</div></li>";
+    }).join("");
+    return '<details class="guide"' + (opt.open ? " open" : "") +
+      (opt.id ? ' id="' + esc(opt.id) + '"' : "") + ">" +
+      "<summary>" + esc(title) + "</summary>" +
+      '<div class="guide__body">' +
+        (intro ? "<p>" + intro + "</p>" : "") +
+        '<ol class="guide-steps">' + body + "</ol>" +
+      "</div></details>";
+  };
+
+  /* One delegated listener covers every command block on the page, now
+     and after any re-render, without each page script wiring its own. */
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest && e.target.closest(".cmdline__copy[data-copy]");
+    if (!btn) return;
+    P.copy(btn.dataset.copy, "Command copied — run it in your terminal");
+    btn.textContent = "Copied";
+    btn.dataset.copied = "1";
+    setTimeout(() => { btn.textContent = "Copy"; delete btn.dataset.copied; }, 2200);
+  });
+
   P.download = (filename, text, mime) => {
     const blob = new Blob([text], { type: mime || "application/json" });
     const a = document.createElement("a");

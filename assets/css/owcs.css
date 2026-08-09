@@ -20,40 +20,72 @@
 /* ------------------------------------------------------------------ *
    1. Tokens
  * ------------------------------------------------------------------ */
-:root {
-  /* surfaces — near-black with a cold blue undertone */
-  --bg: #06070b;
-  --bg-deep: #030407;
-  --s1: #0b0d13;          /* card */
-  --s2: #11141c;          /* raised / hover */
-  --s3: #171b25;          /* active / inset */
-  --well: #08090e;        /* sunken well, code, media */
+/* CANDY BRUTALISM × HYPER BRUTALISM (2026 overhaul).
 
-  /* one border weight, three strengths */
-  --line: rgba(150, 165, 205, 0.10);
-  --line-2: rgba(150, 165, 205, 0.18);
-  --line-3: rgba(150, 165, 205, 0.30);
+   The token NAMES below are frozen — every page script, several tests
+   and 1,000 lines of component CSS underneath reference them — but the
+   values now describe different physics. The previous direction was
+   "professional esports broadcast tooling": hairline borders, blurred
+   depth, glass. This one is a wall chart in a concrete arena.
+
+   Read the geometry tokens as the contract:
+     --r-1..4, --r-pill   0. Nothing on this site is rounded.
+     --sh-1..3            solid offsets. No blur radius anywhere.
+     --line/-2/-3         opaque bone, not 10%-alpha of a blue-grey.
+     --glass              none. Depth comes from borders and offsets.
+   Because every existing rule reads these, ~200 `border-radius` and
+   every `box-shadow` in this file re-cut themselves without one of them
+   being edited.
+
+   The four rules the palette obeys:
+     1. Status is never colour alone — every state keeps a glyph or word.
+     2. A candy fill always takes --ink text. Neon on white fails.
+     3. Colour must encode something: state, role, region, provenance.
+        Colour that encodes nothing is bone, ink or grey.
+     4. Motion is orientation and feedback. The ticker is the single
+        exception and it stops dead under reduced motion. */
+:root {
+  /* surfaces — a true black-out so bone borders and candy slabs read at
+     maximum contrast. The steps are visible jumps, not four near-identical
+     greys, because a brutalist panel has to look stacked, not tinted. */
+  --bg: #08080d;
+  --bg-deep: #000004;
+  --s1: #14141f;          /* card */
+  --s2: #1d1d2b;          /* raised / hover */
+  --s3: #292939;          /* active / inset */
+  --well: #000004;        /* sunken well, code, media */
+
+  /* borders are STRUCTURE now. Opaque, and heavy enough to hold a block. */
+  --line: #3a3a4c;
+  --line-2: #6a6a80;
+  --line-3: #c9c7bd;
+  --bone: #f2efe4;        /* the border/ink colour of a candy slab */
+  --ink: #000004;         /* text ON a candy fill; also the shadow colour */
 
   /* text */
-  --tx: #edeae2;
-  --tx-2: #a7aebf;
-  --tx-3: #7f8798;        /* 4.9:1 on --s1 */
+  --tx: #f7f5ec;
+  --tx-2: #b8b8c8;
+  --tx-3: #8f8fa4;        /* 5.2:1 on --s1 */
 
-  /* signal colours */
-  --gold: #d9a94f;        /* published / verified / the product's spine */
-  --gold-hi: #f2c87e;
-  --gold-ink: #1c1403;
-  --amber: #f0a83a;       /* needs a human */
-  --cyan: #4cc6ea;        /* working right now */
-  --emerald: #35cf8d;     /* evidence, proven */
-  --violet: #9b7bf5;      /* detected / machine-authored */
-  --red: #ff5f6b;         /* blocked / failed */
-  --grey: #8b95ab;        /* queued / inert */
+  /* signal colours — saturated to the edge of the display, because a
+     brutalist block has no gradient to hide behind: the colour IS the
+     panel. Meanings are unchanged from the previous system. */
+  --gold: #ffc531;        /* published / verified / the product's spine */
+  --gold-hi: #ffe066;
+  --gold-ink: #000004;
+  --amber: #ffa62e;       /* needs a human */
+  --cyan: #22e0ff;        /* working right now */
+  --emerald: #2bf08a;     /* evidence, proven */
+  --violet: #a05cff;      /* detected / machine-authored */
+  --red: #ff2e5b;         /* blocked / failed */
+  --grey: #9aa3bd;        /* queued / inert */
+  --lime: #c6ff2e;        /* acid lime — the live meta, primary accent */
+  --magenta: #ff2e93;     /* hot candy — movers, demo data, heat */
 
   /* roles */
-  --role-tank: #5b8def;
-  --role-damage: #ef5f6e;
-  --role-support: #3ecf8f;
+  --role-tank: #3d8bff;
+  --role-damage: #ff2e5b;
+  --role-support: #2bf08a;
 
   /* type */
   --f-display: "Saira Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
@@ -64,20 +96,32 @@
   --s-1: 4px;  --s-2: 8px;  --s-3: 12px; --s-4: 16px;
   --s-5: 24px; --s-6: 32px; --s-7: 48px; --s-8: 72px; --s-9: 112px;
 
-  /* radius + depth */
-  --r-1: 4px; --r-2: 8px; --r-3: 12px; --r-4: 18px; --r-pill: 999px;
-  --sh-1: 0 1px 2px rgba(0, 0, 0, .45);
-  --sh-2: 0 12px 32px -14px rgba(0, 0, 0, .8);
-  --sh-3: 0 32px 70px -22px rgba(0, 0, 0, .85);
-  --glass: saturate(140%) blur(14px);
+  /* GEOMETRY: hyper-brutalist. Radii are kept as named tokens rather
+     than deleted so every existing `border-radius: var(--r-2)` resolves
+     to zero untouched. */
+  --r-1: 0px; --r-2: 0px; --r-3: 0px; --r-4: 0px; --r-pill: 0px;
 
-  /* motion */
-  --t-1: 120ms; --t-2: 220ms; --t-3: 380ms;
-  --ease: cubic-bezier(.22, .61, .36, 1);
+  /* border weights, escalating with importance */
+  --bw-1: 2px; --bw-2: 3px; --bw-3: 5px;
+  --bd: var(--bw-1) solid var(--line-2);
+  --bd-hard: var(--bw-2) solid var(--bone);
+
+  /* hard shadows — solid offsets, zero blur. --sh-c lets any component
+     recolour its own cast block without redefining the shadow. */
+  --sh-c: #000004;
+  --sh-1: 3px 3px 0 0 var(--sh-c);
+  --sh-2: 6px 6px 0 0 var(--sh-c);
+  --sh-3: 10px 10px 0 0 var(--sh-c);
+  --glass: none;          /* there is no glass in this system */
+
+  /* motion — snappier, with a slight overshoot so panels "land" */
+  --t-1: 110ms; --t-2: 200ms; --t-3: 380ms;
+  --ease: cubic-bezier(.2, .9, .3, 1);
+  --ease-snap: cubic-bezier(.16, 1.2, .3, 1);
 
   --shell: 1280px;
   --shell-wide: 1600px;
-  --header-h: 60px;
+  --header-h: 64px;
 }
 
 /* ------------------------------------------------------------------ *
@@ -1066,4 +1110,510 @@ html.motion-on .rv-in { opacity: 1; transform: none; transition: opacity var(--t
   .card, .well, .table-wrap { border-color: #ccc; background: #fff; }
   a { color: #000; }
   .rv { opacity: 1 !important; transform: none !important; }
+}
+
+/* ================================================================== *
+   23. BRUTAL LAYER — Candy Brutalism × Hyper Brutalism
+   ------------------------------------------------------------------
+   Appended last on purpose. Everything above is the broadcast-tooling
+   system and it is still load-bearing: every class name, every data
+   attribute and every page script continues to work untouched. This
+   layer re-cuts the GEOMETRY (blocks, structural borders, hard offset
+   shadows, poster type) and adds the components the Meta Hub needs, at
+   equal or higher specificity — so no markup had to be rewritten to
+   get the new look.
+
+   What it deliberately does NOT do: change what any component MEANS.
+   Gold is still published, amber still needs a human, cyan is still
+   working, emerald is still evidence, red is still blocked. A louder
+   system that re-assigned those would cost more than it bought.
+ * ================================================================== */
+
+/* ---------- 23.1 Ground ---------- */
+body { font-size: 15.5px; }
+/* The quiet radial light source becomes an engineering grid. A brutalist
+   page sits on graph paper, not on fog. */
+body::before {
+  background:
+    linear-gradient(180deg, var(--bg-deep) 0%, var(--bg) 42%, #05050b 100%);
+}
+body::after {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background-image:
+    linear-gradient(90deg, rgba(242,239,228,.05) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(242,239,228,.05) 1px, transparent 1px);
+  background-size: 64px 64px;
+  -webkit-mask-image: radial-gradient(125% 92% at 50% 0%, #000 10%, transparent 76%);
+  mask-image: radial-gradient(125% 92% at 50% 0%, #000 10%, transparent 76%);
+}
+
+/* ---------- 23.2 Poster typography ----------
+   Headlines are compressed, uppercase, tight-tracked, poster-scale.
+   Body copy is deliberately NOT: a wall of condensed caps is unreadable
+   and the data is the product. */
+h1, h2 { text-transform: uppercase; font-weight: 700; }
+h1 { font-size: clamp(2.4rem, 7vw, 5.6rem); line-height: .86; letter-spacing: -.015em; text-wrap: balance; }
+h2 { font-size: clamp(1.6rem, 3.2vw, 2.6rem); line-height: .95; letter-spacing: -.005em; }
+h3 { font-weight: 700; letter-spacing: .02em; }
+.lede { font-size: clamp(15px, 1.35vw, 18px); line-height: 1.5; max-width: 68ch; color: var(--tx-2); }
+.lede b, .lede strong { color: var(--tx); }
+
+/* Prose links get a candy underline you cannot miss, and invert on hover. */
+a { text-decoration-thickness: 2px; text-underline-offset: 3px; }
+p > a, .lede a, li > a { color: var(--lime); text-decoration-color: currentColor; }
+p > a:hover, .lede a:hover, li > a:hover { background: var(--lime); color: var(--ink); }
+
+/* The eyebrow becomes a hard bone tab rather than letterspaced grey. */
+.eyebrow {
+  display: inline-block;
+  background: var(--bone); color: var(--ink);
+  font-family: var(--f-mono); font-size: 11px; font-weight: 500;
+  letter-spacing: .18em; text-transform: uppercase;
+  padding: 4px 10px; border: 0; margin-bottom: var(--s-3);
+}
+.eyebrow--lime { background: var(--lime); }
+.eyebrow--magenta { background: var(--magenta); }
+.eyebrow--cyan { background: var(--cyan); }
+.eyebrow--gold { background: var(--gold); }
+.eyebrow--violet { background: var(--violet); color: var(--bone); }
+
+/* A highlighter block for the one phrase that carries the sentence. */
+.hl {
+  background: var(--candy, var(--lime)); color: var(--ink); padding: 0 .12em;
+  box-decoration-break: clone; -webkit-box-decoration-break: clone;
+}
+.hl--magenta { --candy: var(--magenta); }
+.hl--cyan { --candy: var(--cyan); }
+.hl--gold { --candy: var(--gold); }
+
+/* Oversized outlined numerals — tournament wall-chart signage. */
+.numeral {
+  font-family: var(--f-display); font-weight: 700;
+  font-size: clamp(48px, 9vw, 120px); line-height: .8; letter-spacing: -.04em;
+  color: transparent; -webkit-text-stroke: 2px var(--line-2); user-select: none;
+}
+
+/* ---------- 23.3 The universal block ---------- */
+.card, .well, .note, .tile, .stat, .game-card, .qitem, .table-wrap,
+.console, .diag, .field, .empty, .rw__queue, .slot {
+  border-radius: 0;
+  border: var(--bd);
+  background: var(--s1);
+  box-shadow: var(--sh-1);
+}
+.card--raised { box-shadow: var(--sh-2); border-color: var(--line-3); }
+.card--flush { box-shadow: none; }
+.well, .console { background: var(--well); border-color: var(--line); }
+
+/* Hover pressure: the block physically presses into the page. Cheap
+   (transform only), reversible, and it makes a flat grid feel built
+   rather than printed. Keyboard gets exact parity — a hover affordance
+   that a keyboard user cannot feel is decoration, not feedback. */
+.card--hoverable, .game-card, .qitem, a.card, .press {
+  transition: transform var(--t-1) var(--ease-snap),
+              box-shadow var(--t-1) var(--ease-snap),
+              border-color var(--t-1) var(--ease);
+}
+.card--hoverable:hover, .game-card:hover, .qitem:hover, a.card:hover, .press:hover,
+.card--hoverable:focus-within, .game-card:focus-within, a.card:focus-visible, .press:focus-visible {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0 0 var(--sh-c);
+  border-color: var(--bone);
+}
+.card--hoverable:active, .game-card:active, .press:active {
+  transform: translate(3px, 3px); box-shadow: 0 0 0 0 var(--sh-c);
+}
+
+/* Accent spine: a 5px candy edge carrying state without adding a badge.
+   The most reused signal in the system. */
+.spine { position: relative; border-left-width: 6px !important; border-left-color: var(--candy, var(--lime)) !important; }
+.spine--gold { --candy: var(--gold); }
+.spine--amber { --candy: var(--amber); }
+.spine--cyan { --candy: var(--cyan); }
+.spine--emerald { --candy: var(--emerald); }
+.spine--red { --candy: var(--red); }
+.spine--violet { --candy: var(--violet); }
+.spine--magenta { --candy: var(--magenta); }
+
+/* ---------- 23.4 Candy slabs — the loud section break ----------
+   A saturated full-width block with ink text. It exists to stop a
+   scroll, not to decorate one: two or three per page, never adjacent. */
+.slab {
+  --candy: var(--lime);
+  background: var(--candy); color: var(--ink);
+  border: var(--bw-2) solid var(--ink);
+  box-shadow: var(--sh-2);
+  padding: var(--s-5);
+  display: grid; gap: var(--s-3);
+}
+.slab--magenta { --candy: var(--magenta); }
+.slab--cyan { --candy: var(--cyan); }
+.slab--gold { --candy: var(--gold); }
+.slab--violet { --candy: var(--violet); color: var(--bone); border-color: var(--bone); }
+.slab--bone { --candy: var(--bone); }
+.slab h2, .slab h3, .slab p, .slab a, .slab b { color: inherit; }
+.slab h2 { font-size: clamp(1.5rem, 3vw, 2.4rem); }
+.slab p { margin: 0; max-width: 64ch; font-weight: 500; }
+.slab a:not(.btn) { text-decoration: underline; text-decoration-thickness: 2px; }
+.slab .btn { border-color: var(--ink); background: var(--ink); color: var(--candy); }
+.slab .btn:hover { background: var(--bone); color: var(--ink); }
+.slab .btn--ghost { background: transparent; color: var(--ink); }
+.slab .btn--ghost:hover { background: var(--ink); color: var(--candy); }
+
+/* ---------- 23.5 Ticker ----------
+   A broadcast lower-third. The only perpetual motion in the system: it
+   pauses on hover and focus, and under reduced motion it stops moving
+   and WRAPS — the content stays, it just stops travelling. */
+.ticker {
+  border-top: var(--bw-2) solid var(--bone);
+  border-bottom: var(--bw-2) solid var(--bone);
+  background: var(--ink); overflow: hidden;
+}
+.ticker__track { display: flex; gap: var(--s-5); align-items: center; padding: 9px 0; white-space: nowrap; width: max-content; }
+html.motion-on .ticker__track { animation: tick 46s linear infinite; }
+.ticker:hover .ticker__track, .ticker:focus-within .ticker__track { animation-play-state: paused; }
+@keyframes tick { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.ticker__item {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--f-mono); font-size: 12px; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--tx-2);
+}
+.ticker__item b { color: var(--bone); font-weight: 600; }
+.ticker__item .up { color: var(--lime); }
+.ticker__item .down { color: var(--magenta); }
+.ticker__item::after { content: "//"; color: var(--line); margin-left: var(--s-3); }
+
+/* ---------- 23.6 Buttons ---------- */
+.btn {
+  border-radius: 0;
+  border: var(--bw-2) solid var(--bone);
+  background: var(--s2); color: var(--tx);
+  font-family: var(--f-display); font-weight: 700;
+  text-transform: uppercase; letter-spacing: .04em;
+  box-shadow: 4px 4px 0 0 var(--sh-c);
+  transition: transform var(--t-1) var(--ease-snap), box-shadow var(--t-1) var(--ease-snap),
+              background var(--t-1) var(--ease), color var(--t-1) var(--ease);
+}
+.btn:hover { background: var(--bone); color: var(--ink); transform: translate(-2px, -2px); box-shadow: 6px 6px 0 0 var(--sh-c); }
+.btn:active { transform: translate(4px, 4px); box-shadow: 0 0 0 0 var(--sh-c); }
+.btn--primary { background: var(--gold); border-color: var(--ink); color: var(--ink); }
+.btn--primary:hover { background: var(--gold-hi); color: var(--ink); }
+.btn--good { background: var(--emerald); border-color: var(--ink); color: var(--ink); }
+.btn--good:hover { background: #7bf7b8; color: var(--ink); }
+.btn--danger { background: var(--red); border-color: var(--ink); color: var(--ink); }
+.btn--danger:hover { background: #ff6f90; color: var(--ink); }
+.btn--lime { background: var(--lime); border-color: var(--ink); color: var(--ink); }
+.btn--lime:hover { background: #dcff7a; color: var(--ink); }
+.btn--cyan { background: var(--cyan); border-color: var(--ink); color: var(--ink); }
+.btn--cyan:hover { background: #7aecff; color: var(--ink); }
+.btn--ghost, .btn--quiet { background: transparent; border-color: var(--line-2); color: var(--tx-2); box-shadow: none; }
+.btn--ghost:hover, .btn--quiet:hover { background: var(--bone); color: var(--ink); border-color: var(--bone); }
+.btn--sm { box-shadow: 3px 3px 0 0 var(--sh-c); }
+
+/* ---------- 23.7 Chips, tags, meters ---------- */
+.chip, .tag {
+  border-radius: 0; border: 2px solid currentColor; background: var(--ink);
+  font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+}
+.chip--outline { background: transparent; }
+/* Solid-fill emphasis for the two states a reader must never miss. */
+.chip--solid { background: currentColor; }
+.chip--solid, .chip--solid * { color: var(--ink) !important; }
+.meter, .conf__bar { border-radius: 0; background: var(--ink); box-shadow: inset 0 0 0 2px var(--line); }
+.conf__fill { border-radius: 0; }
+.score { border-radius: 0; border: var(--bw-2) solid var(--bone); background: var(--ink); }
+.score--none { border-style: dashed; text-transform: uppercase; letter-spacing: .1em; }
+
+/* Provenance / trust labels — the honest vocabulary as one component.
+   data-trust: published | reviewed | auto-high | detected | manual |
+   needs-review | rejected | partial | failed | stale | demo | production */
+.trust {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--f-mono); font-size: 10.5px; font-weight: 500;
+  letter-spacing: .1em; text-transform: uppercase;
+  padding: 3px 8px; border: 2px solid currentColor; background: var(--ink);
+  white-space: nowrap;
+}
+.trust::before { font-family: var(--f-body); font-weight: 700; }
+.trust[data-trust="published"] { color: var(--gold); }
+.trust[data-trust="published"]::before { content: "★"; }
+.trust[data-trust="production"] { color: var(--emerald); }
+.trust[data-trust="production"]::before { content: "✓"; }
+.trust[data-trust="reviewed"] { color: var(--emerald); }
+.trust[data-trust="reviewed"]::before { content: "✓"; }
+.trust[data-trust="auto-high"] { color: var(--cyan); }
+.trust[data-trust="auto-high"]::before { content: "≈"; }
+.trust[data-trust="detected"] { color: var(--violet); }
+.trust[data-trust="detected"]::before { content: "⌾"; }
+.trust[data-trust="manual"] { color: var(--gold); }
+.trust[data-trust="manual"]::before { content: "✎"; }
+.trust[data-trust="needs-review"] { color: var(--amber); }
+.trust[data-trust="needs-review"]::before { content: "!"; }
+.trust[data-trust="rejected"] { color: var(--tx-3); }
+.trust[data-trust="rejected"]::before { content: "×"; }
+.trust[data-trust="partial"] { color: var(--amber); }
+.trust[data-trust="partial"]::before { content: "◐"; }
+.trust[data-trust="failed"] { color: var(--red); }
+.trust[data-trust="failed"]::before { content: "×"; }
+.trust[data-trust="stale"] { color: var(--amber); }
+.trust[data-trust="stale"]::before { content: "◷"; }
+.trust[data-trust="demo"] { color: var(--ink); background: var(--magenta); border-color: var(--ink); }
+.trust[data-trust="demo"]::before { content: "▲"; }
+
+/* ---------- 23.8 Header, nav, footer ---------- */
+.hdr {
+  background: var(--ink);
+  backdrop-filter: none; -webkit-backdrop-filter: none;
+  border-bottom: var(--bw-2) solid var(--bone);
+}
+.brand__mark {
+  border-radius: 0; background: var(--lime); color: var(--ink);
+  border: 2px solid var(--ink); font-weight: 700;
+}
+.brand__name small { font-family: var(--f-mono); letter-spacing: .12em; text-transform: uppercase; }
+.nav a {
+  border-radius: 0; font-weight: 700; letter-spacing: .06em;
+  text-transform: uppercase; border-bottom: 3px solid transparent;
+}
+.nav a:hover { background: var(--bone); color: var(--ink); }
+.nav a[aria-current="page"] {
+  background: var(--lime); color: var(--ink); border-bottom-color: var(--ink);
+}
+.nav .pip { border-radius: 0; background: var(--magenta); color: var(--ink); border: 2px solid var(--ink); font-weight: 700; }
+.ftr { border-top: var(--bw-3) solid var(--bone); background: var(--ink); }
+.ftr h2 { font-size: 13px; letter-spacing: .14em; color: var(--lime); }
+.ftr a:hover { background: var(--lime); color: var(--ink); }
+.ftr__meta { border-top: 2px solid var(--line); font-family: var(--f-mono); }
+
+/* Secondary rail — the deeper data layers, one scroll away on every
+   page. Horizontal scroll, never a second row: a wrapping rail pushes
+   content below the fold on a phone. */
+.subnav {
+  background: var(--ink); border-bottom: 2px solid var(--line);
+  position: sticky; top: var(--header-h); z-index: 55;
+  overflow-x: auto; scrollbar-width: thin; -webkit-overflow-scrolling: touch;
+}
+.subnav__in {
+  width: min(100% - 2 * var(--s-5), var(--shell-wide)); margin-inline: auto;
+  display: flex; align-items: stretch; width: max-content; min-width: 100%;
+}
+.subnav a {
+  display: inline-flex; align-items: center; padding: 9px 14px; min-height: 42px;
+  white-space: nowrap; font-family: var(--f-mono); font-size: 11px;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--tx-3);
+  border-right: 2px solid var(--line); text-decoration: none;
+}
+.subnav a:first-child { border-left: 2px solid var(--line); }
+.subnav a:hover { background: var(--bone); color: var(--ink); }
+.subnav a[aria-current="page"] { background: var(--cyan); color: var(--ink); font-weight: 600; }
+@media (max-width: 900px) { .subnav { position: static; } }
+
+/* ---------- 23.9 Page furniture ---------- */
+.page-head { padding-bottom: var(--s-4); border-bottom: 5px solid var(--bone); }
+.sec-head { border-bottom: var(--bw-2) solid var(--bone); padding-bottom: var(--s-3); }
+.sec-head h2 { margin: 0; }
+.sec-link { font-family: var(--f-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+.band { border-top: 0; }
+.breadcrumbs { font-family: var(--f-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; }
+hr { border-top: 5px solid var(--bone); }
+
+/* ---------- 23.10 Stat tiles ---------- */
+.stat__v {
+  font-family: var(--f-display); font-weight: 700; line-height: .85;
+  font-size: clamp(34px, 5vw, 58px); letter-spacing: -.02em;
+  font-variant-numeric: tabular-nums; color: var(--candy, var(--bone));
+}
+.stat__k { font-family: var(--f-mono); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--tx-3); }
+.stat--lime { --candy: var(--lime); }
+.stat--gold { --candy: var(--gold); }
+.stat--cyan { --candy: var(--cyan); }
+.stat--emerald { --candy: var(--emerald); }
+.stat--magenta { --candy: var(--magenta); }
+.stat--amber { --candy: var(--amber); }
+
+/* ---------- 23.11 Forms, tabs, tables ---------- */
+.input, input[type="text"], input[type="search"], input[type="url"], select, textarea {
+  border-radius: 0; border: 2px solid var(--line-2); background: var(--ink);
+  font-family: var(--f-mono);
+}
+.input:hover, select:hover { border-color: var(--bone); }
+.seg { border-radius: 0; border: var(--bd); background: var(--ink); }
+.seg button, .seg a { border-radius: 0; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
+.seg [aria-pressed="true"], .seg [aria-selected="true"] { background: var(--lime); color: var(--ink); }
+.tbl th {
+  background: var(--ink); color: var(--lime); font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase;
+  border-bottom: var(--bw-2) solid var(--bone);
+}
+.tbl td, .tbl th { border-bottom: 2px solid var(--line); }
+.tbl tbody tr:hover { background: var(--s2); }
+.switch__track { border-radius: 0; border: 2px solid var(--line-2); }
+
+/* ---------- 23.12 Heroes, teams, evidence ---------- */
+.hero__face, .team__logo, .crest {
+  border-radius: 0; border: 2px solid var(--line-2); box-shadow: none;
+}
+.hero__name { font-family: var(--f-mono); font-size: 10.5px; }
+html.motion-on .hero:hover .hero__face {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 0 var(--bone);
+  border-color: var(--bone);
+}
+.team--win .team__name { color: var(--lime); }
+.flow__dot { border-radius: 0; border: 2px solid var(--ink); }
+.railflow__seg { border-radius: 0; }
+
+/* Role legend — role colour is never the only signal. */
+.role-key { display: flex; flex-wrap: wrap; gap: var(--s-3); font-family: var(--f-mono); font-size: 11px; color: var(--tx-3); }
+.role-key span { display: inline-flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: .1em; }
+.role-key i { width: 12px; height: 12px; display: inline-block; border: 2px solid var(--ink); }
+
+/* ---------- 23.13 Guides, commands, gates ----------
+   Product requirement: any technical step keeps a walkthrough within
+   reach, and the walkthrough has to be unmistakable rather than a
+   footnote. Three components cover every case, all plain markup first —
+   the copy button is progressive enhancement and the command is
+   selectable without it. Nothing here is ever executed by the page. */
+.guide { border: var(--bw-2) solid var(--cyan); background: var(--well); box-shadow: var(--sh-1); }
+.guide > summary {
+  cursor: pointer; list-style: none;
+  display: flex; align-items: center; gap: 10px;
+  padding: 13px var(--s-4); min-height: 48px;
+  font-family: var(--f-display); font-weight: 700; text-transform: uppercase;
+  letter-spacing: .08em; font-size: 14px; color: var(--cyan); background: var(--ink);
+}
+.guide > summary::-webkit-details-marker { display: none; }
+.guide > summary::before {
+  content: "?"; flex: none; width: 22px; height: 22px; display: grid; place-items: center;
+  background: var(--cyan); color: var(--ink); font-weight: 700; font-size: 14px;
+  border: 2px solid var(--ink);
+}
+.guide > summary::after { content: "SHOW ME HOW ▸"; margin-left: auto; font-family: var(--f-mono); font-size: 11px; letter-spacing: .12em; color: var(--tx-3); }
+.guide[open] > summary::after { content: "HIDE ▾"; }
+.guide > summary:hover { background: var(--cyan); color: var(--ink); }
+.guide > summary:hover::before { background: var(--ink); color: var(--cyan); border-color: var(--cyan); }
+.guide > summary:hover::after { color: var(--ink); }
+.guide__body { padding: var(--s-4); display: grid; gap: var(--s-4); border-top: 2px solid var(--line); }
+.guide__body > p { margin: 0; font-size: 14.5px; color: var(--tx-2); max-width: 72ch; }
+
+.guide-steps { list-style: none; counter-reset: gstep; margin: 0; padding: 0; display: grid; }
+.guide-steps > li {
+  counter-increment: gstep;
+  display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: var(--s-3);
+  padding: var(--s-4) 0; border-top: 2px solid var(--line);
+}
+.guide-steps > li:first-child { border-top: 0; padding-top: 0; }
+.guide-steps > li::before {
+  content: counter(gstep); width: 34px; height: 34px; display: grid; place-items: center;
+  background: var(--bone); color: var(--ink);
+  font-family: var(--f-display); font-weight: 700; font-size: 17px; border: 2px solid var(--ink);
+}
+.guide-steps > li[data-done="1"]::before { background: var(--emerald); content: "✓"; }
+.guide-steps > li[data-blocked="1"]::before { background: var(--amber); }
+.guide-steps .gs-title { font-family: var(--f-display); font-weight: 700; text-transform: uppercase; letter-spacing: .05em; font-size: 16px; color: var(--tx); margin: 0 0 4px; }
+.guide-steps .gs-body { margin: 0; font-size: 14px; color: var(--tx-2); }
+.guide-steps .gs-body + .cmdline, .guide-steps .gs-body + .gs-body { margin-top: 8px; }
+
+.cmdline {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: var(--s-2);
+  background: var(--ink); border: 2px solid var(--lime); border-left-width: 6px; padding: 11px var(--s-3);
+}
+.cmdline code {
+  font-family: var(--f-mono); font-size: 12.5px; color: var(--lime); background: none;
+  border: 0; padding: 0; white-space: pre-wrap; word-break: break-word; line-height: 1.55;
+}
+.cmdline code::before { content: "> "; color: var(--tx-3); }
+.cmdline__copy {
+  appearance: none; cursor: pointer; font: inherit;
+  font-family: var(--f-mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase;
+  background: transparent; color: var(--tx-3); border: 2px solid var(--line);
+  padding: 5px 9px; min-height: 34px; white-space: nowrap;
+}
+.cmdline__copy:hover { background: var(--lime); color: var(--ink); border-color: var(--lime); }
+.cmdline__copy[data-copied="1"] { background: var(--emerald); color: var(--ink); border-color: var(--emerald); }
+.cmdline__note { grid-column: 1 / -1; font-size: 12px; color: var(--tx-3); margin: 0; }
+
+/* Human gate — a decision only a person may make. Deliberately heavy. */
+.gate { border: var(--bw-3) solid var(--amber); background: var(--well); box-shadow: var(--sh-2); padding: var(--s-4); display: grid; gap: var(--s-3); }
+.gate__head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.gate__badge {
+  background: var(--amber); color: var(--ink); border: 2px solid var(--ink);
+  font-family: var(--f-mono); font-size: 10.5px; letter-spacing: .14em;
+  text-transform: uppercase; padding: 4px 9px;
+}
+.gate__badge::before { content: "⚑ "; }
+.gate__title { font-family: var(--f-display); font-weight: 700; text-transform: uppercase; letter-spacing: .05em; font-size: 18px; margin: 0; }
+.gate__why { margin: 0; font-size: 14px; color: var(--tx-2); max-width: 72ch; }
+.gate--blocked { border-color: var(--red); }
+.gate--blocked .gate__badge { background: var(--red); }
+.gate--blocked .gate__badge::before { content: "× "; }
+.gate--passed { border-color: var(--emerald); }
+.gate--passed .gate__badge { background: var(--emerald); }
+.gate--passed .gate__badge::before { content: "✓ "; }
+
+/* ---------- 23.14 Notices + empty states ---------- */
+.note { border-left-width: 6px; border-radius: 0; background: var(--ink); }
+.note__ic { border-radius: 0; }
+.empty {
+  border: 3px dashed var(--line-2); border-radius: 0; background: var(--well);
+}
+.empty__title { font-family: var(--f-display); font-weight: 700; text-transform: uppercase; letter-spacing: .07em; }
+.empty__glyph { color: var(--line-2); }
+.skeleton { border-radius: 0; }
+.toast { border-radius: 0; border: var(--bd-hard); box-shadow: var(--sh-2); }
+
+/* ---------- 23.15 Palette ---------- */
+.palette__box { border-radius: 0; border: var(--bw-3) solid var(--bone); box-shadow: var(--sh-3); background: var(--well); }
+.palette__box input { border-radius: 0; border: 0; border-bottom: var(--bw-2) solid var(--bone); background: var(--ink); font-family: var(--f-mono); }
+.palette__row { border-radius: 0; }
+.palette__row.on { background: var(--lime); color: var(--ink); }
+.palette__row.on .k, .palette__row.on .s { color: var(--ink); }
+.palette__row .k {
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: .12em;
+  text-transform: uppercase; border: 2px solid currentColor; padding: 1px 6px;
+}
+
+/* ---------- 23.16 Reveals ----------
+   Blocks arrive by SNAPPING into place, matching the physics of the
+   shadows. No fades from far away, no drift: the panel was always
+   there, it just landed. */
+html.motion-on .rv { opacity: 0; transform: translateY(18px); }
+html.motion-on .rv.rv-in { opacity: 1; transform: none; transition: opacity .32s var(--ease), transform .32s var(--ease-snap); }
+.rv:not(.rv-in) { opacity: 1; transform: none; }
+
+/* ---------- 23.17 Responsive ---------- */
+@media (max-width: 900px) {
+  .slab { padding: var(--s-4); }
+  .guide-steps > li { grid-template-columns: 36px minmax(0, 1fr); gap: var(--s-2); }
+  .guide-steps > li::before { width: 28px; height: 28px; font-size: 14px; }
+  .cmdline { grid-template-columns: minmax(0, 1fr); }
+  .cmdline__copy { justify-self: start; }
+}
+@media (max-width: 640px) {
+  :root { --bw-1: 2px; --bw-2: 2px; --bw-3: 3px; }
+  h1 { font-size: clamp(2rem, 11vw, 3.2rem); }
+  .numeral { font-size: clamp(38px, 16vw, 64px); }
+  .ticker__item { font-size: 11px; }
+  .subnav a { padding: 9px 11px; font-size: 10.5px; }
+}
+
+/* ---------- 23.18 Reduced motion + print ----------
+   Every animated thing above has an off switch here. The ticker stops
+   and wraps rather than hiding its content off-screen; hover pressure
+   becomes a border change; reveals go inert. */
+@media (prefers-reduced-motion: reduce) {
+  .ticker__track { animation: none !important; width: auto; white-space: normal; flex-wrap: wrap; }
+  .ticker__item::after { content: ""; }
+  .card--hoverable:hover, .game-card:hover, .qitem:hover, a.card:hover, .press:hover,
+  html.motion-on .hero:hover .hero__face, .btn:hover, .btn:active {
+    transform: none !important;
+  }
+  html.motion-on .rv, html.motion-on .rv.rv-in {
+    opacity: 1 !important; transform: none !important; transition: none !important;
+  }
+}
+@media print {
+  body::after, .ticker, .nav, .subnav, .nav-toggle { display: none !important; }
+  .card, .slab, .guide, .gate { box-shadow: none !important; border-color: #000 !important; }
+  .slab { background: #fff !important; color: #000 !important; }
 }

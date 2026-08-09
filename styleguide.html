@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design system — OWCS Comp Tracker</title>
+<meta name="description" content="The OWCS Comp Tracker design system: candy brutalism blocks, the signal palette, status chips, trust and evidence states, guides, gates and motion rules — rendered from the site's own component helpers.">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/owcs.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<main id="main" class="shell">
+  <div class="page-head">
+    <p class="eyebrow eyebrow--magenta">Reference</p>
+    <h1>Design system</h1>
+    <p class="lede">Candy brutalism × hyper brutalism. Every component below is rendered by the
+      same helpers the real screens call, so this page <b>cannot drift</b> from the product: if a
+      chip changes shape here, it changed shape everywhere.</p>
+  </div>
+
+  <section class="band" aria-labelledby="h-rules">
+    <div class="sec-head"><h2 id="h-rules">01 · Rules</h2></div>
+    <div class="grid grid--3 u-mt-4" id="sg-rules"></div>
+  </section>
+
+  <section class="band" aria-labelledby="h-colour">
+    <div class="sec-head"><h2 id="h-colour">02 · Colour</h2></div>
+    <p class="lede u-mt-3">Colour encodes state, role or provenance. Colour that encodes nothing
+      is bone, ink or grey. Meanings are unchanged from the previous system: gold is published,
+      amber needs a human, cyan is working, emerald is evidence, red is blocked.</p>
+    <div class="u-mt-4" id="sg-colour"></div>
+  </section>
+
+  <section class="band" aria-labelledby="h-type">
+    <div class="sec-head"><h2 id="h-type">03 · Type</h2></div>
+    <div class="u-mt-4" id="sg-type"></div>
+  </section>
+
+  <section class="band" aria-labelledby="h-status">
+    <div class="sec-head"><h2 id="h-status">04 · Status, trust and evidence</h2></div>
+    <p class="lede u-mt-3">Every one of these carries a glyph or a word. None rely on colour
+      alone — that is a hard rule, not a preference.</p>
+    <div class="u-mt-4" id="sg-status"></div>
+  </section>
+
+  <section class="band" aria-labelledby="h-blocks">
+    <div class="sec-head"><h2 id="h-blocks">05 · Blocks</h2></div>
+    <div class="u-mt-4" id="sg-blocks"></div>
+  </section>
+
+  <section class="band" aria-labelledby="h-guides">
+    <div class="sec-head"><h2 id="h-guides">06 · Guides, commands and gates</h2></div>
+    <p class="lede u-mt-3">The three components that carry every technical instruction here.</p>
+    <div class="u-mt-4" id="sg-guides"></div>
+  </section>
+
+  <section class="band" aria-labelledby="h-empty">
+    <div class="sec-head"><h2 id="h-empty">07 · Empty states</h2></div>
+    <p class="lede u-mt-3">Every screen has one. An empty state says what is missing, why, and
+      what would fill it — never just "no data".</p>
+    <div class="grid grid--3 u-mt-4" id="sg-empty"></div>
+  </section>
+
+  <section class="band" aria-labelledby="h-motion">
+    <div class="sec-head"><h2 id="h-motion">08 · Motion</h2></div>
+    <div class="u-mt-4" id="sg-motion"></div>
+  </section>
+
+</main>
+
+<script src="assets/vendor/lenis.min.js" defer></script>
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="assets/js/app/motion.js" defer></script>
+<script src="assets/data/hero_art.v1.js"></script>
+<script src="assets/data/public_data.v1.js"></script>
+<script src="assets/js/app/core.js"></script>
+<script src="assets/js/app/games.js"></script>
+<script src="assets/js/app/api.js"></script>
+<script src="assets/js/app/shell.js"></script>
+<script src="assets/js/app/page-styleguide.js"></script>
+</body>
+</html>

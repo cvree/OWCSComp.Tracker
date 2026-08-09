@@ -1,6 +1,166 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
-## CURRENT STATUS (authoritative — 2026-08-08, eleventh pass) — stop downloading broadcasts to look at them
+## CURRENT STATUS (authoritative — 2026-08-09, twelfth pass) — the product gets a face: candy brutalism
+
+> Additive to the eleventh pass below, and deliberately orthogonal to it:
+> this pass touched **no** pipeline, detector, database or safety-gate code.
+> It is a design pass over the app shell, plus two robustness fixes that
+> headless QA turned up on the way.
+
+### What changed, in one sentence
+
+The one design system (`owcs.css`) kept every component, every class name
+and every colour *meaning* it had, and had its **geometry and palette
+re-cut**: hard structural borders, solid offset shadows with no blur, zero
+radius anywhere, poster-scale compressed headlines, and a saturated candy
+accent pair on top of the existing signal colours.
+
+### How it was done, and why that matters for the next person
+
+The token block in `owcs.css` was **rewritten in place**, not replaced. The
+names are frozen — 1,000 lines of component CSS underneath and every page
+script reference them — so setting `--r-1..4` and `--r-pill` to `0` re-cut
+roughly 200 `border-radius` declarations without one of them being edited,
+and redefining `--sh-1..3` as solid offsets re-cut every shadow the same
+way. A ~600-line **brutal layer** is then appended last for the components
+that genuinely did not exist before.
+
+The consequence worth knowing: **you can revert the look without reverting
+the pass.** Restore the old `:root` values and the product returns to the
+broadcast-tooling aesthetic with the new components still present.
+
+Colour meanings were left alone on purpose: gold is still published, amber
+still needs a human, cyan is still working, emerald is still evidence, red
+is still blocked. A louder system that also re-assigned those would have
+cost more than it bought.
+
+### Files changed
+
+**`assets/css/owcs.css`** (1,069 → 1,619 lines) — token rewrite in place +
+section 23, the brutal layer: `.slab`, `.ticker`, `.subnav`, `.guide`,
+`.cmdline`, `.gate`, `.trust`, `.spine`, `.numeral`, `.hl`, `.role-key`,
+plus brutalist re-cuts of `.card` `.btn` `.chip` `.stat` `.tbl` `.hdr`
+`.ftr` `.palette` `.empty` `.note`, and a print stylesheet.
+
+**`assets/js/app/shell.js`** — a **secondary rail** under the header
+(Teams · Guides · How it works · Tools · Calibrate) and a **broadcast
+ticker** built entirely from the export: freshness, dataset kind, current
+patch, published comp count, games published/tracked, what is waiting on a
+person, and the top three picks. The ticker refuses to render rather than
+scrolling placeholders, cannot break a page if the tally throws, pauses on
+hover/focus, and stops dead under reduced motion. A demo-data bar appears
+only when the loaded export says `meta.demo`.
+
+**`assets/js/app/core.js`** — `P.media()` / `P.onMedia()` (guarded media
+queries), `P.guide()` / `P.cmd()` (the walkthrough builders) and one
+delegated copy handler that reuses the existing `P.copy` fallback.
+
+**New: `guide.html` + `app/page-guide.js`** — six walkthroughs (setup,
+submit, calibrate, review, publish, troubleshoot) with 16 copyable
+commands, the five human gates written out, and every state a game can
+stop in mapped to its next step. It mounts the tracker-connection banner,
+so it tells you whether you can actually do the thing right now instead of
+letting you find out by failing.
+
+**New: `styleguide.html` + `app/page-styleguide.js`** — the design system
+rendered by the product's own helpers (`P.stateChip`, `P.teamPlate`,
+`P.compStrip`, `P.confMeter`, `P.scorePlate`, `P.empty`, `P.note`,
+`P.guide`, `P.cmd`), so it cannot drift from what ships.
+
+**`pipeline/test_site.py`** — the two new pages added to `PRODUCT_PAGES`.
+Nothing else in that suite was touched or relaxed.
+
+**New: `pipeline/test_meta_hub.py`** — ~70 checks over the design layer.
+
+### The IA rule this pass ran into, and obeyed
+
+The first version of the rail carried Heroes, Maps and Comps.
+`test_site.py` failed it, correctly: hero/map/composition data are **tabs
+on the stats page, not destinations**, and `label: "Heroes"` appearing
+anywhere in `shell.js` is exactly how the page-per-dataset architecture the
+redesign removed grows back. The rail was cut to the five real secondary
+destinations instead. **That test was not weakened to make the design fit.**
+
+### Two robustness fixes (both pre-existing, both real)
+
+1. `shell.js` called `window.matchMedia` **unguarded at module top level**.
+   In any renderer without it — jsdom, some embedded webviews, several
+   headless screenshot tools — that threw before a single line of the
+   module ran, so the header, nav, search *and* footer silently never
+   built and every page rendered as bare unstyled sections. Now routed
+   through `P.media()`. `motion.js` had the same shape and keeps its own
+   copy of the guard because it defers and can run before `core.js`.
+2. `app/motion.js` likewise. Both pinned by regression checks in
+   `test_meta_hub.py`, which fails on any new unguarded call.
+
+### How to test it (Windows PowerShell, from the repo root)
+
+```powershell
+py pipeline\test_site.py
+py pipeline\test_meta_hub.py
+py pipeline\serve.py
+```
+
+Then walk these at a desktop width and again at 390px:
+
+```
+http://localhost:8000/index.html       dashboard, ticker, tiles
+http://localhost:8000/guide.html       six walkthroughs, 16 commands, five gates
+http://localhost:8000/styleguide.html  every component, chip and trust state
+http://localhost:8000/games.html       game cards, hover pressure
+http://localhost:8000/review.html      the workspace under the new geometry
+http://localhost:8000/stats.html       tables and tabs under the new geometry
+```
+
+Check specifically:
+
+- **Reduced motion.** Settings → Accessibility → Visual effects → Animation
+  effects **off**, then reload. The ticker must stop moving *and keep its
+  text* (it wraps); hover pressure must become a border change; reveals
+  must be inert.
+- **Keyboard.** Tab from the top: skip link first. Every card that presses
+  under the cursor does the same on `:focus-visible`. `/` or Ctrl-K opens
+  search.
+- **The demo bar.** It only appears when the loaded export sets
+  `meta.demo`. The current production export does not, so you should not
+  see it — if you do, the page is on fixture data.
+
+### What was verified, and how
+
+- **Tests.** `test_site.py`, `test_meta_hub.py`,
+  `test_public_export_contracts.py`, `test_desktop_website.py`,
+  `test_desktop_pages.py`, `test_site_paths.py`, `test_calibrate_web.py`
+  and `test_assets.py` all pass.
+- **Headless page QA.** All 15 pages loaded in a real DOM (jsdom) against a
+  local server with scripts executing: **0 console errors**, shell built on
+  every product page, exactly one `<h1>` each, no image without `alt`, no
+  button without an accessible name. This is what found the `matchMedia`
+  bug. The harness is not committed — it needs an npm dependency the repo
+  does not otherwise have.
+
+### What is NOT done
+
+1. **Visual QA at real widths was not performed.** No browser was available
+   in the environment this was built in. Structure, DOM and console are
+   verified; **pixels are not**. The responsive rules are written and the
+   breakpoints are conservative, but walk the list above at 1440px and
+   390px before calling this finished.
+2. **Generated reports** (`reports/auto/*/index.html`, `layout.html`,
+   `crops.html`) still use the old dark theme from the Python constants.
+   `test_site.py` pins `#060b15`, so restyling them means updating that
+   test in the same commit.
+3. **`assets/css/appliance.css`** (the desktop app's stylesheet) and
+   `calibrate.css` were not touched, so the packaged Windows app and the
+   calibration wizard still look like the previous system. They are
+   self-contained surfaces; porting the tokens across is mechanical.
+4. **Control-room pages call `fetch` unguarded** in about a dozen places.
+   Unlike the public-site cases this is not a rendering risk in a real
+   browser — they are local-only surfaces that genuinely need an API — so
+   it was left alone, but it is the same shape of hazard.
+
+---
+
+## CURRENT STATUS (2026-08-08, eleventh pass) — stop downloading broadcasts to look at them
 
 > Additive to the tenth pass below. The detection, calibration, evidence and
 > review architecture is unchanged; what changed is how many bytes it costs

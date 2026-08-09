@@ -46,6 +46,13 @@ PRODUCT_PAGES = {
     "hero.html": "One hero",
     "how-it-works.html": "Explainer",
     "tools.html": "Operator tools",
+    # Added by the candy-brutalist pass. Both build the standard shell, so
+    # they are product pages, not standalone tools. `guide.html` is the
+    # walkthrough surface — every technical step, with the exact command;
+    # `styleguide.html` is the design system rendered from the product's
+    # own component helpers, so it cannot drift from what ships.
+    "guide.html": "Guides",
+    "styleguide.html": "Design system",
 }
 #: Reachable, but not part of the product shell: the calibration wizard
 #: (its own self-contained tool), the packaged desktop app's two screens,

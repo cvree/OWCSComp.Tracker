@@ -28,8 +28,18 @@
 (function () {
   "use strict";
 
+  /* matchMedia is optional in the platform — absent in jsdom, in some
+     embedded webviews and in several headless renderers. Calling it
+     unguarded at module top level throws before anything below runs,
+     which takes the whole file down over a progressive-enhancement
+     query. This file loads with `defer` and may run before core.js has
+     defined P.media, so it carries its own copy of the guard. */
+  const mq = (q) => {
+    try { return !!(window.matchMedia && window.matchMedia(q).matches); }
+    catch (e) { return false; }
+  };
   const reduced =
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+    mq("(prefers-reduced-motion: reduce)") ||
     (navigator.connection && navigator.connection.saveData === true);
   const $$ = (sel, root) => Array.prototype.slice.call((root || document).querySelectorAll(sel));
 
