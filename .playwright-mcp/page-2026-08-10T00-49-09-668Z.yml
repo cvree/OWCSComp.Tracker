@@ -1,0 +1,119 @@
+- generic [ref=f2e2]:
+  - link "Skip to content" [ref=f2e3] [cursor=pointer]:
+    - /url: "#main"
+  - generic [ref=f2e4]:
+    - navigation "Primary" [ref=f2e5]:
+      - generic [ref=f2e6]: Story Atlas
+      - list [ref=f2e13]:
+        - listitem [ref=f2e14]:
+          - link "Feed" [ref=f2e15] [cursor=pointer]:
+            - /url: "#/"
+        - listitem [ref=f2e20]:
+          - link "Search" [ref=f2e21] [cursor=pointer]:
+            - /url: "#/search"
+        - listitem [ref=f2e26]:
+          - link "Atlas" [ref=f2e27] [cursor=pointer]:
+            - /url: "#/atlas"
+        - listitem [ref=f2e32]:
+          - link "Time" [ref=f2e33] [cursor=pointer]:
+            - /url: "#/timeline"
+        - listitem [ref=f2e38]:
+          - link "Paths" [ref=f2e39] [cursor=pointer]:
+            - /url: "#/collections"
+        - listitem [ref=f2e44]:
+          - link "Saved" [ref=f2e45] [cursor=pointer]:
+            - /url: "#/saved"
+        - listitem [ref=f2e49]:
+          - link "You" [ref=f2e50] [cursor=pointer]:
+            - /url: "#/you"
+      - 'button "Theme: dark. Click to change." [ref=f2e55] [cursor=pointer]':
+        - generic [ref=f2e58]: dark
+    - main [ref=f2e59]:
+      - generic [ref=f2e339]:
+        - generic [ref=f2e340]:
+          - paragraph [ref=f2e341]: Your atlas
+          - heading "Progress" [level=1] [ref=f2e342]
+        - generic [ref=f2e343]:
+          - generic [ref=f2e344]:
+            - paragraph [ref=f2e345]: Stories finished
+            - paragraph [ref=f2e346]: "0"
+            - paragraph [ref=f2e347]: of 22
+          - generic [ref=f2e348]:
+            - paragraph [ref=f2e349]: World covered
+            - paragraph [ref=f2e350]: "0"
+            - paragraph [ref=f2e351]: of 12 regions
+          - generic [ref=f2e352]:
+            - paragraph [ref=f2e353]: Saved
+            - paragraph [ref=f2e354]: "0"
+          - generic [ref=f2e355]:
+            - paragraph [ref=f2e356]: Quiz
+            - paragraph [ref=f2e357]: —
+            - paragraph [ref=f2e358]: correct
+        - generic [ref=f2e359]:
+          - heading "World coverage" [level=2] [ref=f2e361]
+          - list [ref=f2e363]:
+            - listitem [ref=f2e364]:
+              - generic [ref=f2e365]: Mediterranean
+              - generic [ref=f2e367]: 0/7
+            - listitem [ref=f2e368]:
+              - generic [ref=f2e369]: Middle East
+              - generic [ref=f2e371]: 0/1
+            - listitem [ref=f2e372]:
+              - generic [ref=f2e373]: East Asia
+              - generic [ref=f2e375]: 0/2
+            - listitem [ref=f2e376]:
+              - generic [ref=f2e377]: Africa
+              - generic [ref=f2e379]: 0/2
+            - listitem [ref=f2e380]:
+              - generic [ref=f2e381]: Mesoamerica
+              - generic [ref=f2e383]: 0/1
+            - listitem [ref=f2e384]:
+              - generic [ref=f2e385]: Oceania
+              - generic [ref=f2e387]: 0/2
+            - listitem [ref=f2e388]:
+              - generic [ref=f2e389]: South Asia
+              - generic [ref=f2e391]: 0/1
+            - listitem [ref=f2e392]:
+              - generic [ref=f2e393]: Europe
+              - generic [ref=f2e395]: 0/2
+            - listitem [ref=f2e396]:
+              - generic [ref=f2e397]: Polar
+              - generic [ref=f2e399]: 0/1
+            - listitem [ref=f2e400]:
+              - generic [ref=f2e401]: Beyond
+              - generic [ref=f2e403]: 0/1
+            - listitem [ref=f2e404]:
+              - generic [ref=f2e405]: South America
+              - generic [ref=f2e407]: 0/1
+            - listitem [ref=f2e408]:
+              - generic [ref=f2e409]: North America
+              - generic [ref=f2e411]: 0/1
+        - generic [ref=f2e412]:
+          - heading "Collectibles" [level=2] [ref=f2e414]
+          - paragraph [ref=f2e416]: Finish a story and its card is minted here.
+        - generic [ref=f2e417]:
+          - heading "What the feed thinks you like" [level=2] [ref=f2e419]
+          - list [ref=f2e421]:
+            - listitem [ref=f2e422]:
+              - link "flight" [ref=f2e423] [cursor=pointer]:
+                - /url: "#/search?q=flight"
+            - listitem [ref=f2e426]:
+              - link "fathers and sons" [ref=f2e427] [cursor=pointer]:
+                - /url: "#/search?q=fathers%20and%20sons"
+            - listitem [ref=f2e430]:
+              - link "hubris" [ref=f2e431] [cursor=pointer]:
+                - /url: "#/search?q=hubris"
+            - listitem [ref=f2e434]:
+              - link "Crete" [ref=f2e435] [cursor=pointer]:
+                - /url: "#/search?q=Crete"
+            - listitem [ref=f2e438]:
+              - link "Greek myth" [ref=f2e439] [cursor=pointer]:
+                - /url: "#/search?q=Greek%20myth"
+            - listitem [ref=f2e442]:
+              - link "the sea" [ref=f2e443] [cursor=pointer]:
+                - /url: "#/search?q=the%20sea"
+            - listitem [ref=f2e446]:
+              - link "inventors" [ref=f2e447] [cursor=pointer]:
+                - /url: "#/search?q=inventors"
+          - button "Reset everything" [ref=f2e450] [cursor=pointer]
+  - status

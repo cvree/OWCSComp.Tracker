@@ -1,0 +1,22 @@
+[    5665ms] [ERROR] The result of getSnapshot should be cached to avoid an infinite loop @ :0
+[    6489ms] Error: Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate. React limits the number of nested updates to prevent infinite loops.
+    at getRootForUpdatedFiber (http://localhost:5183/Story-Atlas/node_modules/.vite/deps/react-dom_client.js?v=f8ffed5f:3524:128)
+    at enqueueConcurrentRenderForLane (http://localhost:5183/Story-Atlas/node_modules/.vite/deps/react-dom_client.js?v=f8ffed5f:3512:16)
+    at forceStoreRerender (http://localhost:5183/Story-Atlas/node_modules/.vite/deps/react-dom_client.js?v=f8ffed5f:6102:21)
+    at updateStoreInstance (http://localhost:5183/Story-Atlas/node_modules/.vite/deps/react-dom_client.js?v=f8ffed5f:6084:41)
+    at Object.react_stack_bottom_frame (http://localhost:5183/Story-Atlas/node_modules/.vite/deps/react-dom_client.js?v=f8ffed5f:18565:20)
+    at runWithFiberInDEV (http://localhost:5183/Story-Atlas/node_modules/.vite/deps/react-dom_client.js?v=f8ffed5f:995:72)
+    at commitHookEffectListMount (http://localhost:5183/Story-Atlas/node_modules/.vite/deps/react-dom_client.js?v=f8ffed5f:9409:163)
+    at commitHookPassiveMountEffects (http://localhost:5183/Story-Atlas/node_modules/.vite/deps/react-dom_client.js?v=f8ffed5f:9463:60)
+    at commitPassiveMountOnFiber (http://localhost:5183/Story-Atlas/node_modules/.vite/deps/react-dom_client.js?v=f8ffed5f:11038:29)
+    at recursivelyTraversePassiveMountEffects (http://localhost:5183/Story-Atlas/node_modules/.vite/deps/react-dom_client.js?v=f8ffed5f:11008:13)
+[    6489ms] [WARNING] %s
+
+%s
+ An error occurred in the <Feed> component. Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries. @ http://localhost:5183/Story-Atlas/node_modules/.vite/deps/react-dom_client.js?v=f8ffed5f:6963
+[   21562ms] [ERROR] [vite] SyntaxError: The requested module '/Story-Atlas/src/state/store.ts?t=1786322970803' does not provide an export named 'useResume' @ http://localhost:5183/Story-Atlas/@vite/client:881
+[   21562ms] [ERROR] [vite] Failed to reload /src/routes/Feed.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:5183/Story-Atlas/@vite/client:881
+[   21562ms] [ERROR] [vite] SyntaxError: The requested module '/Story-Atlas/src/state/store.ts?t=1786322970803' does not provide an export named 'useResume' @ http://localhost:5183/Story-Atlas/@vite/client:881
+[   21562ms] [ERROR] [vite] Failed to reload /src/App.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:5183/Story-Atlas/@vite/client:881
+[  274707ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5183/Story-Atlas/node_modules/.vite/deps/react-dom_client.js?v=f8ffed5f:20100

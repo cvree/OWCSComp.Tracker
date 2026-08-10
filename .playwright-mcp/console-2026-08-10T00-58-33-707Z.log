@@ -1,0 +1,16 @@
+[   26258ms] ReferenceError: FigureHeadwear is not defined
+    at Figure (http://localhost:5183/Story-Atlas/src/art/figures.tsx?t=1786323539606:411:28)
+    at Object.react_stack_bottom_frame (http://localhost:5183/Story-Atlas/node_modules/.vite/deps/react-dom_client.js?v=f8ffed5f:18507:20)
+    at renderWithHooks (http://localhost:5183/Story-Atlas/node_modules/.vite/deps/react-dom_client.js?v=f8ffed5f:5652:24)
+    at updateFunctionComponent (http://localhost:5183/Story-Atlas/node_modules/.vite/deps/react-dom_client.js?v=f8ffed5f:7473:21)
+    at beginWork (http://localhost:5183/Story-Atlas/node_modules/.vite/deps/react-dom_client.js?v=f8ffed5f:8523:20)
+    at runWithFiberInDEV (http://localhost:5183/Story-Atlas/node_modules/.vite/deps/react-dom_client.js?v=f8ffed5f:995:72)
+    at performUnitOfWork (http://localhost:5183/Story-Atlas/node_modules/.vite/deps/react-dom_client.js?v=f8ffed5f:12559:98)
+    at workLoopSync (http://localhost:5183/Story-Atlas/node_modules/.vite/deps/react-dom_client.js?v=f8ffed5f:12422:43)
+    at renderRootSync (http://localhost:5183/Story-Atlas/node_modules/.vite/deps/react-dom_client.js?v=f8ffed5f:12406:13)
+    at performWorkOnRoot (http://localhost:5183/Story-Atlas/node_modules/.vite/deps/react-dom_client.js?v=f8ffed5f:11825:37)
+[   26259ms] [WARNING] %s
+
+%s
+ An error occurred in the <Figure> component. Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries. @ http://localhost:5183/Story-Atlas/node_modules/.vite/deps/react-dom_client.js?v=f8ffed5f:6963

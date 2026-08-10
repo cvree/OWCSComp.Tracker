@@ -1,0 +1,84 @@
+- generic [ref=f7e2]:
+  - link "Skip to content" [ref=f7e325] [cursor=pointer]:
+    - /url: "#main"
+  - main [ref=f7e327]:
+    - generic [ref=f7e328]:
+      - generic [ref=f7e329]:
+        - link "Back to Read mode" [ref=f7e330] [cursor=pointer]:
+          - /url: "#/s/cadaver-synod"
+        - generic [ref=f7e333]:
+          - paragraph [ref=f7e334]: The Cadaver Synod
+          - paragraph [ref=f7e335]: The prosecution. A living man shouting at a dead one.
+        - button "Share comic" [ref=f7e336] [cursor=pointer]
+      - group "Comic, 7 pages. Use left and right arrow keys to turn pages." [ref=f7e340]:
+        - region [ref=f7e341]
+        - region [ref=f7e873]:
+          - generic [ref=f7e442]:
+            - figure [ref=f7e443]:
+              - paragraph [ref=f7e490]: He had been dead for nine months.
+              - generic [ref=f7e491]: Workmen lifting a stone slab by lamplight inside a crypt, faces turned away.
+            - figure [ref=f7e874]:
+              - generic [ref=f7e512]: They brought vestments. Someone had thought about this in advance.
+              - generic [ref=f7e514]: Folded gold and cream papal vestments and a mitre laid across a bench.
+        - 'region "Page 3 of 7. The reveal: the court is already seated." [ref=f7e515]':
+          - figure [ref=f7e517]:
+            - paragraph [ref=f7e609]: The synod was properly constituted. The bishops were real bishops. The charges were real charges. Everything was in order except the defendant.
+            - generic [ref=f7e610]: A vested body seated upright in a chair facing a semicircle of seated clergy in a cold hall.
+        - region "Page 4 of 7. The prosecution. A living man shouting at a dead one." [ref=f7e611]:
+          - generic [ref=f7e612]:
+            - figure [ref=f7e613]:
+              - paragraph [ref=f7e685]:
+                - generic [ref=f7e686]: "Pope Stephen VI:"
+                - text: Why did you, ambitious of the see of Rome, usurp the universal see —
+              - paragraph [ref=f7e688]:
+                - generic [ref=f7e689]: "Pope Stephen VI:"
+                - text: — being formerly Bishop of Porto?
+              - generic [ref=f7e690]: Pope Stephen VI on his feet, leaning forward, shouting across the hall at the seated corpse.
+            - figure [ref=f7e691]:
+              - paragraph [ref=f7e725]: A deacon stood behind the chair and answered for him.
+              - paragraph [ref=f7e727]:
+                - generic [ref=f7e728]: "deacon:"
+                - text: …I did.
+              - generic [ref=f7e730]: A very young deacon standing rigid behind the chair, eyes down, mouth barely moving.
+        - region "Page 5 of 7. The verdict and its consequences, in four beats." [ref=f7e875]:
+          - generic [ref=f7e732]:
+            - figure "Guilty." [ref=f7e876]:
+              - generic [ref=f7e754]: A hand pressing a wax seal onto a document.
+            - 'figure "Every act of his papacy: void." [ref=f7e877]':
+              - generic [ref=f7e774]: A stack of documents being struck through with a heavy line of ink.
+            - figure [ref=f7e775]:
+              - paragraph [ref=f7e817]: Which meant every priest he had ordained was, suddenly, not a priest.
+              - generic [ref=f7e818]: A row of clergy standing in a corridor, absorbing news that has just unmade them.
+            - figure "And then the river." [ref=f7e878]:
+              - generic [ref=f7e844]: The Tiber at night from a bridge parapet, dark water moving, nothing visible in it.
+        - region [ref=f7e845]:
+          - generic [ref=f7e879]:
+            - figure [ref=f7e880]:
+              - paragraph [ref=f7e969]: A few months later the Lateran basilica came down.
+              - generic: KRRRK
+              - generic [ref=f7e970]: A basilica roof and wall collapsing in a cloud of dust, people running in the foreground.
+            - figure [ref=f7e971]:
+              - paragraph [ref=f7e1002]: Rome decided it knew what that meant. There was a rising. Stephen was deposed, imprisoned, and strangled before the summer was out.
+              - generic [ref=f7e1003]: The verdict was annulled the following year. Then reinstated. Then annulled again.
+              - generic [ref=f7e1005]: A barred window in a stone cell, empty, morning light on the floor.
+        - region [ref=f7e847]
+      - navigation "Page navigation" [ref=f7e849]:
+        - button "Previous page" [ref=f7e850] [cursor=pointer]
+        - list [ref=f7e853]:
+          - listitem [ref=f7e854]:
+            - button "Go to page 1" [ref=f7e855] [cursor=pointer]
+          - listitem [ref=f7e856]:
+            - button "Go to page 2" [ref=f7e857] [cursor=pointer]
+          - listitem [ref=f7e858]:
+            - button "Go to page 3" [ref=f7e859] [cursor=pointer]
+          - listitem [ref=f7e860]:
+            - button "Go to page 4" [ref=f7e861] [cursor=pointer]
+          - listitem [ref=f7e862]:
+            - button "Go to page 5" [ref=f7e863] [cursor=pointer]
+          - listitem [ref=f7e864]:
+            - button "Go to page 6" [ref=f7e865] [cursor=pointer]
+          - listitem [ref=f7e866]:
+            - button "Go to page 7" [ref=f7e867] [cursor=pointer]
+        - generic [ref=f7e868]: 04/07
+        - button "Next page" [ref=f7e869] [cursor=pointer]
+  - status

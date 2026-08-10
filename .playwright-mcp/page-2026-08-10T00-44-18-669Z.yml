@@ -1,0 +1,149 @@
+- generic [ref=f1e2]:
+  - link "Skip to content" [ref=f1e3] [cursor=pointer]:
+    - /url: "#main"
+  - generic [ref=f1e4]:
+    - navigation "Primary" [ref=f1e3639]:
+      - generic [ref=f1e3640]: Story Atlas
+      - list [ref=f1e3647]:
+        - listitem [ref=f1e3648]:
+          - link "Feed" [ref=f1e3649] [cursor=pointer]:
+            - /url: "#/"
+        - listitem [ref=f1e3654]:
+          - link "Search" [ref=f1e3655] [cursor=pointer]:
+            - /url: "#/search"
+        - listitem [ref=f1e3660]:
+          - link "Atlas" [ref=f1e3661] [cursor=pointer]:
+            - /url: "#/atlas"
+        - listitem [ref=f1e3666]:
+          - link "Time" [ref=f1e3667] [cursor=pointer]:
+            - /url: "#/timeline"
+        - listitem [ref=f1e3672]:
+          - link "Paths" [ref=f1e3673] [cursor=pointer]:
+            - /url: "#/collections"
+        - listitem [ref=f1e3678]:
+          - link "Saved" [ref=f1e3679] [cursor=pointer]:
+            - /url: "#/saved"
+        - listitem [ref=f1e3683]:
+          - link "You" [ref=f1e3684] [cursor=pointer]:
+            - /url: "#/you"
+      - 'button "Theme: dark. Click to change." [ref=f1e3689] [cursor=pointer]':
+        - generic [ref=f1e3692]: dark
+    - main [ref=f1e48]:
+      - generic [ref=f1e3693]:
+        - generic [ref=f1e3694]:
+          - generic [ref=f1e3695]:
+            - paragraph [ref=f1e3696]: Atlas
+            - heading "Everywhere at once" [level=1] [ref=f1e3697]
+          - paragraph [ref=f1e3698]: 66 located places across 12 regions. Pins use real coordinates; the coastlines are deliberately generalised.
+          - generic [ref=f1e3699]:
+            - button "Whole world" [pressed] [ref=f1e3700] [cursor=pointer]
+            - button "Mediterranean" [ref=f1e3701] [cursor=pointer]
+            - button "Middle East" [ref=f1e3702] [cursor=pointer]
+            - button "East Asia" [ref=f1e3703] [cursor=pointer]
+            - button "Africa" [ref=f1e3704] [cursor=pointer]
+            - button "Mesoamerica" [ref=f1e3705] [cursor=pointer]
+            - button "Oceania" [ref=f1e3706] [cursor=pointer]
+            - button "South Asia" [ref=f1e3707] [cursor=pointer]
+            - button "Europe" [ref=f1e3708] [cursor=pointer]
+            - button "Polar" [ref=f1e3709] [cursor=pointer]
+            - button "Beyond" [ref=f1e3710] [cursor=pointer]
+            - button "South America" [ref=f1e3711] [cursor=pointer]
+            - button "North America" [ref=f1e3712] [cursor=pointer]
+        - generic [ref=f1e3713]:
+          - img "World map of every location in Story Atlas" [ref=f1e3716]:
+            - generic [ref=f1e3750]:
+              - button "Knossos — Icarus" [ref=f1e3751] [cursor=pointer]
+              - button "Ikaria — Icarus" [ref=f1e3754] [cursor=pointer]
+              - button "Kamikos — Icarus" [ref=f1e3757] [cursor=pointer]
+              - button "Cumae — Icarus" [ref=f1e3760] [cursor=pointer]
+              - button "Argos — Medusa" [ref=f1e3763] [cursor=pointer]
+              - button "Temple of Artemis, Corfu — Medusa" [ref=f1e3766] [cursor=pointer]
+              - button "The Caucasus — Prometheus" [ref=f1e3769] [cursor=pointer]
+              - button "Mekone — Prometheus" [ref=f1e3772] [cursor=pointer]
+              - button "Uruk — Gilgamesh" [ref=f1e3775] [cursor=pointer]
+              - button "Nineveh — Gilgamesh" [ref=f1e3778] [cursor=pointer]
+              - button "Chang’an — Sun Wukong" [ref=f1e3781] [cursor=pointer]
+              - button "Nalanda — Sun Wukong" [ref=f1e3784] [cursor=pointer]
+              - button "Flower-Fruit Mountain — Sun Wukong" [ref=f1e3787] [cursor=pointer]
+              - button "Kumasi — Anansi" [ref=f1e3790] [cursor=pointer]
+              - button "Jamaica — Anansi" [ref=f1e3793] [cursor=pointer]
+              - button "Suriname — Anansi" [ref=f1e3796] [cursor=pointer]
+              - button "Chichicastenango — The Hero Twins" [ref=f1e3799] [cursor=pointer]
+              - button "Copán — The Hero Twins" [ref=f1e3802] [cursor=pointer]
+              - button "San Bartolo — The Hero Twins" [ref=f1e3805] [cursor=pointer]
+              - button "Gunbalanya / Injalak Hill — The Rainbow Serpent" [ref=f1e3808] [cursor=pointer]
+              - button "Derbarl Yerrigan (Swan River) — The Rainbow Serpent" [ref=f1e3811] [cursor=pointer]
+              - button "Niani — Mansa Musa" [ref=f1e3814] [cursor=pointer]
+              - button "Timbuktu — Mansa Musa" [ref=f1e3817] [cursor=pointer]
+              - button "Cairo — Mansa Musa" [ref=f1e3820] [cursor=pointer]
+              - button "Mecca — Mansa Musa" [ref=f1e3823] [cursor=pointer]
+              - button "Sarnath — Ashoka" [ref=f1e3826] [cursor=pointer]
+              - button "Dhauli — Ashoka" [ref=f1e3829] [cursor=pointer]
+              - button "Kandahar — Ashoka" [ref=f1e3832] [cursor=pointer]
+              - button "Nanjing — Zheng He" [ref=f1e3835] [cursor=pointer]
+              - button "Calicut — Zheng He" [ref=f1e3838] [cursor=pointer]
+              - button "Malindi — Zheng He" [ref=f1e3841] [cursor=pointer]
+              - button "Hormuz — Zheng He" [ref=f1e3844] [cursor=pointer]
+              - button "Curia of Pompey — The Ides of March" [ref=f1e3847] [cursor=pointer]
+              - button "The Roman Forum — The Ides of March" [ref=f1e3850] [cursor=pointer]
+              - button "Philippi — The Ides of March" [ref=f1e3853] [cursor=pointer]
+              - button "Alexandria — Cleopatra" [ref=f1e3856] [cursor=pointer]
+              - button "Actium — Cleopatra" [ref=f1e3859] [cursor=pointer]
+              - button "Dendera — Cleopatra" [ref=f1e3862] [cursor=pointer]
+              - button "Pompeii — Pompeii" [ref=f1e3865] [cursor=pointer]
+              - button "Herculaneum — Pompeii" [ref=f1e3868] [cursor=pointer]
+              - button "Misenum — Pompeii" [ref=f1e3871] [cursor=pointer]
+              - button "Stabiae — Pompeii" [ref=f1e3874] [cursor=pointer]
+              - button "The Lateran — The Cadaver Synod" [ref=f1e3877] [cursor=pointer]
+              - button "Old St Peter’s — The Cadaver Synod" [ref=f1e3880] [cursor=pointer]
+              - button "The Tiber — The Cadaver Synod" [ref=f1e3883] [cursor=pointer]
+              - button "Domrémy — Joan of Arc" [ref=f1e3886] [cursor=pointer]
+              - button "Orléans — Joan of Arc" [ref=f1e3889] [cursor=pointer]
+              - button "Reims — Joan of Arc" [ref=f1e3892] [cursor=pointer]
+              - button "Rouen — Joan of Arc" [ref=f1e3895] [cursor=pointer]
+              - button "The Weddell Sea — Shackleton" [ref=f1e3898] [cursor=pointer]
+              - button "Elephant Island — Shackleton" [ref=f1e3901] [cursor=pointer]
+              - button "South Georgia — Shackleton" [ref=f1e3904] [cursor=pointer]
+              - button "Tranquility Base — Apollo 11" [ref=f1e3907] [cursor=pointer]
+              - button "Mission Control, Houston — Apollo 11" [ref=f1e3910] [cursor=pointer]
+              - button "Kennedy Space Center — Apollo 11" [ref=f1e3913] [cursor=pointer]
+              - button "Honeysuckle Creek — Apollo 11" [ref=f1e3916] [cursor=pointer]
+              - button "Nan Madol — Nan Madol" [ref=f1e3919] [cursor=pointer]
+              - button "Sokehs basalt quarries — Nan Madol" [ref=f1e3922] [cursor=pointer]
+              - button "Cusco — The Khipu" [ref=f1e3925] [cursor=pointer]
+              - button "San Juan de Collata — The Khipu" [ref=f1e3928] [cursor=pointer]
+              - button "Incahuasi — The Khipu" [ref=f1e3931] [cursor=pointer]
+              - button "Cahokia — Cahokia" [ref=f1e3934] [cursor=pointer]
+              - button "St Louis — Cahokia" [ref=f1e3937] [cursor=pointer]
+              - button "Antikythera — The Antikythera Mechanism" [ref=f1e3940] [cursor=pointer]
+              - button "National Archaeological Museum — The Antikythera Mechanism" [ref=f1e3943] [cursor=pointer]
+              - button "Rhodes — The Antikythera Mechanism" [ref=f1e3946] [cursor=pointer]
+          - complementary [ref=f1e3949]:
+            - generic [ref=f1e3950]:
+              - paragraph [ref=f1e3954]: Select a pin to see what happened there.
+              - list [ref=f1e3955]:
+                - listitem [ref=f1e3956]:
+                  - generic [ref=f1e3957]: Mediterranean
+                  - text: The Greek and Roman sea
+                - listitem [ref=f1e3958]:
+                  - generic [ref=f1e3959]: Middle East
+                  - text: Mesopotamia, Levant, Persia, Arabia
+                - listitem [ref=f1e3960]:
+                  - generic [ref=f1e3961]: East Asia
+                  - text: China, Korea, Japan
+                - listitem [ref=f1e3962]:
+                  - generic [ref=f1e3963]: Africa
+                  - text: Sahel, Nile, Swahili coast, forest kingdoms
+                - listitem [ref=f1e3964]:
+                  - generic [ref=f1e3965]: Mesoamerica
+                  - text: Maya, Mexica, Zapotec
+                - listitem [ref=f1e3966]:
+                  - generic [ref=f1e3967]: Oceania
+                  - text: Polynesia, Melanesia, Australia
+                - listitem [ref=f1e3968]:
+                  - generic [ref=f1e3969]: South Asia
+                  - text: India, Nepal, Sri Lanka
+                - listitem [ref=f1e3970]:
+                  - generic [ref=f1e3971]: Europe
+                  - text: Atlantic to the Urals
+  - status

@@ -1,0 +1,498 @@
+- generic [ref=f1e2]:
+  - link "Skip to content" [ref=f1e3] [cursor=pointer]:
+    - /url: "#main"
+  - generic [ref=f1e4]:
+    - navigation "Primary" [ref=f1e5]:
+      - list [ref=f1e6]:
+        - listitem [ref=f1e7]:
+          - link "Feed" [ref=f1e8] [cursor=pointer]:
+            - /url: "#/"
+        - listitem [ref=f1e13]:
+          - link "Search" [ref=f1e14] [cursor=pointer]:
+            - /url: "#/search"
+        - listitem [ref=f1e19]:
+          - link "Atlas" [ref=f1e20] [cursor=pointer]:
+            - /url: "#/atlas"
+        - listitem [ref=f1e25]:
+          - link "Time" [ref=f1e26] [cursor=pointer]:
+            - /url: "#/timeline"
+        - listitem [ref=f1e31]:
+          - link "Paths" [ref=f1e32] [cursor=pointer]:
+            - /url: "#/collections"
+        - listitem [ref=f1e37]:
+          - link "Saved" [ref=f1e38] [cursor=pointer]:
+            - /url: "#/saved"
+        - listitem [ref=f1e42]:
+          - link "You" [ref=f1e43] [cursor=pointer]:
+            - /url: "#/you"
+    - main [ref=f1e48]:
+      - article [ref=f1e49]:
+        - generic [ref=f1e169]:
+          - generic [ref=f1e170]:
+            - generic "Classified as Myth. A traditional story about gods, origins and meaning. Not a record of events." [ref=f1e171]: MYTH
+            - generic [ref=f1e173]: Mediterranean
+            - generic [ref=f1e174]: Mythic Bronze Age
+          - heading "Icarus" [level=1] [ref=f1e175]
+          - paragraph [ref=f1e176]: "His father gave him one rule: don’t fly too close to the sun."
+          - paragraph [ref=f1e177]: Everyone remembers the boy who ignored a warning. Almost nobody remembers that the warning had two halves — or that the story is really about his father.
+          - generic [ref=f1e178]:
+            - generic [ref=f1e179]: 5 min read
+            - generic [ref=f1e180]: Greek · Cretan
+          - generic [ref=f1e181]:
+            - link "Read as a comic" [ref=f1e182] [cursor=pointer]:
+              - /url: "#/s/icarus/comic"
+            - button "Save story" [ref=f1e187] [cursor=pointer]
+            - button "Share" [ref=f1e190] [cursor=pointer]
+          - paragraph [ref=f1e194]: A traditional story about gods, origins and meaning. Not a record of events.
+        - generic [ref=f1e195]:
+          - paragraph [ref=f1e196]: The trick to this story is that you already know the ending, and you still have it wrong.
+          - paragraph [ref=f1e197]: A man and his son are locked on an island. The man is the finest engineer alive. He looks at the one road out that nobody is guarding — straight up — and he builds it. Then he tells his boy the two rules that will keep him alive. The boy breaks one of them.
+          - paragraph [ref=f1e198]: That much you know. What gets lost, every single time, is which rule he was actually given, and who the story is punishing.
+        - generic [ref=f1e199]:
+          - heading "The man who built the problem" [level=2] [ref=f1e200]
+          - paragraph [ref=f1e201]: "Daedalus was the sort of craftsman other craftsmen tell stories about. In the Greek imagination he is the origin point of made things: the first statues with their eyes open and their legs apart, as though about to walk. He was Athenian, and he left Athens in a hurry — the tradition says he threw his own nephew off the Acropolis for being more talented than he was."
+          - paragraph [ref=f1e202]: He landed on Crete, at the court of King Minos, and there he did the work that would trap him. Minos’s wife Pasiphaë had conceived a child by a bull. The child grew. It had to be kept somewhere. So Daedalus designed a building with no room in it that could be understood from inside — the Labyrinth — and shut the Minotaur into the middle of it.
+          - paragraph [ref=f1e203]: "Then Minos’s daughter Ariadne fell in love with a visiting Athenian, and Daedalus — who could not help himself — told her the trick: a thread. Theseus went in, killed the thing, and followed the thread back out."
+          - paragraph [ref=f1e204]: Minos worked out very quickly who had given away the secret. And a king who owns the only harbours on an island does not need a prison. He simply announces that no ship will carry you.
+        - complementary [ref=f1e205]:
+          - generic [ref=f1e206]: “
+          - blockquote [ref=f1e207]: He may block the land and the sea, but the sky is open.
+          - generic [ref=f1e208]: Daedalus, in Ovid’s Metamorphoses
+        - generic [ref=f1e209]:
+          - heading "Feathers, thread, wax" [level=2] [ref=f1e210]
+          - paragraph [ref=f1e211]: Ovid describes the build the way you would describe a real object being made, which is part of why it has lasted two thousand years. Daedalus lays out feathers in a row, shortest to longest, so the edge steps up like a rustic pan-pipe. He binds the middles with linen thread and seals the bases with wax. Then he bends the whole assembly into a gentle curve, because that is the shape a real bird’s wing has.
+          - paragraph [ref=f1e212]: "And the boy is underfoot the whole time. This is the detail that gives the passage its terrible domestic weight: Icarus keeps grabbing at the feathers as they drift, mashing the yellow wax with his thumb, getting in the way of the work. He is playing with the thing that is going to kill him, and his father is smiling at him while he does it."
+        - figure "Ovid gives Daedalus a working method, not a miracle. That is why it feels true." [ref=f1e213]:
+          - img "Daedalus laying out graded rows of feathers on a workbench while Icarus reaches for one drifting in the air." [ref=f1e215]
+        - complementary [ref=f1e312]:
+          - paragraph [ref=f1e313]: The half everybody forgets
+          - paragraph [ref=f1e314]:
+            - generic [ref=f1e315]:
+              - text: The warning is not “don’t fly too high.” It is a corridor. Fly too low and sea spray soaks the feathers and drags you down. Fly too high and the sun softens the wax. Daedalus tells him to hold the middle — and the Latin word Ovid uses for that instruction,
+              - emphasis [ref=f1e316]: medio
+              - text: ", is the same idea Greek ethics had been circling for centuries. The moral of Icarus is not “don’t be ambitious.” It is “don’t be extreme.”"
+        - generic [ref=f1e317]:
+          - heading "The flight" [level=2] [ref=f1e318]
+          - paragraph [ref=f1e319]: "They go up. Below them, a fisherman with a trembling rod, a shepherd on his crook, a ploughman at his handles — all three stop and look up and decide they are watching gods. Ovid puts those three men in for a reason: it is the only moment in the story where the flight is beautiful and nothing has gone wrong yet."
+          - paragraph [ref=f1e320]:
+            - generic [ref=f1e321]:
+              - text: Then the boy starts to enjoy it. Ovid is careful here. Icarus is not proud, not defiant, not making a point. He is
+              - emphasis [ref=f1e322]: delighted
+              - text: . He is a teenager who has just discovered that he can climb, so he climbs — drawn, in the poem’s phrase, by a longing for the sky. He leaves the corridor.
+          - paragraph [ref=f1e323]: The sun softens the wax. The feathers come away. He beats bare arms against nothing, and the air will not hold him, and he is still calling his father’s name when the water closes over him.
+        - complementary [ref=f1e324]:
+          - generic [ref=f1e325]: “
+          - blockquote [ref=f1e326]: He was calling his father’s name, and the blue water took it, and that water carries his name now.
+        - generic [ref=f1e327]:
+          - heading "Who the story is actually about" [level=2] [ref=f1e328]
+          - paragraph [ref=f1e329]: Here is where most retellings stop, and here is where Ovid’s version turns.
+          - paragraph [ref=f1e330]:
+            - generic [ref=f1e331]:
+              - text: Daedalus is still flying. He calls back. Nothing. He calls again —
+              - emphasis [ref=f1e332]: Icarus, where are you?
+              - text: — and then he sees the feathers on the water.
+          - paragraph [ref=f1e333]: And the last thing the greatest engineer in the world ever does in this story is bury his son on an island, and curse his own hands, and his own arts.
+          - paragraph [ref=f1e334]: That is the shape of it. The boy is not punished for ambition; he is a kid who got excited. The person the story destroys is the father — the man who solved an impossible problem brilliantly and completely, and lost the only thing the solution was for. Every version of this myth that ends with “and that’s why you shouldn’t reach too high” has quietly deleted the grieving man in the sky shouting a name at an empty sea.
+        - region "Places in this story" [ref=f1e336]:
+          - heading "Where" [level=2] [ref=f1e338]
+          - generic [ref=f1e340]:
+            - img "Places in Icarus" [ref=f1e342]:
+              - generic [ref=f1e376]:
+                - button "Knossos" [ref=f1e377] [cursor=pointer]
+                - button "Ikaria" [ref=f1e381] [cursor=pointer]
+                - button "Kamikos" [ref=f1e384] [cursor=pointer]
+                - button "Cumae" [ref=f1e387] [cursor=pointer]
+            - generic [ref=f1e390]:
+              - button "Knossos Crete, Greece" [pressed] [ref=f1e391] [cursor=pointer]:
+                - generic [ref=f1e392]: Knossos
+                - emphasis [ref=f1e393]: Crete, Greece
+              - button "Ikaria Ikaria, Greece" [ref=f1e394] [cursor=pointer]:
+                - generic [ref=f1e395]: Ikaria
+                - emphasis [ref=f1e396]: Ikaria, Greece
+              - button "Kamikos Sicily, Italy" [ref=f1e397] [cursor=pointer]:
+                - generic [ref=f1e398]: Kamikos
+                - emphasis [ref=f1e399]: Sicily, Italy
+              - button "Cumae Campania, Italy" [ref=f1e400] [cursor=pointer]:
+                - generic [ref=f1e401]: Cumae
+                - emphasis [ref=f1e402]: Campania, Italy
+          - paragraph [ref=f1e403]: The palace of Minos — and a real Bronze Age complex of some 1,300 rooms.
+          - paragraph [ref=f1e404]: 35.298° N · 25.163° E
+        - region "Timeline" [ref=f1e406]:
+          - heading "Timeline" [level=2] [ref=f1e408]
+          - list [ref=f1e410]:
+            - listitem [ref=f1e411]:
+              - paragraph [ref=f1e413]: c. 1600 BCE~
+              - paragraph [ref=f1e414]: The mythic setting
+              - paragraph [ref=f1e415]: Where later Greeks placed Minos and the Labyrinth. A story date, not a record.
+            - listitem [ref=f1e416]:
+              - paragraph [ref=f1e418]: c. 1450 BCE
+              - paragraph [ref=f1e419]: Knossos is destroyed
+              - paragraph [ref=f1e420]: The real palace complex burns and is taken over by mainland Mycenaeans.
+            - listitem [ref=f1e421]:
+              - paragraph [ref=f1e423]: c. 530 BCE~
+              - paragraph [ref=f1e424]: Icarus appears in Greek art
+              - paragraph [ref=f1e425]: The fall is already a recognisable scene on painted pottery centuries before Rome.
+            - listitem [ref=f1e426]:
+              - paragraph [ref=f1e428]: 8 CE
+              - paragraph [ref=f1e429]: Ovid publishes the Metamorphoses
+              - paragraph [ref=f1e430]: The version that wins.
+            - listitem [ref=f1e431]:
+              - paragraph [ref=f1e433]: c. 1560~
+              - paragraph [ref=f1e434]: Bruegel paints the fall
+              - paragraph [ref=f1e435]: And hides it in the bottom-right corner of an ordinary afternoon.
+            - listitem [ref=f1e436]:
+              - paragraph [ref=f1e438]: "1900"
+              - paragraph [ref=f1e439]: Arthur Evans digs at Knossos
+              - paragraph [ref=f1e440]: A real palace with a genuinely bewildering plan comes out of the ground.
+        - complementary [ref=f1e441]:
+          - heading "The most famous painting of this is a joke about you" [level=3] [ref=f1e442]
+          - paragraph [ref=f1e443]:
+            - generic [ref=f1e444]:
+              - text: Bruegel’s
+              - emphasis [ref=f1e445]: Landscape with the Fall of Icarus
+              - text: "(c. 1560, or a later copy of a lost original) is a wide, calm, gorgeous scene: a ploughman ploughing, a shepherd staring at the sky, a ship in full sail, the sun going down. It takes most people a while to find Icarus at all. He is a pair of white legs, bottom right, disappearing into the water, and not one person in the painting has noticed."
+          - paragraph [ref=f1e446]:
+            - generic [ref=f1e447]:
+              - text: W. H. Auden built a poem around it —
+              - emphasis [ref=f1e448]: Musée des Beaux Arts
+              - text: "— about exactly that: how catastrophe always happens somewhere off to the side of somebody else’s ordinary afternoon."
+        - region "Key people" [ref=f1e450]:
+          - heading "Key people" [level=2] [ref=f1e452]
+          - list [ref=f1e454]:
+            - listitem [ref=f1e455]:
+              - link [ref=f1e456] [cursor=pointer]:
+                - /url: "#/p/icarus"
+                - img "Portrait of Icarus" [ref=f1e457]
+                - generic [ref=f1e484]:
+                  - heading "Icarus" [level=3] [ref=f1e485]
+                  - paragraph [ref=f1e486]: Son of Daedalus; the boy who flew
+            - listitem [ref=f1e487]:
+              - link [ref=f1e488] [cursor=pointer]:
+                - /url: "#/p/daedalus"
+                - img "Portrait of Daedalus" [ref=f1e489]
+                - generic [ref=f1e512]:
+                  - heading "Daedalus" [level=3] [ref=f1e513]
+                  - paragraph [ref=f1e514]: Master craftsman, architect of the Labyrinth
+            - listitem [ref=f1e515]:
+              - link [ref=f1e516] [cursor=pointer]:
+                - /url: "#/p/minos"
+                - img "Portrait of King Minos" [ref=f1e517]
+                - generic [ref=f1e545]:
+                  - heading "King Minos" [level=3] [ref=f1e546]
+                  - paragraph [ref=f1e547]: King of Crete
+            - listitem [ref=f1e548]:
+              - link [ref=f1e549] [cursor=pointer]:
+                - /url: "#/p/ariadne"
+                - img "Portrait of Ariadne" [ref=f1e550]
+                - generic [ref=f1e575]:
+                  - heading "Ariadne" [level=3] [ref=f1e576]
+                  - paragraph [ref=f1e577]: Daughter of Minos
+            - listitem [ref=f1e578]:
+              - link [ref=f1e579] [cursor=pointer]:
+                - /url: "#/p/theseus"
+                - img "Portrait of Theseus" [ref=f1e580]
+                - generic [ref=f1e603]:
+                  - heading "Theseus" [level=3] [ref=f1e604]
+                  - paragraph [ref=f1e605]: Athenian prince
+        - region "Artifacts" [ref=f1e607]:
+          - heading "Artifacts" [level=2] [ref=f1e609]
+          - list [ref=f1e611]:
+            - listitem [ref=f1e612]:
+              - generic [ref=f1e619]:
+                - heading "Silver stater of Knossos" [level=3] [ref=f1e620]
+                - paragraph [ref=f1e621]: Cretan coins struck from the 5th to 1st centuries BCE carry a labyrinth on the reverse — square or round, always a single winding path. The city was advertising the myth as civic identity, a thousand years after the palace burned.
+                - paragraph [ref=f1e622]: British Museum; Ashmolean; Heraklion
+            - listitem [ref=f1e623]:
+              - generic [ref=f1e632]:
+                - heading "The labrys (double axe)" [level=3] [ref=f1e633]
+                - paragraph [ref=f1e634]: Bronze double axes, some ceremonial and far too thin to cut anything, are found across Minoan Crete and incised into the stones of Knossos itself.
+                - paragraph [ref=f1e635]: Heraklion Archaeological Museum
+            - listitem [ref=f1e636]:
+              - generic [ref=f1e645]:
+                - heading "The Metamorphoses" [level=3] [ref=f1e646]
+                - paragraph [ref=f1e647]: Fifteen books of Latin hexameter finished in 8 CE, the year Ovid was exiled to the Black Sea. No copy in his own hand survives; everything we have descends from medieval manuscripts.
+                - paragraph [ref=f1e648]: Copied continuously since the 9th century
+        - generic [ref=f1e649]:
+          - region [ref=f1e650]:
+            - generic [ref=f1e652]:
+              - paragraph [ref=f1e653]: Accuracy
+              - heading "What do we actually know?" [level=2] [ref=f1e654]
+            - paragraph [ref=f1e656]: Every claim in this story is graded. Nothing is quietly promoted from legend to fact.
+            - group "Filter by confidence" [ref=f1e657]:
+              - button "All 8" [ref=f1e658] [cursor=pointer]
+              - button "Myth" [ref=f1e659] [cursor=pointer]
+              - button "Documented" [ref=f1e660] [cursor=pointer]
+              - button "Likely" [ref=f1e661] [cursor=pointer]
+              - button "Disputed" [ref=f1e662] [cursor=pointer]
+              - button "Later tradition" [ref=f1e663] [cursor=pointer]
+              - button "Popular but unsupported" [ref=f1e664] [cursor=pointer]
+            - list [ref=f1e665]:
+              - listitem [ref=f1e666]:
+                - generic [ref=f1e674]:
+                  - paragraph [ref=f1e675]: Myth
+                  - paragraph [ref=f1e676]: The flight itself — the wings, the sun, the fall.
+                  - paragraph [ref=f1e677]: This belongs entirely to the story-world. There is no ancient claim that it was witnessed or recorded, and no ancient author treats it as reportage.
+              - listitem [ref=f1e678]:
+                - generic [ref=f1e686]:
+                  - paragraph [ref=f1e687]: Documented
+                  - paragraph [ref=f1e688]: The story is old and was told across the Greek and Roman world.
+                  - paragraph [ref=f1e689]: Icarus appears in Greek art and reference long before Rome, and the fullest surviving narrative is Ovid’s, published in 8 CE. Apollodorus, Diodorus, Hyginus and Pausanias all preserve variants — which is how we know Ovid was shaping an inherited story, not inventing one.
+              - listitem [ref=f1e690]:
+                - generic [ref=f1e698]:
+                  - paragraph [ref=f1e699]: Documented
+                  - paragraph [ref=f1e700]: The places are real and were named after him in antiquity.
+                  - paragraph [ref=f1e701]: The island of Ikaria and the stretch of Aegean around it — the Icarian Sea — carried the name in classical antiquity, and still do. Strabo records the association.
+              - listitem [ref=f1e702]:
+                - generic [ref=f1e710]:
+                  - paragraph [ref=f1e711]: Likely
+                  - paragraph [ref=f1e712]: A wealthy, complex palace society really did dominate Bronze Age Crete.
+                  - paragraph [ref=f1e713]: Excavations at Knossos from 1900 revealed an enormous multi-storey administrative complex with hundreds of interconnected rooms. That is a real civilisation with real reach — and a plausible seedbed for stories about a king, a maze-like palace, and a bull cult.
+              - listitem [ref=f1e714]:
+                - generic [ref=f1e722]:
+                  - paragraph [ref=f1e723]: Disputed
+                  - paragraph [ref=f1e724]: “Labyrinth” comes from *labrys*, the Minoan double axe.
+                  - paragraph [ref=f1e725]: It is a popular and attractive derivation — the double axe is everywhere at Knossos. But the word is pre-Greek and the etymology is genuinely unresolved; specialists disagree, and the *labrys* link is a nineteenth-century proposal, not a settled fact.
+              - listitem [ref=f1e726]:
+                - generic [ref=f1e734]:
+                  - paragraph [ref=f1e735]: Later tradition
+                  - paragraph [ref=f1e736]: Icarus is a warning against pride.
+                  - paragraph [ref=f1e737]: This reading hardens in the medieval and Renaissance moralising tradition. In Ovid the boy is not proud — he is *captured by desire for the sky*, and the emotional weight of the passage falls on his father’s grief.
+              - listitem [ref=f1e738]:
+                - generic [ref=f1e746]:
+                  - paragraph [ref=f1e747]: Popular but unsupported
+                  - paragraph [ref=f1e748]: Daedalus only warned him about the sun.
+                  - paragraph [ref=f1e749]: "Repeated constantly. It is half the instruction. The text gives a two-sided limit: too low and the sea weighs the wings down, too high and the fire scorches them. Deleting the lower bound turns a lesson about moderation into a lesson about ambition."
+              - listitem [ref=f1e750]:
+                - generic [ref=f1e758]:
+                  - paragraph [ref=f1e759]: Popular but unsupported
+                  - paragraph [ref=f1e760]: The wax melted because he got close to the sun’s heat.
+                  - paragraph [ref=f1e761]: It is the story’s internal physics, not the world’s. Air gets colder with altitude, not hotter. This is a poetic mechanism, and treating it as a physics claim misreads the genre.
+          - region "Memorable facts" [ref=f1e762]:
+            - heading "Worth remembering" [level=2] [ref=f1e764]
+            - list [ref=f1e766]:
+              - listitem [ref=f1e767]:
+                - generic [ref=f1e768]: "01"
+                - paragraph [ref=f1e769]: The warning had two halves. Sea spray below, sun above. Icarus was told to hold the middle — and “hold the middle” is a far less flattering moral than “don’t be ambitious.”
+              - listitem [ref=f1e770]:
+                - generic [ref=f1e771]: "02"
+                - paragraph [ref=f1e772]: The Icarian Sea is on modern nautical charts. A stretch of the Aegean is named after a boy who never existed.
+              - listitem [ref=f1e773]:
+                - generic [ref=f1e774]: "03"
+                - paragraph [ref=f1e775]: In Ovid, the last person we see is Daedalus, cursing his own hands over open water.
+              - listitem [ref=f1e776]:
+                - generic [ref=f1e777]: "04"
+                - paragraph [ref=f1e778]: "Diodorus Siculus preserves a deflationary version: they escaped by boat, and Icarus simply fell overboard. Ancient writers were already trying to make the story sensible."
+              - listitem [ref=f1e779]:
+                - generic [ref=f1e780]: "05"
+                - paragraph [ref=f1e781]: Bruegel painted the fall so small that most people never find it.
+          - region [ref=f1e782]:
+            - generic [ref=f1e783]:
+              - generic [ref=f1e784]:
+                - paragraph [ref=f1e785]: Check yourself
+                - heading "Did it stick?" [level=2] [ref=f1e786]
+              - generic [ref=f1e787]: —
+            - list [ref=f1e788]:
+              - listitem [ref=f1e789]:
+                - paragraph [ref=f1e790]:
+                  - generic [ref=f1e791]: Q1
+                  - text: What did Daedalus actually warn Icarus about?
+                - generic [ref=f1e792]:
+                  - button "A Flying too close to the sun" [ref=f1e793] [cursor=pointer]:
+                    - generic [ref=f1e794]: A
+                    - generic [ref=f1e795]: Flying too close to the sun
+                  - button "B Flying too low *and* too high" [ref=f1e796] [cursor=pointer]:
+                    - generic [ref=f1e797]: B
+                    - generic [ref=f1e798]: Flying too low *and* too high
+                  - button "C Looking down at the sea" [ref=f1e799] [cursor=pointer]:
+                    - generic [ref=f1e800]: C
+                    - generic [ref=f1e801]: Looking down at the sea
+                  - button "D Flying at night" [ref=f1e802] [cursor=pointer]:
+                    - generic [ref=f1e803]: D
+                    - generic [ref=f1e804]: Flying at night
+              - listitem [ref=f1e805]:
+                - paragraph [ref=f1e806]:
+                  - generic [ref=f1e807]: Q2
+                  - text: How is Icarus’s state of mind described at the moment he climbs?
+                - generic [ref=f1e808]:
+                  - button "A Proud and defiant" [ref=f1e809] [cursor=pointer]:
+                    - generic [ref=f1e810]: A
+                    - generic [ref=f1e811]: Proud and defiant
+                  - button "B Terrified" [ref=f1e812] [cursor=pointer]:
+                    - generic [ref=f1e813]: B
+                    - generic [ref=f1e814]: Terrified
+                  - button "C Delighted — pulled by a longing for the sky" [ref=f1e815] [cursor=pointer]:
+                    - generic [ref=f1e816]: C
+                    - generic [ref=f1e817]: Delighted — pulled by a longing for the sky
+                  - button "D Asleep" [ref=f1e818] [cursor=pointer]:
+                    - generic [ref=f1e819]: D
+                    - generic [ref=f1e820]: Asleep
+              - listitem [ref=f1e821]:
+                - paragraph [ref=f1e822]:
+                  - generic [ref=f1e823]: Q3
+                  - text: Where does the word “labyrinth” come from?
+                - generic [ref=f1e824]:
+                  - button "A Certainly from *labrys*, the Minoan double axe" [ref=f1e825] [cursor=pointer]:
+                    - generic [ref=f1e826]: A
+                    - generic [ref=f1e827]: Certainly from *labrys*, the Minoan double axe
+                  - button "B From the Greek for “stone”" [ref=f1e828] [cursor=pointer]:
+                    - generic [ref=f1e829]: B
+                    - generic [ref=f1e830]: From the Greek for “stone”
+                  - button "C It is pre-Greek and genuinely unresolved" [ref=f1e831] [cursor=pointer]:
+                    - generic [ref=f1e832]: C
+                    - generic [ref=f1e833]: It is pre-Greek and genuinely unresolved
+                  - button "D From the name of the architect" [ref=f1e834] [cursor=pointer]:
+                    - generic [ref=f1e835]: D
+                    - generic [ref=f1e836]: From the name of the architect
+              - listitem [ref=f1e837]:
+                - paragraph [ref=f1e838]:
+                  - generic [ref=f1e839]: Q4
+                  - text: Which part of this story has hard archaeological support?
+                - generic [ref=f1e840]:
+                  - button "A The wings" [ref=f1e841] [cursor=pointer]:
+                    - generic [ref=f1e842]: A
+                    - generic [ref=f1e843]: The wings
+                  - button "B The Labyrinth as a building" [ref=f1e844] [cursor=pointer]:
+                    - generic [ref=f1e845]: B
+                    - generic [ref=f1e846]: The Labyrinth as a building
+                  - button "C A large, wealthy palace society on Bronze Age Crete" [ref=f1e847] [cursor=pointer]:
+                    - generic [ref=f1e848]: C
+                    - generic [ref=f1e849]: A large, wealthy palace society on Bronze Age Crete
+                  - button "D Minos as a named historical king" [ref=f1e850] [cursor=pointer]:
+                    - generic [ref=f1e851]: D
+                    - generic [ref=f1e852]: Minos as a named historical king
+          - region [ref=f1e853]:
+            - heading "Sources" [level=2] [ref=f1e855]
+            - paragraph [ref=f1e857]: Where this came from. Primary sources were made at the time; scholarship interprets them. Both are listed so you can go and disagree with us.
+            - list [ref=f1e858]:
+              - listitem [ref=f1e859]:
+                - generic [ref=f1e860]: Primary
+                - generic [ref=f1e861]:
+                  - paragraph [ref=f1e862]:
+                    - text: Ovid,
+                    - emphasis [ref=f1e863]: Metamorphoses
+                    - text: VIII.183–235
+                  - paragraph [ref=f1e864]: The fullest surviving narrative, and the source of nearly every detail modern readers know.
+                  - link "Open source ↗" [ref=f1e865] [cursor=pointer]:
+                    - /url: https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.02.0028
+                - generic [ref=f1e866]: 8 CE
+              - listitem [ref=f1e867]:
+                - generic [ref=f1e868]: Primary
+                - generic [ref=f1e869]:
+                  - paragraph [ref=f1e870]:
+                    - text: Pseudo-Apollodorus,
+                    - emphasis [ref=f1e871]: Bibliotheca
+                    - text: ", Epitome 1.12–13"
+                  - paragraph [ref=f1e872]: A compact mythographic summary — useful precisely because it is dry.
+                  - link "Open source ↗" [ref=f1e873] [cursor=pointer]:
+                    - /url: https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0022
+                - generic [ref=f1e874]: 1st–2nd c. CE
+              - listitem [ref=f1e875]:
+                - generic [ref=f1e876]: Primary
+                - generic [ref=f1e877]:
+                  - paragraph [ref=f1e878]:
+                    - text: Diodorus Siculus,
+                    - emphasis [ref=f1e879]: Bibliotheca historica
+                    - text: IV.77
+                  - paragraph [ref=f1e880]: Gives a rationalised variant in which the escape is by sail, not by wing.
+                - generic [ref=f1e881]: c. 30 BCE
+              - listitem [ref=f1e882]:
+                - generic [ref=f1e883]: Primary
+                - generic [ref=f1e884]:
+                  - paragraph [ref=f1e885]:
+                    - text: Pausanias,
+                    - emphasis [ref=f1e886]: Description of Greece
+                    - text: IX.11.4–5
+                  - paragraph [ref=f1e887]: On Daedalus’s statues and his afterlife in Greek memory.
+                - generic [ref=f1e888]: c. 175 CE
+              - listitem [ref=f1e889]:
+                - generic [ref=f1e890]: Primary
+                - generic [ref=f1e891]:
+                  - paragraph [ref=f1e892]:
+                    - text: Strabo,
+                    - emphasis [ref=f1e893]: Geography
+                    - text: XIV.1.19
+                  - paragraph [ref=f1e894]: On Ikaria and the Icarian Sea taking their name from the fall.
+                - generic [ref=f1e895]: c. 20 CE
+              - listitem [ref=f1e896]:
+                - generic [ref=f1e897]: Archaeology
+                - generic [ref=f1e898]:
+                  - paragraph [ref=f1e899]:
+                    - text: Arthur Evans,
+                    - emphasis [ref=f1e900]: The Palace of Minos at Knossos
+                    - text: ", 4 vols (1921–1935)"
+                  - paragraph [ref=f1e901]: The excavation that gave the Bronze Age Cretans the name “Minoan” — after the king in this story. Read Evans’s reconstructions critically; several are his own invention.
+                - generic [ref=f1e902]: 1921–1935
+              - listitem [ref=f1e903]:
+                - generic [ref=f1e904]: Collection
+                - generic [ref=f1e905]:
+                  - paragraph [ref=f1e906]: Knossos archaeological site, Hellenic Ministry of Culture
+                  - link "Open source ↗" [ref=f1e907] [cursor=pointer]:
+                    - /url: https://www.culture.gov.gr/en/service/SitePages/view.aspx?iID=2369
+              - listitem [ref=f1e908]:
+                - generic [ref=f1e909]: Reference
+                - generic [ref=f1e910]:
+                  - paragraph [ref=f1e911]:
+                    - text: R. S. P. Beekes,
+                    - emphasis [ref=f1e912]: Etymological Dictionary of Greek
+                    - text: (2010), s.v. λαβύρινθος
+                  - paragraph [ref=f1e913]: Treats the word as pre-Greek and the *labrys* derivation as unproven.
+                - generic [ref=f1e914]: "2010"
+              - listitem [ref=f1e915]:
+                - generic [ref=f1e916]: Scholarship
+                - paragraph [ref=f1e918]: W. H. Auden, “Musée des Beaux Arts” (1938)
+                - generic [ref=f1e919]: "1938"
+          - region "Related stories" [ref=f1e920]:
+            - heading "Keep going" [level=2] [ref=f1e922]
+            - list [ref=f1e924]:
+              - listitem [ref=f1e925]:
+                - link [ref=f1e926] [cursor=pointer]:
+                  - /url: "#/s/prometheus"
+                  - generic "Classified as Myth. A traditional story about gods, origins and meaning. Not a record of events." [ref=f1e927]: MYTH
+                  - paragraph [ref=f1e929]: He stole fire for us, and the punishment was designed to never finish.
+                  - paragraph [ref=f1e930]: Prometheus
+                  - generic [ref=f1e931]: Read
+              - listitem [ref=f1e934]:
+                - link [ref=f1e935] [cursor=pointer]:
+                  - /url: "#/s/sun-wukong"
+                  - generic "Classified as Folklore. Living oral tradition — told, retold and reshaped by communities." [ref=f1e936]: FOLKLORE
+                  - paragraph [ref=f1e938]: He ate the peaches of immortality, erased his own name from the register of the dead, and lost a bet by pissing on the Buddha’s finger.
+                  - paragraph [ref=f1e939]: Sun Wukong
+                  - generic [ref=f1e940]: Read
+              - listitem [ref=f1e943]:
+                - link [ref=f1e944] [cursor=pointer]:
+                  - /url: "#/s/apollo-11"
+                  - generic "Classified as Documented history. Supported by contemporary records, physical evidence, or both." [ref=f1e945]: DOCUMENTED
+                  - paragraph [ref=f1e947]: With 20 seconds of fuel left, the computer started throwing alarms nobody in the room had ever seen — and a 26-year-old said “go”.
+                  - paragraph [ref=f1e948]: Apollo 11
+                  - generic [ref=f1e949]: Read
+              - listitem [ref=f1e952]:
+                - link [ref=f1e953] [cursor=pointer]:
+                  - /url: "#/s/medusa"
+                  - generic "Classified as Myth. A traditional story about gods, origins and meaning. Not a record of events." [ref=f1e954]: MYTH
+                  - paragraph [ref=f1e956]: The monster everyone can name was, in the oldest versions, not cursed for anything at all.
+                  - paragraph [ref=f1e957]: Medusa
+                  - generic [ref=f1e958]: Read
+          - region "Tags" [ref=f1e961]:
+            - list [ref=f1e962]:
+              - listitem [ref=f1e963]:
+                - link "flight" [ref=f1e964] [cursor=pointer]:
+                  - /url: "#/search?q=flight"
+              - listitem [ref=f1e965]:
+                - link "fathers and sons" [ref=f1e966] [cursor=pointer]:
+                  - /url: "#/search?q=fathers%20and%20sons"
+              - listitem [ref=f1e967]:
+                - link "hubris" [ref=f1e968] [cursor=pointer]:
+                  - /url: "#/search?q=hubris"
+              - listitem [ref=f1e969]:
+                - link "Crete" [ref=f1e970] [cursor=pointer]:
+                  - /url: "#/search?q=Crete"
+              - listitem [ref=f1e971]:
+                - link "Greek myth" [ref=f1e972] [cursor=pointer]:
+                  - /url: "#/search?q=Greek%20myth"
+              - listitem [ref=f1e973]:
+                - link "the sea" [ref=f1e974] [cursor=pointer]:
+                  - /url: "#/search?q=the%20sea"
+              - listitem [ref=f1e975]:
+                - link "inventors" [ref=f1e976] [cursor=pointer]:
+                  - /url: "#/search?q=inventors"
+  - status

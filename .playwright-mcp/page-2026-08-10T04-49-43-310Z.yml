@@ -1,0 +1,229 @@
+- generic [ref=f1e2]:
+  - link "Skip to content" [ref=f1e3] [cursor=pointer]:
+    - /url: "#main"
+  - generic [ref=f1e4]:
+    - navigation "Primary" [ref=f1e5]:
+      - list [ref=f1e6]:
+        - listitem [ref=f1e7]:
+          - link "Feed" [ref=f1e8] [cursor=pointer]:
+            - /url: "#/"
+        - listitem [ref=f1e13]:
+          - link "Search" [ref=f1e14] [cursor=pointer]:
+            - /url: "#/search"
+        - listitem [ref=f1e19]:
+          - link "Atlas" [ref=f1e20] [cursor=pointer]:
+            - /url: "#/atlas"
+        - listitem [ref=f1e25]:
+          - link "Time" [ref=f1e26] [cursor=pointer]:
+            - /url: "#/timeline"
+        - listitem [ref=f1e31]:
+          - link "Paths" [ref=f1e32] [cursor=pointer]:
+            - /url: "#/collections"
+        - listitem [ref=f1e37]:
+          - link "Saved" [ref=f1e38] [cursor=pointer]:
+            - /url: "#/saved"
+        - listitem [ref=f1e42]:
+          - link "You" [ref=f1e43] [cursor=pointer]:
+            - /url: "#/you"
+    - main [ref=f1e48]:
+      - generic [ref=f1e49]:
+        - generic [ref=f1e50]:
+          - generic [ref=f1e51]:
+            - heading "STORY ATLAS" [level=1] [ref=f1e52]
+            - generic [ref=f1e53]: 22 STORIES
+          - paragraph [ref=f1e54]: The world, retold. Myths, mysteries, disasters and discoveries — classified honestly, sourced properly.
+          - generic [ref=f1e55]:
+            - text: Feed mix
+            - generic [ref=f1e56]:
+              - generic [ref=f1e57]: 70% your interests
+              - slider "Balance between your interests and unexpected discovery" [ref=f1e58]: "30"
+              - generic [ref=f1e59]: 30% surprise
+            - paragraph [ref=f1e60]: No history yet — the feed is showing you the whole world
+        - generic [ref=f1e61]:
+          - complementary [ref=f1e62]:
+            - generic [ref=f1e63]:
+              - button "Dismiss story of the day" [ref=f1e64] [cursor=pointer]
+              - generic [ref=f1e145]:
+                - paragraph [ref=f1e146]: Story of the day
+                - heading "The Hero Twins" [level=2] [ref=f1e148]
+                - paragraph [ref=f1e149]: The lords of the underworld challenged two boys to a ball game. The boys had already worked out how to come back from the dead.
+                - generic [ref=f1e150]:
+                  - generic "Classified as Myth. A traditional story about gods, origins and meaning. Not a record of events." [ref=f1e151]: MYTH
+                  - link "Open" [ref=f1e153] [cursor=pointer]:
+                    - /url: "#/s/hero-twins"
+          - generic [ref=f1e156]:
+            - generic [ref=f1e157]:
+              - article [ref=f1e158]:
+                - generic [ref=f1e159]:
+                  - generic [ref=f1e160]: "001"
+                  - generic "Classified as Documented history. Supported by contemporary records, physical evidence, or both." [ref=f1e161]: DOCUMENTED
+                  - generic [ref=f1e163]: Europe
+                - link "Open Joan of Arc" [ref=f1e165] [cursor=pointer]:
+                  - /url: "#/s/joan-of-arc"
+                  - generic [ref=f1e257]: The Hundred Years’ War
+                - generic [ref=f1e258]:
+                  - paragraph [ref=f1e259]: A teenage farm girl talked her way into command of an army — and we have the transcript of her trial, in her own words.
+                  - heading "Joan of Arc Medieval France" [level=2] [ref=f1e260]:
+                    - link "Joan of Arc" [ref=f1e261] [cursor=pointer]:
+                      - /url: "#/s/joan-of-arc"
+                    - generic [ref=f1e262]: Medieval France
+                  - paragraph [ref=f1e263]: Almost no medieval peasant left a record of their voice. Joan left hundreds of pages of it, because the people who burned her were fastidious about minutes.
+                - generic [ref=f1e264]:
+                  - generic [ref=f1e265]:
+                    - button "Read 5m" [ref=f1e266] [cursor=pointer]:
+                      - text: Read
+                      - generic [ref=f1e270]: 5m
+                    - generic [ref=f1e271]: Comic soon
+                    - button "Save story" [ref=f1e272] [cursor=pointer]
+                    - button "Share story" [ref=f1e275] [cursor=pointer]
+                  - paragraph [ref=f1e279]: A part of the world you haven’t opened
+              - article [ref=f1e282]:
+                - generic [ref=f1e283]:
+                  - generic [ref=f1e284]: "002"
+                  - generic "Classified as Myth. A traditional story about gods, origins and meaning. Not a record of events." [ref=f1e285]: MYTH
+                  - generic [ref=f1e287]: Mediterranean
+                - link "Open Medusa" [ref=f1e289] [cursor=pointer]:
+                  - /url: "#/s/medusa"
+                  - generic [ref=f1e361]: Archaic Greece
+                - generic [ref=f1e362]:
+                  - paragraph [ref=f1e363]: The monster everyone can name was, in the oldest versions, not cursed for anything at all.
+                  - heading "Medusa Greek" [level=2] [ref=f1e364]:
+                    - link "Medusa" [ref=f1e365] [cursor=pointer]:
+                      - /url: "#/s/medusa"
+                    - generic [ref=f1e366]: Greek
+                  - paragraph [ref=f1e367]: A face that turns men to stone, a hero with a mirror — and a backstory that a Roman poet added eight hundred years late, which is the only part anybody remembers.
+                - generic [ref=f1e368]:
+                  - generic [ref=f1e369]:
+                    - button "Read 4m" [ref=f1e370] [cursor=pointer]:
+                      - text: Read
+                      - generic [ref=f1e374]: 4m
+                    - generic [ref=f1e375]: Comic soon
+                    - button "Save story" [ref=f1e376] [cursor=pointer]
+                    - button "Share story" [ref=f1e379] [cursor=pointer]
+                  - paragraph [ref=f1e383]: A part of the world you haven’t opened
+              - article [ref=f1e386]:
+                - generic [ref=f1e387]:
+                  - generic [ref=f1e388]: "003"
+                  - generic "Classified as Folklore. Living oral tradition — told, retold and reshaped by communities." [ref=f1e389]: FOLKLORE
+                  - generic [ref=f1e391]: East Asia
+                - link "Open Sun Wukong" [ref=f1e393] [cursor=pointer]:
+                  - /url: "#/s/sun-wukong"
+                  - generic [ref=f1e483]: Ming dynasty · drawing on Tang-era legend
+                - generic [ref=f1e484]:
+                  - paragraph [ref=f1e485]: He ate the peaches of immortality, erased his own name from the register of the dead, and lost a bet by pissing on the Buddha’s finger.
+                  - heading "Sun Wukong Chinese" [level=2] [ref=f1e486]:
+                    - link "Sun Wukong" [ref=f1e487] [cursor=pointer]:
+                      - /url: "#/s/sun-wukong"
+                    - generic [ref=f1e488]: Chinese
+                  - paragraph [ref=f1e489]: The Monkey King is the most popular character in East Asian literature, and his story is a very funny, very serious argument about what actually restrains power.
+                - generic [ref=f1e490]:
+                  - generic [ref=f1e491]:
+                    - button "Read 4m" [ref=f1e492] [cursor=pointer]:
+                      - text: Read
+                      - generic [ref=f1e496]: 4m
+                    - generic [ref=f1e497]: Comic soon
+                    - button "Save story" [ref=f1e498] [cursor=pointer]
+                    - button "Share story" [ref=f1e501] [cursor=pointer]
+                  - paragraph [ref=f1e505]: A part of the world you haven’t opened
+              - article [ref=f1e508]:
+                - generic [ref=f1e509]:
+                  - generic [ref=f1e510]: "004"
+                  - generic "Classified as Documented history. Supported by contemporary records, physical evidence, or both." [ref=f1e511]: DOCUMENTED
+                  - generic [ref=f1e513]: Mediterranean
+                - link "Open Pompeii" [ref=f1e515] [cursor=pointer]:
+                  - /url: "#/s/pompeii"
+                  - generic [ref=f1e599]: Early Roman Empire
+                - generic [ref=f1e600]:
+                  - paragraph [ref=f1e601]: A seventeen-year-old boy watched the mountain kill his uncle, then wrote it down so carefully that volcanologists named an eruption type after him.
+                  - heading "Pompeii Roman" [level=2] [ref=f1e602]:
+                    - link "Pompeii" [ref=f1e603] [cursor=pointer]:
+                      - /url: "#/s/pompeii"
+                    - generic [ref=f1e604]: Roman
+                  - paragraph [ref=f1e605]: In 79 CE Vesuvius buried two cities in a single day. The only eyewitness account we have was written by a teenager who stayed behind to finish his homework.
+                - generic [ref=f1e606]:
+                  - generic [ref=f1e607]:
+                    - button "Read 5m" [ref=f1e608] [cursor=pointer]:
+                      - text: Read
+                      - generic [ref=f1e612]: 5m
+                    - generic [ref=f1e613]: Comic soon
+                    - button "Save story" [ref=f1e614] [cursor=pointer]
+                    - button "Share story" [ref=f1e617] [cursor=pointer]
+                  - paragraph [ref=f1e621]: A part of the world you haven’t opened
+              - article [ref=f1e624]:
+                - generic [ref=f1e625]:
+                  - generic [ref=f1e626]: "005"
+                  - generic "Classified as Folklore. Living oral tradition — told, retold and reshaped by communities." [ref=f1e627]: FOLKLORE
+                  - generic [ref=f1e629]: Africa
+                - link "Open Anansi" [ref=f1e631] [cursor=pointer]:
+                  - /url: "#/s/anansi"
+                  - generic [ref=f1e699]: Living oral tradition
+                - generic [ref=f1e700]:
+                  - paragraph [ref=f1e701]: A spider bought every story in the world from the sky god — and the price was four things nobody could catch.
+                  - heading "Anansi Akan (Ghana, Côte d’Ivoire) · Caribbean diaspora" [level=2] [ref=f1e702]:
+                    - link "Anansi" [ref=f1e703] [cursor=pointer]:
+                      - /url: "#/s/anansi"
+                    - generic [ref=f1e704]: Akan (Ghana, Côte d’Ivoire) · Caribbean diaspora
+                  - paragraph [ref=f1e705]: How an Akan trickster came to own narrative itself, and how the stories then crossed the Atlantic in the holds of slave ships and refused to die.
+                - generic [ref=f1e706]:
+                  - generic [ref=f1e707]:
+                    - button "Read 4m" [ref=f1e708] [cursor=pointer]:
+                      - text: Read
+                      - generic [ref=f1e712]: 4m
+                    - generic [ref=f1e713]: Comic soon
+                    - button "Save story" [ref=f1e714] [cursor=pointer]
+                    - button "Share story" [ref=f1e717] [cursor=pointer]
+                  - paragraph [ref=f1e721]: A part of the world you haven’t opened
+              - article [ref=f1e724]:
+                - generic [ref=f1e725]:
+                  - generic [ref=f1e726]: "006"
+                  - generic "Classified as Myth. A traditional story about gods, origins and meaning. Not a record of events." [ref=f1e727]: MYTH
+                  - generic [ref=f1e729]: Mediterranean
+                - link "Open Prometheus" [ref=f1e731] [cursor=pointer]:
+                  - /url: "#/s/prometheus"
+                  - generic [ref=f1e809]: Archaic Greece
+                - generic [ref=f1e810]:
+                  - paragraph [ref=f1e811]: He stole fire for us, and the punishment was designed to never finish.
+                  - heading "Prometheus Greek" [level=2] [ref=f1e812]:
+                    - link "Prometheus" [ref=f1e813] [cursor=pointer]:
+                      - /url: "#/s/prometheus"
+                    - generic [ref=f1e814]: Greek
+                  - paragraph [ref=f1e815]: A Titan cheats the king of the gods twice, hands humanity the one thing that changes everything, and is chained to a rock where the sentence resets every single morning.
+                - generic [ref=f1e816]:
+                  - generic [ref=f1e817]:
+                    - button "Read 4m" [ref=f1e818] [cursor=pointer]:
+                      - text: Read
+                      - generic [ref=f1e822]: 4m
+                    - generic [ref=f1e823]: Comic soon
+                    - button "Save story" [ref=f1e824] [cursor=pointer]
+                    - button "Share story" [ref=f1e827] [cursor=pointer]
+                  - paragraph [ref=f1e831]: A part of the world you haven’t opened
+            - generic [ref=f1e834]: Loading more of the world
+          - complementary [ref=f1e836]:
+            - link "Story path Caesar to Augustus How killing a tyrant produced an emperor. 5 stops" [ref=f1e837] [cursor=pointer]:
+              - /url: "#/path/republic-to-empire"
+              - generic [ref=f1e842]:
+                - paragraph [ref=f1e843]: Story path
+                - paragraph [ref=f1e844]: Caesar to Augustus
+                - paragraph [ref=f1e845]: How killing a tyrant produced an emperor.
+              - generic [ref=f1e846]: 5 stops
+            - link "World covered 0/12 Finish a story to light one up" [ref=f1e847] [cursor=pointer]:
+              - /url: "#/you"
+              - paragraph [ref=f1e848]: World covered
+              - paragraph [ref=f1e849]:
+                - text: "0"
+                - generic [ref=f1e850]: /12
+              - list [ref=f1e851]:
+                - listitem [ref=f1e852]
+                - listitem [ref=f1e853]
+                - listitem [ref=f1e854]
+                - listitem [ref=f1e855]
+                - listitem [ref=f1e856]
+                - listitem [ref=f1e857]
+                - listitem [ref=f1e858]
+                - listitem [ref=f1e859]
+                - listitem [ref=f1e860]
+                - listitem [ref=f1e861]
+                - listitem [ref=f1e862]
+                - listitem [ref=f1e863]
+              - paragraph [ref=f1e864]: Finish a story to light one up
+  - status

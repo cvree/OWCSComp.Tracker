@@ -1,0 +1,86 @@
+- generic [ref=f1e2]:
+  - link "Skip to content" [ref=f1e3] [cursor=pointer]:
+    - /url: "#main"
+  - main [ref=f1e48]:
+    - generic [ref=f1e2494]:
+      - generic [ref=f1e2495]:
+        - link "Back to Read mode" [ref=f1e2496] [cursor=pointer]:
+          - /url: "#/s/icarus"
+        - generic [ref=f1e2499]:
+          - paragraph [ref=f1e2500]: Icarus
+          - paragraph [ref=f1e2501]: "Establishing: the island prison."
+        - button "Share comic" [ref=f1e2502] [cursor=pointer]
+      - group "Comic, 12 pages. Use left and right arrow keys to turn pages." [ref=f1e2506]:
+        - 'region "Page 1 of 12. Establishing: the island prison." [ref=f1e2507]':
+          - figure "THE PALACE OF MINOS" [ref=f1e2509]:
+            - paragraph [ref=f1e2594]: Crete. The richest island in the world, and the only one they could not leave.
+            - generic [ref=f1e2597]: A vast Cretan palace on a headland at dawn, the sea beyond it, a lone tower on the cliff edge.
+        - region "Page 2 of 12. Why they are here. Minos does not need a prison." [ref=f1e2598]:
+          - generic [ref=f1e2599]:
+            - figure [ref=f1e2600]:
+              - paragraph [ref=f1e2656]: Daedalus built the maze that held the Minotaur. Then he told the king’s daughter how to beat it.
+              - paragraph [ref=f1e2658]:
+                - generic [ref=f1e2659]: "King Minos:"
+                - text: You gave away my secret, Athenian.
+              - generic [ref=f1e2661]: King Minos seated in a throne room, speaking quietly to Daedalus, who stands with his head down.
+            - figure "No ship would take them. Not for any price." [ref=f1e2662]:
+              - paragraph [ref=f1e2734]: A king who owns every harbour does not need a cell.
+              - generic [ref=f1e2737]: An empty harbour under guard, ships riding at anchor with sails furled, soldiers on the quay.
+        - region [ref=f1e2738]:
+          - generic [ref=f1e2739]:
+            - figure [ref=f1e2740]:
+              - paragraph [ref=f1e2774]: So he looked at the one road nobody was guarding.
+              - generic [ref=f1e2775]: Close on Daedalus’s face, lit from below, looking upward with a fixed calculating expression.
+            - figure [ref=f1e2776]:
+              - generic [ref=f1e2802]: Feathers laid shortest to longest, like the pipes of a shepherd’s flute.
+              - generic [ref=f1e2804]: A row of feathers laid out in ascending order on a wooden bench.
+            - figure [ref=f1e2805]:
+              - generic [ref=f1e2903]: Bound at the middle. Sealed at the base with wax.
+              - generic [ref=f1e2905]: Hands pressing warm wax around the base of a bound row of feathers.
+            - figure [ref=f1e2906]:
+              - paragraph [ref=f1e2953]:
+                - generic [ref=f1e2954]: "Icarus:"
+                - text: It’s soft.
+              - paragraph [ref=f1e2957]:
+                - generic [ref=f1e2958]: "Daedalus:"
+                - text: Stop touching it.
+              - generic [ref=f1e2960]: Icarus squashing wax between his fingers while Daedalus works behind him.
+        - region [ref=f1e2961]
+        - region [ref=f1e2963]
+        - region [ref=f1e2965]
+        - region [ref=f1e2967]
+        - region [ref=f1e2969]
+        - region [ref=f1e2971]
+        - region [ref=f1e2973]
+        - region [ref=f1e2975]
+        - region [ref=f1e2977]
+      - navigation "Page navigation" [ref=f1e2979]:
+        - button "Previous page" [disabled] [ref=f1e2980]
+        - list [ref=f1e2983]:
+          - listitem [ref=f1e2984]:
+            - button "Go to page 1" [ref=f1e2985] [cursor=pointer]
+          - listitem [ref=f1e2986]:
+            - button "Go to page 2" [ref=f1e2987] [cursor=pointer]
+          - listitem [ref=f1e2988]:
+            - button "Go to page 3" [ref=f1e2989] [cursor=pointer]
+          - listitem [ref=f1e2990]:
+            - button "Go to page 4" [ref=f1e2991] [cursor=pointer]
+          - listitem [ref=f1e2992]:
+            - button "Go to page 5" [ref=f1e2993] [cursor=pointer]
+          - listitem [ref=f1e2994]:
+            - button "Go to page 6" [ref=f1e2995] [cursor=pointer]
+          - listitem [ref=f1e2996]:
+            - button "Go to page 7" [ref=f1e2997] [cursor=pointer]
+          - listitem [ref=f1e2998]:
+            - button "Go to page 8" [ref=f1e2999] [cursor=pointer]
+          - listitem [ref=f1e3000]:
+            - button "Go to page 9" [ref=f1e3001] [cursor=pointer]
+          - listitem [ref=f1e3002]:
+            - button "Go to page 10" [ref=f1e3003] [cursor=pointer]
+          - listitem [ref=f1e3004]:
+            - button "Go to page 11" [ref=f1e3005] [cursor=pointer]
+          - listitem [ref=f1e3006]:
+            - button "Go to page 12" [ref=f1e3007] [cursor=pointer]
+        - generic [ref=f1e3008]: 01/12
+        - button "Next page" [ref=f1e3009] [cursor=pointer]
+  - status

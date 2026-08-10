@@ -1,0 +1,235 @@
+- generic [ref=f7e2]:
+  - link "Skip to content" [ref=f7e325] [cursor=pointer]:
+    - /url: "#main"
+  - generic [ref=f7e326]:
+    - navigation "Primary" [ref=f7e1112]:
+      - list [ref=f7e1113]:
+        - listitem [ref=f7e1114]:
+          - link "Feed" [ref=f7e1115] [cursor=pointer]:
+            - /url: "#/"
+        - listitem [ref=f7e1120]:
+          - link "Search" [ref=f7e1121] [cursor=pointer]:
+            - /url: "#/search"
+        - listitem [ref=f7e1126]:
+          - link "Atlas" [ref=f7e1127] [cursor=pointer]:
+            - /url: "#/atlas"
+        - listitem [ref=f7e1132]:
+          - link "Time" [ref=f7e1133] [cursor=pointer]:
+            - /url: "#/timeline"
+        - listitem [ref=f7e1138]:
+          - link "Paths" [ref=f7e1139] [cursor=pointer]:
+            - /url: "#/collections"
+        - listitem [ref=f7e1144]:
+          - link "Saved" [ref=f7e1145] [cursor=pointer]:
+            - /url: "#/saved"
+        - listitem [ref=f7e1149]:
+          - link "You" [ref=f7e1150] [cursor=pointer]:
+            - /url: "#/you"
+    - main [ref=f7e327]:
+      - generic [ref=f7e1155]:
+        - generic [ref=f7e1156]:
+          - generic [ref=f7e1157]:
+            - heading "STORY ATLAS" [level=1] [ref=f7e1158]
+            - generic [ref=f7e1159]: 22 STORIES
+          - paragraph [ref=f7e1160]: The world, retold. Myths, mysteries, disasters and discoveries — classified honestly, sourced properly.
+          - generic [ref=f7e1161]:
+            - text: Feed mix
+            - generic [ref=f7e1162]:
+              - generic [ref=f7e1163]: 70% your interests
+              - slider "Balance between your interests and unexpected discovery" [ref=f7e1164]: "30"
+              - generic [ref=f7e1165]: 30% surprise
+            - paragraph [ref=f7e1166]: Tracking 7 interests · never more than one region in a row
+        - link [ref=f7e1167] [cursor=pointer]:
+          - /url: "#/s/cadaver-synod/comic"
+          - generic [ref=f7e1169]:
+            - paragraph [ref=f7e1170]: Continue where you stopped
+            - paragraph [ref=f7e1171]: The Cadaver Synod
+          - generic [ref=f7e1172]: page 4
+        - generic [ref=f7e1175]:
+          - complementary [ref=f7e1176]:
+            - generic [ref=f7e1177]:
+              - button "Dismiss story of the day" [ref=f7e1178] [cursor=pointer]
+              - generic [ref=f7e1259]:
+                - paragraph [ref=f7e1260]: Story of the day
+                - heading "The Hero Twins" [level=2] [ref=f7e1262]
+                - paragraph [ref=f7e1263]: The lords of the underworld challenged two boys to a ball game. The boys had already worked out how to come back from the dead.
+                - generic [ref=f7e1264]:
+                  - generic "Classified as Myth. A traditional story about gods, origins and meaning. Not a record of events." [ref=f7e1265]: MYTH
+                  - link "Open" [ref=f7e1267] [cursor=pointer]:
+                    - /url: "#/s/hero-twins"
+            - link "Story path Perseus and the Gorgon A severed head keeps working — and keeps generating stories. 6 stops" [ref=f7e1270] [cursor=pointer]:
+              - /url: "#/path/perseus-cycle"
+              - generic [ref=f7e1275]:
+                - paragraph [ref=f7e1276]: Story path
+                - paragraph [ref=f7e1277]: Perseus and the Gorgon
+                - paragraph [ref=f7e1278]: A severed head keeps working — and keeps generating stories.
+              - generic [ref=f7e1279]: 6 stops
+            - link "World covered 0/12 Finish a story to light one up" [ref=f7e1280] [cursor=pointer]:
+              - /url: "#/you"
+              - paragraph [ref=f7e1281]: World covered
+              - paragraph [ref=f7e1282]:
+                - text: "0"
+                - generic [ref=f7e1283]: /12
+              - list [ref=f7e1284]:
+                - listitem [ref=f7e1285]
+                - listitem [ref=f7e1286]
+                - listitem [ref=f7e1287]
+                - listitem [ref=f7e1288]
+                - listitem [ref=f7e1289]
+                - listitem [ref=f7e1290]
+                - listitem [ref=f7e1291]
+                - listitem [ref=f7e1292]
+                - listitem [ref=f7e1293]
+                - listitem [ref=f7e1294]
+                - listitem [ref=f7e1295]
+                - listitem [ref=f7e1296]
+              - paragraph [ref=f7e1297]: Finish a story to light one up
+          - generic [ref=f7e1298]:
+            - generic [ref=f7e1299]:
+              - article [ref=f7e1300]:
+                - generic [ref=f7e1301]:
+                  - generic [ref=f7e1302]: "001"
+                  - generic "Classified as Myth. A traditional story about gods, origins and meaning. Not a record of events." [ref=f7e1303]: MYTH
+                  - generic [ref=f7e1305]: Mediterranean
+                - link "Open Icarus" [ref=f7e1307] [cursor=pointer]:
+                  - /url: "#/s/icarus"
+                  - generic [ref=f7e1472]: Mythic Bronze Age
+                  - generic [ref=f7e1473]: COMIC
+                - generic [ref=f7e1478]:
+                  - paragraph [ref=f7e1479]: "His father gave him one rule: don’t fly too close to the sun."
+                  - heading "Icarus Greek · Cretan" [level=2] [ref=f7e1480]:
+                    - link "Icarus" [ref=f7e1481] [cursor=pointer]:
+                      - /url: "#/s/icarus"
+                    - generic [ref=f7e1482]: Greek · Cretan
+                  - paragraph [ref=f7e1483]: Everyone remembers the boy who ignored a warning. Almost nobody remembers that the warning had two halves — or that the story is really about his father.
+                - generic [ref=f7e1484]:
+                  - generic [ref=f7e1485]:
+                    - button "Read 5m" [ref=f7e1486] [cursor=pointer]:
+                      - text: Read
+                      - generic [ref=f7e1490]: 5m
+                    - button "Comic" [ref=f7e1491] [cursor=pointer]
+                    - button "Save story" [ref=f7e1496] [cursor=pointer]
+                    - button "Share story" [ref=f7e1499] [cursor=pointer]
+                  - paragraph [ref=f7e1503]: A part of the world you haven’t opened
+              - article [ref=f7e1506]:
+                - generic [ref=f7e1507]:
+                  - generic [ref=f7e1508]: "002"
+                  - generic "Classified as Documented history. Supported by contemporary records, physical evidence, or both." [ref=f7e1509]: DOCUMENTED
+                  - generic [ref=f7e1511]: Polar
+                - link "Open Shackleton" [ref=f7e1513] [cursor=pointer]:
+                  - /url: "#/s/shackleton"
+                  - generic [ref=f7e1557]: The Heroic Age of Antarctic Exploration
+                - generic [ref=f7e1558]:
+                  - paragraph [ref=f7e1559]: His ship was crushed by ice 1,200 miles from anywhere. Two years later, every single one of his men was still alive.
+                  - heading "Shackleton British Antarctic exploration" [level=2] [ref=f7e1560]:
+                    - link "Shackleton" [ref=f7e1561] [cursor=pointer]:
+                      - /url: "#/s/shackleton"
+                    - generic [ref=f7e1562]: British Antarctic exploration
+                  - paragraph [ref=f7e1563]: The Endurance expedition failed completely at what it set out to do, and became the greatest survival story of the twentieth century instead.
+                - generic [ref=f7e1564]:
+                  - generic [ref=f7e1565]:
+                    - button "Read 5m" [ref=f7e1566] [cursor=pointer]:
+                      - text: Read
+                      - generic [ref=f7e1570]: 5m
+                    - generic [ref=f7e1571]: Comic soon
+                    - button "Save story" [ref=f7e1572] [cursor=pointer]
+                    - button "Share story" [ref=f7e1575] [cursor=pointer]
+                  - paragraph [ref=f7e1579]: A part of the world you haven’t opened
+              - article [ref=f7e1582]:
+                - generic [ref=f7e1583]:
+                  - generic [ref=f7e1584]: "003"
+                  - generic "Classified as Myth. A traditional story about gods, origins and meaning. Not a record of events." [ref=f7e1585]: MYTH
+                  - generic [ref=f7e1587]: Mediterranean
+                - link "Open Prometheus" [ref=f7e1589] [cursor=pointer]:
+                  - /url: "#/s/prometheus"
+                  - generic [ref=f7e1667]: Archaic Greece
+                - generic [ref=f7e1668]:
+                  - paragraph [ref=f7e1669]: He stole fire for us, and the punishment was designed to never finish.
+                  - heading "Prometheus Greek" [level=2] [ref=f7e1670]:
+                    - link "Prometheus" [ref=f7e1671] [cursor=pointer]:
+                      - /url: "#/s/prometheus"
+                    - generic [ref=f7e1672]: Greek
+                  - paragraph [ref=f7e1673]: A Titan cheats the king of the gods twice, hands humanity the one thing that changes everything, and is chained to a rock where the sentence resets every single morning.
+                - generic [ref=f7e1674]:
+                  - generic [ref=f7e1675]:
+                    - button "Read 4m" [ref=f7e1676] [cursor=pointer]:
+                      - text: Read
+                      - generic [ref=f7e1680]: 4m
+                    - generic [ref=f7e1681]: Comic soon
+                    - button "Save story" [ref=f7e1682] [cursor=pointer]
+                    - button "Share story" [ref=f7e1685] [cursor=pointer]
+                  - paragraph [ref=f7e1689]: A part of the world you haven’t opened
+              - article [ref=f7e1692]:
+                - generic [ref=f7e1693]:
+                  - generic [ref=f7e1694]: "004"
+                  - generic "Classified as Folklore. Living oral tradition — told, retold and reshaped by communities." [ref=f7e1695]: FOLKLORE
+                  - generic [ref=f7e1697]: East Asia
+                - link "Open Sun Wukong" [ref=f7e1699] [cursor=pointer]:
+                  - /url: "#/s/sun-wukong"
+                  - generic [ref=f7e1789]: Ming dynasty · drawing on Tang-era legend
+                - generic [ref=f7e1790]:
+                  - paragraph [ref=f7e1791]: He ate the peaches of immortality, erased his own name from the register of the dead, and lost a bet by pissing on the Buddha’s finger.
+                  - heading "Sun Wukong Chinese" [level=2] [ref=f7e1792]:
+                    - link "Sun Wukong" [ref=f7e1793] [cursor=pointer]:
+                      - /url: "#/s/sun-wukong"
+                    - generic [ref=f7e1794]: Chinese
+                  - paragraph [ref=f7e1795]: The Monkey King is the most popular character in East Asian literature, and his story is a very funny, very serious argument about what actually restrains power.
+                - generic [ref=f7e1796]:
+                  - generic [ref=f7e1797]:
+                    - button "Read 4m" [ref=f7e1798] [cursor=pointer]:
+                      - text: Read
+                      - generic [ref=f7e1802]: 4m
+                    - generic [ref=f7e1803]: Comic soon
+                    - button "Save story" [ref=f7e1804] [cursor=pointer]
+                    - button "Share story" [ref=f7e1807] [cursor=pointer]
+                  - paragraph [ref=f7e1811]: A part of the world you haven’t opened
+              - article [ref=f7e1814]:
+                - generic [ref=f7e1815]:
+                  - generic [ref=f7e1816]: "005"
+                  - generic "Classified as Documented history. Supported by contemporary records, physical evidence, or both." [ref=f7e1817]: DOCUMENTED
+                  - generic [ref=f7e1819]: Mediterranean
+                - link "Open Cleopatra" [ref=f7e1821] [cursor=pointer]:
+                  - /url: "#/s/cleopatra"
+                  - generic [ref=f7e1891]: Hellenistic Egypt
+                - generic [ref=f7e1892]:
+                  - paragraph [ref=f7e1893]: She was a Greek pharaoh who spoke nine languages, ran a superpower, and lost — which is why you have only ever heard about her love life.
+                  - heading "Cleopatra Ptolemaic Egypt" [level=2] [ref=f7e1894]:
+                    - link "Cleopatra" [ref=f7e1895] [cursor=pointer]:
+                      - /url: "#/s/cleopatra"
+                    - generic [ref=f7e1896]: Ptolemaic Egypt
+                  - paragraph [ref=f7e1897]: Almost everything written about Cleopatra VII was written by the propaganda machine of the man who destroyed her. The record still shows a formidably capable head of state.
+                - generic [ref=f7e1898]:
+                  - generic [ref=f7e1899]:
+                    - button "Read 5m" [ref=f7e1900] [cursor=pointer]:
+                      - text: Read
+                      - generic [ref=f7e1904]: 5m
+                    - generic [ref=f7e1905]: Comic soon
+                    - button "Save story" [ref=f7e1906] [cursor=pointer]
+                    - button "Share story" [ref=f7e1909] [cursor=pointer]
+                  - paragraph [ref=f7e1913]: A part of the world you haven’t opened
+              - article [ref=f7e1916]:
+                - generic [ref=f7e1917]:
+                  - generic [ref=f7e1918]: "006"
+                  - generic "Classified as Religious tradition. Sacred narrative held as meaningful by a living faith community." [ref=f7e1919]: TRADITION
+                  - generic [ref=f7e1921]: Oceania
+                - link "Open The Rainbow Serpent" [ref=f7e1923] [cursor=pointer]:
+                  - /url: "#/s/rainbow-serpent"
+                  - generic [ref=f7e1972]: Deep time to the present
+                - generic [ref=f7e1973]:
+                  - paragraph [ref=f7e1974]: The oldest continuously told story on earth may be about a snake that made the rivers — and it has been told for longer than agriculture has existed.
+                  - heading "The Rainbow Serpent Aboriginal Australian — many distinct nations and traditions" [level=2] [ref=f7e1975]:
+                    - link "The Rainbow Serpent" [ref=f7e1976] [cursor=pointer]:
+                      - /url: "#/s/rainbow-serpent"
+                    - generic [ref=f7e1977]: Aboriginal Australian — many distinct nations and traditions
+                  - paragraph [ref=f7e1978]: Across Aboriginal Australia, an ancestral serpent shapes the land, controls water, and enforces law. The rock art goes back thousands of years, and the tradition never stopped.
+                - generic [ref=f7e1979]:
+                  - generic [ref=f7e1980]:
+                    - button "Read 4m" [ref=f7e1981] [cursor=pointer]:
+                      - text: Read
+                      - generic [ref=f7e1985]: 4m
+                    - generic [ref=f7e1986]: Comic soon
+                    - button "Save story" [ref=f7e1987] [cursor=pointer]
+                    - button "Share story" [ref=f7e1990] [cursor=pointer]
+                  - paragraph [ref=f7e1994]: A part of the world you haven’t opened
+            - generic [ref=f7e1997]: Loading more of the world
+  - status

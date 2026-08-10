@@ -1,0 +1,208 @@
+- generic [ref=f3e2]:
+  - link "Skip to content" [ref=f3e3] [cursor=pointer]:
+    - /url: "#main"
+  - generic [ref=f3e4]:
+    - navigation "Primary" [ref=f3e5]:
+      - generic [ref=f3e6]: Story Atlas
+      - list [ref=f3e13]:
+        - listitem [ref=f3e14]:
+          - link "Feed" [ref=f3e15] [cursor=pointer]:
+            - /url: "#/"
+        - listitem [ref=f3e20]:
+          - link "Search" [ref=f3e21] [cursor=pointer]:
+            - /url: "#/search"
+        - listitem [ref=f3e26]:
+          - link "Atlas" [ref=f3e27] [cursor=pointer]:
+            - /url: "#/atlas"
+        - listitem [ref=f3e32]:
+          - link "Time" [ref=f3e33] [cursor=pointer]:
+            - /url: "#/timeline"
+        - listitem [ref=f3e38]:
+          - link "Paths" [ref=f3e39] [cursor=pointer]:
+            - /url: "#/collections"
+        - listitem [ref=f3e44]:
+          - link "Saved" [ref=f3e45] [cursor=pointer]:
+            - /url: "#/saved"
+        - listitem [ref=f3e49]:
+          - link "You" [ref=f3e50] [cursor=pointer]:
+            - /url: "#/you"
+      - 'button "Theme: light. Click to change." [ref=f3e55] [cursor=pointer]':
+        - generic [ref=f3e59]: light
+    - main [ref=f3e60]:
+      - generic [ref=f3e61]:
+        - generic [ref=f3e62]:
+          - generic [ref=f3e63]:
+            - heading "STORY ATLAS" [level=1] [ref=f3e64]
+            - generic [ref=f3e65]: 22 STORIES
+          - paragraph [ref=f3e66]: The world, retold. Myths, mysteries, disasters and discoveries — classified honestly, sourced properly.
+          - generic [ref=f3e67]:
+            - text: Feed mix
+            - generic [ref=f3e68]:
+              - generic [ref=f3e69]: 70% your interests
+              - slider "Balance between your interests and unexpected discovery" [ref=f3e70]: "30"
+              - generic [ref=f3e71]: 30% surprise
+            - paragraph [ref=f3e72]: Tracking 7 interests · never more than one region in a row
+        - link [ref=f3e73] [cursor=pointer]:
+          - /url: "#/s/icarus/comic"
+          - generic [ref=f3e75]:
+            - paragraph [ref=f3e76]: Continue where you stopped
+            - paragraph [ref=f3e77]: Icarus
+          - generic [ref=f3e78]: page 2
+        - generic [ref=f3e81]:
+          - button "Dismiss story of the day" [ref=f3e82] [cursor=pointer]
+          - generic [ref=f3e163]:
+            - paragraph [ref=f3e164]: Story of the day
+            - heading "The Hero Twins" [level=2] [ref=f3e166]
+            - paragraph [ref=f3e167]: The lords of the underworld challenged two boys to a ball game. The boys had already worked out how to come back from the dead.
+            - generic [ref=f3e168]:
+              - generic "Classified as Myth. A traditional story about gods, origins and meaning. Not a record of events." [ref=f3e169]: MYTH
+              - link "Open" [ref=f3e171] [cursor=pointer]:
+                - /url: "#/s/hero-twins"
+        - generic [ref=f3e174]:
+          - article [ref=f3e175]:
+            - generic [ref=f3e176]:
+              - generic [ref=f3e177]: "001"
+              - generic "Classified as Myth. A traditional story about gods, origins and meaning. Not a record of events." [ref=f3e178]: MYTH
+              - generic [ref=f3e180]: Mediterranean
+            - link "Open Prometheus" [ref=f3e182] [cursor=pointer]:
+              - /url: "#/s/prometheus"
+              - generic [ref=f3e260]: Archaic Greece
+            - generic [ref=f3e261]:
+              - paragraph [ref=f3e262]: He stole fire for us, and the punishment was designed to never finish.
+              - heading "Prometheus Greek" [level=2] [ref=f3e263]:
+                - link "Prometheus" [ref=f3e264] [cursor=pointer]:
+                  - /url: "#/s/prometheus"
+                - generic [ref=f3e265]: Greek
+              - paragraph [ref=f3e266]: A Titan cheats the king of the gods twice, hands humanity the one thing that changes everything, and is chained to a rock where the sentence resets every single morning.
+            - generic [ref=f3e267]:
+              - generic [ref=f3e268]:
+                - button "Read 4m" [ref=f3e269] [cursor=pointer]:
+                  - text: Read
+                  - generic [ref=f3e273]: 4m
+                - generic [ref=f3e274]: Comic soon
+                - button "Save story" [ref=f3e275] [cursor=pointer]
+                - button "Share story" [ref=f3e278] [cursor=pointer]
+              - paragraph [ref=f3e282]: A part of the world you haven’t opened
+          - article [ref=f3e285]:
+            - generic [ref=f3e286]:
+              - generic [ref=f3e287]: "002"
+              - generic "Classified as Folklore. Living oral tradition — told, retold and reshaped by communities." [ref=f3e288]: FOLKLORE
+              - generic [ref=f3e290]: Africa
+            - link "Open Anansi" [ref=f3e292] [cursor=pointer]:
+              - /url: "#/s/anansi"
+              - generic [ref=f3e360]: Living oral tradition
+            - generic [ref=f3e361]:
+              - paragraph [ref=f3e362]: A spider bought every story in the world from the sky god — and the price was four things nobody could catch.
+              - heading "Anansi Akan (Ghana, Côte d’Ivoire) · Caribbean diaspora" [level=2] [ref=f3e363]:
+                - link "Anansi" [ref=f3e364] [cursor=pointer]:
+                  - /url: "#/s/anansi"
+                - generic [ref=f3e365]: Akan (Ghana, Côte d’Ivoire) · Caribbean diaspora
+              - paragraph [ref=f3e366]: How an Akan trickster came to own narrative itself, and how the stories then crossed the Atlantic in the holds of slave ships and refused to die.
+            - generic [ref=f3e367]:
+              - generic [ref=f3e368]:
+                - button "Read 4m" [ref=f3e369] [cursor=pointer]:
+                  - text: Read
+                  - generic [ref=f3e373]: 4m
+                - generic [ref=f3e374]: Comic soon
+                - button "Save story" [ref=f3e375] [cursor=pointer]
+                - button "Share story" [ref=f3e378] [cursor=pointer]
+              - paragraph [ref=f3e382]: A part of the world you haven’t opened
+          - article [ref=f3e385]:
+            - generic [ref=f3e386]:
+              - generic [ref=f3e387]: "003"
+              - generic "Classified as Myth. A traditional story about gods, origins and meaning. Not a record of events." [ref=f3e388]: MYTH
+              - generic [ref=f3e390]: Mediterranean
+            - link "Open Icarus" [ref=f3e392] [cursor=pointer]:
+              - /url: "#/s/icarus"
+              - generic [ref=f3e557]: Mythic Bronze Age
+              - generic [ref=f3e558]: COMIC
+            - generic [ref=f3e563]:
+              - paragraph [ref=f3e564]: "His father gave him one rule: don’t fly too close to the sun."
+              - heading "Icarus Greek · Cretan" [level=2] [ref=f3e565]:
+                - link "Icarus" [ref=f3e566] [cursor=pointer]:
+                  - /url: "#/s/icarus"
+                - generic [ref=f3e567]: Greek · Cretan
+              - paragraph [ref=f3e568]: Everyone remembers the boy who ignored a warning. Almost nobody remembers that the warning had two halves — or that the story is really about his father.
+            - generic [ref=f3e569]:
+              - generic [ref=f3e570]:
+                - button "Read 5m" [ref=f3e571] [cursor=pointer]:
+                  - text: Read
+                  - generic [ref=f3e575]: 5m
+                - button "Comic" [ref=f3e576] [cursor=pointer]
+                - button "Save story" [ref=f3e581] [cursor=pointer]
+                - button "Share story" [ref=f3e584] [cursor=pointer]
+              - paragraph [ref=f3e588]: A part of the world you haven’t opened
+          - article [ref=f3e591]:
+            - generic [ref=f3e592]:
+              - generic [ref=f3e593]: "004"
+              - generic "Classified as Legend. A story attached to real places or people, grown far beyond the evidence." [ref=f3e594]: LEGEND
+              - generic [ref=f3e596]: Middle East
+            - link "Open Gilgamesh" [ref=f3e598] [cursor=pointer]:
+              - /url: "#/s/gilgamesh"
+              - generic [ref=f3e669]: Early Bronze Age Mesopotamia
+            - generic [ref=f3e670]:
+              - paragraph [ref=f3e671]: The oldest surviving great story is about a man who could not accept that his friend was dead.
+              - heading "Gilgamesh Sumerian · Akkadian · Babylonian" [level=2] [ref=f3e672]:
+                - link "Gilgamesh" [ref=f3e673] [cursor=pointer]:
+                  - /url: "#/s/gilgamesh"
+                - generic [ref=f3e674]: Sumerian · Akkadian · Babylonian
+              - paragraph [ref=f3e675]: Four thousand years old, written on clay, lost for two millennia, and then dug up and translated by a self-taught banknote engraver who ran around the room taking his clothes off.
+            - generic [ref=f3e676]:
+              - generic [ref=f3e677]:
+                - button "Read 5m" [ref=f3e678] [cursor=pointer]:
+                  - text: Read
+                  - generic [ref=f3e682]: 5m
+                - generic [ref=f3e683]: Comic soon
+                - button "Save story" [ref=f3e684] [cursor=pointer]
+                - button "Share story" [ref=f3e687] [cursor=pointer]
+              - paragraph [ref=f3e691]: A part of the world you haven’t opened
+          - article [ref=f3e694]:
+            - generic [ref=f3e695]:
+              - generic [ref=f3e696]: "005"
+              - generic "Classified as Myth. A traditional story about gods, origins and meaning. Not a record of events." [ref=f3e697]: MYTH
+              - generic [ref=f3e699]: Mediterranean
+            - link "Open Medusa" [ref=f3e701] [cursor=pointer]:
+              - /url: "#/s/medusa"
+              - generic [ref=f3e768]: Archaic Greece
+            - generic [ref=f3e769]:
+              - paragraph [ref=f3e770]: The monster everyone can name was, in the oldest versions, not cursed for anything at all.
+              - heading "Medusa Greek" [level=2] [ref=f3e771]:
+                - link "Medusa" [ref=f3e772] [cursor=pointer]:
+                  - /url: "#/s/medusa"
+                - generic [ref=f3e773]: Greek
+              - paragraph [ref=f3e774]: A face that turns men to stone, a hero with a mirror — and a backstory that a Roman poet added eight hundred years late, which is the only part anybody remembers.
+            - generic [ref=f3e775]:
+              - generic [ref=f3e776]:
+                - button "Read 4m" [ref=f3e777] [cursor=pointer]:
+                  - text: Read
+                  - generic [ref=f3e781]: 4m
+                - generic [ref=f3e782]: Comic soon
+                - button "Save story" [ref=f3e783] [cursor=pointer]
+                - button "Share story" [ref=f3e786] [cursor=pointer]
+              - paragraph [ref=f3e790]: A part of the world you haven’t opened
+          - article [ref=f3e793]:
+            - generic [ref=f3e794]:
+              - generic [ref=f3e795]: "006"
+              - generic "Classified as Religious tradition. Sacred narrative held as meaningful by a living faith community." [ref=f3e796]: TRADITION
+              - generic [ref=f3e798]: Oceania
+            - link "Open The Rainbow Serpent" [ref=f3e800] [cursor=pointer]:
+              - /url: "#/s/rainbow-serpent"
+              - generic [ref=f3e849]: Deep time to the present
+            - generic [ref=f3e850]:
+              - paragraph [ref=f3e851]: The oldest continuously told story on earth may be about a snake that made the rivers — and it has been told for longer than agriculture has existed.
+              - heading "The Rainbow Serpent Aboriginal Australian — many distinct nations and traditions" [level=2] [ref=f3e852]:
+                - link "The Rainbow Serpent" [ref=f3e853] [cursor=pointer]:
+                  - /url: "#/s/rainbow-serpent"
+                - generic [ref=f3e854]: Aboriginal Australian — many distinct nations and traditions
+              - paragraph [ref=f3e855]: Across Aboriginal Australia, an ancestral serpent shapes the land, controls water, and enforces law. The rock art goes back thousands of years, and the tradition never stopped.
+            - generic [ref=f3e856]:
+              - generic [ref=f3e857]:
+                - button "Read 4m" [ref=f3e858] [cursor=pointer]:
+                  - text: Read
+                  - generic [ref=f3e862]: 4m
+                - generic [ref=f3e863]: Comic soon
+                - button "Save story" [ref=f3e864] [cursor=pointer]
+                - button "Share story" [ref=f3e867] [cursor=pointer]
+              - paragraph [ref=f3e871]: A part of the world you haven’t opened
+        - generic [ref=f3e874]: Loading more of the world
+  - status

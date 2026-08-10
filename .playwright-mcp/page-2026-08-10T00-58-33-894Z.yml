@@ -1,0 +1,52 @@
+- generic [ref=f7e2]:
+  - link "Skip to content" [ref=f7e3] [cursor=pointer]:
+    - /url: "#main"
+  - main [ref=f7e5]:
+    - generic [ref=f7e6]:
+      - generic [ref=f7e7]:
+        - link "Back to Read mode" [ref=f7e8] [cursor=pointer]:
+          - /url: "#/s/cadaver-synod"
+        - generic [ref=f7e11]:
+          - paragraph [ref=f7e12]: The Cadaver Synod
+          - paragraph [ref=f7e13]: "Establishing: Rome, January, and an order nobody wants to carry out."
+        - button "Share comic" [ref=f7e14] [cursor=pointer]
+      - group "Comic, 7 pages. Use left and right arrow keys to turn pages." [ref=f7e18]:
+        - 'region "Page 1 of 7. Establishing: Rome, January, and an order nobody wants to carry out." [ref=f7e19]':
+          - figure "OLD ST PETER’S BASILICA" [ref=f7e21]:
+            - paragraph [ref=f7e115]: Rome, January 897. The order came down before dawn.
+            - generic [ref=f7e118]: The facade of old St Peter’s in winter dark, torches at the doors, a cart waiting.
+        - region "Page 2 of 7. The exhumation, shown obliquely." [ref=f7e119]:
+          - generic [ref=f7e120]:
+            - figure [ref=f7e121]:
+              - paragraph [ref=f7e168]: He had been dead for nine months.
+              - generic [ref=f7e169]: Workmen lifting a stone slab by lamplight inside a crypt, faces turned away.
+            - figure "They brought vestments. Someone had thought about this in advance." [ref=f7e170]:
+              - generic [ref=f7e192]: Folded gold and cream papal vestments and a mitre laid across a bench.
+        - region [ref=f7e193]:
+          - figure [ref=f7e195]:
+            - paragraph [ref=f7e292]: The synod was properly constituted. The bishops were real bishops. The charges were real charges. Everything was in order except the defendant.
+            - generic [ref=f7e293]: A vested body seated upright in a chair facing a semicircle of seated clergy in a cold hall.
+        - region [ref=f7e294]
+        - region [ref=f7e296]
+        - region [ref=f7e298]
+        - region [ref=f7e300]
+      - navigation "Page navigation" [ref=f7e302]:
+        - button "Previous page" [disabled] [ref=f7e303]
+        - list [ref=f7e306]:
+          - listitem [ref=f7e307]:
+            - button "Go to page 1" [ref=f7e308] [cursor=pointer]
+          - listitem [ref=f7e309]:
+            - button "Go to page 2" [ref=f7e310] [cursor=pointer]
+          - listitem [ref=f7e311]:
+            - button "Go to page 3" [ref=f7e312] [cursor=pointer]
+          - listitem [ref=f7e313]:
+            - button "Go to page 4" [ref=f7e314] [cursor=pointer]
+          - listitem [ref=f7e315]:
+            - button "Go to page 5" [ref=f7e316] [cursor=pointer]
+          - listitem [ref=f7e317]:
+            - button "Go to page 6" [ref=f7e318] [cursor=pointer]
+          - listitem [ref=f7e319]:
+            - button "Go to page 7" [ref=f7e320] [cursor=pointer]
+        - generic [ref=f7e321]: 01/07
+        - button "Next page" [ref=f7e322] [cursor=pointer]
+  - status

@@ -1,0 +1,18 @@
+[     162ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5183/Story-Atlas/node_modules/.vite/deps/react-dom_client.js?v=f8ffed5f:20100
+[    5282ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5183/Story-Atlas/node_modules/.vite/deps/react-dom_client.js?v=f8ffed5f:20100
+[   54815ms] ReferenceError: REGIONS is not defined
+    at http://localhost:5183/Story-Atlas/src/routes/Feed.tsx?t=1786323331102:263:89
+    at Array.map (<anonymous>)
+    at CoverageCard (http://localhost:5183/Story-Atlas/src/routes/Feed.tsx?t=1786323331102:262:106)
+    at Object.react_stack_bottom_frame (http://localhost:5183/Story-Atlas/node_modules/.vite/deps/react-dom_client.js?v=f8ffed5f:18507:20)
+    at renderWithHooks (http://localhost:5183/Story-Atlas/node_modules/.vite/deps/react-dom_client.js?v=f8ffed5f:5652:24)
+    at updateFunctionComponent (http://localhost:5183/Story-Atlas/node_modules/.vite/deps/react-dom_client.js?v=f8ffed5f:7473:21)
+    at beginWork (http://localhost:5183/Story-Atlas/node_modules/.vite/deps/react-dom_client.js?v=f8ffed5f:8523:20)
+    at runWithFiberInDEV (http://localhost:5183/Story-Atlas/node_modules/.vite/deps/react-dom_client.js?v=f8ffed5f:995:72)
+    at performUnitOfWork (http://localhost:5183/Story-Atlas/node_modules/.vite/deps/react-dom_client.js?v=f8ffed5f:12559:98)
+    at workLoopSync (http://localhost:5183/Story-Atlas/node_modules/.vite/deps/react-dom_client.js?v=f8ffed5f:12422:43)
+[   54816ms] [WARNING] %s
+
+%s
+ An error occurred in the <CoverageCard> component. Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries. @ http://localhost:5183/Story-Atlas/node_modules/.vite/deps/react-dom_client.js?v=f8ffed5f:6963

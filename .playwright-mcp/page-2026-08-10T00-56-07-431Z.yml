@@ -1,0 +1,384 @@
+- generic [ref=f6e2]:
+  - link "Skip to content" [ref=f6e3] [cursor=pointer]:
+    - /url: "#main"
+  - generic [ref=f6e4]:
+    - navigation "Primary" [ref=f6e5]:
+      - generic [ref=f6e6]: Story Atlas
+      - list [ref=f6e13]:
+        - listitem [ref=f6e14]:
+          - link "Feed" [ref=f6e15] [cursor=pointer]:
+            - /url: "#/"
+        - listitem [ref=f6e20]:
+          - link "Search" [ref=f6e21] [cursor=pointer]:
+            - /url: "#/search"
+        - listitem [ref=f6e26]:
+          - link "Atlas" [ref=f6e27] [cursor=pointer]:
+            - /url: "#/atlas"
+        - listitem [ref=f6e32]:
+          - link "Time" [ref=f6e33] [cursor=pointer]:
+            - /url: "#/timeline"
+        - listitem [ref=f6e38]:
+          - link "Paths" [ref=f6e39] [cursor=pointer]:
+            - /url: "#/collections"
+        - listitem [ref=f6e44]:
+          - link "Saved" [ref=f6e45] [cursor=pointer]:
+            - /url: "#/saved"
+        - listitem [ref=f6e49]:
+          - link "You" [ref=f6e50] [cursor=pointer]:
+            - /url: "#/you"
+      - 'button "Theme: dark. Click to change." [ref=f6e55] [cursor=pointer]':
+        - generic [ref=f6e58]: dark
+    - main [ref=f6e59]:
+      - generic [ref=f6e60]:
+        - generic [ref=f6e61]:
+          - generic [ref=f6e62]:
+            - heading "STORY ATLAS" [level=1] [ref=f6e63]
+            - generic [ref=f6e64]: 22 STORIES
+          - paragraph [ref=f6e65]: The world, retold. Myths, mysteries, disasters and discoveries — classified honestly, sourced properly.
+          - generic [ref=f6e66]:
+            - text: Feed mix
+            - generic [ref=f6e67]:
+              - generic [ref=f6e68]: 70% your interests
+              - slider "Balance between your interests and unexpected discovery" [ref=f6e69]: "30"
+              - generic [ref=f6e70]: 30% surprise
+            - paragraph [ref=f6e71]: Tracking 7 interests · never more than one region in a row
+        - link [ref=f6e72] [cursor=pointer]:
+          - /url: "#/s/icarus/comic"
+          - generic [ref=f6e74]:
+            - paragraph [ref=f6e75]: Continue where you stopped
+            - paragraph [ref=f6e76]: Icarus
+          - generic [ref=f6e77]: page 2
+        - generic [ref=f6e80]:
+          - complementary [ref=f6e81]:
+            - generic [ref=f6e82]:
+              - button "Dismiss story of the day" [ref=f6e83] [cursor=pointer]
+              - generic [ref=f6e164]:
+                - paragraph [ref=f6e165]: Story of the day
+                - heading "The Hero Twins" [level=2] [ref=f6e167]
+                - paragraph [ref=f6e168]: The lords of the underworld challenged two boys to a ball game. The boys had already worked out how to come back from the dead.
+                - generic [ref=f6e169]:
+                  - generic "Classified as Myth. A traditional story about gods, origins and meaning. Not a record of events." [ref=f6e170]: MYTH
+                  - link "Open" [ref=f6e172] [cursor=pointer]:
+                    - /url: "#/s/hero-twins"
+            - link "Story path The Long Way Round Four journeys that were never really about arriving. 4 stops" [ref=f6e175] [cursor=pointer]:
+              - /url: "#/path/the-long-way"
+              - generic [ref=f6e180]:
+                - paragraph [ref=f6e181]: Story path
+                - paragraph [ref=f6e182]: The Long Way Round
+                - paragraph [ref=f6e183]: Four journeys that were never really about arriving.
+              - generic [ref=f6e184]: 4 stops
+            - link "World covered 0/12 Finish a story to light one up" [ref=f6e185] [cursor=pointer]:
+              - /url: "#/you"
+              - paragraph [ref=f6e186]: World covered
+              - paragraph [ref=f6e187]:
+                - text: "0"
+                - generic [ref=f6e188]: /12
+              - list [ref=f6e189]:
+                - listitem [ref=f6e190]
+                - listitem [ref=f6e191]
+                - listitem [ref=f6e192]
+                - listitem [ref=f6e193]
+                - listitem [ref=f6e194]
+                - listitem [ref=f6e195]
+                - listitem [ref=f6e196]
+                - listitem [ref=f6e197]
+                - listitem [ref=f6e198]
+                - listitem [ref=f6e199]
+                - listitem [ref=f6e200]
+                - listitem [ref=f6e201]
+              - paragraph [ref=f6e202]: Finish a story to light one up
+          - generic [ref=f6e203]:
+            - generic [ref=f6e204]:
+              - article [ref=f6e205]:
+                - generic [ref=f6e206]:
+                  - generic [ref=f6e207]: "001"
+                  - generic "Classified as Myth. A traditional story about gods, origins and meaning. Not a record of events." [ref=f6e208]: MYTH
+                  - generic [ref=f6e210]: Mediterranean
+                - link "Open Medusa" [ref=f6e212] [cursor=pointer]:
+                  - /url: "#/s/medusa"
+                  - generic [ref=f6e279]: Archaic Greece
+                - generic [ref=f6e280]:
+                  - paragraph [ref=f6e281]: The monster everyone can name was, in the oldest versions, not cursed for anything at all.
+                  - heading "Medusa Greek" [level=2] [ref=f6e282]:
+                    - link "Medusa" [ref=f6e283] [cursor=pointer]:
+                      - /url: "#/s/medusa"
+                    - generic [ref=f6e284]: Greek
+                  - paragraph [ref=f6e285]: A face that turns men to stone, a hero with a mirror — and a backstory that a Roman poet added eight hundred years late, which is the only part anybody remembers.
+                - generic [ref=f6e286]:
+                  - generic [ref=f6e287]:
+                    - button "Read 4m" [ref=f6e288] [cursor=pointer]:
+                      - text: Read
+                      - generic [ref=f6e292]: 4m
+                    - generic [ref=f6e293]: Comic soon
+                    - button "Save story" [ref=f6e294] [cursor=pointer]
+                    - button "Share story" [ref=f6e297] [cursor=pointer]
+                  - paragraph [ref=f6e301]: A part of the world you haven’t opened
+              - article [ref=f6e304]:
+                - generic [ref=f6e305]:
+                  - generic [ref=f6e306]: "002"
+                  - generic "Classified as Documented history. Supported by contemporary records, physical evidence, or both." [ref=f6e307]: DOCUMENTED
+                  - generic [ref=f6e309]: Beyond
+                - link "Open Apollo 11" [ref=f6e311] [cursor=pointer]:
+                  - /url: "#/s/apollo-11"
+                  - generic [ref=f6e368]: The Space Race
+                - generic [ref=f6e369]:
+                  - paragraph [ref=f6e370]: With 20 seconds of fuel left, the computer started throwing alarms nobody in the room had ever seen — and a 26-year-old said “go”.
+                  - heading "Apollo 11 United States · the Space Age" [level=2] [ref=f6e371]:
+                    - link "Apollo 11" [ref=f6e372] [cursor=pointer]:
+                      - /url: "#/s/apollo-11"
+                    - generic [ref=f6e373]: United States · the Space Age
+                  - paragraph [ref=f6e374]: The landing was not a triumphant glide. It was four minutes of compounding problems solved by people whose average age was 28.
+                - generic [ref=f6e375]:
+                  - generic [ref=f6e376]:
+                    - button "Read 5m" [ref=f6e377] [cursor=pointer]:
+                      - text: Read
+                      - generic [ref=f6e381]: 5m
+                    - generic [ref=f6e382]: Comic soon
+                    - button "Save story" [ref=f6e383] [cursor=pointer]
+                    - button "Share story" [ref=f6e386] [cursor=pointer]
+                  - paragraph [ref=f6e390]: A part of the world you haven’t opened
+              - article [ref=f6e393]:
+                - generic [ref=f6e394]:
+                  - generic [ref=f6e395]: "003"
+                  - generic "Classified as Myth. A traditional story about gods, origins and meaning. Not a record of events." [ref=f6e396]: MYTH
+                  - generic [ref=f6e398]: Mediterranean
+                - link "Open Prometheus" [ref=f6e400] [cursor=pointer]:
+                  - /url: "#/s/prometheus"
+                  - generic [ref=f6e478]: Archaic Greece
+                - generic [ref=f6e479]:
+                  - paragraph [ref=f6e480]: He stole fire for us, and the punishment was designed to never finish.
+                  - heading "Prometheus Greek" [level=2] [ref=f6e481]:
+                    - link "Prometheus" [ref=f6e482] [cursor=pointer]:
+                      - /url: "#/s/prometheus"
+                    - generic [ref=f6e483]: Greek
+                  - paragraph [ref=f6e484]: A Titan cheats the king of the gods twice, hands humanity the one thing that changes everything, and is chained to a rock where the sentence resets every single morning.
+                - generic [ref=f6e485]:
+                  - generic [ref=f6e486]:
+                    - button "Read 4m" [ref=f6e487] [cursor=pointer]:
+                      - text: Read
+                      - generic [ref=f6e491]: 4m
+                    - generic [ref=f6e492]: Comic soon
+                    - button "Save story" [ref=f6e493] [cursor=pointer]
+                    - button "Share story" [ref=f6e496] [cursor=pointer]
+                  - paragraph [ref=f6e500]: A part of the world you haven’t opened
+              - article [ref=f6e503]:
+                - generic [ref=f6e504]:
+                  - generic [ref=f6e505]: "004"
+                  - generic "Classified as Documented history. Supported by contemporary records, physical evidence, or both." [ref=f6e506]: DOCUMENTED
+                  - generic [ref=f6e508]: Europe
+                - link "Open Joan of Arc" [ref=f6e510] [cursor=pointer]:
+                  - /url: "#/s/joan-of-arc"
+                  - generic [ref=f6e602]: The Hundred Years’ War
+                - generic [ref=f6e603]:
+                  - paragraph [ref=f6e604]: A teenage farm girl talked her way into command of an army — and we have the transcript of her trial, in her own words.
+                  - heading "Joan of Arc Medieval France" [level=2] [ref=f6e605]:
+                    - link "Joan of Arc" [ref=f6e606] [cursor=pointer]:
+                      - /url: "#/s/joan-of-arc"
+                    - generic [ref=f6e607]: Medieval France
+                  - paragraph [ref=f6e608]: Almost no medieval peasant left a record of their voice. Joan left hundreds of pages of it, because the people who burned her were fastidious about minutes.
+                - generic [ref=f6e609]:
+                  - generic [ref=f6e610]:
+                    - button "Read 5m" [ref=f6e611] [cursor=pointer]:
+                      - text: Read
+                      - generic [ref=f6e615]: 5m
+                    - generic [ref=f6e616]: Comic soon
+                    - button "Save story" [ref=f6e617] [cursor=pointer]
+                    - button "Share story" [ref=f6e620] [cursor=pointer]
+                  - paragraph [ref=f6e624]: A part of the world you haven’t opened
+              - article [ref=f6e627]:
+                - generic [ref=f6e628]:
+                  - generic [ref=f6e629]: "005"
+                  - generic "Classified as Myth. A traditional story about gods, origins and meaning. Not a record of events." [ref=f6e630]: MYTH
+                  - generic [ref=f6e632]: Mediterranean
+                - link "Open Icarus" [ref=f6e634] [cursor=pointer]:
+                  - /url: "#/s/icarus"
+                  - generic [ref=f6e799]: Mythic Bronze Age
+                  - generic [ref=f6e800]: COMIC
+                - generic [ref=f6e805]:
+                  - paragraph [ref=f6e806]: "His father gave him one rule: don’t fly too close to the sun."
+                  - heading "Icarus Greek · Cretan" [level=2] [ref=f6e807]:
+                    - link "Icarus" [ref=f6e808] [cursor=pointer]:
+                      - /url: "#/s/icarus"
+                    - generic [ref=f6e809]: Greek · Cretan
+                  - paragraph [ref=f6e810]: Everyone remembers the boy who ignored a warning. Almost nobody remembers that the warning had two halves — or that the story is really about his father.
+                - generic [ref=f6e811]:
+                  - generic [ref=f6e812]:
+                    - button "Read 5m" [ref=f6e813] [cursor=pointer]:
+                      - text: Read
+                      - generic [ref=f6e817]: 5m
+                    - button "Comic" [ref=f6e818] [cursor=pointer]
+                    - button "Save story" [ref=f6e823] [cursor=pointer]
+                    - button "Share story" [ref=f6e826] [cursor=pointer]
+                  - paragraph [ref=f6e830]: A part of the world you haven’t opened
+              - article [ref=f6e833]:
+                - generic [ref=f6e834]:
+                  - generic [ref=f6e835]: "006"
+                  - generic "Classified as Folklore. Living oral tradition — told, retold and reshaped by communities." [ref=f6e836]: FOLKLORE
+                  - generic [ref=f6e838]: Africa
+                - link "Open Anansi" [ref=f6e840] [cursor=pointer]:
+                  - /url: "#/s/anansi"
+                  - generic [ref=f6e908]: Living oral tradition
+                - generic [ref=f6e909]:
+                  - paragraph [ref=f6e910]: A spider bought every story in the world from the sky god — and the price was four things nobody could catch.
+                  - heading "Anansi Akan (Ghana, Côte d’Ivoire) · Caribbean diaspora" [level=2] [ref=f6e911]:
+                    - link "Anansi" [ref=f6e912] [cursor=pointer]:
+                      - /url: "#/s/anansi"
+                    - generic [ref=f6e913]: Akan (Ghana, Côte d’Ivoire) · Caribbean diaspora
+                  - paragraph [ref=f6e914]: How an Akan trickster came to own narrative itself, and how the stories then crossed the Atlantic in the holds of slave ships and refused to die.
+                - generic [ref=f6e915]:
+                  - generic [ref=f6e916]:
+                    - button "Read 4m" [ref=f6e917] [cursor=pointer]:
+                      - text: Read
+                      - generic [ref=f6e921]: 4m
+                    - generic [ref=f6e922]: Comic soon
+                    - button "Save story" [ref=f6e923] [cursor=pointer]
+                    - button "Share story" [ref=f6e926] [cursor=pointer]
+                  - paragraph [ref=f6e930]: A part of the world you haven’t opened
+              - article "Icarus Greek · Cretan" [ref=f6e933]:
+                - generic [ref=f6e934]:
+                  - generic [ref=f6e935]: "007"
+                  - generic "Classified as Myth. A traditional story about gods, origins and meaning. Not a record of events." [ref=f6e936]: MYTH
+                  - generic [ref=f6e938]: Mediterranean
+                - link "Open Icarus" [ref=f6e940] [cursor=pointer]:
+                  - /url: "#/s/icarus"
+                  - generic [ref=f6e1105]: Mythic Bronze Age
+                  - generic [ref=f6e1106]: COMIC
+                - generic [ref=f6e1111]:
+                  - paragraph [ref=f6e1112]: "His father gave him one rule: don’t fly too close to the sun."
+                  - heading "Icarus Greek · Cretan" [level=2] [ref=f6e1113]:
+                    - link "Icarus" [ref=f6e1114] [cursor=pointer]:
+                      - /url: "#/s/icarus"
+                    - generic [ref=f6e1115]: Greek · Cretan
+                  - paragraph [ref=f6e1116]: Everyone remembers the boy who ignored a warning. Almost nobody remembers that the warning had two halves — or that the story is really about his father.
+                - generic [ref=f6e1117]:
+                  - generic [ref=f6e1118]:
+                    - button "Read 5m" [ref=f6e1119] [cursor=pointer]:
+                      - text: Read
+                      - generic [ref=f6e1123]: 5m
+                    - button "Comic" [ref=f6e1124] [cursor=pointer]
+                    - button "Save story" [ref=f6e1129] [cursor=pointer]
+                    - button "Share story" [ref=f6e1132] [cursor=pointer]
+                  - paragraph [ref=f6e1136]: A part of the world you haven’t opened
+              - article [ref=f6e1139]:
+                - generic [ref=f6e1140]:
+                  - generic [ref=f6e1141]: "008"
+                  - generic "Classified as Documented history. Supported by contemporary records, physical evidence, or both." [ref=f6e1142]: DOCUMENTED
+                  - generic [ref=f6e1144]: Europe
+                - link "Open The Cadaver Synod" [ref=f6e1146] [cursor=pointer]:
+                  - /url: "#/s/cadaver-synod"
+                  - generic [ref=f6e1253]: The Roman papacy at its lowest
+                  - generic [ref=f6e1254]: COMIC
+                - generic [ref=f6e1259]:
+                  - paragraph [ref=f6e1260]: In 897, the Church dug up a dead pope and put his corpse on trial.
+                  - heading "The Cadaver Synod Medieval Rome" [level=2] [ref=f6e1261]:
+                    - link "The Cadaver Synod" [ref=f6e1262] [cursor=pointer]:
+                      - /url: "#/s/cadaver-synod"
+                    - generic [ref=f6e1263]: Medieval Rome
+                  - paragraph [ref=f6e1264]: They exhumed him after nine months, dressed the body in papal vestments, sat it in a chair, appointed a teenage deacon to speak for it, and found it guilty.
+                - generic [ref=f6e1265]:
+                  - generic [ref=f6e1266]:
+                    - button "Read 5m" [ref=f6e1267] [cursor=pointer]:
+                      - text: Read
+                      - generic [ref=f6e1271]: 5m
+                    - button "Comic" [ref=f6e1272] [cursor=pointer]
+                    - button "Save story" [ref=f6e1277] [cursor=pointer]
+                    - button "Share story" [ref=f6e1280] [cursor=pointer]
+                  - paragraph [ref=f6e1284]: A part of the world you haven’t opened
+              - article [ref=f6e1287]:
+                - generic [ref=f6e1288]:
+                  - generic [ref=f6e1289]: "009"
+                  - generic "Classified as Myth. A traditional story about gods, origins and meaning. Not a record of events." [ref=f6e1290]: MYTH
+                  - generic [ref=f6e1292]: Mesoamerica
+                - link "Open The Hero Twins" [ref=f6e1294] [cursor=pointer]:
+                  - /url: "#/s/hero-twins"
+                  - generic [ref=f6e1373]: Written c. 1550s · far older tradition
+                - generic [ref=f6e1374]:
+                  - paragraph [ref=f6e1375]: The lords of the underworld challenged two boys to a ball game. The boys had already worked out how to come back from the dead.
+                  - heading "The Hero Twins K’iche’ Maya" [level=2] [ref=f6e1376]:
+                    - link "The Hero Twins" [ref=f6e1377] [cursor=pointer]:
+                      - /url: "#/s/hero-twins"
+                    - generic [ref=f6e1378]: K’iche’ Maya
+                  - paragraph [ref=f6e1379]: The Popol Vuh is the great surviving narrative of the Maya world — and it survives because a friar wrote down the thing his order was burning.
+                - generic [ref=f6e1380]:
+                  - generic [ref=f6e1381]:
+                    - button "Read 4m" [ref=f6e1382] [cursor=pointer]:
+                      - text: Read
+                      - generic [ref=f6e1386]: 4m
+                    - generic [ref=f6e1387]: Comic soon
+                    - button "Save story" [ref=f6e1388] [cursor=pointer]
+                    - button "Share story" [ref=f6e1391] [cursor=pointer]
+                  - paragraph [ref=f6e1395]: A part of the world you haven’t opened
+              - article [ref=f6e1398]:
+                - generic [ref=f6e1399]:
+                  - generic [ref=f6e1400]: "010"
+                  - generic "Classified as Documented history. Supported by contemporary records, physical evidence, or both." [ref=f6e1401]: DOCUMENTED
+                  - generic [ref=f6e1403]: South Asia
+                - link "Open Ashoka" [ref=f6e1405] [cursor=pointer]:
+                  - /url: "#/s/ashoka"
+                  - generic [ref=f6e1465]: 3rd century BCE
+                - generic [ref=f6e1466]:
+                  - paragraph [ref=f6e1467]: He won the war, walked through what he had done, and then carved his own confession into rock across half a continent.
+                  - heading "Ashoka Mauryan India" [level=2] [ref=f6e1468]:
+                    - link "Ashoka" [ref=f6e1469] [cursor=pointer]:
+                      - /url: "#/s/ashoka"
+                    - generic [ref=f6e1470]: Mauryan India
+                  - paragraph [ref=f6e1471]: The Mauryan emperor’s edicts are the earliest decipherable writing in India — and one of them is a head of state admitting, in public, that his greatest victory was a moral catastrophe.
+                - generic [ref=f6e1472]:
+                  - generic [ref=f6e1473]:
+                    - button "Read 5m" [ref=f6e1474] [cursor=pointer]:
+                      - text: Read
+                      - generic [ref=f6e1478]: 5m
+                    - generic [ref=f6e1479]: Comic soon
+                    - button "Save story" [ref=f6e1480] [cursor=pointer]
+                    - button "Share story" [ref=f6e1483] [cursor=pointer]
+                  - paragraph [ref=f6e1487]: A part of the world you haven’t opened
+              - article [ref=f6e1490]:
+                - generic [ref=f6e1491]:
+                  - generic [ref=f6e1492]: "011"
+                  - generic "Classified as Historical mystery. A real, documented puzzle that has never been solved." [ref=f6e1493]: MYSTERY
+                  - generic [ref=f6e1495]: Oceania
+                - link "Open Nan Madol" [ref=f6e1497] [cursor=pointer]:
+                  - /url: "#/s/nan-madol"
+                  - generic [ref=f6e1544]: c. 1180–1628 CE
+                - generic [ref=f6e1545]:
+                  - paragraph [ref=f6e1546]: Someone built a city of ninety-two artificial islands out of stone logs weighing up to fifty tonnes — on a Pacific reef.
+                  - heading "Nan Madol Pohnpei · Saudeleur dynasty" [level=2] [ref=f6e1547]:
+                    - link "Nan Madol" [ref=f6e1548] [cursor=pointer]:
+                      - /url: "#/s/nan-madol"
+                    - generic [ref=f6e1549]: Pohnpei · Saudeleur dynasty
+                  - paragraph [ref=f6e1550]: It is the only ancient city ever built on a coral reef, it took roughly 750,000 tonnes of basalt to make, and nobody has satisfactorily explained how the stones were moved.
+                - generic [ref=f6e1551]:
+                  - generic [ref=f6e1552]:
+                    - button "Read 4m" [ref=f6e1553] [cursor=pointer]:
+                      - text: Read
+                      - generic [ref=f6e1557]: 4m
+                    - generic [ref=f6e1558]: Comic soon
+                    - button "Save story" [ref=f6e1559] [cursor=pointer]
+                    - button "Share story" [ref=f6e1562] [cursor=pointer]
+                  - paragraph [ref=f6e1566]: A part of the world you haven’t opened
+              - article [ref=f6e1569]:
+                - generic [ref=f6e1570]:
+                  - generic [ref=f6e1571]: "012"
+                  - generic "Classified as Documented history. Supported by contemporary records, physical evidence, or both." [ref=f6e1572]: DOCUMENTED
+                  - generic [ref=f6e1574]: Mediterranean
+                - link "Open The Ides of March" [ref=f6e1576] [cursor=pointer]:
+                  - /url: "#/s/caesar"
+                  - generic [ref=f6e1671]: Late Roman Republic
+                - generic [ref=f6e1672]:
+                  - paragraph [ref=f6e1673]: Someone warned Julius Caesar exactly how he would die. He kept the appointment anyway.
+                  - heading "The Ides of March Roman" [level=2] [ref=f6e1674]:
+                    - link "The Ides of March" [ref=f6e1675] [cursor=pointer]:
+                      - /url: "#/s/caesar"
+                    - generic [ref=f6e1676]: Roman
+                  - paragraph [ref=f6e1677]: A diviner named a date. A wife had a dream. A friend wrote out the whole plot and put it in his hand. He walked into the room with all of it and sat down.
+                - generic [ref=f6e1678]:
+                  - generic [ref=f6e1679]:
+                    - button "Read 5m" [ref=f6e1680] [cursor=pointer]:
+                      - text: Read
+                      - generic [ref=f6e1684]: 5m
+                    - generic [ref=f6e1685]: Comic soon
+                    - button "Save story" [ref=f6e1686] [cursor=pointer]
+                    - button "Share story" [ref=f6e1689] [cursor=pointer]
+                  - paragraph [ref=f6e1693]: A part of the world you haven’t opened
+            - generic [ref=f6e1696]: Loading more of the world
+  - status
