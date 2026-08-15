@@ -6,9 +6,9 @@
 <title>OWCS Comp Tracker — turn a broadcast into reviewed match data</title>
 <meta name="description" content="Submit an Overwatch Champions Series broadcast, watch it get read frame by frame, confirm what the detector saw, and publish trustworthy hero composition data.">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preload" href="assets/fonts/archivo-var-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/saira-condensed-700-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/fonts.css">
 <link rel="stylesheet" href="assets/css/owcs.css">
 </head>
 <body>
@@ -17,19 +17,25 @@
 <main id="main">
 
   <!-- What this is, in one screen — and compact, because the people who
-       use this daily want the dashboard, not the pitch. -->
+       use this daily want the dashboard, not the pitch. The right-hand
+       column is not decoration: it is the most recent thing the product
+       actually produced, so the claim on the left is evidenced beside it.
+       It removes itself when there is nothing published to show. -->
   <section class="shell shell--wide">
-    <div class="page-head page-head--tight">
-      <p class="eyebrow eyebrow--gold">OWCS data</p>
-      <h1>Turn broadcasts into<br><span class="hl hl--gold">reviewed match data.</span></h1>
-      <p class="lede">Automatically read every hero composition and swap off the HUD, then
-        verify uncertain detections before publishing. Nothing reaches these pages until a
-        person has confirmed what the detector saw.</p>
-      <div class="row u-mt-4">
-        <a class="btn btn--primary" href="submit.html">Submit a broadcast</a>
-        <a class="btn btn--ghost" href="games.html">Browse games</a>
+    <div class="opener">
+      <div class="page-head page-head--tight">
+        <p class="eyebrow eyebrow--gold">OWCS data</p>
+        <h1>Turn broadcasts into<br><span class="hl hl--gold">reviewed match data.</span></h1>
+        <p class="lede">Automatically read every hero composition and swap off the HUD, then
+          verify uncertain detections before publishing. Nothing reaches these pages until a
+          person has confirmed what the detector saw.</p>
+        <div class="row u-mt-4">
+          <a class="btn btn--primary" href="submit.html">Submit a broadcast</a>
+          <a class="btn btn--ghost" href="games.html">Browse games</a>
+        </div>
+        <div id="mode-status" class="u-mt-4" style="max-width:70ch"></div>
       </div>
-      <div id="mode-status" class="u-mt-4" style="max-width:70ch"></div>
+      <div id="showcase" class="opener__showcase"></div>
     </div>
   </section>
 
@@ -87,6 +93,7 @@
 
 </main>
 
+<script src="assets/vendor/fuse.basic.min.js" defer></script>
 <script src="assets/vendor/lenis.min.js" defer></script>
 <script src="assets/vendor/gsap.min.js" defer></script>
 <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
@@ -98,6 +105,9 @@
 <script src="assets/js/app/core.js"></script>
 <script src="assets/js/app/games.js"></script>
 <script src="assets/js/app/api.js"></script>
+<script src="assets/vendor/panzoom.min.js"></script>
+<script src="assets/js/app/evidence.js"></script>
+<script src="assets/js/app/hovercard.js" defer></script>
 <script src="assets/js/app/shell.js"></script>
 <script src="assets/js/app/page-dashboard.js"></script>
 </body>

@@ -81,6 +81,7 @@
   P.regionName = (id) => (IDX.regions.get(id) || { name: id || "—" }).name;
   P.heroes = () => (D && D.heroes) || [];
   P.teams = () => (D && D.teams) || [];
+  P.maps = () => (D && D.mapsCatalog) || [];
 
   /* Everything the product will show a fan as a fact. The gate that keeps
      an unreviewed detection out of production lives in the exporter; this
@@ -179,6 +180,12 @@
   };
   P.heroArtwork = (heroId) =>
     ART.has(heroId) ? "assets/img/heroes/official/" + encodeURIComponent(heroId) + "/artwork.webp" : null;
+  /* The 3:2 crop, framed on the hero rather than on the middle of the
+     splash — what to use anywhere the art is shown as a banner. Cropping
+     the full artwork with object-fit lands on whatever happens to be in
+     the centre of the scene, which for most heroes is not the hero. */
+  P.heroCard = (heroId) =>
+    ART.has(heroId) ? "assets/img/heroes/official/" + encodeURIComponent(heroId) + "/card.webp" : null;
 
   /* --------------------------------------------------- team accent hues */
   const TEAM_HUES = {
@@ -242,8 +249,10 @@
     const body = '<span class="hero__face">' + P.heroFace(h, px) + "</span>" +
       '<span class="hero__name">' + esc(h.name) + "</span>" +
       '<span class="visually-hidden">' + esc(h.name) + (h.role ? ", " + esc(h.role) : "") + "</span>";
-    const attrs = ' data-role="' + esc(h.role || "") + '" title="' + esc(h.name) +
-      (h.role ? " — " + esc(h.role) : "") + '"';
+    /* `title` is the no-JS answer to "who is this"; `data-hero` is what
+       the hover card hangs off. Both, so the tile is never a mystery. */
+    const attrs = ' data-role="' + esc(h.role || "") + '" data-hero="' + esc(h.id) +
+      '" title="' + esc(h.name) + (h.role ? " — " + esc(h.role) : "") + '"';
     if (opt.link) {
       return '<a class="hero' + size + '" href="hero.html?id=' + encodeURIComponent(h.id) + '"' +
         attrs + ">" + body + "</a>";
@@ -342,8 +351,13 @@
     '<details class="diag"><summary>' + esc(summary) + '</summary>' +
     '<div class="diag__body">' + bodyHtml + "</div></details>";
 
+  /* The class is load-bearing: the two-column term/definition layout used
+     to live only under `.diag__body dl`, so the same helper rendered as a
+     tidy grid inside a diagnostics block and as browser-default stacked
+     <dt>/<dd> anywhere else. The style belongs to the component, not to
+     one of the places it appears. */
   P.dl = (pairs) =>
-    "<dl>" + pairs.filter((p) => p && p[1] != null && p[1] !== "")
+    '<dl class="dl">' + pairs.filter((p) => p && p[1] != null && p[1] !== "")
       .map((p) => "<dt>" + esc(p[0]) + "</dt><dd>" + esc(p[1]) + "</dd>").join("") + "</dl>";
 
   /* --------------------------------------------------------- URL + DOM */

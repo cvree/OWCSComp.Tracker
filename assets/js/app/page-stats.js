@@ -64,12 +64,43 @@
         "Hero numbers appear the moment the first game is reviewed.");
       return;
     }
+    /* The table below carries every column; the chart answers the one
+       question people open this tab for — who is being played — without
+       making them rank twelve numbers by eye. Both, not either: the chart
+       is the shape, the table is the record. */
+    const picked = rows.slice(0, 14);
+    const sample = P.publishedComps().length;
+    const chart = P.chart ? P.chart.bars(picked.map((r) => {
+      const h = P.hero(r.hero);
+      return {
+        label: h.name, value: r.picks, role: h.role,
+        note: r.pickRate != null ? pct(r.pickRate) + " of line-ups" : "",
+        href: "hero.html?id=" + encodeURIComponent(h.id),
+        mark: '<span class="hero__face">' + P.heroFace(h, 26) + "</span>",
+      };
+    }), {
+      byRole: true,
+      title: "Times picked" + (rows.length > picked.length
+        ? " — top " + picked.length + " of " + rows.length : ""),
+      caption: "Out of " + sample + " approved line-up" + (sample === 1 ? "" : "s") +
+        ". Bars are coloured by role; every value is also in the table below.",
+    }) : "";
+
+    const roleSplit = P.chart
+      ? P.chart.roleSplit(
+        P.publishedComps().reduce((all, c) => all.concat(c.heroes || []), []),
+        { title: "Role split across every approved line-up",
+          caption: "One count per hero slot, so five per line-up." })
+      : "";
+
     host.innerHTML =
       '<p class="dim small u-mt-5">Counted across ' + rows.length +
       " hero(es) that appear in approved line-ups. Pick rate is the share of approved " +
       "line-ups the hero appears in; swap rate is how often they were swapped in or out " +
       "mid-map." + "</p>" +
-      '<div class="table-wrap u-mt-4"><table class="tbl">' +
+      (chart ? '<div class="card u-mt-5">' + chart + "</div>" : "") +
+      (roleSplit ? '<div class="card u-mt-4">' + roleSplit + "</div>" : "") +
+      '<div class="table-wrap u-mt-5"><table class="tbl">' +
       "<thead><tr><th>Hero</th><th>Role</th><th class=\"num\">Picks</th>" +
       "<th class=\"num\">Pick rate</th><th class=\"num\">Win rate</th>" +
       "<th class=\"num\">Swapped</th></tr></thead><tbody>" +
@@ -155,6 +186,15 @@
           '<span class="stat__v">' + m.played + "</span>" +
           '<span class="stat__note">played of ' + m.maps + " map(s) in the pool</span></div>"
         ).join("") + "</div>"
+        : "") +
+      (played.length > 1 && P.chart
+        ? '<div class="card u-mt-5">' + P.chart.bars(played.map((m) => ({
+            label: m.name, value: m.played, note: m.mode,
+          })), {
+            title: "Maps by times played",
+            caption: "Counted from approved line-ups only, so a map played on a " +
+              "broadcast nobody has reviewed yet shows as zero.",
+          }) + "</div>"
         : "") +
       (played.length
         ? '<div class="table-wrap u-mt-5"><table class="tbl">' +

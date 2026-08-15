@@ -374,15 +374,35 @@ def test_links_resolve() -> None:
                 missing.append(f"{p} -> {rel}")
     check(f"no dead asset reference ({missing or 'none'})", not missing)
 
-    print("nothing is loaded from a third party except the webfont:")
+    # This used to carve out fonts.googleapis.com/fonts.gstatic.com, which
+    # meant every page opened with a render-blocking stylesheet on a
+    # third-party origin and did not look like itself wherever that CDN is
+    # unreachable — while owcs.css's own header promised the product
+    # degrades "no JS, no webfont, no colour". The three faces are
+    # vendored under assets/fonts now (SIL OFL, see assets/css/fonts.css),
+    # so the exception is gone and this is an absolute rule again.
+    print("nothing at all is loaded from a third party:")
     offenders = []
     for p in pages:
         for url in re.findall(r'(?:src|href)="(https?://[^"]+)"', read(p)):
-            if "fonts.googleapis.com" in url or "fonts.gstatic.com" in url:
-                continue
             offenders.append(f"{p} -> {url}")
     check(f"no third-party script or stylesheet ({offenders or 'none'})",
           not offenders)
+
+    print("the webfonts a page declares are on disk:")
+    css = read("assets/css/fonts.css")
+    faces = re.findall(r'url\("\.\./fonts/([^"]+)"', css)
+    check(f"fonts.css declares faces ({len(faces)} url(s))", bool(faces))
+    absent = [f for f in set(faces)
+              if not os.path.exists(os.path.join(ROOT, "assets", "fonts", f))]
+    check(f"every declared font file exists ({absent or 'none'})", not absent)
+    # Only the pages that ask for those families. The packaged desktop
+    # screens (appliance.css) deliberately name families they do not ship
+    # and fall back to the host's own UI font, because that build has to
+    # stay byte-small and works on a machine with nothing installed.
+    wants_fonts = [p for p in pages if "assets/css/owcs.css" in read(p)]
+    unwired = [p for p in wants_fonts if "assets/css/fonts.css" not in read(p)]
+    check(f"every page on owcs.css loads fonts.css ({unwired or 'none'})", not unwired)
 
 
 def test_legacy_redirects() -> None:

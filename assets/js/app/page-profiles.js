@@ -155,7 +155,7 @@
       { label: h.name }]));
 
     const rate = ((D && D.heroPickRates) || []).filter((r) => r.hero === h.id)[0];
-    const art = P.heroArtwork(h.id);
+    const art = P.heroCard(h.id);
 
     set("head",
       '<div class="page-head page-head--tight">' +
@@ -174,8 +174,9 @@
     const parts = [];
     if (art) {
       parts.push('<section class="band"><img src="' + esc(art) + '" alt="" loading="lazy" ' +
-        'style="width:100%;max-height:280px;object-fit:cover;border-radius:var(--r-3);' +
-        'border:1px solid var(--line)">' +
+        'width="640" height="427" ' +
+        'style="width:100%;aspect-ratio:3/2;max-height:340px;object-fit:cover;' +
+        'object-position:50% 30%;border-radius:var(--r-3);border:1px solid var(--line)">' +
         '<p class="dim small u-mt-3">Official hero art from Blizzard’s own hero pages, ' +
         "used for recognition only. Compositions on this site are never illustrated with " +
         "official art — those show the actual broadcast crop.</p></section>");

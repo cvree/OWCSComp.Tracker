@@ -248,27 +248,52 @@
     return el;
   }
 
-  /* --------------------------------------------------------- search */
+  /* --------------------------------------------------------- search
+     Substring matching was the wrong tool for this index: an operator who
+     remembers "qadsia" or types "midseson" got nothing back, and every
+     result looked identical, so picking the right game out of sixty-seven
+     meant reading sixty-seven near-identical strings. Fuse.js (Apache-2.0,
+     github.com/krisk/Fuse) does the matching now — typo-tolerant, weighted
+     so a team's name outranks the tournament it played in — and each row
+     carries the thing it is: the hero's portrait, the team's crest, the
+     game's state chip. Without Fuse it falls back to the substring scorer,
+     so search still works with the vendor file missing. */
   function buildSearch() {
     const items = [];
-    const add = (type, label, sub, href, keys) =>
-      items.push({ type: type, label: label, sub: sub || "", href: href,
-        keys: String(keys || label).toLowerCase() });
+    const add = (it) => items.push(it);
 
     if (P.games) {
       P.games.all().forEach((g) => {
         const a = P.team(g.teamA), b = P.team(g.teamB);
-        add("game", g.title, P.STATE_WORDS[g.state].label, g.href,
-          [g.title, a && a.code, b && b.code, g.tournamentName].filter(Boolean).join(" "));
+        const st = P.STATE_WORDS[g.state] || { label: g.state };
+        add({
+          type: "game", label: g.title, sub: g.tournamentName || "",
+          href: g.href, state: g.state, badge: st.label,
+          mark: (a || b)
+            ? '<span class="palette__vs">' + P.teamCrest(a) + P.teamCrest(b) + "</span>"
+            : "",
+          terms: [g.title, a && a.name, a && a.code, b && b.name, b && b.code,
+            g.tournamentName].filter(Boolean).join(" "),
+        });
       });
     }
-    P.teams().forEach((t) =>
-      add("team", t.name, "Team · " + P.regionName(t.region),
-        "team.html?id=" + encodeURIComponent(t.id),
-        [t.name, t.code, (t.aliases || []).join(" ")].join(" ")));
-    P.heroes().forEach((h) =>
-      add("hero", h.name, "Hero · " + (h.role || "—"),
-        "hero.html?id=" + encodeURIComponent(h.id), h.name + " " + h.id + " " + (h.role || "")));
+    P.teams().forEach((t) => add({
+      type: "team", label: t.name, sub: P.regionName(t.region),
+      href: "team.html?id=" + encodeURIComponent(t.id),
+      mark: '<span class="palette__mark">' + P.teamCrest(t) + "</span>",
+      terms: [t.name, t.code, (t.aliases || []).join(" ")].join(" "),
+    }));
+    P.heroes().forEach((h) => add({
+      type: "hero", label: h.name, sub: h.role || "",
+      href: "hero.html?id=" + encodeURIComponent(h.id),
+      mark: '<span class="palette__mark">' + P.heroFace(h, 32) + "</span>",
+      terms: [h.name, h.id, h.role].filter(Boolean).join(" "),
+    }));
+    (P.maps ? P.maps() : []).forEach((m) => add({
+      type: "map", label: m.name, sub: m.mode || "",
+      href: "stats.html?tab=maps",
+      terms: [m.name, m.mode, m.id].filter(Boolean).join(" "),
+    }));
 
     [["Dashboard", "index.html", "Where everything stands"],
      ["Games", "games.html", "Every game, whatever state it is in"],
@@ -285,19 +310,45 @@
      ["Guide: publish", "guide.html#publish", "Promote reviewed detections and export"],
      ["Guide: when something is blocked", "guide.html#troubleshoot", "Each blocked state and the next command"],
      ["Design system", "styleguide.html", "Every component, chip and evidence state"],
-    ].forEach((r) => add("page", r[0], r[2], r[1], r[0] + " " + r[2]));
+    ].forEach((r) => add({ type: "page", label: r[0], sub: r[2], href: r[1],
+      terms: r[0] + " " + r[2] }));
 
+    /* Weights encode what people actually search by: the name of the thing
+       first, what it belongs to second. `ignoreLocation` matters because a
+       team code sits at the end of a game title, not the start. */
+    let fuse = null;
+    if (typeof window.Fuse === "function") {
+      try {
+        fuse = new window.Fuse(items, {
+          includeScore: true,
+          ignoreLocation: true,
+          threshold: 0.38,
+          keys: [{ name: "label", weight: 0.6 }, { name: "terms", weight: 0.3 },
+                 { name: "sub", weight: 0.1 }],
+        });
+      } catch (err) { fuse = null; }
+    }
+
+    /* Plural heads a group of them; singular labels one row. */
+    const KIND = { game: "Games", team: "Teams", hero: "Heroes", map: "Maps", page: "Go to" };
+    const ONE = { game: "Game", team: "Team", hero: "Hero", map: "Map", page: "Page" };
     const wrap = document.createElement("div");
     wrap.className = "palette";
     wrap.hidden = true;
     wrap.innerHTML =
       '<div class="palette__scrim" data-close></div>' +
       '<div class="palette__box" role="dialog" aria-modal="true" aria-label="Search">' +
-        '<input type="search" id="palette-input" autocomplete="off" spellcheck="false" ' +
-          'placeholder="Search games, teams, heroes…" role="combobox" aria-expanded="true" ' +
-          'aria-controls="palette-list" aria-autocomplete="list">' +
+        '<div class="palette__field">' +
+          '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" ' +
+            'stroke-width="2" stroke-linecap="round">' +
+            '<circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 4.5 4.5"/></svg>' +
+          '<input type="search" id="palette-input" autocomplete="off" spellcheck="false" ' +
+            'placeholder="Search games, teams, heroes, maps…" role="combobox" ' +
+            'aria-expanded="true" aria-controls="palette-list" aria-autocomplete="list">' +
+        "</div>" +
         '<ul class="palette__list" id="palette-list" role="listbox" aria-label="Results"></ul>' +
-        '<p class="palette__hint">↑↓ move · Enter open · Esc close</p>' +
+        '<p class="palette__hint"><kbd>↑</kbd><kbd>↓</kbd> move · <kbd>↵</kbd> open · ' +
+          "<kbd>esc</kbd> close</p>" +
       "</div>";
     document.body.appendChild(wrap);
 
@@ -305,32 +356,65 @@
     const list = wrap.querySelector("#palette-list");
     let shown = [], cursor = 0, lastFocus = null;
 
-    const score = (it, q) => {
-      const i = it.keys.indexOf(q);
-      return i < 0 ? -1 : (i === 0 ? 0 : 10) + i + (it.type === "page" ? 2 : 0);
+    const substring = (q) => {
+      const scored = [];
+      items.forEach((it) => {
+        const i = (it.label + " " + it.terms).toLowerCase().indexOf(q);
+        if (i >= 0) scored.push({ it: it, s: i + (it.type === "page" ? 2 : 0) });
+      });
+      return scored.sort((a, b) => a.s - b.s).map((r) => r.it);
     };
+
+    function results(query) {
+      if (!query) {
+        /* An empty palette is a launcher, not an empty state: the places
+           worth going, plus whatever is actually waiting on a person. */
+        const attention = P.games
+          ? P.games.all().filter((g) => g.state === "review" || g.state === "blocked").slice(0, 4)
+          : [];
+        const quick = items.filter((it) => it.type === "page").slice(0, 8);
+        return attention
+          .map((g) => items.find((it) => it.href === g.href))
+          .filter(Boolean)
+          .concat(quick)
+          .slice(0, 10);
+      }
+      if (fuse) return fuse.search(query, { limit: 14 }).map((r) => r.item);
+      return substring(query.toLowerCase()).slice(0, 14);
+    }
+
     function render(q) {
-      const query = q.trim().toLowerCase();
-      shown = query
-        ? items.map((it) => ({ it: it, s: score(it, query) })).filter((r) => r.s >= 0)
-          .sort((a, b) => a.s - b.s).slice(0, 12).map((r) => r.it)
-        : items.filter((it) => it.type === "page").slice(0, 8);
+      const query = q.trim();
+      shown = results(query);
       cursor = 0;
       if (!shown.length) {
-        list.innerHTML = '<li class="palette__empty">Nothing here matches “' + esc(q) +
-          "”. Only games that have been submitted appear in search.</li>";
+        list.innerHTML = '<li class="palette__empty">Nothing matches “' + esc(q) +
+          "”. Only games that have been submitted or found appear here.</li>";
         return;
       }
-      list.innerHTML = shown.map((it, i) =>
-        '<li role="option" id="p-opt-' + i + '" aria-selected="' + (i === 0) + '" ' +
-        'class="palette__row' + (i === 0 ? " on" : "") + '" data-href="' + esc(it.href) + '">' +
-        '<span class="k">' + esc(it.type) + '</span><span class="l">' + esc(it.label) +
-        '</span><span class="s">' + esc(it.sub) + "</span></li>").join("");
+      let lastKind = null;
+      list.innerHTML = shown.map((it, i) => {
+        const head = it.type !== lastKind && !query
+          ? '<li class="palette__group" role="presentation">' + esc(KIND[it.type] || it.type) + "</li>"
+          : "";
+        lastKind = it.type;
+        return head +
+          '<li role="option" id="p-opt-' + i + '" aria-selected="' + (i === 0) + '" ' +
+          'class="palette__row' + (i === 0 ? " on" : "") + '" data-href="' + esc(it.href) + '">' +
+          (it.mark || '<span class="palette__mark palette__mark--kind">' +
+            esc((KIND[it.type] || "?").slice(0, 1)) + "</span>") +
+          '<span class="palette__text"><span class="l">' + esc(it.label) + "</span>" +
+          (it.sub ? '<span class="s">' + esc(it.sub) + "</span>" : "") + "</span>" +
+          (it.state ? P.stateChip(it.state) : '<span class="k">' + esc(ONE[it.type] || it.type) + "</span>") +
+          "</li>";
+      }).join("");
     }
     function move(d) {
       if (!shown.length) return;
       cursor = (cursor + d + shown.length) % shown.length;
-      Array.prototype.forEach.call(list.children, (el, i) => {
+      /* Group headings are list items too, so the cursor walks the rows
+         themselves rather than every child of the list. */
+      P.$$(".palette__row", list).forEach((el, i) => {
         const on = i === cursor;
         el.classList.toggle("on", on);
         el.setAttribute("aria-selected", on ? "true" : "false");

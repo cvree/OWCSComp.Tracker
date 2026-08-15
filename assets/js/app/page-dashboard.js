@@ -14,6 +14,7 @@
 
   document.addEventListener("DOMContentLoaded", () => {
     P.api.mountStatus("mode-status");
+    renderShowcase();
     renderTiles();
     renderAutofill();
     renderAttention();
@@ -21,6 +22,70 @@
     renderPublished();
     renderHealth();
   });
+
+  /* --------------------------------------------------------- showcase
+     The headline claims the product turns a broadcast into reviewed data.
+     This is the last time it did, in full: the map, both line-ups, the
+     confidence the detector had, and the frame it was read from. It is the
+     claim and the receipt side by side.
+
+     It renders nothing at all when nothing has been published — an empty
+     promise-shaped box would be worse than the space it saves. */
+  function renderShowcase() {
+    const host = document.getElementById("showcase");
+    if (!host) return;
+    const comps = P.publishedComps();
+    if (!comps.length) { host.remove(); return; }
+
+    /* Newest first by the clock the exporter writes, falling back to the
+       read offset so a dataset without timestamps still picks the latest
+       thing on the latest map rather than an arbitrary row. */
+    const latest = comps.slice().sort((a, b) =>
+      String(b.matchId).localeCompare(String(a.matchId)) ||
+      (b.timestamp || 0) - (a.timestamp || 0))[0];
+    const mapId = latest.mapId;
+    const onMap = comps.filter((c) => c.mapId === mapId);
+    const sides = {};
+    onMap.forEach((c) => {
+      if (!sides[c.teamId] || c.timestamp < sides[c.teamId].timestamp) sides[c.teamId] = c;
+    });
+    const teamIds = Object.keys(sides);
+    if (!teamIds.length) { host.remove(); return; }
+
+    const match = P.match(latest.matchId);
+    const mapRec = match && (match.maps || []).find((m) => m.id === mapId);
+    const info = P.mapInfo(mapRec ? mapRec.map : null);
+
+    const side = (teamId) => {
+      const c = sides[teamId];
+      return '<div class="showcase__side">' +
+        '<div class="showcase__team">' + P.teamPlate(teamId, { size: "sm", link: true }) +
+        P.confMeter(c.confidence) + "</div>" +
+        P.compStrip(c.heroes, { size: "sm", link: true }) + "</div>";
+    };
+
+    host.innerHTML =
+      '<article class="showcase">' +
+        '<div class="showcase__head">' +
+          '<span class="chip" data-state="published"><span class="dot"></span>Published</span>' +
+          '<span class="showcase__map">' + esc(info.name) +
+          (info.mode ? '<span class="dim"> · ' + esc(info.mode) + "</span>" : "") + "</span>" +
+        "</div>" +
+        '<p class="showcase__kicker">The most recent line-up this read off a broadcast ' +
+          "and a person confirmed.</p>" +
+        teamIds.map(side).join('<span class="showcase__rule" aria-hidden="true"></span>') +
+        '<div class="showcase__foot">' +
+          (latest.evidenceFrame
+            ? '<button class="btn btn--sm btn--quiet" data-evidence="' +
+              esc(latest.evidenceFrame) + '" data-evidence-cap="' +
+              esc(info.name + " — the frame this was read from") + '">See the frame</button>'
+            : "") +
+          '<a class="btn btn--sm btn--ghost" href="game.html?id=' +
+            encodeURIComponent(latest.matchId) + '">Open the game</a>' +
+        "</div>" +
+      "</article>";
+    if (P.evidence) P.evidence.wire(document);
+  }
 
   /* ------------------------------------------------------------ tiles
      Analytics cards, not alert blocks. The number carries the semantic

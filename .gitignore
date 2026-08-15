@@ -16,12 +16,18 @@ build/
 dist/
 
 # --- Windows application build outputs ---
-# vendor/bin holds ffmpeg.exe, ffprobe.exe and yt-dlp.exe, fetched at BUILD
-# time by packaging/fetch_vendor.py. ~150 MB of third-party binaries that are
-# reproducible from their official release URLs, so they are shipped inside
-# the installer and never committed here. dist/ (above) holds the PyInstaller
-# bundle and the installer itself.
-vendor/
+# packaging/vendor/bin holds ffmpeg.exe, ffprobe.exe and yt-dlp.exe, fetched
+# at BUILD time by packaging/fetch_vendor.py. ~150 MB of third-party binaries
+# that are reproducible from their official release URLs, so they are shipped
+# inside the installer and never committed here. dist/ (above) holds the
+# PyInstaller bundle and the installer itself.
+#
+# Anchored to packaging/ on purpose. This used to be a bare `vendor/`, which
+# also matched assets/vendor/ — the site's own vendored libraries, which ARE
+# committed and are the reason the pages need no CDN. The three that were
+# already there had to be force-added, and the next one added normally would
+# have been dropped in silence.
+packaging/vendor/
 *.spec.bak
 
 # --- Virtualenvs / tooling ---
