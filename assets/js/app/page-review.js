@@ -745,8 +745,12 @@
   /* -------------------------------------------------------- keyboard */
   function wireKeys() {
     document.addEventListener("keydown", (e) => {
-      if (!$("picker-modal").hidden) return;
-      if (!$("lightbox").hidden) return;
+      /* Anything modal owns the keyboard while it is up. Both guards are
+         null-safe on purpose: the evidence viewer builds its own dialog on
+         first use, so there is no element to read until then. */
+      const picker = $("picker-modal");
+      if (picker && !picker.hidden) return;
+      if (P.evidence && P.evidence.isOpen()) return;
       const typing = /^(input|textarea|select)$/i.test(e.target.tagName || "") ||
         e.target.isContentEditable;
       if (typing || e.metaKey || e.ctrlKey || e.altKey) return;

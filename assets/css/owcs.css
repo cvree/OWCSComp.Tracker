@@ -1387,11 +1387,12 @@ html.motion-on a.hero:hover .hero__face { transform: translateY(-2px); }
   background-size: 20px 20px;
   background-position: 0 0, 10px 10px;
 }
+/* Sized in JS on load, not here: the stage holds both a 1280px frame and a
+   35px crop cut out of one, and only one of those wants a max-width. */
 .lightbox__stage img {
-  display: block; max-width: 100%; max-height: 74vh;
-  image-rendering: -webkit-optimize-contrast;
-  user-select: none; -webkit-user-drag: none;
+  display: block; user-select: none; -webkit-user-drag: none;
 }
+.lightbox__stage { min-height: min(74vh, 520px); }
 /* Panzoom drives the element's own transform; nothing here may animate it
    or the pan lags a frame behind the pointer. */
 .lightbox__stage img { transition: none !important; }

@@ -102,15 +102,46 @@
     return true;
   }
 
-  /* --------------------------------------------------------------- zoom */
+  /* --------------------------------------------------------------- zoom
+     The two things this viewer opens are wildly different sizes: a 1280x720
+     broadcast frame, and a 35x35 hero crop cut out of one. Left at their
+     natural size the first overflows and the second is a speck, so the
+     image is fitted to the stage on load — scaled DOWN for the frame and
+     UP for the crop — and that fitted size is what 100% means.
+
+     Fitting first is also what makes the zoom work at all. Panzoom's
+     `contain: "outside"` keeps the element covering its parent, which for
+     a letterboxed image means forcing the scale up until it does: opening
+     a 35px crop pinned it at the 800% ceiling, and "Fit" could not bring
+     it back because 800% *was* the contained minimum. With the element
+     already fitted there is nothing to contain, so scale 1 is a real
+     resting state again. */
+  function fitToStage() {
+    if (!img || !img.naturalWidth || !stage) return 1;
+    const box = stage.getBoundingClientRect();
+    const pad = 24;
+    const availW = Math.max(80, box.width - pad);
+    const availH = Math.max(80, box.height - pad);
+    const factor = Math.min(availW / img.naturalWidth, availH / img.naturalHeight);
+    img.style.width = Math.round(img.naturalWidth * factor) + "px";
+    img.style.height = Math.round(img.naturalHeight * factor) + "px";
+    /* Past 2x there are no real pixels left to interpolate. A reviewer
+       judging a portrait wants to see the pixels the detector saw, not a
+       smoothed guess at them. */
+    img.style.imageRendering = factor >= 2 ? "pixelated" : "";
+    return factor;
+  }
+
   function attachZoom() {
     detachZoom();
-    if (typeof window.Panzoom !== "function" || !img) return;
+    if (!img) return;
+    fitToStage();
+    if (typeof window.Panzoom !== "function") { syncLevel(); return; }
     try {
       pz = window.Panzoom(img, {
         maxScale: ZOOM_MAX,
         minScale: ZOOM_MIN,
-        contain: "outside",
+        contain: false,
         cursor: "grab",
         step: 0.4,
       });
@@ -157,11 +188,25 @@
      ← → walk the same sequence the reader sees. Rebuilt on open: pages
      re-render, and a stale list would step to something that is gone. */
   function collect(path) {
-    group = P.$$("[data-evidence]").map((el) => ({
-      path: el.dataset.evidence,
-      cap: el.dataset.evidenceCap || "",
-    })).filter((e, i, all) =>
-      e.path && all.findIndex((o) => o.path === e.path && o.cap === e.cap) === i);
+    /* Keyed on the FILE, not on the button. Both teams' opening line-ups
+       are read off the same broadcast frame, so the page carries two
+       anchors pointing at one image — and deduplicating on path+caption
+       kept both, which made "next" appear to do nothing: it stepped to a
+       different caption for the same picture. One frame is one stop, and
+       the captions of everything read from it are joined, which is also
+       the more honest label for what that frame shows. */
+    const byPath = new Map();
+    P.$$("[data-evidence]").forEach((el) => {
+      const p = el.dataset.evidence;
+      if (!p) return;
+      const cap = el.dataset.evidenceCap || "";
+      if (!byPath.has(p)) byPath.set(p, { path: p, caps: [] });
+      const entry = byPath.get(p);
+      if (cap && entry.caps.indexOf(cap) < 0) entry.caps.push(cap);
+    });
+    group = Array.from(byPath.values()).map((e) => ({
+      path: e.path, cap: e.caps.join(" · "),
+    }));
     at = group.findIndex((e) => e.path === path);
     if (at < 0) {
       group.unshift({ path: path, cap: "" });
@@ -174,7 +219,7 @@
     at = (i + group.length) % group.length;
     const e = group[at];
     detachZoom();
-    img.removeAttribute("style");
+    img.removeAttribute("style");  /* drop the previous image's fitted size */
     img.src = e.path;
     img.alt = e.cap || "Evidence frame";
     cap.textContent = e.cap || "Evidence frame";
@@ -190,12 +235,26 @@
   }
 
   P.evidence = {
+    /* Whether the viewer currently owns the keyboard.
+
+       Callers must ask through this rather than reading `#lightbox`'s
+       `hidden`: the dialog is built on first use now, so before anyone has
+       opened a frame there is no element to read, and a page that pokes at
+       the id directly throws on every keypress. The review workspace's
+       whole keyboard died that way. */
+    isOpen: function () {
+      return !!(box && !box.hidden);
+    },
     /* `path` is repo-relative, exactly as the record stores it. */
     open: function (path, caption) {
       if (!ensure() || !path) return;
       lastFocus = document.activeElement;
       collect(path);
-      if (caption && group[at]) group[at].cap = caption;
+      /* Only fills a gap — a caller opening a path that is not on the page
+         has no anchor to have been collected from. It never overwrites the
+         merged caption, which names everything read off that frame rather
+         than only the one button that was clicked. */
+      if (caption && group[at] && !group[at].cap) group[at].cap = caption;
       show(at);
       box.hidden = false;
       document.documentElement.classList.add("lightbox-open");
