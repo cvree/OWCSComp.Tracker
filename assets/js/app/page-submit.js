@@ -126,6 +126,26 @@
     return hit;
   }
 
+  /* The same idea against the DISCOVERY layer: a link the unattended scan
+     already found arrives with an event name and a day read off its own
+     title. Only empty fields are filled, and only from what the title
+     actually said — a parsed value that is null stays null here too. */
+  function autofillFromDiscovery(v) {
+    if (!v.videoId) return null;
+    const hit = P.discovered().filter((b) => b.videoId === v.videoId)[0];
+    if (!hit || hit.state === "published") return null;
+    const p = hit.parsed || {};
+    if (p.eventName && !$("tournament").value) $("tournament").value = p.eventName;
+    if ((p.regions || []).length === 1 && !$("region").value) {
+      $("region").value = p.regions[0];
+    }
+    if (p.fixture && !$("teamA").value && !$("teamB").value) {
+      $("teamA").value = p.fixture[0];
+      $("teamB").value = p.fixture[1];
+    }
+    return hit;
+  }
+
   /* ---------------------------------------------------------- verdict */
   function renderVerdict() {
     const box = $("link-verdict");
@@ -140,6 +160,16 @@
       input.removeAttribute("aria-invalid");
       box.innerHTML = '<p class="ok-note">✓ Recognised ' + esc(verdict.label) + ". " +
         esc(verdict.detail || "") + "</p>";
+      const found = autofillFromDiscovery(verdict);
+      if (found) {
+        box.innerHTML += P.note("info", "The tracker already found this broadcast",
+          "<p>It was picked up automatically on " + esc(found.channelTitle ||
+            "an official channel") + (found.publishedAt
+            ? ", published " + esc(P.fmtDate(found.publishedAt)) : "") +
+          ". Nothing has been read from it yet — that is what submitting does.</p>",
+          '<a class="btn btn--sm btn--ghost" href="game.html?video=' +
+          encodeURIComponent(found.videoId) + '">See what was found</a>');
+      }
       const known = autofillFromLink(verdict);
       if (known) {
         box.innerHTML += P.note("info", "This broadcast is already in the record",
@@ -187,14 +217,36 @@
     });
     const sources = ((P.work && P.work.videoSources) || [])
       .filter((s) => s.url && s.platform === "youtube" && !known.has(s.url))
-      .slice(0, 4);
-    if (!sources.length) { host.innerHTML = ""; return; }
+      .map((s) => ({ url: s.url, label: s.title || s.id, sub: null }));
+
+    /* The published copy has no working record at all, so on the live
+       site the list above is always empty and this box used to disappear
+       — the one place a visitor could actually start from was a blank
+       field. These come from the unattended scan instead, which means the
+       published site can offer real, current OWCS broadcasts. */
+    P.discovered().filter((b) => b.state === "found" && b.url &&
+      !b.parsed.companion && !known.has(b.url)).forEach((b) => {
+      if (sources.some((s) => s.url === b.url)) return;
+      const p = b.parsed || {};
+      sources.push({
+        url: b.url,
+        label: p.cleanTitle || b.title || b.videoId,
+        sub: [p.eventName, p.day ? "Day " + p.day : null,
+          b.publishedAt ? P.fmtDate(b.publishedAt) : null]
+          .filter(Boolean).join(" · "),
+      });
+    });
+
+    const shown = sources.slice(0, 6);
+    if (!shown.length) { host.innerHTML = ""; return; }
     host.innerHTML =
-      '<p class="label">Broadcasts the tracker already knows about</p>' +
-      '<div class="row u-mt-3">' + sources.map((s) =>
+      '<p class="label">Broadcasts the tracker already found</p>' +
+      '<div class="row u-mt-3">' + shown.map((s) =>
         '<button type="button" class="btn btn--sm btn--ghost btn--trunc" data-url="' +
-        esc(s.url) + '" title="' + esc(s.title || s.id) + '"><span>' +
-        esc(s.title || s.id) + "</span></button>").join("") + "</div>";
+        esc(s.url) + '" title="' + esc(s.sub || s.label) + '"><span>' +
+        esc(s.label) + "</span></button>").join("") + "</div>" +
+      '<p class="dim small u-mt-3">Found automatically on verified official channels. ' +
+      'Nothing has been read from them — picking one starts that.</p>';
     host.addEventListener("click", (e) => {
       const b = e.target.closest("[data-url]");
       if (!b) return;

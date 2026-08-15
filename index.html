@@ -42,6 +42,16 @@
     <div class="grid grid--4" id="tiles"></div>
   </section>
 
+  <!-- What the tracker did on its own since anyone last looked. Hides
+       itself when no automatic scan has ever run. -->
+  <section class="shell shell--wide band" id="autofill-band" hidden aria-labelledby="h-auto">
+    <div class="sec-head">
+      <h2 id="h-auto">Filling itself</h2>
+      <a class="sec-link" href="games.html?state=found">Everything found →</a>
+    </div>
+    <div id="autofill"></div>
+  </section>
+
   <!-- Only what needs a person. This block hides itself when it is empty. -->
   <section class="shell shell--wide band" id="attention-band" hidden aria-labelledby="h-attn">
     <div class="sec-head">
@@ -83,6 +93,7 @@
 <script src="assets/js/app/motion.js" defer></script>
 <script src="assets/data/hero_art.v1.js"></script>
 <script src="assets/data/public_data.v1.js"></script>
+<script src="assets/data/discovered.v1.js"></script>
 <script src="assets/js/data.js"></script>
 <script src="assets/js/app/core.js"></script>
 <script src="assets/js/app/games.js"></script>

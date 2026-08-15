@@ -51,24 +51,48 @@ from the screen it belongs to.
 
 | page | what it is for |
 |---|---|
-| `index.html` | **Dashboard** — one obvious "Submit a game", what needs a person, what is processing, what is blocked, what was recently published, and a small honest system-health strip. |
-| `games.html` | **Games** — one row per game whatever state it is in. This replaced the separate matches / runs / sources / tournaments lists, which were four views of the same thing. Also carries the official season schedule, collapsed, as "nobody has submitted this yet". |
+| `index.html` | **Dashboard** — one obvious "Submit a game", what the unattended scan filled in since anyone last looked, what needs a person, what is processing, what is blocked, what was recently published, and a small honest system-health strip. |
+| `games.html` | **Games** — one row per game whatever state it is in, including every broadcast the scheduled scan found on its own (grouped separately and labelled as found, not read). This replaced the separate matches / runs / sources / tournaments lists, which were four views of the same thing. Also carries the official season schedule, collapsed, with how many broadcasts have already been found for each event. |
 | `submit.html` | **Submit** — one required field. The link is classified as you type (offline; a connected tracker's own classifier takes over when there is one), known broadcasts autofill the rest, advanced options stay shut, and there is exactly one final button. |
 | `review.html` | **Review** — the human gate, and the best screen in the product. Every detection beside the frame it was read from, confidence as a bar, a fast hero picker, whole-map and whole-line-up approval, swap and map-boundary confirmation, and a full keyboard (`j`/`k` move, `a` approve, `c` correct, `f` flag, `⇧A` approve every clean read). |
-| `game.html` | **One game**, in whatever state it is in: the six-step progression with live output while it runs, the blocker and its exact fix when it is stuck, and the published maps and line-ups once it is approved. |
+| `game.html` | **One game**, in whatever state it is in — including `?video=<id>`, a broadcast the scan found that nobody has submitted, which shows exactly what is known and what is not: the six-step progression with live output while it runs, the blocker and its exact fix when it is stuck, and the published maps and line-ups once it is approved. |
 | `stats.html` | **Stats** — heroes, compositions, maps, teams and swaps as five tabs over the same approved dataset. |
 | `teams.html` · `team.html` · `hero.html` | nested profiles, reached from a game or a stats table. |
 | `how-it-works.html` | the explainer, in plain language, rendering the product's own step definitions so it cannot drift. |
-| `tools.html` | everything technical, off the main path: broadcast sources, processing history, calibration health, download authentication, storage, publishing, the evidence archive. |
+| `tools.html` | everything technical, off the main path: automatic-discovery health (when the scan last ran, what it found, every source error), broadcast sources, processing history, calibration health, download authentication, storage, publishing, the evidence archive. |
 | `calibrate.html` | the in-browser calibration wizard — the one operator tool that works fully on the published copy. |
 | `404.html` | the legacy-URL map. Every page the redesign removed names where it went, and goes there. |
 
-Two datasets, never merged: `assets/data/public_data.v1.js` is the
-**published** record (approved, evidence-backed, safe to state as fact) and
+Three datasets, never merged: `assets/data/public_data.v1.js` is the
+**published** record (approved, evidence-backed, safe to state as fact),
 `assets/js/data.js` is the **working** record (runs, sources, what is
-happening). The demo fixture is a test asset under `pipeline/fixtures/` and
-no page can load it — an empty export renders an honest empty state, never
-invented games.
+happening), and `assets/data/discovered.v1.js` is the **discovery** record
+— what the unattended scan found and what each title says about itself,
+never a fact a person confirmed. The demo fixture is a test asset under
+`pipeline/fixtures/` and no page can load it — an empty export renders an
+honest empty state, never invented games.
+
+**The site fills itself** (`pipeline/automation/self_fill.py` →
+`assets/data/discovered.v1.js`, rebuilt by the scheduled `match-finder`
+workflow): the finder has always scanned every verified official channel
+on free sources, but its snapshot was rendered only by the operator's own
+localhost portal — so the live site kept showing whatever a human last
+pushed while dozens of real broadcasts sat in a committed file. `self_fill`
+is a pure, offline function of four committed files (the scan, the official
+calendar, the published dataset, and the workflow's own cron) that produces
+the layer the public pages render: every discovered broadcast with the
+event / stage / day / region **its own title states** (and `null` where it
+does not), the official calendar event whose window and region actually
+contain it (with `matchedBy` naming the evidence, and a refusal plus its
+reason when several events fit), its lifecycle state joined against the
+published record, an event rollup, and the one action that moves it
+forward. Discovered broadcasts appear on the dashboard ("Filling itself"),
+in the games list as their own group, on `submit.html` as one-click
+suggestions, in site search, and each on its own `game.html?video=<id>`
+page. Finding is not reading: nothing here can publish a composition,
+approve a source, or touch the DB — the human review gate is unchanged.
+`python3 pipeline/automation/cli.py self-fill [--check]` rebuilds or gates
+it; CI fails if the committed layer is not what a fresh build produces.
 
 **Site search** (`assets/js/app/shell.js`): every page carries a search
 button plus `/` and ⌘/Ctrl-K. It indexes games, teams, heroes and the
@@ -492,9 +516,18 @@ New CV tables (`pipeline/schema.sql`): `ingest_runs`, `slot_observations`,
 - **720p capture.** The layout profile is resolution-independent, but the
   reject-marker template crops are cut at 720p (re-cut for other
   resolutions).
-- **Scheduled GitHub workflows are manual-only** (`workflow_dispatch`). The
-  capture/FACEIT auto-commit pipelines are intentionally off-cron so they
-  can't race CI or mutate the committed milestone unattended.
+- **The capture/FACEIT workflows are manual-only** (`workflow_dispatch`).
+  Those auto-commit pipelines are intentionally off-cron so they can't race
+  CI or mutate the committed milestone unattended. The two that DO run on a
+  schedule are read-only by construction: `discovery` (registry/calendar
+  sync) and `match-finder` (broadcast discovery + the site's discovery
+  layer). Neither downloads a video, writes a composition, or approves a
+  source.
+- **Discovery is not detection.** The site now fills itself with broadcasts
+  nobody submitted, and every one of them is labelled as found rather than
+  read. A discovered row carries the video's own metadata and a reading of
+  its title — never a composition, a score or a result. Turning one into
+  match data still requires processing and a human review.
 - **The LLM advisor is a convenience, not a measurement**, and is scoped to
   stay that way — closed-vocabulary suggestions behind a human gate, plus
   wording help on calibration failures. It has been exercised against a
@@ -514,6 +547,8 @@ owcs-comp-tracker/
 │   ├── css/ js/                 # site logic (public/ = fan pages)
 │   └── data/
 │       ├── public_data.v1.js    # PRODUCTION export (real Nepal data)
+│       ├── discovered.v1.js     # what the unattended scan found (self-fill)
+│       ├── matchfinder.v1.json  # the raw scan the layer above is built from
 │       └── public_fixture.v1.js # demo fixture (guarded fallback)
 ├── pipeline/                    # the whole Python pipeline + tests
 ├── layouts/                     # calibrated HUD profiles + marker crops

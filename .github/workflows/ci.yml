@@ -57,6 +57,14 @@ jobs:
       - name: Committed exports must match a fresh export (reproducibility)
         run: python pipeline/export_data.py --check --public
 
+      # The site's discovery layer is derived from the committed scan, so a
+      # hand-edit or a stale commit would make the pages render something no
+      # scan ever produced. `--check` writes nothing and exits 1 on any
+      # difference; the artifact carries no wall clock, so an unchanged scan
+      # always rebuilds byte-identically.
+      - name: Discovery layer must match a fresh build (self-fill)
+        run: python pipeline/automation/cli.py self-fill --check
+
       - name: Offline test suite
         run: |
           fail=0

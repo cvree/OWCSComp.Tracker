@@ -29,7 +29,12 @@
   document.addEventListener("DOMContentLoaded", () => {
     const id = P.qs("id");
     const run = P.qs("run");
-    game = id ? G.byId(id) : run ? G.byId(run) : null;
+    /* `?video=` is a broadcast the scan found by itself. It is the same
+       page: a game the machine knows about and nobody has touched yet is
+       still a game, and it deserves an address. */
+    const video = P.qs("video");
+    game = id ? G.byId(id) : run ? G.byId(run)
+      : video ? G.byId("bc-" + video) : null;
 
     if (!game) {
       document.getElementById("head").innerHTML =
@@ -71,7 +76,10 @@
       working: ["Watch the live output", "#live", "btn--ghost"],
       queued: ["See all games", "games.html", "btn--ghost"],
       blocked: ["Fix the blocker", "#blockers", "btn--primary"],
-    }[game.state];
+      found: ["Process this broadcast",
+        "submit.html?url=" + encodeURIComponent(game.sourceUrl || ""), "btn--primary"],
+      ignored: ["See all games", "games.html", "btn--ghost"],
+    }[game.state] || ["See all games", "games.html", "btn--ghost"];
 
     /* The fixture, not a sentence. Where the record names two teams the
        header is a scoreboard — marks, names and the score — because that
@@ -124,6 +132,7 @@
     const parts = [];
 
     if (game.blockers.length) parts.push(blockerSection());
+    if (game.broadcast) parts.push(discoverySection());
     parts.push(flowSection());
     if (game.state === "working") parts.push(liveSection());
     if (game.state === "review") parts.push(reviewCallSection());
@@ -154,6 +163,75 @@
           (b.link ? '<a class="btn btn--sm' + (b.command ? " btn--ghost" : " btn--primary") +
             '" href="' + esc(b.link) + '">' + esc(b.fixLabel) + "</a>" : ""))
       ).join("") + "</div></section>";
+  }
+
+  /* --------------------------------------------------------- discovery
+     Everything the tracker knows about a broadcast NOBODY has submitted:
+     where it came from, what its own title says, why it was scored as a
+     match broadcast, and what would happen next. The point of writing it
+     out in full is that a visitor can tell the difference between "the
+     machine found a video" and "the machine read a game" — the two are
+     one click apart in this product and must never look alike. */
+  function discoverySection() {
+    const b = game.broadcast;
+    const p = b.parsed || {};
+    const cal = b.calendar || {};
+    const dur = b.durationSeconds
+      ? Math.floor(b.durationSeconds / 3600) + "h " +
+        Math.round((b.durationSeconds % 3600) / 60) + "m"
+      : null;
+
+    const facts = P.dl([
+      ["Channel", b.channelTitle],
+      ["Published", b.publishedAt ? P.fmtDateTime(b.publishedAt)
+        : "not stated by the source"],
+      ["Length", dur],
+      ["Event, read from the title", p.eventName],
+      ["Stage", p.stage != null ? "Stage " + p.stage : null],
+      ["Day", p.day != null ? "Day " + p.day : null],
+      ["Week", p.week != null ? "Week " + p.week : null],
+      ["Region named in the title", (p.regions || []).length
+        ? p.regions.map(P.regionName).join(" · ") : "none named"],
+      ["Official calendar", cal.eventName || cal.why],
+      ["First seen by the scan", b.firstSeenAt ? P.fmtDateTime(b.firstSeenAt) : null],
+      ["Found on", (b.sources || []).join(", ")],
+    ]);
+
+    const reasons = ((b.likeness || {}).reasons || []);
+    const scoring = reasons.length
+      ? P.diag("Why it was scored as a match broadcast (" +
+        esc((b.likeness || {}).confidence || "unscored") + ")",
+        "<ul>" + reasons.map((r) => "<li>" + esc(r) + "</li>").join("") + "</ul>")
+      : "";
+
+    const action = b.nextAction
+      ? P.note("info", b.nextAction.label,
+        "<p>This does not happen on its own. Processing downloads the broadcast, " +
+        "separates live play from replays and the desk, reads the hero portraits off " +
+        "the HUD, and then stops for a person to confirm what it saw.</p>" +
+        (b.nextAction.command
+          ? '<pre class="console u-mt-3" style="max-height:none">' +
+            esc(b.nextAction.command) + "</pre>" : ""),
+        '<a class="btn btn--sm btn--primary" href="' + esc(b.nextAction.href) + '">' +
+        esc(b.nextAction.label) + "</a>" +
+        (b.nextAction.command
+          ? '<button class="btn btn--sm btn--ghost" data-copy="' +
+            esc(b.nextAction.command) + '">Copy the command</button>' : ""))
+      : "";
+
+    return '<section class="band" id="discovery" aria-labelledby="h-disc">' +
+      '<div class="sec-head"><h2 id="h-disc">What the tracker found</h2>' +
+      '<span class="chip" data-state="detected"><span class="dot"></span>' +
+      "machine-discovered</span></div>" +
+      P.note("warn", "Nothing has been read from this broadcast yet",
+        "<p>It was found automatically on a verified official channel. Everything below " +
+        "is either the source's own metadata or a reading of the video title — there are " +
+        "no hero compositions, no scores and no results here, and there will not be until " +
+        "it has been processed and reviewed.</p>") +
+      '<div class="card u-mt-4">' + facts + "</div>" +
+      (scoring ? '<div class="u-mt-4">' + scoring + "</div>" : "") +
+      (action ? '<div class="u-mt-4">' + action + "</div>" : "") +
+      "</section>";
   }
 
   /* -------------------------------------------------------------- flow */

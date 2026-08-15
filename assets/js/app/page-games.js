@@ -17,6 +17,7 @@
     ["working", "Processing"],
     ["blocked", "Blocked"],
     ["queued", "Queued"],
+    ["found", "Found automatically"],
     ["published", "Published"],
   ];
 
@@ -47,14 +48,28 @@
         ? P.empty("◇", "No games match that",
           "Try a different state, or clear the text filter.")
         : P.empty("◇", "No games yet",
-          'Nothing has been submitted. <a href="submit.html">Submit the first one</a> — ' +
+          "Nothing has been submitted and the automatic scan has not found a " +
+          'broadcast yet. <a href="submit.html">Submit the first one</a> — ' +
           "one broadcast link is all it needs.");
       return;
     }
-    /* Anything needing a person gets the full card treatment; settled
-       games are a dense table, because scanning beats browsing there. */
+    /* Three groups, in the order a person cares about them: what needs a
+       human, what the tracker is already working on, and what the scan
+       found by itself. The third group is separated because it is a
+       different KIND of row — nobody submitted it and nothing has been
+       read from it — and burying sixty of those in one table would hide
+       the one game that actually needs attention. */
     const attention = rows.filter((g) => g.state === "blocked" || g.state === "review");
-    const rest = rows.filter((g) => g.state !== "blocked" && g.state !== "review");
+    const found = rows.filter((g) => g.state === "found");
+    const rest = rows.filter((g) => g.state !== "blocked" && g.state !== "review" &&
+      g.state !== "found");
+
+    const table = (list, caption) =>
+      '<div class="table-wrap u-mt-4"><table class="tbl">' +
+      "<thead><tr><th>Game</th><th>State</th><th>Progress</th><th>Event</th>" +
+      "<th>Updated</th><th><span class=\"visually-hidden\">Open</span></th></tr></thead>" +
+      "<tbody>" + list.map(G.row).join("") + "</tbody>" +
+      "<caption>" + caption + "</caption></table></div>";
 
     host.innerHTML =
       (attention.length
@@ -64,13 +79,20 @@
         : "") +
       (rest.length
         ? (attention.length ? '<h2 class="u-mt-6" style="font-size:1.1rem">Everything else</h2>' : "") +
-          '<div class="table-wrap u-mt-4"><table class="tbl">' +
-          "<thead><tr><th>Game</th><th>State</th><th>Progress</th><th>Event</th>" +
-          "<th>Updated</th><th><span class=\"visually-hidden\">Open</span></th></tr></thead>" +
-          "<tbody>" + rest.map(G.row).join("") + "</tbody>" +
-          '<caption>' + rows.length + " game" + (rows.length === 1 ? "" : "s") +
-          " shown. Progress bars read left to right: source, video, gameplay, heroes, " +
-          "match link, review.</caption></table></div>"
+          table(rest, rest.length + " game" + (rest.length === 1 ? "" : "s") +
+            " shown. Progress bars read left to right: source, video, gameplay, " +
+            "heroes, match link, review.")
+        : "") +
+      (found.length
+        ? '<h2 class="u-mt-6" style="font-size:1.1rem">Found automatically ' +
+          '<span class="chip" data-state="detected"><span class="dot"></span>' +
+          found.length + "</span></h2>" +
+          '<p class="dim small u-mt-3" style="max-width:75ch">Broadcasts the tracker ' +
+          "found by itself on verified official channels. Nothing has been read from " +
+          "them yet — the title is all we know, and the title is all this list claims. " +
+          "Opening one shows the evidence and the single step that starts processing.</p>" +
+          table(found, found.length + " broadcast" + (found.length === 1 ? "" : "s") +
+            " found automatically and not yet processed.")
         : "");
     if (P.observeReveals) P.observeReveals(host);
   }
@@ -80,31 +102,92 @@
      submitted yet" is the most useful thing to see under a games list,
      so it sits at the bottom of this one, collapsed. */
   function renderUpcoming() {
-    const events = ((P.pub && P.pub.calendarEvents) || []).slice()
-      .filter((e) => e.startsAt && new Date(e.startsAt).getTime() > Date.now() - 86400000)
-      .sort((a, b) => String(a.startsAt).localeCompare(String(b.startsAt)));
     const host = document.getElementById("upcoming");
     if (!host) return;
+    /* `startDate`/`endDate` are what the exporter writes (and what the
+       public data contract specifies). This read used to look for a
+       `startsAt` field that has never existed in the export, so the
+       filter dropped every row and the official schedule silently
+       rendered as nothing on every load. */
+    const cutoff = Date.now() - 86400000;
+    const events = ((P.pub && P.pub.calendarEvents) || []).slice()
+      .filter((e) => {
+        const ends = e.endDate || e.startDate;
+        return ends && new Date(ends).getTime() > cutoff;
+      })
+      .sort((a, b) => String(a.startDate || "").localeCompare(String(b.startDate || "")));
     if (!events.length) { host.innerHTML = ""; return; }
+
+    /* How much of each event the scan has already found for itself, so
+       the schedule stops saying "nobody has submitted this" about an
+       event whose broadcasts are sitting in the list above. */
+    const foundPerEvent = {};
+    P.discovered().forEach((b) => {
+      ((b.calendar && b.calendar.eventIds) || []).forEach((id) => {
+        foundPerEvent[id] = (foundPerEvent[id] || 0) + 1;
+      });
+    });
+    const covered = events.filter((e) => foundPerEvent[e.id]).length;
+
     host.innerHTML = P.diag(
       "On the official schedule (" + events.length + " event" +
-      (events.length === 1 ? "" : "s") + " nobody has submitted yet)",
+      (events.length === 1 ? "" : "s") +
+      (covered ? ", " + covered + " with broadcasts already found" : "") + ")",
       '<p class="dim small" style="margin-bottom:var(--s-3)">Straight from the published ' +
-      "OWCS calendar. An event here has no data until someone submits its broadcast — " +
-      "which is the whole point of listing it.</p>" +
+      "OWCS calendar. “Broadcasts found” counts what the automatic scan has already " +
+      "located for that event; a count of none means nothing has turned up for it yet.</p>" +
       '<div class="table-wrap"><table class="tbl"><thead><tr><th>Event</th><th>Region</th>' +
-      "<th>Starts</th><th>Confirmed</th></tr></thead><tbody>" +
-      events.map((e) => "<tr><td><b>" + esc(e.name) + "</b></td><td>" +
-        esc(P.regionName(e.region)) + "</td><td>" +
-        esc(e.timeKnown === false ? P.fmtDate(e.startsAt) + " · time TBA"
-          : P.fmtDateTime(e.startsAt)) + "</td><td>" +
-        (e.verified
-          ? '<span class="chip" data-state="evidence"><span class="dot"></span>confirmed</span>'
-          : '<span class="chip" data-state="queued">provisional</span>') +
-        "</td></tr>").join("") + "</tbody></table></div>");
+      "<th>Dates</th><th>Broadcasts found</th><th>Confirmed</th></tr></thead><tbody>" +
+      events.map((e) => {
+        const n = foundPerEvent[e.id] || 0;
+        const span = e.endDate && e.endDate !== e.startDate
+          ? P.fmtDate(e.startDate) + " – " + P.fmtDate(e.endDate)
+          : P.fmtDate(e.startDate);
+        return "<tr><td><b>" + esc(e.name) + "</b></td><td>" +
+          esc(P.regionName(e.region)) + "</td><td>" + esc(span) + "</td><td>" +
+          (n
+            ? '<a href="games.html?state=found&q=' + encodeURIComponent(e.name) + '">' +
+              n + "</a>"
+            : '<span class="dim">none yet</span>') + "</td><td>" +
+          (e.verified
+            ? '<span class="chip" data-state="evidence"><span class="dot"></span>confirmed</span>'
+            : '<span class="chip" data-state="queued">provisional</span>') +
+          "</td></tr>";
+      }).join("") + "</tbody></table></div>");
+  }
+
+  /* The honest header for a self-filling list: when the tracker last
+     looked, what it found, and when it will look again. It renders the
+     staleness as a word, not only as a colour. */
+  function renderScanStatus() {
+    const host = document.getElementById("scan-status");
+    if (!host) return;
+    const d = P.disc;
+    if (!d || !d.scan || !d.scan.generatedAt) {
+      host.innerHTML = P.note("info", "No automatic scan has run yet",
+        "<p>Every game in this list was put here by a person. Once the scheduled " +
+        "broadcast scan runs, new OWCS broadcasts appear here on their own.</p>");
+      return;
+    }
+    const s = d.summary || {};
+    const stale = P.scanStale();
+    const next = d.scan.nextExpectedAt;
+    const errs = (d.scan.sourceErrors || []).length;
+    const body = "<p>Last scan " + esc(P.fmtRel(d.scan.generatedAt)) +
+      (stale ? " — <b>stale</b>" : "") + ". " +
+      esc(s.broadcastsKnown || 0) + " broadcast" + ((s.broadcastsKnown === 1) ? "" : "s") +
+      " known across " + esc(s.events || 0) + " event" + ((s.events === 1) ? "" : "s") +
+      ", " + esc(s.awaitingProcessing || 0) + " waiting to be processed." +
+      (next && !stale ? " Next scan due " + esc(P.fmtRel(next)) + "." : "") +
+      (errs ? " " + errs + " source error" + (errs === 1 ? "" : "s") +
+        ' — see <a href="tools.html">tools</a>.' : "") + "</p>";
+    host.innerHTML = P.note(stale || errs ? "warn" : "ok",
+      stale ? "The automatic scan has not run recently"
+        : "This list fills itself", body);
   }
 
   document.addEventListener("DOMContentLoaded", () => {
+    renderScanStatus();
     renderFilter();
     document.getElementById("q").value = query;
     render();

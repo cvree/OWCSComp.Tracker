@@ -1517,6 +1517,18 @@ def cmd_find_matches(args: argparse.Namespace) -> int:
     ledger = mf.scan(
         chans, limit=args.limit,
         extra_channel_urls=[args.channel_url] if args.channel_url else None)
+    # Bounded per-video date backfill. The flat-playlist dump the scan is
+    # built on often omits the timestamp, and a broadcast with no date can
+    # never be placed on the calendar — see mf.fill_missing_dates.
+    if args.fill_dates and not args.dry_run:
+        ledger, date_errors, filled = mf.fill_missing_dates(
+            ledger, limit=args.fill_dates)
+        if filled:
+            print(f"[match-finder] filled the air date of {filled} "
+                  f"previously-dateless broadcast(s)")
+        for err in date_errors:
+            print(f"[match-finder] {err}")
+        ledger.setdefault("sourceErrors", []).extend(date_errors)
     if not args.dry_run:
         mf.save_ledger(ledger)
     queued: list[dict] = []
@@ -1545,8 +1557,18 @@ def cmd_find_matches(args: argparse.Namespace) -> int:
         finally:
             store.close()
     report = mf.build_report(args.db, ledger=ledger)
+    filled_path = None
     if not args.dry_run:
         mf.export_snapshot(report)
+        # Rebuild the site's discovery layer from the snapshot we just
+        # wrote. Doing it here, in the same command, is what keeps the two
+        # artifacts from drifting: there is no state in which the site is
+        # rendering a scan that no longer exists.
+        if not args.no_self_fill:
+            from automation import self_fill as sfill
+            payload = sfill.build(snapshot=report)
+            filled_path = sfill.write(payload)
+            print(sfill.format_report(payload))
     if args.json:
         print(json.dumps({"report": report, "queued": queued}, indent=2))
         return 0
@@ -1554,8 +1576,46 @@ def cmd_find_matches(args: argparse.Namespace) -> int:
     for q in queued:
         print(f"[match-finder] queued {q['videoId']} -> {q['jobKey']} "
               f"(source {q['sourceState']})")
+    if filled_path:
+        print(f"[match-finder] site discovery layer -> "
+              f"{os.path.relpath(filled_path, content_db.REPO_ROOT)}")
     if args.dry_run:
         print("[match-finder] dry run — nothing written")
+    return 0
+
+
+def cmd_self_fill(args: argparse.Namespace) -> int:
+    """`self-fill` — rebuild the layer the PUBLIC site renders from the
+    committed match-finder scan: every discovered broadcast, what its own
+    title says about it, which official calendar event contains it, where
+    it stands in the pipeline, and the one action that moves it forward.
+
+    Entirely offline — it reads four committed files and writes one. It
+    cannot publish a composition, approve a source, or touch the DB.
+    `--check` writes nothing and fails when the committed artifact is out
+    of date, which is what CI runs."""
+    from automation import self_fill as sfill
+    payload = sfill.build()
+    path = sfill.path_for(sfill.OUTPUT_REL)
+    if args.check:
+        fresh = sfill.render_js(payload)
+        try:
+            with open(path, encoding="utf-8") as f:
+                committed = f.read()
+        except OSError:
+            committed = None
+        if committed != fresh:
+            print("[self-fill] assets/data/discovered.v1.js is out of date — "
+                  "run: python3 pipeline/automation/cli.py self-fill")
+            return 1
+        print("[self-fill] committed artifact matches a fresh build")
+        return 0
+    sfill.write(payload)
+    if args.json:
+        print(json.dumps(payload, indent=2))
+        return 0
+    print(sfill.format_report(payload))
+    print(f"[self-fill] wrote {os.path.relpath(path, content_db.REPO_ROOT)}")
     return 0
 
 
@@ -2139,10 +2199,28 @@ def main(argv: list[str] | None = None) -> int:
                            "call (offline); sources then cannot auto-approve")
     fm_p.add_argument("--fixture-dir", default=None,
                       help="serve YouTube responses from local fixtures (offline)")
+    fm_p.add_argument("--fill-dates", type=int, default=0, metavar="N",
+                      help="spend up to N extra metadata-only requests "
+                           "giving dateless archived broadcasts their real "
+                           "air date (default 0 = off; the archive fills "
+                           "itself over successive scans)")
+    fm_p.add_argument("--no-self-fill", action="store_true",
+                      help="skip rebuilding assets/data/discovered.v1.js "
+                           "(the layer the public site renders)")
     fm_p.add_argument("--dry-run", action="store_true",
                       help="scan and print, write nothing")
     fm_p.add_argument("--json", action="store_true")
     fm_p.set_defaults(func=cmd_find_matches)
+
+    sf_p = sub.add_parser("self-fill",
+                          help="rebuild the site's discovery layer "
+                               "(assets/data/discovered.v1.js) from the "
+                               "committed scan — offline, no network")
+    sf_p.add_argument("--check", action="store_true",
+                      help="exit 1 if the committed artifact differs from a "
+                           "fresh build, and write nothing (CI gate)")
+    sf_p.add_argument("--json", action="store_true")
+    sf_p.set_defaults(func=cmd_self_fill)
 
     mp_p = sub.add_parser("media-probe",
                           help="prove real video BYTES download (not just "

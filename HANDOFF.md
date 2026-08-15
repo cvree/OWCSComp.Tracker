@@ -1,6 +1,136 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
-## CURRENT STATUS (authoritative — 2026-08-09, thirteenth pass) — the face gets quieter: broadcast tooling
+## CURRENT STATUS (authoritative — 2026-08-15, fourteenth pass) — the site fills itself
+
+> Additive to every pass below. This one touched **no** detector, no
+> database schema, no publishing gate and no review flow. It closed the gap
+> between "the data updates itself" and "the site updates itself".
+
+### The problem, in one paragraph
+
+`match-finder` has been running unattended every six hours for weeks and
+committing `assets/data/matchfinder.v1.json` — 92 candidates, **63 scored
+as likely OWCS broadcasts**. Nothing on the published site read that file.
+The only consumer was the operator's own localhost portal
+(`serve.py /api/matchfinder`). So the live site's games list said "No games
+yet · nothing has been submitted" while sixty-three real broadcasts sat in
+a committed file two directories away, and the published dataset's own
+timestamp had not moved since 2026-08-08.
+
+### What now happens with nobody watching
+
+**`pipeline/automation/self_fill.py` (new)** builds
+`assets/data/discovered.v1.js` (`window.OWCS_DISCOVERED`, schema
+`discovered.v1`) as a **pure, offline, stdlib-only function of four
+committed files**: the scan, `config/owcs_calendar.json`,
+`assets/data/public_data.v1.js`, and the match-finder workflow's own cron
+(so the site can say "next scan due in 5h" without a second copy of the
+schedule drifting). For each broadcast it derives:
+
+* **a reading of the title** — event, stage, day, week, region(s), phase,
+  fixture — where the title literally says so, `null` where it does not,
+  plus a `confidence` word for how much was understood. `Day N` is stripped
+  from the event name (it identifies one broadcast) while `Stage N` is kept
+  (it identifies the event), which is what makes five days of the Midseason
+  Championship roll up into one event row instead of five orphan videos.
+* **a calendar link with its evidence** — `date` → `date+region` →
+  `date+region+stage`. A title naming two regions ("NA/EMEA Stage 2") links
+  to **both** regional events, because it genuinely belongs to both. When
+  several events fit and the title distinguishes none of them, the link is
+  **refused**, every candidate is listed, and the row says why.
+* **a lifecycle state** — `published` / `review` / `working` / `queued` /
+  `found` / `ignored`, joined against the published record by video id
+  (streamUrl, `sources[]`, vodSources, capture run). A broadcast already
+  published is never offered as an undiscovered find.
+* **the next action**, as both a site link and the exact command.
+
+**The site renders it.** Dashboard gains a "Filling itself" band and a
+fifth tile; the games list gains a `found` group, a scan-status strip and a
+`Found automatically` filter; `game.html?video=<id>` is a real page for a
+broadcast nobody submitted; `submit.html` offers the newest finds as
+one-click chips and autofills event/region/fixture from the parsed title;
+`tools.html` gains an Automatic discovery panel (last scan, interval, next
+expected, source errors, missing inputs); site search indexes them for free
+because they enter the shared `G.all()` model.
+
+**Two bugs the work turned up, both real:**
+
+1. `page-games.js` filtered the official schedule on `e.startsAt` and
+   formatted `e.timeKnown` — **neither field has ever been emitted** by
+   `export_data.build_calendar_events` (it writes `startDate`/`endDate`/
+   `verified`). The filter dropped every row, so the "on the official
+   schedule" section silently rendered as nothing on every page load. The
+   contract test that was supposed to guard this grep'd the page source for
+   the string `timeKnown`, which the broken code contained — so it passed.
+   The test now compares against the exporter's **real output** and fails if
+   the page reads a calendar field the export cannot supply.
+2. `match_finder.fetch_streams_tab` read only `timestamp` from the
+   flat-playlist dump. A finished livestream carries `release_timestamp`
+   far more often, which is why **60 of 92** archived broadcasts had no air
+   date at all — and a dateless broadcast can never be placed on the
+   calendar. It now reads both, and `--fill-dates N` spends a bounded
+   number of metadata-only lookups per scan (15 in the workflow) giving the
+   remaining dateless rows their real date, so the archive completes itself
+   over successive runs instead of hammering the source in one burst.
+
+### Guarantees kept
+
+`self_fill` reads four files and writes one. It cannot publish a
+composition, approve a source, approve a layout, download a video or touch
+the DB — asserted by a test that walks the payload's **keys** (not its
+text: "Calling All Heroes" is a real event, so a substring scan for
+"heroes" would be both false-positive and no proof of anything). Every
+discovered row is labelled machine-discovered in the UI, and the human
+review gate before anything becomes match data is untouched.
+
+The artifact carries **no wall clock** — `generatedAt` is copied from the
+scan — so identical inputs produce identical bytes, an unchanged scan
+commits nothing, and `self-fill --check` is a usable CI gate. It is wired
+into `ci.yml` next to the export reproducibility check.
+
+### Files
+
+**New:** `pipeline/automation/self_fill.py`, `pipeline/test_self_fill.py`
+(40 checks), `assets/data/discovered.v1.js` (generated).
+
+**Changed:** `pipeline/automation/match_finder.py` (release_timestamp,
+`fetch_video_metadata`, `fill_missing_dates`), `pipeline/automation/cli.py`
+(`self-fill` command, `--fill-dates`, `--no-self-fill`, self-fill wired
+into `find-matches`), `.github/workflows/match-finder.yml` (commits the new
+artifact, runs the date backfill, reports the site layer in the job
+summary), `.github/workflows/ci.yml` (the `--check` gate),
+`pipeline/test_public_export_contracts.py` (the calendar contract now
+guards field names against the exporter),
+`assets/js/app/{core,games,page-games,page-dashboard,page-game,page-tools,page-submit}.js`,
+`assets/css/owcs.css` (indigo stat accent), all 13 product pages (one
+script tag), `index.html` + `games.html` + `tools.html` (new hosts),
+`README.md`.
+
+### Test status
+
+**106 suites green** (105 before + `test_self_fill.py`), `render_check.js`
+green across all 13 pages, `check_packaging.py` green,
+`self-fill --check` green. Verified in jsdom against the real committed
+data: 63 rows on the games list, the dashboard band, the schedule table
+rendering for the first time, and the per-broadcast page.
+
+### Known limits / next
+
+* **`calendarLinked` is currently 0 against real data**, and honestly so:
+  most archived broadcasts predate the calendar's only windows, and the
+  2026 Stage 2 entries are three same-window events the titles do not
+  distinguish. It rises on its own as `--fill-dates` completes the archive
+  and as verified events are added to `config/owcs_calendar.json`.
+* **One verified channel.** `ow_esports_global` is the only enabled entry
+  in the broadcast registry, so that is the whole discovery surface. Adding
+  a channel is an evidence question, not a code one — never guess an id.
+* The discovery layer is ~160 KB of pretty-printed JSON (kept readable for
+  reviewable diffs). If it becomes a load concern, drop `likeness.reasons`
+  for ignored rows before compacting the whole file.
+
+---
+
+## Thirteenth pass (2026-08-09) — the face gets quieter: broadcast tooling
 
 > Additive to the twelfth pass below, and orthogonal to everything under
 > it: this pass touched **no** pipeline, detector, database or safety-gate

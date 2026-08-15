@@ -166,6 +166,15 @@ def fetch_rss_channel(channel_id: str,
         return [], f"rss {channel_id}: {type(exc).__name__}: {exc}"
 
 
+def _iso_from_epoch(value) -> str | None:
+    """Unix seconds -> UTC ISO-8601, or None for anything that is not a
+    usable epoch."""
+    if isinstance(value, (int, float)) and value > 0:
+        return dt.datetime.fromtimestamp(
+            value, dt.timezone.utc).replace(microsecond=0).isoformat()
+    return None
+
+
 # ---------------------------------------------------------- streams tab
 def fetch_streams_tab(channel_url: str, limit: int = DEFAULT_LIMIT,
                       runner=subprocess) -> tuple[list[dict], str | None]:
@@ -196,11 +205,13 @@ def fetch_streams_tab(channel_url: str, limit: int = DEFAULT_LIMIT,
         if not vid:
             continue
         dur = e.get("duration")
-        ts = e.get("timestamp")
-        published = None
-        if isinstance(ts, (int, float)) and ts > 0:
-            published = dt.datetime.fromtimestamp(
-                ts, dt.timezone.utc).replace(microsecond=0).isoformat()
+        # A finished livestream carries `release_timestamp` (when it went
+        # live) far more often than `timestamp` in a flat-playlist dump, and
+        # for a broadcast that IS the air date. Reading only `timestamp` was
+        # why sixty of ninety-two archived broadcasts had no date at all —
+        # and a broadcast with no date can never be placed on the calendar.
+        published = _iso_from_epoch(e.get("timestamp")) or \
+            _iso_from_epoch(e.get("release_timestamp"))
         out.append({
             "videoId": vid,
             "title": e.get("title"),
@@ -211,6 +222,106 @@ def fetch_streams_tab(channel_url: str, limit: int = DEFAULT_LIMIT,
             "liveBroadcastStatus": _LIVE_STATUS.get(e.get("live_status")),
         })
     return out, None
+
+
+# -------------------------------------------------------- date backfill
+def fetch_video_metadata(video_id: str, runner=subprocess
+                         ) -> tuple[dict | None, str | None]:
+    """One metadata-only `yt-dlp -J` for a single video. (fields, error);
+    never raises.
+
+    `--skip-download` is belt and braces next to `-J` (which already only
+    dumps JSON): this function must be incapable of pulling media, because
+    the whole finder's safety claim is that it never downloads video."""
+    url = li.canonical_url(video_id)
+    cmd = ["yt-dlp", "-J", "--skip-download", "--no-warnings",
+           "--no-playlist", url]
+    try:
+        res = runner.run(cmd, capture_output=True, text=True, timeout=60,
+                         **proc_text.PIPE_TEXT)
+    except FileNotFoundError:
+        return None, "date-backfill: yt-dlp not found on PATH"
+    except Exception as exc:  # noqa: BLE001
+        return None, f"date-backfill {video_id}: {type(exc).__name__}: {exc}"
+    if res.returncode != 0:
+        tail = (res.stderr or "").strip()[-200:]
+        return None, f"date-backfill {video_id}: yt-dlp exit {res.returncode}: {tail}"
+    try:
+        info = json.loads(res.stdout or "{}")
+    except ValueError:
+        return None, f"date-backfill {video_id}: unparseable yt-dlp JSON"
+    published = (_iso_from_epoch(info.get("release_timestamp"))
+                 or _iso_from_epoch(info.get("timestamp")))
+    if not published:
+        # upload_date is a bare YYYYMMDD with no time. Midnight UTC is a
+        # deliberate, visible approximation of a DATE we do have — it is
+        # never invented, and it is only ever used when the precise
+        # timestamp genuinely is not published.
+        raw = str(info.get("upload_date") or "")
+        if len(raw) == 8 and raw.isdigit():
+            published = f"{raw[0:4]}-{raw[4:6]}-{raw[6:8]}T00:00:00+00:00"
+    dur = info.get("duration")
+    return {
+        "publishedAt": published,
+        "durationSeconds": int(dur) if isinstance(dur, (int, float)) else None,
+        "liveBroadcastStatus": _LIVE_STATUS.get(info.get("live_status")),
+    }, None
+
+
+def fill_missing_dates(ledger: dict, *, limit: int = 0, runner=subprocess,
+                       fetch_meta: Callable[[str], tuple[dict | None, str | None]]
+                       | None = None) -> tuple[dict, list[str], int]:
+    """Give dateless archived broadcasts their real air date, a bounded
+    number per scan. Returns (ledger, errors, filled).
+
+    Why this exists: the /streams tab is dumped with `--flat-playlist`,
+    which is one cheap request for the whole channel but frequently omits
+    the timestamp. A broadcast with no date cannot be placed on the
+    official calendar, cannot be ordered against anything, and cannot be
+    told apart from last season's — so most of the archive was unusable to
+    the site even though it had been found.
+
+    The budget is the point. Each fill is one extra metadata request, so
+    the scan spends `limit` of them per run, oldest-known-first, and the
+    archive completes itself over a handful of scheduled runs instead of
+    hammering the source in one burst. `limit=0` disables it entirely,
+    which is what every offline test and dry run uses."""
+    if limit <= 0:
+        return ledger, [], 0
+    meta = fetch_meta or (lambda vid: fetch_video_metadata(vid, runner=runner))
+    errors: list[str] = []
+    filled = 0
+    for row in ledger.get("candidates") or []:
+        if filled >= limit:
+            break
+        if not isinstance(row, dict) or row.get("publishedAt"):
+            continue
+        # Nothing to place on a calendar: a refused Short is not worth a
+        # request, and never will be.
+        if (row.get("likeness") or {}).get("refused"):
+            continue
+        fields, err = meta(row["videoId"])
+        if err:
+            errors.append(err)
+            continue
+        if not fields or not fields.get("publishedAt"):
+            continue
+        row["publishedAt"] = fields["publishedAt"]
+        for key in ("durationSeconds", "liveBroadcastStatus"):
+            if row.get(key) is None and fields.get(key) is not None:
+                row[key] = fields[key]
+        if "video-metadata" not in (row.get("sources") or []):
+            row["sources"] = sorted((row.get("sources") or [])
+                                    + ["video-metadata"])
+        filled += 1
+    if filled:
+        # Dates just changed, so the archive's newest-first ordering has to
+        # be recomputed or the new dates would sit in the undated tail.
+        rows = sorted(ledger["candidates"],
+                      key=lambda c: c.get("publishedAt") or "", reverse=True)
+        rows.sort(key=lambda c: c.get("publishedAt") is None)
+        ledger["candidates"] = rows
+    return ledger, errors, filled
 
 
 # ---------------------------------------------------------------- merge

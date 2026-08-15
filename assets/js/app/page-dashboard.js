@@ -15,6 +15,7 @@
   document.addEventListener("DOMContentLoaded", () => {
     P.api.mountStatus("mode-status");
     renderTiles();
+    renderAutofill();
     renderAttention();
     renderRecent();
     renderPublished();
@@ -38,6 +39,8 @@
       '<span class="stat__cta">' + esc(cta) + " <span aria-hidden=\"true\">→</span></span></a>";
 
     P.mount("tiles",
+      tile("games.html?state=found", "Found automatically", c.found, "indigo",
+        c.found ? "Waiting to be processed" : "Nothing new found", "See what was found") +
       tile("review.html", "Needs review", c.review, "amber",
         c.review ? "Requires confirmation" : "Nothing waiting", "Review queue") +
       tile("games.html?state=working", "Processing now", c.working, "cyan",
@@ -46,6 +49,70 @@
         c.blocked ? "A person must intervene" : "No blockers", "See what stopped") +
       tile("stats.html", "Published line-ups", comps, "gold",
         "Evidence-backed compositions", "Explore the data"));
+  }
+
+  /* -------------------------------------------------- filling itself
+     The one band on this page that is about the SYSTEM rather than a
+     game: what the unattended scan did without anyone asking, when it
+     last ran, and what it turned up. It hides itself entirely when no
+     scan has ever run rather than printing an empty promise. */
+  function renderAutofill() {
+    const band = document.getElementById("autofill-band");
+    const host = document.getElementById("autofill");
+    if (!band || !host) return;
+    const d = P.disc;
+    if (!d || !d.scan || !d.scan.generatedAt) { band.hidden = true; return; }
+    band.hidden = false;
+
+    const s = d.summary || {};
+    const stale = P.scanStale();
+    const errs = (d.scan.sourceErrors || []).length;
+    const channels = (d.scan.channels || []).length;
+
+    const fact = (k, v, note) =>
+      '<div class="card"><span class="stat__k">' + esc(k) + "</span>" +
+      '<span class="stat__v">' + esc(v) + "</span>" +
+      '<span class="stat__note">' + note + "</span></div>";
+
+    const events = (d.events || []).filter((e) => e.found > 0).slice(0, 5);
+
+    host.innerHTML =
+      P.note(stale || errs ? "warn" : "ok",
+        stale ? "The scan has not run recently" : "The tracker is filling itself",
+        "<p>The scheduled scan reads every verified official broadcast channel and adds " +
+        "what it finds to the games list without anyone asking. Last run " +
+        esc(P.fmtRel(d.scan.generatedAt)) + (stale ? " — <b>stale</b>" : "") +
+        (d.scan.nextExpectedAt && !stale
+          ? ", next due " + esc(P.fmtRel(d.scan.nextExpectedAt)) : "") + "." +
+        (errs ? " <b>" + errs + " source error" + (errs === 1 ? "" : "s") +
+          "</b> on the last run." : "") +
+        " Finding a broadcast is not reading it: nothing here becomes match data until " +
+        "it has been processed and a person has confirmed what the detector saw.</p>") +
+      '<div class="grid grid--4 u-mt-4">' +
+      fact("Broadcasts known", s.broadcastsKnown || 0,
+        esc(channels) + " official channel" + (channels === 1 ? "" : "s") + " scanned") +
+      fact("Waiting to be processed", s.awaitingProcessing || 0,
+        '<a href="games.html?state=found">Open the list</a>') +
+      fact("Events recognised", s.events || 0,
+        esc(s.calendarLinked || 0) + " broadcast" + (s.calendarLinked === 1 ? "" : "s") +
+        " placed on the official calendar") +
+      fact("Published from them", s.published || 0,
+        "Reviewed, approved and live") +
+      "</div>" +
+      (events.length
+        ? '<div class="table-wrap u-mt-4"><table class="tbl">' +
+          "<thead><tr><th>Event the scan recognised</th><th>Broadcasts found</th>" +
+          "<th>Published</th><th>Most recent</th></tr></thead><tbody>" +
+          events.map((e) => "<tr><td><b>" + esc(e.name) + "</b>" +
+            (e.days && e.days.length
+              ? ' <span class="dim small">day ' + esc(e.days.join(", ")) + "</span>" : "") +
+            "</td><td>" + esc(e.broadcasts) + "</td><td>" + esc(e.published) +
+            '</td><td class="dim small u-nowrap">' +
+            esc(e.lastAt ? P.fmtDate(e.lastAt) : "date unknown") + "</td></tr>").join("") +
+          "</tbody><caption>Events are read from the broadcast titles themselves — " +
+          "never from a source that could be wrong about them.</caption>" +
+          "</table></div>"
+        : "");
   }
 
   /* ------------------------------------------------- waiting on you */

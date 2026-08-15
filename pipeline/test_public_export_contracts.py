@@ -684,6 +684,14 @@ class TestCalendarContract(unittest.TestCase):
 
         This guards the wiring, not the page: an export that carries
         calendarEvents while no page reads them is a silent data loss.
+
+        It now also guards the FIELD NAMES, which is how this check used
+        to pass while the section rendered nothing at all. The page filtered
+        on `startsAt` and formatted `timeKnown` — neither of which
+        build_calendar_events has ever emitted — so every event was dropped
+        by the filter and the schedule silently rendered as empty on every
+        load. Grepping for a string the page happens to contain cannot catch
+        that; comparing against the exporter's real output can.
         """
         page = open(os.path.join(REPO, "games.html"), encoding="utf-8").read()
         js = open(os.path.join(REPO, "assets", "js", "app",
@@ -692,9 +700,28 @@ class TestCalendarContract(unittest.TestCase):
                       "games.html has nowhere to render the schedule")
         self.assertIn("calendarEvents", js,
                       "the games page must read the exported events")
-        self.assertIn("timeKnown", js,
-                      "the games page must honour the time-known flag")
-        self.assertIn("time TBA", js)
+
+        events = ex.build_calendar_events()
+        self.assertTrue(events, "the committed calendar seed exports no events")
+        exported = set(events[0])
+        for field in ("startDate", "endDate", "verified"):
+            self.assertIn(field, exported,
+                          "the exporter stopped emitting a field the page reads")
+            self.assertIn(field, js,
+                          f"the games page must read the exported {field}")
+
+        # Any calendar field the page names must be one the export can
+        # actually supply. This is the assertion that fails the moment a
+        # page starts reading a field out of thin air again. Comments are
+        # stripped first: the code may — and does — DISCUSS the field names
+        # that were wrong, and that must not read as using them.
+        code = re.sub(r"/\*.*?\*/", "", js, flags=re.S)
+        invented = [f for f in ("startsAt", "timeKnown", "endsAt") if f in code]
+        self.assertFalse(
+            invented,
+            "the games page reads " + ", ".join(f"`{f}`" for f in invented) +
+            " — build_calendar_events never emits that, so the schedule "
+            "would silently render empty")
 
 
 if __name__ == "__main__":

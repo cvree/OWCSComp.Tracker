@@ -26,6 +26,31 @@
   P.pub = D;
   P.work = W;
 
+  /* The THIRD dataset, and the only one that fills itself: what the
+     unattended scan has found on the official broadcast channels
+     (assets/data/discovered.v1.js, rebuilt by the scheduled match-finder
+     workflow). It is neither published fact nor local working state — it
+     is "these broadcasts exist and here is what their own titles say" —
+     so it is kept separate from both and every renderer that touches it
+     labels it as machine-discovered. */
+  P.disc = window.OWCS_DISCOVERED || null;
+  P.discovered = () => (P.disc && P.disc.broadcasts) || [];
+  P.discoveredEvents = () => (P.disc && P.disc.events) || [];
+  /* Hours since the scan that produced the discovery layer, or null when
+     no scan has ever run. Computed here, not stored in the artifact: the
+     artifact is a pure function of its inputs and holds no wall clock. */
+  P.scanAgeHours = () => {
+    const when = P.disc && P.disc.scan && P.disc.scan.generatedAt;
+    if (!when) return null;
+    const ms = new Date(when).getTime();
+    return isNaN(ms) ? null : (Date.now() - ms) / 3600000;
+  };
+  P.scanStale = () => {
+    const age = P.scanAgeHours();
+    const limit = (P.disc && P.disc.scan && P.disc.scan.staleAfterHours) || 24;
+    return age == null ? true : age > limit;
+  };
+
   /* ---------------------------------------------------------- escaping */
   const esc = (s) => String(s == null ? "" : s)
     .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
@@ -71,6 +96,18 @@
       if (overridden.has(c.id)) return false;
       return !filter || filter(c);
     });
+  };
+
+  /* The YouTube video id inside a URL, in every form the datasets use
+     (watch?v=, youtu.be/, /live/, /embed/). Returns null for anything
+     else — this is how a discovered broadcast is recognised as one the
+     site already has a match or a run for. */
+  P.videoId = (url) => {
+    const s = String(url || "");
+    const m = s.match(/[?&]v=([A-Za-z0-9_-]{6,})/) ||
+      s.match(/youtu\.be\/([A-Za-z0-9_-]{6,})/) ||
+      s.match(/youtube\.com\/(?:live|embed|shorts)\/([A-Za-z0-9_-]{6,})/);
+    return m ? m[1] : null;
   };
 
   /* --------------------------------------------------------------- time */
@@ -247,6 +284,14 @@
       say: "Accepted and waiting its turn." },
     blocked: { label: "Blocked", kind: "blocked",
       say: "Stopped on something a person has to fix." },
+    /* Indigo, the colour this system already reserves for "a machine said
+       so". A found broadcast is exactly that: the scan located it on an
+       official channel and nobody has looked at it yet. */
+    found: { label: "Found automatically", kind: "detected",
+      say: "The scan found this broadcast. Nothing has been read from it yet." },
+    ignored: { label: "Not a match broadcast", kind: "queued",
+      say: "Scored as something other than a match broadcast — kept so the "
+        + "archive is complete, never offered as data." },
   };
   P.STATE_WORDS = STATE_WORDS;
   P.stateChip = (state, textOverride) => {

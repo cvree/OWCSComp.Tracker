@@ -24,6 +24,7 @@
         "they were current.</p>",
     });
 
+    renderDiscovery();
     renderSources();
     renderRuns();
     renderCalibration();
@@ -35,6 +36,77 @@
       if (c) P.copy(c.dataset.copy, "Copied");
     });
   });
+
+  /* -------------------------------------------------------- discovery
+     The health of the one part of this system that runs with nobody
+     watching. Everything here comes from the committed discovery layer,
+     so it reads the same on the published copy as it does locally — which
+     matters, because the failure this panel exists to catch (the
+     scheduled scan quietly stopping) is invisible everywhere else. */
+  function renderDiscovery() {
+    const d = P.disc;
+    if (!d || !d.scan || !d.scan.generatedAt) {
+      set("discovery-body", P.empty("◇", "No automatic scan has run yet",
+        "The scheduled workflow scans every verified official channel and writes " +
+        "<code>assets/data/discovered.v1.js</code>. Until it has run once, every game in " +
+        "this tracker got here because a person put it here."));
+      return;
+    }
+    const s = d.summary || {};
+    const c = d.counts || {};
+    const stale = P.scanStale();
+    const errors = d.scan.sourceErrors || [];
+    const missing = (d.inputs || []).filter((i) => !i.loaded);
+
+    const rows = [
+      ["Last scan", P.fmtDateTime(d.scan.generatedAt) + " (" +
+        P.fmtRel(d.scan.generatedAt) + ")"],
+      ["Scan interval", d.scan.intervalHours
+        ? "every " + d.scan.intervalHours + "h" : "not on a schedule"],
+      ["Next scan expected", d.scan.nextExpectedAt
+        ? P.fmtDateTime(d.scan.nextExpectedAt) : "unknown"],
+      ["Channels scanned", (d.scan.channels || []).map((ch) => ch.title || ch.id)
+        .join(", ") || "none"],
+      ["Broadcasts known", String(s.broadcastsKnown || 0)],
+      ["Awaiting processing", String(s.awaitingProcessing || 0)],
+      ["In flight", String(s.inFlight || 0)],
+      ["Published from them", String(s.published || 0)],
+      ["Ignored (not match broadcasts)", String(c.ignored || 0)],
+      ["Events recognised", String(s.events || 0)],
+      ["Placed on the official calendar", String(s.calendarLinked || 0)],
+      ["Still without an air date", String((d.broadcasts || [])
+        .filter((b) => !b.publishedAt).length)],
+    ];
+
+    set("discovery-body",
+      (stale
+        ? P.note("warn", "The scheduled scan has not run recently",
+          "<p>The last scan was " + esc(P.fmtRel(d.scan.generatedAt)) + ". Nothing new " +
+          "will appear on the games list until it runs again. Check the " +
+          "<code>match-finder</code> workflow.</p>")
+        : P.note("ok", "The scan is running on schedule",
+          "<p>This is the only part of the tracker that works with nobody watching. It " +
+          "finds broadcasts; it never downloads one, never reads a hero off one, and " +
+          "never approves anything.</p>")) +
+      (errors.length
+        ? P.note("warn", errors.length + " source error" +
+          (errors.length === 1 ? "" : "s") + " on the last scan",
+          "<p>The archive still holds every broadcast found before — the ledger is an " +
+          "archive, not a window — but the last scan did not see everything.</p>" +
+          "<ul>" + errors.map((e) => "<li><code>" + esc(e) + "</code></li>").join("") +
+          "</ul>")
+        : "") +
+      (missing.length
+        ? P.note("warn", "The discovery layer was built without every input",
+          "<ul>" + missing.map((i) => "<li><code>" + esc(i.path) + "</code> (" +
+            esc(i.name) + ") could not be read</li>").join("") + "</ul>")
+        : "") +
+      '<div class="card u-mt-4">' + P.dl(rows) + "</div>" +
+      '<p class="dim small u-mt-3" style="max-width:74ch">Rebuild this layer from the ' +
+      "committed scan with <code>python3 pipeline/automation/cli.py self-fill</code>. " +
+      "It reads four committed files and writes one; it cannot touch the database, the " +
+      "published dataset, or a layout.</p>");
+  }
 
   /* ---------------------------------------------------------- sources */
   function renderSources() {

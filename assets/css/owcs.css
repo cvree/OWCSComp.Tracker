@@ -804,6 +804,9 @@ a.stat:hover .stat__cta { color: var(--gold-hi); }
 .stat[data-accent="cyan"]    .stat__v { color: #96dcf2; }
 .stat[data-accent="red"]     .stat__v { color: #ff9ea1; }
 .stat[data-accent="emerald"] .stat__v { color: #7ee2b4; }
+/* Indigo keeps its one meaning here too: a machine found this, and no
+   person has confirmed anything about it yet. */
+.stat[data-accent="indigo"]  .stat__v { color: #b3bbe8; }
 /* A tile only takes an accent edge when its number is non-zero — a
    zero blocker count should look calm, not alarming. */
 .stat[data-alert="1"] { border-left: 3px solid var(--line-3); }
@@ -811,6 +814,7 @@ a.stat:hover .stat__cta { color: var(--gold-hi); }
 .stat[data-alert="1"][data-accent="red"]   { border-left-color: var(--red); }
 .stat[data-alert="1"][data-accent="cyan"]  { border-left-color: var(--cyan); }
 .stat[data-alert="1"][data-accent="gold"]  { border-left-color: var(--gold); }
+.stat[data-alert="1"][data-accent="indigo"] { border-left-color: var(--indigo); }
 
 /* ------------------------------------------------------------------ *
    9. Forms

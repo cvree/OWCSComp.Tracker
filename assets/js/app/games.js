@@ -241,6 +241,57 @@
   }
 
   /* ------------------------------------------------------------------ *
+     Build one game from a broadcast the scan found by itself.
+
+     This is the row that makes the published site fill itself. Nobody
+     submitted it, nobody is processing it, and — critically — nothing has
+     been READ from it: it is a real OWCS broadcast on a verified official
+     channel, listed with what its own title says and nothing more. It
+     carries the first step done ("we know which broadcast this is on")
+     and every later step still to do, which is the literal truth.
+   * ------------------------------------------------------------------ */
+  function fromBroadcast(b) {
+    const p = b.parsed || {};
+    const steps = STEPS.map((s, i) => step(
+      s.key,
+      i === 0 ? "done" : "todo",
+      i === 0 ? "Found automatically on " + (b.channelTitle || "an official channel") : ""));
+
+    const bits = [];
+    if (p.day) bits.push("Day " + p.day);
+    if (p.week) bits.push("Week " + p.week);
+
+    return {
+      id: "bc-" + b.videoId,
+      kind: "broadcast",
+      href: "game.html?video=" + encodeURIComponent(b.videoId),
+      title: p.cleanTitle || b.title || b.videoId,
+      teamA: null, teamB: null,
+      tournamentId: null,
+      tournamentName: p.eventName || (b.calendar && b.calendar.eventName) || null,
+      scheduledAt: b.publishedAt || null,
+      /* lastSeenAt is when the scan last confirmed it exists — the only
+         honest "updated" a row nobody has touched can have. */
+      updatedAt: b.publishedAt || b.lastSeenAt || null,
+      state: b.state,
+      steps: steps,
+      maps: [], mapCount: 0, compCount: 0,
+      sourceUrl: b.url || null,
+      faceitUrl: null,
+      captureRunId: null,
+      captureStatus: null,
+      scoreA: null, scoreB: null, winner: null,
+      summary: b.why || null,
+      window: bits.length ? bits.join(" · ") : null,
+      blockers: [],
+      match: null,
+      run: null,
+      broadcast: b,
+    };
+  }
+  G.fromBroadcast = fromBroadcast;
+
+  /* ------------------------------------------------------------------ *
      The list.
    * ------------------------------------------------------------------ */
   let CACHE = null;
@@ -267,8 +318,30 @@
       out.push(fromRun(r));
     });
 
+    /* Broadcasts the scan found on its own. A discovered video that has
+       already become a match or a run above is NOT added again — the
+       richer row wins, matched on the video id inside its source URL. */
+    const covered = new Set();
+    out.forEach((g) => {
+      const vid = P.videoId(g.sourceUrl);
+      if (vid) covered.add(vid);
+      if (g.run && g.run.url) {
+        const rid = P.videoId(g.run.url);
+        if (rid) covered.add(rid);
+      }
+    });
+    P.discovered().forEach((b) => {
+      if (!b || !b.videoId || covered.has(b.videoId)) return;
+      /* Refused uploads (Shorts, promos, patch notes) stay in the archive
+         and out of the game list. tools.html shows them; a games list is
+         for things that could become a game. */
+      if (b.state === "ignored") return;
+      out.push(fromBroadcast(b));
+    });
+
     out.sort((x, y) => {
-      const rank = { blocked: 0, review: 1, working: 2, queued: 3, published: 4 };
+      const rank = { blocked: 0, review: 1, working: 2, queued: 3,
+        found: 4, published: 5 };
       const dr = rank[x.state] - rank[y.state];
       if (dr) return dr;
       return String(y.updatedAt || "").localeCompare(String(x.updatedAt || ""));
@@ -280,7 +353,8 @@
   G.byId = (id) => G.all().filter((g) => g.id === id)[0] || null;
   G.byState = (state) => G.all().filter((g) => g.state === state);
   G.counts = function () {
-    const c = { published: 0, review: 0, working: 0, queued: 0, blocked: 0, total: 0 };
+    const c = { published: 0, review: 0, working: 0, queued: 0, blocked: 0,
+      found: 0, total: 0 };
     G.all().forEach((g) => { c[g.state] = (c[g.state] || 0) + 1; c.total++; });
     return c;
   };
@@ -362,7 +436,8 @@
     if (g.window) foot.push("window " + P.esc(g.window));
 
     const cta = { published: "View match", review: "Review this game",
-      working: "Watch progress", queued: "See status", blocked: "Fix the blocker" }[g.state];
+      working: "Watch progress", queued: "See status", blocked: "Fix the blocker",
+      found: "See what was found" }[g.state] || "Open";
 
     return '<a class="game-card" href="' + P.esc(g.href) + '">' +
       (context.length

@@ -2,11 +2,25 @@
 # OWCS Comp Tracker — auto match finder ($0, no secrets, no API key)
 # ---------------------------------------------------------------------
 # Scans every VERIFIED broadcast channel for OWCS broadcasts on two
-# permanently free sources and commits the refreshed public snapshot
-# (assets/data/matchfinder.v1.json), which is what the portal renders on
-# static hosting. Without this workflow the live site can only ever show
-# whatever a human last scanned locally — this is what makes the finder
-# work for a visitor rather than only for the operator.
+# permanently free sources and commits TWO artifacts:
+#
+#   assets/data/matchfinder.v1.json  the raw scan (the portal's snapshot)
+#   assets/data/discovered.v1.js     the layer the PUBLIC pages render
+#                                    (pipeline/automation/self_fill.py)
+#
+# The second one is what makes this workflow visible to a visitor. The
+# snapshot alone was rendered only by the operator's own localhost portal,
+# so for a long time the scan committed real broadcasts every six hours
+# and the live site kept showing whatever a human last pushed. self_fill
+# turns that scan into the games list, the dashboard's "filling itself"
+# band and the per-broadcast page — derived in the SAME command, so the
+# site can never render a scan that no longer exists.
+#
+# The scan also spends a bounded number of metadata-only lookups per run
+# (--fill-dates) giving previously dateless archived broadcasts their real
+# air date. The /streams tab is dumped with --flat-playlist, which is one
+# cheap request for a whole channel but frequently omits the timestamp,
+# and a broadcast with no date can never be placed on the calendar.
 #
 # The two sources (see pipeline/automation/match_finder.py):
 #   * the channel's public RSS feed (stdlib urllib; no key, no quota)
@@ -51,6 +65,10 @@ on:
         description: "Scan and report without committing (true|false)"
         required: false
         default: "false"
+      fill_dates:
+        description: "Max metadata-only lookups spent giving dateless archived broadcasts their real air date"
+        required: false
+        default: "15"
 
 # Shares the ONE generated-data group with discovery/pipeline/update-data:
 # all four commit to the same branch, and separate groups are exactly how
@@ -70,6 +88,7 @@ jobs:
     env:
       LIMIT: ${{ github.event.inputs.limit || '60' }}
       DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+      FILL_DATES: ${{ github.event.inputs.fill_dates || '15' }}
     steps:
       - name: Check out repo
         uses: actions/checkout@v6
@@ -93,7 +112,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          ARGS=(--limit "$LIMIT")
+          ARGS=(--limit "$LIMIT" --fill-dates "$FILL_DATES")
           if [ "$DRY_RUN" = "true" ]; then ARGS+=(--dry-run); fi
           python3 pipeline/automation/cli.py find-matches "${ARGS[@]}" 2>&1 | tee run-output.txt
           test -s run-output.txt
@@ -119,6 +138,21 @@ jobs:
           print(f"- Likely broadcasts: **{s.get('likely', 0)}**")
           print(f"- Channels scanned: {len(r.get('channels') or [])}")
           print(f"- Last scan: {r.get('generatedAt')}")
+          # What the SITE will actually show, which is the point of the run.
+          try:
+              with open("assets/data/discovered.v1.js", encoding="utf-8") as f:
+                  text = f.read()
+              body = json.loads(text[text.index("{"):text.rstrip().rstrip(";").rindex("}") + 1])
+              d = body.get("summary") or {}
+              print(f"- Site discovery layer: **{d.get('broadcastsKnown', 0)}** "
+                    f"broadcasts across **{d.get('events', 0)}** events, "
+                    f"**{d.get('awaitingProcessing', 0)}** awaiting processing, "
+                    f"**{d.get('published', 0)}** published")
+              dateless = sum(1 for b in body.get("broadcasts") or []
+                             if not b.get("publishedAt"))
+              print(f"- Broadcasts still without an air date: {dateless}")
+          except Exception as exc:
+              print(f"- Site discovery layer: could not be read ({exc})")
           if errs:
               print(f"- Source errors: **{len(errs)}**")
               for e in errs:
@@ -136,6 +170,7 @@ jobs:
         if: env.DRY_RUN != 'true'
         run: |
           python3 pipeline/test_match_finder.py
+          python3 pipeline/test_self_fill.py
           python3 pipeline/check_packaging.py
 
       - name: Commit the refreshed snapshot if it changed
@@ -146,9 +181,11 @@ jobs:
           set -euo pipefail
           git config user.name  "owcs-matchfinder[bot]"
           git config user.email "actions@users.noreply.github.com"
-          # ONLY the snapshot. Never the DB, the public dataset or a layout:
-          # a discovery scan has no business touching any of those.
-          git add assets/data/matchfinder.v1.json
+          # ONLY the two discovery artifacts. Never the DB, the published
+          # dataset or a layout: a discovery scan has no business touching
+          # any of those. discovered.v1.js is derived from the snapshot in
+          # the same command that wrote it, so the pair is always in step.
+          git add assets/data/matchfinder.v1.json assets/data/discovered.v1.js
           if git diff --cached --quiet; then
             echo "No new broadcasts and no changed metadata this scan."
             echo "committed=false" >> "$GITHUB_OUTPUT"
