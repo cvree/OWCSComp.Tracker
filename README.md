@@ -95,9 +95,46 @@ approve a source, or touch the DB — the human review gate is unchanged.
 it; CI fails if the committed layer is not what a fresh build produces.
 
 **Site search** (`assets/js/app/shell.js`): every page carries a search
-button plus `/` and ⌘/Ctrl-K. It indexes games, teams, heroes and the
+button plus `/` and ⌘/Ctrl-K. It indexes games, teams, heroes, maps and the
 product's own pages straight from the export — no service, no index file to
-rebuild. Arrow keys move, Enter opens, Esc closes.
+rebuild. Arrow keys move, Enter opens, Esc closes. Matching is fuzzy
+(Fuse.js, vendored), because "qadsia" and "midseson" are what people
+actually type; each row carries the thing it is — the hero's portrait, the
+team's crest, the game's state chip — so a result is recognised rather than
+read. Without the vendor file it falls back to substring matching.
+
+**Hero art** (`pipeline/hero_crop.py`): Blizzard's official hero pages
+serve one wide splash per hero, and it is a *scene* — the hero stands
+off-centre in a depth-of-field-blurred map location and the bottom third is
+flat colour for Blizzard's own page text. Cropping that down the middle,
+which is what this repo did until 2026-08, produced portraits that were
+mostly empty backdrop with the head clipped off the top edge: unreadable at
+the 28–40 px the comp strips and stats tables actually render them at. The
+cropper now finds the hero first — the flat band has no detail, and the
+hero is the only thing in focus, so a block-wise sharpness map isolates the
+figure, and the figure is separated from its props (a turret, a ship, a
+raised gauntlet) by picking the heaviest run of columns. There is no
+per-hero table: a hero added tomorrow frames itself. Four variants come out
+of it — `artwork` (untouched), `card` (3:2, for banners and hover cards),
+`portrait` (320², for tiles) and `icon` (96²). `python3
+pipeline/build_hero_official_assets.py --recrop` re-derives all of them
+from the committed artwork with no network; `pipeline/test_hero_crop.py`
+asserts the framing rather than just the file sizes.
+
+**Evidence viewer** (`assets/js/app/evidence.js`): a broadcast frame is
+1280×720 and the thing being judged inside it is a 40 px hero portrait, so
+the viewer zooms and pans (Panzoom, vendored) — wheel to zoom, double-click
+for 3× under the pointer, `←`/`→` to walk every piece of evidence on the
+page without closing it, and the file path always on screen. Without the
+vendor file the frame still opens, fit to the window.
+
+**No third-party requests.** Every byte a page loads comes from this
+origin, including the three webfonts (`assets/fonts/`, SIL OFL, vendored
+via @fontsource — see `assets/css/fonts.css`). They used to come from
+fonts.googleapis.com, which meant a render-blocking stylesheet on someone
+else's origin before any of this site's own CSS could apply, and a product
+that did not look like itself wherever that CDN is unreachable.
+`pipeline/test_site.py` gates it with no exceptions.
 
 **Motion** (`assets/js/app/motion.js`): Lenis smooth scroll, one entrance
 reveal per element, a scroll hairline, and nothing else. The WebGL ambience
@@ -545,6 +582,11 @@ owcs-comp-tracker/
 ├── *.html                       # public pages + control-room pages
 ├── assets/
 │   ├── css/ js/                 # site logic (public/ = fan pages)
+│   ├── fonts/                   # the three webfonts, self-hosted (SIL OFL)
+│   ├── vendor/                  # vendored OSS builds — no CDN, no build step
+│   │                            #   fuse.basic.min.js  fuzzy search
+│   │                            #   panzoom.min.js     evidence zoom/pan
+│   │                            #   gsap + ScrollTrigger, lenis  motion
 │   └── data/
 │       ├── public_data.v1.js    # PRODUCTION export (real Nepal data)
 │       ├── discovered.v1.js     # what the unattended scan found (self-fill)

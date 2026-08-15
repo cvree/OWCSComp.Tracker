@@ -1,0 +1,98 @@
+/* =====================================================================
+   OWCS Comp Tracker — fonts.css
+   The three typefaces, served from this origin.
+
+   They used to come from fonts.googleapis.com, which cost the site a
+   render-blocking stylesheet on a third-party origin before a single byte
+   of its own CSS could apply, put every visitor's IP in front of Google on
+   page load, and — the reason it finally had to go — meant the product did
+   not render as designed anywhere the CDN is unreachable. owcs.css says in
+   its own header that everything degrades "no JS, no webfont, no colour —
+   still legible"; a webfont that only arrives when a third party is up is
+   not a dependency this product should carry.
+
+   The files are the upstream releases, vendored via @fontsource (which
+   packages the Google Fonts corpus for self-hosting). Latin subsets only —
+   the interface is English and the data is Latin-script, so the ~200 KB of
+   Cyrillic/Greek/Vietnamese coverage would never be read.
+
+     Archivo            SIL Open Font License 1.1
+                        github.com/Omnibus-Type/Archivo
+     Saira Condensed    SIL Open Font License 1.1
+                        github.com/NDISCOVER/Saira
+     IBM Plex Mono      SIL Open Font License 1.1
+                        github.com/IBM/plex
+
+   `font-display: swap` everywhere: fallback metrics are close enough that
+   the swap is not a jolt, and text a visitor can read immediately beats
+   text that is invisible until a font arrives.
+   ===================================================================== */
+
+/* Archivo — body. One variable file covers 400/600/700, so the whole body
+   face is a single 35 KB request instead of three static ones. */
+@font-face {
+  font-family: "Archivo";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("../fonts/archivo-var-latin.woff2") format("woff2-variations"),
+       url("../fonts/archivo-var-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Saira Condensed — display. Static weights: the condensed family has no
+   variable release, and only three weights are ever used. */
+@font-face {
+  font-family: "Saira Condensed";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("../fonts/saira-condensed-500-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Saira Condensed";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("../fonts/saira-condensed-600-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Saira Condensed";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../fonts/saira-condensed-700-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* IBM Plex Mono — timecodes, ids, and every number that has to line up. */
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/ibm-plex-mono-400-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("../fonts/ibm-plex-mono-500-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}

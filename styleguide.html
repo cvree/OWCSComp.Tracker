@@ -6,9 +6,9 @@
 <title>Design system — OWCS Comp Tracker</title>
 <meta name="description" content="The OWCS Comp Tracker design system: surfaces, the signal palette, status chips, trust and evidence states, guides, gates and motion rules — rendered from the site's own component helpers.">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preload" href="assets/fonts/archivo-var-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/saira-condensed-700-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/fonts.css">
 <link rel="stylesheet" href="assets/css/owcs.css">
 </head>
 <body>
@@ -67,13 +67,30 @@
     <div class="grid grid--3 u-mt-4" id="sg-empty"></div>
   </section>
 
+  <section class="band" aria-labelledby="h-data">
+    <div class="sec-head"><h2 id="h-data">08 · Data display</h2></div>
+    <p class="lede u-mt-3">Two chart forms and one timeline, and every one of them states the
+      sample it was computed from. A chart here may never claim more precision than the data
+      behind it has.</p>
+    <div class="u-mt-4" id="sg-charts"></div>
+  </section>
+
   <section class="band" aria-labelledby="h-motion">
-    <div class="sec-head"><h2 id="h-motion">08 · Motion</h2></div>
+    <div class="sec-head"><h2 id="h-motion">09 · Motion</h2></div>
     <div class="u-mt-4" id="sg-motion"></div>
+  </section>
+
+  <section class="band" aria-labelledby="h-deps">
+    <div class="sec-head"><h2 id="h-deps">10 · What is vendored, and why</h2></div>
+    <p class="lede u-mt-3">Everything the pages load comes from this origin. No CDN, no
+      third-party request on page load, and every one of these is a released build of a public
+      open-source project rather than a copy someone pasted in.</p>
+    <div class="u-mt-4" id="sg-deps"></div>
   </section>
 
 </main>
 
+<script src="assets/vendor/fuse.basic.min.js" defer></script>
 <script src="assets/vendor/lenis.min.js" defer></script>
 <script src="assets/vendor/gsap.min.js" defer></script>
 <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
@@ -84,7 +101,9 @@
 <script src="assets/js/app/core.js"></script>
 <script src="assets/js/app/games.js"></script>
 <script src="assets/js/app/api.js"></script>
+<script src="assets/js/app/hovercard.js" defer></script>
 <script src="assets/js/app/shell.js"></script>
+<script src="assets/js/app/charts.js"></script>
 <script src="assets/js/app/page-styleguide.js"></script>
 </body>
 </html>

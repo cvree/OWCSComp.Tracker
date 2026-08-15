@@ -217,6 +217,48 @@
     P.empty("○", "Nothing captured here yet",
       "Absence of data and absence of play are different facts, and this product never conflates them."));
 
+  /* ----------------------------------------------------------- data
+     Rendered by the same P.chart helpers the stats page calls, on a fixed
+     sample, so this section cannot drift from the real charts either. */
+  set("#sg-charts",
+    '<div class="grid grid--2">' +
+      '<div class="card">' + P.chart.bars([
+        { label: "Kiriko", value: 9, note: "82% of line-ups", role: "Support" },
+        { label: "D.Va", value: 7, note: "64% of line-ups", role: "Tank" },
+        { label: "Sojourn", value: 4, note: "36% of line-ups", role: "Damage" },
+        { label: "Juno", value: 2, note: "18% of line-ups", role: "Support" },
+      ], {
+        byRole: true,
+        title: "Magnitude — horizontal bars",
+        caption: "Illustrative sample. Bars cap at 22px, square at the baseline and rounded " +
+          "at the data end, on a track that shows what the value is out of.",
+      }) + "</div>" +
+      '<div class="card">' + P.chart.stack([
+        { label: "Tank", value: 11, fill: P.chart.roleFill("Tank") },
+        { label: "Damage", value: 22, fill: P.chart.roleFill("Damage") },
+        { label: "Support", value: 22, fill: P.chart.roleFill("Support") },
+      ], {
+        title: "Part-to-whole — one stacked bar",
+        caption: "Segments are separated by a 2px surface gap, never a stroke. The legend is " +
+          "always present: identity is never colour alone.",
+      }) + "</div>" +
+    "</div>" +
+    '<div class="card u-mt-4">' +
+      '<p class="small" style="margin:0 0 var(--s-3)">Chart colour is chosen by the job it ' +
+      "does. Magnitude is one hue on a track — sequential, no palette needed. Role is " +
+      "<i>identity</i>, so it gets a categorical palette, and that palette is deliberately " +
+      "<b>not</b> the interface's role tokens: those are tuned to read as a 3px underline on a " +
+      "portrait, and side by side as fills they fail deuteranopia separation. The chart steps " +
+      "are the same hues re-stepped until the lightness band, chroma floor, CVD separation and " +
+      "contrast checks all pass on this surface.</p>" +
+      P.dl([
+        ["Interface roles", "--role-tank / --role-damage / --role-support — underlines, dots, text"],
+        ["Chart roles", "#4a8ded / #b4303a / #1da875 — adjacent fills, worst pair ΔE 12.8 deutan"],
+        ["Magnitude", "--gold on an --s2 track; one hue, more is longer"],
+        ["Never", "a value on every mark, a second y-axis, or a generated hue for a 9th series"],
+      ]) +
+    "</div>");
+
   /* ---------------------------------------------------------- motion */
   set("#sg-motion",
     '<div class="card" style="padding:var(--s-4);display:grid;gap:var(--s-3)">' +
@@ -235,6 +277,35 @@
       "add their visible class <b>before</b> the tween runs, a MutationObserver arms anything " +
       "rendered later, and a watchdog force-reveals whatever is still pending — so print, " +
       "find-in-page and deep links can never land on an empty page.</p>" +
+    "</div>");
+
+  /* ----------------------------------------------------- dependencies
+     A short, honest bill of materials. Each line says what the thing is
+     for, so a future maintainer can tell whether removing it would cost
+     anything. Every one of them is optional at runtime: the page works
+     with the file missing, just with less. */
+  set("#sg-deps",
+    '<div class="card">' +
+      P.dl([
+        ["Fuse.js · Apache-2.0",
+          "Fuzzy matching behind ⌘K/“/” search and the games filter. Without it both fall " +
+          "back to substring matching."],
+        ["Panzoom · MIT",
+          "Zoom and pan in the evidence viewer, so a 40px portrait inside a 1280px frame can " +
+          "actually be judged. Without it the frame still opens, fit to the window."],
+        ["GSAP + ScrollTrigger · standard licence",
+          "Entrance tweens. Reveals add their visible class before any tween, so a missing " +
+          "GSAP cannot withhold content."],
+        ["Lenis · MIT", "One smooth-scroll instance, driven by GSAP's ticker."],
+        ["Archivo, Saira Condensed, IBM Plex Mono · SIL OFL 1.1",
+          "Self-hosted Latin subsets. These used to load from fonts.googleapis.com, which " +
+          "meant a render-blocking third-party request and a product that did not look like " +
+          "itself wherever that CDN is unreachable."],
+      ]) +
+      '<p class="small dim" style="margin:var(--s-3) 0 0">Hero presentation art is derived ' +
+      "locally by <code>pipeline/hero_crop.py</code>, which finds the hero inside Blizzard's " +
+      "official splash before cropping — a centre crop of those puts the head off the top " +
+      "edge and fills the tile with backdrop.</p>" +
     "</div>");
 
   P.observeReveals(document);

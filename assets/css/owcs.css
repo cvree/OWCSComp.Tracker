@@ -443,6 +443,35 @@ main { display: block; padding-bottom: var(--s-8); }
 .page-head h1 { max-width: 22ch; }
 .page-head .lede { margin-top: var(--s-4); }
 
+/* The dashboard opener: the pitch, and beside it the last thing the
+   product actually produced. Two columns only when the second one has
+   room to be readable — below that the evidence follows the claim. */
+.opener {
+  display: grid; gap: var(--s-6);
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+}
+@media (min-width: 1040px) {
+  .opener { grid-template-columns: minmax(0, 1fr) minmax(400px, 480px); gap: var(--s-8); }
+}
+.opener__showcase { min-width: 0; }
+.opener .page-head--tight { padding-bottom: 0; }
+
+.showcase {
+  display: grid; gap: var(--s-4);
+  padding: var(--s-5);
+  background: linear-gradient(168deg, var(--s2), var(--s1) 60%);
+  border: 1px solid var(--line-2); border-radius: var(--r-4);
+  box-shadow: var(--sh-2);
+}
+.showcase__head { display: flex; align-items: center; gap: var(--s-3); flex-wrap: wrap; }
+.showcase__map { font: 600 15px/1.2 var(--f-display); letter-spacing: .01em; color: var(--tx); }
+.showcase__kicker { margin: 0; font-size: 12.5px; color: var(--tx-3); max-width: 46ch; }
+.showcase__side { display: grid; gap: var(--s-3); }
+.showcase__team { display: flex; align-items: center; justify-content: space-between; gap: var(--s-3); }
+.showcase__rule { display: block; height: 1px; background: var(--line); }
+.showcase__foot { display: flex; gap: var(--s-2); flex-wrap: wrap; padding-top: var(--s-1); }
+
 /* A small typographic label, not a coloured tab. The accent rule in
    front of it is the only colour it gets. */
 .eyebrow {
@@ -551,8 +580,12 @@ input, select, textarea { min-width: 0; }
 
 .btn--ghost { --btn-bg: transparent; --btn-line: var(--line-2); --btn-fg: var(--tx-2); }
 .btn--ghost:hover { --btn-fg: var(--tx); --btn-bg: var(--s2); }
-.btn--quiet { --btn-bg: transparent; --btn-line: transparent; --btn-fg: var(--tx-3); }
+/* Quiet, not invisible: a dotted underline is enough to read as "this is
+   a control" without competing with the primary action on the row. A
+   button nobody can tell is a button is a button nobody presses. */
+.btn--quiet { --btn-bg: transparent; --btn-line: transparent; --btn-fg: var(--tx-2); }
 .btn--quiet:hover { --btn-fg: var(--tx); --btn-bg: var(--s2); }
+.btn--quiet:not(:hover) { text-decoration: underline dotted var(--line-3); text-underline-offset: 3px; }
 .btn--danger { --btn-line: rgba(229, 72, 77, .42); --btn-bg: transparent; --btn-fg: #ff9ea1; }
 .btn--danger:hover { --btn-bg: var(--wash-red); --btn-line: rgba(229, 72, 77, .7); }
 .btn--good { --btn-line: rgba(53, 207, 141, .42); --btn-bg: transparent; --btn-fg: #7ee2b4; }
@@ -569,10 +602,11 @@ input, select, textarea { min-width: 0; }
 .btn--trunc { max-width: min(100%, 320px); display: inline-flex; }
 .btn--trunc > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-.btn kbd {
+.btn kbd, .palette__hint kbd {
   font: 500 10.5px/1 var(--f-mono);
   border: 1px solid var(--line-2); border-radius: 3px;
   padding: 3px 4px; color: var(--tx-3); background: rgba(0, 0, 0, .28);
+  display: inline-block; min-width: 18px; text-align: center;
 }
 
 /* ------------------------------------------------------------------ *
@@ -1220,6 +1254,72 @@ html.motion-on a.hero:hover .hero__face { transform: translateY(-2px); }
   height: 1px; background: var(--red); transform: rotate(-8deg);
 }
 
+/* one mid-map swap, as one scannable row */
+.swap {
+  display: grid; align-items: center; gap: var(--s-3) var(--s-5);
+  grid-template-columns: minmax(118px, auto) auto auto minmax(0, 1fr);
+  padding: var(--s-3) var(--s-4);
+  background: var(--well); border: 1px solid var(--line); border-radius: var(--r-3);
+  transition: border-color var(--t-1) var(--ease);
+}
+.swap:hover { border-color: var(--line-2); }
+.swap__who { display: flex; align-items: center; gap: var(--s-3); }
+.swap__diff {
+  display: grid; align-items: center; gap: var(--s-2) var(--s-3);
+  grid-auto-flow: column; justify-content: start;
+}
+/* The struck-through portrait already says "no longer this hero"; saying
+   it a second time on the name is noise, so the name only goes quiet. */
+.swap__name { font-size: 12.5px; color: var(--tx-2); white-space: nowrap; }
+.swap__name--was { color: var(--tx-3); }
+.swap__when { display: flex; align-items: center; gap: var(--s-3); }
+.swap__when .mono { font: 500 12.5px/1 var(--f-mono); color: var(--tx-2); }
+.swap__evidence { display: flex; gap: var(--s-2); justify-content: flex-end; }
+@media (max-width: 860px) {
+  .swap { grid-template-columns: 1fr; gap: var(--s-3); }
+  .swap__evidence { justify-content: flex-start; }
+}
+
+/* the map, drawn against its own clock */
+.tl { display: grid; gap: var(--s-2); }
+.tl__track {
+  position: relative; height: 46px; margin-top: var(--s-4);
+  background: var(--well); border: 1px solid var(--line); border-radius: var(--r-2);
+}
+.tl__round {
+  position: absolute; top: 0; bottom: 0;
+  background: var(--wash-indigo); border-left: 1px solid rgba(127, 136, 200, .45);
+  border-right: 1px solid rgba(127, 136, 200, .45);
+}
+.tl__round i {
+  position: absolute; left: 5px; bottom: 3px; font-style: normal;
+  font: 500 10px/1 var(--f-mono); color: var(--indigo);
+}
+.tl__mark { position: absolute; top: 0; bottom: 0; width: 0; }
+.tl__mark::before {
+  content: ""; position: absolute; top: 0; bottom: 0; left: -1px; width: 2px;
+  background: var(--emerald);
+}
+.tl__mark--swap::before { background: var(--gold); }
+.tl__flag {
+  position: absolute; top: 4px; left: 4px; white-space: nowrap;
+  font: 500 10px/1 var(--f-mono); letter-spacing: .02em;
+  color: var(--emerald); background: rgba(4, 5, 8, .82);
+  padding: 2px 4px; border-radius: 3px;
+  max-width: 132px; overflow: hidden; text-overflow: ellipsis;
+}
+.tl__mark--swap .tl__flag { color: var(--gold-hi); top: auto; bottom: 4px; }
+.tl__mark--end .tl__flag { left: auto; right: 4px; }
+.tl__scale {
+  display: flex; justify-content: space-between;
+  font: 400 11px/1 var(--f-mono); color: var(--tx-3);
+}
+.tl__key { display: flex; align-items: center; gap: var(--s-2); flex-wrap: wrap; margin: 0; }
+.tl__key span { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+.tl__key-round { background: var(--wash-indigo); border: 1px solid rgba(127, 136, 200, .45); }
+.tl__key-read { background: var(--emerald); }
+.tl__key-swap { background: var(--gold); }
+
 /* hero picker — built for speed */
 .picker { display: grid; gap: var(--s-3); }
 .picker__search { position: sticky; top: 0; z-index: 2; background: var(--s1); padding-bottom: var(--s-2); }
@@ -1238,22 +1338,76 @@ html.motion-on a.hero:hover .hero__face { transform: translateY(-2px); }
 .picker__opt[aria-pressed="true"] { background: var(--wash-gold); border-color: rgba(243, 167, 47, .5); }
 .picker__opt .hero__name { display: block; }
 
-/* evidence lightbox */
+/* evidence viewer — a workspace, not a picture frame. The frame is the
+   thing being judged, so it gets the room: chrome collapses to a bar and
+   a foot, and the stage takes everything left over. */
 .lightbox {
   position: fixed; inset: 0; z-index: 120;
-  display: grid; place-items: center; padding: var(--s-5);
-  background: rgba(4, 5, 8, .86);
+  display: grid; place-items: center; padding: clamp(8px, 2.5vw, 28px);
+  background: rgba(4, 5, 8, .88);
   backdrop-filter: blur(6px);
 }
 .lightbox[hidden] { display: none; }
 .lightbox__scrim { position: absolute; inset: 0; }
 .lightbox__box {
+  position: relative; margin: 0;
+  display: grid; grid-template-rows: auto 1fr auto;
+  width: min(96vw, 1180px); max-height: 92vh;
   background: var(--s1); border: 1px solid var(--line-2); border-radius: var(--r-4);
-  padding: var(--s-5); max-width: min(94vw, 900px); max-height: 92vh; overflow: auto;
-  box-shadow: var(--sh-3);
+  box-shadow: var(--sh-3); overflow: hidden;
 }
-.lightbox img { display: block; margin-inline: auto; background: var(--well); border-radius: var(--r-2); }
-.lightbox figcaption { margin-top: var(--s-4); font: 400 12px/1.6 var(--f-mono); color: var(--tx-3); word-break: break-all; }
+.lightbox__bar,
+.lightbox__foot {
+  display: flex; align-items: center; gap: var(--s-3);
+  padding: var(--s-3) var(--s-4); background: var(--bg-deep);
+}
+.lightbox__bar { border-bottom: 1px solid var(--line); }
+.lightbox__foot { border-top: 1px solid var(--line); justify-content: space-between; }
+.lightbox__cap {
+  font: 600 13.5px/1.4 var(--f-body); color: var(--tx);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1 1 auto;
+}
+.lightbox__tools { display: flex; align-items: center; gap: var(--s-1); flex: 0 0 auto; }
+.lightbox__count,
+.lightbox__level {
+  font: 400 11.5px/1 var(--f-mono); color: var(--tx-3);
+  min-width: 4ch; text-align: center; padding-inline: var(--s-2);
+}
+.lightbox__path {
+  font: 400 11.5px/1.5 var(--f-mono); color: var(--tx-3);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  background: none; border: 0; padding: 0; min-width: 0;
+}
+.lightbox__stage {
+  position: relative; overflow: hidden; background: var(--well);
+  display: grid; place-items: center; min-height: 240px;
+  background-image:
+    linear-gradient(45deg, #0e1015 25%, transparent 25%, transparent 75%, #0e1015 75%),
+    linear-gradient(45deg, #0e1015 25%, transparent 25%, transparent 75%, #0e1015 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
+}
+/* Sized in JS on load, not here: the stage holds both a 1280px frame and a
+   35px crop cut out of one, and only one of those wants a max-width. */
+.lightbox__stage img {
+  display: block; user-select: none; -webkit-user-drag: none;
+}
+.lightbox__stage { min-height: min(74vh, 520px); }
+/* Panzoom drives the element's own transform; nothing here may animate it
+   or the pan lags a frame behind the pointer. */
+.lightbox__stage img { transition: none !important; }
+html.lightbox-open, html.lightbox-open body { overflow: hidden; }
+
+.icon-btn {
+  display: inline-grid; place-items: center; min-width: 28px; height: 28px;
+  padding: 0 var(--s-2); border: 1px solid var(--line); border-radius: var(--r-1);
+  background: var(--s2); color: var(--tx-2);
+  font: 500 13px/1 var(--f-body); cursor: pointer;
+  transition: background var(--t-1) var(--ease), color var(--t-1) var(--ease),
+              border-color var(--t-1) var(--ease);
+}
+.icon-btn:hover:not(:disabled) { background: var(--s3); color: var(--tx); border-color: var(--line-2); }
+.icon-btn:disabled { opacity: .4; cursor: default; }
 
 /* ------------------------------------------------------------------ *
    16. Console / log
@@ -1350,9 +1504,41 @@ html.motion-on a.hero:hover .hero__face { transform: translateY(-2px); }
 .diag[open] > summary::before { transform: rotate(90deg); }
 .diag > summary:hover { color: var(--tx); }
 .diag__body { padding: 0 var(--s-4) var(--s-4); font-size: 13px; color: var(--tx-2); }
-.diag__body dl { display: grid; grid-template-columns: minmax(120px, auto) 1fr; gap: var(--s-2) var(--s-4); margin: 0; }
-.diag__body dt { font: 500 11px/1.5 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--tx-3); }
-.diag__body dd { margin: 0; font-family: var(--f-mono); font-size: 12px; word-break: break-word; }
+
+/* term / definition pairs — wherever P.dl is called, not only in .diag */
+.dl { display: grid; grid-template-columns: minmax(120px, 34%) 1fr; gap: var(--s-2) var(--s-4); margin: 0; }
+.dl dt { font: 500 11px/1.5 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--tx-3); }
+.dl dd { margin: 0; font-family: var(--f-mono); font-size: 12px; color: var(--tx-2); word-break: break-word; }
+@media (max-width: 560px) {
+  .dl { grid-template-columns: minmax(0, 1fr); gap: var(--s-1) 0; }
+  .dl dd { margin-bottom: var(--s-2); }
+}
+
+/* An event group in the games list. Same disclosure mechanic as .diag, but
+   this one holds content people are looking for rather than detail they
+   are usually not, so it reads at full text weight instead of muted. */
+.evt { border: 1px solid var(--line); border-radius: var(--r-3); background: var(--s1); }
+.evt > summary {
+  cursor: pointer; list-style: none;
+  padding: var(--s-3) var(--s-4);
+  display: flex; align-items: center; gap: var(--s-3);
+  font: 600 14px/1.4 var(--f-body); color: var(--tx);
+}
+.evt > summary::-webkit-details-marker { display: none; }
+.evt > summary::before {
+  content: "▸"; font-size: 10px; color: var(--tx-3); flex: 0 0 auto;
+  transition: transform var(--t-1) var(--ease);
+}
+.evt[open] > summary::before { transform: rotate(90deg); }
+.evt > summary:hover { background: var(--s2); border-radius: var(--r-3); }
+.evt__name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.evt__count {
+  font: 500 11px/1 var(--f-mono); color: var(--tx-3);
+  border: 1px solid var(--line); border-radius: var(--r-pill);
+  padding: 4px var(--s-2); flex: 0 0 auto;
+}
+.evt__when { margin-left: auto; flex: 0 0 auto; }
+.evt .table-wrap { margin: 0 var(--s-2) var(--s-3); }
 
 /* ------------------------------------------------------------------ *
    19. Guides, commands, human gates
@@ -1468,6 +1654,86 @@ html.motion-on a.hero:hover .hero__face { transform: translateY(-2px); }
 .gate--passed .gate__badge::before { content: "✓"; }
 
 /* ------------------------------------------------------------------ *
+   19a. Hero hover card — see app/hovercard.js
+ * ------------------------------------------------------------------ */
+.hcard {
+  position: absolute; z-index: 130; width: 260px;
+  background: var(--s1); border: 1px solid var(--line-2); border-radius: var(--r-3);
+  box-shadow: var(--sh-3); overflow: hidden;
+  display: grid; opacity: 0; transform: translateY(4px);
+  transition: opacity var(--t-1) var(--ease), transform var(--t-1) var(--ease);
+}
+.hcard.is-in { opacity: 1; transform: none; }
+.hcard[hidden] { display: none; }
+.hcard__art { display: block; aspect-ratio: 3 / 2; background: var(--well); }
+.hcard__art img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.hcard__body { display: grid; gap: var(--s-1); padding: var(--s-3) var(--s-4) var(--s-4); }
+.hcard__name { font: 600 15px/1.2 var(--f-display); letter-spacing: .01em; color: var(--tx); }
+.hcard__role { font: 500 11px/1 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--tx-3); }
+.hcard__role[data-role="Tank"] { color: var(--role-tank); }
+.hcard__role[data-role="Damage"] { color: var(--role-damage); }
+.hcard__role[data-role="Support"] { color: var(--role-support); }
+.hcard__stat { font-size: 12px; line-height: 1.5; color: var(--tx-2); margin-top: var(--s-1); }
+@media (prefers-reduced-motion: reduce) {
+  .hcard { transition: none; transform: none; }
+}
+
+/* ------------------------------------------------------------------ *
+   19b. Charts — see app/charts.js for the rules these implement
+ * ------------------------------------------------------------------ */
+.ch { margin: 0; display: grid; gap: var(--s-3); }
+.ch__title { font: 600 13.5px/1.4 var(--f-body); color: var(--tx); }
+.ch__rows { display: grid; gap: var(--s-2); }
+.ch__row {
+  display: grid; align-items: center; gap: var(--s-4);
+  grid-template-columns: minmax(120px, 210px) minmax(0, 1fr) auto;
+}
+.ch__key { text-decoration: none; color: inherit; min-width: 0; }
+a.ch__key:hover .ch__name { color: var(--gold-hi); }
+.ch__label { display: flex; align-items: center; gap: var(--s-3); min-width: 0; }
+.ch__label .hero__face, .ch__label .crest, .ch__label img {
+  width: 26px; height: 26px; border-radius: var(--r-1); flex: 0 0 auto;
+}
+.ch__name {
+  font: 600 13px/1.3 var(--f-body); color: var(--tx);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.ch__note { font: 400 11.5px/1 var(--f-body); color: var(--tx-3); white-space: nowrap; }
+/* The track is the "out of what": a rail at the full scale so a short bar
+   reads as a small share rather than as a mystery. */
+.ch__track {
+  position: relative; height: var(--ch-bar, 22px); border-radius: var(--r-1);
+  background: var(--s2); overflow: hidden;
+}
+.ch__bar {
+  position: absolute; inset: 0 auto 0 0; background: var(--fill, var(--gold));
+  /* square where it meets the baseline, rounded at the data end */
+  border-radius: 0 4px 4px 0;
+  min-width: 3px;
+}
+.ch__val {
+  font: 500 12.5px/1 var(--f-mono); color: var(--tx-2);
+  min-width: 5ch; text-align: right;
+}
+.ch__caption { margin: 0; }
+
+.ch__stack { display: flex; gap: var(--gap, 2px); height: 22px; }
+.ch__seg { background: var(--fill); border-radius: 2px; min-width: 3px; }
+.ch__seg:first-child { border-radius: var(--r-1) 2px 2px var(--r-1); }
+.ch__seg:last-child { border-radius: 2px var(--r-1) var(--r-1) 2px; }
+.ch__legend { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-4); }
+.ch__legend-item {
+  display: inline-flex; align-items: center; gap: var(--s-2);
+  font: 400 12px/1 var(--f-body); color: var(--tx-2);
+}
+.ch__swatch { width: 10px; height: 10px; border-radius: 2px; background: var(--fill); }
+.ch__legend-val { font: 500 12px/1 var(--f-mono); color: var(--tx-3); }
+@media (max-width: 640px) {
+  .ch__row { grid-template-columns: minmax(0, 1fr) auto; }
+  .ch__track { grid-column: 1 / -1; }
+}
+
+/* ------------------------------------------------------------------ *
    20. Command palette / search
  * ------------------------------------------------------------------ */
 .palette { position: fixed; inset: 0; z-index: 140; display: grid; place-items: start center; padding-top: 12vh; }
@@ -1478,26 +1744,63 @@ html.motion-on a.hero:hover .hero__face { transform: translateY(-2px); }
   background: var(--s1); border: 1px solid var(--line-2); border-radius: var(--r-4);
   box-shadow: var(--sh-3); overflow: hidden;
 }
+.palette__field {
+  display: grid; grid-template-columns: auto 1fr; align-items: center;
+  gap: var(--s-3); padding-left: var(--s-4); border-bottom: 1px solid var(--line);
+}
+.palette__field svg { width: 16px; height: 16px; color: var(--tx-3); }
 .palette input {
-  border: 0; border-bottom: 1px solid var(--line); border-radius: 0;
-  background: transparent; min-height: 52px; font-size: 15px; font-family: var(--f-body);
+  border: 0; border-radius: 0;
+  background: transparent; min-height: 54px; font-size: 15.5px; font-family: var(--f-body);
+  padding-left: 0;
 }
-.palette input:focus { box-shadow: none; border-color: var(--line); background: transparent; }
-.palette__list { list-style: none; margin: 0; padding: var(--s-2); max-height: 52vh; overflow: auto; display: grid; gap: 2px; }
+.palette input:focus { box-shadow: none; border-color: transparent; background: transparent; }
+.palette input::-webkit-search-cancel-button { display: none; }
+.palette__list { list-style: none; margin: 0; padding: var(--s-2); max-height: 56vh; overflow: auto; display: grid; gap: 2px; }
+.palette__group {
+  font: 500 10px/1 var(--f-mono); letter-spacing: .1em; text-transform: uppercase;
+  color: var(--tx-3); padding: var(--s-3) var(--s-3) var(--s-2);
+}
+.palette__group:first-child { padding-top: var(--s-2); }
 .palette__row {
-  display: grid; grid-template-columns: 62px 1fr auto; gap: var(--s-3); align-items: center;
+  display: grid; grid-template-columns: 32px minmax(0, 1fr) auto;
+  gap: var(--s-3); align-items: center;
   padding: var(--s-2) var(--s-3); border-radius: var(--r-2); cursor: pointer;
+  scroll-margin: var(--s-2);
 }
-.palette__row.on { background: var(--s3); }
+.palette__row.on { background: var(--s3); box-shadow: inset 2px 0 0 var(--gold); }
 .palette__row .k {
   font: 500 10px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase;
   color: var(--tx-3); border: 0; padding: 0;
 }
+.palette__text { display: grid; gap: 1px; min-width: 0; }
 .palette__row .l { font-weight: 600; font-size: 13.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.palette__row .s { font-size: 12px; color: var(--tx-3); white-space: nowrap; }
-.palette__hint { padding: var(--s-2) var(--s-4); border-top: 1px solid var(--line); font: 400 11.5px/1.6 var(--f-mono); color: var(--tx-3); margin: 0; }
+.palette__row .s { font-size: 12px; color: var(--tx-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* One 32px well holds whatever identifies the row — a portrait, a crest,
+   a pair of crests for a fixture, or a letter. Uniform box, so the list
+   reads as a column instead of a ragged edge. */
+.palette__mark {
+  width: 32px; height: 32px; border-radius: var(--r-1); overflow: hidden;
+  display: grid; place-items: center; background: var(--s2);
+  border: 1px solid var(--line);
+}
+.palette__mark img, .palette__mark .crest, .palette__mark .hero-mono {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+.palette__mark--kind {
+  font: 600 13px/1 var(--f-display); color: var(--tx-3);
+}
+.palette__vs { display: flex; width: 32px; height: 32px; align-items: center; }
+.palette__vs .crest { width: 20px; height: 20px; }
+.palette__vs .crest:last-child { margin-left: -7px; }
+.palette__hint {
+  display: flex; gap: var(--s-2); align-items: center;
+  padding: var(--s-2) var(--s-4); border-top: 1px solid var(--line);
+  font: 400 11.5px/1.6 var(--f-body); color: var(--tx-3); margin: 0;
+}
 .palette__empty { padding: var(--s-5); text-align: center; color: var(--tx-3); font-size: 13.5px; }
-html.palette-open { overflow: hidden; }
+html.palette-open, html.palette-open body { overflow: hidden; }
 
 /* ------------------------------------------------------------------ *
    21. Reveals — orientation only, and never able to withhold content
@@ -1527,6 +1830,7 @@ html.motion-on .rv-in { opacity: 1; transform: none; transition: opacity var(--t
 .u-gap-2 { gap: var(--s-2); }
 .u-gap-3 { gap: var(--s-3); }
 .u-gap-4 { gap: var(--s-4); }
+.u-gap-5 { gap: var(--s-5); }
 .u-mt-0 { margin-top: 0; }
 .u-mt-3 { margin-top: var(--s-3); }
 .u-mt-4 { margin-top: var(--s-4); }

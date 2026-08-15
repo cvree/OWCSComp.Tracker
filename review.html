@@ -7,9 +7,9 @@
 <meta name="description" content="Confirm or correct what the detector read: every hero prediction shown next to the frame it came from, with a one-key approve and a fast hero picker.">
 <meta name="robots" content="noindex">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Archivo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preload" href="assets/fonts/archivo-var-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/saira-condensed-700-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/fonts.css">
 <link rel="stylesheet" href="assets/css/owcs.css">
 </head>
 <body>
@@ -64,16 +64,8 @@
   </div>
 </div>
 
-<div class="lightbox" id="lightbox" hidden>
-  <div data-close style="position:absolute;inset:0"></div>
-  <figure class="lightbox__box" role="dialog" aria-modal="true" aria-label="Evidence frame"
-          style="margin:0">
-    <img id="lightbox-img" src="" alt="">
-    <figcaption id="lightbox-cap"></figcaption>
-    <div class="row u-mt-4"><button class="btn btn--sm" data-close>Close</button></div>
-  </figure>
-</div>
 
+<script src="assets/vendor/fuse.basic.min.js" defer></script>
 <script src="assets/vendor/lenis.min.js" defer></script>
 <script src="assets/vendor/gsap.min.js" defer></script>
 <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
@@ -85,7 +77,9 @@
 <script src="assets/js/app/core.js"></script>
 <script src="assets/js/app/games.js"></script>
 <script src="assets/js/app/api.js"></script>
+<script src="assets/vendor/panzoom.min.js"></script>
 <script src="assets/js/app/evidence.js"></script>
+<script src="assets/js/app/hovercard.js" defer></script>
 <script src="assets/js/app/shell.js"></script>
 <script src="assets/js/app/page-review.js"></script>
 </body>

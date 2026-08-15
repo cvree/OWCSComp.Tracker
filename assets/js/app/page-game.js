@@ -388,6 +388,7 @@
           m.winner === game.teamA ? "a" : m.winner === game.teamB ? "b" : null) +
       "</div>" +
       '<div class="grid grid--2 u-mt-5">' + side(game.teamA) + side(game.teamB) + "</div>" +
+      mapTimeline(m, comps, swaps) +
       (swaps.length
         ? '<div class="u-mt-5"><p class="label">Confirmed mid-map swaps</p>' +
           '<div class="stack u-mt-3">' + swaps.map(swapRow).join("") + "</div></div>"
@@ -408,22 +409,107 @@
       "</article>";
   }
 
+  /* ------------------------------------------------------ map timeline
+     A map is a span of time, and everything on this card happened at some
+     point in it: the round windows, the line-up reads, the swaps. Written
+     out as rows of timecodes that is a list to be cross-referenced by
+     hand; drawn against one axis it is a picture of the map. It is built
+     only from what was actually recorded — no map is given a nominal
+     duration it did not have — so a map with no round windows and no swaps
+     draws nothing rather than an empty axis. */
+  function mapTimeline(m, comps, swaps) {
+    const rounds = (m.rounds || []).filter((r) => r.start != null && r.end != null);
+    const marks = []
+      .concat(comps.map((c) => ({ at: c.timestamp, kind: "read",
+        label: (P.team(c.teamId) || {}).code || "line-up", title: "Line-up read" })))
+      .concat(swaps.map((s) => ({ at: s.offset, kind: "swap",
+        label: P.hero(s.toHero).name,
+        title: P.hero(s.fromHero).name + " → " + P.hero(s.toHero).name })))
+      .filter((x) => x.at != null);
+    if (!rounds.length && marks.length < 2) return "";
+
+    const times = rounds.map((r) => r.start).concat(rounds.map((r) => r.end),
+      marks.map((x) => x.at));
+    const lo = Math.min.apply(null, times);
+    const hi = Math.max.apply(null, times);
+    const span = hi - lo;
+    if (!(span > 0)) return "";
+    const at = (t) => ((t - lo) / span) * 100;
+    const pct = (t) => at(t).toFixed(2) + "%";
+
+    /* Both teams' line-ups are read off the same frame, so their marks land
+       on the same pixel. Stacking two labels there renders one on top of
+       the other and both become unreadable, so marks close enough to
+       collide are merged into one flag that names all of them. */
+    const merged = [];
+    marks.sort((a, b) => a.at - b.at).forEach((x) => {
+      const prev = merged[merged.length - 1];
+      if (prev && prev.kind === x.kind && at(x.at) - at(prev.at) < 4) {
+        prev.labels.push(x.label);
+        prev.titles.push(x.title + " at " + P.fmtClock(x.at));
+        return;
+      }
+      merged.push({ at: x.at, kind: x.kind, labels: [x.label],
+        titles: [x.title + " at " + P.fmtClock(x.at)] });
+    });
+
+    return '<div class="tl u-mt-5">' +
+      '<p class="label">When it happened</p>' +
+      '<div class="tl__track" role="img" aria-label="' +
+        esc(rounds.length + " round window(s), " + marks.length +
+            " recorded event(s), from " + P.fmtClock(lo) + " to " + P.fmtClock(hi)) + '">' +
+        rounds.map((r) =>
+          '<span class="tl__round" style="left:' + pct(r.start) +
+          ";width:" + (((r.end - r.start) / span) * 100).toFixed(2) + '%" ' +
+          'title="Round ' + esc(r.index) + " · " + esc(P.fmtClock(r.start)) + "–" +
+          esc(P.fmtClock(r.end)) + '"><i>' + esc(r.index) + "</i></span>").join("") +
+        merged.map((x) =>
+          /* Past two-thirds along, a flag drawn rightwards would run off the
+             end of the track, so it hangs off the left of its mark instead. */
+          '<span class="tl__mark tl__mark--' + x.kind +
+          (at(x.at) > 66 ? " tl__mark--end" : "") + '" style="left:' + pct(x.at) + '" ' +
+          'title="' + esc(x.titles.join(" · ")) + '">' +
+          '<span class="tl__flag">' + esc(x.labels.join(" · ")) + "</span></span>").join("") +
+      "</div>" +
+      '<div class="tl__scale"><span>' + esc(P.fmtClock(lo)) + "</span><span>" +
+        esc(P.fmtClock(hi)) + "</span></div>" +
+      '<p class="tl__key dim small">' +
+        '<span class="tl__key-round"></span> round window ' +
+        '<span class="tl__key-read"></span> line-up read ' +
+        '<span class="tl__key-swap"></span> hero swap' +
+      "</p></div>";
+  }
+
+  /* A swap is one sentence — who, which slot, from what to what, when, how
+     sure, and the two frames that prove it. It gets one row with a fixed
+     shape so a column of them can be scanned rather than read, and the
+     heroes keep their names: two unlabelled 40px faces and an arrow is a
+     puzzle, not a record. */
   function swapRow(s) {
-    return '<div class="well"><div class="u-flex u-center u-gap-3 u-wrap">' +
-      P.teamPlate(s.teamId, { size: "sm", short: true }) +
-      '<span class="dim small">slot ' + esc(s.slot) + "</span>" +
-      '<span class="diff"><span class="diff__was">' + P.heroTile(s.fromHero, { size: "sm" }) +
-      '</span><span class="diff__arrow">→</span>' + P.heroTile(s.toHero, { size: "sm" }) + "</span>" +
-      '<span class="dim small">at ' + esc(P.fmtClock(s.offset)) + "</span>" +
-      (s.confidence != null ? P.confMeter(s.confidence) : "") +
-      '<span class="spacer"></span>' +
-      (s.evidenceBefore
-        ? '<button class="btn btn--sm btn--quiet" data-evidence="' + esc(s.evidenceBefore) +
-          '" data-evidence-cap="before the swap">Before</button>' : "") +
-      (s.evidenceAfter
-        ? '<button class="btn btn--sm btn--quiet" data-evidence="' + esc(s.evidenceAfter) +
-          '" data-evidence-cap="after the swap">After</button>' : "") +
-      "</div></div>";
+    const from = P.hero(s.fromHero), to = P.hero(s.toHero);
+    return '<div class="swap">' +
+      '<div class="swap__who">' + P.teamPlate(s.teamId, { size: "sm", short: true }) +
+        '<span class="dim small">slot ' + esc(s.slot) + "</span></div>" +
+      '<div class="swap__diff">' +
+        '<span class="diff__was">' + P.heroTile(s.fromHero, { size: "sm" }) + "</span>" +
+        '<span class="swap__name swap__name--was">' + esc(from.name) + "</span>" +
+        '<span class="diff__arrow" aria-hidden="true">→</span>' +
+        P.heroTile(s.toHero, { size: "sm" }) +
+        '<span class="swap__name">' + esc(to.name) + "</span>" +
+      "</div>" +
+      '<div class="swap__when"><span class="mono">' + esc(P.fmtClock(s.offset)) + "</span>" +
+        (s.confidence != null ? P.confMeter(s.confidence) : "") + "</div>" +
+      '<div class="swap__evidence">' +
+        (s.evidenceBefore
+          ? '<button class="btn btn--sm btn--quiet" data-evidence="' + esc(s.evidenceBefore) +
+            '" data-evidence-cap="' + esc(from.name + " before the swap") + '">Before</button>' : "") +
+        (s.evidenceAfter
+          ? '<button class="btn btn--sm btn--quiet" data-evidence="' + esc(s.evidenceAfter) +
+            '" data-evidence-cap="' + esc(to.name + " after the swap") + '">After</button>' : "") +
+      "</div>" +
+      '<span class="visually-hidden">' + esc(from.name + " swapped to " + to.name +
+        " at " + P.fmtClock(s.offset)) + "</span>" +
+      "</div>";
   }
 
   /* ------------------------------------------------------- diagnostics

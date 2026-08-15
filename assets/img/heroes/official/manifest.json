@@ -1,6 +1,6 @@
 {
  "note": "Official Blizzard hero presentation art (portrait/artwork/icon), distinct from the broadcast-crop evidence portraits in assets/img/heroes/manifest.json. Source: overwatch.blizzard.com, Blizzard's own official hero pages. Non-commercial fan use per Blizzard's Fan Content Policy; Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc.",
- "generatedAt": "2026-07-26T01:15:38+00:00",
+ "generatedAt": "2026-08-15T20:49:41+00:00",
  "heroes": {
   "ana": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/ana/",
@@ -19,17 +19,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/ana/portrait.png",
     "webp": "assets/img/heroes/official/ana/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/ana/icon.png",
     "webp": "assets/img/heroes/official/ana/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/ana/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:37+00:00"
   },
   "anran": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/anran/",
@@ -48,17 +59,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/anran/portrait.png",
     "webp": "assets/img/heroes/official/anran/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/anran/icon.png",
     "webp": "assets/img/heroes/official/anran/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/anran/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:37+00:00"
   },
   "ashe": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/ashe/",
@@ -77,17 +99,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/ashe/portrait.png",
     "webp": "assets/img/heroes/official/ashe/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/ashe/icon.png",
     "webp": "assets/img/heroes/official/ashe/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/ashe/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:37+00:00"
   },
   "ball": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/wrecking-ball/",
@@ -106,17 +139,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/ball/portrait.png",
     "webp": "assets/img/heroes/official/ball/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/ball/icon.png",
     "webp": "assets/img/heroes/official/ball/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/ball/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:37+00:00"
   },
   "bap": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/baptiste/",
@@ -135,17 +179,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/bap/portrait.png",
     "webp": "assets/img/heroes/official/bap/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/bap/icon.png",
     "webp": "assets/img/heroes/official/bap/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/bap/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:37+00:00"
   },
   "bastion": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/bastion/",
@@ -164,17 +219,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/bastion/portrait.png",
     "webp": "assets/img/heroes/official/bastion/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/bastion/icon.png",
     "webp": "assets/img/heroes/official/bastion/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/bastion/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:37+00:00"
   },
   "brig": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/brigitte/",
@@ -193,17 +259,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/brig/portrait.png",
     "webp": "assets/img/heroes/official/brig/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/brig/icon.png",
     "webp": "assets/img/heroes/official/brig/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/brig/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:37+00:00"
   },
   "cass": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/cassidy/",
@@ -222,17 +299,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/cass/portrait.png",
     "webp": "assets/img/heroes/official/cass/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/cass/icon.png",
     "webp": "assets/img/heroes/official/cass/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/cass/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:37+00:00"
   },
   "domina": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/domina/",
@@ -251,17 +339,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/domina/portrait.png",
     "webp": "assets/img/heroes/official/domina/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/domina/icon.png",
     "webp": "assets/img/heroes/official/domina/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/domina/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:38+00:00"
   },
   "doomfist": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/doomfist/",
@@ -280,17 +379,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/doomfist/portrait.png",
     "webp": "assets/img/heroes/official/doomfist/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/doomfist/icon.png",
     "webp": "assets/img/heroes/official/doomfist/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/doomfist/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:38+00:00"
   },
   "dva": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/dva/",
@@ -309,17 +419,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/dva/portrait.png",
     "webp": "assets/img/heroes/official/dva/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/dva/icon.png",
     "webp": "assets/img/heroes/official/dva/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/dva/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:38+00:00"
   },
   "echo": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/echo/",
@@ -338,17 +459,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/echo/portrait.png",
     "webp": "assets/img/heroes/official/echo/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/echo/icon.png",
     "webp": "assets/img/heroes/official/echo/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/echo/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:38+00:00"
   },
   "emre": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/emre/",
@@ -367,17 +499,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/emre/portrait.png",
     "webp": "assets/img/heroes/official/emre/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/emre/icon.png",
     "webp": "assets/img/heroes/official/emre/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/emre/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:38+00:00"
   },
   "freja": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/freja/",
@@ -396,17 +539,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/freja/portrait.png",
     "webp": "assets/img/heroes/official/freja/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/freja/icon.png",
     "webp": "assets/img/heroes/official/freja/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/freja/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:38+00:00"
   },
   "genji": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/genji/",
@@ -425,17 +579,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/genji/portrait.png",
     "webp": "assets/img/heroes/official/genji/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/genji/icon.png",
     "webp": "assets/img/heroes/official/genji/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/genji/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:38+00:00"
   },
   "hanzo": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/hanzo/",
@@ -454,17 +619,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/hanzo/portrait.png",
     "webp": "assets/img/heroes/official/hanzo/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/hanzo/icon.png",
     "webp": "assets/img/heroes/official/hanzo/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/hanzo/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:38+00:00"
   },
   "hazard": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/hazard/",
@@ -483,17 +659,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/hazard/portrait.png",
     "webp": "assets/img/heroes/official/hazard/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/hazard/icon.png",
     "webp": "assets/img/heroes/official/hazard/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/hazard/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:38+00:00"
   },
   "hog": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/roadhog/",
@@ -512,17 +699,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/hog/portrait.png",
     "webp": "assets/img/heroes/official/hog/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/hog/icon.png",
     "webp": "assets/img/heroes/official/hog/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/hog/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:38+00:00"
   },
   "illari": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/illari/",
@@ -541,17 +739,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/illari/portrait.png",
     "webp": "assets/img/heroes/official/illari/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/illari/icon.png",
     "webp": "assets/img/heroes/official/illari/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/illari/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:38+00:00"
   },
   "jetcat": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/jetpack-cat/",
@@ -570,17 +779,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/jetcat/portrait.png",
     "webp": "assets/img/heroes/official/jetcat/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/jetcat/icon.png",
     "webp": "assets/img/heroes/official/jetcat/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/jetcat/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:38+00:00"
   },
   "jq": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/junker-queen/",
@@ -599,17 +819,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/jq/portrait.png",
     "webp": "assets/img/heroes/official/jq/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/jq/icon.png",
     "webp": "assets/img/heroes/official/jq/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/jq/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:38+00:00"
   },
   "junkrat": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/junkrat/",
@@ -628,17 +859,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/junkrat/portrait.png",
     "webp": "assets/img/heroes/official/junkrat/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/junkrat/icon.png",
     "webp": "assets/img/heroes/official/junkrat/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/junkrat/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:38+00:00"
   },
   "juno": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/juno/",
@@ -657,17 +899,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/juno/portrait.png",
     "webp": "assets/img/heroes/official/juno/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/juno/icon.png",
     "webp": "assets/img/heroes/official/juno/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/juno/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:39+00:00"
   },
   "kiriko": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/kiriko/",
@@ -686,17 +939,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/kiriko/portrait.png",
     "webp": "assets/img/heroes/official/kiriko/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/kiriko/icon.png",
     "webp": "assets/img/heroes/official/kiriko/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/kiriko/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:39+00:00"
   },
   "lucio": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/lucio/",
@@ -715,17 +979,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/lucio/portrait.png",
     "webp": "assets/img/heroes/official/lucio/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/lucio/icon.png",
     "webp": "assets/img/heroes/official/lucio/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/lucio/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:39+00:00"
   },
   "lw": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/lifeweaver/",
@@ -744,17 +1019,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/lw/portrait.png",
     "webp": "assets/img/heroes/official/lw/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/lw/icon.png",
     "webp": "assets/img/heroes/official/lw/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/lw/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:39+00:00"
   },
   "mauga": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/mauga/",
@@ -773,17 +1059,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/mauga/portrait.png",
     "webp": "assets/img/heroes/official/mauga/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/mauga/icon.png",
     "webp": "assets/img/heroes/official/mauga/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/mauga/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:39+00:00"
   },
   "mei": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/mei/",
@@ -802,17 +1099,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/mei/portrait.png",
     "webp": "assets/img/heroes/official/mei/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/mei/icon.png",
     "webp": "assets/img/heroes/official/mei/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/mei/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:39+00:00"
   },
   "mercy": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/mercy/",
@@ -831,17 +1139,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/mercy/portrait.png",
     "webp": "assets/img/heroes/official/mercy/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/mercy/icon.png",
     "webp": "assets/img/heroes/official/mercy/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/mercy/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:39+00:00"
   },
   "mizuki": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/mizuki/",
@@ -860,17 +1179,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/mizuki/portrait.png",
     "webp": "assets/img/heroes/official/mizuki/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/mizuki/icon.png",
     "webp": "assets/img/heroes/official/mizuki/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/mizuki/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:39+00:00"
   },
   "moira": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/moira/",
@@ -889,17 +1219,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/moira/portrait.png",
     "webp": "assets/img/heroes/official/moira/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/moira/icon.png",
     "webp": "assets/img/heroes/official/moira/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/moira/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:39+00:00"
   },
   "orisa": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/orisa/",
@@ -918,17 +1259,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/orisa/portrait.png",
     "webp": "assets/img/heroes/official/orisa/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/orisa/icon.png",
     "webp": "assets/img/heroes/official/orisa/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/orisa/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:39+00:00"
   },
   "pharah": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/pharah/",
@@ -947,17 +1299,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/pharah/portrait.png",
     "webp": "assets/img/heroes/official/pharah/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/pharah/icon.png",
     "webp": "assets/img/heroes/official/pharah/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/pharah/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:39+00:00"
   },
   "ram": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/ramattra/",
@@ -976,17 +1339,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/ram/portrait.png",
     "webp": "assets/img/heroes/official/ram/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/ram/icon.png",
     "webp": "assets/img/heroes/official/ram/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/ram/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:39+00:00"
   },
   "reaper": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/reaper/",
@@ -1005,17 +1379,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/reaper/portrait.png",
     "webp": "assets/img/heroes/official/reaper/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/reaper/icon.png",
     "webp": "assets/img/heroes/official/reaper/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/reaper/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:39+00:00"
   },
   "rein": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/reinhardt/",
@@ -1034,17 +1419,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/rein/portrait.png",
     "webp": "assets/img/heroes/official/rein/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/rein/icon.png",
     "webp": "assets/img/heroes/official/rein/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/rein/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:39+00:00"
   },
   "shion": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/shion/",
@@ -1063,17 +1459,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/shion/portrait.png",
     "webp": "assets/img/heroes/official/shion/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/shion/icon.png",
     "webp": "assets/img/heroes/official/shion/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/shion/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:40+00:00"
   },
   "sierra": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/sierra/",
@@ -1092,17 +1499,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/sierra/portrait.png",
     "webp": "assets/img/heroes/official/sierra/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/sierra/icon.png",
     "webp": "assets/img/heroes/official/sierra/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/sierra/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:40+00:00"
   },
   "sigma": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/sigma/",
@@ -1121,17 +1539,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/sigma/portrait.png",
     "webp": "assets/img/heroes/official/sigma/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/sigma/icon.png",
     "webp": "assets/img/heroes/official/sigma/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/sigma/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:40+00:00"
   },
   "sojourn": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/sojourn/",
@@ -1150,17 +1579,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/sojourn/portrait.png",
     "webp": "assets/img/heroes/official/sojourn/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/sojourn/icon.png",
     "webp": "assets/img/heroes/official/sojourn/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/sojourn/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:40+00:00"
   },
   "soldier": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/soldier-76/",
@@ -1179,17 +1619,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/soldier/portrait.png",
     "webp": "assets/img/heroes/official/soldier/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/soldier/icon.png",
     "webp": "assets/img/heroes/official/soldier/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/soldier/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:40+00:00"
   },
   "sombra": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/sombra/",
@@ -1208,17 +1659,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/sombra/portrait.png",
     "webp": "assets/img/heroes/official/sombra/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/sombra/icon.png",
     "webp": "assets/img/heroes/official/sombra/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/sombra/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:40+00:00"
   },
   "sym": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/symmetra/",
@@ -1237,17 +1699,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/sym/portrait.png",
     "webp": "assets/img/heroes/official/sym/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/sym/icon.png",
     "webp": "assets/img/heroes/official/sym/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/sym/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:40+00:00"
   },
   "torb": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/torbjorn/",
@@ -1266,17 +1739,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/torb/portrait.png",
     "webp": "assets/img/heroes/official/torb/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/torb/icon.png",
     "webp": "assets/img/heroes/official/torb/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/torb/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:40+00:00"
   },
   "tracer": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/tracer/",
@@ -1295,17 +1779,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/tracer/portrait.png",
     "webp": "assets/img/heroes/official/tracer/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/tracer/icon.png",
     "webp": "assets/img/heroes/official/tracer/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/tracer/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:40+00:00"
   },
   "vendetta": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/vendetta/",
@@ -1324,17 +1819,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/vendetta/portrait.png",
     "webp": "assets/img/heroes/official/vendetta/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/vendetta/icon.png",
     "webp": "assets/img/heroes/official/vendetta/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/vendetta/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:40+00:00"
   },
   "venture": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/venture/",
@@ -1353,17 +1859,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/venture/portrait.png",
     "webp": "assets/img/heroes/official/venture/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/venture/icon.png",
     "webp": "assets/img/heroes/official/venture/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/venture/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:40+00:00"
   },
   "widow": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/widowmaker/",
@@ -1382,17 +1899,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/widow/portrait.png",
     "webp": "assets/img/heroes/official/widow/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/widow/icon.png",
     "webp": "assets/img/heroes/official/widow/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/widow/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:40+00:00"
   },
   "winston": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/winston/",
@@ -1411,17 +1939,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/winston/portrait.png",
     "webp": "assets/img/heroes/official/winston/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/winston/icon.png",
     "webp": "assets/img/heroes/official/winston/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/winston/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:40+00:00"
   },
   "wuyang": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/wuyang/",
@@ -1440,17 +1979,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/wuyang/portrait.png",
     "webp": "assets/img/heroes/official/wuyang/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/wuyang/icon.png",
     "webp": "assets/img/heroes/official/wuyang/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/wuyang/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:41+00:00"
   },
   "zarya": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/zarya/",
@@ -1469,17 +2019,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/zarya/portrait.png",
     "webp": "assets/img/heroes/official/zarya/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/zarya/icon.png",
     "webp": "assets/img/heroes/official/zarya/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/zarya/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:41+00:00"
   },
   "zen": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/zenyatta/",
@@ -1498,17 +2059,28 @@
    "portrait": {
     "path": "assets/img/heroes/official/zen/portrait.png",
     "webp": "assets/img/heroes/official/zen/portrait.webp",
-    "width": 256,
-    "height": 256,
+    "width": 320,
+    "height": 320,
     "avif": null
    },
    "icon": {
     "path": "assets/img/heroes/official/zen/icon.png",
     "webp": "assets/img/heroes/official/zen/icon.webp",
-    "width": 64,
-    "height": 64,
+    "width": 96,
+    "height": 96,
     "avif": null
-   }
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/zen/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   },
+   "recroppedAt": "2026-08-15T20:49:41+00:00"
   }
  },
  "unresolved": []

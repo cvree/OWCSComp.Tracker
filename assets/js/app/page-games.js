@@ -31,17 +31,47 @@
     }).join("");
   }
 
-  function matches(g) {
-    if (state !== "all" && g.state !== state) return false;
-    if (!query) return true;
+  /* Fuse over the same haystack the substring filter used, so a typo or a
+     half-remembered team name still finds the game. Built once and reused;
+     the list does not change while the page is open. */
+  let fuse = null;
+  function searchIndex() {
+    if (fuse !== null) return fuse;
+    const rows = G.all().map((g) => {
+      const a = P.team(g.teamA), b = P.team(g.teamB);
+      return { id: g.id, title: g.title, event: g.tournamentName || "",
+        teams: [a && a.name, a && a.code, b && b.name, b && b.code].filter(Boolean).join(" ") };
+    });
+    if (typeof window.Fuse !== "function") { fuse = false; return fuse; }
+    try {
+      fuse = new window.Fuse(rows, {
+        ignoreLocation: true, threshold: 0.36,
+        keys: [{ name: "title", weight: 0.5 }, { name: "teams", weight: 0.3 },
+               { name: "event", weight: 0.2 }],
+      });
+    } catch (err) { fuse = false; }
+    return fuse;
+  }
+
+  function matching() {
+    let rows = G.all();
+    if (state !== "all") rows = rows.filter((g) => g.state === state);
+    if (!query) return rows;
+    const f = searchIndex();
+    if (f) {
+      const hits = new Set(f.search(query).map((r) => r.item.id));
+      return rows.filter((g) => hits.has(g.id));
+    }
     const q = query.toLowerCase();
-    const a = P.team(g.teamA), b = P.team(g.teamB);
-    return [g.title, g.tournamentName, a && a.code, b && b.code, g.id]
-      .filter(Boolean).join(" ").toLowerCase().indexOf(q) >= 0;
+    return rows.filter((g) => {
+      const a = P.team(g.teamA), b = P.team(g.teamB);
+      return [g.title, g.tournamentName, a && a.code, b && b.code, g.id]
+        .filter(Boolean).join(" ").toLowerCase().indexOf(q) >= 0;
+    });
   }
 
   function render() {
-    const rows = G.all().filter(matches);
+    const rows = matching();
     const host = document.getElementById("games");
     if (!rows.length) {
       host.innerHTML = G.all().length
@@ -71,6 +101,41 @@
       "<tbody>" + list.map(G.row).join("") + "</tbody>" +
       "<caption>" + caption + "</caption></table></div>";
 
+    /* Sixty-one rows that differ only in a day number is not a list, it is
+       a wall. They already carry the one thing that separates them — the
+       event they belong to — so the wall becomes a dozen named, collapsed
+       groups, each opening to its own days. The biggest event opens by
+       default so the section is never a row of shut doors. */
+    function grouped(list) {
+      const order = [];
+      const byEvent = new Map();
+      list.forEach((g) => {
+        const key = g.tournamentName || "Event not identified";
+        if (!byEvent.has(key)) { byEvent.set(key, []); order.push(key); }
+        byEvent.get(key).push(g);
+      });
+      if (byEvent.size < 2) {
+        return table(list, list.length + " broadcast" + (list.length === 1 ? "" : "s") +
+          " found automatically and not yet processed.");
+      }
+      const sorted = order.slice().sort((a, b) => byEvent.get(b).length - byEvent.get(a).length);
+      const widest = byEvent.get(sorted[0]).length;
+      return '<div class="stack u-mt-4">' + sorted.map((key) => {
+        const items = byEvent.get(key);
+        const newest = items.map((g) => g.updatedAt).filter(Boolean).sort().pop();
+        return '<details class="evt"' +
+          (items.length === widest || query ? " open" : "") + ">" +
+          '<summary><span class="evt__name">' + esc(key) + "</span>" +
+          '<span class="evt__count">' + items.length + " broadcast" +
+          (items.length === 1 ? "" : "s") + "</span>" +
+          (newest ? '<span class="evt__when dim small">' + esc(P.fmtRel(newest)) + "</span>" : "") +
+          "</summary>" +
+          table(items, items.length + " broadcast" + (items.length === 1 ? "" : "s") +
+            " on this event, not yet processed.") +
+          "</details>";
+      }).join("") + "</div>";
+    }
+
     host.innerHTML =
       (attention.length
         ? '<h2 class="visually-hidden">Games needing a person</h2>' +
@@ -91,8 +156,7 @@
           "found by itself on verified official channels. Nothing has been read from " +
           "them yet — the title is all we know, and the title is all this list claims. " +
           "Opening one shows the evidence and the single step that starts processing.</p>" +
-          table(found, found.length + " broadcast" + (found.length === 1 ? "" : "s") +
-            " found automatically and not yet processed.")
+          grouped(found)
         : "");
     if (P.observeReveals) P.observeReveals(host);
   }
