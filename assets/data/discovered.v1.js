@@ -15,12 +15,16 @@ window.OWCS_DISCOVERED = {
  "broadcasts": [
   {
    "calendar": {
-    "candidates": [],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "no calendar event covers this date"
+    "candidates": [
+     "owwc_2026_group_stage"
+    ],
+    "eventId": "owwc_2026_group_stage",
+    "eventIds": [
+     "owwc_2026_group_stage"
+    ],
+    "eventName": "Overwatch World Cup 2026 — Group Stage",
+    "matchedBy": "date",
+    "why": null
    },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
    "channelTitle": "Overwatch Esports",
@@ -65,12 +69,16 @@ window.OWCS_DISCOVERED = {
   },
   {
    "calendar": {
-    "candidates": [],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "no calendar event covers this date"
+    "candidates": [
+     "owwc_2026_group_stage"
+    ],
+    "eventId": "owwc_2026_group_stage",
+    "eventIds": [
+     "owwc_2026_group_stage"
+    ],
+    "eventName": "Overwatch World Cup 2026 — Group Stage",
+    "matchedBy": "date",
+    "why": null
    },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
    "channelTitle": "Overwatch Esports",
@@ -120,12 +128,16 @@ window.OWCS_DISCOVERED = {
   },
   {
    "calendar": {
-    "candidates": [],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "no calendar event covers this date"
+    "candidates": [
+     "owwc_2026_group_stage"
+    ],
+    "eventId": "owwc_2026_group_stage",
+    "eventIds": [
+     "owwc_2026_group_stage"
+    ],
+    "eventName": "Overwatch World Cup 2026 — Group Stage",
+    "matchedBy": "date",
+    "why": null
    },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
    "channelTitle": "Overwatch Esports",
@@ -171,12 +183,16 @@ window.OWCS_DISCOVERED = {
   },
   {
    "calendar": {
-    "candidates": [],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "no calendar event covers this date"
+    "candidates": [
+     "owwc_2026_group_stage"
+    ],
+    "eventId": "owwc_2026_group_stage",
+    "eventIds": [
+     "owwc_2026_group_stage"
+    ],
+    "eventName": "Overwatch World Cup 2026 — Group Stage",
+    "matchedBy": "date",
+    "why": null
    },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
    "channelTitle": "Overwatch Esports",
@@ -223,12 +239,16 @@ window.OWCS_DISCOVERED = {
   },
   {
    "calendar": {
-    "candidates": [],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "no calendar event covers this date"
+    "candidates": [
+     "owwc_2026_group_stage"
+    ],
+    "eventId": "owwc_2026_group_stage",
+    "eventIds": [
+     "owwc_2026_group_stage"
+    ],
+    "eventName": "Overwatch World Cup 2026 — Group Stage",
+    "matchedBy": "date",
+    "why": null
    },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
    "channelTitle": "Overwatch Esports",
@@ -274,12 +294,16 @@ window.OWCS_DISCOVERED = {
   },
   {
    "calendar": {
-    "candidates": [],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "no calendar event covers this date"
+    "candidates": [
+     "owwc_2026_group_stage"
+    ],
+    "eventId": "owwc_2026_group_stage",
+    "eventIds": [
+     "owwc_2026_group_stage"
+    ],
+    "eventName": "Overwatch World Cup 2026 — Group Stage",
+    "matchedBy": "date",
+    "why": null
    },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
    "channelTitle": "Overwatch Esports",
@@ -324,12 +348,16 @@ window.OWCS_DISCOVERED = {
   },
   {
    "calendar": {
-    "candidates": [],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "no calendar event covers this date"
+    "candidates": [
+     "owwc_2026_group_stage"
+    ],
+    "eventId": "owwc_2026_group_stage",
+    "eventIds": [
+     "owwc_2026_group_stage"
+    ],
+    "eventName": "Overwatch World Cup 2026 — Group Stage",
+    "matchedBy": "date",
+    "why": null
    },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
    "channelTitle": "Overwatch Esports",
@@ -375,12 +403,16 @@ window.OWCS_DISCOVERED = {
   },
   {
    "calendar": {
-    "candidates": [],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "no calendar event covers this date"
+    "candidates": [
+     "owwc_2026_group_stage"
+    ],
+    "eventId": "owwc_2026_group_stage",
+    "eventIds": [
+     "owwc_2026_group_stage"
+    ],
+    "eventName": "Overwatch World Cup 2026 — Group Stage",
+    "matchedBy": "date",
+    "why": null
    },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
    "channelTitle": "Overwatch Esports",
@@ -426,12 +458,16 @@ window.OWCS_DISCOVERED = {
   },
   {
    "calendar": {
-    "candidates": [],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "no calendar event covers this date"
+    "candidates": [
+     "owwc_2026_group_stage"
+    ],
+    "eventId": "owwc_2026_group_stage",
+    "eventIds": [
+     "owwc_2026_group_stage"
+    ],
+    "eventName": "Overwatch World Cup 2026 — Group Stage",
+    "matchedBy": "date",
+    "why": null
    },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
    "channelTitle": "Overwatch Esports",
@@ -481,12 +517,16 @@ window.OWCS_DISCOVERED = {
   },
   {
    "calendar": {
-    "candidates": [],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "no calendar event covers this date"
+    "candidates": [
+     "owwc_2026_group_stage"
+    ],
+    "eventId": "owwc_2026_group_stage",
+    "eventIds": [
+     "owwc_2026_group_stage"
+    ],
+    "eventName": "Overwatch World Cup 2026 — Group Stage",
+    "matchedBy": "date",
+    "why": null
    },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
    "channelTitle": "Overwatch Esports",
@@ -536,12 +576,16 @@ window.OWCS_DISCOVERED = {
   },
   {
    "calendar": {
-    "candidates": [],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "no calendar event covers this date"
+    "candidates": [
+     "owwc_2026_group_stage"
+    ],
+    "eventId": "owwc_2026_group_stage",
+    "eventIds": [
+     "owwc_2026_group_stage"
+    ],
+    "eventName": "Overwatch World Cup 2026 — Group Stage",
+    "matchedBy": "date",
+    "why": null
    },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
    "channelTitle": "Overwatch Esports",
@@ -586,12 +630,16 @@ window.OWCS_DISCOVERED = {
   },
   {
    "calendar": {
-    "candidates": [],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "no calendar event covers this date"
+    "candidates": [
+     "owwc_2026_group_stage"
+    ],
+    "eventId": "owwc_2026_group_stage",
+    "eventIds": [
+     "owwc_2026_group_stage"
+    ],
+    "eventName": "Overwatch World Cup 2026 — Group Stage",
+    "matchedBy": "date",
+    "why": null
    },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
    "channelTitle": "Overwatch Esports",
@@ -641,12 +689,16 @@ window.OWCS_DISCOVERED = {
   },
   {
    "calendar": {
-    "candidates": [],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "no calendar event covers this date"
+    "candidates": [
+     "owwc_2026_group_stage"
+    ],
+    "eventId": "owwc_2026_group_stage",
+    "eventIds": [
+     "owwc_2026_group_stage"
+    ],
+    "eventName": "Overwatch World Cup 2026 — Group Stage",
+    "matchedBy": "date",
+    "why": null
    },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
    "channelTitle": "Overwatch Esports",
@@ -15909,7 +15961,9 @@ window.OWCS_DISCOVERED = {
  "events": [
   {
    "broadcasts": 4,
-   "calendarEventIds": [],
+   "calendarEventIds": [
+    "owwc_2026_group_stage"
+   ],
    "days": [
     1,
     2,
@@ -17692,7 +17746,7 @@ window.OWCS_DISCOVERED = {
  "summary": {
   "awaitingProcessing": 249,
   "broadcastsKnown": 288,
-  "calendarLinked": 0,
+  "calendarLinked": 13,
   "channelsScanned": 1,
   "events": 98,
   "ignored": 38,
