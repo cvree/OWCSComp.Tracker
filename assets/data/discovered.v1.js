@@ -15,6 +15,682 @@ window.OWCS_DISCOVERED = {
  "broadcasts": [
   {
    "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "no calendar event covers this date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "Overwatch Esports",
+   "durationSeconds": null,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "unlikely",
+    "reasons": [
+     "-10 no livestream timing metadata",
+     "-15 no duration and no livestream metadata — nothing says this is long-form",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": -10
+   },
+   "liveStatus": null,
+   "matchId": null,
+   "nextAction": null,
+   "parsed": {
+    "cleanTitle": "A BTS look at the 1v1’s that determined the Finals Bracket!",
+    "companion": false,
+    "confidence": "partial",
+    "day": null,
+    "eventKey": "a-bts-look-at-the-1v1-s-that-determined-the-finals-bracket",
+    "eventName": "A BTS look at the 1v1’s that determined the Finals Bracket!",
+    "fixture": null,
+    "phase": "finals",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": null
+   },
+   "publishedAt": "2026-08-23T22:17:10+00:00",
+   "sources": [
+    "rss"
+   ],
+   "state": "ignored",
+   "title": "A BTS look at the 1v1’s that determined the Finals Bracket! 👏 #overwatch #OWWC2026 #esports",
+   "url": "https://www.youtube.com/watch?v=SOV0KB8EmLs",
+   "videoId": "SOV0KB8EmLs",
+   "why": "Scored as unlikely to be a match broadcast."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "no calendar event covers this date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "Overwatch Esports",
+   "durationSeconds": 31900,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (31900s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=S3jhKosqHGw\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=S3jhKosqHGw",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch World Cup 2026 | Group Stage Day 4",
+    "companion": false,
+    "confidence": "clear",
+    "day": 4,
+    "eventKey": "overwatch-world-cup-2026-group-stage",
+    "eventName": "Overwatch World Cup 2026 — Group Stage",
+    "fixture": null,
+    "phase": "group-stage",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2026
+   },
+   "publishedAt": "2026-08-23T10:40:37+00:00",
+   "sources": [
+    "rss",
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] Overwatch World Cup 2026 | Group Stage Day 4",
+   "url": "https://www.youtube.com/watch?v=S3jhKosqHGw",
+   "videoId": "S3jhKosqHGw",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "no calendar event covers this date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "Overwatch Esports",
+   "durationSeconds": null,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "unlikely",
+    "reasons": [
+     "-10 no livestream timing metadata",
+     "-15 no duration and no livestream metadata — nothing says this is long-form",
+     "-10 no team/competition relationship signal",
+     "-30 instructional/promotional-title signal"
+    ],
+    "score": -65
+   },
+   "liveStatus": null,
+   "matchId": null,
+   "nextAction": null,
+   "parsed": {
+    "cleanTitle": "FDGod thinks Team France is the best in the world right now",
+    "companion": false,
+    "confidence": "title-only",
+    "day": null,
+    "eventKey": "fdgod-thinks-team-france-is-the-best-in-the-world-right-now",
+    "eventName": "FDGod thinks Team France is the best in the world right now",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": null
+   },
+   "publishedAt": "2026-08-23T06:13:05+00:00",
+   "sources": [
+    "rss"
+   ],
+   "state": "ignored",
+   "title": "FDGod thinks Team France is the best in the world right now 😮 #shorts #overwatch #worldcup",
+   "url": "https://www.youtube.com/watch?v=XiuXBon_Ca8",
+   "videoId": "XiuXBon_Ca8",
+   "why": "Scored as unlikely to be a match broadcast."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "no calendar event covers this date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "Overwatch Esports",
+   "durationSeconds": null,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "unlikely",
+    "reasons": [
+     "-10 no livestream timing metadata",
+     "-15 no duration and no livestream metadata — nothing says this is long-form",
+     "-10 no team/competition relationship signal"
+    ],
+    "score": -35
+   },
+   "liveStatus": null,
+   "matchId": null,
+   "nextAction": null,
+   "parsed": {
+    "cleanTitle": "We took Team GBR out for some Korean cold noodles!",
+    "companion": false,
+    "confidence": "partial",
+    "day": null,
+    "eventKey": "we-took-team-gbr-out-for-some-korean-cold-noodles",
+    "eventName": "We took Team GBR out for some Korean cold noodles!",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "korea"
+    ],
+    "stage": null,
+    "week": null,
+    "year": null
+   },
+   "publishedAt": "2026-08-23T05:53:59+00:00",
+   "sources": [
+    "rss"
+   ],
+   "state": "ignored",
+   "title": "We took Team GBR 🇬🇧 out for some Korean cold noodles! 🍜 #OWWC2026 #overwatch #busan #mukbang",
+   "url": "https://www.youtube.com/watch?v=9quZlkl5md0",
+   "videoId": "9quZlkl5md0",
+   "why": "Scored as unlikely to be a match broadcast."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "no calendar event covers this date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "Overwatch Esports",
+   "durationSeconds": null,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "unlikely",
+    "reasons": [
+     "-10 no livestream timing metadata",
+     "-15 no duration and no livestream metadata — nothing says this is long-form",
+     "-10 no team/competition relationship signal",
+     "-30 instructional/promotional-title signal"
+    ],
+    "score": -65
+   },
+   "liveStatus": null,
+   "matchId": null,
+   "nextAction": null,
+   "parsed": {
+    "cleanTitle": "LBBD7 believes they can win it all at BlizzCon",
+    "companion": false,
+    "confidence": "title-only",
+    "day": null,
+    "eventKey": "lbbd7-believes-they-can-win-it-all-at-blizzcon",
+    "eventName": "LBBD7 believes they can win it all at BlizzCon",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": null
+   },
+   "publishedAt": "2026-08-23T03:55:58+00:00",
+   "sources": [
+    "rss"
+   ],
+   "state": "ignored",
+   "title": "LBBD7 believes they can win it all at BlizzCon #shorts #overwatch #worldcup",
+   "url": "https://www.youtube.com/watch?v=SBMLZj76uew",
+   "videoId": "SBMLZj76uew",
+   "why": "Scored as unlikely to be a match broadcast."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "no calendar event covers this date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "Overwatch Esports",
+   "durationSeconds": null,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "unlikely",
+    "reasons": [
+     "-10 no livestream timing metadata",
+     "-15 no duration and no livestream metadata — nothing says this is long-form",
+     "-10 no team/competition relationship signal"
+    ],
+    "score": -35
+   },
+   "liveStatus": null,
+   "matchId": null,
+   "nextAction": null,
+   "parsed": {
+    "cleanTitle": "Newcomers Santy and Akku share what it's like to play in",
+    "companion": false,
+    "confidence": "title-only",
+    "day": null,
+    "eventKey": "newcomers-santy-and-akku-share-what-it-s-like-to-play-in",
+    "eventName": "Newcomers Santy and Akku share what it's like to play in",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": null
+   },
+   "publishedAt": "2026-08-23T02:22:17+00:00",
+   "sources": [
+    "rss"
+   ],
+   "state": "ignored",
+   "title": "Newcomers Santy and Akku share what it's like to play in #OWWC2026 💪 #overwatch #esports",
+   "url": "https://www.youtube.com/watch?v=SOWoPFOGdLg",
+   "videoId": "SOWoPFOGdLg",
+   "why": "Scored as unlikely to be a match broadcast."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "no calendar event covers this date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "Overwatch Esports",
+   "durationSeconds": null,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "unlikely",
+    "reasons": [
+     "-10 no livestream timing metadata",
+     "-15 no duration and no livestream metadata — nothing says this is long-form",
+     "-10 no team/competition relationship signal",
+     "-30 instructional/promotional-title signal"
+    ],
+    "score": -65
+   },
+   "liveStatus": null,
+   "matchId": null,
+   "nextAction": null,
+   "parsed": {
+    "cleanTitle": "Zerruh on how it feels to qualify to BlizzCon",
+    "companion": false,
+    "confidence": "title-only",
+    "day": null,
+    "eventKey": "zerruh-on-how-it-feels-to-qualify-to-blizzcon",
+    "eventName": "Zerruh on how it feels to qualify to BlizzCon",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": null
+   },
+   "publishedAt": "2026-08-23T01:07:14+00:00",
+   "sources": [
+    "rss"
+   ],
+   "state": "ignored",
+   "title": "Zerruh on how it feels to qualify to BlizzCon #shorts #overwatch  #worldcup",
+   "url": "https://www.youtube.com/watch?v=MsOB7ey-QJA",
+   "videoId": "MsOB7ey-QJA",
+   "why": "Scored as unlikely to be a match broadcast."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "no calendar event covers this date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "Overwatch Esports",
+   "durationSeconds": null,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "unlikely",
+    "reasons": [
+     "-10 no livestream timing metadata",
+     "-15 no duration and no livestream metadata — nothing says this is long-form",
+     "-10 no team/competition relationship signal",
+     "-30 instructional/promotional-title signal"
+    ],
+    "score": -65
+   },
+   "liveStatus": null,
+   "matchId": null,
+   "nextAction": null,
+   "parsed": {
+    "cleanTitle": "Admiral talks about the vibes on Team Sweden",
+    "companion": false,
+    "confidence": "title-only",
+    "day": null,
+    "eventKey": "admiral-talks-about-the-vibes-on-team-sweden",
+    "eventName": "Admiral talks about the vibes on Team Sweden",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": null
+   },
+   "publishedAt": "2026-08-22T11:29:40+00:00",
+   "sources": [
+    "rss"
+   ],
+   "state": "ignored",
+   "title": "Admiral talks about the vibes on Team Sweden #shorts #overwatch #worldcup",
+   "url": "https://www.youtube.com/watch?v=PjN8gQbn9Jk",
+   "videoId": "PjN8gQbn9Jk",
+   "why": "Scored as unlikely to be a match broadcast."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "no calendar event covers this date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "Overwatch Esports",
+   "durationSeconds": 34071,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (34071s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=jvWHAbdZ7kU\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=jvWHAbdZ7kU",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch World Cup 2026 | Group Stage Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "overwatch-world-cup-2026-group-stage",
+    "eventName": "Overwatch World Cup 2026 — Group Stage",
+    "fixture": null,
+    "phase": "group-stage",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2026
+   },
+   "publishedAt": "2026-08-22T11:26:25+00:00",
+   "sources": [
+    "rss",
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] Overwatch World Cup 2026 | Group Stage Day 3",
+   "url": "https://www.youtube.com/watch?v=jvWHAbdZ7kU",
+   "videoId": "jvWHAbdZ7kU",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "no calendar event covers this date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "Overwatch Esports",
+   "durationSeconds": 37741,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (37741s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=E-3NDmyUDWw\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=E-3NDmyUDWw",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch World Cup 2026 | Group Stage Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "overwatch-world-cup-2026-group-stage",
+    "eventName": "Overwatch World Cup 2026 — Group Stage",
+    "fixture": null,
+    "phase": "group-stage",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2026
+   },
+   "publishedAt": "2026-08-21T13:08:51+00:00",
+   "sources": [
+    "rss",
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch World Cup 2026 | Group Stage Day 2",
+   "url": "https://www.youtube.com/watch?v=E-3NDmyUDWw",
+   "videoId": "E-3NDmyUDWw",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "no calendar event covers this date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "Overwatch Esports",
+   "durationSeconds": null,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "unlikely",
+    "reasons": [
+     "-10 no livestream timing metadata",
+     "-15 no duration and no livestream metadata — nothing says this is long-form",
+     "-10 no team/competition relationship signal"
+    ],
+    "score": -35
+   },
+   "liveStatus": null,
+   "matchId": null,
+   "nextAction": null,
+   "parsed": {
+    "cleanTitle": "Commemorate the return of at BlizzCon",
+    "companion": false,
+    "confidence": "title-only",
+    "day": null,
+    "eventKey": "commemorate-the-return-of-at-blizzcon",
+    "eventName": "Commemorate the return of at BlizzCon",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": null
+   },
+   "publishedAt": "2026-08-21T01:58:49+00:00",
+   "sources": [
+    "rss"
+   ],
+   "state": "ignored",
+   "title": "Commemorate the return of #OWWC2026 at BlizzCon 🌎 #overwatch",
+   "url": "https://www.youtube.com/watch?v=zBzzG7hSNUc",
+   "videoId": "zBzzG7hSNUc",
+   "why": "Scored as unlikely to be a match broadcast."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "no calendar event covers this date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "Overwatch Esports",
+   "durationSeconds": 42900,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (42900s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=mV3D7vRq9Zo\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=mV3D7vRq9Zo",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch World Cup 2026 | Group Stage Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "overwatch-world-cup-2026-group-stage",
+    "eventName": "Overwatch World Cup 2026 — Group Stage",
+    "fixture": null,
+    "phase": "group-stage",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2026
+   },
+   "publishedAt": "2026-08-20T14:09:39+00:00",
+   "sources": [
+    "rss",
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] Overwatch World Cup 2026 | Group Stage Day 1",
+   "url": "https://www.youtube.com/watch?v=mV3D7vRq9Zo",
+   "videoId": "mV3D7vRq9Zo",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "no calendar event covers this date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "Overwatch Esports",
+   "durationSeconds": null,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "unlikely",
+    "reasons": [
+     "-10 no livestream timing metadata",
+     "-15 no duration and no livestream metadata — nothing says this is long-form",
+     "-10 no team/competition relationship signal"
+    ],
+    "score": -35
+   },
+   "liveStatus": null,
+   "matchId": null,
+   "nextAction": null,
+   "parsed": {
+    "cleanTitle": "Overwatch World Cup Team Jersey Reveal | OWCS MSC 2026",
+    "companion": false,
+    "confidence": "partial",
+    "day": null,
+    "eventKey": "overwatch-world-cup-team-jersey-reveal-owcs-msc-2026",
+    "eventName": "Overwatch World Cup Team Jersey Reveal — OWCS MSC 2026",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2026
+   },
+   "publishedAt": "2026-08-20T06:27:42+00:00",
+   "sources": [
+    "rss"
+   ],
+   "state": "ignored",
+   "title": "Overwatch World Cup Team Jersey Reveal | OWCS MSC 2026",
+   "url": "https://www.youtube.com/watch?v=zy3Lf91phSk",
+   "videoId": "zy3Lf91phSk",
+   "why": "Scored as unlikely to be a match broadcast."
+  },
+  {
+   "calendar": {
     "candidates": [
      "owcs_2026_emea_stage2",
      "owcs_2026_korea_stage2",
@@ -30,7 +706,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-08-14T19:37:26+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -84,7 +760,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-08-13T19:44:34+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -246,65 +922,6 @@ window.OWCS_DISCOVERED = {
    },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
    "channelTitle": "Overwatch Esports",
-   "durationSeconds": 24375,
-   "firstSeenAt": "2026-08-10T08:17:09+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
-   "likeness": {
-    "confidence": "likely",
-    "reasons": [
-     "+25 livestream metadata (completed)",
-     "+20 substantial duration (24375s)",
-     "+15 tournament/broadcast terminology in title/description"
-    ],
-    "score": 60
-   },
-   "liveStatus": "completed",
-   "matchId": null,
-   "nextAction": {
-    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=9LMVyFVrFRE\"",
-    "href": "submit.html?url=https://www.youtube.com/watch?v=9LMVyFVrFRE",
-    "label": "Process this broadcast"
-   },
-   "parsed": {
-    "cleanTitle": "OWCS x FACEIT League | Stage 3 Promotion/Relegation Matches",
-    "companion": false,
-    "confidence": "clear",
-    "day": null,
-    "eventKey": "owcs-x-faceit-league-stage-3-promotion-relegation-matches",
-    "eventName": "OWCS x FACEIT League — Stage 3 Promotion/Relegation Matches",
-    "fixture": null,
-    "phase": "promotion-relegation",
-    "regions": [],
-    "stage": 3,
-    "week": null,
-    "year": null
-   },
-   "publishedAt": "2026-08-10T23:51:05+00:00",
-   "sources": [
-    "rss",
-    "streams"
-   ],
-   "state": "found",
-   "title": "OWCS x FACEIT League | Stage 3 Promotion/Relegation Matches",
-   "url": "https://www.youtube.com/watch?v=9LMVyFVrFRE",
-   "videoId": "9LMVyFVrFRE",
-   "why": "Found automatically. Nobody has processed it yet."
-  },
-  {
-   "calendar": {
-    "candidates": [
-     "owcs_2026_emea_stage2",
-     "owcs_2026_korea_stage2",
-     "owcs_2026_na_stage2"
-    ],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "3 calendar events cover this date — the title does not say which"
-   },
-   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
-   "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-08-10T19:42:43+00:00",
    "lastSeenAt": "2026-08-15T07:16:31+00:00",
@@ -343,124 +960,6 @@ window.OWCS_DISCOVERED = {
    "url": "https://www.youtube.com/watch?v=9ZAiB4vVTfY",
    "videoId": "9ZAiB4vVTfY",
    "why": "Scored as unlikely to be a match broadcast."
-  },
-  {
-   "calendar": {
-    "candidates": [
-     "owcs_2026_emea_stage2",
-     "owcs_2026_korea_stage2",
-     "owcs_2026_na_stage2"
-    ],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "3 calendar events cover this date — the title does not say which"
-   },
-   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
-   "channelTitle": "Overwatch Esports",
-   "durationSeconds": 22789,
-   "firstSeenAt": "2026-08-03T22:34:18+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
-   "likeness": {
-    "confidence": "likely",
-    "reasons": [
-     "+25 livestream metadata (completed)",
-     "+20 substantial duration (22789s)",
-     "+15 tournament/broadcast terminology in title/description"
-    ],
-    "score": 60
-   },
-   "liveStatus": "completed",
-   "matchId": null,
-   "nextAction": {
-    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=1IcfQbcgJ6o\"",
-    "href": "submit.html?url=https://www.youtube.com/watch?v=1IcfQbcgJ6o",
-    "label": "Process this broadcast"
-   },
-   "parsed": {
-    "cleanTitle": "Calling All Heroes 2026:Season Playoffs | Day 2",
-    "companion": false,
-    "confidence": "clear",
-    "day": 2,
-    "eventKey": "calling-all-heroes-2026-season-playoffs",
-    "eventName": "Calling All Heroes 2026:Season Playoffs",
-    "fixture": null,
-    "phase": "playoffs",
-    "regions": [],
-    "stage": null,
-    "week": null,
-    "year": 2026
-   },
-   "publishedAt": "2026-08-10T00:17:54+00:00",
-   "sources": [
-    "rss",
-    "streams"
-   ],
-   "state": "found",
-   "title": "Calling All Heroes 2026:Season Playoffs | Day 2",
-   "url": "https://www.youtube.com/watch?v=1IcfQbcgJ6o",
-   "videoId": "1IcfQbcgJ6o",
-   "why": "Found automatically. Nobody has processed it yet."
-  },
-  {
-   "calendar": {
-    "candidates": [
-     "owcs_2026_emea_stage2",
-     "owcs_2026_korea_stage2",
-     "owcs_2026_na_stage2"
-    ],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "3 calendar events cover this date — the title does not say which"
-   },
-   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
-   "channelTitle": "Overwatch Esports",
-   "durationSeconds": 21185,
-   "firstSeenAt": "2026-08-03T22:34:18+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
-   "likeness": {
-    "confidence": "likely",
-    "reasons": [
-     "+25 livestream metadata (completed)",
-     "+20 substantial duration (21185s)",
-     "+15 tournament/broadcast terminology in title/description"
-    ],
-    "score": 60
-   },
-   "liveStatus": "completed",
-   "matchId": null,
-   "nextAction": {
-    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=zNK1kK7qZps\"",
-    "href": "submit.html?url=https://www.youtube.com/watch?v=zNK1kK7qZps",
-    "label": "Process this broadcast"
-   },
-   "parsed": {
-    "cleanTitle": "Calling All Heroes 2026:Season Playoffs | Day 1",
-    "companion": false,
-    "confidence": "clear",
-    "day": 1,
-    "eventKey": "calling-all-heroes-2026-season-playoffs",
-    "eventName": "Calling All Heroes 2026:Season Playoffs",
-    "fixture": null,
-    "phase": "playoffs",
-    "regions": [],
-    "stage": null,
-    "week": null,
-    "year": 2026
-   },
-   "publishedAt": "2026-08-08T23:51:15+00:00",
-   "sources": [
-    "rss",
-    "streams"
-   ],
-   "state": "found",
-   "title": "Calling All Heroes 2026:Season Playoffs | Day 1",
-   "url": "https://www.youtube.com/watch?v=zNK1kK7qZps",
-   "videoId": "zNK1kK7qZps",
-   "why": "Found automatically. Nobody has processed it yet."
   },
   {
    "calendar": {
@@ -680,65 +1179,6 @@ window.OWCS_DISCOVERED = {
    "url": "https://www.youtube.com/watch?v=EM1SXzVyFic",
    "videoId": "EM1SXzVyFic",
    "why": "Scored as unlikely to be a match broadcast."
-  },
-  {
-   "calendar": {
-    "candidates": [
-     "owcs_2026_emea_stage2",
-     "owcs_2026_korea_stage2",
-     "owcs_2026_na_stage2"
-    ],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "3 calendar events cover this date — the title does not say which"
-   },
-   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
-   "channelTitle": "Overwatch Esports",
-   "durationSeconds": 31849,
-   "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
-   "likeness": {
-    "confidence": "likely",
-    "reasons": [
-     "+25 livestream metadata (completed)",
-     "+20 substantial duration (31849s)",
-     "-10 no team/competition relationship signal"
-    ],
-    "score": 35
-   },
-   "liveStatus": "completed",
-   "matchId": null,
-   "nextAction": {
-    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=3eRcSk9b2L8\"",
-    "href": "submit.html?url=https://www.youtube.com/watch?v=3eRcSk9b2L8",
-    "label": "Process this broadcast"
-   },
-   "parsed": {
-    "cleanTitle": "OWCS 2026 | Midseason Championship Day 5",
-    "companion": false,
-    "confidence": "clear",
-    "day": 5,
-    "eventKey": "owcs-2026-midseason-championship",
-    "eventName": "OWCS 2026 — Midseason Championship",
-    "fixture": null,
-    "phase": "midseason-championship",
-    "regions": [],
-    "stage": null,
-    "week": null,
-    "year": 2026
-   },
-   "publishedAt": "2026-08-02T19:12:39+00:00",
-   "sources": [
-    "rss",
-    "streams"
-   ],
-   "state": "found",
-   "title": "[DROPS] OWCS 2026 | Midseason Championship Day 5",
-   "url": "https://www.youtube.com/watch?v=3eRcSk9b2L8",
-   "videoId": "3eRcSk9b2L8",
-   "why": "Found automatically. Nobody has processed it yet."
   },
   {
    "calendar": {
@@ -1837,13 +2277,286 @@ window.OWCS_DISCOVERED = {
     "eventIds": [],
     "eventName": null,
     "matchedBy": null,
+    "why": "no calendar event covers this date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 20573,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (20573s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=Dmp0TOC1WFU\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=Dmp0TOC1WFU",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 4 Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "overwatch-champions-series-japan-stage2-owcs-japan",
+    "eventName": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN)",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "japan"
+    ],
+    "stage": 2,
+    "week": 4,
+    "year": null
+   },
+   "publishedAt": "2024-09-04T00:00:00+00:00",
+   "sources": [
+    "streams",
+    "video-metadata"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 4 Day 3",
+   "url": "https://www.youtube.com/watch?v=Dmp0TOC1WFU",
+   "videoId": "Dmp0TOC1WFU",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 24375,
+   "firstSeenAt": "2026-08-10T08:17:09+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (24375s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=9LMVyFVrFRE\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=9LMVyFVrFRE",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS x FACEIT League | Stage 3 Promotion/Relegation Matches",
+    "companion": false,
+    "confidence": "clear",
+    "day": null,
+    "eventKey": "owcs-x-faceit-league-stage-3-promotion-relegation-matches",
+    "eventName": "OWCS x FACEIT League — Stage 3 Promotion/Relegation Matches",
+    "fixture": null,
+    "phase": "promotion-relegation",
+    "regions": [],
+    "stage": 3,
+    "week": null,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "OWCS x FACEIT League | Stage 3 Promotion/Relegation Matches",
+   "url": "https://www.youtube.com/watch?v=9LMVyFVrFRE",
+   "videoId": "9LMVyFVrFRE",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 22789,
+   "firstSeenAt": "2026-08-03T22:34:18+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (22789s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=1IcfQbcgJ6o\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=1IcfQbcgJ6o",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Calling All Heroes 2026:Season Playoffs | Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "calling-all-heroes-2026-season-playoffs",
+    "eventName": "Calling All Heroes 2026:Season Playoffs",
+    "fixture": null,
+    "phase": "playoffs",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2026
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Calling All Heroes 2026:Season Playoffs | Day 2",
+   "url": "https://www.youtube.com/watch?v=1IcfQbcgJ6o",
+   "videoId": "1IcfQbcgJ6o",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 21185,
+   "firstSeenAt": "2026-08-03T22:34:18+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (21185s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=zNK1kK7qZps\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=zNK1kK7qZps",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Calling All Heroes 2026:Season Playoffs | Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "calling-all-heroes-2026-season-playoffs",
+    "eventName": "Calling All Heroes 2026:Season Playoffs",
+    "fixture": null,
+    "phase": "playoffs",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2026
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Calling All Heroes 2026:Season Playoffs | Day 1",
+   "url": "https://www.youtube.com/watch?v=zNK1kK7qZps",
+   "videoId": "zNK1kK7qZps",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 31849,
+   "firstSeenAt": "2026-07-29T23:14:15+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (31849s)",
+     "-10 no team/competition relationship signal"
+    ],
+    "score": 35
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=3eRcSk9b2L8\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=3eRcSk9b2L8",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2026 | Midseason Championship Day 5",
+    "companion": false,
+    "confidence": "clear",
+    "day": 5,
+    "eventKey": "owcs-2026-midseason-championship",
+    "eventName": "OWCS 2026 — Midseason Championship",
+    "fixture": null,
+    "phase": "midseason-championship",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2026
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2026 | Midseason Championship Day 5",
+   "url": "https://www.youtube.com/watch?v=3eRcSk9b2L8",
+   "videoId": "3eRcSk9b2L8",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
     "why": "the broadcast has no publish date"
    },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24861,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -1897,7 +2610,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 25656,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -1951,7 +2664,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 25087,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -2005,7 +2718,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 40894,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -2059,7 +2772,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 2502,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -2113,7 +2826,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 34113,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -2170,7 +2883,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24414,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -2223,7 +2936,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 20606,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -2280,7 +2993,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 28383,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -2337,7 +3050,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 25657,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -2394,7 +3107,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 27361,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -2451,7 +3164,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 28697,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -2508,7 +3221,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 28455,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -2565,7 +3278,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 25714,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -2622,7 +3335,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 42373,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -2678,7 +3391,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 42899,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -2734,7 +3447,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 37659,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -2788,7 +3501,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 20974,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -2842,7 +3555,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 42899,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -2896,7 +3609,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 20389,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -2950,7 +3663,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 33100,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -3004,7 +3717,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 35152,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -3058,7 +3771,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 26826,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -3112,7 +3825,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 23139,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -3166,7 +3879,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 35667,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -3220,7 +3933,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24335,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -3277,7 +3990,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 22581,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -3334,7 +4047,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24105,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -3391,7 +4104,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 28484,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -3448,7 +4161,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 29782,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -3505,7 +4218,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 26566,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -3562,7 +4275,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 26418,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -3619,7 +4332,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 26540,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -3676,7 +4389,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 29536,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -3733,7 +4446,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 21470,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -3787,7 +4500,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 21281,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -3841,7 +4554,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 13430,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -3895,7 +4608,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 29771,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -3949,7 +4662,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 32256,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -4003,7 +4716,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 27641,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -4057,7 +4770,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 35937,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -4111,7 +4824,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 20453,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -4165,7 +4878,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 17370,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -4219,7 +4932,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 20197,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -4273,7 +4986,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 5058,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -4327,7 +5040,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 20937,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -4381,7 +5094,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 27485,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -4435,7 +5148,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 27492,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -4489,7 +5202,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 33613,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -4543,7 +5256,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 33495,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -4597,7 +5310,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 29919,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -4651,7 +5364,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 29877,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -4705,7 +5418,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 26562,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -4759,7 +5472,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 26283,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -4813,7 +5526,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 20697,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -4867,7 +5580,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 22819,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-15T07:16:31+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -4921,7 +5634,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 22024,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-10T02:59:50+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -4975,7 +5688,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24828,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-03T12:44:11+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -5029,7 +5742,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 23736,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-03T12:44:11+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -5069,62 +5782,10165 @@ window.OWCS_DISCOVERED = {
    "url": "https://www.youtube.com/watch?v=wRLVFGV5f6s",
    "videoId": "wRLVFGV5f6s",
    "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 15997,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (15997s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=utUNnBbwtFY\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=utUNnBbwtFY",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Calling All Heroes 2025: LCQ Finals",
+    "companion": false,
+    "confidence": "clear",
+    "day": null,
+    "eventKey": "calling-all-heroes-2025-lcq-finals",
+    "eventName": "Calling All Heroes 2025: LCQ Finals",
+    "fixture": null,
+    "phase": "finals",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Calling All Heroes 2025: LCQ Finals",
+   "url": "https://www.youtube.com/watch?v=utUNnBbwtFY",
+   "videoId": "utUNnBbwtFY",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 30773,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (30773s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=OgC6iLkRxqI\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=OgC6iLkRxqI",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | NA & EMEA | Stage 3 Playoffs Day 4",
+    "companion": false,
+    "confidence": "clear",
+    "day": 4,
+    "eventKey": "owcs-2025-na-emea-stage-3-playoffs",
+    "eventName": "OWCS 2025 — NA & EMEA — Stage 3 Playoffs",
+    "fixture": null,
+    "phase": "playoffs",
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 3,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | NA & EMEA | Stage 3 Playoffs Day 4",
+   "url": "https://www.youtube.com/watch?v=OgC6iLkRxqI",
+   "videoId": "OgC6iLkRxqI",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 26531,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (26531s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=fzTZEFtUawc\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=fzTZEFtUawc",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "2025 Overwatch Champions Series ASIA Road to World Finals (OWCS ASIA) Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "2025-overwatch-champions-series-asia-road-to-world-finals-owcs-asia",
+    "eventName": "2025 Overwatch Champions Series ASIA Road to World Finals (OWCS ASIA)",
+    "fixture": null,
+    "phase": "finals",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "2025 Overwatch Champions Series ASIA Road to World Finals (OWCS ASIA) Day 3",
+   "url": "https://www.youtube.com/watch?v=fzTZEFtUawc",
+   "videoId": "fzTZEFtUawc",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 29632,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (29632s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=3i4IV1P7axI\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=3i4IV1P7axI",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | NA & EMEA | Stage 3 Playoffs Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "owcs-2025-na-emea-stage-3-playoffs",
+    "eventName": "OWCS 2025 — NA & EMEA — Stage 3 Playoffs",
+    "fixture": null,
+    "phase": "playoffs",
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 3,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | NA & EMEA | Stage 3 Playoffs Day 3",
+   "url": "https://www.youtube.com/watch?v=3i4IV1P7axI",
+   "videoId": "3i4IV1P7axI",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 35971,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (35971s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=P5xElCPI6nQ\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=P5xElCPI6nQ",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "2025 Overwatch Champions Series ASIA Road to World Finals (OWCS ASIA) Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "2025-overwatch-champions-series-asia-road-to-world-finals-owcs-asia",
+    "eventName": "2025 Overwatch Champions Series ASIA Road to World Finals (OWCS ASIA)",
+    "fixture": null,
+    "phase": "finals",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "2025 Overwatch Champions Series ASIA Road to World Finals (OWCS ASIA) Day 2",
+   "url": "https://www.youtube.com/watch?v=P5xElCPI6nQ",
+   "videoId": "P5xElCPI6nQ",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 14310,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (14310s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=zlJJJpw8UXc\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=zlJJJpw8UXc",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Calling All Heroes 2025: LCQ Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "calling-all-heroes-2025-lcq",
+    "eventName": "Calling All Heroes 2025: LCQ",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Calling All Heroes 2025: LCQ Day 1",
+   "url": "https://www.youtube.com/watch?v=zlJJJpw8UXc",
+   "videoId": "zlJJJpw8UXc",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 29386,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (29386s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=o50ZBAHfFWk\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=o50ZBAHfFWk",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "2025 Overwatch Champions Series ASIA Road to World Finals (OWCS ASIA) Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "2025-overwatch-champions-series-asia-road-to-world-finals-owcs-asia",
+    "eventName": "2025 Overwatch Champions Series ASIA Road to World Finals (OWCS ASIA)",
+    "fixture": null,
+    "phase": "finals",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "2025 Overwatch Champions Series ASIA Road to World Finals (OWCS ASIA) Day 1",
+   "url": "https://www.youtube.com/watch?v=o50ZBAHfFWk",
+   "videoId": "o50ZBAHfFWk",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 23453,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (23453s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=ttiIZD3gYrM\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=ttiIZD3gYrM",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | NA & EMEA | Stage 3 Playoffs Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "owcs-2025-na-emea-stage-3-playoffs",
+    "eventName": "OWCS 2025 — NA & EMEA — Stage 3 Playoffs",
+    "fixture": null,
+    "phase": "playoffs",
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 3,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | NA & EMEA | Stage 3 Playoffs Day 2",
+   "url": "https://www.youtube.com/watch?v=ttiIZD3gYrM",
+   "videoId": "ttiIZD3gYrM",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 24435,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (24435s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=R9lXX2ejLvs\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=R9lXX2ejLvs",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | NA & EMEA | Stage 3 Playoffs Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "owcs-2025-na-emea-stage-3-playoffs",
+    "eventName": "OWCS 2025 — NA & EMEA — Stage 3 Playoffs",
+    "fixture": null,
+    "phase": "playoffs",
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 3,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | NA & EMEA | Stage 3 Playoffs Day 1",
+   "url": "https://www.youtube.com/watch?v=R9lXX2ejLvs",
+   "videoId": "R9lXX2ejLvs",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 24619,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (24619s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=oqqrGSQB5WY\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=oqqrGSQB5WY",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | NA & EMEA | Stage 3 Week 6 Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "owcs-2025-na-emea-stage-3",
+    "eventName": "OWCS 2025 — NA & EMEA — Stage 3",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 3,
+    "week": 6,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | NA & EMEA | Stage 3 Week 6 Day 2",
+   "url": "https://www.youtube.com/watch?v=oqqrGSQB5WY",
+   "videoId": "oqqrGSQB5WY",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 29166,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (29166s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=AeR9I6CmxOc\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=AeR9I6CmxOc",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | NA & EMEA | Stage 3 Week 6 Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "owcs-2025-na-emea-stage-3",
+    "eventName": "OWCS 2025 — NA & EMEA — Stage 3",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 3,
+    "week": 6,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | NA & EMEA | Stage 3 Week 6 Day 1",
+   "url": "https://www.youtube.com/watch?v=AeR9I6CmxOc",
+   "videoId": "AeR9I6CmxOc",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 20705,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (20705s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=_V5sZ1XMZ_c\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=_V5sZ1XMZ_c",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | NA & EMEA | Stage 3 Week 5 Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "owcs-2025-na-emea-stage-3",
+    "eventName": "OWCS 2025 — NA & EMEA — Stage 3",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 3,
+    "week": 5,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | NA & EMEA | Stage 3 Week 5 Day 2",
+   "url": "https://www.youtube.com/watch?v=_V5sZ1XMZ_c",
+   "videoId": "_V5sZ1XMZ_c",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 30702,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (30702s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=1Kt8pqv8eGs\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=1Kt8pqv8eGs",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | NA & EMEA | Stage 3 Week 5 Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "owcs-2025-na-emea-stage-3",
+    "eventName": "OWCS 2025 — NA & EMEA — Stage 3",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 3,
+    "week": 5,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | NA & EMEA | Stage 3 Week 5 Day 1",
+   "url": "https://www.youtube.com/watch?v=1Kt8pqv8eGs",
+   "videoId": "1Kt8pqv8eGs",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 17480,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (17480s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=OTFTBP-NiEU\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=OTFTBP-NiEU",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | NA & EMEA | Stage 3 Week 4 Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "owcs-2025-na-emea-stage-3",
+    "eventName": "OWCS 2025 — NA & EMEA — Stage 3",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 3,
+    "week": 4,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | NA & EMEA | Stage 3 Week 4 Day 2",
+   "url": "https://www.youtube.com/watch?v=OTFTBP-NiEU",
+   "videoId": "OTFTBP-NiEU",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 24406,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (24406s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=f7v_MfMvOws\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=f7v_MfMvOws",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | NA & EMEA | Stage 3 Week 4 Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "owcs-2025-na-emea-stage-3",
+    "eventName": "OWCS 2025 — NA & EMEA — Stage 3",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 3,
+    "week": 4,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | NA & EMEA | Stage 3 Week 4 Day 1",
+   "url": "https://www.youtube.com/watch?v=f7v_MfMvOws",
+   "videoId": "f7v_MfMvOws",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 22181,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (22181s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=1VlxLEzpj2g\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=1VlxLEzpj2g",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | NA & EMEA | Stage 3 Week 3 Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "owcs-2025-na-emea-stage-3",
+    "eventName": "OWCS 2025 — NA & EMEA — Stage 3",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 3,
+    "week": 3,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | NA & EMEA | Stage 3 Week 3 Day 2",
+   "url": "https://www.youtube.com/watch?v=1VlxLEzpj2g",
+   "videoId": "1VlxLEzpj2g",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 30339,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (30339s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=DHAHJ-cr9-4\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=DHAHJ-cr9-4",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | NA & EMEA | Stage 3 Week 3 Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "owcs-2025-na-emea-stage-3",
+    "eventName": "OWCS 2025 — NA & EMEA — Stage 3",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 3,
+    "week": 3,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | NA & EMEA | Stage 3 Week 3 Day 1",
+   "url": "https://www.youtube.com/watch?v=DHAHJ-cr9-4",
+   "videoId": "DHAHJ-cr9-4",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 14434,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (14434s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=lg9jT1V9FGE\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=lg9jT1V9FGE",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Calling All Heroes 2025: Summer Stage Finals",
+    "companion": false,
+    "confidence": "clear",
+    "day": null,
+    "eventKey": "calling-all-heroes-2025-summer-stage-finals",
+    "eventName": "Calling All Heroes 2025: Summer Stage Finals",
+    "fixture": null,
+    "phase": "finals",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Calling All Heroes 2025: Summer Stage Finals",
+   "url": "https://www.youtube.com/watch?v=lg9jT1V9FGE",
+   "videoId": "lg9jT1V9FGE",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 21456,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (21456s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=yrbAirTRWyI\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=yrbAirTRWyI",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | NA & EMEA | Stage 3 Week 2 Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "owcs-2025-na-emea-stage-3",
+    "eventName": "OWCS 2025 — NA & EMEA — Stage 3",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 3,
+    "week": 2,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | NA & EMEA | Stage 3 Week 2 Day 2",
+   "url": "https://www.youtube.com/watch?v=yrbAirTRWyI",
+   "videoId": "yrbAirTRWyI",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 23081,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (23081s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=M5H8zEUHXqU\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=M5H8zEUHXqU",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | NA & EMEA | Stage 3 Week 2 Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "owcs-2025-na-emea-stage-3",
+    "eventName": "OWCS 2025 — NA & EMEA — Stage 3",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 3,
+    "week": 2,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | NA & EMEA | Stage 3 Week 2 Day 1",
+   "url": "https://www.youtube.com/watch?v=M5H8zEUHXqU",
+   "videoId": "M5H8zEUHXqU",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 16636,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (16636s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=YrJ3yjDeDOA\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=YrJ3yjDeDOA",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Calling All Heroes 2025: Summer Stage Playoffs Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "calling-all-heroes-2025-summer-stage-playoffs",
+    "eventName": "Calling All Heroes 2025: Summer Stage Playoffs",
+    "fixture": null,
+    "phase": "playoffs",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Calling All Heroes 2025: Summer Stage Playoffs Day 2",
+   "url": "https://www.youtube.com/watch?v=YrJ3yjDeDOA",
+   "videoId": "YrJ3yjDeDOA",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 25935,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (25935s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=V41Nx0GSGSA\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=V41Nx0GSGSA",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | NA & EMEA | Stage 3 Week 1 Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "owcs-2025-na-emea-stage-3",
+    "eventName": "OWCS 2025 — NA & EMEA — Stage 3",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 3,
+    "week": 1,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | NA & EMEA | Stage 3 Week 1 Day 2",
+   "url": "https://www.youtube.com/watch?v=V41Nx0GSGSA",
+   "videoId": "V41Nx0GSGSA",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 28690,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (28690s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=PAX7-BTPaEQ\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=PAX7-BTPaEQ",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | NA & EMEA | Stage 3 Opening Day",
+    "companion": false,
+    "confidence": "clear",
+    "day": null,
+    "eventKey": "owcs-2025-na-emea-stage-3-opening-day",
+    "eventName": "OWCS 2025 — NA & EMEA — Stage 3 Opening Day",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 3,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | NA & EMEA | Stage 3 Opening Day",
+   "url": "https://www.youtube.com/watch?v=PAX7-BTPaEQ",
+   "videoId": "PAX7-BTPaEQ",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 20189,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (20189s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=OTzxbKloE_Y\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=OTzxbKloE_Y",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Calling All Heroes 2025: Summer Stage Playoffs Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "calling-all-heroes-2025-summer-stage-playoffs",
+    "eventName": "Calling All Heroes 2025: Summer Stage Playoffs",
+    "fixture": null,
+    "phase": "playoffs",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Calling All Heroes 2025: Summer Stage Playoffs Day 1",
+   "url": "https://www.youtube.com/watch?v=OTzxbKloE_Y",
+   "videoId": "OTzxbKloE_Y",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 32945,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (32945s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=ncbbj2CvK0M\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=ncbbj2CvK0M",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | Midseason Championship at EWC | Final Day",
+    "companion": false,
+    "confidence": "clear",
+    "day": null,
+    "eventKey": "owcs-2025-midseason-championship-at-ewc-final-day",
+    "eventName": "OWCS 2025 — Midseason Championship at EWC — Final Day",
+    "fixture": null,
+    "phase": "midseason-championship",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | Midseason Championship at EWC | Final Day",
+   "url": "https://www.youtube.com/watch?v=ncbbj2CvK0M",
+   "videoId": "ncbbj2CvK0M",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 30861,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (30861s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=EJDnqViPgqA\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=EJDnqViPgqA",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | Midseason Championship at EWC | Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "owcs-2025-midseason-championship-at-ewc",
+    "eventName": "OWCS 2025 — Midseason Championship at EWC",
+    "fixture": null,
+    "phase": "midseason-championship",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | Midseason Championship at EWC | Day 3",
+   "url": "https://www.youtube.com/watch?v=EJDnqViPgqA",
+   "videoId": "EJDnqViPgqA",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 36311,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (36311s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=8Pdh-LYuPEI\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=8Pdh-LYuPEI",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | Midseason Championship Day 2 [A Stream]",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "owcs-2025-midseason-championship-a-stream",
+    "eventName": "OWCS 2025 — Midseason Championship [A Stream]",
+    "fixture": null,
+    "phase": "midseason-championship",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | Midseason Championship Day 2 [A Stream]",
+   "url": "https://www.youtube.com/watch?v=8Pdh-LYuPEI",
+   "videoId": "8Pdh-LYuPEI",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 20987,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (20987s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=o-_Lp79YFj8\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=o-_Lp79YFj8",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | Midseason Championship Day 2 [B Stream]",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "owcs-2025-midseason-championship-b-stream",
+    "eventName": "OWCS 2025 — Midseason Championship [B Stream]",
+    "fixture": null,
+    "phase": "midseason-championship",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | Midseason Championship Day 2 [B Stream]",
+   "url": "https://www.youtube.com/watch?v=o-_Lp79YFj8",
+   "videoId": "o-_Lp79YFj8",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 36313,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (36313s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=sluRRwitd4s\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=sluRRwitd4s",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | Midseason Championship Day 1 [B Stream]",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "owcs-2025-midseason-championship-b-stream",
+    "eventName": "OWCS 2025 — Midseason Championship [B Stream]",
+    "fixture": null,
+    "phase": "midseason-championship",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | Midseason Championship Day 1 [B Stream]",
+   "url": "https://www.youtube.com/watch?v=sluRRwitd4s",
+   "videoId": "sluRRwitd4s",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 33945,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (33945s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=2kGe0otzk4w\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=2kGe0otzk4w",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | Midseason Championship Day 1 [A Stream]",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "owcs-2025-midseason-championship-a-stream",
+    "eventName": "OWCS 2025 — Midseason Championship [A Stream]",
+    "fixture": null,
+    "phase": "midseason-championship",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | Midseason Championship Day 1 [A Stream]",
+   "url": "https://www.youtube.com/watch?v=2kGe0otzk4w",
+   "videoId": "2kGe0otzk4w",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 26675,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (26675s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=tt1FEjprjhM\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=tt1FEjprjhM",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | MSC Last Chance Qualifier Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "owcs-2025-msc-last-chance-qualifier",
+    "eventName": "OWCS 2025 — MSC Last Chance Qualifier",
+    "fixture": null,
+    "phase": "qualifier",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "OWCS 2025 | MSC Last Chance Qualifier Day 3",
+   "url": "https://www.youtube.com/watch?v=tt1FEjprjhM",
+   "videoId": "tt1FEjprjhM",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 13310,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (13310s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=wSjpuGNU-iA\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=wSjpuGNU-iA",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | MSC Last Chance Qualifier Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "owcs-2025-msc-last-chance-qualifier",
+    "eventName": "OWCS 2025 — MSC Last Chance Qualifier",
+    "fixture": null,
+    "phase": "qualifier",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "OWCS 2025 | MSC Last Chance Qualifier Day 2",
+   "url": "https://www.youtube.com/watch?v=wSjpuGNU-iA",
+   "videoId": "wSjpuGNU-iA",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 26691,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (26691s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=2RE8U8Copu0\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=2RE8U8Copu0",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | MSC Last Chance Qualifier Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "owcs-2025-msc-last-chance-qualifier",
+    "eventName": "OWCS 2025 — MSC Last Chance Qualifier",
+    "fixture": null,
+    "phase": "qualifier",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "OWCS 2025 | MSC Last Chance Qualifier Day 1",
+   "url": "https://www.youtube.com/watch?v=2RE8U8Copu0",
+   "videoId": "2RE8U8Copu0",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 38371,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (38371s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=rscEE7bNCF0\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=rscEE7bNCF0",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | Stage 2 Promotion/Relegation Tournament",
+    "companion": false,
+    "confidence": "clear",
+    "day": null,
+    "eventKey": "owcs-2025-stage-2-promotion-relegation-tournament",
+    "eventName": "OWCS 2025 — Stage 2 Promotion/Relegation Tournament",
+    "fixture": null,
+    "phase": "promotion-relegation",
+    "regions": [],
+    "stage": 2,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "OWCS 2025 | Stage 2 Promotion/Relegation Tournament",
+   "url": "https://www.youtube.com/watch?v=rscEE7bNCF0",
+   "videoId": "rscEE7bNCF0",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 37137,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (37137s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=3FdzilsfbZY\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=3FdzilsfbZY",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "FACEIT League Season 5 - Master Division Playoffs Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "faceit-league-season-5-master-division-playoffs",
+    "eventName": "FACEIT League Season 5 - Master Division Playoffs",
+    "fixture": null,
+    "phase": "playoffs",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] FACEIT League Season 5 - Master Division Playoffs Day 2",
+   "url": "https://www.youtube.com/watch?v=3FdzilsfbZY",
+   "videoId": "3FdzilsfbZY",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 42877,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (42877s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=pYHTPQd_9Qw\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=pYHTPQd_9Qw",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "FACEIT League Season 5 - Master Division Playoffs Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "faceit-league-season-5-master-division-playoffs",
+    "eventName": "FACEIT League Season 5 - Master Division Playoffs",
+    "fixture": null,
+    "phase": "playoffs",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] FACEIT League Season 5 - Master Division Playoffs Day 1",
+   "url": "https://www.youtube.com/watch?v=pYHTPQd_9Qw",
+   "videoId": "pYHTPQd_9Qw",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 32505,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (32505s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=LRh0S9g_1Vc\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=LRh0S9g_1Vc",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | EMEA & NA | Stage 2 Playoffs Day 4",
+    "companion": false,
+    "confidence": "clear",
+    "day": 4,
+    "eventKey": "owcs-2025-emea-na-stage-2-playoffs",
+    "eventName": "OWCS 2025 — EMEA & NA — Stage 2 Playoffs",
+    "fixture": null,
+    "phase": "playoffs",
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 2,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 2 Playoffs Day 4",
+   "url": "https://www.youtube.com/watch?v=LRh0S9g_1Vc",
+   "videoId": "LRh0S9g_1Vc",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 24366,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (24366s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=zMQ70vf8OEE\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=zMQ70vf8OEE",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | EMEA & NA | Stage 2 Playoffs Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "owcs-2025-emea-na-stage-2-playoffs",
+    "eventName": "OWCS 2025 — EMEA & NA — Stage 2 Playoffs",
+    "fixture": null,
+    "phase": "playoffs",
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 2,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 2 Playoffs Day 3",
+   "url": "https://www.youtube.com/watch?v=zMQ70vf8OEE",
+   "videoId": "zMQ70vf8OEE",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 15766,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (15766s)",
+     "-10 no team/competition relationship signal"
+    ],
+    "score": 35
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=Sh2mgXorFMk\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=Sh2mgXorFMk",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch 2 Stadium Asia Streamer Showdown",
+    "companion": false,
+    "confidence": "title-only",
+    "day": null,
+    "eventKey": "overwatch-2-stadium-asia-streamer-showdown",
+    "eventName": "Overwatch 2 Stadium Asia Streamer Showdown",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[Rerun] Overwatch 2 Stadium Asia Streamer Showdown",
+   "url": "https://www.youtube.com/watch?v=Sh2mgXorFMk",
+   "videoId": "Sh2mgXorFMk",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 16461,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (16461s)",
+     "-10 no team/competition relationship signal"
+    ],
+    "score": 35
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=SzQEoQgNjRo\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=SzQEoQgNjRo",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch 2 Stadium Asia Streamer Showdown",
+    "companion": false,
+    "confidence": "title-only",
+    "day": null,
+    "eventKey": "overwatch-2-stadium-asia-streamer-showdown",
+    "eventName": "Overwatch 2 Stadium Asia Streamer Showdown",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch 2 Stadium Asia Streamer Showdown",
+   "url": "https://www.youtube.com/watch?v=SzQEoQgNjRo",
+   "videoId": "SzQEoQgNjRo",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 22095,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (22095s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=4p9WsqAVkl8\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=4p9WsqAVkl8",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | EMEA & NA | Playoffs Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "owcs-2025-emea-na-playoffs",
+    "eventName": "OWCS 2025 — EMEA & NA — Playoffs",
+    "fixture": null,
+    "phase": "playoffs",
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": null,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | EMEA & NA | Playoffs Day 2",
+   "url": "https://www.youtube.com/watch?v=4p9WsqAVkl8",
+   "videoId": "4p9WsqAVkl8",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 19811,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (19811s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=91Z5vrPZfm0\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=91Z5vrPZfm0",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "2025 Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs Day 3 [Grand Finals]",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "2025-overwatch-champions-series-korea-stage2-owcs-korea-playoffs-grand-finals",
+    "eventName": "2025 Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs [Grand Finals]",
+    "fixture": null,
+    "phase": "grand-finals",
+    "regions": [
+     "korea"
+    ],
+    "stage": 2,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "2025 Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs Day 3 [Grand Finals]",
+   "url": "https://www.youtube.com/watch?v=91Z5vrPZfm0",
+   "videoId": "91Z5vrPZfm0",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 21176,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (21176s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=RXNXeT1Shos\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=RXNXeT1Shos",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | EMEA & NA | Stage 2 Playoffs Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "owcs-2025-emea-na-stage-2-playoffs",
+    "eventName": "OWCS 2025 — EMEA & NA — Stage 2 Playoffs",
+    "fixture": null,
+    "phase": "playoffs",
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 2,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 2 Playoffs Day 1",
+   "url": "https://www.youtube.com/watch?v=RXNXeT1Shos",
+   "videoId": "RXNXeT1Shos",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 15481,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (15481s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=6STpOXLwZf8\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=6STpOXLwZf8",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "2025 Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs Day 2 [Semi Finals]",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "2025-overwatch-champions-series-korea-stage2-owcs-korea-playoffs-semi-finals",
+    "eventName": "2025 Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs [Semi Finals]",
+    "fixture": null,
+    "phase": "playoffs",
+    "regions": [
+     "korea"
+    ],
+    "stage": 2,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "2025 Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs Day 2 [Semi Finals]",
+   "url": "https://www.youtube.com/watch?v=6STpOXLwZf8",
+   "videoId": "6STpOXLwZf8",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 17490,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (17490s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=fJrJU4ETxGs\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=fJrJU4ETxGs",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "2025 Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs Day 1 [Round of 6]",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "2025-overwatch-champions-series-korea-stage2-owcs-korea-playoffs-round-of-6",
+    "eventName": "2025 Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs [Round of 6]",
+    "fixture": null,
+    "phase": "playoffs",
+    "regions": [
+     "korea"
+    ],
+    "stage": 2,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "2025 Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs Day 1 [Round of 6]",
+   "url": "https://www.youtube.com/watch?v=fJrJU4ETxGs",
+   "videoId": "fJrJU4ETxGs",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 26728,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (26728s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=2nHcIUad-5A\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=2nHcIUad-5A",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | EMEA & NA | Stage 2 Week 6 Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "owcs-2025-emea-na-stage-2",
+    "eventName": "OWCS 2025 — EMEA & NA — Stage 2",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 2,
+    "week": 6,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 2 Week 6 Day 2",
+   "url": "https://www.youtube.com/watch?v=2nHcIUad-5A",
+   "videoId": "2nHcIUad-5A",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 25745,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (25745s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=7JKZXjz5aQc\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=7JKZXjz5aQc",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | EMEA & NA | Stage 2 Week 6 Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "owcs-2025-emea-na-stage-2",
+    "eventName": "OWCS 2025 — EMEA & NA — Stage 2",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 2,
+    "week": 6,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 2 Week 6 Day 1",
+   "url": "https://www.youtube.com/watch?v=7JKZXjz5aQc",
+   "videoId": "7JKZXjz5aQc",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 19427,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (19427s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=YB0gK0OntuU\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=YB0gK0OntuU",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Calling All Heroes 2025: Spring Stage Finals",
+    "companion": false,
+    "confidence": "clear",
+    "day": null,
+    "eventKey": "calling-all-heroes-2025-spring-stage-finals",
+    "eventName": "Calling All Heroes 2025: Spring Stage Finals",
+    "fixture": null,
+    "phase": "finals",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Calling All Heroes 2025: Spring Stage Finals",
+   "url": "https://www.youtube.com/watch?v=YB0gK0OntuU",
+   "videoId": "YB0gK0OntuU",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 19380,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (19380s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=ozAZH-PvFlc\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=ozAZH-PvFlc",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | EMEA & NA | Stage 2 Week 5 Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "owcs-2025-emea-na-stage-2",
+    "eventName": "OWCS 2025 — EMEA & NA — Stage 2",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 2,
+    "week": 5,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 2 Week 5 Day 2",
+   "url": "https://www.youtube.com/watch?v=ozAZH-PvFlc",
+   "videoId": "ozAZH-PvFlc",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 27250,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (27250s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=hGiQcAnmzXg\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=hGiQcAnmzXg",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | EMEA & NA | Stage 2 Week 5 Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "owcs-2025-emea-na-stage-2",
+    "eventName": "OWCS 2025 — EMEA & NA — Stage 2",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 2,
+    "week": 5,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 2 Week 5 Day 1",
+   "url": "https://www.youtube.com/watch?v=hGiQcAnmzXg",
+   "videoId": "hGiQcAnmzXg",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 18871,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (18871s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=bwpX0zsf95g\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=bwpX0zsf95g",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Calling All Heroes 2025: Spring Stage Playoffs Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "calling-all-heroes-2025-spring-stage-playoffs",
+    "eventName": "Calling All Heroes 2025: Spring Stage Playoffs",
+    "fixture": null,
+    "phase": "playoffs",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Calling All Heroes 2025: Spring Stage Playoffs Day 2",
+   "url": "https://www.youtube.com/watch?v=bwpX0zsf95g",
+   "videoId": "bwpX0zsf95g",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 16725,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (16725s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=XM_ZhJAJnII\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=XM_ZhJAJnII",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | EMEA & NA | Stage 2 Week 4 Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "owcs-2025-emea-na-stage-2",
+    "eventName": "OWCS 2025 — EMEA & NA — Stage 2",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 2,
+    "week": 4,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 2 Week 4 Day 2",
+   "url": "https://www.youtube.com/watch?v=XM_ZhJAJnII",
+   "videoId": "XM_ZhJAJnII",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 28894,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (28894s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=tb8lYU47X7A\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=tb8lYU47X7A",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | EMEA & NA | Stage 2 Week 4 Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "owcs-2025-emea-na-stage-2",
+    "eventName": "OWCS 2025 — EMEA & NA — Stage 2",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 2,
+    "week": 4,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 2 Week 4 Day 1",
+   "url": "https://www.youtube.com/watch?v=tb8lYU47X7A",
+   "videoId": "tb8lYU47X7A",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 18467,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (18467s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=651q5ysZV28\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=651q5ysZV28",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Calling All Heroes 2025: Spring Stage Playoffs Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "calling-all-heroes-2025-spring-stage-playoffs",
+    "eventName": "Calling All Heroes 2025: Spring Stage Playoffs",
+    "fixture": null,
+    "phase": "playoffs",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Calling All Heroes 2025: Spring Stage Playoffs Day 1",
+   "url": "https://www.youtube.com/watch?v=651q5ysZV28",
+   "videoId": "651q5ysZV28",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 22439,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (22439s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=NPzF0Enbmf0\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=NPzF0Enbmf0",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | EMEA & NA | Stage 2 Week 3 Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "owcs-2025-emea-na-stage-2",
+    "eventName": "OWCS 2025 — EMEA & NA — Stage 2",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 2,
+    "week": 3,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 2 Week 3 Day 2",
+   "url": "https://www.youtube.com/watch?v=NPzF0Enbmf0",
+   "videoId": "NPzF0Enbmf0",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 24905,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (24905s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=J2m3kJCoNzM\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=J2m3kJCoNzM",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | EMEA & NA | Stage 2 Week 3 Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "owcs-2025-emea-na-stage-2",
+    "eventName": "OWCS 2025 — EMEA & NA — Stage 2",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 2,
+    "week": 3,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 2 Week 3 Day 1",
+   "url": "https://www.youtube.com/watch?v=J2m3kJCoNzM",
+   "videoId": "J2m3kJCoNzM",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 24785,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (24785s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=aSAnxFJiU-M\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=aSAnxFJiU-M",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | EMEA & NA | Stage 2 Week 2 Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "owcs-2025-emea-na-stage-2",
+    "eventName": "OWCS 2025 — EMEA & NA — Stage 2",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 2,
+    "week": 2,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 2 Week 2 Day 2",
+   "url": "https://www.youtube.com/watch?v=aSAnxFJiU-M",
+   "videoId": "aSAnxFJiU-M",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 21035,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (21035s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=MlK6aXSZCYQ\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=MlK6aXSZCYQ",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | EMEA & NA | Stage 2 Week 2 Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "owcs-2025-emea-na-stage-2",
+    "eventName": "OWCS 2025 — EMEA & NA — Stage 2",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 2,
+    "week": 2,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 2 Week 2 Day 1",
+   "url": "https://www.youtube.com/watch?v=MlK6aXSZCYQ",
+   "videoId": "MlK6aXSZCYQ",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 28941,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (28941s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=HN7N52JYOBA\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=HN7N52JYOBA",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | EMEA & NA | Stage 2 Week 1 Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "owcs-2025-emea-na-stage-2",
+    "eventName": "OWCS 2025 — EMEA & NA — Stage 2",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 2,
+    "week": 1,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 2 Week 1 Day 2",
+   "url": "https://www.youtube.com/watch?v=HN7N52JYOBA",
+   "videoId": "HN7N52JYOBA",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 30816,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (30816s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=2cQVf-tNHfQ\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=2cQVf-tNHfQ",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | EMEA & NA | Stage 2 Week 1 Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "owcs-2025-emea-na-stage-2",
+    "eventName": "OWCS 2025 — EMEA & NA — Stage 2",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 2,
+    "week": 1,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 2 Week 1 Day 1",
+   "url": "https://www.youtube.com/watch?v=2cQVf-tNHfQ",
+   "videoId": "2cQVf-tNHfQ",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 5325,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (5325s)",
+     "+15 tournament/broadcast terminology in title/description",
+     "+15 match/series formatting signal (vs / best-of / game-map / score pattern)"
+    ],
+    "score": 75
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=00mQP9D3DXk\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=00mQP9D3DXk",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "100 Soldiers vs. 1 Gorilla | Overwatch 2 Showmatch",
+    "companion": false,
+    "confidence": "partial",
+    "day": null,
+    "eventKey": "100-soldiers-vs-1-gorilla-overwatch-2-showmatch",
+    "eventName": "100 Soldiers vs. 1 Gorilla — Overwatch 2 Showmatch",
+    "fixture": [
+     "100 Soldiers",
+     "1 Gorilla"
+    ],
+    "phase": "showmatch",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "100 Soldiers vs. 1 Gorilla | Overwatch 2 Showmatch",
+   "url": "https://www.youtube.com/watch?v=00mQP9D3DXk",
+   "videoId": "00mQP9D3DXk",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 29866,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (29866s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=WzqiOFig1DA\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=WzqiOFig1DA",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | Champions Clash Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "owcs-2025-champions-clash",
+    "eventName": "OWCS 2025 — Champions Clash",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | Champions Clash Day 3",
+   "url": "https://www.youtube.com/watch?v=WzqiOFig1DA",
+   "videoId": "WzqiOFig1DA",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 30891,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (30891s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=8wbAE3pIj2o\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=8wbAE3pIj2o",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | Champions Clash Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "owcs-2025-champions-clash",
+    "eventName": "OWCS 2025 — Champions Clash",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | Champions Clash Day 2",
+   "url": "https://www.youtube.com/watch?v=8wbAE3pIj2o",
+   "videoId": "8wbAE3pIj2o",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 30101,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (30101s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=z6zeAoVkOjM\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=z6zeAoVkOjM",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | Champions Clash Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "owcs-2025-champions-clash",
+    "eventName": "OWCS 2025 — Champions Clash",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | Champions Clash Day 1",
+   "url": "https://www.youtube.com/watch?v=z6zeAoVkOjM",
+   "videoId": "z6zeAoVkOjM",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 30109,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (30109s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=cTkI9hAwNDc\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=cTkI9hAwNDc",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 Stage 1 Promotion/Relegation",
+    "companion": false,
+    "confidence": "clear",
+    "day": null,
+    "eventKey": "owcs-2025-stage-1-promotion-relegation",
+    "eventName": "OWCS 2025 Stage 1 Promotion/Relegation",
+    "fixture": null,
+    "phase": "promotion-relegation",
+    "regions": [],
+    "stage": 1,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "OWCS 2025 Stage 1 Promotion/Relegation",
+   "url": "https://www.youtube.com/watch?v=cTkI9hAwNDc",
+   "videoId": "cTkI9hAwNDc",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 26587,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (26587s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=9qtbteXyX4c\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=9qtbteXyX4c",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "FACEIT League Season 4 Master Division Finals | OWCS Relegation Qualifier",
+    "companion": false,
+    "confidence": "partial",
+    "day": null,
+    "eventKey": "faceit-league-season-4-master-division-finals-owcs-relegation-qualifier",
+    "eventName": "FACEIT League Season 4 Master Division Finals — OWCS Relegation Qualifier",
+    "fixture": null,
+    "phase": "qualifier",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "FACEIT League Season 4 Master Division Finals | OWCS Relegation Qualifier",
+   "url": "https://www.youtube.com/watch?v=9qtbteXyX4c",
+   "videoId": "9qtbteXyX4c",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 21771,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (21771s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=MRD6Dk9A6-c\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=MRD6Dk9A6-c",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "2025 Overwatch Champions Series ASIA Stage1 (OWCS ASIA) Playoffs Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "2025-overwatch-champions-series-asia-stage1-owcs-asia-playoffs",
+    "eventName": "2025 Overwatch Champions Series ASIA Stage1 (OWCS ASIA) Playoffs",
+    "fixture": null,
+    "phase": "playoffs",
+    "regions": [],
+    "stage": 1,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "2025 Overwatch Champions Series ASIA Stage1 (OWCS ASIA) Playoffs Day 3",
+   "url": "https://www.youtube.com/watch?v=MRD6Dk9A6-c",
+   "videoId": "MRD6Dk9A6-c",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 16326,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (16326s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=aEPeG5DwGwk\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=aEPeG5DwGwk",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "2025 Overwatch Champions Series ASIA Stage1 (OWCS ASIA) Playoffs Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "2025-overwatch-champions-series-asia-stage1-owcs-asia-playoffs",
+    "eventName": "2025 Overwatch Champions Series ASIA Stage1 (OWCS ASIA) Playoffs",
+    "fixture": null,
+    "phase": "playoffs",
+    "regions": [],
+    "stage": 1,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "2025 Overwatch Champions Series ASIA Stage1 (OWCS ASIA) Playoffs Day 2",
+   "url": "https://www.youtube.com/watch?v=aEPeG5DwGwk",
+   "videoId": "aEPeG5DwGwk",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 18316,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (18316s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=rd12-oRNsPo\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=rd12-oRNsPo",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "2025 Overwatch Champions Series ASIA Stage1 (OWCS ASIA) Playoffs Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "2025-overwatch-champions-series-asia-stage1-owcs-asia-playoffs",
+    "eventName": "2025 Overwatch Champions Series ASIA Stage1 (OWCS ASIA) Playoffs",
+    "fixture": null,
+    "phase": "playoffs",
+    "regions": [],
+    "stage": 1,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "2025 Overwatch Champions Series ASIA Stage1 (OWCS ASIA) Playoffs Day 1",
+   "url": "https://www.youtube.com/watch?v=rd12-oRNsPo",
+   "videoId": "rd12-oRNsPo",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 35646,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (35646s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=K2wLJbpK_GY\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=K2wLJbpK_GY",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | EMEA & NA | Stage 1 Playoffs Day 4",
+    "companion": false,
+    "confidence": "clear",
+    "day": 4,
+    "eventKey": "owcs-2025-emea-na-stage-1-playoffs",
+    "eventName": "OWCS 2025 — EMEA & NA — Stage 1 Playoffs",
+    "fixture": null,
+    "phase": "playoffs",
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 1,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 1 Playoffs Day 4",
+   "url": "https://www.youtube.com/watch?v=K2wLJbpK_GY",
+   "videoId": "K2wLJbpK_GY",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 24475,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (24475s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=AEFrmDOC6hg\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=AEFrmDOC6hg",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | EMEA & NA | Stage 1 Playoffs Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "owcs-2025-emea-na-stage-1-playoffs",
+    "eventName": "OWCS 2025 — EMEA & NA — Stage 1 Playoffs",
+    "fixture": null,
+    "phase": "playoffs",
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 1,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 1 Playoffs Day 3",
+   "url": "https://www.youtube.com/watch?v=AEFrmDOC6hg",
+   "videoId": "AEFrmDOC6hg",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 19800,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (19800s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=G6pRLS5RkHY\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=G6pRLS5RkHY",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | EMEA & NA | Stage 1 Playoffs Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "owcs-2025-emea-na-stage-1-playoffs",
+    "eventName": "OWCS 2025 — EMEA & NA — Stage 1 Playoffs",
+    "fixture": null,
+    "phase": "playoffs",
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 1,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 1 Playoffs Day 2",
+   "url": "https://www.youtube.com/watch?v=G6pRLS5RkHY",
+   "videoId": "G6pRLS5RkHY",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 21216,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (21216s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=V42xhZK4GNQ\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=V42xhZK4GNQ",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "2025 Overwatch Champions Series KOREA Stage1 (OWCS KOREA) Playoffs Day 3 [Grand Finals]",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "2025-overwatch-champions-series-korea-stage1-owcs-korea-playoffs-grand-finals",
+    "eventName": "2025 Overwatch Champions Series KOREA Stage1 (OWCS KOREA) Playoffs [Grand Finals]",
+    "fixture": null,
+    "phase": "grand-finals",
+    "regions": [
+     "korea"
+    ],
+    "stage": 1,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "2025 Overwatch Champions Series KOREA Stage1 (OWCS KOREA) Playoffs Day 3 [Grand Finals]",
+   "url": "https://www.youtube.com/watch?v=V42xhZK4GNQ",
+   "videoId": "V42xhZK4GNQ",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 19859,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (19859s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=rncfvRkkWRo\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=rncfvRkkWRo",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | EMEA & NA | Stage 1 Playoffs Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "owcs-2025-emea-na-stage-1-playoffs",
+    "eventName": "OWCS 2025 — EMEA & NA — Stage 1 Playoffs",
+    "fixture": null,
+    "phase": "playoffs",
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 1,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 1 Playoffs Day 1",
+   "url": "https://www.youtube.com/watch?v=rncfvRkkWRo",
+   "videoId": "rncfvRkkWRo",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 19456,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (19456s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=usRILx8AEBk\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=usRILx8AEBk",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "2025 Overwatch Champions Series KOREA Stage1 (OWCS KOREA) Playoffs Day 2 [Semi Finals]",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "2025-overwatch-champions-series-korea-stage1-owcs-korea-playoffs-semi-finals",
+    "eventName": "2025 Overwatch Champions Series KOREA Stage1 (OWCS KOREA) Playoffs [Semi Finals]",
+    "fixture": null,
+    "phase": "playoffs",
+    "regions": [
+     "korea"
+    ],
+    "stage": 1,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "2025 Overwatch Champions Series KOREA Stage1 (OWCS KOREA) Playoffs Day 2 [Semi Finals]",
+   "url": "https://www.youtube.com/watch?v=usRILx8AEBk",
+   "videoId": "usRILx8AEBk",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 18875,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (18875s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=AY3qgCKyE8w\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=AY3qgCKyE8w",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "2025 Overwatch Champions Series KOREA Stage1 (OWCS KOREA) Playoffs Day 1 [Round of 6]",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "2025-overwatch-champions-series-korea-stage1-owcs-korea-playoffs-round-of-6",
+    "eventName": "2025 Overwatch Champions Series KOREA Stage1 (OWCS KOREA) Playoffs [Round of 6]",
+    "fixture": null,
+    "phase": "playoffs",
+    "regions": [
+     "korea"
+    ],
+    "stage": 1,
+    "week": null,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "2025 Overwatch Champions Series KOREA Stage1 (OWCS KOREA) Playoffs Day 1 [Round of 6]",
+   "url": "https://www.youtube.com/watch?v=AY3qgCKyE8w",
+   "videoId": "AY3qgCKyE8w",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 19421,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (19421s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=xsJAYYKqtEo\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=xsJAYYKqtEo",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | EMEA & NA | Stage 1 Week 4 Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "owcs-2025-emea-na-stage-1",
+    "eventName": "OWCS 2025 — EMEA & NA — Stage 1",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 1,
+    "week": 4,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 1 Week 4 Day 3",
+   "url": "https://www.youtube.com/watch?v=xsJAYYKqtEo",
+   "videoId": "xsJAYYKqtEo",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 26581,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (26581s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=EiZ3YjBtwzE\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=EiZ3YjBtwzE",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | EMEA & NA | Stage 1 Week 4 Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "owcs-2025-emea-na-stage-1",
+    "eventName": "OWCS 2025 — EMEA & NA — Stage 1",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 1,
+    "week": 4,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 1 Week 4 Day 2",
+   "url": "https://www.youtube.com/watch?v=EiZ3YjBtwzE",
+   "videoId": "EiZ3YjBtwzE",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 27330,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (27330s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=w-KjMkod1sw\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=w-KjMkod1sw",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | EMEA & NA | Stage 1 Week 4 Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "owcs-2025-emea-na-stage-1",
+    "eventName": "OWCS 2025 — EMEA & NA — Stage 1",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 1,
+    "week": 4,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 1 Week 4 Day 1",
+   "url": "https://www.youtube.com/watch?v=w-KjMkod1sw",
+   "videoId": "w-KjMkod1sw",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 22216,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (22216s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=2Ah2PG8UsEg\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=2Ah2PG8UsEg",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | EMEA & NA | Stage 1 Week 3 Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "owcs-2025-emea-na-stage-1",
+    "eventName": "OWCS 2025 — EMEA & NA — Stage 1",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 1,
+    "week": 3,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 1 Week 3 Day 3",
+   "url": "https://www.youtube.com/watch?v=2Ah2PG8UsEg",
+   "videoId": "2Ah2PG8UsEg",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 19255,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (19255s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=yHaF0eLkLhU\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=yHaF0eLkLhU",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | EMEA & NA | Stage 1 Week 3 Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "owcs-2025-emea-na-stage-1",
+    "eventName": "OWCS 2025 — EMEA & NA — Stage 1",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 1,
+    "week": 3,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 1 Week 3 Day 2",
+   "url": "https://www.youtube.com/watch?v=yHaF0eLkLhU",
+   "videoId": "yHaF0eLkLhU",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 27616,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (27616s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=guRQNjwYVcE\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=guRQNjwYVcE",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | EMEA & NA | Stage 1 Week 3 Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "owcs-2025-emea-na-stage-1",
+    "eventName": "OWCS 2025 — EMEA & NA — Stage 1",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 1,
+    "week": 3,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 1 Week 3 Day 1",
+   "url": "https://www.youtube.com/watch?v=guRQNjwYVcE",
+   "videoId": "guRQNjwYVcE",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 18910,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (18910s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=iEDUQ7AECbA\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=iEDUQ7AECbA",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | EMEA & NA | Stage 1 Week 2 Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "owcs-2025-emea-na-stage-1",
+    "eventName": "OWCS 2025 — EMEA & NA — Stage 1",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 1,
+    "week": 2,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 1 Week 2 Day 3",
+   "url": "https://www.youtube.com/watch?v=iEDUQ7AECbA",
+   "videoId": "iEDUQ7AECbA",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 23480,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (23480s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=6YwiiOP_TvI\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=6YwiiOP_TvI",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | EMEA & NA | Stage 1 Week 2 Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "owcs-2025-emea-na-stage-1",
+    "eventName": "OWCS 2025 — EMEA & NA — Stage 1",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 1,
+    "week": 2,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 1 Week 2 Day 2",
+   "url": "https://www.youtube.com/watch?v=6YwiiOP_TvI",
+   "videoId": "6YwiiOP_TvI",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 24111,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (24111s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=S9szrVmVlFU\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=S9szrVmVlFU",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | EMEA & NA | Stage 1 Week 2 Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "owcs-2025-emea-na-stage-1",
+    "eventName": "OWCS 2025 — EMEA & NA — Stage 1",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 1,
+    "week": 2,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 1 Week 2 Day 1",
+   "url": "https://www.youtube.com/watch?v=S9szrVmVlFU",
+   "videoId": "S9szrVmVlFU",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 24912,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (24912s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=NugogHdAL74\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=NugogHdAL74",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | EMEA & NA | Stage 1 Week 1 Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "owcs-2025-emea-na-stage-1",
+    "eventName": "OWCS 2025 — EMEA & NA — Stage 1",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 1,
+    "week": 1,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 1 Week 1 Day 3",
+   "url": "https://www.youtube.com/watch?v=NugogHdAL74",
+   "videoId": "NugogHdAL74",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 30903,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (30903s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=4pS2ysxFCTU\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=4pS2ysxFCTU",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | EMEA & NA | Stage 1 Week 1 Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "owcs-2025-emea-na-stage-1",
+    "eventName": "OWCS 2025 — EMEA & NA — Stage 1",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 1,
+    "week": 1,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 1 Week 1 Day 2",
+   "url": "https://www.youtube.com/watch?v=4pS2ysxFCTU",
+   "videoId": "4pS2ysxFCTU",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 28169,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (28169s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=rdvjIDUCwWw\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=rdvjIDUCwWw",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2025 | EMEA & NA | Stage 1 Week 1 Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "owcs-2025-emea-na-stage-1",
+    "eventName": "OWCS 2025 — EMEA & NA — Stage 1",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 1,
+    "week": 1,
+    "year": 2025
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 1 Week 1 Day 1",
+   "url": "https://www.youtube.com/watch?v=rdvjIDUCwWw",
+   "videoId": "rdvjIDUCwWw",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 20195,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (20195s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=2HPieCMDwtk\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=2HPieCMDwtk",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Calling All Heroes: Championship Finals 2024-25 Day 4",
+    "companion": false,
+    "confidence": "clear",
+    "day": 4,
+    "eventKey": "calling-all-heroes-championship-finals-2024-25",
+    "eventName": "Calling All Heroes: Championship Finals 2024-25",
+    "fixture": null,
+    "phase": "championship",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Calling All Heroes: Championship Finals 2024-25 Day 4",
+   "url": "https://www.youtube.com/watch?v=2HPieCMDwtk",
+   "videoId": "2HPieCMDwtk",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 22803,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (22803s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=3578U0oAhaY\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=3578U0oAhaY",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Calling All Heroes: Championship 2024-25 Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "calling-all-heroes-championship-2024-25",
+    "eventName": "Calling All Heroes: Championship 2024-25",
+    "fixture": null,
+    "phase": "championship",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Calling All Heroes: Championship 2024-25 Day 3",
+   "url": "https://www.youtube.com/watch?v=3578U0oAhaY",
+   "videoId": "3578U0oAhaY",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 13962,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (13962s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=W6TUVdWsZvU\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=W6TUVdWsZvU",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Calling All Heroes: Championship 2024-25 Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "calling-all-heroes-championship-2024-25",
+    "eventName": "Calling All Heroes: Championship 2024-25",
+    "fixture": null,
+    "phase": "championship",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Calling All Heroes: Championship 2024-25 Day 2",
+   "url": "https://www.youtube.com/watch?v=W6TUVdWsZvU",
+   "videoId": "W6TUVdWsZvU",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 13824,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (13824s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=l2ExFIDS_rA\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=l2ExFIDS_rA",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Calling All Heroes: Championship 2024-25 Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "calling-all-heroes-championship-2024-25",
+    "eventName": "Calling All Heroes: Championship 2024-25",
+    "fixture": null,
+    "phase": "championship",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Calling All Heroes: Championship 2024-25 Day 1",
+   "url": "https://www.youtube.com/watch?v=l2ExFIDS_rA",
+   "videoId": "l2ExFIDS_rA",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 23140,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (23140s)",
+     "-10 no team/competition relationship signal"
+    ],
+    "score": 35
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=I4cJkq2rF_A\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=I4cJkq2rF_A",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Calling All Heroes: LCQ & Rising Spotlight 2024-25",
+    "companion": false,
+    "confidence": "partial",
+    "day": null,
+    "eventKey": "calling-all-heroes-lcq-rising-spotlight-2024-25",
+    "eventName": "Calling All Heroes: LCQ & Rising Spotlight 2024-25",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Calling All Heroes: LCQ & Rising Spotlight 2024-25",
+   "url": "https://www.youtube.com/watch?v=I4cJkq2rF_A",
+   "videoId": "I4cJkq2rF_A",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 27049,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (27049s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=rFgJWeFL4ts\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=rFgJWeFL4ts",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Calling All Heroes: Major 3 2024-25 [Day 2 - Finals]",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "calling-all-heroes-major-3-2024-25-finals",
+    "eventName": "Calling All Heroes: Major 3 2024-25 [ - Finals]",
+    "fixture": null,
+    "phase": "finals",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Calling All Heroes: Major 3 2024-25 [Day 2 - Finals]",
+   "url": "https://www.youtube.com/watch?v=rFgJWeFL4ts",
+   "videoId": "rFgJWeFL4ts",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 22679,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (22679s)",
+     "-10 no team/competition relationship signal"
+    ],
+    "score": 35
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=zyyvgEbtSdc\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=zyyvgEbtSdc",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Calling All Heroes: Major 3 2024-25 [Day1]",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "calling-all-heroes-major-3-2024-25",
+    "eventName": "Calling All Heroes: Major 3 2024-25",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Calling All Heroes: Major 3 2024-25 [Day1]",
+   "url": "https://www.youtube.com/watch?v=zyyvgEbtSdc",
+   "videoId": "zyyvgEbtSdc",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 20877,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (20877s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=U-lvfWuVEMU\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=U-lvfWuVEMU",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "2024 OWCS World Finals - Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "2024-owcs-world-finals",
+    "eventName": "2024 OWCS World Finals",
+    "fixture": null,
+    "phase": "finals",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] 2024 OWCS World Finals - Day 3",
+   "url": "https://www.youtube.com/watch?v=U-lvfWuVEMU",
+   "videoId": "U-lvfWuVEMU",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 25814,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (25814s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=LLuwGfq8VWg\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=LLuwGfq8VWg",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "2024 OWCS World Finals - Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "2024-owcs-world-finals",
+    "eventName": "2024 OWCS World Finals",
+    "fixture": null,
+    "phase": "finals",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] 2024 OWCS World Finals - Day 2",
+   "url": "https://www.youtube.com/watch?v=LLuwGfq8VWg",
+   "videoId": "LLuwGfq8VWg",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 31535,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (31535s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=7MgRxlMJMFA\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=7MgRxlMJMFA",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "2024 OWCS World Finals - Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "2024-owcs-world-finals",
+    "eventName": "2024 OWCS World Finals",
+    "fixture": null,
+    "phase": "finals",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "[DROPS] 2024 OWCS World Finals - Day 1",
+   "url": "https://www.youtube.com/watch?v=7MgRxlMJMFA",
+   "videoId": "7MgRxlMJMFA",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 24822,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (24822s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=tGUQuEGOzeU\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=tGUQuEGOzeU",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Collegiate Homecoming 2024 [Finals]",
+    "companion": false,
+    "confidence": "clear",
+    "day": null,
+    "eventKey": "overwatch-collegiate-homecoming-2024-finals",
+    "eventName": "Overwatch Collegiate Homecoming 2024 [Finals]",
+    "fixture": null,
+    "phase": "finals",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Collegiate Homecoming 2024 [Finals]",
+   "url": "https://www.youtube.com/watch?v=tGUQuEGOzeU",
+   "videoId": "tGUQuEGOzeU",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 23741,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (23741s)",
+     "-10 no team/competition relationship signal"
+    ],
+    "score": 35
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=UXZLrSfTnCk\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=UXZLrSfTnCk",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Collegiate Homecoming 2024 [Day 4]",
+    "companion": false,
+    "confidence": "clear",
+    "day": 4,
+    "eventKey": "overwatch-collegiate-homecoming-2024",
+    "eventName": "Overwatch Collegiate Homecoming 2024",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Collegiate Homecoming 2024 [Day 4]",
+   "url": "https://www.youtube.com/watch?v=UXZLrSfTnCk",
+   "videoId": "UXZLrSfTnCk",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 21953,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (21953s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=WVyadVHKkkk\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=WVyadVHKkkk",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Collegiate Homecoming 2024 [Day 3]",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "overwatch-collegiate-homecoming-2024",
+    "eventName": "Overwatch Collegiate Homecoming 2024",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Collegiate Homecoming 2024 [Day 3]",
+   "url": "https://www.youtube.com/watch?v=WVyadVHKkkk",
+   "videoId": "WVyadVHKkkk",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 21190,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (21190s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=m3Yj-YVBQNw\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=m3Yj-YVBQNw",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Collegiate Homecoming 2024 [Day 2]",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "overwatch-collegiate-homecoming-2024",
+    "eventName": "Overwatch Collegiate Homecoming 2024",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Collegiate Homecoming 2024 [Day 2]",
+   "url": "https://www.youtube.com/watch?v=m3Yj-YVBQNw",
+   "videoId": "m3Yj-YVBQNw",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 28234,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (28234s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=8S94RFMnIs0\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=8S94RFMnIs0",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Calling All Heroes: Minor 3 2024-25 [Day 2 - Finals]",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "calling-all-heroes-minor-3-2024-25-finals",
+    "eventName": "Calling All Heroes: Minor 3 2024-25 [ - Finals]",
+    "fixture": null,
+    "phase": "finals",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Calling All Heroes: Minor 3 2024-25 [Day 2 - Finals]",
+   "url": "https://www.youtube.com/watch?v=8S94RFMnIs0",
+   "videoId": "8S94RFMnIs0",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 20621,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (20621s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=rnJ8bNJaj0o\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=rnJ8bNJaj0o",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Collegiate Homecoming 2024 [Day 1]",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "overwatch-collegiate-homecoming-2024",
+    "eventName": "Overwatch Collegiate Homecoming 2024",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Collegiate Homecoming 2024 [Day 1]",
+   "url": "https://www.youtube.com/watch?v=rnJ8bNJaj0o",
+   "videoId": "rnJ8bNJaj0o",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 24276,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (24276s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=WbcHkM1GQfY\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=WbcHkM1GQfY",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Calling All Heroes: Minor 3 2024-25 [Day 1]",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "calling-all-heroes-minor-3-2024-25",
+    "eventName": "Calling All Heroes: Minor 3 2024-25",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Calling All Heroes: Minor 3 2024-25 [Day 1]",
+   "url": "https://www.youtube.com/watch?v=WbcHkM1GQfY",
+   "videoId": "WbcHkM1GQfY",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 27551,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (27551s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=qsmVdc_gjh0\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=qsmVdc_gjh0",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2024 | EMEA & NA Stage 4 - Main Event Day 4",
+    "companion": false,
+    "confidence": "clear",
+    "day": 4,
+    "eventKey": "owcs-2024-emea-na-stage-4-main-event",
+    "eventName": "OWCS 2024 — EMEA & NA Stage 4 - Main Event",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 4,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "OWCS 2024 | EMEA & NA Stage 4 - Main Event Day 4",
+   "url": "https://www.youtube.com/watch?v=qsmVdc_gjh0",
+   "videoId": "qsmVdc_gjh0",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 37460,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (37460s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=Ywz77n34FSU\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=Ywz77n34FSU",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2024 | EMEA & NA Stage 4 - Main Event Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "owcs-2024-emea-na-stage-4-main-event",
+    "eventName": "OWCS 2024 — EMEA & NA Stage 4 - Main Event",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 4,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "OWCS 2024 | EMEA & NA Stage 4 - Main Event Day 3",
+   "url": "https://www.youtube.com/watch?v=Ywz77n34FSU",
+   "videoId": "Ywz77n34FSU",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 28800,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (28800s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=QZ2smyBUH48\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=QZ2smyBUH48",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2024 | EMEA & NA Stage 4 - Main Event Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "owcs-2024-emea-na-stage-4-main-event",
+    "eventName": "OWCS 2024 — EMEA & NA Stage 4 - Main Event",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 4,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "OWCS 2024 | EMEA & NA Stage 4 - Main Event Day 2",
+   "url": "https://www.youtube.com/watch?v=QZ2smyBUH48",
+   "videoId": "QZ2smyBUH48",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 35905,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (35905s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=gOrK9N5WUlU\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=gOrK9N5WUlU",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2024 | EMEA & NA Stage 4 - Main Event Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "owcs-2024-emea-na-stage-4-main-event",
+    "eventName": "OWCS 2024 — EMEA & NA Stage 4 - Main Event",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 4,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "OWCS 2024 | EMEA & NA Stage 4 - Main Event Day 1",
+   "url": "https://www.youtube.com/watch?v=gOrK9N5WUlU",
+   "videoId": "gOrK9N5WUlU",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 30760,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (30760s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=NXG4sBdErF0\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=NXG4sBdErF0",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2024 | EMEA & NA Stage 4 - Groups Day 5",
+    "companion": false,
+    "confidence": "clear",
+    "day": 5,
+    "eventKey": "owcs-2024-emea-na-stage-4-groups",
+    "eventName": "OWCS 2024 — EMEA & NA Stage 4 - Groups",
+    "fixture": null,
+    "phase": "group-stage",
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 4,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "OWCS 2024 | EMEA & NA Stage 4 - Groups Day 5",
+   "url": "https://www.youtube.com/watch?v=NXG4sBdErF0",
+   "videoId": "NXG4sBdErF0",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 33631,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (33631s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=wejDGwKQZus\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=wejDGwKQZus",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2024 | EMEA & NA Stage 4 - Groups Day 4",
+    "companion": false,
+    "confidence": "clear",
+    "day": 4,
+    "eventKey": "owcs-2024-emea-na-stage-4-groups",
+    "eventName": "OWCS 2024 — EMEA & NA Stage 4 - Groups",
+    "fixture": null,
+    "phase": "group-stage",
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 4,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "OWCS 2024 | EMEA & NA Stage 4 - Groups Day 4",
+   "url": "https://www.youtube.com/watch?v=wejDGwKQZus",
+   "videoId": "wejDGwKQZus",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 23720,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (23720s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=tTwn8XpBRyU\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=tTwn8XpBRyU",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series ASIA Stage2 (OWCS ASIA) Grand Finals",
+    "companion": false,
+    "confidence": "clear",
+    "day": null,
+    "eventKey": "overwatch-champions-series-asia-stage2-owcs-asia-grand-finals",
+    "eventName": "Overwatch Champions Series ASIA Stage2 (OWCS ASIA) Grand Finals",
+    "fixture": null,
+    "phase": "grand-finals",
+    "regions": [],
+    "stage": 2,
+    "week": null,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series ASIA Stage2 (OWCS ASIA) Grand Finals",
+   "url": "https://www.youtube.com/watch?v=tTwn8XpBRyU",
+   "videoId": "tTwn8XpBRyU",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 30915,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (30915s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=fH8bSXyfvAI\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=fH8bSXyfvAI",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2024 | EMEA & NA Stage 4 - Groups Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "owcs-2024-emea-na-stage-4-groups",
+    "eventName": "OWCS 2024 — EMEA & NA Stage 4 - Groups",
+    "fixture": null,
+    "phase": "group-stage",
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 4,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "OWCS 2024 | EMEA & NA Stage 4 - Groups Day 3",
+   "url": "https://www.youtube.com/watch?v=fH8bSXyfvAI",
+   "videoId": "fH8bSXyfvAI",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 26510,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (26510s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=AC7YPpEh0MQ\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=AC7YPpEh0MQ",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series ASIA Stage2 (OWCS ASIA) Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "overwatch-champions-series-asia-stage2-owcs-asia",
+    "eventName": "Overwatch Champions Series ASIA Stage2 (OWCS ASIA)",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": 2,
+    "week": null,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series ASIA Stage2 (OWCS ASIA) Day 3",
+   "url": "https://www.youtube.com/watch?v=AC7YPpEh0MQ",
+   "videoId": "AC7YPpEh0MQ",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 36002,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (36002s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=KEivgi12a9w\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=KEivgi12a9w",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2024 | EMEA & NA Stage 4 - Groups Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "owcs-2024-emea-na-stage-4-groups",
+    "eventName": "OWCS 2024 — EMEA & NA Stage 4 - Groups",
+    "fixture": null,
+    "phase": "group-stage",
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 4,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "OWCS 2024 | EMEA & NA Stage 4 - Groups Day 2",
+   "url": "https://www.youtube.com/watch?v=KEivgi12a9w",
+   "videoId": "KEivgi12a9w",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 32256,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (32256s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=WJZ83B43b5I\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=WJZ83B43b5I",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series ASIA Stage2 (OWCS ASIA) Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "overwatch-champions-series-asia-stage2-owcs-asia",
+    "eventName": "Overwatch Champions Series ASIA Stage2 (OWCS ASIA)",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": 2,
+    "week": null,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series ASIA Stage2 (OWCS ASIA) Day 2",
+   "url": "https://www.youtube.com/watch?v=WJZ83B43b5I",
+   "videoId": "WJZ83B43b5I",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 23603,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (23603s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=5-yV2xt1zyY\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=5-yV2xt1zyY",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series ASIA Stage2 (OWCS ASIA) Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "overwatch-champions-series-asia-stage2-owcs-asia",
+    "eventName": "Overwatch Champions Series ASIA Stage2 (OWCS ASIA)",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": 2,
+    "week": null,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series ASIA Stage2 (OWCS ASIA) Day 1",
+   "url": "https://www.youtube.com/watch?v=5-yV2xt1zyY",
+   "videoId": "5-yV2xt1zyY",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 33806,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (33806s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=46pVgaV5N2o\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=46pVgaV5N2o",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Calling All Heroes: Minor 2 2024-25 [Day 2 - Finals]",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "calling-all-heroes-minor-2-2024-25-finals",
+    "eventName": "Calling All Heroes: Minor 2 2024-25 [ - Finals]",
+    "fixture": null,
+    "phase": "finals",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Calling All Heroes: Minor 2 2024-25 [Day 2 - Finals]",
+   "url": "https://www.youtube.com/watch?v=46pVgaV5N2o",
+   "videoId": "46pVgaV5N2o",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 10651,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (10651s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=9W27qI06RFU\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=9W27qI06RFU",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs Day 3 [Grand Finals]",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "overwatch-champions-series-korea-stage2-owcs-korea-playoffs-grand-finals",
+    "eventName": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs [Grand Finals]",
+    "fixture": null,
+    "phase": "grand-finals",
+    "regions": [
+     "korea"
+    ],
+    "stage": 2,
+    "week": null,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs Day 3 [Grand Finals]",
+   "url": "https://www.youtube.com/watch?v=9W27qI06RFU",
+   "videoId": "9W27qI06RFU",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 12610,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (12610s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=SWItY0RnCnk\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=SWItY0RnCnk",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Grand Finals",
+    "companion": false,
+    "confidence": "clear",
+    "day": null,
+    "eventKey": "overwatch-champions-series-japan-stage2-owcs-japan-grand-finals",
+    "eventName": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Grand Finals",
+    "fixture": null,
+    "phase": "grand-finals",
+    "regions": [
+     "japan"
+    ],
+    "stage": 2,
+    "week": null,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Grand Finals",
+   "url": "https://www.youtube.com/watch?v=SWItY0RnCnk",
+   "videoId": "SWItY0RnCnk",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 24773,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (24773s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=tsgmLHINVTI\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=tsgmLHINVTI",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Calling All Heroes: Minor 2 2024-25 [Day 1]",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "calling-all-heroes-minor-2-2024-25",
+    "eventName": "Calling All Heroes: Minor 2 2024-25",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Calling All Heroes: Minor 2 2024-25 [Day 1]",
+   "url": "https://www.youtube.com/watch?v=tsgmLHINVTI",
+   "videoId": "tsgmLHINVTI",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 15840,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (15840s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=GAf5Oh8z580\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=GAf5Oh8z580",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series stage 2 ASIA (OWCS ASIA) WILDCARD",
+    "companion": false,
+    "confidence": "partial",
+    "day": null,
+    "eventKey": "overwatch-champions-series-stage-2-asia-owcs-asia-wildcard",
+    "eventName": "Overwatch Champions Series stage 2 ASIA (OWCS ASIA) WILDCARD",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": 2,
+    "week": null,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series stage 2 ASIA (OWCS ASIA) WILDCARD",
+   "url": "https://www.youtube.com/watch?v=GAf5Oh8z580",
+   "videoId": "GAf5Oh8z580",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 25220,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (25220s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=f3UmTCUVaYk\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=f3UmTCUVaYk",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Playoffs Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "overwatch-champions-series-japan-stage2-owcs-japan-playoffs",
+    "eventName": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Playoffs",
+    "fixture": null,
+    "phase": "playoffs",
+    "regions": [
+     "japan"
+    ],
+    "stage": 2,
+    "week": null,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Playoffs Day 2",
+   "url": "https://www.youtube.com/watch?v=f3UmTCUVaYk",
+   "videoId": "f3UmTCUVaYk",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 14450,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (14450s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=4fEGj8bkVdM\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=4fEGj8bkVdM",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Playoffs Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "overwatch-champions-series-japan-stage2-owcs-japan-playoffs",
+    "eventName": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Playoffs",
+    "fixture": null,
+    "phase": "playoffs",
+    "regions": [
+     "japan"
+    ],
+    "stage": 2,
+    "week": null,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Playoffs Day 1",
+   "url": "https://www.youtube.com/watch?v=4fEGj8bkVdM",
+   "videoId": "4fEGj8bkVdM",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 10311,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (10311s)",
+     "+15 tournament/broadcast terminology in title/description",
+     "+15 match/series formatting signal (vs / best-of / game-map / score pattern)"
+    ],
+    "score": 75
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=4PnkT6U7dhI\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=4PnkT6U7dhI",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) LCQ Game 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": null,
+    "eventKey": "overwatch-champions-series-japan-stage2-owcs-japan-lcq-game-3",
+    "eventName": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) LCQ Game 3",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "japan"
+    ],
+    "stage": 2,
+    "week": null,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) LCQ Game 3",
+   "url": "https://www.youtube.com/watch?v=4PnkT6U7dhI",
+   "videoId": "4PnkT6U7dhI",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 22175,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (22175s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=Aeneus1iksg\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=Aeneus1iksg",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs Day 2 [Semifinals]",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "overwatch-champions-series-korea-stage2-owcs-korea-playoffs-semifinals",
+    "eventName": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs [Semifinals]",
+    "fixture": null,
+    "phase": "playoffs",
+    "regions": [
+     "korea"
+    ],
+    "stage": 2,
+    "week": null,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs Day 2 [Semifinals]",
+   "url": "https://www.youtube.com/watch?v=Aeneus1iksg",
+   "videoId": "Aeneus1iksg",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 12990,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (12990s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=2mI_xhm6DFE\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=2mI_xhm6DFE",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs Day 1 [Quarterfinals]",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "overwatch-champions-series-korea-stage2-owcs-korea-playoffs-quarterfinals",
+    "eventName": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs [Quarterfinals]",
+    "fixture": null,
+    "phase": "playoffs",
+    "regions": [
+     "korea"
+    ],
+    "stage": 2,
+    "week": null,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs Day 1 [Quarterfinals]",
+   "url": "https://www.youtube.com/watch?v=2mI_xhm6DFE",
+   "videoId": "2mI_xhm6DFE",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 18815,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (18815s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=5t-dV_vUKfY\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=5t-dV_vUKfY",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series PACIFIC Stage2 (OWCS PACIFIC) Week 5",
+    "companion": false,
+    "confidence": "clear",
+    "day": null,
+    "eventKey": "overwatch-champions-series-pacific-stage2-owcs-pacific",
+    "eventName": "Overwatch Champions Series PACIFIC Stage2 (OWCS PACIFIC)",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "pacific"
+    ],
+    "stage": 2,
+    "week": 5,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series PACIFIC Stage2 (OWCS PACIFIC) Week 5",
+   "url": "https://www.youtube.com/watch?v=5t-dV_vUKfY",
+   "videoId": "5t-dV_vUKfY",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 21375,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (21375s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=by4M5mIM6rw\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=by4M5mIM6rw",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 4 Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "overwatch-champions-series-japan-stage2-owcs-japan",
+    "eventName": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN)",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "japan"
+    ],
+    "stage": 2,
+    "week": 4,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 4 Day 2",
+   "url": "https://www.youtube.com/watch?v=by4M5mIM6rw",
+   "videoId": "by4M5mIM6rw",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 19495,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (19495s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=hbEPzaE1h_Y\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=hbEPzaE1h_Y",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 4 Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "overwatch-champions-series-japan-stage2-owcs-japan",
+    "eventName": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN)",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "japan"
+    ],
+    "stage": 2,
+    "week": 4,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 4 Day 1",
+   "url": "https://www.youtube.com/watch?v=hbEPzaE1h_Y",
+   "videoId": "hbEPzaE1h_Y",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 26501,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (26501s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=DEDUZlLe54E\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=DEDUZlLe54E",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2024 | EMEA & NA Stage 3 - Main Event Day 4",
+    "companion": false,
+    "confidence": "clear",
+    "day": 4,
+    "eventKey": "owcs-2024-emea-na-stage-3-main-event",
+    "eventName": "OWCS 2024 — EMEA & NA Stage 3 - Main Event",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 3,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "OWCS 2024 | EMEA & NA Stage 3 - Main Event Day 4",
+   "url": "https://www.youtube.com/watch?v=DEDUZlLe54E",
+   "videoId": "DEDUZlLe54E",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 23920,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (23920s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=eYWRfOVOgyk\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=eYWRfOVOgyk",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 4 Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "overwatch-champions-series-korea-stage2-owcs-korea",
+    "eventName": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA)",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "korea"
+    ],
+    "stage": 2,
+    "week": 4,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 4 Day 3",
+   "url": "https://www.youtube.com/watch?v=eYWRfOVOgyk",
+   "videoId": "eYWRfOVOgyk",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 30370,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (30370s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=BBJHHE8q1Ho\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=BBJHHE8q1Ho",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2024 | EMEA & NA Stage 3 - Main Event Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "owcs-2024-emea-na-stage-3-main-event",
+    "eventName": "OWCS 2024 — EMEA & NA Stage 3 - Main Event",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 3,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "OWCS 2024 | EMEA & NA Stage 3 - Main Event Day 3",
+   "url": "https://www.youtube.com/watch?v=BBJHHE8q1Ho",
+   "videoId": "BBJHHE8q1Ho",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 23684,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (23684s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=ZACBXrBbVkE\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=ZACBXrBbVkE",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 4 Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "overwatch-champions-series-korea-stage2-owcs-korea",
+    "eventName": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA)",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "korea"
+    ],
+    "stage": 2,
+    "week": 4,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 4 Day 2",
+   "url": "https://www.youtube.com/watch?v=ZACBXrBbVkE",
+   "videoId": "ZACBXrBbVkE",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 30521,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (30521s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=tnfAwsor0AY\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=tnfAwsor0AY",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2024 | EMEA & NA Stage 3 - Main Event Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "owcs-2024-emea-na-stage-3-main-event",
+    "eventName": "OWCS 2024 — EMEA & NA Stage 3 - Main Event",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 3,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "OWCS 2024 | EMEA & NA Stage 3 - Main Event Day 2",
+   "url": "https://www.youtube.com/watch?v=tnfAwsor0AY",
+   "videoId": "tnfAwsor0AY",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 22335,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (22335s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=RzqmO7jJPd8\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=RzqmO7jJPd8",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 4 Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "overwatch-champions-series-korea-stage2-owcs-korea",
+    "eventName": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA)",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "korea"
+    ],
+    "stage": 2,
+    "week": 4,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 4 Day 1",
+   "url": "https://www.youtube.com/watch?v=RzqmO7jJPd8",
+   "videoId": "RzqmO7jJPd8",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 33915,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (33915s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=BlvI88Hgg4g\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=BlvI88Hgg4g",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2024 | EMEA & NA Stage 3 - Main Event Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "owcs-2024-emea-na-stage-3-main-event",
+    "eventName": "OWCS 2024 — EMEA & NA Stage 3 - Main Event",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 3,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "OWCS 2024 | EMEA & NA Stage 3 - Main Event Day 1",
+   "url": "https://www.youtube.com/watch?v=BlvI88Hgg4g",
+   "videoId": "BlvI88Hgg4g",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 17261,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (17261s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=bgDOEEhbYik\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=bgDOEEhbYik",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series PACIFIC Stage2 (OWCS PACIFIC) Week 4",
+    "companion": false,
+    "confidence": "clear",
+    "day": null,
+    "eventKey": "overwatch-champions-series-pacific-stage2-owcs-pacific",
+    "eventName": "Overwatch Champions Series PACIFIC Stage2 (OWCS PACIFIC)",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "pacific"
+    ],
+    "stage": 2,
+    "week": 4,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series PACIFIC Stage2 (OWCS PACIFIC) Week 4",
+   "url": "https://www.youtube.com/watch?v=bgDOEEhbYik",
+   "videoId": "bgDOEEhbYik",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 22960,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (22960s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=saSBVHKY2y8\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=saSBVHKY2y8",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 3 Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "overwatch-champions-series-japan-stage2-owcs-japan",
+    "eventName": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN)",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "japan"
+    ],
+    "stage": 2,
+    "week": 3,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 3 Day 3",
+   "url": "https://www.youtube.com/watch?v=saSBVHKY2y8",
+   "videoId": "saSBVHKY2y8",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 18448,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (18448s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=-vtAeblc66E\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=-vtAeblc66E",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 3 Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "overwatch-champions-series-japan-stage2-owcs-japan",
+    "eventName": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN)",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "japan"
+    ],
+    "stage": 2,
+    "week": 3,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 3 Day 2",
+   "url": "https://www.youtube.com/watch?v=-vtAeblc66E",
+   "videoId": "-vtAeblc66E",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 17751,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (17751s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=xmhYf8DEmGw\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=xmhYf8DEmGw",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 3 Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "overwatch-champions-series-japan-stage2-owcs-japan",
+    "eventName": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN)",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "japan"
+    ],
+    "stage": 2,
+    "week": 3,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 3 Day 1",
+   "url": "https://www.youtube.com/watch?v=xmhYf8DEmGw",
+   "videoId": "xmhYf8DEmGw",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 35691,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (35691s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=Bu79ap3JB-I\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=Bu79ap3JB-I",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2024 | EMEA & NA Stage 3 - Groups Day 5",
+    "companion": false,
+    "confidence": "clear",
+    "day": 5,
+    "eventKey": "owcs-2024-emea-na-stage-3-groups",
+    "eventName": "OWCS 2024 — EMEA & NA Stage 3 - Groups",
+    "fixture": null,
+    "phase": "group-stage",
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 3,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "OWCS 2024 | EMEA & NA Stage 3 - Groups Day 5",
+   "url": "https://www.youtube.com/watch?v=Bu79ap3JB-I",
+   "videoId": "Bu79ap3JB-I",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 24105,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (24105s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=wPtD-tWumu8\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=wPtD-tWumu8",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 3 Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "overwatch-champions-series-korea-stage2-owcs-korea",
+    "eventName": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA)",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "korea"
+    ],
+    "stage": 2,
+    "week": 3,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 3 Day 3",
+   "url": "https://www.youtube.com/watch?v=wPtD-tWumu8",
+   "videoId": "wPtD-tWumu8",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 36966,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (36966s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=er4CyZ-TYeM\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=er4CyZ-TYeM",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2024 | EMEA & NA Stage 3 - Groups Day 4",
+    "companion": false,
+    "confidence": "clear",
+    "day": 4,
+    "eventKey": "owcs-2024-emea-na-stage-3-groups",
+    "eventName": "OWCS 2024 — EMEA & NA Stage 3 - Groups",
+    "fixture": null,
+    "phase": "group-stage",
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 3,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "OWCS 2024 | EMEA & NA Stage 3 - Groups Day 4",
+   "url": "https://www.youtube.com/watch?v=er4CyZ-TYeM",
+   "videoId": "er4CyZ-TYeM",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 18570,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (18570s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=zKOx1WTPwEQ\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=zKOx1WTPwEQ",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 3 Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "overwatch-champions-series-korea-stage2-owcs-korea",
+    "eventName": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA)",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "korea"
+    ],
+    "stage": 2,
+    "week": 3,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 3 Day 2",
+   "url": "https://www.youtube.com/watch?v=zKOx1WTPwEQ",
+   "videoId": "zKOx1WTPwEQ",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 20800,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (20800s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=zHPB0UbbXVo\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=zHPB0UbbXVo",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 3 Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "overwatch-champions-series-korea-stage2-owcs-korea",
+    "eventName": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA)",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "korea"
+    ],
+    "stage": 2,
+    "week": 3,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 3 Day 1",
+   "url": "https://www.youtube.com/watch?v=zHPB0UbbXVo",
+   "videoId": "zHPB0UbbXVo",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 18595,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (18595s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=tC52jkizbnk\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=tC52jkizbnk",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series PACIFIC Stage2 (OWCS PACIFIC) Week 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": null,
+    "eventKey": "overwatch-champions-series-pacific-stage2-owcs-pacific",
+    "eventName": "Overwatch Champions Series PACIFIC Stage2 (OWCS PACIFIC)",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "pacific"
+    ],
+    "stage": 2,
+    "week": 3,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series PACIFIC Stage2 (OWCS PACIFIC) Week 3",
+   "url": "https://www.youtube.com/watch?v=tC52jkizbnk",
+   "videoId": "tC52jkizbnk",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 14631,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (14631s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=5UwN-fHHgDw\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=5UwN-fHHgDw",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 2 Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "overwatch-champions-series-japan-stage2-owcs-japan",
+    "eventName": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN)",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "japan"
+    ],
+    "stage": 2,
+    "week": 2,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 2 Day 3",
+   "url": "https://www.youtube.com/watch?v=5UwN-fHHgDw",
+   "videoId": "5UwN-fHHgDw",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 18791,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (18791s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=Su0vrvYj5XE\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=Su0vrvYj5XE",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 2 Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "overwatch-champions-series-japan-stage2-owcs-japan",
+    "eventName": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN)",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "japan"
+    ],
+    "stage": 2,
+    "week": 2,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 2 Day 2",
+   "url": "https://www.youtube.com/watch?v=Su0vrvYj5XE",
+   "videoId": "Su0vrvYj5XE",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 15881,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (15881s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=DOkb_iLF0uo\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=DOkb_iLF0uo",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 2 Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "overwatch-champions-series-japan-stage2-owcs-japan",
+    "eventName": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN)",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "japan"
+    ],
+    "stage": 2,
+    "week": 2,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 2 Day 1",
+   "url": "https://www.youtube.com/watch?v=DOkb_iLF0uo",
+   "videoId": "DOkb_iLF0uo",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 33685,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (33685s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=HLgVyTFfbvo\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=HLgVyTFfbvo",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2024 | EMEA & NA Stage 3 - Groups Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "owcs-2024-emea-na-stage-3-groups",
+    "eventName": "OWCS 2024 — EMEA & NA Stage 3 - Groups",
+    "fixture": null,
+    "phase": "group-stage",
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 3,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "OWCS 2024 | EMEA & NA Stage 3 - Groups Day 3",
+   "url": "https://www.youtube.com/watch?v=HLgVyTFfbvo",
+   "videoId": "HLgVyTFfbvo",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 21941,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (21941s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=cGHH1ZQ_Ork\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=cGHH1ZQ_Ork",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 2 Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "overwatch-champions-series-korea-stage2-owcs-korea",
+    "eventName": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA)",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "korea"
+    ],
+    "stage": 2,
+    "week": 2,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 2 Day 3",
+   "url": "https://www.youtube.com/watch?v=cGHH1ZQ_Ork",
+   "videoId": "cGHH1ZQ_Ork",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 31871,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (31871s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=hu6O_k60EDM\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=hu6O_k60EDM",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2024 | EMEA & NA Stage 3 - Groups Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "owcs-2024-emea-na-stage-3-groups",
+    "eventName": "OWCS 2024 — EMEA & NA Stage 3 - Groups",
+    "fixture": null,
+    "phase": "group-stage",
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 3,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "OWCS 2024 | EMEA & NA Stage 3 - Groups Day 2",
+   "url": "https://www.youtube.com/watch?v=hu6O_k60EDM",
+   "videoId": "hu6O_k60EDM",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 24640,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (24640s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=9_mzkLYlpxU\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=9_mzkLYlpxU",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 2 Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "overwatch-champions-series-korea-stage2-owcs-korea",
+    "eventName": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA)",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "korea"
+    ],
+    "stage": 2,
+    "week": 2,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 2 Day 2",
+   "url": "https://www.youtube.com/watch?v=9_mzkLYlpxU",
+   "videoId": "9_mzkLYlpxU",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 17276,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (17276s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=F_hcb6fH-FY\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=F_hcb6fH-FY",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 2 Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "overwatch-champions-series-korea-stage2-owcs-korea",
+    "eventName": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA)",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "korea"
+    ],
+    "stage": 2,
+    "week": 2,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 2 Day 1",
+   "url": "https://www.youtube.com/watch?v=F_hcb6fH-FY",
+   "videoId": "F_hcb6fH-FY",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 16555,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (16555s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=v4XyOBuENKA\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=v4XyOBuENKA",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series PACIFIC Stage2 (OWCS PACIFIC) Week 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": null,
+    "eventKey": "overwatch-champions-series-pacific-stage2-owcs-pacific",
+    "eventName": "Overwatch Champions Series PACIFIC Stage2 (OWCS PACIFIC)",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "pacific"
+    ],
+    "stage": 2,
+    "week": 2,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series PACIFIC Stage2 (OWCS PACIFIC) Week 2",
+   "url": "https://www.youtube.com/watch?v=v4XyOBuENKA",
+   "videoId": "v4XyOBuENKA",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 18120,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (18120s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=S4qO8YnB_2I\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=S4qO8YnB_2I",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 1 Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "overwatch-champions-series-japan-stage2-owcs-japan",
+    "eventName": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN)",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "japan"
+    ],
+    "stage": 2,
+    "week": 1,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 1 Day 3",
+   "url": "https://www.youtube.com/watch?v=S4qO8YnB_2I",
+   "videoId": "S4qO8YnB_2I",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 18326,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (18326s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=t0GlSzUkj3g\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=t0GlSzUkj3g",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 1 Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "overwatch-champions-series-japan-stage2-owcs-japan",
+    "eventName": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN)",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "japan"
+    ],
+    "stage": 2,
+    "week": 1,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 1 Day 2",
+   "url": "https://www.youtube.com/watch?v=t0GlSzUkj3g",
+   "videoId": "t0GlSzUkj3g",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 25655,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (25655s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=agFVFljrKXo\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=agFVFljrKXo",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 1 Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "overwatch-champions-series-japan-stage2-owcs-japan",
+    "eventName": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN)",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "japan"
+    ],
+    "stage": 2,
+    "week": 1,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 1 Day 1",
+   "url": "https://www.youtube.com/watch?v=agFVFljrKXo",
+   "videoId": "agFVFljrKXo",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 23081,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (23081s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=CM6bZMw-ru8\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=CM6bZMw-ru8",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 1 Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "overwatch-champions-series-korea-stage2-owcs-korea",
+    "eventName": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA)",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "korea"
+    ],
+    "stage": 2,
+    "week": 1,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 1 Day 3",
+   "url": "https://www.youtube.com/watch?v=CM6bZMw-ru8",
+   "videoId": "CM6bZMw-ru8",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 21775,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (21775s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=-kX-6nEmMjU\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=-kX-6nEmMjU",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 1 Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "overwatch-champions-series-korea-stage2-owcs-korea",
+    "eventName": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA)",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "korea"
+    ],
+    "stage": 2,
+    "week": 1,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 1 Day 2",
+   "url": "https://www.youtube.com/watch?v=-kX-6nEmMjU",
+   "videoId": "-kX-6nEmMjU",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 26946,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (26946s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=QBoORcyzC_E\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=QBoORcyzC_E",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 1 Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "overwatch-champions-series-korea-stage2-owcs-korea",
+    "eventName": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA)",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "korea"
+    ],
+    "stage": 2,
+    "week": 1,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 1 Day 1",
+   "url": "https://www.youtube.com/watch?v=QBoORcyzC_E",
+   "videoId": "QBoORcyzC_E",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 14173,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (14173s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=gYQN4zdll8A\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=gYQN4zdll8A",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series PACIFIC Stage2 (OWCS PACIFIC) Week 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": null,
+    "eventKey": "overwatch-champions-series-pacific-stage2-owcs-pacific",
+    "eventName": "Overwatch Champions Series PACIFIC Stage2 (OWCS PACIFIC)",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "pacific"
+    ],
+    "stage": 2,
+    "week": 1,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series PACIFIC Stage2 (OWCS PACIFIC) Week 1",
+   "url": "https://www.youtube.com/watch?v=gYQN4zdll8A",
+   "videoId": "gYQN4zdll8A",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 29158,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (29158s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=gMv_oYxAz1U\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=gMv_oYxAz1U",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Calling All Heroes: Major 2 2024-25 [Day 2 - Finals]",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "calling-all-heroes-major-2-2024-25-finals",
+    "eventName": "Calling All Heroes: Major 2 2024-25 [ - Finals]",
+    "fixture": null,
+    "phase": "finals",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Calling All Heroes: Major 2 2024-25 [Day 2 - Finals]",
+   "url": "https://www.youtube.com/watch?v=gMv_oYxAz1U",
+   "videoId": "gMv_oYxAz1U",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 22158,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (22158s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=W_wgHapW7iY\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=W_wgHapW7iY",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Calling All Heroes: Major 2 2024-25 [Day 1]",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "calling-all-heroes-major-2-2024-25",
+    "eventName": "Calling All Heroes: Major 2 2024-25",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Calling All Heroes: Major 2 2024-25 [Day 1]",
+   "url": "https://www.youtube.com/watch?v=W_wgHapW7iY",
+   "videoId": "W_wgHapW7iY",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 24876,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (24876s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=RDrq_egO66Y\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=RDrq_egO66Y",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Calling All Heroes: Minor 1 2024-25 [Day 2 - Finals]",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "calling-all-heroes-minor-1-2024-25-finals",
+    "eventName": "Calling All Heroes: Minor 1 2024-25 [ - Finals]",
+    "fixture": null,
+    "phase": "finals",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Calling All Heroes: Minor 1 2024-25 [Day 2 - Finals]",
+   "url": "https://www.youtube.com/watch?v=RDrq_egO66Y",
+   "videoId": "RDrq_egO66Y",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 20937,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (20937s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=1QzyhUfZ-Ok\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=1QzyhUfZ-Ok",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Calling All Heroes: Minor 1 2024-25 [Day 1]",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "calling-all-heroes-minor-1-2024-25",
+    "eventName": "Calling All Heroes: Minor 1 2024-25",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Calling All Heroes: Minor 1 2024-25 [Day 1]",
+   "url": "https://www.youtube.com/watch?v=1QzyhUfZ-Ok",
+   "videoId": "1QzyhUfZ-Ok",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 24050,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (24050s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=V5_eh0BzyEo\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=V5_eh0BzyEo",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Calling All Heroes: Major 1 2024-25 [Day 2 - Finals]",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "calling-all-heroes-major-1-2024-25-finals",
+    "eventName": "Calling All Heroes: Major 1 2024-25 [ - Finals]",
+    "fixture": null,
+    "phase": "finals",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Calling All Heroes: Major 1 2024-25 [Day 2 - Finals]",
+   "url": "https://www.youtube.com/watch?v=V5_eh0BzyEo",
+   "videoId": "V5_eh0BzyEo",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 23951,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (23951s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=RKPYCwGppf0\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=RKPYCwGppf0",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Calling All Heroes: Major 1 2024-25 [Day 1]",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "calling-all-heroes-major-1-2024-25",
+    "eventName": "Calling All Heroes: Major 1 2024-25",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Calling All Heroes: Major 1 2024-25 [Day 1]",
+   "url": "https://www.youtube.com/watch?v=RKPYCwGppf0",
+   "videoId": "RKPYCwGppf0",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 31366,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (31366s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=KZUx8fQuc5s\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=KZUx8fQuc5s",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2024 | Dallas Major: Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "owcs-2024-dallas-major",
+    "eventName": "OWCS 2024 — Dallas Major",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "OWCS 2024 | Dallas Major: Day 3",
+   "url": "https://www.youtube.com/watch?v=KZUx8fQuc5s",
+   "videoId": "KZUx8fQuc5s",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 29941,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (29941s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=-UDC5ZYP4po\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=-UDC5ZYP4po",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2024 | Dallas Major: Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "owcs-2024-dallas-major",
+    "eventName": "OWCS 2024 — Dallas Major",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "OWCS 2024 | Dallas Major: Day 2",
+   "url": "https://www.youtube.com/watch?v=-UDC5ZYP4po",
+   "videoId": "-UDC5ZYP4po",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 36822,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (36822s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=KHygZyucW0M\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=KHygZyucW0M",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2024 | Dallas Major: Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "owcs-2024-dallas-major",
+    "eventName": "OWCS 2024 — Dallas Major",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "OWCS 2024 | Dallas Major: Day 1",
+   "url": "https://www.youtube.com/watch?v=KHygZyucW0M",
+   "videoId": "KHygZyucW0M",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 15676,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (15676s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=ejxb8hQfY54\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=ejxb8hQfY54",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Collegiate Championship 2024 [FINALS]",
+    "companion": false,
+    "confidence": "clear",
+    "day": null,
+    "eventKey": "overwatch-collegiate-championship-2024-finals",
+    "eventName": "Overwatch Collegiate Championship 2024 [FINALS]",
+    "fixture": null,
+    "phase": "championship",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Collegiate Championship 2024 [FINALS]",
+   "url": "https://www.youtube.com/watch?v=ejxb8hQfY54",
+   "videoId": "ejxb8hQfY54",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 21595,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (21595s)",
+     "-10 no team/competition relationship signal"
+    ],
+    "score": 35
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=_R_xt5-pzNE\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=_R_xt5-pzNE",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Collegiate Championship 2024 [Day 5]",
+    "companion": false,
+    "confidence": "clear",
+    "day": 5,
+    "eventKey": "overwatch-collegiate-championship-2024",
+    "eventName": "Overwatch Collegiate Championship 2024",
+    "fixture": null,
+    "phase": "championship",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Collegiate Championship 2024 [Day 5]",
+   "url": "https://www.youtube.com/watch?v=_R_xt5-pzNE",
+   "videoId": "_R_xt5-pzNE",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 12565,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (12565s)",
+     "-10 no team/competition relationship signal"
+    ],
+    "score": 35
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=P7MKJhHYgAs\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=P7MKJhHYgAs",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Collegiate Championship 2024 [Day 4]",
+    "companion": false,
+    "confidence": "clear",
+    "day": 4,
+    "eventKey": "overwatch-collegiate-championship-2024",
+    "eventName": "Overwatch Collegiate Championship 2024",
+    "fixture": null,
+    "phase": "championship",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Collegiate Championship 2024 [Day 4]",
+   "url": "https://www.youtube.com/watch?v=P7MKJhHYgAs",
+   "videoId": "P7MKJhHYgAs",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 23565,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (23565s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=YpvQoWEO_0c\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=YpvQoWEO_0c",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Collegiate Championship 2024 [Day 3]",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "overwatch-collegiate-championship-2024",
+    "eventName": "Overwatch Collegiate Championship 2024",
+    "fixture": null,
+    "phase": "championship",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Collegiate Championship 2024 [Day 3]",
+   "url": "https://www.youtube.com/watch?v=YpvQoWEO_0c",
+   "videoId": "YpvQoWEO_0c",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 22656,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (22656s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=QhbT8QkrBog\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=QhbT8QkrBog",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Collegiate Championship 2024 [Day 2]",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "overwatch-collegiate-championship-2024",
+    "eventName": "Overwatch Collegiate Championship 2024",
+    "fixture": null,
+    "phase": "championship",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Collegiate Championship 2024 [Day 2]",
+   "url": "https://www.youtube.com/watch?v=QhbT8QkrBog",
+   "videoId": "QhbT8QkrBog",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 10695,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (10695s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=KDnjjP0cfcE\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=KDnjjP0cfcE",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Collegiate Championship 2024 [Day 1]",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "overwatch-collegiate-championship-2024",
+    "eventName": "Overwatch Collegiate Championship 2024",
+    "fixture": null,
+    "phase": "championship",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Collegiate Championship 2024 [Day 1]",
+   "url": "https://www.youtube.com/watch?v=KDnjjP0cfcE",
+   "videoId": "KDnjjP0cfcE",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 27175,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (27175s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=R4DnMC-ft3M\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=R4DnMC-ft3M",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2024 | EMEA & NA Stage 2 - Main Event Day 4",
+    "companion": false,
+    "confidence": "clear",
+    "day": 4,
+    "eventKey": "owcs-2024-emea-na-stage-2-main-event",
+    "eventName": "OWCS 2024 — EMEA & NA Stage 2 - Main Event",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 2,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "OWCS 2024 | EMEA & NA Stage 2 - Main Event Day 4",
+   "url": "https://www.youtube.com/watch?v=R4DnMC-ft3M",
+   "videoId": "R4DnMC-ft3M",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 21856,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (21856s)",
+     "-10 no team/competition relationship signal"
+    ],
+    "score": 35
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=9Z4fg3FEclE\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=9Z4fg3FEclE",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series ASIA (OWCS ASIA) Day 4",
+    "companion": false,
+    "confidence": "partial",
+    "day": 4,
+    "eventKey": "overwatch-champions-series-asia-owcs-asia",
+    "eventName": "Overwatch Champions Series ASIA (OWCS ASIA)",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series ASIA (OWCS ASIA) Day 4",
+   "url": "https://www.youtube.com/watch?v=9Z4fg3FEclE",
+   "videoId": "9Z4fg3FEclE",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 32817,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (32817s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=Yhxzaa5zAFw\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=Yhxzaa5zAFw",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2024 | EMEA & NA Stage 2 - Main Event Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "owcs-2024-emea-na-stage-2-main-event",
+    "eventName": "OWCS 2024 — EMEA & NA Stage 2 - Main Event",
+    "fixture": null,
+    "phase": null,
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 2,
+    "week": null,
+    "year": 2024
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "OWCS 2024 | EMEA & NA Stage 2 - Main Event Day 3",
+   "url": "https://www.youtube.com/watch?v=Yhxzaa5zAFw",
+   "videoId": "Yhxzaa5zAFw",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 24736,
+   "firstSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (24736s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=cpNi0CYgZKo\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=cpNi0CYgZKo",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Overwatch Champions Series ASIA (OWCS ASIA) Day 3",
+    "companion": false,
+    "confidence": "partial",
+    "day": 3,
+    "eventKey": "overwatch-champions-series-asia-owcs-asia",
+    "eventName": "Overwatch Champions Series ASIA (OWCS ASIA)",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": null
+   },
+   "publishedAt": null,
+   "sources": [
+    "streams"
+   ],
+   "state": "found",
+   "title": "Overwatch Champions Series ASIA (OWCS ASIA) Day 3",
+   "url": "https://www.youtube.com/watch?v=cpNi0CYgZKo",
+   "videoId": "cpNi0CYgZKo",
+   "why": "Found automatically. Nobody has processed it yet."
   }
  ],
  "counts": {
-  "found": 62,
-  "ignored": 29,
+  "found": 249,
+  "ignored": 38,
   "published": 1,
   "queued": 0,
   "review": 0,
-  "total": 92,
+  "total": 288,
   "working": 0
  },
  "events": [
   {
-   "broadcasts": 1,
-   "calendarEventIds": [],
-   "days": [],
-   "firstAt": "2026-08-10T23:51:05+00:00",
-   "found": 1,
-   "key": "owcs-x-faceit-league-stage-3-promotion-relegation-matches",
-   "lastAt": "2026-08-10T23:51:05+00:00",
-   "name": "OWCS x FACEIT League — Stage 3 Promotion/Relegation Matches",
-   "published": 0,
-   "regions": []
-  },
-  {
-   "broadcasts": 2,
-   "calendarEventIds": [],
-   "days": [
-    1,
-    2
-   ],
-   "firstAt": "2026-08-08T23:51:15+00:00",
-   "found": 2,
-   "key": "calling-all-heroes-2026-season-playoffs",
-   "lastAt": "2026-08-10T00:17:54+00:00",
-   "name": "Calling All Heroes 2026:Season Playoffs",
-   "published": 0,
-   "regions": []
-  },
-  {
-   "broadcasts": 5,
+   "broadcasts": 4,
    "calendarEventIds": [],
    "days": [
     1,
     2,
     3,
-    4,
-    5
+    4
    ],
-   "firstAt": "2026-08-02T19:12:39+00:00",
-   "found": 5,
-   "key": "owcs-2026-midseason-championship",
-   "lastAt": "2026-08-02T19:12:39+00:00",
-   "name": "OWCS 2026 — Midseason Championship",
+   "firstAt": "2026-08-20T14:09:39+00:00",
+   "found": 4,
+   "key": "overwatch-world-cup-2026-group-stage",
+   "lastAt": "2026-08-23T10:40:37+00:00",
+   "name": "Overwatch World Cup 2026 — Group Stage",
    "published": 0,
    "regions": []
+  },
+  {
+   "broadcasts": 12,
+   "calendarEventIds": [],
+   "days": [
+    1,
+    2,
+    3
+   ],
+   "firstAt": "2024-09-04T00:00:00+00:00",
+   "found": 12,
+   "key": "overwatch-champions-series-japan-stage2-owcs-japan",
+   "lastAt": "2024-09-04T00:00:00+00:00",
+   "name": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN)",
+   "published": 0,
+   "regions": [
+    "japan"
+   ]
   },
   {
    "broadcasts": 3,
@@ -5176,9 +15992,68 @@ window.OWCS_DISCOVERED = {
    "days": [],
    "firstAt": null,
    "found": 1,
+   "key": "overwatch-collegiate-homecoming-2024-finals",
+   "lastAt": null,
+   "name": "Overwatch Collegiate Homecoming 2024 [Finals]",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 4,
+   "calendarEventIds": [],
+   "days": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "firstAt": null,
+   "found": 4,
+   "key": "overwatch-collegiate-homecoming-2024",
+   "lastAt": null,
+   "name": "Overwatch Collegiate Homecoming 2024",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [],
+   "firstAt": null,
+   "found": 1,
    "key": "overwatch-collegiate-championship-finals",
    "lastAt": null,
    "name": "Overwatch Collegiate Championship — Finals",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [],
+   "firstAt": null,
+   "found": 1,
+   "key": "overwatch-collegiate-championship-2024-finals",
+   "lastAt": null,
+   "name": "Overwatch Collegiate Championship 2024 [FINALS]",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 5,
+   "calendarEventIds": [],
+   "days": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "firstAt": null,
+   "found": 5,
+   "key": "overwatch-collegiate-championship-2024",
+   "lastAt": null,
+   "name": "Overwatch Collegiate Championship 2024",
    "published": 0,
    "regions": []
   },
@@ -5193,6 +16068,198 @@ window.OWCS_DISCOVERED = {
    "key": "overwatch-collegiate-championship",
    "lastAt": null,
    "name": "Overwatch Collegiate Championship",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [],
+   "firstAt": null,
+   "found": 1,
+   "key": "overwatch-champions-series-stage-2-asia-owcs-asia-wildcard",
+   "lastAt": null,
+   "name": "Overwatch Champions Series stage 2 ASIA (OWCS ASIA) WILDCARD",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 5,
+   "calendarEventIds": [],
+   "days": [],
+   "firstAt": null,
+   "found": 5,
+   "key": "overwatch-champions-series-pacific-stage2-owcs-pacific",
+   "lastAt": null,
+   "name": "Overwatch Champions Series PACIFIC Stage2 (OWCS PACIFIC)",
+   "published": 0,
+   "regions": [
+    "pacific"
+   ]
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [
+    2
+   ],
+   "firstAt": null,
+   "found": 1,
+   "key": "overwatch-champions-series-korea-stage2-owcs-korea-playoffs-semifinals",
+   "lastAt": null,
+   "name": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs [Semifinals]",
+   "published": 0,
+   "regions": [
+    "korea"
+   ]
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [
+    1
+   ],
+   "firstAt": null,
+   "found": 1,
+   "key": "overwatch-champions-series-korea-stage2-owcs-korea-playoffs-quarterfinals",
+   "lastAt": null,
+   "name": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs [Quarterfinals]",
+   "published": 0,
+   "regions": [
+    "korea"
+   ]
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [
+    3
+   ],
+   "firstAt": null,
+   "found": 1,
+   "key": "overwatch-champions-series-korea-stage2-owcs-korea-playoffs-grand-finals",
+   "lastAt": null,
+   "name": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs [Grand Finals]",
+   "published": 0,
+   "regions": [
+    "korea"
+   ]
+  },
+  {
+   "broadcasts": 12,
+   "calendarEventIds": [],
+   "days": [
+    1,
+    2,
+    3
+   ],
+   "firstAt": null,
+   "found": 12,
+   "key": "overwatch-champions-series-korea-stage2-owcs-korea",
+   "lastAt": null,
+   "name": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA)",
+   "published": 0,
+   "regions": [
+    "korea"
+   ]
+  },
+  {
+   "broadcasts": 2,
+   "calendarEventIds": [],
+   "days": [
+    1,
+    2
+   ],
+   "firstAt": null,
+   "found": 2,
+   "key": "overwatch-champions-series-japan-stage2-owcs-japan-playoffs",
+   "lastAt": null,
+   "name": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Playoffs",
+   "published": 0,
+   "regions": [
+    "japan"
+   ]
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [],
+   "firstAt": null,
+   "found": 1,
+   "key": "overwatch-champions-series-japan-stage2-owcs-japan-lcq-game-3",
+   "lastAt": null,
+   "name": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) LCQ Game 3",
+   "published": 0,
+   "regions": [
+    "japan"
+   ]
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [],
+   "firstAt": null,
+   "found": 1,
+   "key": "overwatch-champions-series-japan-stage2-owcs-japan-grand-finals",
+   "lastAt": null,
+   "name": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Grand Finals",
+   "published": 0,
+   "regions": [
+    "japan"
+   ]
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [],
+   "firstAt": null,
+   "found": 1,
+   "key": "overwatch-champions-series-asia-stage2-owcs-asia-grand-finals",
+   "lastAt": null,
+   "name": "Overwatch Champions Series ASIA Stage2 (OWCS ASIA) Grand Finals",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 3,
+   "calendarEventIds": [],
+   "days": [
+    1,
+    2,
+    3
+   ],
+   "firstAt": null,
+   "found": 3,
+   "key": "overwatch-champions-series-asia-stage2-owcs-asia",
+   "lastAt": null,
+   "name": "Overwatch Champions Series ASIA Stage2 (OWCS ASIA)",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 2,
+   "calendarEventIds": [],
+   "days": [
+    3,
+    4
+   ],
+   "firstAt": null,
+   "found": 2,
+   "key": "overwatch-champions-series-asia-owcs-asia",
+   "lastAt": null,
+   "name": "Overwatch Champions Series ASIA (OWCS ASIA)",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 2,
+   "calendarEventIds": [],
+   "days": [],
+   "firstAt": null,
+   "found": 2,
+   "key": "overwatch-2-stadium-asia-streamer-showdown",
+   "lastAt": null,
+   "name": "Overwatch 2 Stadium Asia Streamer Showdown",
    "published": 0,
    "regions": []
   },
@@ -5238,6 +16305,18 @@ window.OWCS_DISCOVERED = {
    "key": "owwc-2026-online-qualifiers",
    "lastAt": null,
    "name": "OWWC 2026 — Online Qualifiers",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [],
+   "firstAt": null,
+   "found": 1,
+   "key": "owcs-x-faceit-league-stage-3-promotion-relegation-matches",
+   "lastAt": null,
+   "name": "OWCS x FACEIT League — Stage 3 Promotion/Relegation Matches",
    "published": 0,
    "regions": []
   },
@@ -5346,6 +16425,24 @@ window.OWCS_DISCOVERED = {
    ]
   },
   {
+   "broadcasts": 5,
+   "calendarEventIds": [],
+   "days": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "firstAt": null,
+   "found": 5,
+   "key": "owcs-2026-midseason-championship",
+   "lastAt": null,
+   "name": "OWCS 2026 — Midseason Championship",
+   "published": 0,
+   "regions": []
+  },
+  {
    "broadcasts": 3,
    "calendarEventIds": [],
    "days": [
@@ -5383,9 +16480,713 @@ window.OWCS_DISCOVERED = {
    "days": [],
    "firstAt": null,
    "found": 1,
+   "key": "owcs-2025-stage-2-promotion-relegation-tournament",
+   "lastAt": null,
+   "name": "OWCS 2025 — Stage 2 Promotion/Relegation Tournament",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 4,
+   "calendarEventIds": [],
+   "days": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "firstAt": null,
+   "found": 4,
+   "key": "owcs-2025-na-emea-stage-3-playoffs",
+   "lastAt": null,
+   "name": "OWCS 2025 — NA & EMEA — Stage 3 Playoffs",
+   "published": 0,
+   "regions": [
+    "emea",
+    "na"
+   ]
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [],
+   "firstAt": null,
+   "found": 1,
+   "key": "owcs-2025-na-emea-stage-3-opening-day",
+   "lastAt": null,
+   "name": "OWCS 2025 — NA & EMEA — Stage 3 Opening Day",
+   "published": 0,
+   "regions": [
+    "emea",
+    "na"
+   ]
+  },
+  {
+   "broadcasts": 11,
+   "calendarEventIds": [],
+   "days": [
+    1,
+    2
+   ],
+   "firstAt": null,
+   "found": 11,
+   "key": "owcs-2025-na-emea-stage-3",
+   "lastAt": null,
+   "name": "OWCS 2025 — NA & EMEA — Stage 3",
+   "published": 0,
+   "regions": [
+    "emea",
+    "na"
+   ]
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [],
+   "firstAt": null,
+   "found": 1,
+   "key": "owcs-2025-midseason-championship-at-ewc-final-day",
+   "lastAt": null,
+   "name": "OWCS 2025 — Midseason Championship at EWC — Final Day",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [
+    3
+   ],
+   "firstAt": null,
+   "found": 1,
+   "key": "owcs-2025-midseason-championship-at-ewc",
+   "lastAt": null,
+   "name": "OWCS 2025 — Midseason Championship at EWC",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 2,
+   "calendarEventIds": [],
+   "days": [
+    1,
+    2
+   ],
+   "firstAt": null,
+   "found": 2,
+   "key": "owcs-2025-midseason-championship-b-stream",
+   "lastAt": null,
+   "name": "OWCS 2025 — Midseason Championship [B Stream]",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 2,
+   "calendarEventIds": [],
+   "days": [
+    1,
+    2
+   ],
+   "firstAt": null,
+   "found": 2,
+   "key": "owcs-2025-midseason-championship-a-stream",
+   "lastAt": null,
+   "name": "OWCS 2025 — Midseason Championship [A Stream]",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 3,
+   "calendarEventIds": [],
+   "days": [
+    1,
+    2,
+    3
+   ],
+   "firstAt": null,
+   "found": 3,
+   "key": "owcs-2025-msc-last-chance-qualifier",
+   "lastAt": null,
+   "name": "OWCS 2025 — MSC Last Chance Qualifier",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 3,
+   "calendarEventIds": [],
+   "days": [
+    1,
+    3,
+    4
+   ],
+   "firstAt": null,
+   "found": 3,
+   "key": "owcs-2025-emea-na-stage-2-playoffs",
+   "lastAt": null,
+   "name": "OWCS 2025 — EMEA & NA — Stage 2 Playoffs",
+   "published": 0,
+   "regions": [
+    "emea",
+    "na"
+   ]
+  },
+  {
+   "broadcasts": 12,
+   "calendarEventIds": [],
+   "days": [
+    1,
+    2
+   ],
+   "firstAt": null,
+   "found": 12,
+   "key": "owcs-2025-emea-na-stage-2",
+   "lastAt": null,
+   "name": "OWCS 2025 — EMEA & NA — Stage 2",
+   "published": 0,
+   "regions": [
+    "emea",
+    "na"
+   ]
+  },
+  {
+   "broadcasts": 4,
+   "calendarEventIds": [],
+   "days": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "firstAt": null,
+   "found": 4,
+   "key": "owcs-2025-emea-na-stage-1-playoffs",
+   "lastAt": null,
+   "name": "OWCS 2025 — EMEA & NA — Stage 1 Playoffs",
+   "published": 0,
+   "regions": [
+    "emea",
+    "na"
+   ]
+  },
+  {
+   "broadcasts": 12,
+   "calendarEventIds": [],
+   "days": [
+    1,
+    2,
+    3
+   ],
+   "firstAt": null,
+   "found": 12,
+   "key": "owcs-2025-emea-na-stage-1",
+   "lastAt": null,
+   "name": "OWCS 2025 — EMEA & NA — Stage 1",
+   "published": 0,
+   "regions": [
+    "emea",
+    "na"
+   ]
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [
+    2
+   ],
+   "firstAt": null,
+   "found": 1,
+   "key": "owcs-2025-emea-na-playoffs",
+   "lastAt": null,
+   "name": "OWCS 2025 — EMEA & NA — Playoffs",
+   "published": 0,
+   "regions": [
+    "emea",
+    "na"
+   ]
+  },
+  {
+   "broadcasts": 3,
+   "calendarEventIds": [],
+   "days": [
+    1,
+    2,
+    3
+   ],
+   "firstAt": null,
+   "found": 3,
+   "key": "owcs-2025-champions-clash",
+   "lastAt": null,
+   "name": "OWCS 2025 — Champions Clash",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [],
+   "firstAt": null,
+   "found": 1,
+   "key": "owcs-2025-stage-1-promotion-relegation",
+   "lastAt": null,
+   "name": "OWCS 2025 Stage 1 Promotion/Relegation",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 4,
+   "calendarEventIds": [],
+   "days": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "firstAt": null,
+   "found": 4,
+   "key": "owcs-2024-emea-na-stage-4-main-event",
+   "lastAt": null,
+   "name": "OWCS 2024 — EMEA & NA Stage 4 - Main Event",
+   "published": 0,
+   "regions": [
+    "emea",
+    "na"
+   ]
+  },
+  {
+   "broadcasts": 4,
+   "calendarEventIds": [],
+   "days": [
+    2,
+    3,
+    4,
+    5
+   ],
+   "firstAt": null,
+   "found": 4,
+   "key": "owcs-2024-emea-na-stage-4-groups",
+   "lastAt": null,
+   "name": "OWCS 2024 — EMEA & NA Stage 4 - Groups",
+   "published": 0,
+   "regions": [
+    "emea",
+    "na"
+   ]
+  },
+  {
+   "broadcasts": 4,
+   "calendarEventIds": [],
+   "days": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "firstAt": null,
+   "found": 4,
+   "key": "owcs-2024-emea-na-stage-3-main-event",
+   "lastAt": null,
+   "name": "OWCS 2024 — EMEA & NA Stage 3 - Main Event",
+   "published": 0,
+   "regions": [
+    "emea",
+    "na"
+   ]
+  },
+  {
+   "broadcasts": 4,
+   "calendarEventIds": [],
+   "days": [
+    2,
+    3,
+    4,
+    5
+   ],
+   "firstAt": null,
+   "found": 4,
+   "key": "owcs-2024-emea-na-stage-3-groups",
+   "lastAt": null,
+   "name": "OWCS 2024 — EMEA & NA Stage 3 - Groups",
+   "published": 0,
+   "regions": [
+    "emea",
+    "na"
+   ]
+  },
+  {
+   "broadcasts": 2,
+   "calendarEventIds": [],
+   "days": [
+    3,
+    4
+   ],
+   "firstAt": null,
+   "found": 2,
+   "key": "owcs-2024-emea-na-stage-2-main-event",
+   "lastAt": null,
+   "name": "OWCS 2024 — EMEA & NA Stage 2 - Main Event",
+   "published": 0,
+   "regions": [
+    "emea",
+    "na"
+   ]
+  },
+  {
+   "broadcasts": 3,
+   "calendarEventIds": [],
+   "days": [
+    1,
+    2,
+    3
+   ],
+   "firstAt": null,
+   "found": 3,
+   "key": "owcs-2024-dallas-major",
+   "lastAt": null,
+   "name": "OWCS 2024 — Dallas Major",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [],
+   "firstAt": null,
+   "found": 1,
    "key": "faceit-league-season-7-master-division-playoffs",
    "lastAt": null,
    "name": "FACEIT League Season 7 - Master Division Playoffs",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 2,
+   "calendarEventIds": [],
+   "days": [
+    1,
+    2
+   ],
+   "firstAt": null,
+   "found": 2,
+   "key": "faceit-league-season-5-master-division-playoffs",
+   "lastAt": null,
+   "name": "FACEIT League Season 5 - Master Division Playoffs",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [],
+   "firstAt": null,
+   "found": 1,
+   "key": "faceit-league-season-4-master-division-finals-owcs-relegation-qualifier",
+   "lastAt": null,
+   "name": "FACEIT League Season 4 Master Division Finals — OWCS Relegation Qualifier",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [
+    2
+   ],
+   "firstAt": null,
+   "found": 1,
+   "key": "calling-all-heroes-minor-3-2024-25-finals",
+   "lastAt": null,
+   "name": "Calling All Heroes: Minor 3 2024-25 [ - Finals]",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [
+    1
+   ],
+   "firstAt": null,
+   "found": 1,
+   "key": "calling-all-heroes-minor-3-2024-25",
+   "lastAt": null,
+   "name": "Calling All Heroes: Minor 3 2024-25",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [
+    2
+   ],
+   "firstAt": null,
+   "found": 1,
+   "key": "calling-all-heroes-minor-2-2024-25-finals",
+   "lastAt": null,
+   "name": "Calling All Heroes: Minor 2 2024-25 [ - Finals]",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [
+    1
+   ],
+   "firstAt": null,
+   "found": 1,
+   "key": "calling-all-heroes-minor-2-2024-25",
+   "lastAt": null,
+   "name": "Calling All Heroes: Minor 2 2024-25",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [
+    2
+   ],
+   "firstAt": null,
+   "found": 1,
+   "key": "calling-all-heroes-minor-1-2024-25-finals",
+   "lastAt": null,
+   "name": "Calling All Heroes: Minor 1 2024-25 [ - Finals]",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [
+    1
+   ],
+   "firstAt": null,
+   "found": 1,
+   "key": "calling-all-heroes-minor-1-2024-25",
+   "lastAt": null,
+   "name": "Calling All Heroes: Minor 1 2024-25",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [
+    2
+   ],
+   "firstAt": null,
+   "found": 1,
+   "key": "calling-all-heroes-major-3-2024-25-finals",
+   "lastAt": null,
+   "name": "Calling All Heroes: Major 3 2024-25 [ - Finals]",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [
+    1
+   ],
+   "firstAt": null,
+   "found": 1,
+   "key": "calling-all-heroes-major-3-2024-25",
+   "lastAt": null,
+   "name": "Calling All Heroes: Major 3 2024-25",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [
+    2
+   ],
+   "firstAt": null,
+   "found": 1,
+   "key": "calling-all-heroes-major-2-2024-25-finals",
+   "lastAt": null,
+   "name": "Calling All Heroes: Major 2 2024-25 [ - Finals]",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [
+    1
+   ],
+   "firstAt": null,
+   "found": 1,
+   "key": "calling-all-heroes-major-2-2024-25",
+   "lastAt": null,
+   "name": "Calling All Heroes: Major 2 2024-25",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [
+    2
+   ],
+   "firstAt": null,
+   "found": 1,
+   "key": "calling-all-heroes-major-1-2024-25-finals",
+   "lastAt": null,
+   "name": "Calling All Heroes: Major 1 2024-25 [ - Finals]",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [
+    1
+   ],
+   "firstAt": null,
+   "found": 1,
+   "key": "calling-all-heroes-major-1-2024-25",
+   "lastAt": null,
+   "name": "Calling All Heroes: Major 1 2024-25",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [],
+   "firstAt": null,
+   "found": 1,
+   "key": "calling-all-heroes-lcq-rising-spotlight-2024-25",
+   "lastAt": null,
+   "name": "Calling All Heroes: LCQ & Rising Spotlight 2024-25",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [
+    4
+   ],
+   "firstAt": null,
+   "found": 1,
+   "key": "calling-all-heroes-championship-finals-2024-25",
+   "lastAt": null,
+   "name": "Calling All Heroes: Championship Finals 2024-25",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 3,
+   "calendarEventIds": [],
+   "days": [
+    1,
+    2,
+    3
+   ],
+   "firstAt": null,
+   "found": 3,
+   "key": "calling-all-heroes-championship-2024-25",
+   "lastAt": null,
+   "name": "Calling All Heroes: Championship 2024-25",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 2,
+   "calendarEventIds": [],
+   "days": [
+    1,
+    2
+   ],
+   "firstAt": null,
+   "found": 2,
+   "key": "calling-all-heroes-2026-season-playoffs",
+   "lastAt": null,
+   "name": "Calling All Heroes 2026:Season Playoffs",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 2,
+   "calendarEventIds": [],
+   "days": [
+    1,
+    2
+   ],
+   "firstAt": null,
+   "found": 2,
+   "key": "calling-all-heroes-2025-summer-stage-playoffs",
+   "lastAt": null,
+   "name": "Calling All Heroes 2025: Summer Stage Playoffs",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [],
+   "firstAt": null,
+   "found": 1,
+   "key": "calling-all-heroes-2025-summer-stage-finals",
+   "lastAt": null,
+   "name": "Calling All Heroes 2025: Summer Stage Finals",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 2,
+   "calendarEventIds": [],
+   "days": [
+    1,
+    2
+   ],
+   "firstAt": null,
+   "found": 2,
+   "key": "calling-all-heroes-2025-spring-stage-playoffs",
+   "lastAt": null,
+   "name": "Calling All Heroes 2025: Spring Stage Playoffs",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [],
+   "firstAt": null,
+   "found": 1,
+   "key": "calling-all-heroes-2025-spring-stage-finals",
+   "lastAt": null,
+   "name": "Calling All Heroes 2025: Spring Stage Finals",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [],
+   "firstAt": null,
+   "found": 1,
+   "key": "calling-all-heroes-2025-lcq-finals",
+   "lastAt": null,
+   "name": "Calling All Heroes 2025: LCQ Finals",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [
+    1
+   ],
+   "firstAt": null,
+   "found": 1,
+   "key": "calling-all-heroes-2025-lcq",
+   "lastAt": null,
+   "name": "Calling All Heroes 2025: LCQ",
    "published": 0,
    "regions": []
   },
@@ -5434,6 +17235,134 @@ window.OWCS_DISCOVERED = {
    "regions": []
   },
   {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [
+    2
+   ],
+   "firstAt": null,
+   "found": 1,
+   "key": "2025-overwatch-champions-series-korea-stage2-owcs-korea-playoffs-semi-finals",
+   "lastAt": null,
+   "name": "2025 Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs [Semi Finals]",
+   "published": 0,
+   "regions": [
+    "korea"
+   ]
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [
+    1
+   ],
+   "firstAt": null,
+   "found": 1,
+   "key": "2025-overwatch-champions-series-korea-stage2-owcs-korea-playoffs-round-of-6",
+   "lastAt": null,
+   "name": "2025 Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs [Round of 6]",
+   "published": 0,
+   "regions": [
+    "korea"
+   ]
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [
+    3
+   ],
+   "firstAt": null,
+   "found": 1,
+   "key": "2025-overwatch-champions-series-korea-stage2-owcs-korea-playoffs-grand-finals",
+   "lastAt": null,
+   "name": "2025 Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs [Grand Finals]",
+   "published": 0,
+   "regions": [
+    "korea"
+   ]
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [
+    2
+   ],
+   "firstAt": null,
+   "found": 1,
+   "key": "2025-overwatch-champions-series-korea-stage1-owcs-korea-playoffs-semi-finals",
+   "lastAt": null,
+   "name": "2025 Overwatch Champions Series KOREA Stage1 (OWCS KOREA) Playoffs [Semi Finals]",
+   "published": 0,
+   "regions": [
+    "korea"
+   ]
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [
+    1
+   ],
+   "firstAt": null,
+   "found": 1,
+   "key": "2025-overwatch-champions-series-korea-stage1-owcs-korea-playoffs-round-of-6",
+   "lastAt": null,
+   "name": "2025 Overwatch Champions Series KOREA Stage1 (OWCS KOREA) Playoffs [Round of 6]",
+   "published": 0,
+   "regions": [
+    "korea"
+   ]
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [
+    3
+   ],
+   "firstAt": null,
+   "found": 1,
+   "key": "2025-overwatch-champions-series-korea-stage1-owcs-korea-playoffs-grand-finals",
+   "lastAt": null,
+   "name": "2025 Overwatch Champions Series KOREA Stage1 (OWCS KOREA) Playoffs [Grand Finals]",
+   "published": 0,
+   "regions": [
+    "korea"
+   ]
+  },
+  {
+   "broadcasts": 3,
+   "calendarEventIds": [],
+   "days": [
+    1,
+    2,
+    3
+   ],
+   "firstAt": null,
+   "found": 3,
+   "key": "2025-overwatch-champions-series-asia-stage1-owcs-asia-playoffs",
+   "lastAt": null,
+   "name": "2025 Overwatch Champions Series ASIA Stage1 (OWCS ASIA) Playoffs",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 3,
+   "calendarEventIds": [],
+   "days": [
+    1,
+    2,
+    3
+   ],
+   "firstAt": null,
+   "found": 3,
+   "key": "2025-overwatch-champions-series-asia-road-to-world-finals-owcs-asia",
+   "lastAt": null,
+   "name": "2025 Overwatch Champions Series ASIA Road to World Finals (OWCS ASIA)",
+   "published": 0,
+   "regions": []
+  },
+  {
    "broadcasts": 6,
    "calendarEventIds": [],
    "days": [
@@ -5450,9 +17379,37 @@ window.OWCS_DISCOVERED = {
    "name": "2025 OWCS World Finals",
    "published": 0,
    "regions": []
+  },
+  {
+   "broadcasts": 3,
+   "calendarEventIds": [],
+   "days": [
+    1,
+    2,
+    3
+   ],
+   "firstAt": null,
+   "found": 3,
+   "key": "2024-owcs-world-finals",
+   "lastAt": null,
+   "name": "2024 OWCS World Finals",
+   "published": 0,
+   "regions": []
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "days": [],
+   "firstAt": null,
+   "found": 1,
+   "key": "100-soldiers-vs-1-gorilla-overwatch-2-showmatch",
+   "lastAt": null,
+   "name": "100 Soldiers vs. 1 Gorilla — Overwatch 2 Showmatch",
+   "published": 0,
+   "regions": []
   }
  ],
- "generatedAt": "2026-08-15T07:16:31+00:00",
+ "generatedAt": "2026-08-25T21:20:04+00:00",
  "inputs": [
   {
    "loaded": true,
@@ -5479,20 +17436,266 @@ window.OWCS_DISCOVERED = {
     "title": "ow_esports_global"
    }
   ],
-  "generatedAt": "2026-08-15T07:16:31+00:00",
+  "generatedAt": "2026-08-25T21:20:04+00:00",
   "intervalHours": 6.0,
-  "nextExpectedAt": "2026-08-15T13:16:31+00:00",
-  "sourceErrors": [],
+  "nextExpectedAt": "2026-08-26T03:20:04+00:00",
+  "sourceErrors": [
+   "date-backfill 9LMVyFVrFRE: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 1IcfQbcgJ6o: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill zNK1kK7qZps: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 3eRcSk9b2L8: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill -8v_Ob1Fc88: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 1maoxsSkDGo: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill h3pgxhsUCt0: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 2NE1nq75sv8: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill _lCIzOn4Z34: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill nD5lLLWDkY0: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill jkSiX___Qwc: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill AfCXDIMPsLE: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill tm8tcr2UUJM: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill d9uylXw_-dE: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill SA72IfyTpkE: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill nHLa2dANVVE: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill Z2hQctC7Jzw: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill uEtw5nhdk_Q: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill SrVV_lrHSHI: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill WeRIASu3eIA: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 8G52yz1iXsQ: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill fEye24gKxVw: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill WP8Hhfx7jDQ: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill V2EbSwDME8M: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill jS8r0kqgoV4: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 2eaD-hKLacU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill m_nGAbgpHi8: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill IiySuNpNFhU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill QDDVIxCS3Mc: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill Q998tVE7B-w: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill HnFJBXRmXLk: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill E0xzLwD9sS0: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 4UUdEv86ky8: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill NkhPh-56KFI: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill WBv1DiynaOQ: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 8hgnhV9lqCA: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill KCoiZ7xO1ao: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill tObGLXuxF34: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 3fcZy0ToP8s: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill aNHUebYwOHo: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 6FNhfLsKyMI: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 9DCg7_mbC4c: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill J9g82a93O8Y: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill ly-JP0ayjdU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill uXYKInwf1z4: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 0ewSCtCYSNY: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill XY77sT0Cc2s: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill aJZEKFUXYlM: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill LZhD2lp6Hgg: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 68h59ArOiXo: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 51QZTfBduSY: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill oWNXeN_erD0: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill ZbfgFp8mi-s: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill m-tlVHvl15E: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill _D2MNjrkPVQ: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill MLg4m1hwWrs: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill Y5FqtpdEwjc: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill oPmT0PIFlZ0: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill -HFNCpEMXcU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill k7Wa3FaIH_Q: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill JNQhY0nODqY: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill DaafD8PMpio: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill wRLVFGV5f6s: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill utUNnBbwtFY: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill OgC6iLkRxqI: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill fzTZEFtUawc: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 3i4IV1P7axI: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill P5xElCPI6nQ: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill zlJJJpw8UXc: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill o50ZBAHfFWk: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill ttiIZD3gYrM: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill R9lXX2ejLvs: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill oqqrGSQB5WY: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill AeR9I6CmxOc: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill _V5sZ1XMZ_c: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 1Kt8pqv8eGs: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill OTFTBP-NiEU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill f7v_MfMvOws: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 1VlxLEzpj2g: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill DHAHJ-cr9-4: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill lg9jT1V9FGE: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill yrbAirTRWyI: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill M5H8zEUHXqU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill YrJ3yjDeDOA: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill V41Nx0GSGSA: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill PAX7-BTPaEQ: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill OTzxbKloE_Y: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill ncbbj2CvK0M: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill EJDnqViPgqA: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 8Pdh-LYuPEI: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill o-_Lp79YFj8: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill sluRRwitd4s: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 2kGe0otzk4w: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill tt1FEjprjhM: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill wSjpuGNU-iA: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 2RE8U8Copu0: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill rscEE7bNCF0: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 3FdzilsfbZY: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill pYHTPQd_9Qw: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill LRh0S9g_1Vc: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill zMQ70vf8OEE: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill Sh2mgXorFMk: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill SzQEoQgNjRo: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 4p9WsqAVkl8: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 91Z5vrPZfm0: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill RXNXeT1Shos: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 6STpOXLwZf8: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill fJrJU4ETxGs: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 2nHcIUad-5A: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 7JKZXjz5aQc: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill YB0gK0OntuU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill ozAZH-PvFlc: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill hGiQcAnmzXg: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill bwpX0zsf95g: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill XM_ZhJAJnII: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill tb8lYU47X7A: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 651q5ysZV28: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill NPzF0Enbmf0: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill J2m3kJCoNzM: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill aSAnxFJiU-M: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill MlK6aXSZCYQ: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill HN7N52JYOBA: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 2cQVf-tNHfQ: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 00mQP9D3DXk: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill WzqiOFig1DA: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 8wbAE3pIj2o: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill z6zeAoVkOjM: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill cTkI9hAwNDc: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 9qtbteXyX4c: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill MRD6Dk9A6-c: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill aEPeG5DwGwk: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill rd12-oRNsPo: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill K2wLJbpK_GY: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill AEFrmDOC6hg: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill G6pRLS5RkHY: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill V42xhZK4GNQ: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill rncfvRkkWRo: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill usRILx8AEBk: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill AY3qgCKyE8w: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill xsJAYYKqtEo: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill EiZ3YjBtwzE: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill w-KjMkod1sw: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 2Ah2PG8UsEg: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill yHaF0eLkLhU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill guRQNjwYVcE: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill iEDUQ7AECbA: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 6YwiiOP_TvI: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill S9szrVmVlFU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill NugogHdAL74: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 4pS2ysxFCTU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill rdvjIDUCwWw: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 2HPieCMDwtk: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 3578U0oAhaY: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill W6TUVdWsZvU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill l2ExFIDS_rA: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill I4cJkq2rF_A: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill rFgJWeFL4ts: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill zyyvgEbtSdc: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill U-lvfWuVEMU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill LLuwGfq8VWg: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 7MgRxlMJMFA: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill tGUQuEGOzeU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill UXZLrSfTnCk: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill WVyadVHKkkk: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill m3Yj-YVBQNw: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 8S94RFMnIs0: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill rnJ8bNJaj0o: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill WbcHkM1GQfY: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill qsmVdc_gjh0: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill Ywz77n34FSU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill QZ2smyBUH48: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill gOrK9N5WUlU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill NXG4sBdErF0: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill wejDGwKQZus: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill tTwn8XpBRyU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill fH8bSXyfvAI: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill AC7YPpEh0MQ: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill KEivgi12a9w: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill WJZ83B43b5I: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 5-yV2xt1zyY: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 46pVgaV5N2o: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 9W27qI06RFU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill SWItY0RnCnk: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill tsgmLHINVTI: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill GAf5Oh8z580: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill f3UmTCUVaYk: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 4fEGj8bkVdM: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 4PnkT6U7dhI: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill Aeneus1iksg: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 2mI_xhm6DFE: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 5t-dV_vUKfY: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill by4M5mIM6rw: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill hbEPzaE1h_Y: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill DEDUZlLe54E: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill eYWRfOVOgyk: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill BBJHHE8q1Ho: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill ZACBXrBbVkE: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill tnfAwsor0AY: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill RzqmO7jJPd8: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill BlvI88Hgg4g: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill bgDOEEhbYik: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill saSBVHKY2y8: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill -vtAeblc66E: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill xmhYf8DEmGw: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill Bu79ap3JB-I: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill wPtD-tWumu8: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill er4CyZ-TYeM: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill zKOx1WTPwEQ: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill zHPB0UbbXVo: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill tC52jkizbnk: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 5UwN-fHHgDw: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill Su0vrvYj5XE: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill DOkb_iLF0uo: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill HLgVyTFfbvo: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill cGHH1ZQ_Ork: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill hu6O_k60EDM: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 9_mzkLYlpxU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill F_hcb6fH-FY: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill v4XyOBuENKA: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill S4qO8YnB_2I: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill t0GlSzUkj3g: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill agFVFljrKXo: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill CM6bZMw-ru8: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill -kX-6nEmMjU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill QBoORcyzC_E: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill gYQN4zdll8A: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill gMv_oYxAz1U: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill W_wgHapW7iY: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill RDrq_egO66Y: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 1QzyhUfZ-Ok: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill V5_eh0BzyEo: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill RKPYCwGppf0: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill KZUx8fQuc5s: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill -UDC5ZYP4po: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill KHygZyucW0M: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill ejxb8hQfY54: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill _R_xt5-pzNE: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill P7MKJhHYgAs: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill YpvQoWEO_0c: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill QhbT8QkrBog: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill KDnjjP0cfcE: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill R4DnMC-ft3M: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill 9Z4fg3FEclE: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill Yhxzaa5zAFw: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
+   "date-backfill cpNi0CYgZKo: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies"
+  ],
   "staleAfterHours": 24
  },
  "schema": "discovered.v1",
  "summary": {
-  "awaitingProcessing": 62,
-  "broadcastsKnown": 92,
+  "awaitingProcessing": 249,
+  "broadcastsKnown": 288,
   "calendarLinked": 0,
   "channelsScanned": 1,
-  "events": 24,
-  "ignored": 29,
+  "events": 98,
+  "ignored": 38,
   "inFlight": 0,
   "published": 1
  }
