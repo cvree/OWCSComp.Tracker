@@ -66,6 +66,11 @@ jobs:
         run: python pipeline/automation/cli.py self-fill --check
 
       - name: Offline test suite
+        # OpenCV comes from requirements.txt here, so the site suite must run
+        # its report-builder checks rather than skipping them the way the
+        # lean, no-video scheduled workflows legitimately do.
+        env:
+          OWCS_REQUIRE_FULL_SITE_TESTS: "1"
         run: |
           fail=0
           for t in pipeline/test_*.py; do
