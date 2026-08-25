@@ -285,14 +285,23 @@ def fill_missing_dates(ledger: dict, *, limit: int = 0, runner=subprocess,
     the scan spends `limit` of them per run, oldest-known-first, and the
     archive completes itself over a handful of scheduled runs instead of
     hammering the source in one burst. `limit=0` disables it entirely,
-    which is what every offline test and dry run uses."""
+    which is what every offline test and dry run uses.
+
+    The budget counts REQUESTS, not successes. It used to count only the
+    rows it filled, so a failing lookup cost a request and bought nothing
+    against the limit — and when the source refused every lookup (YouTube
+    now bot-checks the runner and asks for cookies), the loop walked the
+    entire dateless archive. A budget of 40 spent 245 requests and wrote
+    245 near-identical errors into the public snapshot, hammering a source
+    hardest at the exact moment it was already refusing us."""
     if limit <= 0:
         return ledger, [], 0
     meta = fetch_meta or (lambda vid: fetch_video_metadata(vid, runner=runner))
     errors: list[str] = []
     filled = 0
+    attempts = 0
     for row in ledger.get("candidates") or []:
-        if filled >= limit:
+        if attempts >= limit:
             break
         if not isinstance(row, dict) or row.get("publishedAt"):
             continue
@@ -300,6 +309,7 @@ def fill_missing_dates(ledger: dict, *, limit: int = 0, runner=subprocess,
         # request, and never will be.
         if (row.get("likeness") or {}).get("refused"):
             continue
+        attempts += 1
         fields, err = meta(row["videoId"])
         if err:
             errors.append(err)

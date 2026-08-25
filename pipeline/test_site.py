@@ -419,6 +419,27 @@ def test_legacy_redirects() -> None:
 
 def test_generated_reports_point_at_real_pages() -> None:
     print("generated reports link into the product, not deleted pages:")
+    # The three report builders sit on top of the vision stack (capture ->
+    # detect -> hero_overlay_detect), every layer of which imports OpenCV at
+    # module scope. ci.yml installs requirements.txt and so runs this check
+    # in full on every push and PR — which is the only way these builders can
+    # ever change. The LEAN scheduled workflows (discovery.yml hourly,
+    # match-finder.yml 6-hourly) deliberately install no OpenCV and no ffmpeg
+    # because nothing they do decodes video; before this guard, importing
+    # them here crashed the hourly discovery run outright and took the whole
+    # automation down with it. Announce the skip rather than passing quietly.
+    try:
+        import cv2  # noqa: F401
+    except ModuleNotFoundError:
+        # ci.yml sets this. There, OpenCV is installed from requirements.txt
+        # and a skip could only mean the dependency quietly went missing —
+        # so the full suite refuses the skip instead of shrinking itself.
+        if os.environ.get("OWCS_REQUIRE_FULL_SITE_TESTS") == "1":
+            check("OpenCV present for the report-builder checks", False)
+            return
+        print("  SKIP  report-builder checks (OpenCV absent — this run is "
+              "the no-video workflow; ci.yml runs them in full)")
+        return
     import build_crop_report as bcr
     import build_layout_debug as bld
     import run_owcs_auto as roa

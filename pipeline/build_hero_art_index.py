@@ -32,6 +32,9 @@ import json
 import os
 import sys
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import proc_text  # noqa: E402
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ART_DIR = os.path.join(ROOT, "assets", "img", "heroes", "official")
 OUT_PATH = os.path.join(ROOT, "assets", "data", "hero_art.v1.js")
@@ -70,6 +73,12 @@ def render(ids: list[str]) -> str:
 
 
 def main() -> int:
+    # This prints '—' in its --check line, which test_assets.py captures and
+    # re-prints. Without UTF-8 out, Windows encodes it in the ANSI code page,
+    # the parent's UTF-8 decode turns it into U+FFFD, and the parent then dies
+    # printing that. proc_text is explicit that every entry point here calls
+    # this before it prints; this one had been missed.
+    proc_text.enable_utf8_stdio()
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--check", action="store_true",
                     help="exit non-zero if the committed index is stale")

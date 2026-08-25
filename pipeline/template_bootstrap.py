@@ -41,6 +41,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import site_paths  # noqa: E402  (cross-drive-safe relative paths)
 import db  # noqa: E402
 
 # cv2 is needed only by the harvesting/labeling paths; coverage reporting and
@@ -131,7 +132,7 @@ def template_set_status(templates_dir: str, roster: list[dict], *,
     unknown_files = sorted(set(files) - roster_ids)
     single_variant = [h for h in covered if len(files[h]) == 1]
     try:
-        rel = os.path.relpath(templates_dir, repo_root).replace("\\", "/")
+        rel = site_paths.site_relpath(templates_dir, repo_root)
     except ValueError:
         rel = templates_dir
     return {
@@ -397,7 +398,7 @@ def bootstrap(con, templates_dir: str, *, clip: str | None = None,
     result["clusters"] = len(meta)
     result["suggestions"] = labels["suggestions"]
     result["needsReview"] = labels["needsReview"]
-    result["candidatesDir"] = os.path.relpath(cand_dir, db.REPO_ROOT).replace("\\", "/")
+    result["candidatesDir"] = site_paths.site_relpath(cand_dir, db.REPO_ROOT)
     result["message"] = (
         f"harvested {len(meta)} cluster(s) from {len(times)} sampled frame(s); "
         f"{len(labels['needsReview'])} need a human label. Review "

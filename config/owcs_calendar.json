@@ -26,10 +26,20 @@
     "task rule, verified stays false until an official source is available.",
     "The FACEIT registry pass confirmed only the OWCS 2026 NA/EMEA Open",
     "Qualifiers exist on FACEIT; the main-stage regional windows below are",
-    "unconfirmed placeholders."
+    "unconfirmed placeholders.",
+    "",
+    "UPDATE (2026-08-25): added `owwc_2026_group_stage`. The Overwatch",
+    "World Cup 2026 Group Stage (Days 1-4) aired on ow_esports_global",
+    "between 2026-08-20 and 2026-08-23 and no calendar event covered it, so",
+    "all four broadcasts sat unlinked. Its window is OBSERVED from the",
+    "broadcasts themselves rather than read from an official schedule (still",
+    "unreachable here), which is recorded per-entry in `dateProvenance` and",
+    "leaves verified=false. Nothing else aired in that window, so the link",
+    "is unambiguous on date alone — World Cup titles name no region, and",
+    "region is what normally separates same-window events."
   ],
   "version": 1,
-  "updated": "2026-07-24",
+  "updated": "2026-08-25",
   "events": [
     {
       "id": "owcs_2026_na_stage2",
@@ -39,7 +49,9 @@
       "startDate": "2026-07-01",
       "endDate": "2026-08-15",
       "faceitCompetitionId": "owcs_2026_na_stage",
-      "broadcastChannels": ["ow_esports_global"],
+      "broadcastChannels": [
+        "ow_esports_global"
+      ],
       "verified": false
     },
     {
@@ -50,7 +62,9 @@
       "startDate": "2026-07-01",
       "endDate": "2026-08-15",
       "faceitCompetitionId": "owcs_2026_emea_stage",
-      "broadcastChannels": ["ow_esports_global"],
+      "broadcastChannels": [
+        "ow_esports_global"
+      ],
       "verified": false
     },
     {
@@ -61,7 +75,9 @@
       "startDate": "2026-07-01",
       "endDate": "2026-08-15",
       "faceitCompetitionId": "owcs_2026_korea_stage",
-      "broadcastChannels": ["ow_esports_korea"],
+      "broadcastChannels": [
+        "ow_esports_korea"
+      ],
       "verified": false
     },
     {
@@ -72,8 +88,26 @@
       "startDate": "2026-11-01",
       "endDate": "2026-11-10",
       "faceitCompetitionId": "owcs_2026_global_finals",
-      "broadcastChannels": ["ow_esports_global", "ow_esports_korea", "ow_esports_japan"],
+      "broadcastChannels": [
+        "ow_esports_global",
+        "ow_esports_korea",
+        "ow_esports_japan"
+      ],
       "verified": false
+    },
+    {
+      "id": "owwc_2026_group_stage",
+      "name": "Overwatch World Cup 2026 — Group Stage",
+      "region": "global",
+      "stage": "Group Stage",
+      "startDate": "2026-08-20",
+      "endDate": "2026-08-23",
+      "faceitCompetitionId": null,
+      "broadcastChannels": [
+        "ow_esports_global"
+      ],
+      "verified": false,
+      "dateProvenance": "OBSERVED, not official: the window is the air date of the first and last Group Stage broadcast the match finder actually saw on ow_esports_global (Day 1 2026-08-20 .. Day 4 2026-08-23). The official schedule site is unreachable from this environment, so verified stays false. The Finals are at BlizzCon on a date this entry does not know — extend endDate, or add a separate finals event, once that date is confirmed against an official source."
     }
   ]
 }

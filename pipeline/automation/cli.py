@@ -1566,7 +1566,17 @@ def cmd_find_matches(args: argparse.Namespace) -> int:
         # rendering a scan that no longer exists.
         if not args.no_self_fill:
             from automation import self_fill as sfill
-            payload = sfill.build(snapshot=report)
+            # Build from DISK, not from the in-memory `report`. self_fill
+            # records where each input came from, and it can only record the
+            # scan when it loads the scan itself — passing `snapshot=report`
+            # skipped that entry, so this wrote a two-input artifact while
+            # the CI gate (`self-fill --check`, test_self_fill) recomputes a
+            # three-input one from disk and byte-compares. Every scheduled
+            # scan therefore found real broadcasts, failed the gate that runs
+            # immediately after, and never reached the commit step. The
+            # snapshot was just written by export_snapshot() above, so this
+            # reads exactly what the gate will read.
+            payload = sfill.build()
             filled_path = sfill.write(payload)
             print(sfill.format_report(payload))
     if args.json:

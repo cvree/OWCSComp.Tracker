@@ -444,6 +444,48 @@ class TestDateBackfill(unittest.TestCase):
         self.assertEqual(calls, ["NODATE00001"])
         self.assertEqual(errors, [])
 
+    def test_a_failing_source_cannot_outspend_the_budget(self):
+        """The budget counts REQUESTS, not successes. Counting successes
+        meant a run where every lookup failed walked the whole dateless
+        archive: --fill-dates 40 spent 245 requests and wrote 245 errors
+        into the public snapshot, hammering a source that was already
+        refusing us."""
+        calls = []
+
+        def meta(vid):
+            calls.append(vid)
+            return None, f"yt-dlp exit 1: bot check on {vid}"
+
+        # More dateless rows than the budget, so an unbounded loop is
+        # visibly different from a bounded one.
+        led = {"candidates": [
+            dict(candidate(f"NODATE0000{i}", f"OWCS 2026 | Stage 2 Day {i}",
+                           published=None), job=None)
+            for i in range(1, 7)]}
+
+        _led, errors, filled = mf.fill_missing_dates(
+            led, limit=2, fetch_meta=meta)
+        self.assertEqual(filled, 0)
+        self.assertEqual(len(calls), 2,
+                         "a failing lookup must still cost its budget")
+        self.assertEqual(len(errors), 2)
+
+    def test_a_partly_failing_source_still_stops_at_the_budget(self):
+        calls = []
+
+        def meta(vid):
+            calls.append(vid)
+            if len(calls) == 1:
+                return None, "transient"
+            return {"publishedAt": "2026-07-15T00:00:00+00:00",
+                    "durationSeconds": None, "liveBroadcastStatus": None}, None
+
+        _led, errors, filled = mf.fill_missing_dates(
+            self.ledger(), limit=2, fetch_meta=meta)
+        self.assertEqual(len(calls), 2)
+        self.assertEqual(filled, 1)
+        self.assertEqual(len(errors), 1)
+
     def test_a_refused_upload_never_costs_a_request(self):
         calls = []
 
@@ -515,6 +557,64 @@ class TestDateBackfill(unittest.TestCase):
         self.assertIsNone(err)
         self.assertTrue(entries[0]["publishedAt"],
                         "release_timestamp must produce a publish date")
+
+
+# ------------------------------------------- the writer matches the gate
+class TestFindMatchesWritesWhatTheGateChecks(unittest.TestCase):
+    """The regression that silently stopped the site updating itself.
+
+    `find-matches` writes assets/data/discovered.v1.js and the validate step
+    immediately after it recomputes that file and byte-compares. Those two
+    must be the SAME build, or every scheduled scan finds real broadcasts and
+    then fails the gate before it can commit them — which is exactly what
+    happened for ten days: the scan worked perfectly, and the result was
+    thrown away four lines later.
+    """
+
+    def test_the_provenance_records_every_input_it_loaded(self):
+        payload = sf.build()
+        names = [i["name"] for i in payload["inputs"]]
+        self.assertEqual(names, ["scan", "published dataset",
+                                 "official calendar"],
+                         "a from-disk build must record all three inputs")
+
+    def test_passing_the_snapshot_in_drops_the_scan_record(self):
+        """Documents WHY the caller must not pass it: provenance is honest
+        about what it actually loaded, so a handed-in snapshot is correctly
+        not recorded as a load. That is a feature — it just means the writer
+        has to build from disk, like the gate does."""
+        snap = sf.load_json(sf.path_for(sf.SNAPSHOT_REL))
+        handed_in = [i["name"] for i in sf.build(snapshot=snap)["inputs"]]
+        self.assertNotIn("scan", handed_in)
+        self.assertNotEqual(sf.render_js(sf.build(snapshot=snap)),
+                            sf.render_js(sf.build()),
+                            "if these ever agree this guard is moot")
+
+    def test_find_matches_builds_the_artifact_from_disk(self):
+        """The actual guard, asserted against the real cli.py: the self-fill
+        call inside `find-matches` must take no snapshot argument."""
+        import ast
+        path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                            "automation", "cli.py")
+        with open(path, encoding="utf-8") as f:
+            tree = ast.parse(f.read(), filename=path)
+        fn = next((n for n in ast.walk(tree)
+                   if isinstance(n, ast.FunctionDef)
+                   and n.name == "cmd_find_matches"), None)
+        self.assertIsNotNone(fn, "cmd_find_matches disappeared from cli.py")
+        calls = [n for n in ast.walk(fn)
+                 if isinstance(n, ast.Call)
+                 and isinstance(n.func, ast.Attribute)
+                 and n.func.attr == "build"]
+        self.assertTrue(calls, "find-matches no longer builds the site's "
+                               "discovery layer at all")
+        for call in calls:
+            passed = {kw.arg for kw in call.keywords}
+            self.assertNotIn(
+                "snapshot", passed,
+                "find-matches must call self_fill.build() with NO snapshot "
+                "argument, so the artifact it writes is byte-identical to "
+                "the one the validate step recomputes from disk")
 
 
 if __name__ == "__main__":
