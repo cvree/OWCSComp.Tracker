@@ -444,6 +444,48 @@ class TestDateBackfill(unittest.TestCase):
         self.assertEqual(calls, ["NODATE00001"])
         self.assertEqual(errors, [])
 
+    def test_a_failing_source_cannot_outspend_the_budget(self):
+        """The budget counts REQUESTS, not successes. Counting successes
+        meant a run where every lookup failed walked the whole dateless
+        archive: --fill-dates 40 spent 245 requests and wrote 245 errors
+        into the public snapshot, hammering a source that was already
+        refusing us."""
+        calls = []
+
+        def meta(vid):
+            calls.append(vid)
+            return None, f"yt-dlp exit 1: bot check on {vid}"
+
+        # More dateless rows than the budget, so an unbounded loop is
+        # visibly different from a bounded one.
+        led = {"candidates": [
+            dict(candidate(f"NODATE0000{i}", f"OWCS 2026 | Stage 2 Day {i}",
+                           published=None), job=None)
+            for i in range(1, 7)]}
+
+        _led, errors, filled = mf.fill_missing_dates(
+            led, limit=2, fetch_meta=meta)
+        self.assertEqual(filled, 0)
+        self.assertEqual(len(calls), 2,
+                         "a failing lookup must still cost its budget")
+        self.assertEqual(len(errors), 2)
+
+    def test_a_partly_failing_source_still_stops_at_the_budget(self):
+        calls = []
+
+        def meta(vid):
+            calls.append(vid)
+            if len(calls) == 1:
+                return None, "transient"
+            return {"publishedAt": "2026-07-15T00:00:00+00:00",
+                    "durationSeconds": None, "liveBroadcastStatus": None}, None
+
+        _led, errors, filled = mf.fill_missing_dates(
+            self.ledger(), limit=2, fetch_meta=meta)
+        self.assertEqual(len(calls), 2)
+        self.assertEqual(filled, 1)
+        self.assertEqual(len(errors), 1)
+
     def test_a_refused_upload_never_costs_a_request(self):
         calls = []
 
