@@ -37,6 +37,7 @@ import cv2  # noqa: E402
 import numpy as np  # noqa: E402
 
 import detect  # noqa: E402
+import site_paths  # noqa: E402  (cross-drive-safe relative paths)
 import hero_coverage as hc  # noqa: E402
 import portrait_roi as proi  # noqa: E402
 import template_evidence as te  # noqa: E402
@@ -311,7 +312,11 @@ class TestHeldOutIsEnforced(Temp):
                             "labelSource": te.LABEL_CONSENSUS})
         return {
             "evidenceSetVersion": te.MANIFEST_VERSION,
-            "sourceReport": "src", "cropsDir": os.path.relpath(crops, ROOT),
+            # site_relpath, not os.path.relpath: on a Windows runner the
+            # checkout is on D: and tempfile hands back C:, and there is no
+            # relative path between two drives — relpath raises ValueError.
+            # That is the exact bug site_paths exists to absorb.
+            "sourceReport": "src", "cropsDir": site_paths.site_relpath(crops, ROOT),
             "layoutId": "test", "crops": records, "excluded": [],
             "counts": {"labeled": len(records)}, "stints": [],
             "labelPolicy": {"method": "test"},

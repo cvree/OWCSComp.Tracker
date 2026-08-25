@@ -14,6 +14,16 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+import proc_text  # noqa: E402
+
+# This suite prints what its subprocesses said, and those say '—'. Windows
+# decodes a pipe with the ANSI code page, where that character does not
+# exist, so without this the run dies on UnicodeEncodeError after every
+# check has already passed. proc_text names this as the rule for every
+# entry point here; this one had been missed.
+proc_text.enable_utf8_stdio()
 
 FAILS = 0
 
