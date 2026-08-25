@@ -64,6 +64,7 @@ import sys
 from collections import Counter, defaultdict
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import site_paths  # noqa: E402  (cross-drive-safe relative paths)
 import db  # noqa: E402
 
 MANIFEST_VERSION = 1
@@ -273,8 +274,8 @@ def build_from_report(report_dir: str, *, layout_id: str,
     return {
         "evidenceSetVersion": MANIFEST_VERSION,
         "generatedAt": _utcnow_iso(),
-        "sourceReport": os.path.relpath(report_dir, db.REPO_ROOT).replace("\\", "/"),
-        "cropsDir": os.path.relpath(crops_dir, db.REPO_ROOT).replace("\\", "/"),
+        "sourceReport": site_paths.site_relpath(report_dir, db.REPO_ROOT),
+        "cropsDir": site_paths.site_relpath(crops_dir, db.REPO_ROOT),
         "sourceVideo": source_video,
         "layoutId": layout_id,
         "labelPolicy": {
