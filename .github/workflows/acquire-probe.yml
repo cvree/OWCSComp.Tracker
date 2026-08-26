@@ -176,6 +176,44 @@ jobs:
           find work -name '*.png' -o -name '*.jpg' 2>/dev/null | head -20
           du -sh work 2>/dev/null || true
 
+      # The finder's Twitch source, run against the real registry row on the
+      # real channel. Offline tests prove the parsing and the dispatch; this
+      # proves the source itself answers, and shows what it found.
+      - name: Match finder — scan the official Twitch channel for real
+        run: |
+          python - <<'PY' | tee twitch-scan.log
+          import sys
+          sys.path.insert(0, "pipeline")
+          from automation import config as cfg
+          from automation import match_finder as mf
+          from automation import link_intake as li
+
+          rows = [c for c in cfg.load_channels(platform="twitch")]
+          if not rows:
+              print("no enabled Twitch channel in the registry"); raise SystemExit(0)
+          ch = rows[0]
+          print(f"channel: {ch['id']}  {ch['sourceUrl']}")
+          entries, err = mf.fetch_twitch_vods(ch["sourceUrl"], limit=15)
+          if err:
+              print(f"::warning::twitch source error: {err}")
+              raise SystemExit(0)
+          cands = mf.merge_channel_entries(ch, [], entries, platform=li.TWITCH)
+          print(f"{len(cands)} candidate(s) from {len(entries)} VOD(s)\n")
+          for c in sorted(cands, key=lambda c: str(c.get("publishedAt")),
+                          reverse=True)[:12]:
+              lk = c.get("likeness") or {}
+              hrs = (c.get("durationSeconds") or 0) / 3600.0
+              print(f"  {str(c.get('publishedAt'))[:10]}  {hrs:5.1f}h  "
+                    f"{lk.get('confidence','?'):8s}  {str(c.get('title'))[:64]}")
+              print(f"      {c['url']}")
+          # The handoff that matters: the URL discovery emits must be the
+          # URL intake accepts.
+          bad = [c["url"] for c in cands
+                 if li.parse_link(c["url"])["videoId"] != c["videoId"]]
+          print(f"\nround-trip through intake: "
+                f"{'FAILED for ' + str(bad) if bad else 'all ' + str(len(cands)) + ' OK'}")
+          PY
+
       - name: Report
         if: always()
         run: |
@@ -187,6 +225,8 @@ jobs:
             cat resolve-youtube.log 2>/dev/null || echo "(no log)"
             echo "-- twitch --"
             cat resolve-twitch.log 2>/dev/null || echo "(no log)"
+            echo "-- match finder, twitch source --"
+            cat twitch-scan.log 2>/dev/null || echo "(no log)"
             echo '```'
             echo ""
             if [ -s frames.json ]; then
