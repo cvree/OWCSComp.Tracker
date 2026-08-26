@@ -130,6 +130,21 @@ LIKENESS_SUBSTANTIAL_DURATION_SECONDS = MIN_PLAUSIBLE_DURATION_SECONDS  # 20 min
 LIKENESS_SHORTS_DURATION_SECONDS = 60                                    # sub-60s is Shorts territory
 LIKENESS_THRESHOLD = 0  # score >= this -> "likely" a broadcast; below -> "unlikely"
 
+# The floor's mirror image at the top end. MIN_BROADCAST_DURATION_SECONDS is
+# the one signal nothing can outvote downwards; this is the one signal nothing
+# can outvote upwards. Nothing that runs for an hour is a Short, a promo, a
+# clip, a tips video or an interview cutdown — whatever its title says — so an
+# hour of runtime decides the verdict on its own rather than merely adding
+# weight to it.
+#
+# Why it needs to be decisive rather than a bigger number: the title penalties
+# sum to -50 (instructional terms -30, no match signal -10, no livestream
+# metadata -10), which is enough to call a ninety-minute broadcast "unlikely"
+# on the strength of one word in its title. A full-day World Cup stream titled
+# "... Highlights" is exactly the upload this product exists to find, and it
+# was being filtered out before anything could look at it.
+LIKENESS_LONGFORM_DURATION_SECONDS = 60 * 60
+
 # --- The hard floor --------------------------------------------------------
 # Everything above is a weighted signal that another signal can outvote. This
 # one cannot be outvoted, because there is no such thing as a five-minute
@@ -246,11 +261,21 @@ def broadcast_likeness(video: dict) -> dict:
         score += LIKENESS_PENALTY_INSTRUCTIONAL_TERMS
         reasons.append(f"{LIKENESS_PENALTY_INSTRUCTIONAL_TERMS} instructional/promotional-title signal")
 
+    longform = (dur is not None
+                and not refusal
+                and int(dur) >= LIKENESS_LONGFORM_DURATION_SECONDS)
+
     if refusal:
         # Stated first, because it is the only reason that decided anything.
         reasons.insert(0, refusal)
+    elif longform:
+        # Same reasoning, same placement: this alone settled it.
+        reasons.insert(0, f"long-form: {int(dur) // 60}m of runtime is longer "
+                          f"than any promo, clip or cutdown — considered a "
+                          f"broadcast regardless of what the title says")
     confidence = ("unlikely" if refusal
-                  else ("likely" if score >= LIKENESS_THRESHOLD else "unlikely"))
+                  else ("likely" if longform or score >= LIKENESS_THRESHOLD
+                        else "unlikely"))
     return {"score": score, "confidence": confidence, "reasons": reasons,
             "refused": bool(refusal), "refusalReason": refusal}
 

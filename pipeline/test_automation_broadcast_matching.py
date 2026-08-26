@@ -668,18 +668,56 @@ class TestBroadcastLikeness(unittest.TestCase):
         self.assertEqual(r["confidence"], "likely")
 
     def test_does_not_rely_on_duration_alone(self):
-        # A LONG video with only instructional signals must still be
-        # unlikely (duration alone can't save it). Below the five-minute
-        # floor duration DOES decide on its own — deliberately, see
-        # MIN_BROADCAST_DURATION_SECONDS — but above it duration is only one
-        # of several independent signals.
+        # Between the two hard boundaries, duration is only one signal among
+        # several: a 30-minute instructional upload is still unlikely. Below
+        # MIN_BROADCAST_DURATION_SECONDS and at/above
+        # LIKENESS_LONGFORM_DURATION_SECONDS duration DOES decide on its own,
+        # deliberately — those two cases are covered just below.
         long_instructional = video(
             title="Full tutorial: every perk explained in depth", description="",
             liveBroadcastStatus="none", durationSeconds=1800,
             actualStartAt=None, scheduledStartAt=None)
+        self.assertLess(1800, bm.LIKENESS_LONGFORM_DURATION_SECONDS,
+                        "this fixture must sit BELOW the long-form boundary "
+                        "or it is no longer testing what it says")
         r = bm.broadcast_likeness(long_instructional)
         self.assertEqual(r["confidence"], "unlikely",
                         "a long instructional upload must not pass on duration alone")
+
+    def test_an_hour_of_runtime_is_considered_whatever_the_title_says(self):
+        """The mirror of the too-short refusal. Nothing that runs for an hour
+        is a promo, a clip or a tips video, so the title penalties (which sum
+        to -50) must not be able to veto it. A full-day broadcast titled
+        '... Highlights' is exactly the upload we cannot afford to drop."""
+        v = video(title="OWCS 2026 World Cup Highlights", description="",
+                  liveBroadcastStatus="none",
+                  durationSeconds=bm.LIKENESS_LONGFORM_DURATION_SECONDS,
+                  actualStartAt=None, scheduledStartAt=None)
+        r = bm.broadcast_likeness(v)
+        self.assertEqual(r["confidence"], "likely")
+        self.assertLess(r["score"], bm.LIKENESS_THRESHOLD,
+                        "the point of this test is that it passes DESPITE a "
+                        "failing score, not because the score rescued it")
+        self.assertFalse(r["refused"])
+        self.assertIn("long-form", r["reasons"][0],
+                      "the reason that decided the verdict must be stated first")
+
+    def test_just_under_the_hour_still_has_to_earn_it(self):
+        under = bm.LIKENESS_LONGFORM_DURATION_SECONDS - 1
+        v = video(title="OWCS 2026 World Cup Highlights", description="",
+                  liveBroadcastStatus="none", durationSeconds=under,
+                  actualStartAt=None, scheduledStartAt=None)
+        self.assertEqual(bm.broadcast_likeness(v)["confidence"], "unlikely")
+
+    def test_a_refusal_still_outranks_long_form(self):
+        """A /shorts/ URL claiming a two-hour duration is lying about one of
+        them. The documented hard floor stays the hard floor."""
+        v = video(title="OWCS 2026 | Group Stage Day 1 vs",
+                  liveBroadcastStatus="completed", durationSeconds=2 * 60 * 60,
+                  isShortsUrl=True)
+        r = bm.broadcast_likeness(v)
+        self.assertEqual(r["confidence"], "unlikely")
+        self.assertTrue(r["refused"])
 
     def test_no_brittle_title_special_case(self):
         # The signals are generic keyword/structure checks, not a hard-coded
