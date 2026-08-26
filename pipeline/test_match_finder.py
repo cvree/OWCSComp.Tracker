@@ -590,11 +590,14 @@ class TestTwitchSource(unittest.TestCase):
         self.assertIn("https://www.twitch.tv/ow_esports/videos", runner2.cmds[0])
         self.assertNotIn("videos/videos", " ".join(runner2.cmds[0]))
 
-    def test_entries_carry_the_air_date_without_a_backfill_pass(self):
-        """The YouTube flat dump omits the timestamp often enough that the
-        archive needed a separate dating pass. A Twitch dump carries
-        release_timestamp, so a broadcast arrives placeable on the
-        calendar."""
+    def test_a_timestamp_is_used_when_the_dump_carries_one(self):
+        """When the flat dump does carry a timestamp it is read, preferring
+        release_timestamp (when the stream went live) over timestamp.
+
+        It usually does NOT. A live scan of the real channel returned
+        fifteen VODs and every one of them was dateless — the same gap the
+        YouTube listing has, which is why the backfill below exists for
+        both platforms."""
         entries, err = mf.fetch_twitch_vods(
             "https://www.twitch.tv/ow_esports",
             runner=FakeRunner(stdout=self._dump([{
@@ -703,6 +706,83 @@ class TestTwitchSource(unittest.TestCase):
         self.assertFalse(any("ow_esports" in u for u in fetched_rss))
         self.assertFalse(any("youtube.com/channel/ow_esports" in u
                              for u in urls))
+
+
+class TestTwitchDateBackfill(unittest.TestCase):
+    """Measured, not assumed: a live scan of the real channel returned
+    fifteen Twitch VODs and every one of them arrived with no air date, so
+    the flat dump is no more forthcoming here than YouTube's is.
+
+    The difference that matters is what happens next. The per-video lookup
+    that fills the gap is REFUSED on YouTube from a GitHub-hosted runner —
+    which is why the API path exists and is primary there — and is served
+    on Twitch. So the path this repo had already written, and had to route
+    around for YouTube, is exactly the one that works for Twitch.
+    """
+
+    @staticmethod
+    def _ledger():
+        return {"candidates": [
+            {"videoId": "2854348714", "platform": "twitch",
+             "title": "OWCS 2026 | Day 2", "publishedAt": None,
+             "likeness": {"confidence": "likely", "refused": False},
+             "sources": ["twitch-videos"]},
+            {"videoId": "dQw4w9WgXcQ",
+             "title": "OWCS 2026 | Day 1", "publishedAt": None,
+             "likeness": {"confidence": "likely", "refused": False},
+             "sources": ["streams"]},
+        ]}
+
+    def test_each_row_is_looked_up_on_its_own_platform(self):
+        seen = []
+
+        def meta(vid, platform):
+            seen.append((vid, platform))
+            return {"publishedAt": "2026-08-24T01:46:40+00:00",
+                    "durationSeconds": 21600,
+                    "liveBroadcastStatus": "completed"}, None
+
+        led, errors, filled = mf.fill_missing_dates(
+            self._ledger(), limit=5, fetch_meta=meta)
+        self.assertEqual(errors, [])
+        self.assertEqual(filled, 2)
+        self.assertEqual(sorted(seen), sorted([
+            ("2854348714", li.TWITCH), ("dQw4w9WgXcQ", li.YOUTUBE)]))
+
+    def test_the_lookup_url_is_the_row_platform_url(self):
+        """A Twitch id sent to a YouTube URL would 404 forever, and the
+        circuit breaker would read that as the source refusing us."""
+        runner = FakeRunner(stdout=json.dumps(
+            {"id": "2854348714", "release_timestamp": 1756000000}))
+        fields, err = mf.fetch_video_metadata(
+            "2854348714", runner=runner, platform=li.TWITCH)
+        self.assertIsNone(err)
+        self.assertIn("https://www.twitch.tv/videos/2854348714", runner.cmds[0])
+        self.assertTrue(fields["publishedAt"].startswith("2025-"))
+        # and the default is unchanged for every existing caller
+        runner2 = FakeRunner(stdout=json.dumps({"id": "dQw4w9WgXcQ"}))
+        mf.fetch_video_metadata("dQw4w9WgXcQ", runner=runner2)
+        self.assertIn("https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+                      runner2.cmds[0])
+
+    def test_a_fetcher_written_against_the_old_arity_still_works(self):
+        """The injected fetcher is a test seam that predates platforms."""
+        def meta(vid):
+            return {"publishedAt": "2026-08-24T00:00:00+00:00"}, None
+
+        _led, errors, filled = mf.fill_missing_dates(
+            self._ledger(), limit=5, fetch_meta=meta)
+        self.assertEqual((errors, filled), ([], 2))
+
+    def test_a_typeerror_inside_a_fetcher_is_never_swallowed(self):
+        """Deciding arity by signature rather than by catching TypeError:
+        a real bug inside a fetcher must not be retried as a different
+        call and turned into a silent wrong answer."""
+        def meta(vid, platform):
+            raise TypeError("a real bug inside the fetcher")
+
+        with self.assertRaises(TypeError):
+            mf.fill_missing_dates(self._ledger(), limit=1, fetch_meta=meta)
 
 
 if __name__ == "__main__":

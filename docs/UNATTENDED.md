@@ -66,6 +66,36 @@ a full broadcast rather than a highlight clip.
 **So the unattended loop is possible on free GitHub hardware — through
 Twitch, not YouTube.**
 
+### And the finder's Twitch source, run for real
+
+The same probe runs the finder's Twitch source against the real registry
+row. It returned **15 candidates from 15 VODs**, every one scored `likely`
+by the same broadcast-likeness gate production intake trusts, and every one
+round-tripping through `parse_link` back to the id it came from:
+
+```
+  8.5h  likely  [REBROADCAST] [DROPS] OWWC 2026 | Group Stage Day 4
+ 12.1h  likely  [DROPS] OWWC 2026 | Group Stage Day 1
+  6.8h  likely  OWCS x FACEIT League | Stage 3 Promotion/Relegation Matches
+  8.9h  likely  [DROPS] OWCS 2026 | Midseason Championship Day 5
+```
+
+Runtimes of 6–12 hours: real broadcast days, not clips.
+
+Two things that run corrected, which is what a live check is for:
+
+* **The flat dump carries no air date** — all fifteen came back dateless,
+  exactly like the YouTube listing. The difference is what happens next:
+  the bounded per-video lookup that fills the gap is refused on YouTube
+  from this hardware and served on Twitch, so the path this repo already
+  wrote (and had to route around with the Data API for YouTube) is the one
+  that works here. `fetch_video_metadata` now takes the row's platform.
+* **Rebroadcasts are listed as their own VODs** and score `likely`,
+  because they are the same content aired again. Deduplicating them
+  against their original is a real piece of work the finder does not do
+  yet — worth doing before this queue drives anything unattended, or the
+  same day gets processed twice.
+
 ### What that costs at full-map scale
 
 The measured rate extrapolates honestly. The verified Nepal map sampled
@@ -89,8 +119,8 @@ above is the worst case of six deliberately-scattered reads.
 
 | step | runs today | unattended | needs |
 |---|---|---|---|
-| find broadcasts | `match-finder.yml`, every 6 h | ✅ already | Twitch channel added as a source |
-| acquire frames | operator's machine | ✅ **proven above** | Twitch accepted at intake |
+| find broadcasts | `match-finder.yml`, every 6 h | ✅ **done** | — |
+| acquire frames | operator's machine | ✅ **proven above** | the worker's host allowlist |
 | calibrate the HUD | operator runs `calibrate_source.py` | computational already; refuses below 0.55 | an auto-approve threshold |
 | forge templates | operator runs `template_forge.py` | build → gate → held-out validation is already one command | promote only `VALIDATED` heroes |
 | ingest the map | operator runs `ingest_map.py` | pure OpenCV, offline | nothing |
@@ -105,22 +135,25 @@ publishes without a human**.
 
 ## What to build, in order
 
-### 1. Twitch as a first-class source — the actual blocker now
+### 1. Twitch as a first-class source — DONE
 
-`link_intake.parse_link` rejects `twitch.tv` with `unsupported_host`, and
-`pipeline/test_automation_link_intake.py` asserts that it does. The one
-source a free runner can fetch is the one intake refuses. This is the
-keystone change and it is not small: `videoId` identity, the 11-character
-YouTube id regex, `canonical_url`, the worker's download path, discovery,
-`self_fill` and the public export contract all assume YouTube spelling.
+`platform` rides beside `videoId`, defaulting to `youtube` so every
+committed artifact stays byte-identical and every key already in a job
+store keeps resolving. Intake parses and authorizes Twitch VODs with no
+key at all, the finder scans the channel's `/videos` tab, and `self_fill`
+joins a published Twitch match against its own record.
 
-Do it as: a `platform` field beside `videoId` (defaulting to `youtube` so
-every committed artifact stays byte-identical), a per-platform id shape,
-per-platform canonical URLs, and the same verified-channel authority rule
-applied to the Twitch channel registry. Tests first — the export contract
-suite is the one that will catch drift.
+### 2. The worker's host allowlist — the actual blocker now
 
-### 2. `autopilot.yml` — the scheduled chain
+`worker.py` keeps its own `ALLOWED_HOSTS`, YouTube-only, and refuses
+anything else before a download starts. So intake now accepts a Twitch VOD
+that the download path will still turn away. This is the same shape of
+change intake just took, and it is deliberately a separate gate: intake
+decides what may be *recorded*, the worker decides what may be *fetched*.
+`video_ingest.is_remote_url` has the same assumption baked into a
+substring check.
+
+### 3. `autopilot.yml` — the scheduled chain
 
 `pipeline/automation/autopilot.py` already drives every automatic stage in
 a row and stops honestly at the first human gate. Unattended operation is
@@ -129,7 +162,7 @@ then committing through the same PR-and-green-CI path `discovery.yml`
 already uses. Concurrency must join the existing shared data group so it
 can never race the other committing workflows.
 
-### 3. The four gates
+### 4. The four gates
 
 `autopilot.py` stops at: source authorization, layout approval, segment
 identity, detection review. Unattended means each needs a written rule
@@ -147,29 +180,43 @@ rather than a person:
 
 ---
 
-## The decision that is not the pipeline's to make
+## The publication rule — decided
 
-Today the product states plainly that **nothing is ever approved
-automatically**: hero compositions reach production only through a human
-review. Fully unattended publishing changes that, and it is a product
-decision, not a technical one.
+The product used to state plainly that **nothing is ever approved
+automatically**: hero compositions reached production only through a human
+review. Fully unattended publishing changes that, and it was a product
+decision rather than a technical one. It has been made: **publish what the
+detector accepts.**
 
-The Windows app already has the shape of an answer — *"only repeated,
-high-confidence readings publish on their own"* — and the detector already
-produces exactly the evidence such a rule needs: a ranked candidate, its
-runner-up, the margin, `UNKNOWN` instead of a guess, and temporal
-consensus over hundreds of agreeing frames.
+That is a narrower rule than it sounds, and the narrowness is the whole
+reason it is defensible. It moves the human out of the loop; it does NOT
+move the bar. Everything the detector already refuses, it still refuses:
 
-So the honest unattended rule is a **narrow** one: publish a slot read
-only when a long run of frames agrees, the margin clears a stated floor,
-and no neighbouring read is `UNKNOWN` — and send everything else to the
-review inbox, where it waits as long as it needs to. That keeps the
-guarantee that matters (nothing uncertain is ever stated as fact) while
-letting the ordinary case flow through untouched.
+* a slot whose best match does not clear `unknown_floor` reads `UNKNOWN`,
+  and `UNKNOWN` is never a hero;
+* a slot whose best and runner-up are too close to separate fails
+  `min_margin` and reads `UNKNOWN` too;
+* a hero with no template in the package is reported `UNKNOWN`, never
+  guessed from a near neighbour;
+* a change point survives only if temporal consensus confirms it — the
+  verified Nepal map rejected 7 of 10 suspected swaps as dead-portrait
+  lookalikes and killcam artifacts, and those rejections are exported with
+  the reason they were thrown out;
+* replays, scoreboards and desk segments never create comps at all.
 
-What must NOT happen is lowering the detector's own floors to make more
-things auto-publishable. An unattended pipeline that publishes a
-plausible-but-wrong composition is worse than one that publishes nothing.
+So what publishes unattended is what survived all of that, and what did
+not survive is still published as a stated `UNKNOWN` rather than a guess.
+
+**What must never happen is lowering those floors to make more things
+publishable.** They are the entire remaining guarantee, and an unattended
+pipeline that states a plausible-but-wrong composition as fact is worse
+than one that publishes nothing. Any future change that moves
+`unknown_floor`, `min_margin`, or the consensus thresholds is a change to
+this decision, not an implementation detail of it.
+
+The pages that explain the workflow say a human reviews before publishing.
+They will need to say what actually happens instead — the honesty of the
+site about its own process is part of the product.
 
 ---
 

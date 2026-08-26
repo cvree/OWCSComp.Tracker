@@ -34,6 +34,7 @@ Hard guarantees (match the rest of the automation layer):
 from __future__ import annotations
 
 import datetime as dt
+import inspect
 import json
 import os
 import re
@@ -308,15 +309,22 @@ def fetch_twitch_vods(channel_url: str, limit: int = DEFAULT_LIMIT,
 SYSTEMIC_REFUSALS = 3
 
 
-def fetch_video_metadata(video_id: str, runner=subprocess
+def fetch_video_metadata(video_id: str, runner=subprocess, *,
+                         platform: str = li.YOUTUBE
                          ) -> tuple[dict | None, str | None]:
     """One metadata-only `yt-dlp -J` for a single video. (fields, error);
     never raises.
 
     `--skip-download` is belt and braces next to `-J` (which already only
     dumps JSON): this function must be incapable of pulling media, because
-    the whole finder's safety claim is that it never downloads video."""
-    url = li.canonical_url(video_id)
+    the whole finder's safety claim is that it never downloads video.
+
+    Works for either platform, and the difference between them is the
+    whole reason this path is alive again. On YouTube it is refused from a
+    GitHub-hosted runner — which is why the API path exists and is
+    primary. On Twitch it is served, so it is the ONLY way a Twitch
+    broadcast gets a date at all."""
+    url = li.canonical_url(video_id, platform)
     cmd = ["yt-dlp", "-J", "--skip-download", "--no-warnings",
            "--no-playlist", url]
     try:
@@ -476,6 +484,25 @@ def fill_missing_dates_via_api(ledger: dict, *, client,
     return ledger, errors, filled
 
 
+def _call_meta(meta: Callable, row: dict):
+    """Call a metadata fetcher with the row's platform, when it takes one.
+
+    An injected fetcher may be written against either arity. Deciding by
+    signature rather than by catching TypeError matters: a TypeError raised
+    INSIDE a two-argument fetcher would otherwise be swallowed and retried
+    as a one-argument call, turning a real bug into a silent wrong answer.
+    """
+    platform = row.get("platform") or li.YOUTUBE
+    try:
+        params = inspect.signature(meta).parameters
+    except (TypeError, ValueError):     # a builtin or C callable
+        return meta(row["videoId"])
+    takes_platform = (
+        len(params) >= 2
+        or any(p.kind is inspect.Parameter.VAR_POSITIONAL for p in params.values()))
+    return meta(row["videoId"], platform) if takes_platform else meta(row["videoId"])
+
+
 def fill_missing_dates(ledger: dict, *, limit: int = 0, runner=subprocess,
                        fetch_meta: Callable[[str], tuple[dict | None, str | None]]
                        | None = None) -> tuple[dict, list[str], int]:
@@ -504,7 +531,9 @@ def fill_missing_dates(ledger: dict, *, limit: int = 0, runner=subprocess,
     hardest at the exact moment it was already refusing us."""
     if limit <= 0:
         return ledger, [], 0
-    meta = fetch_meta or (lambda vid: fetch_video_metadata(vid, runner=runner))
+    meta = fetch_meta or (
+        lambda vid, platform=li.YOUTUBE: fetch_video_metadata(
+            vid, runner=runner, platform=platform))
     errors: list[str] = []
     filled = 0
     attempts = 0
@@ -539,7 +568,7 @@ def fill_missing_dates(ledger: dict, *, limit: int = 0, runner=subprocess,
         if (row.get("likeness") or {}).get("refused"):
             continue
         attempts += 1
-        fields, err = meta(row["videoId"])
+        fields, err = _call_meta(meta, row)
         if err:
             errors.append(err)
             consecutive_failures += 1
