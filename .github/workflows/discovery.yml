@@ -33,10 +33,11 @@
 #                           match isn't public yet, read-only (D2.1)
 #   mode=sync              (default) same as the scheduled run — now also runs LIVE
 #                          team enrichment + opens a data-update PR when calendar
-#                          or team facts change. It ATTEMPTS to merge that PR once
-#                          its CI is green; with only the default GITHUB_TOKEN the
-#                          PR does not trigger ci.yml, so the merge is best-effort
-#                          and the PR is left for a human (see the step's comment).
+#                          or team facts change, authenticated as the BOT_PAT
+#                          secret (a real account, not the default GITHUB_TOKEN)
+#                          so ci.yml actually runs on it. It merges that PR once
+#                          its CI is green; a red or absent check leaves the PR
+#                          open for a human (see the step's comment).
 #
 # Every YouTube mode is read-only: no video download, no recording, no hero-
 # composition writes, no production DB update, no auto-merge. Only sanitized
@@ -99,6 +100,16 @@ jobs:
     steps:
       - name: Check out repo
         uses: actions/checkout@v6
+        with:
+          # BOT_PAT, not the default GITHUB_TOKEN: actions/checkout persists
+          # whatever token it's given as the git credential for the rest of
+          # this job, so this is what `git push origin "$BR"` further down
+          # authenticates as. A GITHUB_TOKEN-authored push cannot trigger
+          # other workflows (GitHub's anti-recursion rule), which is why
+          # ci.yml never ran on an auto/discovery-* PR and it sat in
+          # "Awaiting approval" forever. A PAT belonging to a real account
+          # does not carry that restriction.
+          token: ${{ secrets.BOT_PAT }}
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -363,7 +374,11 @@ jobs:
         id: pr
         if: steps.validate.conclusion == 'success'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # BOT_PAT — every gh CLI call below (pr create/view/checks/merge)
+          # authenticates as it, matching the checkout step's token so the
+          # push and the PR are opened by the same identity. See that step's
+          # comment for why this is what makes ci.yml actually run on the PR.
+          GH_TOKEN: ${{ secrets.BOT_PAT }}
         run: |
           git config user.name  "owcs-discovery[bot]"
           git config user.email "actions@users.noreply.github.com"
@@ -423,24 +438,25 @@ jobs:
           # failing or timed-out check leaves the PR open for a human —
           # never force-merged, never bypassed.
           #
-          # KNOWN LIMITATION, stated here because the alternative is a
-          # workflow that lies: this PR is opened with the default
-          # GITHUB_TOKEN, and GitHub's anti-recursion rule means a
-          # GITHUB_TOKEN-created pull_request event does NOT start a workflow
-          # run. So unless a PAT/App token is configured, ci.yml never runs on
-          # $BR, `gh pr checks` reports "no checks" (exit 8), and this branch
-          # correctly falls through to the human-review path below. Auto-merge
-          # is therefore best-effort, NOT a guarantee — do not read a green
-          # discovery run as "the data update shipped".
+          # This push and this PR are both authenticated as BOT_PAT (a real
+          # account), not the default GITHUB_TOKEN — so GitHub's anti-
+          # recursion rule (a GITHUB_TOKEN-authored pull_request event does
+          # NOT start a workflow run) does not apply, and ci.yml runs on
+          # $BR normally. Nothing here silently falls back to GITHUB_TOKEN
+          # if BOT_PAT is ever missing or revoked: `${{ secrets.BOT_PAT }}`
+          # then resolves empty, checkout/push/gh all fail on the bad
+          # credential, and the step fails loudly rather than quietly
+          # reverting to the old best-effort behavior.
           if gh pr checks "$BR" --watch --fail-fast; then
             gh pr merge --squash --delete-branch "$BR"
             echo "merged=true" >> "$GITHUB_OUTPUT"
           else
             echo "merged=false" >> "$GITHUB_OUTPUT"
-            echo "::warning::No passing CI conclusion for $BR (either a real "
-            echo "::warning::failure, or no checks ran because a GITHUB_TOKEN-"
-            echo "::warning::opened PR does not trigger workflows). The PR is "
-            echo "::warning::open and waiting for a human — nothing shipped."
+            echo "::warning::No passing CI conclusion for $BR — a real CI "
+            echo "::warning::failure, or ci.yml requires manual approval to "
+            echo "::warning::run for this actor (Settings > Actions > General). "
+            echo "::warning::The PR is open and waiting for a human — nothing "
+            echo "::warning::shipped."
           fi
 
       - name: Summary
