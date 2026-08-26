@@ -16,20 +16,39 @@
 # band and the per-broadcast page — derived in the SAME command, so the
 # site can never render a scan that no longer exists.
 #
-# The scan also spends a bounded number of metadata-only lookups per run
-# (--fill-dates) giving previously dateless archived broadcasts their real
-# air date. The /streams tab is dumped with --flat-playlist, which is one
-# cheap request for a whole channel but frequently omits the timestamp,
-# and a broadcast with no date can never be placed on the calendar.
+# The scan also gives previously dateless archived broadcasts their real air
+# date. The /streams tab is dumped with --flat-playlist, which is one cheap
+# request for a whole channel but frequently omits the timestamp, and a
+# broadcast with no date can never be placed on the calendar.
+#
+# That backfill takes whichever of two paths is available:
+#
+#   * YOUTUBE_API_KEY set (the case here) — videos.list returns FIFTY videos
+#     per call for ONE quota unit, so the entire dateless archive costs a
+#     handful of units against the 10,000/day default. It also returns
+#     liveStreamingDetails.actualStartTime, which for an archived broadcast
+#     is the real air date rather than a publish timestamp.
+#   * No key — the bounded per-video yt-dlp lookup (--fill-dates), which
+#     still works from a residential IP but is currently REFUSED on
+#     GitHub-hosted runners: YouTube bot-checks datacentre IPs and asks for
+#     cookies, which an unattended public scan has no business holding. It
+#     keeps its budget and its circuit breaker for that reason.
+#
+# The key buys dates and nothing else. Without it this workflow still runs
+# end to end with no secrets at all, exactly as it did before.
 #
 # The two sources (see pipeline/automation/match_finder.py):
 #   * the channel's public RSS feed (stdlib urllib; no key, no quota)
 #   * the channel's /streams tab via `yt-dlp --flat-playlist` (metadata
 #     only — the `-J` dump, never a media download)
 #
-# Cost: $0. No FACEIT key, no YOUTUBE_API_KEY, no cookies, no login.
-# GitHub-hosted runners can reach YouTube, which is the whole reason this
-# runs here: the finder is the one part of the system that needs real
+# Cost: $0. No FACEIT key, no cookies, no login. YOUTUBE_API_KEY is used
+# when present — free tier, ~5 of 10,000 daily units for the whole
+# archive — and the run degrades to the keyless path when it is not.
+# GitHub-hosted runners can reach YouTube's public feeds and channel
+# listings, which is the whole reason this runs here (its per-video player
+# API is a different story — see the backfill note above): the finder is
+# the one part of the system that needs real
 # egress, and a scheduled runner provides it for free.
 #
 # Safety — this workflow CANNOT publish a composition:
@@ -89,6 +108,9 @@ jobs:
       LIMIT: ${{ github.event.inputs.limit || '60' }}
       DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
       FILL_DATES: ${{ github.event.inputs.fill_dates || '15' }}
+      # Read-only, metadata-only, and optional. When absent the scan falls
+      # back to the bounded yt-dlp lookup and says so in its own output.
+      YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
     steps:
       - name: Check out repo
         uses: actions/checkout@v6

@@ -108,16 +108,31 @@ year lands in a `season: null` group rather than being guessed into one,
 and `runtimeSeconds` always ships beside `runtimeKnown` so a total over
 38 of 41 broadcasts reads as the floor it is.
 
-**Why almost nothing has a date** (`date_coverage()`): the scan reads a
-whole channel in one cheap `--flat-playlist` request, which carries no
-air date, and the per-video lookup that would supply one is currently
-being **refused by YouTube** (it asks for cookies). 246 of 250 broadcasts
-therefore have no date, which is why the calendar links so little. The
-site states that reason wherever a date is missing instead of printing
-"date unknown" 246 times, and `fill_missing_dates` now trips a circuit
-breaker after `SYSTEMIC_REFUSALS` consecutive refusals — a class refusal
-costs three requests and one honest summary line, not the whole budget
-and fifteen copies of one error.
+**Dating the archive.** The scan reads a whole channel in one cheap
+`--flat-playlist` request, which carries no air date, so the dates have to
+come from somewhere else — and a broadcast with no date can never be placed
+on the calendar. There are two paths, chosen by whether a `YOUTUBE_API_KEY`
+is present:
+
+* **With a key** (`fill_missing_dates_via_api`): `videos.list` returns
+  **fifty videos per call for one quota unit**, so the entire dateless
+  archive — 246 rows — costs **5 units** of the 10,000/day default. It also
+  returns `liveStreamingDetails.actualStartTime`, which for an archived
+  broadcast is the real air date rather than a publish timestamp that can
+  sit days earlier, and `contentDetails.duration`, which fills the runtimes
+  the flat playlist omitted. This is the primary path.
+* **Without a key** (`fill_missing_dates`): the bounded per-video `yt-dlp`
+  lookup. It still works from a residential IP, but on GitHub-hosted
+  runners YouTube **bot-checks the datacentre IP and asks for cookies**, so
+  every request is refused. It keeps its budget and now trips a circuit
+  breaker after `SYSTEMIC_REFUSALS` consecutive refusals — a class refusal
+  costs three requests and one honest summary line, not the whole budget
+  and fifteen copies of one error.
+
+The key is optional and buys dates only: with it absent the finder still
+runs end to end with no secrets at all. Wherever a date is still missing,
+`date_coverage()` derives the reason from the scan's own errors and the
+site prints it, instead of "date unknown" 246 times.
 
 **Site search** (`assets/js/app/shell.js`): every page carries a search
 button plus `/` and ⌘/Ctrl-K. It indexes games, teams, heroes, maps and the

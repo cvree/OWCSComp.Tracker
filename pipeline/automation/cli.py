@@ -1517,12 +1517,41 @@ def cmd_find_matches(args: argparse.Namespace) -> int:
     ledger = mf.scan(
         chans, limit=args.limit,
         extra_channel_urls=[args.channel_url] if args.channel_url else None)
-    # Bounded per-video date backfill. The flat-playlist dump the scan is
-    # built on often omits the timestamp, and a broadcast with no date can
-    # never be placed on the calendar — see mf.fill_missing_dates.
+    # Date backfill. The flat-playlist dump the scan is built on often omits
+    # the timestamp, and a broadcast with no date can never be placed on the
+    # calendar.
+    #
+    # TWO PATHS, and which one runs is decided by whether a YOUTUBE_API_KEY
+    # exists — not by a flag, because there is no case where the slow path
+    # is preferable when the fast one is available:
+    #
+    #   * WITH a key: one videos.list call covers FIFTY videos for ONE quota
+    #     unit, so the whole dateless archive costs a handful of units out
+    #     of the 10,000/day default. No per-video budget is needed and none
+    #     is imposed.
+    #   * WITHOUT a key: the bounded yt-dlp path, which still works from a
+    #     residential IP but is currently refused outright on GitHub-hosted
+    #     runners (YouTube bot-checks datacentre IPs and asks for cookies).
+    #     It keeps its budget and its circuit breaker.
+    #
+    # The keyless path is kept, not replaced: this command's contract is
+    # that it runs with no secrets at all, and it still does — it just
+    # degrades to the slower, refusable source.
     if args.fill_dates and not args.dry_run:
-        ledger, date_errors, filled = mf.fill_missing_dates(
-            ledger, limit=args.fill_dates)
+        pending = len(mf.dateless_candidates(ledger))
+        if os.environ.get("YOUTUBE_API_KEY"):
+            client = _build_youtube_client(args)
+            print(f"[match-finder] dating {pending} broadcast(s) via the "
+                  f"YouTube Data API ({-(-pending // 50)} call(s), "
+                  f"{-(-pending // 50)} quota unit(s))")
+            ledger, date_errors, filled = mf.fill_missing_dates_via_api(
+                ledger, client=client)
+        else:
+            print("[match-finder] no YOUTUBE_API_KEY — falling back to the "
+                  f"bounded per-video lookup ({args.fill_dates} request(s) "
+                  f"of {pending} pending)")
+            ledger, date_errors, filled = mf.fill_missing_dates(
+                ledger, limit=args.fill_dates)
         if filled:
             print(f"[match-finder] filled the air date of {filled} "
                   f"previously-dateless broadcast(s)")

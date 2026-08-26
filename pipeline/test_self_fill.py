@@ -546,6 +546,194 @@ class TestScanCadence(unittest.TestCase):
 
 
 # --------------------------------------------------------- date backfill
+class TestApiDateBackfill(unittest.TestCase):
+    """The PRIMARY date path. yt-dlp's per-video lookup is refused outright
+    on GitHub-hosted runners — YouTube bot-checks datacentre IPs — so the
+    archive's dates come from videos.list, which is both allowed and about
+    fifty times cheaper per video."""
+
+    def _client(self, items, *, calls=None):
+        """A real YouTubeClient over a stub transport, so the batching and
+        quota accounting under test are the SHIPPING ones rather than a fake
+        that agrees with me."""
+        from automation import youtube_api as yt
+
+        def transport(url, headers):
+            import urllib.parse as up
+            q = up.parse_qs(up.urlparse(url).query)
+            ids = q["id"][0].split(",")
+            if calls is not None:
+                calls.append(ids)
+            self.assertLessEqual(len(ids), 50,
+                                 "videos.list rejects more than 50 ids")
+            return 200, json.dumps(
+                {"items": [items[v] for v in ids if v in items]}), None
+
+        return yt.YouTubeClient(api_key="test-key", transport=transport,
+                                cache_ttl_seconds=None)
+
+    def _video(self, vid, *, start=None, published="2026-07-01T00:00:00Z",
+               duration="PT5H43M12S"):
+        live = {}
+        if start:
+            live = {"actualStartTime": start,
+                    "actualEndTime": "2026-07-04T23:45:00+00:00"}
+        return {"id": vid, "snippet": {"publishedAt": published},
+                "liveStreamingDetails": live,
+                "contentDetails": {"duration": duration}}
+
+    def _ledger(self, n):
+        return {"candidates": [
+            dict(candidate(f"NODATE{i:05d}", f"OWCS 2026 | Stage 2 Day {i}",
+                           published=None), job=None)
+            for i in range(n)]}
+
+    def test_the_whole_archive_costs_a_handful_of_quota_units(self):
+        """The entire argument for this path: 246 dateless broadcasts cost
+        5 calls — 5 units of a 10,000/day allowance — not 246."""
+        led = self._ledger(246)
+        items = {c["videoId"]: self._video(c["videoId"],
+                                           start="2026-07-04T18:00:00+00:00")
+                 for c in led["candidates"]}
+        calls = []
+        client = self._client(items, calls=calls)
+        led, errors, filled = mf.fill_missing_dates_via_api(led, client=client)
+        self.assertEqual(filled, 246)
+        self.assertEqual(len(calls), 5)
+        self.assertEqual(client.quota_used, 5)
+        self.assertEqual(errors, [])
+
+    def test_a_broadcast_is_dated_by_when_it_actually_went_live(self):
+        """`publishedAt` on an archived stream can sit days before it aired —
+        it is when the stream was CREATED. actualStartTime is the air date,
+        the same precedence the yt-dlp path applies to release_timestamp."""
+        led = self._ledger(1)
+        vid = led["candidates"][0]["videoId"]
+        client = self._client({vid: self._video(
+            vid, published="2026-06-28T09:00:00Z",
+            start="2026-07-04T18:02:11+00:00")})
+        led, _errors, filled = mf.fill_missing_dates_via_api(led, client=client)
+        self.assertEqual(filled, 1)
+        self.assertEqual(led["candidates"][0]["publishedAt"],
+                         "2026-07-04T18:02:11+00:00")
+
+    def test_a_plain_upload_falls_back_to_its_publish_time(self):
+        led = self._ledger(1)
+        vid = led["candidates"][0]["videoId"]
+        client = self._client({vid: self._video(
+            vid, published="2026-07-09T10:00:00Z", start=None)})
+        led, _errors, filled = mf.fill_missing_dates_via_api(led, client=client)
+        self.assertEqual(filled, 1)
+        self.assertEqual(led["candidates"][0]["publishedAt"],
+                         "2026-07-09T10:00:00Z")
+
+    def test_it_also_fills_the_duration_the_flat_playlist_omitted(self):
+        led = self._ledger(1)
+        row = led["candidates"][0]
+        row["durationSeconds"] = None
+        client = self._client({row["videoId"]: self._video(
+            row["videoId"], start="2026-07-04T18:00:00+00:00")})
+        led, _e, _f = mf.fill_missing_dates_via_api(led, client=client)
+        self.assertEqual(led["candidates"][0]["durationSeconds"], 20592)
+        self.assertEqual(led["candidates"][0]["liveBroadcastStatus"],
+                         "completed")
+
+    def test_the_row_records_where_its_date_came_from(self):
+        led = self._ledger(1)
+        vid = led["candidates"][0]["videoId"]
+        client = self._client({vid: self._video(
+            vid, start="2026-07-04T18:00:00+00:00")})
+        led, _e, _f = mf.fill_missing_dates_via_api(led, client=client)
+        self.assertIn("youtube-api", led["candidates"][0]["sources"])
+
+    def test_a_deleted_video_is_reported_not_invented(self):
+        """videos.list simply omits ids it will not serve. Those rows keep no
+        date, and the scan says how many went unanswered."""
+        led = self._ledger(3)
+        ids = [c["videoId"] for c in led["candidates"]]
+        client = self._client({ids[0]: self._video(
+            ids[0], start="2026-07-04T18:00:00+00:00")})
+        led, errors, filled = mf.fill_missing_dates_via_api(led, client=client)
+        self.assertEqual(filled, 1)
+        self.assertEqual(
+            len([c for c in led["candidates"] if not c.get("publishedAt")]), 2)
+        self.assertEqual(len(errors), 1)
+        self.assertIn("2 of 3", errors[0])
+
+    def test_a_refused_upload_is_never_sent_to_the_api(self):
+        led = self._ledger(1)
+        vid = led["candidates"][0]["videoId"]
+        led["candidates"].append(
+            dict(candidate("SHORT000001", "Top 10 Tips", published=None,
+                           refused=True, confidence="unlikely"), job=None))
+        calls = []
+        client = self._client(
+            {vid: self._video(vid, start="2026-07-04T18:00:00+00:00")},
+            calls=calls)
+        mf.fill_missing_dates_via_api(led, client=client)
+        self.assertEqual(calls, [[vid]],
+                         "a refused Short is not worth a lookup")
+
+    def test_an_already_dated_row_is_never_re_fetched(self):
+        led = {"candidates": [
+            dict(candidate("HASDATE0001", "OWCS 2026 | Stage 2 Day 3"),
+                 job=None)]}
+        calls = []
+        _led, _e, filled = mf.fill_missing_dates_via_api(
+            led, client=self._client({}, calls=calls))
+        self.assertEqual(filled, 0)
+        self.assertEqual(calls, [])
+
+    def test_an_api_failure_degrades_instead_of_killing_the_scan(self):
+        """A scan that dies on a source loses the whole run's discovery, so a
+        broken backfill has to come back as an error string."""
+        class Boom:
+            def list_videos(self, ids):
+                raise RuntimeError("quota exceeded")
+
+        led, errors, filled = mf.fill_missing_dates_via_api(
+            self._ledger(2), client=Boom())
+        self.assertEqual(filled, 0)
+        self.assertEqual(len(errors), 1)
+        self.assertIn("quota exceeded", errors[0])
+        self.assertTrue(all(not c.get("publishedAt")
+                            for c in led["candidates"]))
+
+    def test_newly_dated_rows_are_resorted_newest_first(self):
+        led = self._ledger(3)
+        ids = [c["videoId"] for c in led["candidates"]]
+        client = self._client({
+            ids[0]: self._video(ids[0], start="2026-07-01T00:00:00+00:00"),
+            ids[1]: self._video(ids[1], start="2026-07-30T00:00:00+00:00"),
+            ids[2]: self._video(ids[2], start="2026-07-15T00:00:00+00:00"),
+        })
+        led, _e, _f = mf.fill_missing_dates_via_api(led, client=client)
+        self.assertEqual([c["videoId"] for c in led["candidates"]],
+                         [ids[1], ids[2], ids[0]])
+
+    def test_no_credential_can_reach_the_ledger(self):
+        led = self._ledger(1)
+        vid = led["candidates"][0]["videoId"]
+        client = self._client({vid: self._video(
+            vid, start="2026-07-04T18:00:00+00:00")})
+        led, _e, _f = mf.fill_missing_dates_via_api(led, client=client)
+        blob = json.dumps(led).lower()
+        for secret in ("test-key", "api_key", "cookie"):
+            self.assertNotIn(secret, blob)
+
+
+class TestIsoDurations(unittest.TestCase):
+    def test_common_broadcast_shapes(self):
+        for iso, seconds in (("PT5H43M12S", 20592), ("PT48M", 2880),
+                             ("PT31S", 31), ("P1DT2H", 93600),
+                             ("PT1H", 3600)):
+            self.assertEqual(mf._duration_seconds(iso), seconds, iso)
+
+    def test_nothing_unparsable_becomes_a_number(self):
+        for bad in (None, "", "garbage", "5h43m"):
+            self.assertIsNone(mf._duration_seconds(bad), repr(bad))
+
+
 class TestDateBackfill(unittest.TestCase):
     """The finder-side half: a broadcast with no air date can never be
     placed on the calendar, so the scan fills a bounded number per run."""

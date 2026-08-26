@@ -36,6 +36,7 @@ from __future__ import annotations
 import datetime as dt
 import json
 import os
+import re
 import subprocess
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -276,6 +277,131 @@ def fetch_video_metadata(video_id: str, runner=subprocess
     }, None
 
 
+def _apply_metadata(row: dict, fields: dict, *, source: str) -> bool:
+    """Write one fetched metadata result back onto a ledger row. Returns
+    True when it supplied the air date the row was missing.
+
+    Shared by both fetch paths so the API and yt-dlp can never disagree
+    about the SHAPE of what they wrote, only about where it came from —
+    which `sources` records."""
+    if not fields or not fields.get("publishedAt"):
+        return False
+    row["publishedAt"] = fields["publishedAt"]
+    for key in ("durationSeconds", "liveBroadcastStatus"):
+        if row.get(key) is None and fields.get(key) is not None:
+            row[key] = fields[key]
+    if source not in (row.get("sources") or []):
+        row["sources"] = sorted((row.get("sources") or []) + [source])
+    return True
+
+
+def _resort_by_date(ledger: dict) -> None:
+    """Dates just changed, so the archive's newest-first ordering has to be
+    recomputed or the new dates would sit in the undated tail."""
+    rows = sorted(ledger["candidates"],
+                  key=lambda c: c.get("publishedAt") or "", reverse=True)
+    rows.sort(key=lambda c: c.get("publishedAt") is None)
+    ledger["candidates"] = rows
+
+
+def dateless_candidates(ledger: dict) -> list[dict]:
+    """Rows that still need an air date and are worth spending one on. A
+    refused Short is not worth a request and never will be."""
+    return [r for r in (ledger.get("candidates") or [])
+            if isinstance(r, dict) and r.get("videoId")
+            and not r.get("publishedAt")
+            and not (r.get("likeness") or {}).get("refused")]
+
+
+def video_fields_from_api(item: dict) -> dict:
+    """One videos.list item -> the same three fields the yt-dlp path returns.
+
+    `liveStreamingDetails.actualStartTime` is preferred over
+    `snippet.publishedAt` for the same reason the yt-dlp path prefers
+    `release_timestamp` over `timestamp`: for an archived broadcast, when it
+    actually went live IS the air date, while the publish timestamp can sit
+    hours or days earlier on a stream that was created and scheduled ahead
+    of time."""
+    snippet = item.get("snippet") or {}
+    live = item.get("liveStreamingDetails") or {}
+    content = item.get("contentDetails") or {}
+    published = (live.get("actualStartTime") or snippet.get("publishedAt")
+                 or None)
+    if live.get("actualEndTime"):
+        status = "completed"
+    elif live.get("actualStartTime"):
+        status = "live"
+    elif live.get("scheduledStartTime"):
+        status = "upcoming"
+    else:
+        status = None
+    return {
+        "publishedAt": published,
+        "durationSeconds": _duration_seconds(content.get("duration")),
+        "liveBroadcastStatus": status,
+    }
+
+
+def _duration_seconds(iso: str | None) -> int | None:
+    """ISO-8601 duration ('PT5H43M12S') -> seconds. None if unparsable."""
+    m = re.match(r"^P(?:(\d+)D)?T?(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$",
+                 str(iso or ""))
+    if not m or not any(m.groups()):
+        return None
+    d, h, mi, sec = (int(g or 0) for g in m.groups())
+    return d * 86400 + h * 3600 + mi * 60 + sec
+
+
+def fill_missing_dates_via_api(ledger: dict, *, client,
+                               limit: int = 0) -> tuple[dict, list[str], int]:
+    """Give dateless archived broadcasts their real air date from the
+    YouTube Data API. Returns (ledger, errors, filled).
+
+    This is the PRIMARY path, and the reason is not preference but
+    arithmetic. `videos.list` costs ONE quota unit per call and takes fifty
+    video ids per call, so the entire dateless archive — 246 rows at the
+    time of writing — costs five units out of a default daily allowance of
+    ten thousand. The yt-dlp path it replaces costs one full metadata
+    request per video AND is currently refused outright: YouTube bot-checks
+    datacentre IPs, which is every GitHub-hosted runner, and asks for
+    cookies that a public unattended scan has no business holding.
+
+    `limit` caps VIDEOS (not calls) so a run can still be bounded; 0 means
+    the whole dateless archive, which is the sane default here precisely
+    because it is nearly free."""
+    rows = dateless_candidates(ledger)
+    if limit > 0:
+        rows = rows[:limit]
+    if not rows:
+        return ledger, [], 0
+
+    errors: list[str] = []
+    try:
+        items = client.list_videos([r["videoId"] for r in rows])
+    except Exception as exc:  # noqa: BLE001 — a scan never dies on a source
+        return ledger, [f"date-backfill (api): {type(exc).__name__}: {exc}"], 0
+
+    by_id = {it.get("id"): it for it in items if isinstance(it, dict)}
+    filled = 0
+    for row in rows:
+        item = by_id.get(row["videoId"])
+        if item is None:
+            # Deleted, private or region-blocked. Not an error worth
+            # shouting about — the row simply keeps no date.
+            continue
+        if _apply_metadata(row, video_fields_from_api(item),
+                           source="youtube-api"):
+            filled += 1
+    missing = len(rows) - len(by_id)
+    if missing > 0:
+        errors.append(
+            f"date-backfill (api): {missing} of {len(rows)} video(s) were "
+            "not returned by the API — deleted, private or region-blocked.")
+    if filled:
+        _resort_by_date(ledger)
+    return ledger, errors, filled
+
+
 def fill_missing_dates(ledger: dict, *, limit: int = 0, runner=subprocess,
                        fetch_meta: Callable[[str], tuple[dict | None, str | None]]
                        | None = None) -> tuple[dict, list[str], int]:
@@ -345,23 +471,10 @@ def fill_missing_dates(ledger: dict, *, limit: int = 0, runner=subprocess,
             consecutive_failures += 1
             continue
         consecutive_failures = 0
-        if not fields or not fields.get("publishedAt"):
-            continue
-        row["publishedAt"] = fields["publishedAt"]
-        for key in ("durationSeconds", "liveBroadcastStatus"):
-            if row.get(key) is None and fields.get(key) is not None:
-                row[key] = fields[key]
-        if "video-metadata" not in (row.get("sources") or []):
-            row["sources"] = sorted((row.get("sources") or [])
-                                    + ["video-metadata"])
-        filled += 1
+        if _apply_metadata(row, fields, source="video-metadata"):
+            filled += 1
     if filled:
-        # Dates just changed, so the archive's newest-first ordering has to
-        # be recomputed or the new dates would sit in the undated tail.
-        rows = sorted(ledger["candidates"],
-                      key=lambda c: c.get("publishedAt") or "", reverse=True)
-        rows.sort(key=lambda c: c.get("publishedAt") is None)
-        ledger["candidates"] = rows
+        _resort_by_date(ledger)
     return ledger, errors, filled
 
 
