@@ -249,9 +249,12 @@ than one that publishes nothing. Any future change that moves
 `unknown_floor`, `min_margin`, or the consensus thresholds is a change to
 this decision, not an implementation detail of it.
 
-The pages that explain the workflow say a human reviews before publishing.
-They will need to say what actually happens instead — the honesty of the
-site about its own process is part of the product.
+`how-it-works.html` still tells visitors a human reviews every detection
+before it is published. That is **true today** — nothing publishes
+unattended yet — so it stays as it is. It must be rewritten in the same
+change that enables publication, not after it: a site that describes a
+review gate it no longer has is lying about the provenance of its own
+data, which is the one thing this project sells.
 
 ---
 
