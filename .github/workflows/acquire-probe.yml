@@ -1,0 +1,128 @@
+# =====================================================================
+# OWCS Comp Tracker — runner acquisition probe (read-only, $0, no secrets)
+# ---------------------------------------------------------------------
+# ONE question, answered honestly on the same free hardware the unattended
+# pipeline would run on: can a GitHub-hosted runner resolve a direct media
+# URL for an OWCS broadcast, and can remote_frames.py pull sparse frames
+# out of it with byte-range reads?
+#
+# This decides whether the whole VOD -> published-comp loop can live on
+# GitHub Actions, or whether media acquisition has to be brokered from
+# somewhere YouTube will actually serve.
+#
+# The repo already knows that the per-video yt-dlp date lookup is refused
+# here (YouTube bot-checks datacentre IPs), which is why the archive is
+# dated through the Data API instead. But that path costs ONE player
+# extraction per VIDEO; remote_frames costs ONE per SOURCE, and yt-dlp's
+# alternate player clients are not all refused equally. Guessing is not
+# evidence, so this measures it.
+#
+# Writes nothing, commits nothing, needs no secrets. Signed media URLs are
+# never printed - only their host and length.
+# =====================================================================
+name: acquire-probe
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "Broadcast URL to probe"
+        required: false
+        default: "https://www.youtube.com/live/jkSiX___Qwc"
+  push:
+    branches: [claude/auto-command-web-github-k8cpyg]
+    paths: [".github/workflows/acquire-probe.yml"]
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install ffmpeg + yt-dlp
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          python -m pip install --upgrade pip --quiet
+          pip install --quiet yt-dlp
+          echo "yt-dlp $(yt-dlp --version)"
+
+      - name: Resolve a direct media URL (every player client, in order)
+        id: resolve
+        env:
+          PROBE_URL: ${{ inputs.url || 'https://www.youtube.com/live/jkSiX___Qwc' }}
+        run: |
+          python - <<'PY' | tee resolve.log
+          import os, subprocess, urllib.parse
+          url = os.environ["PROBE_URL"]
+          # One `-g` per client. The default web client is the one most
+          # likely to be bot-checked; the others are what the fallback
+          # ladder would reach for.
+          clients = ["", "android", "ios", "tv", "mweb", "web_safari", "web_embedded"]
+          fmt = "bv*[height<=720][ext=mp4]/bv*[height<=720]/best[height<=720]"
+          winner = None
+          for c in clients:
+              cmd = ["yt-dlp", "-g", "-f", fmt, "--no-warnings", "--socket-timeout", "20"]
+              if c:
+                  cmd += ["--extractor-args", f"youtube:player_client={c}"]
+              cmd.append(url)
+              name = c or "default(web)"
+              try:
+                  p = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
+              except subprocess.TimeoutExpired:
+                  print(f"{name:14s} TIMEOUT"); continue
+              out = (p.stdout or "").strip().splitlines()
+              if p.returncode == 0 and out and out[0].startswith("http"):
+                  host = urllib.parse.urlparse(out[0]).netloc
+                  print(f"{name:14s} OK    host={host} url_len={len(out[0])}")
+                  winner = winner or name
+              else:
+                  err = " ".join((p.stderr or "").split())[:180]
+                  print(f"{name:14s} FAIL  {err}")
+          print(f"::notice::first working client: {winner or 'NONE'}")
+          with open(os.environ["GITHUB_OUTPUT"], "a") as fh:
+              fh.write(f"client={winner or ''}\n")
+          PY
+
+      - name: Pull sparse frames with remote_frames.py (byte-range reads)
+        if: steps.resolve.outputs.client != ''
+        env:
+          PROBE_URL: ${{ inputs.url || 'https://www.youtube.com/live/jkSiX___Qwc' }}
+        run: |
+          pip install --quiet -r requirements.txt
+          # Six frames a minute apart out of the middle of the broadcast:
+          # the shape a calibration scan actually asks for.
+          python pipeline/remote_frames.py --url "$PROBE_URL" \
+            --offsets 1900,1960,2020,2080,2140,2200 --height 720 --json \
+            | tee frames.json
+          echo "--- frames on disk ---"
+          find work -name '*.png' -o -name '*.jpg' 2>/dev/null | head -20
+          du -sh work 2>/dev/null || true
+
+      - name: Report
+        if: always()
+        run: |
+          {
+            echo "### Runner acquisition probe"
+            echo ""
+            echo '```'
+            cat resolve.log 2>/dev/null || echo "(resolve step produced no log)"
+            echo '```'
+            echo ""
+            if [ -s frames.json ]; then
+              echo "Frame acquisition:"
+              echo '```json'
+              cat frames.json
+              echo '```'
+            else
+              echo "No media URL resolved on this runner - frame acquisition not attempted."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
