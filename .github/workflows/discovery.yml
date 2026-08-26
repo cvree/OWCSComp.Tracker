@@ -382,14 +382,31 @@ jobs:
         run: |
           git config user.name  "owcs-discovery[bot]"
           git config user.email "actions@users.noreply.github.com"
+          GENERATED_FILES="assets/js/data.js assets/data/public_data.v1.js
+            data/owcs.sqlite assets/data/team_asset_sources.json
+            assets/data/team_coverage.v1.json"
+
+          # TIMESTAMP-ONLY GUARD. Every one of these exports stamps itself
+          # with the moment it ran (meta.generatedAt / generated_at /
+          # lastSynced) even when the underlying teams/matches/coverage
+          # facts are byte-identical to what is already committed — a raw
+          # `git diff --cached --quiet` cannot tell "real data changed"
+          # from "only the clock moved" and would open a data-update PR
+          # every single hour regardless. PR #82 is a real example: its
+          # entire merged diff was three timestamp fields, no team or
+          # calendar fact actually changed. meaningful_diff.py normalizes
+          # those volatile fields away before comparing.
+          if ! python3 pipeline/automation/meaningful_diff.py $GENERATED_FILES; then
+            echo "No validated calendar/team changes this run — nothing to publish (only generation timestamps moved)."
+            exit 0
+          fi
+
           # Stage each generated file only if it exists. The previous form
           # (`git add a b c 2>/dev/null || true`) staged NOTHING at all when
           # any single path was absent — one missing optional export silently
           # dropped a real calendar update, and the step then reported
           # "nothing to publish".
-          for f in assets/js/data.js assets/data/public_data.v1.js \
-                   data/owcs.sqlite assets/data/team_asset_sources.json \
-                   assets/data/team_coverage.v1.json; do
+          for f in $GENERATED_FILES; do
             if [ -e "$f" ]; then git add "$f"; fi
           done
           if git diff --cached --quiet; then

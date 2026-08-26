@@ -447,6 +447,24 @@ class TestDiscoveryAutoMergeIsRobust(unittest.TestCase):
                           "GITHUB_TOKEN as a fallback for push/PR auth")
 
 
+class TestNoTimestampOnlyPublishing(unittest.TestCase):
+    """PR #82's entire merged diff was three generation-timestamp fields —
+    no team or calendar fact actually changed. A raw `git diff --cached
+    --quiet` can't tell that apart from a real change, so every workflow
+    that commits a generated export (whose format embeds a wall-clock
+    generatedAt) must gate on meaningful_diff.py first."""
+
+    def test_every_workflow_that_commits_a_timestamped_export_gates_on_it(self):
+        for name in ("discovery.yml", "pipeline.yml", "update-data.yml"):
+            text = _workflow_text(name)
+            with self.subTest(workflow=name):
+                self.assertIn(
+                    "pipeline/automation/meaningful_diff.py", text,
+                    f"{name} commits a generated export with a wall-clock "
+                    f"timestamp but never checks meaningful_diff.py before "
+                    f"deciding whether to publish")
+
+
 class TestPipelineValidationActuallyBlocks(unittest.TestCase):
     """pipeline.yml used to run `validate_data.py || echo ...`, which meant
     a HARD referential-integrity error (validate_data.py's own exit code 1)
