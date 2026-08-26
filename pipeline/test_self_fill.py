@@ -304,6 +304,138 @@ class TestRollups(unittest.TestCase):
                          ["NEW00000001", "OLD00000001", "NODATE00001"])
 
 
+# ------------------------------------------------------- archive rollup
+class TestSeasonArchive(unittest.TestCase):
+    """The archive layer: what an event's own broadcasts collectively say
+    about it, and how those events group into competitive years.
+
+    This is the layer the games page renders instead of 248 identical
+    rows, so every number in it has to be a fold over stated facts —
+    never a lookup, never a guess at a missing year."""
+
+    def setUp(self):
+        self.payload = build([
+            candidate("Y26D1000001", "OWCS 2026 | NA/EMEA | Stage 2 Day 1",
+                      duration=3600),
+            candidate("Y26D2000001", "OWCS 2026 | NA/EMEA | Stage 2 Day 2",
+                      duration=7200),
+            candidate("Y25D1000001", "OWCS 2025 | Korea | Stage 1 Day 1",
+                      duration=1800),
+            candidate("NOYEAR00001", "Overwatch Collegiate Homecoming",
+                      duration=None),
+            candidate("SHORT000001", "Top 10 Tips", duration=45,
+                      confidence="unlikely", refused=True),
+        ])
+
+    def _event(self, needle):
+        return [e for e in self.payload["events"] if needle in e["key"]][0]
+
+    def test_an_event_totals_the_runtime_its_source_reported(self):
+        ev = self._event("stage-2")
+        self.assertEqual(ev["runtimeSeconds"], 3600 + 7200)
+        self.assertEqual(ev["runtimeKnown"], 2)
+
+    def test_runtime_known_counts_separately_from_broadcasts(self):
+        """A total over 2 of 3 broadcasts is a floor, not a total, and the
+        payload has to carry both numbers so the page can say so."""
+        ev = self._event("collegiate-homecoming")
+        self.assertEqual(ev["broadcasts"], 1)
+        self.assertEqual(ev["runtimeKnown"], 0)
+        self.assertEqual(ev["runtimeSeconds"], 0)
+
+    def test_an_event_collects_what_its_titles_stated(self):
+        ev = self._event("stage-2")
+        self.assertEqual(ev["days"], [1, 2])
+        self.assertEqual(ev["years"], [2026])
+        self.assertEqual(ev["stages"], [2])
+        self.assertEqual(ev["regions"], ["emea", "na"])
+        self.assertEqual(ev["channels"], ["Overwatch Esports"])
+
+    def test_a_season_is_only_set_when_the_titles_agree(self):
+        self.assertEqual(self._event("stage-2")["season"], 2026)
+        self.assertIsNone(self._event("collegiate-homecoming")["season"],
+                          "a title that never states a year must not be "
+                          "guessed into one")
+
+    def test_seasons_group_events_newest_first_with_unknowns_last(self):
+        seasons = [s["season"] for s in self.payload["seasons"]]
+        self.assertEqual(seasons, [2026, 2025, None])
+
+    def test_a_season_totals_its_events(self):
+        s26 = self.payload["seasons"][0]
+        self.assertEqual(s26["season"], 2026)
+        self.assertEqual(s26["broadcasts"], 2)
+        self.assertEqual(s26["runtimeSeconds"], 3600 + 7200)
+        self.assertIn("owcs-2026-na-emea-stage-2", s26["eventKeys"])
+
+    def test_every_event_key_belongs_to_exactly_one_season(self):
+        seen = []
+        for s in self.payload["seasons"]:
+            seen.extend(s["eventKeys"])
+        self.assertEqual(sorted(seen),
+                         sorted(e["key"] for e in self.payload["events"]))
+        self.assertEqual(len(seen), len(set(seen)))
+
+    def test_an_ignored_upload_is_in_no_season(self):
+        total = sum(s["broadcasts"] for s in self.payload["seasons"])
+        self.assertEqual(total, self.payload["summary"]["broadcastsKnown"]
+                         - self.payload["summary"]["ignored"])
+
+    def test_the_summary_carries_the_archive_scale(self):
+        s = self.payload["summary"]
+        self.assertEqual(s["runtimeSeconds"], 3600 + 7200 + 1800)
+        self.assertEqual(s["runtimeKnown"], 3)
+        self.assertEqual(s["seasons"], 2, "the null bucket is not a season")
+
+
+class TestDateCoverage(unittest.TestCase):
+    """Why the archive has almost no dates. A visitor seeing 246 blank
+    date cells must be told the reason, and the reason has to come from
+    the scan's own errors rather than being asserted by the page."""
+
+    def _cov(self, *, published, errors=()):
+        return build([
+            candidate("DATED000001", "OWCS 2026 | Stage 2 Day 1",
+                      published=published),
+            candidate("SHORT000001", "Top 10 Tips", duration=45,
+                      confidence="unlikely", refused=True),
+        ], errors=list(errors))["dateCoverage"]
+
+    def test_a_fully_dated_archive_states_no_reason(self):
+        cov = self._cov(published="2026-07-20T18:00:00+00:00")
+        self.assertEqual(cov["unknown"], 0)
+        self.assertIsNone(cov["reason"])
+        self.assertFalse(cov["blocked"])
+
+    def test_ignored_uploads_are_not_counted_as_missing_dates(self):
+        cov = self._cov(published="2026-07-20T18:00:00+00:00")
+        self.assertEqual(cov["considered"], 1)
+
+    def test_a_missing_date_with_no_refusal_reads_as_still_filling(self):
+        cov = self._cov(published=None)
+        self.assertEqual(cov["unknown"], 1)
+        self.assertFalse(cov["blocked"])
+        self.assertIn("over time", cov["reason"])
+
+    def test_a_refused_lookup_is_reported_as_a_blocker(self):
+        cov = self._cov(published=None, errors=[
+            "date-backfill abc123: yt-dlp exit 1: cookies"])
+        self.assertTrue(cov["blocked"])
+        self.assertEqual(cov["failedLookups"], 1)
+        self.assertIn("refused", cov["reason"])
+
+    def test_the_circuit_breaker_summary_is_not_counted_as_a_lookup(self):
+        """The finder writes ONE summary line when it stops early. Counting
+        it as a spent request would overstate what the scan actually did."""
+        cov = self._cov(published=None, errors=[
+            "date-backfill abc123: yt-dlp exit 1: cookies",
+            "date-backfill: stopped after 3 consecutive refusals from the "
+            "source — 246 broadcast(s) still have no air date.",
+        ])
+        self.assertEqual(cov["failedLookups"], 1)
+        self.assertTrue(cov["blocked"])
+
+
 # ---------------------------------------------------------------- purity
 class TestArtifactIsPure(unittest.TestCase):
     def test_the_same_inputs_produce_the_same_bytes(self):
@@ -485,6 +617,62 @@ class TestDateBackfill(unittest.TestCase):
         self.assertEqual(len(calls), 2)
         self.assertEqual(filled, 1)
         self.assertEqual(len(errors), 1)
+
+    def test_a_systemic_refusal_stops_before_the_budget_is_spent(self):
+        """When the source is refusing this lookup as a CLASS — YouTube
+        bot-checking the runner and asking for cookies — every remaining
+        request fails identically. Spending the rest of the budget buys
+        nothing and buries the scan's real errors under fifteen copies of
+        one message. The scan stops after SYSTEMIC_REFUSALS and reports
+        the class once."""
+        calls = []
+
+        def meta(vid):
+            calls.append(vid)
+            return None, (f"date-backfill {vid}: yt-dlp exit 1: "
+                          "sign in to confirm you are not a bot")
+
+        led = {"candidates": [
+            dict(candidate(f"NODATE{i:05d}", f"OWCS 2026 | Stage 2 Day {i}",
+                           published=None), job=None)
+            for i in range(1, 21)]}
+
+        _led, errors, filled = mf.fill_missing_dates(
+            led, limit=15, fetch_meta=meta)
+        self.assertEqual(filled, 0)
+        self.assertEqual(len(calls), mf.SYSTEMIC_REFUSALS,
+                         "a source refusing every lookup must cost three "
+                         "requests, not the whole budget")
+        stop = [e for e in errors if e.startswith("date-backfill: stopped")]
+        self.assertEqual(len(stop), 1, "the class is reported exactly once")
+        self.assertIn("20 broadcast(s) still have no air date", stop[0],
+                      "the summary has to say how much is still waiting, "
+                      "so the site can state the real blocker")
+
+    def test_an_intermittent_failure_does_not_trip_the_breaker(self):
+        """Two bad videos either side of a good one is not a bot check. The
+        breaker must only fire on CONSECUTIVE refusals, or one odd VOD
+        would stop the archive filling in."""
+        calls = []
+
+        def meta(vid):
+            calls.append(vid)
+            if len(calls) % 2:
+                return None, f"date-backfill {vid}: unparseable yt-dlp JSON"
+            return {"publishedAt": "2026-07-15T00:00:00+00:00",
+                    "durationSeconds": None, "liveBroadcastStatus": None}, None
+
+        led = {"candidates": [
+            dict(candidate(f"NODATE{i:05d}", f"OWCS 2026 | Stage 2 Day {i}",
+                           published=None), job=None)
+            for i in range(1, 11)]}
+
+        _led, errors, filled = mf.fill_missing_dates(
+            led, limit=8, fetch_meta=meta)
+        self.assertEqual(len(calls), 8, "the full budget is still spent")
+        self.assertEqual(filled, 4)
+        self.assertEqual([e for e in errors
+                          if e.startswith("date-backfill: stopped")], [])
 
     def test_a_refused_upload_never_costs_a_request(self):
         calls = []

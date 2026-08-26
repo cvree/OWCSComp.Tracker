@@ -94,6 +94,31 @@ approve a source, or touch the DB — the human review gate is unchanged.
 `python3 pipeline/automation/cli.py self-fill [--check]` rebuilds or gates
 it; CI fails if the committed layer is not what a fresh build produces.
 
+**The broadcast archive** (`self_fill.py`'s event/season rollup, rendered
+by `page-games.js`): the scan knows 288 official broadcasts across 98
+events — roughly 1,700 hours of OWCS 2024/2025/2026 — and the games list
+used to render them as 248 rows that differed only in a day number, each
+repeating its own event name and all stamped with the same relative scan
+time. The discovery layer now folds each event over what its broadcasts'
+own titles state (years, stages, phases, regions, day and week numbers)
+plus the runtimes the source reported, groups those events into
+competitive seasons, and the list renders season → event → day. Every
+number is a fold over stated facts: an event whose titles never name a
+year lands in a `season: null` group rather than being guessed into one,
+and `runtimeSeconds` always ships beside `runtimeKnown` so a total over
+38 of 41 broadcasts reads as the floor it is.
+
+**Why almost nothing has a date** (`date_coverage()`): the scan reads a
+whole channel in one cheap `--flat-playlist` request, which carries no
+air date, and the per-video lookup that would supply one is currently
+being **refused by YouTube** (it asks for cookies). 246 of 250 broadcasts
+therefore have no date, which is why the calendar links so little. The
+site states that reason wherever a date is missing instead of printing
+"date unknown" 246 times, and `fill_missing_dates` now trips a circuit
+breaker after `SYSTEMIC_REFUSALS` consecutive refusals — a class refusal
+costs three requests and one honest summary line, not the whole budget
+and fifteen copies of one error.
+
 **Site search** (`assets/js/app/shell.js`): every page carries a search
 button plus `/` and ⌘/Ctrl-K. It indexes games, teams, heroes, maps and the
 product's own pages straight from the export — no service, no index file to

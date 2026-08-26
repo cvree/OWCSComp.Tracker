@@ -225,6 +225,14 @@ def fetch_streams_tab(channel_url: str, limit: int = DEFAULT_LIMIT,
 
 
 # -------------------------------------------------------- date backfill
+#: Consecutive failed date lookups that mean the source is refusing the
+#: request as a class rather than choking on one odd video. Three is
+#: enough to tell one broken video apart from a bot check, and small
+#: enough that a systemic refusal costs three requests instead of the
+#: whole budget.
+SYSTEMIC_REFUSALS = 3
+
+
 def fetch_video_metadata(video_id: str, runner=subprocess
                          ) -> tuple[dict | None, str | None]:
     """One metadata-only `yt-dlp -J` for a single video. (fields, error);
@@ -300,8 +308,29 @@ def fill_missing_dates(ledger: dict, *, limit: int = 0, runner=subprocess,
     errors: list[str] = []
     filled = 0
     attempts = 0
+    consecutive_failures = 0
     for row in ledger.get("candidates") or []:
         if attempts >= limit:
+            break
+        # CIRCUIT BREAKER. When the source is refusing this lookup as a
+        # class — YouTube bot-checking the runner and asking for cookies —
+        # every remaining request fails identically. Spending the rest of
+        # the budget on it buys nothing, hammers a source that is already
+        # saying no, and buries the scan's real errors under fifteen
+        # copies of one message. Stop after SYSTEMIC_REFUSALS in a row and
+        # report the class once, with how many rows are still waiting on
+        # it, so the site can state the actual blocker.
+        if consecutive_failures >= SYSTEMIC_REFUSALS:
+            remaining = sum(
+                1 for r in (ledger.get("candidates") or [])
+                if isinstance(r, dict) and not r.get("publishedAt")
+                and not (r.get("likeness") or {}).get("refused"))
+            errors.append(
+                f"date-backfill: stopped after {consecutive_failures} "
+                f"consecutive refusals from the source — {remaining} "
+                "broadcast(s) still have no air date. The per-video "
+                "metadata lookup is being refused; the channel listing "
+                "the scan reads carries no date of its own.")
             break
         if not isinstance(row, dict) or row.get("publishedAt"):
             continue
@@ -313,7 +342,9 @@ def fill_missing_dates(ledger: dict, *, limit: int = 0, runner=subprocess,
         fields, err = meta(row["videoId"])
         if err:
             errors.append(err)
+            consecutive_failures += 1
             continue
+        consecutive_failures = 0
         if not fields or not fields.get("publishedAt"):
             continue
         row["publishedAt"] = fields["publishedAt"]

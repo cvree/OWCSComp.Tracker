@@ -555,6 +555,18 @@ class TestFixtureToProductionSwitching(unittest.TestCase):
         self.assertIsInstance(published_match_ids, set)
 
 
+#: Calendar fields no exporter has ever emitted. A page reading one of
+#: these renders an empty schedule and says nothing about why.
+INVENTED_CALENDAR_FIELDS = ("startsAt", "timeKnown", "endsAt")
+
+
+def _reads_field(code: str, field: str) -> bool:
+    """True when `code` reads `field` as a property/key rather than merely
+    containing those letters inside a longer identifier."""
+    return re.search(r"(?<![A-Za-z0-9_$])" + re.escape(field)
+                     + r"(?![A-Za-z0-9_$])", code) is not None
+
+
 class TestCalendarContract(unittest.TestCase):
     """The official season calendar reaching the public site.
 
@@ -715,13 +727,38 @@ class TestCalendarContract(unittest.TestCase):
         # page starts reading a field out of thin air again. Comments are
         # stripped first: the code may — and does — DISCUSS the field names
         # that were wrong, and that must not read as using them.
+        #
+        # Matched on IDENTIFIER boundaries, not as a bare substring. A plain
+        # `"timeKnown" in code` also fires on `runtimeKnown` — an unrelated
+        # discovery-layer field that merely ends with those letters — which
+        # is a false alarm about a bug that is not there. The boundaries
+        # keep the real catch (`e.timeKnown`, `["timeKnown"]`) and drop the
+        # coincidence; test_the_guard_still_catches_the_original_bug below
+        # proves the real catch survives.
         code = re.sub(r"/\*.*?\*/", "", js, flags=re.S)
-        invented = [f for f in ("startsAt", "timeKnown", "endsAt") if f in code]
+        invented = [f for f in INVENTED_CALENDAR_FIELDS
+                    if _reads_field(code, f)]
         self.assertFalse(
             invented,
             "the games page reads " + ", ".join(f"`{f}`" for f in invented) +
             " — build_calendar_events never emits that, so the schedule "
             "would silently render empty")
+
+    def test_the_guard_still_catches_the_original_bug(self):
+        """The guard above is only worth having if it fails on the code it
+        was written for. This is that code, verbatim in shape: the filter
+        and the formatter that silently emptied the schedule."""
+        broken = ('events.filter((e) => e.startsAt)'
+                  '.map((e) => fmt(e.timeKnown))')
+        self.assertEqual(
+            sorted(f for f in INVENTED_CALENDAR_FIELDS
+                   if _reads_field(broken, f)),
+            ["startsAt", "timeKnown"])
+        self.assertEqual(
+            [f for f in INVENTED_CALENDAR_FIELDS
+             if _reads_field("const runtimeKnown = ev.runtimeKnown;", f)],
+            [], "an identifier that merely ends in a banned name is not a "
+                "read of that field")
 
 
 if __name__ == "__main__":

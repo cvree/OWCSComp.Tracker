@@ -36,6 +36,15 @@
   P.disc = window.OWCS_DISCOVERED || null;
   P.discovered = () => (P.disc && P.disc.broadcasts) || [];
   P.discoveredEvents = () => (P.disc && P.disc.events) || [];
+  /* The archive by competitive year. The `season: null` row is the events
+     whose titles never state one — it is kept, not hidden, because "we do
+     not know which season these belong to" is itself information. */
+  P.discoveredSeasons = () => (P.disc && P.disc.seasons) || [];
+  P.discoveredEvent = (key) =>
+    P.discoveredEvents().filter((e) => e.key === key)[0] || null;
+  /* How much of the archive has a real air date, and the scan's own reason
+     when most of it does not. Never a bare "date unknown". */
+  P.dateCoverage = () => (P.disc && P.disc.dateCoverage) || null;
   /* Hours since the scan that produced the discovery layer, or null when
      no scan has ever run. Computed here, not stored in the artifact: the
      artifact is a pure function of its inputs and holds no wall clock. */
@@ -140,6 +149,27 @@
     }
     return diff >= 0 ? "just now" : "any moment";
   };
+  /* A span of broadcast runtime, for reading rather than seeking:
+     "5h 43m", "48m". Distinct from fmtClock, which is a position inside
+     one VOD. Returns null — never "0m" — when the source gave no
+     duration, so a caller has to decide what to say instead. */
+  P.fmtRuntime = (seconds) => {
+    const n = Number(seconds);
+    if (!isFinite(n) || n <= 0) return null;
+    const h = Math.floor(n / 3600);
+    const m = Math.round((n % 3600) / 60);
+    if (!h) return m + "m";
+    return m ? h + "h " + m + "m" : h + "h";
+  };
+  /* Runtime totalled across many broadcasts, where minutes are noise:
+     "1,728 hours". */
+  P.fmtHours = (seconds) => {
+    const n = Number(seconds);
+    if (!isFinite(n) || n <= 0) return null;
+    const h = Math.round(n / 3600);
+    return h.toLocaleString() + (h === 1 ? " hour" : " hours");
+  };
+
   /* seconds into a VOD -> 1:02:03 */
   P.fmtClock = (s) => {
     if (s == null || isNaN(s)) return "—";

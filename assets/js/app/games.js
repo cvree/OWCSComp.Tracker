@@ -458,6 +458,86 @@
       "</a>";
   };
 
+  /* ------------------------------------------------------------------ *
+     Discovered broadcasts render differently from games, because they
+     carry different facts. A game has teams, a score and a progress rail.
+     A broadcast the scan found has none of those — it has a place in its
+     event (week, day), a runtime the source reported, and an air date it
+     usually does not have. Showing it through G.row printed the event
+     name on every row INSIDE a group already titled with that event, and
+     an "Updated" column that read the same relative time for all 248 rows
+     because it was the timestamp of the scan, not of the broadcast.
+   * ------------------------------------------------------------------ */
+
+  /* What separates this broadcast from the others on its event. Inside an
+     event group the event name is the group heading, so repeating it is
+     noise; "Week 4 · Day 3" is the whole row. Falls back to the title
+     when the broadcast's own title never placed it. */
+  G.foundLabel = function (g) {
+    const b = g.broadcast || {};
+    const p = b.parsed || {};
+    const bits = [];
+    if (p.week) bits.push("Week " + p.week);
+    if (p.day) bits.push("Day " + p.day);
+    if (!bits.length) return { text: g.title, placed: false };
+    let text = bits.join(" · ");
+    if (p.phase && !p.day && !p.week) text = p.phase;
+    return { text: text, placed: true };
+  };
+
+  /* The air date, or the reason there isn't one. Never a bare dash: a
+     visitor who sees 246 dashes learns nothing, and a visitor who sees
+     "not published by the source" learns that the gap is upstream. */
+  G.airedCell = function (g) {
+    const b = g.broadcast || {};
+    if (b.publishedAt) {
+      return '<span class="u-nowrap">' + P.esc(P.fmtDate(b.publishedAt)) + "</span>";
+    }
+    const cov = P.dateCoverage && P.dateCoverage();
+    const why = (cov && cov.reason) || "The source did not state an air date.";
+    return '<span class="dim u-nowrap" title="' + P.esc(why) + '">not stated</span>';
+  };
+
+  G.foundRow = function (g) {
+    const label = G.foundLabel(g);
+    const b = g.broadcast || {};
+    const runtime = P.fmtRuntime ? P.fmtRuntime(b.durationSeconds) : null;
+    return "<tr>" +
+      '<td><span class="u-trunc">' + P.esc(label.text) + "</span>" +
+      (label.placed
+        ? ""
+        : '<span class="visually-hidden"> — the title does not say which day this is</span>') +
+      "</td>" +
+      '<td class="dim small u-nowrap">' +
+        (runtime ? P.esc(runtime)
+          : '<span class="dim" title="The source did not report a length.">—</span>') +
+      "</td>" +
+      '<td class="dim small">' + G.airedCell(g) + "</td>" +
+      '<td class="u-nowrap"><a class="btn btn--sm" href="' + P.esc(g.href) +
+        '">Open</a></td>' +
+      "</tr>";
+  };
+
+  /* The one-line reading of an event: what its own broadcasts say about
+     it, folded. Every part is omitted when the titles never said it. */
+  G.eventMeta = function (ev) {
+    if (!ev) return [];
+    const out = [];
+    const runtime = P.fmtHours ? P.fmtHours(ev.runtimeSeconds) : null;
+    if (runtime) {
+      out.push(ev.runtimeKnown < ev.broadcasts
+        ? runtime + " over " + ev.runtimeKnown + " of " + ev.broadcasts
+        : runtime);
+    }
+    if (ev.regions && ev.regions.length) {
+      out.push(ev.regions.map((r) => P.regionName ? P.regionName(r) : r).join(" · "));
+    }
+    if (ev.days && ev.days.length > 1) out.push(ev.days.length + " days");
+    else if (ev.weeks && ev.weeks.length > 1) out.push(ev.weeks.length + " weeks");
+    if (ev.published) out.push(ev.published + " published");
+    return out;
+  };
+
   G.row = function (g) {
     const label = g.teamA || g.teamB
       ? P.teamPlate(g.teamA, { size: "sm", short: true }) +

@@ -496,7 +496,13 @@ def next_action(state: str, row: dict, parsed: dict) -> dict | None:
 # ----------------------------------------------------------------- build
 def _event_rollup(broadcasts: list[dict]) -> list[dict]:
     """One row per event the scan has evidence for, so the site groups five
-    days of one championship as one thing."""
+    days of one championship as one thing.
+
+    Everything here is a fold over what the broadcasts themselves already
+    say — the years, stages, phases, regions, day and week numbers their
+    own titles state, and the runtimes the source reported. Nothing is
+    looked up and nothing is inferred: an event whose broadcasts never name
+    a year has no year, and says so."""
     events: dict[str, dict] = {}
     for b in broadcasts:
         if b["state"] == STATE_IGNORED:
@@ -512,6 +518,20 @@ def _event_rollup(broadcasts: list[dict]) -> list[dict]:
             "published": 0,
             "found": 0,
             "days": [],
+            "weeks": [],
+            "years": [],
+            "stages": [],
+            "phases": [],
+            "channels": [],
+            # Runtime the SOURCE reported, and how many rows carried one.
+            # Two separate numbers on purpose: "412 hours" over 38 of 41
+            # broadcasts is a floor, not a total, and the site says so.
+            "runtimeSeconds": 0,
+            "runtimeKnown": 0,
+            # How many of this event's broadcasts have a real air date.
+            # Usually 0 — see date_coverage() for why that is not a bug in
+            # this function.
+            "dated": 0,
             "firstAt": b.get("publishedAt"),
             "lastAt": b.get("publishedAt"),
         })
@@ -520,8 +540,18 @@ def _event_rollup(broadcasts: list[dict]) -> list[dict]:
             ev["published"] += 1
         if b["state"] == STATE_FOUND:
             ev["found"] += 1
-        if parsed["day"] and parsed["day"] not in ev["days"]:
-            ev["days"].append(parsed["day"])
+        if b.get("publishedAt"):
+            ev["dated"] += 1
+        runtime = b.get("durationSeconds")
+        if isinstance(runtime, (int, float)) and runtime > 0:
+            ev["runtimeSeconds"] += int(runtime)
+            ev["runtimeKnown"] += 1
+        for field, value in (("days", parsed["day"]), ("weeks", parsed["week"]),
+                             ("years", parsed["year"]), ("stages", parsed["stage"]),
+                             ("phases", parsed["phase"]),
+                             ("channels", b.get("channelTitle"))):
+            if value not in (None, "") and value not in ev[field]:
+                ev[field].append(value)
         for r in parsed["regions"]:
             if r not in ev["regions"]:
                 ev["regions"].append(r)
@@ -535,10 +565,96 @@ def _event_rollup(broadcasts: list[dict]) -> list[dict]:
             elif when:
                 ev[field] = when
     for ev in events.values():
-        ev["days"].sort()
-        ev["regions"].sort()
+        for field in ("days", "weeks", "years", "stages"):
+            ev[field].sort()
+        for field in ("regions", "phases", "channels"):
+            ev[field].sort()
+        # The one year the site labels this event with. Only when the
+        # event's broadcasts agree; a title set that names two years gets
+        # none rather than an arbitrary pick.
+        ev["season"] = ev["years"][0] if len(ev["years"]) == 1 else None
     return sorted(events.values(),
                   key=lambda e: (e["lastAt"] or "", e["name"]), reverse=True)
+
+
+def _season_rollup(events: list[dict]) -> list[dict]:
+    """The archive by competitive year, because that is how anyone looking
+    for a broadcast thinks about it.
+
+    An event whose titles never state a year lands in the `season: null`
+    bucket rather than being guessed into one. Sorted newest first with
+    that bucket last, so the page never opens on the unknowns."""
+    seasons: dict[Any, dict] = {}
+    for ev in events:
+        key = ev["season"]
+        row = seasons.setdefault(key, {
+            "season": key, "events": 0, "broadcasts": 0, "found": 0,
+            "published": 0, "runtimeSeconds": 0, "runtimeKnown": 0,
+            "dated": 0, "eventKeys": [],
+        })
+        row["events"] += 1
+        row["eventKeys"].append(ev["key"])
+        for field in ("broadcasts", "found", "published", "runtimeSeconds",
+                      "runtimeKnown", "dated"):
+            row[field] += ev[field]
+    for row in seasons.values():
+        row["eventKeys"].sort()
+    return sorted(seasons.values(),
+                  key=lambda r: (r["season"] is not None, r["season"] or 0),
+                  reverse=True)
+
+
+#: Every source error the scan writes while trying to give an archived
+#: broadcast its real air date. Matched as a prefix because the rest of the
+#: string is the video id and the source's own message.
+_DATE_ERROR_PREFIX = "date-backfill"
+
+
+def date_coverage(broadcasts: list[dict],
+                  source_errors: list[str]) -> dict[str, Any]:
+    """How much of the archive has a real air date, and — when most of it
+    does not — the reason taken from the scan's own errors.
+
+    This exists because "date unknown" on 246 rows is not an answer. The
+    scan knows exactly why: the channel listing it reads in one cheap
+    request carries no timestamp, and the per-video lookup that would
+    supply one is being refused by the source. Saying that is the
+    difference between a site that looks broken and a site that is honest
+    about a blocker it does not control."""
+    considered = [b for b in broadcasts if b["state"] != STATE_IGNORED]
+    known = sum(1 for b in considered if b.get("publishedAt"))
+    # Per-video refusals only. The finder also writes ONE summary line when
+    # it trips its circuit breaker; counting that as a failed lookup would
+    # overstate how many requests were actually spent.
+    refusals = [e for e in source_errors
+                if str(e).startswith(_DATE_ERROR_PREFIX + " ")
+                and not str(e).startswith(_DATE_ERROR_PREFIX + ": ")]
+    stopped = [e for e in source_errors
+               if str(e).startswith(_DATE_ERROR_PREFIX + ": stopped")]
+    unknown = len(considered) - known
+    if unknown and (refusals or stopped):
+        reason = ("The scan reads a whole channel in one cheap request, and "
+                  "that listing carries no air date. The per-video lookup "
+                  "that would supply one is currently being refused by the "
+                  "source, so these broadcasts keep the date they came with "
+                  "— none.")
+        blocked = True
+    elif unknown:
+        reason = ("The scan reads a whole channel in one cheap request, and "
+                  "that listing carries no air date. A bounded number of "
+                  "per-video lookups per run fills them in over time.")
+        blocked = False
+    else:
+        reason = None
+        blocked = False
+    return {
+        "known": known,
+        "unknown": unknown,
+        "considered": len(considered),
+        "blocked": blocked,
+        "failedLookups": len(refusals),
+        "reason": reason,
+    }
 
 
 def build(*, snapshot: dict | None = None, public: dict | None = None,
@@ -616,9 +732,14 @@ def build(*, snapshot: dict | None = None, public: dict | None = None,
 
     scan_at = snapshot.get("generatedAt")
     channels = snapshot.get("channels") or []
+    source_errors = [e for e in (snapshot.get("sourceErrors") or [])]
     rollup = _event_rollup(broadcasts)
+    seasons = _season_rollup(rollup)
+    dates = date_coverage(broadcasts, source_errors)
     calendar_linked = sum(1 for b in broadcasts
                           if b["calendar"].get("eventIds"))
+    runtime_seconds = sum(e["runtimeSeconds"] for e in rollup)
+    runtime_known = sum(e["runtimeKnown"] for e in rollup)
 
     return {
         "schema": SCHEMA,
@@ -635,7 +756,7 @@ def build(*, snapshot: dict | None = None, public: dict | None = None,
                           "channelId": c.get("channelId"),
                           "sourceUrl": c.get("sourceUrl")}
                          for c in channels if isinstance(c, dict)],
-            "sourceErrors": list(snapshot.get("sourceErrors") or []),
+            "sourceErrors": list(source_errors),
         },
         "inputs": inputs,
         "counts": counts,
@@ -649,7 +770,16 @@ def build(*, snapshot: dict | None = None, public: dict | None = None,
             "events": len(rollup),
             "calendarLinked": calendar_linked,
             "channelsScanned": len(channels),
+            # The archive's real scale, as two honest numbers: how much
+            # runtime the source reported, over how many broadcasts it
+            # reported one for. Never one number implying the other.
+            "runtimeSeconds": runtime_seconds,
+            "runtimeKnown": runtime_known,
+            "seasons": len([s for s in seasons if s["season"] is not None]),
+            "datedBroadcasts": dates["known"],
         },
+        "dateCoverage": dates,
+        "seasons": seasons,
         "events": rollup,
         "broadcasts": broadcasts,
     }

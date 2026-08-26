@@ -953,7 +953,16 @@ select {
 /* ------------------------------------------------------------------ *
    11. Tables
  * ------------------------------------------------------------------ */
-.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r-3); background: var(--s1); }
+/* `contain: paint` alongside the scroll, not instead of it. The sticky
+   `thead th` below is positioned against this box, and a sticky element
+   inside a horizontally scrolled container still contributes to the
+   SCROLLABLE OVERFLOW of everything above it — so a page full of open
+   tables grew the document a few pixels per table until the whole thing
+   scrolled sideways on a phone, even though every table was scrolling
+   correctly inside its own wrapper. `contain: paint` makes this box the
+   clip boundary the overflow already implied. Hover cards mount on
+   <body> (app/hovercard.js), so nothing that needs to escape does. */
+.table-wrap { overflow-x: auto; contain: paint; border: 1px solid var(--line); border-radius: var(--r-3); background: var(--s1); }
 table.tbl { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 520px; }
 .tbl th, .tbl td { padding: var(--s-3) var(--s-4); text-align: left; vertical-align: middle; }
 .tbl thead th {
@@ -1531,13 +1540,24 @@ html.lightbox-open, html.lightbox-open body { overflow: hidden; }
 }
 .evt[open] > summary::before { transform: rotate(90deg); }
 .evt > summary:hover { background: var(--s2); border-radius: var(--r-3); }
-.evt__name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* The name is what someone is scanning for, so it gets the leftover
+   space and shrinks last. `min-width: 0` is what actually lets a flex
+   item ellipsize — without it the default `min-width: auto` keeps the
+   item at its content width and the row overflows instead. */
+.evt__name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  flex: 1 1 auto; min-width: 0; }
 .evt__count {
   font: 500 11px/1 var(--f-mono); color: var(--tx-3);
   border: 1px solid var(--line); border-radius: var(--r-pill);
   padding: 4px var(--s-2); flex: 0 0 auto;
 }
-.evt__when { margin-left: auto; flex: 0 0 auto; }
+/* The event's reading of itself — runtime, regions, how many days. It is
+   context, not the label, so it never competes with the name for space:
+   it ellipsizes on its own and disappears entirely on a phone, where the
+   name plus the broadcast count already fill the row. */
+.evt__when { margin-left: auto; flex: 0 1 auto; min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@media (max-width: 620px) { .evt__when { display: none; } }
 .evt .table-wrap { margin: 0 var(--s-2) var(--s-3); }
 
 /* ------------------------------------------------------------------ *

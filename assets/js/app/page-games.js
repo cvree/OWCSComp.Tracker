@@ -70,6 +70,43 @@
     });
   }
 
+  /* The archive's real size, in the two numbers that are actually
+     measured: broadcasts found, and runtime the source reported for
+     them. Printed once above the list so a visitor knows what they are
+     looking at before they open anything. */
+  function archiveScale() {
+    const sum = (P.disc && P.disc.summary) || null;
+    if (!sum || !sum.broadcastsKnown) return "";
+    const bits = [];
+    const hours = P.fmtHours(sum.runtimeSeconds);
+    if (hours) {
+      bits.push(sum.runtimeKnown < sum.broadcastsKnown
+        ? hours + " of broadcast, over the " + sum.runtimeKnown +
+          " the source reported a length for"
+        : hours + " of broadcast");
+    }
+    if (sum.events) bits.push(sum.events + " events");
+    if (sum.seasons) bits.push(sum.seasons + " seasons");
+    if (!bits.length) return "";
+    return '<p class="small u-mt-3" style="max-width:75ch"><strong>' +
+      esc(bits.join(" · ")) + "</strong></p>";
+  }
+
+  /* Why almost none of these rows have a date. The archive is otherwise
+     unreadable — "Aired: not stated" 246 times looks like a broken page
+     rather than a source that will not answer. */
+  function dateNote() {
+    const cov = P.dateCoverage();
+    if (!cov || !cov.unknown || !cov.reason) return "";
+    return '<p class="dim small u-mt-3" style="max-width:75ch">' +
+      "Only <strong>" + esc(cov.known) + "</strong> of these " +
+      esc(cov.considered) + " carry a confirmed air date. " + esc(cov.reason) +
+      (cov.blocked
+        ? ' <a href="tools.html#discovery">See the scan\u2019s own errors \u2192</a>'
+        : "") +
+      "</p>";
+  }
+
   function render() {
     const rows = matching();
     const host = document.getElementById("games");
@@ -101,38 +138,139 @@
       "<tbody>" + list.map(G.row).join("") + "</tbody>" +
       "<caption>" + caption + "</caption></table></div>";
 
-    /* Sixty-one rows that differ only in a day number is not a list, it is
-       a wall. They already carry the one thing that separates them — the
-       event they belong to — so the wall becomes a dozen named, collapsed
-       groups, each opening to its own days. The biggest event opens by
-       default so the section is never a row of shut doors. */
+    /* 248 rows that differ only in a day number is not a list, it is a
+       wall — and the wall was the site. The archive already carries the
+       three things that turn it into something worth reading: the season
+       the titles state, the event they belong to, and each broadcast's
+       place inside that event. So it renders as season → event → day,
+       and a row says the one thing its neighbours do not.
+
+       Nothing here is a lookup. Every number comes from the discovery
+       layer's own fold over broadcast titles and source-reported
+       runtimes, and an event whose titles never named a season sits in
+       its own group rather than being guessed into one. */
+    const evByKey = new Map();
+    P.discoveredEvents().forEach((e) => evByKey.set(e.key, e));
+
+    const foundTable = (list, caption) =>
+      '<div class="table-wrap u-mt-3"><table class="tbl">' +
+      "<thead><tr><th>Broadcast</th><th>Length</th><th>Aired</th>" +
+      "<th><span class=\"visually-hidden\">Open</span></th></tr></thead>" +
+      "<tbody>" + list.map(G.foundRow).join("") + "</tbody>" +
+      "<caption>" + caption + "</caption></table></div>";
+
+    /* Days before weeks, ascending, so an event reads in the order it was
+       played. A broadcast whose title places it nowhere sorts last rather
+       than to the top on a zero. */
+    function playOrder(a, b) {
+      const pa = (a.broadcast && a.broadcast.parsed) || {};
+      const pb = (b.broadcast && b.broadcast.parsed) || {};
+      const wa = pa.week == null ? 99 : pa.week, wb = pb.week == null ? 99 : pb.week;
+      if (wa !== wb) return wa - wb;
+      const da = pa.day == null ? 99 : pa.day, db = pb.day == null ? 99 : pb.day;
+      if (da !== db) return da - db;
+      return String(a.title).localeCompare(String(b.title));
+    }
+
+    function eventKeyOf(g) {
+      const p = (g.broadcast && g.broadcast.parsed) || {};
+      return p.eventKey || null;
+    }
+
+    /* One door is left open, always: a section that is nothing but shut
+       <details> reads as an empty page. The first event of the newest
+       season opens, and every event opens while a text filter is on
+       (the point of filtering is to see the matches). */
+    function eventBlock(key, items, open) {
+      const ev = key ? evByKey.get(key) : null;
+      const name = (ev && ev.name) || items[0].tournamentName || "Event not identified";
+      const meta = G.eventMeta(ev);
+      items = items.slice().sort(playOrder);
+      return '<details class="evt"' + (open || query ? " open" : "") + ">" +
+        '<summary><span class="evt__name">' + esc(name) + "</span>" +
+        '<span class="evt__count">' + items.length + " broadcast" +
+        (items.length === 1 ? "" : "s") + "</span>" +
+        (meta.length
+          ? '<span class="evt__when dim small">' + esc(meta.join(" · ")) + "</span>"
+          : "") +
+        "</summary>" +
+        foundTable(items, items.length + " broadcast" +
+          (items.length === 1 ? "" : "s") + " on this event, none read yet.") +
+        "</details>";
+    }
+
     function grouped(list) {
-      const order = [];
-      const byEvent = new Map();
+      /* Which season each event belongs to, from the discovery layer's
+         own rollup — never re-derived here, so the page and the archive
+         can never disagree about what year something is. */
+      const seasonOfEvent = new Map();
+      P.discoveredSeasons().forEach((s) => {
+        (s.eventKeys || []).forEach((k) => seasonOfEvent.set(k, s.season));
+      });
+
+      const bySeason = new Map();
       list.forEach((g) => {
-        const key = g.tournamentName || "Event not identified";
-        if (!byEvent.has(key)) { byEvent.set(key, []); order.push(key); }
+        const ek = eventKeyOf(g);
+        const season = ek != null && seasonOfEvent.has(ek)
+          ? seasonOfEvent.get(ek) : null;
+        if (!bySeason.has(season)) bySeason.set(season, new Map());
+        const byEvent = bySeason.get(season);
+        const key = ek || ("_" + (g.tournamentName || "unidentified"));
+        if (!byEvent.has(key)) byEvent.set(key, []);
         byEvent.get(key).push(g);
       });
-      if (byEvent.size < 2) {
-        return table(list, list.length + " broadcast" + (list.length === 1 ? "" : "s") +
-          " found automatically and not yet processed.");
+
+      /* Newest season first; the events whose titles never stated one go
+         last, under a heading that says exactly that. */
+      const seasons = Array.from(bySeason.keys()).sort((a, b) => {
+        if (a === null) return 1;
+        if (b === null) return -1;
+        return b - a;
+      });
+
+      /* A filtered view can collapse to one season with one event — at
+         that point the scaffolding is louder than the content. */
+      const totalEvents = seasons.reduce((n, s) => n + bySeason.get(s).size, 0);
+      if (totalEvents < 2) {
+        return foundTable(list.slice().sort(playOrder),
+          list.length + " broadcast" + (list.length === 1 ? "" : "s") +
+          " found automatically, none read yet.");
       }
-      const sorted = order.slice().sort((a, b) => byEvent.get(b).length - byEvent.get(a).length);
-      const widest = byEvent.get(sorted[0]).length;
-      return '<div class="stack u-mt-4">' + sorted.map((key) => {
-        const items = byEvent.get(key);
-        const newest = items.map((g) => g.updatedAt).filter(Boolean).sort().pop();
-        return '<details class="evt"' +
-          (items.length === widest || query ? " open" : "") + ">" +
-          '<summary><span class="evt__name">' + esc(key) + "</span>" +
-          '<span class="evt__count">' + items.length + " broadcast" +
-          (items.length === 1 ? "" : "s") + "</span>" +
-          (newest ? '<span class="evt__when dim small">' + esc(P.fmtRel(newest)) + "</span>" : "") +
-          "</summary>" +
-          table(items, items.length + " broadcast" + (items.length === 1 ? "" : "s") +
-            " on this event, not yet processed.") +
-          "</details>";
+
+      let firstOpen = true;
+      return '<div class="stack u-mt-4">' + seasons.map((season) => {
+        const byEvent = bySeason.get(season);
+        const keys = Array.from(byEvent.keys())
+          .sort((a, b) => byEvent.get(b).length - byEvent.get(a).length);
+        const n = keys.reduce((t, k) => t + byEvent.get(k).length, 0);
+        const runtime = P.fmtHours(keys.reduce((t, k) => {
+          const ev = evByKey.get(k);
+          return t + ((ev && ev.runtimeSeconds) || 0);
+        }, 0));
+        const heading = season == null
+          ? "Season not stated in the titles"
+          : season + " season";
+        const sub = [n + " broadcast" + (n === 1 ? "" : "s"),
+          keys.length + " event" + (keys.length === 1 ? "" : "s")];
+        if (runtime) sub.push(runtime);
+        /* The heading and its tally sit on one line where there is room
+           and stack where there is not. Without the wrap the tally is a
+           single unbreakable flex item — "100 broadcasts · 36 events ·
+           680 hours" — and it pushed <main> to 485px inside a 358px
+           column, which scrolls the whole page sideways on a phone. */
+        return '<section class="u-mt-4">' +
+          '<h3 class="u-flex u-center u-gap-3" ' +
+          'style="font-size:1rem;flex-wrap:wrap">' +
+          "<span>" + esc(heading) + "</span>" +
+          '<span class="dim small" style="font-weight:400;min-width:0">' +
+          esc(sub.join(" · ")) + "</span></h3>" +
+          keys.map((k) => {
+            const items = byEvent.get(k);
+            const open = firstOpen;
+            firstOpen = false;
+            return eventBlock(items[0] && eventKeyOf(items[0]), items, open);
+          }).join("") +
+          "</section>";
       }).join("") + "</div>";
     }
 
@@ -156,6 +294,7 @@
           "found by itself on verified official channels. Nothing has been read from " +
           "them yet — the title is all we know, and the title is all this list claims. " +
           "Opening one shows the evidence and the single step that starts processing.</p>" +
+          archiveScale() + dateNote() +
           grouped(found)
         : "");
     if (P.observeReveals) P.observeReveals(host);

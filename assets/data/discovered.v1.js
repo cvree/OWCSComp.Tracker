@@ -16206,12 +16206,24 @@ window.OWCS_DISCOVERED = {
   "total": 288,
   "working": 0
  },
+ "dateCoverage": {
+  "blocked": true,
+  "considered": 250,
+  "failedLookups": 15,
+  "known": 4,
+  "reason": "The scan reads a whole channel in one cheap request, and that listing carries no air date. The per-video lookup that would supply one is currently being refused by the source, so these broadcasts keep the date they came with — none.",
+  "unknown": 246
+ },
  "events": [
   {
    "broadcasts": 4,
    "calendarEventIds": [
     "owwc_2026_group_stage"
    ],
+   "channels": [
+    "Overwatch Esports"
+   ],
+   "dated": 4,
    "days": [
     1,
     2,
@@ -16223,12 +16235,27 @@ window.OWCS_DISCOVERED = {
    "key": "overwatch-world-cup-2026-group-stage",
    "lastAt": "2026-08-23T10:40:37+00:00",
    "name": "Overwatch World Cup 2026 — Group Stage",
+   "phases": [
+    "group-stage"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 4,
+   "runtimeSeconds": 146612,
+   "season": 2026,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2026
+   ]
   },
   {
    "broadcasts": 3,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2,
@@ -16239,24 +16266,54 @@ window.OWCS_DISCOVERED = {
    "key": "overwatch-collegiate-spring-season-playoffs-2026",
    "lastAt": null,
    "name": "Overwatch Collegiate Spring Season Playoffs 2026",
+   "phases": [
+    "playoffs"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 3,
+   "runtimeSeconds": 56181,
+   "season": 2026,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2026
+   ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [],
    "firstAt": null,
    "found": 1,
    "key": "overwatch-collegiate-homecoming-2025-finals",
    "lastAt": null,
    "name": "Overwatch Collegiate Homecoming 2025 [FINALS]",
+   "phases": [
+    "finals"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 22819,
+   "season": 2025,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2025
+   ]
   },
   {
    "broadcasts": 3,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2,
@@ -16267,24 +16324,52 @@ window.OWCS_DISCOVERED = {
    "key": "overwatch-collegiate-homecoming-2025",
    "lastAt": null,
    "name": "Overwatch Collegiate Homecoming 2025",
+   "phases": [],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 3,
+   "runtimeSeconds": 70588,
+   "season": 2025,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2025
+   ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [],
    "firstAt": null,
    "found": 1,
    "key": "overwatch-collegiate-homecoming-2024-finals",
    "lastAt": null,
    "name": "Overwatch Collegiate Homecoming 2024 [Finals]",
+   "phases": [
+    "finals"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 24822,
+   "season": 2024,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2024
+   ]
   },
   {
    "broadcasts": 4,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2,
@@ -16296,36 +16381,77 @@ window.OWCS_DISCOVERED = {
    "key": "overwatch-collegiate-homecoming-2024",
    "lastAt": null,
    "name": "Overwatch Collegiate Homecoming 2024",
+   "phases": [],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 4,
+   "runtimeSeconds": 87505,
+   "season": 2024,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2024
+   ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [],
    "firstAt": null,
    "found": 1,
    "key": "overwatch-collegiate-championship-finals",
    "lastAt": null,
    "name": "Overwatch Collegiate Championship — Finals",
+   "phases": [
+    "championship"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 23139,
+   "season": null,
+   "stages": [],
+   "weeks": [],
+   "years": []
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [],
    "firstAt": null,
    "found": 1,
    "key": "overwatch-collegiate-championship-2024-finals",
    "lastAt": null,
    "name": "Overwatch Collegiate Championship 2024 [FINALS]",
+   "phases": [
+    "championship"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 15676,
+   "season": 2024,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2024
+   ]
   },
   {
    "broadcasts": 5,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2,
@@ -16338,12 +16464,27 @@ window.OWCS_DISCOVERED = {
    "key": "overwatch-collegiate-championship-2024",
    "lastAt": null,
    "name": "Overwatch Collegiate Championship 2024",
+   "phases": [
+    "championship"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 5,
+   "runtimeSeconds": 91076,
+   "season": 2024,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2024
+   ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1
    ],
@@ -16352,38 +16493,83 @@ window.OWCS_DISCOVERED = {
    "key": "overwatch-collegiate-championship",
    "lastAt": null,
    "name": "Overwatch Collegiate Championship",
+   "phases": [
+    "championship"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 35667,
+   "season": null,
+   "stages": [],
+   "weeks": [],
+   "years": []
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [],
    "firstAt": null,
    "found": 1,
    "key": "overwatch-champions-series-stage-2-asia-owcs-asia-wildcard",
    "lastAt": null,
    "name": "Overwatch Champions Series stage 2 ASIA (OWCS ASIA) WILDCARD",
+   "phases": [],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 15840,
+   "season": null,
+   "stages": [
+    2
+   ],
+   "weeks": [],
+   "years": []
   },
   {
    "broadcasts": 5,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [],
    "firstAt": null,
    "found": 5,
    "key": "overwatch-champions-series-pacific-stage2-owcs-pacific",
    "lastAt": null,
    "name": "Overwatch Champions Series PACIFIC Stage2 (OWCS PACIFIC)",
+   "phases": [],
    "published": 0,
    "regions": [
     "pacific"
-   ]
+   ],
+   "runtimeKnown": 5,
+   "runtimeSeconds": 85399,
+   "season": null,
+   "stages": [
+    2
+   ],
+   "weeks": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "years": []
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     2
    ],
@@ -16392,14 +16578,29 @@ window.OWCS_DISCOVERED = {
    "key": "overwatch-champions-series-korea-stage2-owcs-korea-playoffs-semifinals",
    "lastAt": null,
    "name": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs [Semifinals]",
+   "phases": [
+    "playoffs"
+   ],
    "published": 0,
    "regions": [
     "korea"
-   ]
+   ],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 22175,
+   "season": null,
+   "stages": [
+    2
+   ],
+   "weeks": [],
+   "years": []
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1
    ],
@@ -16408,14 +16609,29 @@ window.OWCS_DISCOVERED = {
    "key": "overwatch-champions-series-korea-stage2-owcs-korea-playoffs-quarterfinals",
    "lastAt": null,
    "name": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs [Quarterfinals]",
+   "phases": [
+    "playoffs"
+   ],
    "published": 0,
    "regions": [
     "korea"
-   ]
+   ],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 12990,
+   "season": null,
+   "stages": [
+    2
+   ],
+   "weeks": [],
+   "years": []
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     3
    ],
@@ -16424,14 +16640,29 @@ window.OWCS_DISCOVERED = {
    "key": "overwatch-champions-series-korea-stage2-owcs-korea-playoffs-grand-finals",
    "lastAt": null,
    "name": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs [Grand Finals]",
+   "phases": [
+    "grand-finals"
+   ],
    "published": 0,
    "regions": [
     "korea"
-   ]
+   ],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 10651,
+   "season": null,
+   "stages": [
+    2
+   ],
+   "weeks": [],
+   "years": []
   },
   {
    "broadcasts": 12,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2,
@@ -16442,14 +16673,32 @@ window.OWCS_DISCOVERED = {
    "key": "overwatch-champions-series-korea-stage2-owcs-korea",
    "lastAt": null,
    "name": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA)",
+   "phases": [],
    "published": 0,
    "regions": [
     "korea"
-   ]
+   ],
+   "runtimeKnown": 12,
+   "runtimeSeconds": 269073,
+   "season": null,
+   "stages": [
+    2
+   ],
+   "weeks": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "years": []
   },
   {
    "broadcasts": 2,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2
@@ -16459,42 +16708,85 @@ window.OWCS_DISCOVERED = {
    "key": "overwatch-champions-series-japan-stage2-owcs-japan-playoffs",
    "lastAt": null,
    "name": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Playoffs",
+   "phases": [
+    "playoffs"
+   ],
    "published": 0,
    "regions": [
     "japan"
-   ]
+   ],
+   "runtimeKnown": 2,
+   "runtimeSeconds": 39670,
+   "season": null,
+   "stages": [
+    2
+   ],
+   "weeks": [],
+   "years": []
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [],
    "firstAt": null,
    "found": 1,
    "key": "overwatch-champions-series-japan-stage2-owcs-japan-lcq-game-3",
    "lastAt": null,
    "name": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) LCQ Game 3",
+   "phases": [],
    "published": 0,
    "regions": [
     "japan"
-   ]
+   ],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 10311,
+   "season": null,
+   "stages": [
+    2
+   ],
+   "weeks": [],
+   "years": []
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [],
    "firstAt": null,
    "found": 1,
    "key": "overwatch-champions-series-japan-stage2-owcs-japan-grand-finals",
    "lastAt": null,
    "name": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Grand Finals",
+   "phases": [
+    "grand-finals"
+   ],
    "published": 0,
    "regions": [
     "japan"
-   ]
+   ],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 12610,
+   "season": null,
+   "stages": [
+    2
+   ],
+   "weeks": [],
+   "years": []
   },
   {
    "broadcasts": 12,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2,
@@ -16505,26 +16797,59 @@ window.OWCS_DISCOVERED = {
    "key": "overwatch-champions-series-japan-stage2-owcs-japan",
    "lastAt": null,
    "name": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN)",
+   "phases": [],
    "published": 0,
    "regions": [
     "japan"
-   ]
+   ],
+   "runtimeKnown": 12,
+   "runtimeSeconds": 232006,
+   "season": null,
+   "stages": [
+    2
+   ],
+   "weeks": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "years": []
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [],
    "firstAt": null,
    "found": 1,
    "key": "overwatch-champions-series-asia-stage2-owcs-asia-grand-finals",
    "lastAt": null,
    "name": "Overwatch Champions Series ASIA Stage2 (OWCS ASIA) Grand Finals",
+   "phases": [
+    "grand-finals"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 23720,
+   "season": null,
+   "stages": [
+    2
+   ],
+   "weeks": [],
+   "years": []
   },
   {
    "broadcasts": 3,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2,
@@ -16535,12 +16860,25 @@ window.OWCS_DISCOVERED = {
    "key": "overwatch-champions-series-asia-stage2-owcs-asia",
    "lastAt": null,
    "name": "Overwatch Champions Series ASIA Stage2 (OWCS ASIA)",
+   "phases": [],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 3,
+   "runtimeSeconds": 82369,
+   "season": null,
+   "stages": [
+    2
+   ],
+   "weeks": [],
+   "years": []
   },
   {
    "broadcasts": 2,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     3,
     4
@@ -16550,36 +16888,69 @@ window.OWCS_DISCOVERED = {
    "key": "overwatch-champions-series-asia-owcs-asia",
    "lastAt": null,
    "name": "Overwatch Champions Series ASIA (OWCS ASIA)",
+   "phases": [],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 2,
+   "runtimeSeconds": 46592,
+   "season": null,
+   "stages": [],
+   "weeks": [],
+   "years": []
   },
   {
    "broadcasts": 2,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [],
    "firstAt": null,
    "found": 2,
    "key": "overwatch-2-stadium-asia-streamer-showdown",
    "lastAt": null,
    "name": "Overwatch 2 Stadium Asia Streamer Showdown",
+   "phases": [],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 2,
+   "runtimeSeconds": 32227,
+   "season": null,
+   "stages": [],
+   "weeks": [],
+   "years": []
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [],
    "firstAt": null,
    "found": 1,
    "key": "owwc-group-draw",
    "lastAt": null,
    "name": "OWWC Group Draw",
+   "phases": [],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 2502,
+   "season": null,
+   "stages": [],
+   "weeks": [],
+   "years": []
   },
   {
    "broadcasts": 2,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     4,
     5
@@ -16589,14 +16960,29 @@ window.OWCS_DISCOVERED = {
    "key": "owwc-2026-online-qualifiers-emea-amer",
    "lastAt": null,
    "name": "OWWC 2026 — Online Qualifiers : EMEA/AMER",
+   "phases": [
+    "qualifier"
+   ],
    "published": 0,
    "regions": [
     "emea"
+   ],
+   "runtimeKnown": 2,
+   "runtimeSeconds": 85272,
+   "season": 2026,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2026
    ]
   },
   {
    "broadcasts": 4,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2,
@@ -16607,24 +16993,54 @@ window.OWCS_DISCOVERED = {
    "key": "owwc-2026-online-qualifiers",
    "lastAt": null,
    "name": "OWWC 2026 — Online Qualifiers",
+   "phases": [
+    "qualifier"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 4,
+   "runtimeSeconds": 121921,
+   "season": 2026,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2026
+   ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [],
    "firstAt": null,
    "found": 1,
    "key": "owcs-x-faceit-league-stage-3-promotion-relegation-matches",
    "lastAt": null,
    "name": "OWCS x FACEIT League — Stage 3 Promotion/Relegation Matches",
+   "phases": [
+    "promotion-relegation"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 24375,
+   "season": null,
+   "stages": [
+    3
+   ],
+   "weeks": [],
+   "years": []
   },
   {
    "broadcasts": 3,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2,
@@ -16635,30 +17051,62 @@ window.OWCS_DISCOVERED = {
    "key": "owcs-2026-na-emea-stage-2-playoffs",
    "lastAt": null,
    "name": "OWCS 2026 — NA/EMEA — Stage 2 Playoffs",
+   "phases": [
+    "playoffs"
+   ],
    "published": 1,
    "regions": [
     "emea",
     "na"
+   ],
+   "runtimeKnown": 3,
+   "runtimeSeconds": 79133,
+   "season": 2026,
+   "stages": [
+    2
+   ],
+   "weeks": [],
+   "years": [
+    2026
    ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [],
    "firstAt": null,
    "found": 1,
    "key": "owcs-2026-na-emea-stage-2-opening-day",
    "lastAt": null,
    "name": "OWCS 2026 — NA/EMEA — Stage 2 Opening Day",
+   "phases": [],
    "published": 0,
    "regions": [
     "emea",
     "na"
+   ],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 25714,
+   "season": 2026,
+   "stages": [
+    2
+   ],
+   "weeks": [],
+   "years": [
+    2026
    ]
   },
   {
    "broadcasts": 5,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2
@@ -16668,15 +17116,34 @@ window.OWCS_DISCOVERED = {
    "key": "owcs-2026-na-emea-stage-2",
    "lastAt": null,
    "name": "OWCS 2026 — NA/EMEA — Stage 2",
+   "phases": [],
    "published": 0,
    "regions": [
     "emea",
     "na"
+   ],
+   "runtimeKnown": 5,
+   "runtimeSeconds": 138553,
+   "season": 2026,
+   "stages": [
+    2
+   ],
+   "weeks": [
+    1,
+    2,
+    3
+   ],
+   "years": [
+    2026
    ]
   },
   {
    "broadcasts": 3,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2,
@@ -16687,30 +17154,62 @@ window.OWCS_DISCOVERED = {
    "key": "owcs-2026-na-emea-stage-1-playoffs",
    "lastAt": null,
    "name": "OWCS 2026 — NA/EMEA — Stage 1 Playoffs",
+   "phases": [
+    "playoffs"
+   ],
    "published": 0,
    "regions": [
     "emea",
     "na"
+   ],
+   "runtimeKnown": 3,
+   "runtimeSeconds": 71021,
+   "season": 2026,
+   "stages": [
+    1
+   ],
+   "weeks": [],
+   "years": [
+    2026
    ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [],
    "firstAt": null,
    "found": 1,
    "key": "owcs-2026-na-emea-stage-1-opening-day",
    "lastAt": null,
    "name": "OWCS 2026 — NA/EMEA — Stage 1 Opening Day",
+   "phases": [],
    "published": 0,
    "regions": [
     "emea",
     "na"
+   ],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 29536,
+   "season": 2026,
+   "stages": [
+    1
+   ],
+   "weeks": [],
+   "years": [
+    2026
    ]
   },
   {
    "broadcasts": 5,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2
@@ -16720,15 +17219,33 @@ window.OWCS_DISCOVERED = {
    "key": "owcs-2026-na-emea-stage-1",
    "lastAt": null,
    "name": "OWCS 2026 — NA/EMEA — Stage 1",
+   "phases": [],
    "published": 0,
    "regions": [
     "emea",
     "na"
+   ],
+   "runtimeKnown": 5,
+   "runtimeSeconds": 137790,
+   "season": 2026,
+   "stages": [
+    1
+   ],
+   "weeks": [
+    2,
+    3
+   ],
+   "years": [
+    2026
    ]
   },
   {
    "broadcasts": 5,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2,
@@ -16741,12 +17258,27 @@ window.OWCS_DISCOVERED = {
    "key": "owcs-2026-midseason-championship",
    "lastAt": null,
    "name": "OWCS 2026 — Midseason Championship",
+   "phases": [
+    "midseason-championship"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 5,
+   "runtimeSeconds": 148347,
+   "season": 2026,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2026
+   ]
   },
   {
    "broadcasts": 3,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2,
@@ -16757,12 +17289,25 @@ window.OWCS_DISCOVERED = {
    "key": "owcs-2026-champions-clash",
    "lastAt": null,
    "name": "OWCS 2026 — Champions Clash",
+   "phases": [],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 3,
+   "runtimeSeconds": 95078,
+   "season": 2026,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2026
+   ]
   },
   {
    "broadcasts": 3,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     3,
     4,
@@ -16773,24 +17318,56 @@ window.OWCS_DISCOVERED = {
    "key": "owcs-2025-world-finals",
    "lastAt": null,
    "name": "OWCS 2025 — World Finals",
+   "phases": [
+    "finals"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 3,
+   "runtimeSeconds": 90864,
+   "season": 2025,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2025
+   ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [],
    "firstAt": null,
    "found": 1,
    "key": "owcs-2025-stage-2-promotion-relegation-tournament",
    "lastAt": null,
    "name": "OWCS 2025 — Stage 2 Promotion/Relegation Tournament",
+   "phases": [
+    "promotion-relegation"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 38371,
+   "season": 2025,
+   "stages": [
+    2
+   ],
+   "weeks": [],
+   "years": [
+    2025
+   ]
   },
   {
    "broadcasts": 4,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2,
@@ -16802,30 +17379,62 @@ window.OWCS_DISCOVERED = {
    "key": "owcs-2025-na-emea-stage-3-playoffs",
    "lastAt": null,
    "name": "OWCS 2025 — NA & EMEA — Stage 3 Playoffs",
+   "phases": [
+    "playoffs"
+   ],
    "published": 0,
    "regions": [
     "emea",
     "na"
+   ],
+   "runtimeKnown": 4,
+   "runtimeSeconds": 108293,
+   "season": 2025,
+   "stages": [
+    3
+   ],
+   "weeks": [],
+   "years": [
+    2025
    ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [],
    "firstAt": null,
    "found": 1,
    "key": "owcs-2025-na-emea-stage-3-opening-day",
    "lastAt": null,
    "name": "OWCS 2025 — NA & EMEA — Stage 3 Opening Day",
+   "phases": [],
    "published": 0,
    "regions": [
     "emea",
     "na"
+   ],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 28690,
+   "season": 2025,
+   "stages": [
+    3
+   ],
+   "weeks": [],
+   "years": [
+    2025
    ]
   },
   {
    "broadcasts": 11,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2
@@ -16835,27 +17444,64 @@ window.OWCS_DISCOVERED = {
    "key": "owcs-2025-na-emea-stage-3",
    "lastAt": null,
    "name": "OWCS 2025 — NA & EMEA — Stage 3",
+   "phases": [],
    "published": 0,
    "regions": [
     "emea",
     "na"
+   ],
+   "runtimeKnown": 11,
+   "runtimeSeconds": 270070,
+   "season": 2025,
+   "stages": [
+    3
+   ],
+   "weeks": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "years": [
+    2025
    ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [],
    "firstAt": null,
    "found": 1,
    "key": "owcs-2025-midseason-championship-at-ewc-final-day",
    "lastAt": null,
    "name": "OWCS 2025 — Midseason Championship at EWC — Final Day",
+   "phases": [
+    "midseason-championship"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 32945,
+   "season": 2025,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2025
+   ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     3
    ],
@@ -16864,12 +17510,27 @@ window.OWCS_DISCOVERED = {
    "key": "owcs-2025-midseason-championship-at-ewc",
    "lastAt": null,
    "name": "OWCS 2025 — Midseason Championship at EWC",
+   "phases": [
+    "midseason-championship"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 30861,
+   "season": 2025,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2025
+   ]
   },
   {
    "broadcasts": 2,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2
@@ -16879,12 +17540,27 @@ window.OWCS_DISCOVERED = {
    "key": "owcs-2025-midseason-championship-b-stream",
    "lastAt": null,
    "name": "OWCS 2025 — Midseason Championship [B Stream]",
+   "phases": [
+    "midseason-championship"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 2,
+   "runtimeSeconds": 57300,
+   "season": 2025,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2025
+   ]
   },
   {
    "broadcasts": 2,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2
@@ -16894,12 +17570,27 @@ window.OWCS_DISCOVERED = {
    "key": "owcs-2025-midseason-championship-a-stream",
    "lastAt": null,
    "name": "OWCS 2025 — Midseason Championship [A Stream]",
+   "phases": [
+    "midseason-championship"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 2,
+   "runtimeSeconds": 70256,
+   "season": 2025,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2025
+   ]
   },
   {
    "broadcasts": 3,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2,
@@ -16910,12 +17601,27 @@ window.OWCS_DISCOVERED = {
    "key": "owcs-2025-msc-last-chance-qualifier",
    "lastAt": null,
    "name": "OWCS 2025 — MSC Last Chance Qualifier",
+   "phases": [
+    "qualifier"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 3,
+   "runtimeSeconds": 66676,
+   "season": 2025,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2025
+   ]
   },
   {
    "broadcasts": 3,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     3,
@@ -16926,15 +17632,32 @@ window.OWCS_DISCOVERED = {
    "key": "owcs-2025-emea-na-stage-2-playoffs",
    "lastAt": null,
    "name": "OWCS 2025 — EMEA & NA — Stage 2 Playoffs",
+   "phases": [
+    "playoffs"
+   ],
    "published": 0,
    "regions": [
     "emea",
     "na"
+   ],
+   "runtimeKnown": 3,
+   "runtimeSeconds": 78047,
+   "season": 2025,
+   "stages": [
+    2
+   ],
+   "weeks": [],
+   "years": [
+    2025
    ]
   },
   {
    "broadcasts": 12,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2
@@ -16944,15 +17667,37 @@ window.OWCS_DISCOVERED = {
    "key": "owcs-2025-emea-na-stage-2",
    "lastAt": null,
    "name": "OWCS 2025 — EMEA & NA — Stage 2",
+   "phases": [],
    "published": 0,
    "regions": [
     "emea",
     "na"
+   ],
+   "runtimeKnown": 12,
+   "runtimeSeconds": 297643,
+   "season": 2025,
+   "stages": [
+    2
+   ],
+   "weeks": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "years": [
+    2025
    ]
   },
   {
    "broadcasts": 4,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2,
@@ -16964,15 +17709,32 @@ window.OWCS_DISCOVERED = {
    "key": "owcs-2025-emea-na-stage-1-playoffs",
    "lastAt": null,
    "name": "OWCS 2025 — EMEA & NA — Stage 1 Playoffs",
+   "phases": [
+    "playoffs"
+   ],
    "published": 0,
    "regions": [
     "emea",
     "na"
+   ],
+   "runtimeKnown": 4,
+   "runtimeSeconds": 99780,
+   "season": 2025,
+   "stages": [
+    1
+   ],
+   "weeks": [],
+   "years": [
+    2025
    ]
   },
   {
    "broadcasts": 12,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2,
@@ -16983,15 +17745,35 @@ window.OWCS_DISCOVERED = {
    "key": "owcs-2025-emea-na-stage-1",
    "lastAt": null,
    "name": "OWCS 2025 — EMEA & NA — Stage 1",
+   "phases": [],
    "published": 0,
    "regions": [
     "emea",
     "na"
+   ],
+   "runtimeKnown": 12,
+   "runtimeSeconds": 292904,
+   "season": 2025,
+   "stages": [
+    1
+   ],
+   "weeks": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "years": [
+    2025
    ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     2
    ],
@@ -17000,15 +17782,30 @@ window.OWCS_DISCOVERED = {
    "key": "owcs-2025-emea-na-playoffs",
    "lastAt": null,
    "name": "OWCS 2025 — EMEA & NA — Playoffs",
+   "phases": [
+    "playoffs"
+   ],
    "published": 0,
    "regions": [
     "emea",
     "na"
+   ],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 22095,
+   "season": 2025,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2025
    ]
   },
   {
    "broadcasts": 3,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2,
@@ -17019,24 +17816,54 @@ window.OWCS_DISCOVERED = {
    "key": "owcs-2025-champions-clash",
    "lastAt": null,
    "name": "OWCS 2025 — Champions Clash",
+   "phases": [],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 3,
+   "runtimeSeconds": 90858,
+   "season": 2025,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2025
+   ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [],
    "firstAt": null,
    "found": 1,
    "key": "owcs-2025-stage-1-promotion-relegation",
    "lastAt": null,
    "name": "OWCS 2025 Stage 1 Promotion/Relegation",
+   "phases": [
+    "promotion-relegation"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 30109,
+   "season": 2025,
+   "stages": [
+    1
+   ],
+   "weeks": [],
+   "years": [
+    2025
+   ]
   },
   {
    "broadcasts": 4,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2,
@@ -17048,15 +17875,30 @@ window.OWCS_DISCOVERED = {
    "key": "owcs-2024-emea-na-stage-4-main-event",
    "lastAt": null,
    "name": "OWCS 2024 — EMEA & NA Stage 4 - Main Event",
+   "phases": [],
    "published": 0,
    "regions": [
     "emea",
     "na"
+   ],
+   "runtimeKnown": 4,
+   "runtimeSeconds": 129716,
+   "season": 2024,
+   "stages": [
+    4
+   ],
+   "weeks": [],
+   "years": [
+    2024
    ]
   },
   {
    "broadcasts": 4,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     2,
     3,
@@ -17068,15 +17910,32 @@ window.OWCS_DISCOVERED = {
    "key": "owcs-2024-emea-na-stage-4-groups",
    "lastAt": null,
    "name": "OWCS 2024 — EMEA & NA Stage 4 - Groups",
+   "phases": [
+    "group-stage"
+   ],
    "published": 0,
    "regions": [
     "emea",
     "na"
+   ],
+   "runtimeKnown": 4,
+   "runtimeSeconds": 131308,
+   "season": 2024,
+   "stages": [
+    4
+   ],
+   "weeks": [],
+   "years": [
+    2024
    ]
   },
   {
    "broadcasts": 4,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2,
@@ -17088,15 +17947,30 @@ window.OWCS_DISCOVERED = {
    "key": "owcs-2024-emea-na-stage-3-main-event",
    "lastAt": null,
    "name": "OWCS 2024 — EMEA & NA Stage 3 - Main Event",
+   "phases": [],
    "published": 0,
    "regions": [
     "emea",
     "na"
+   ],
+   "runtimeKnown": 4,
+   "runtimeSeconds": 121307,
+   "season": 2024,
+   "stages": [
+    3
+   ],
+   "weeks": [],
+   "years": [
+    2024
    ]
   },
   {
    "broadcasts": 4,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     2,
     3,
@@ -17108,15 +17982,32 @@ window.OWCS_DISCOVERED = {
    "key": "owcs-2024-emea-na-stage-3-groups",
    "lastAt": null,
    "name": "OWCS 2024 — EMEA & NA Stage 3 - Groups",
+   "phases": [
+    "group-stage"
+   ],
    "published": 0,
    "regions": [
     "emea",
     "na"
+   ],
+   "runtimeKnown": 4,
+   "runtimeSeconds": 138213,
+   "season": 2024,
+   "stages": [
+    3
+   ],
+   "weeks": [],
+   "years": [
+    2024
    ]
   },
   {
    "broadcasts": 2,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     3,
     4
@@ -17126,15 +18017,30 @@ window.OWCS_DISCOVERED = {
    "key": "owcs-2024-emea-na-stage-2-main-event",
    "lastAt": null,
    "name": "OWCS 2024 — EMEA & NA Stage 2 - Main Event",
+   "phases": [],
    "published": 0,
    "regions": [
     "emea",
     "na"
+   ],
+   "runtimeKnown": 2,
+   "runtimeSeconds": 59992,
+   "season": 2024,
+   "stages": [
+    2
+   ],
+   "weeks": [],
+   "years": [
+    2024
    ]
   },
   {
    "broadcasts": 3,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2,
@@ -17145,24 +18051,50 @@ window.OWCS_DISCOVERED = {
    "key": "owcs-2024-dallas-major",
    "lastAt": null,
    "name": "OWCS 2024 — Dallas Major",
+   "phases": [],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 3,
+   "runtimeSeconds": 98129,
+   "season": 2024,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2024
+   ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [],
    "firstAt": null,
    "found": 1,
    "key": "faceit-league-season-7-master-division-playoffs",
    "lastAt": null,
    "name": "FACEIT League Season 7 - Master Division Playoffs",
+   "phases": [
+    "playoffs"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 35937,
+   "season": null,
+   "stages": [],
+   "weeks": [],
+   "years": []
   },
   {
    "broadcasts": 2,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2
@@ -17172,24 +18104,50 @@ window.OWCS_DISCOVERED = {
    "key": "faceit-league-season-5-master-division-playoffs",
    "lastAt": null,
    "name": "FACEIT League Season 5 - Master Division Playoffs",
+   "phases": [
+    "playoffs"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 2,
+   "runtimeSeconds": 80014,
+   "season": null,
+   "stages": [],
+   "weeks": [],
+   "years": []
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [],
    "firstAt": null,
    "found": 1,
    "key": "faceit-league-season-4-master-division-finals-owcs-relegation-qualifier",
    "lastAt": null,
    "name": "FACEIT League Season 4 Master Division Finals — OWCS Relegation Qualifier",
+   "phases": [
+    "qualifier"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 26587,
+   "season": null,
+   "stages": [],
+   "weeks": [],
+   "years": []
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     2
    ],
@@ -17198,12 +18156,27 @@ window.OWCS_DISCOVERED = {
    "key": "calling-all-heroes-minor-3-2024-25-finals",
    "lastAt": null,
    "name": "Calling All Heroes: Minor 3 2024-25 [ - Finals]",
+   "phases": [
+    "finals"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 28234,
+   "season": 2024,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2024
+   ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1
    ],
@@ -17212,12 +18185,25 @@ window.OWCS_DISCOVERED = {
    "key": "calling-all-heroes-minor-3-2024-25",
    "lastAt": null,
    "name": "Calling All Heroes: Minor 3 2024-25",
+   "phases": [],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 24276,
+   "season": 2024,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2024
+   ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     2
    ],
@@ -17226,12 +18212,27 @@ window.OWCS_DISCOVERED = {
    "key": "calling-all-heroes-minor-2-2024-25-finals",
    "lastAt": null,
    "name": "Calling All Heroes: Minor 2 2024-25 [ - Finals]",
+   "phases": [
+    "finals"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 33806,
+   "season": 2024,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2024
+   ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1
    ],
@@ -17240,12 +18241,25 @@ window.OWCS_DISCOVERED = {
    "key": "calling-all-heroes-minor-2-2024-25",
    "lastAt": null,
    "name": "Calling All Heroes: Minor 2 2024-25",
+   "phases": [],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 24773,
+   "season": 2024,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2024
+   ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     2
    ],
@@ -17254,12 +18268,27 @@ window.OWCS_DISCOVERED = {
    "key": "calling-all-heroes-minor-1-2024-25-finals",
    "lastAt": null,
    "name": "Calling All Heroes: Minor 1 2024-25 [ - Finals]",
+   "phases": [
+    "finals"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 24876,
+   "season": 2024,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2024
+   ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1
    ],
@@ -17268,12 +18297,25 @@ window.OWCS_DISCOVERED = {
    "key": "calling-all-heroes-minor-1-2024-25",
    "lastAt": null,
    "name": "Calling All Heroes: Minor 1 2024-25",
+   "phases": [],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 20937,
+   "season": 2024,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2024
+   ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     2
    ],
@@ -17282,12 +18324,27 @@ window.OWCS_DISCOVERED = {
    "key": "calling-all-heroes-major-3-2024-25-finals",
    "lastAt": null,
    "name": "Calling All Heroes: Major 3 2024-25 [ - Finals]",
+   "phases": [
+    "finals"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 27049,
+   "season": 2024,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2024
+   ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1
    ],
@@ -17296,12 +18353,25 @@ window.OWCS_DISCOVERED = {
    "key": "calling-all-heroes-major-3-2024-25",
    "lastAt": null,
    "name": "Calling All Heroes: Major 3 2024-25",
+   "phases": [],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 22679,
+   "season": 2024,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2024
+   ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     2
    ],
@@ -17310,12 +18380,27 @@ window.OWCS_DISCOVERED = {
    "key": "calling-all-heroes-major-2-2024-25-finals",
    "lastAt": null,
    "name": "Calling All Heroes: Major 2 2024-25 [ - Finals]",
+   "phases": [
+    "finals"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 29158,
+   "season": 2024,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2024
+   ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1
    ],
@@ -17324,12 +18409,25 @@ window.OWCS_DISCOVERED = {
    "key": "calling-all-heroes-major-2-2024-25",
    "lastAt": null,
    "name": "Calling All Heroes: Major 2 2024-25",
+   "phases": [],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 22158,
+   "season": 2024,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2024
+   ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     2
    ],
@@ -17338,12 +18436,27 @@ window.OWCS_DISCOVERED = {
    "key": "calling-all-heroes-major-1-2024-25-finals",
    "lastAt": null,
    "name": "Calling All Heroes: Major 1 2024-25 [ - Finals]",
+   "phases": [
+    "finals"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 24050,
+   "season": 2024,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2024
+   ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1
    ],
@@ -17352,24 +18465,50 @@ window.OWCS_DISCOVERED = {
    "key": "calling-all-heroes-major-1-2024-25",
    "lastAt": null,
    "name": "Calling All Heroes: Major 1 2024-25",
+   "phases": [],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 23951,
+   "season": 2024,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2024
+   ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [],
    "firstAt": null,
    "found": 1,
    "key": "calling-all-heroes-lcq-rising-spotlight-2024-25",
    "lastAt": null,
    "name": "Calling All Heroes: LCQ & Rising Spotlight 2024-25",
+   "phases": [],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 23140,
+   "season": 2024,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2024
+   ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     4
    ],
@@ -17378,12 +18517,27 @@ window.OWCS_DISCOVERED = {
    "key": "calling-all-heroes-championship-finals-2024-25",
    "lastAt": null,
    "name": "Calling All Heroes: Championship Finals 2024-25",
+   "phases": [
+    "championship"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 20195,
+   "season": 2024,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2024
+   ]
   },
   {
    "broadcasts": 3,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2,
@@ -17394,12 +18548,27 @@ window.OWCS_DISCOVERED = {
    "key": "calling-all-heroes-championship-2024-25",
    "lastAt": null,
    "name": "Calling All Heroes: Championship 2024-25",
+   "phases": [
+    "championship"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 3,
+   "runtimeSeconds": 50589,
+   "season": 2024,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2024
+   ]
   },
   {
    "broadcasts": 2,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2
@@ -17409,12 +18578,27 @@ window.OWCS_DISCOVERED = {
    "key": "calling-all-heroes-2026-season-playoffs",
    "lastAt": null,
    "name": "Calling All Heroes 2026:Season Playoffs",
+   "phases": [
+    "playoffs"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 2,
+   "runtimeSeconds": 43974,
+   "season": 2026,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2026
+   ]
   },
   {
    "broadcasts": 2,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2
@@ -17424,24 +18608,54 @@ window.OWCS_DISCOVERED = {
    "key": "calling-all-heroes-2025-summer-stage-playoffs",
    "lastAt": null,
    "name": "Calling All Heroes 2025: Summer Stage Playoffs",
+   "phases": [
+    "playoffs"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 2,
+   "runtimeSeconds": 36825,
+   "season": 2025,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2025
+   ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [],
    "firstAt": null,
    "found": 1,
    "key": "calling-all-heroes-2025-summer-stage-finals",
    "lastAt": null,
    "name": "Calling All Heroes 2025: Summer Stage Finals",
+   "phases": [
+    "finals"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 14434,
+   "season": 2025,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2025
+   ]
   },
   {
    "broadcasts": 2,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2
@@ -17451,36 +18665,81 @@ window.OWCS_DISCOVERED = {
    "key": "calling-all-heroes-2025-spring-stage-playoffs",
    "lastAt": null,
    "name": "Calling All Heroes 2025: Spring Stage Playoffs",
+   "phases": [
+    "playoffs"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 2,
+   "runtimeSeconds": 37338,
+   "season": 2025,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2025
+   ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [],
    "firstAt": null,
    "found": 1,
    "key": "calling-all-heroes-2025-spring-stage-finals",
    "lastAt": null,
    "name": "Calling All Heroes 2025: Spring Stage Finals",
+   "phases": [
+    "finals"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 19427,
+   "season": 2025,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2025
+   ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [],
    "firstAt": null,
    "found": 1,
    "key": "calling-all-heroes-2025-lcq-finals",
    "lastAt": null,
    "name": "Calling All Heroes 2025: LCQ Finals",
+   "phases": [
+    "finals"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 15997,
+   "season": 2025,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2025
+   ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1
    ],
@@ -17489,24 +18748,52 @@ window.OWCS_DISCOVERED = {
    "key": "calling-all-heroes-2025-lcq",
    "lastAt": null,
    "name": "Calling All Heroes 2025: LCQ",
+   "phases": [],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 14310,
+   "season": 2025,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2025
+   ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [],
    "firstAt": null,
    "found": 1,
    "key": "calling-all-heroes-2025-championship-finals",
    "lastAt": null,
    "name": "Calling All Heroes 2025: Championship — Finals",
+   "phases": [
+    "championship"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 20453,
+   "season": 2025,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2025
+   ]
   },
   {
    "broadcasts": 4,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2,
@@ -17517,12 +18804,27 @@ window.OWCS_DISCOVERED = {
    "key": "calling-all-heroes-2025-championship",
    "lastAt": null,
    "name": "Calling All Heroes 2025: Championship",
+   "phases": [
+    "championship"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 4,
+   "runtimeSeconds": 63562,
+   "season": 2025,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2025
+   ]
   },
   {
    "broadcasts": 3,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2,
@@ -17533,12 +18835,25 @@ window.OWCS_DISCOVERED = {
    "key": "2026-owcs-pre-season-bootcamp",
    "lastAt": null,
    "name": "2026 OWCS Pre-Season Bootcamp",
+   "phases": [],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 3,
+   "runtimeSeconds": 89668,
+   "season": 2026,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2026
+   ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     2
    ],
@@ -17547,14 +18862,31 @@ window.OWCS_DISCOVERED = {
    "key": "2025-overwatch-champions-series-korea-stage2-owcs-korea-playoffs-semi-finals",
    "lastAt": null,
    "name": "2025 Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs [Semi Finals]",
+   "phases": [
+    "playoffs"
+   ],
    "published": 0,
    "regions": [
     "korea"
+   ],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 15481,
+   "season": 2025,
+   "stages": [
+    2
+   ],
+   "weeks": [],
+   "years": [
+    2025
    ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1
    ],
@@ -17563,14 +18895,31 @@ window.OWCS_DISCOVERED = {
    "key": "2025-overwatch-champions-series-korea-stage2-owcs-korea-playoffs-round-of-6",
    "lastAt": null,
    "name": "2025 Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs [Round of 6]",
+   "phases": [
+    "playoffs"
+   ],
    "published": 0,
    "regions": [
     "korea"
+   ],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 17490,
+   "season": 2025,
+   "stages": [
+    2
+   ],
+   "weeks": [],
+   "years": [
+    2025
    ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     3
    ],
@@ -17579,14 +18928,31 @@ window.OWCS_DISCOVERED = {
    "key": "2025-overwatch-champions-series-korea-stage2-owcs-korea-playoffs-grand-finals",
    "lastAt": null,
    "name": "2025 Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs [Grand Finals]",
+   "phases": [
+    "grand-finals"
+   ],
    "published": 0,
    "regions": [
     "korea"
+   ],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 19811,
+   "season": 2025,
+   "stages": [
+    2
+   ],
+   "weeks": [],
+   "years": [
+    2025
    ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     2
    ],
@@ -17595,14 +18961,31 @@ window.OWCS_DISCOVERED = {
    "key": "2025-overwatch-champions-series-korea-stage1-owcs-korea-playoffs-semi-finals",
    "lastAt": null,
    "name": "2025 Overwatch Champions Series KOREA Stage1 (OWCS KOREA) Playoffs [Semi Finals]",
+   "phases": [
+    "playoffs"
+   ],
    "published": 0,
    "regions": [
     "korea"
+   ],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 19456,
+   "season": 2025,
+   "stages": [
+    1
+   ],
+   "weeks": [],
+   "years": [
+    2025
    ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1
    ],
@@ -17611,14 +18994,31 @@ window.OWCS_DISCOVERED = {
    "key": "2025-overwatch-champions-series-korea-stage1-owcs-korea-playoffs-round-of-6",
    "lastAt": null,
    "name": "2025 Overwatch Champions Series KOREA Stage1 (OWCS KOREA) Playoffs [Round of 6]",
+   "phases": [
+    "playoffs"
+   ],
    "published": 0,
    "regions": [
     "korea"
+   ],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 18875,
+   "season": 2025,
+   "stages": [
+    1
+   ],
+   "weeks": [],
+   "years": [
+    2025
    ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     3
    ],
@@ -17627,14 +19027,31 @@ window.OWCS_DISCOVERED = {
    "key": "2025-overwatch-champions-series-korea-stage1-owcs-korea-playoffs-grand-finals",
    "lastAt": null,
    "name": "2025 Overwatch Champions Series KOREA Stage1 (OWCS KOREA) Playoffs [Grand Finals]",
+   "phases": [
+    "grand-finals"
+   ],
    "published": 0,
    "regions": [
     "korea"
+   ],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 21216,
+   "season": 2025,
+   "stages": [
+    1
+   ],
+   "weeks": [],
+   "years": [
+    2025
    ]
   },
   {
    "broadcasts": 3,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2,
@@ -17645,12 +19062,29 @@ window.OWCS_DISCOVERED = {
    "key": "2025-overwatch-champions-series-asia-stage1-owcs-asia-playoffs",
    "lastAt": null,
    "name": "2025 Overwatch Champions Series ASIA Stage1 (OWCS ASIA) Playoffs",
+   "phases": [
+    "playoffs"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 3,
+   "runtimeSeconds": 56413,
+   "season": 2025,
+   "stages": [
+    1
+   ],
+   "weeks": [],
+   "years": [
+    2025
+   ]
   },
   {
    "broadcasts": 3,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2,
@@ -17661,12 +19095,27 @@ window.OWCS_DISCOVERED = {
    "key": "2025-overwatch-champions-series-asia-road-to-world-finals-owcs-asia",
    "lastAt": null,
    "name": "2025 Overwatch Champions Series ASIA Road to World Finals (OWCS ASIA)",
+   "phases": [
+    "finals"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 3,
+   "runtimeSeconds": 91888,
+   "season": 2025,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2025
+   ]
   },
   {
    "broadcasts": 6,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2,
@@ -17679,12 +19128,27 @@ window.OWCS_DISCOVERED = {
    "key": "2025-owcs-world-finals",
    "lastAt": null,
    "name": "2025 OWCS World Finals",
+   "phases": [
+    "finals"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 6,
+   "runtimeSeconds": 164559,
+   "season": 2025,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2025
+   ]
   },
   {
    "broadcasts": 3,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [
     1,
     2,
@@ -17695,20 +19159,44 @@ window.OWCS_DISCOVERED = {
    "key": "2024-owcs-world-finals",
    "lastAt": null,
    "name": "2024 OWCS World Finals",
+   "phases": [
+    "finals"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 3,
+   "runtimeSeconds": 78226,
+   "season": 2024,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2024
+   ]
   },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
+   "channels": [
+    "ow_esports_global"
+   ],
+   "dated": 0,
    "days": [],
    "firstAt": null,
    "found": 1,
    "key": "100-soldiers-vs-1-gorilla-overwatch-2-showmatch",
    "lastAt": null,
    "name": "100 Soldiers vs. 1 Gorilla — Overwatch 2 Showmatch",
+   "phases": [
+    "showmatch"
+   ],
    "published": 0,
-   "regions": []
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 5325,
+   "season": null,
+   "stages": [],
+   "weeks": [],
+   "years": []
   }
  ],
  "generatedAt": "2026-08-26T13:40:09+00:00",
@@ -17761,14 +19249,166 @@ window.OWCS_DISCOVERED = {
   "staleAfterHours": 24
  },
  "schema": "discovered.v1",
+ "seasons": [
+  {
+   "broadcasts": 44,
+   "dated": 4,
+   "eventKeys": [
+    "2026-owcs-pre-season-bootcamp",
+    "calling-all-heroes-2026-season-playoffs",
+    "overwatch-collegiate-spring-season-playoffs-2026",
+    "overwatch-world-cup-2026-group-stage",
+    "owcs-2026-champions-clash",
+    "owcs-2026-midseason-championship",
+    "owcs-2026-na-emea-stage-1",
+    "owcs-2026-na-emea-stage-1-opening-day",
+    "owcs-2026-na-emea-stage-1-playoffs",
+    "owcs-2026-na-emea-stage-2",
+    "owcs-2026-na-emea-stage-2-opening-day",
+    "owcs-2026-na-emea-stage-2-playoffs",
+    "owwc-2026-online-qualifiers",
+    "owwc-2026-online-qualifiers-emea-amer"
+   ],
+   "events": 14,
+   "found": 43,
+   "published": 1,
+   "runtimeKnown": 44,
+   "runtimeSeconds": 1268800,
+   "season": 2026
+  },
+  {
+   "broadcasts": 100,
+   "dated": 0,
+   "eventKeys": [
+    "2025-overwatch-champions-series-asia-road-to-world-finals-owcs-asia",
+    "2025-overwatch-champions-series-asia-stage1-owcs-asia-playoffs",
+    "2025-overwatch-champions-series-korea-stage1-owcs-korea-playoffs-grand-finals",
+    "2025-overwatch-champions-series-korea-stage1-owcs-korea-playoffs-round-of-6",
+    "2025-overwatch-champions-series-korea-stage1-owcs-korea-playoffs-semi-finals",
+    "2025-overwatch-champions-series-korea-stage2-owcs-korea-playoffs-grand-finals",
+    "2025-overwatch-champions-series-korea-stage2-owcs-korea-playoffs-round-of-6",
+    "2025-overwatch-champions-series-korea-stage2-owcs-korea-playoffs-semi-finals",
+    "2025-owcs-world-finals",
+    "calling-all-heroes-2025-championship",
+    "calling-all-heroes-2025-championship-finals",
+    "calling-all-heroes-2025-lcq",
+    "calling-all-heroes-2025-lcq-finals",
+    "calling-all-heroes-2025-spring-stage-finals",
+    "calling-all-heroes-2025-spring-stage-playoffs",
+    "calling-all-heroes-2025-summer-stage-finals",
+    "calling-all-heroes-2025-summer-stage-playoffs",
+    "overwatch-collegiate-homecoming-2025",
+    "overwatch-collegiate-homecoming-2025-finals",
+    "owcs-2025-champions-clash",
+    "owcs-2025-emea-na-playoffs",
+    "owcs-2025-emea-na-stage-1",
+    "owcs-2025-emea-na-stage-1-playoffs",
+    "owcs-2025-emea-na-stage-2",
+    "owcs-2025-emea-na-stage-2-playoffs",
+    "owcs-2025-midseason-championship-a-stream",
+    "owcs-2025-midseason-championship-at-ewc",
+    "owcs-2025-midseason-championship-at-ewc-final-day",
+    "owcs-2025-midseason-championship-b-stream",
+    "owcs-2025-msc-last-chance-qualifier",
+    "owcs-2025-na-emea-stage-3",
+    "owcs-2025-na-emea-stage-3-opening-day",
+    "owcs-2025-na-emea-stage-3-playoffs",
+    "owcs-2025-stage-1-promotion-relegation",
+    "owcs-2025-stage-2-promotion-relegation-tournament",
+    "owcs-2025-world-finals"
+   ],
+   "events": 36,
+   "found": 100,
+   "published": 0,
+   "runtimeKnown": 100,
+   "runtimeSeconds": 2446704,
+   "season": 2025
+  },
+  {
+   "broadcasts": 52,
+   "dated": 0,
+   "eventKeys": [
+    "2024-owcs-world-finals",
+    "calling-all-heroes-championship-2024-25",
+    "calling-all-heroes-championship-finals-2024-25",
+    "calling-all-heroes-lcq-rising-spotlight-2024-25",
+    "calling-all-heroes-major-1-2024-25",
+    "calling-all-heroes-major-1-2024-25-finals",
+    "calling-all-heroes-major-2-2024-25",
+    "calling-all-heroes-major-2-2024-25-finals",
+    "calling-all-heroes-major-3-2024-25",
+    "calling-all-heroes-major-3-2024-25-finals",
+    "calling-all-heroes-minor-1-2024-25",
+    "calling-all-heroes-minor-1-2024-25-finals",
+    "calling-all-heroes-minor-2-2024-25",
+    "calling-all-heroes-minor-2-2024-25-finals",
+    "calling-all-heroes-minor-3-2024-25",
+    "calling-all-heroes-minor-3-2024-25-finals",
+    "overwatch-collegiate-championship-2024",
+    "overwatch-collegiate-championship-2024-finals",
+    "overwatch-collegiate-homecoming-2024",
+    "overwatch-collegiate-homecoming-2024-finals",
+    "owcs-2024-dallas-major",
+    "owcs-2024-emea-na-stage-2-main-event",
+    "owcs-2024-emea-na-stage-3-groups",
+    "owcs-2024-emea-na-stage-3-main-event",
+    "owcs-2024-emea-na-stage-4-groups",
+    "owcs-2024-emea-na-stage-4-main-event"
+   ],
+   "events": 26,
+   "found": 52,
+   "published": 0,
+   "runtimeKnown": 52,
+   "runtimeSeconds": 1375841,
+   "season": 2024
+  },
+  {
+   "broadcasts": 54,
+   "dated": 0,
+   "eventKeys": [
+    "100-soldiers-vs-1-gorilla-overwatch-2-showmatch",
+    "faceit-league-season-4-master-division-finals-owcs-relegation-qualifier",
+    "faceit-league-season-5-master-division-playoffs",
+    "faceit-league-season-7-master-division-playoffs",
+    "overwatch-2-stadium-asia-streamer-showdown",
+    "overwatch-champions-series-asia-owcs-asia",
+    "overwatch-champions-series-asia-stage2-owcs-asia",
+    "overwatch-champions-series-asia-stage2-owcs-asia-grand-finals",
+    "overwatch-champions-series-japan-stage2-owcs-japan",
+    "overwatch-champions-series-japan-stage2-owcs-japan-grand-finals",
+    "overwatch-champions-series-japan-stage2-owcs-japan-lcq-game-3",
+    "overwatch-champions-series-japan-stage2-owcs-japan-playoffs",
+    "overwatch-champions-series-korea-stage2-owcs-korea",
+    "overwatch-champions-series-korea-stage2-owcs-korea-playoffs-grand-finals",
+    "overwatch-champions-series-korea-stage2-owcs-korea-playoffs-quarterfinals",
+    "overwatch-champions-series-korea-stage2-owcs-korea-playoffs-semifinals",
+    "overwatch-champions-series-pacific-stage2-owcs-pacific",
+    "overwatch-champions-series-stage-2-asia-owcs-asia-wildcard",
+    "overwatch-collegiate-championship",
+    "overwatch-collegiate-championship-finals",
+    "owcs-x-faceit-league-stage-3-promotion-relegation-matches",
+    "owwc-group-draw"
+   ],
+   "events": 22,
+   "found": 54,
+   "published": 0,
+   "runtimeKnown": 54,
+   "runtimeSeconds": 1129179,
+   "season": null
+  }
+ ],
  "summary": {
   "awaitingProcessing": 249,
   "broadcastsKnown": 288,
   "calendarLinked": 13,
   "channelsScanned": 1,
+  "datedBroadcasts": 4,
   "events": 98,
   "ignored": 38,
   "inFlight": 0,
-  "published": 1
+  "published": 1,
+  "runtimeKnown": 250,
+  "runtimeSeconds": 6220524,
+  "seasons": 3
  }
 };

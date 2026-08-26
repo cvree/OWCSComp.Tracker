@@ -181,11 +181,39 @@
         Math.round((b.durationSeconds % 3600) / 60) + "m"
       : null;
 
+    /* The event this broadcast belongs to, from the discovery layer's own
+       rollup. It is what turns a lone row into a position in a season:
+       "day 3 of 5 on an event with 41 hours found". */
+    const ev = P.discoveredEvent ? P.discoveredEvent(p.eventKey) : null;
+    const place = [];
+    if (ev) {
+      if (p.day != null && ev.days && ev.days.length > 1) {
+        place.push("day " + p.day + " of " + ev.days.length + " found");
+      }
+      if (p.week != null && ev.weeks && ev.weeks.length > 1) {
+        place.push("week " + p.week + " of " + ev.weeks.length + " found");
+      }
+      if (ev.broadcasts > 1) {
+        place.push(ev.broadcasts + " broadcasts on this event");
+      }
+      const evHours = P.fmtHours(ev.runtimeSeconds);
+      if (evHours) place.push(evHours + " in total");
+    }
+
+    /* "not stated by the source" is true but useless on its own. The scan
+       knows WHY it has no date, so say that instead of leaving a visitor
+       to assume the site is broken. */
+    const cov = P.dateCoverage ? P.dateCoverage() : null;
+    const publishedCell = b.publishedAt
+      ? P.fmtDateTime(b.publishedAt)
+      : "not stated by the source" +
+        (cov && cov.reason ? " — " + cov.reason : "");
+
     const facts = P.dl([
       ["Channel", b.channelTitle],
-      ["Published", b.publishedAt ? P.fmtDateTime(b.publishedAt)
-        : "not stated by the source"],
+      ["Published", publishedCell],
       ["Length", dur],
+      ["Where it sits on the event", place.length ? place.join(" · ") : null],
       ["Event, read from the title", p.eventName],
       ["Stage", p.stage != null ? "Stage " + p.stage : null],
       ["Day", p.day != null ? "Day " + p.day : null],
@@ -227,7 +255,14 @@
         "<p>It was found automatically on a verified official channel. Everything below " +
         "is either the source's own metadata or a reading of the video title — there are " +
         "no hero compositions, no scores and no results here, and there will not be until " +
-        "it has been processed and reviewed.</p>") +
+        "it has been processed and reviewed.</p>" +
+        (ev && ev.broadcasts > 1
+          ? '<p><a href="games.html?state=found&q=' +
+            encodeURIComponent(ev.name) + '">See the other ' +
+            esc(ev.broadcasts - 1) + " broadcast" +
+            (ev.broadcasts === 2 ? "" : "s") + " found on " + esc(ev.name) +
+            " \u2192</a></p>"
+          : "")) +
       '<div class="card u-mt-4">' + facts + "</div>" +
       (scoring ? '<div class="u-mt-4">' + scoring + "</div>" : "") +
       (action ? '<div class="u-mt-4">' + action + "</div>" : "") +
