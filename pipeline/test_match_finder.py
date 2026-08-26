@@ -473,9 +473,20 @@ class TestStreamsUrlResolution(unittest.TestCase):
                       runner.cmds[0])
 
     def test_the_real_registry_channel_resolves_canonically(self):
-        for ch in mf.scan_channels():
+        youtube = [c for c in mf.scan_channels()
+                   if c["platform"] == li.YOUTUBE]
+        self.assertTrue(youtube)
+        for ch in youtube:
             self.assertRegex(mf.channel_streams_url(ch),
                              r"^https://www\.youtube\.com/channel/UC[\w-]+/streams$")
+
+    def test_a_non_youtube_row_has_no_streams_url(self):
+        """/streams is a YouTube path. Building one for a Twitch row would
+        produce a URL that can only 404 — scan reaches for that platform's
+        own source instead."""
+        for ch in mf.scan_channels():
+            if ch["platform"] != li.YOUTUBE:
+                self.assertIsNone(mf.channel_streams_url(ch))
 
 
 class TestLedgerSnapshotFallback(unittest.TestCase):
@@ -553,6 +564,145 @@ class TestChannelAuthority(unittest.TestCase):
         ]
         chans = mf.scan_channels(rows)
         self.assertEqual([c["id"] for c in chans], ["ok"])
+
+
+class TestTwitchSource(unittest.TestCase):
+    """Twitch is the source an unattended runner can actually follow up on.
+
+    A GitHub-hosted runner is bot-checked by YouTube on every player client,
+    and resolves a Twitch VOD with no credential at all (measured — see
+    docs/UNATTENDED.md). Finding a broadcast the pipeline can never fetch is
+    only half a discovery.
+    """
+
+    @staticmethod
+    def _dump(entries):
+        return json.dumps({"entries": entries})
+
+    def test_it_reads_the_videos_tab_not_the_streams_tab(self):
+        runner = FakeRunner(stdout=self._dump([]))
+        mf.fetch_twitch_vods("https://www.twitch.tv/ow_esports", runner=runner)
+        self.assertIn("https://www.twitch.tv/ow_esports/videos", runner.cmds[0])
+        # Already-suffixed URLs are not double-suffixed.
+        runner2 = FakeRunner(stdout=self._dump([]))
+        mf.fetch_twitch_vods("https://www.twitch.tv/ow_esports/videos",
+                             runner=runner2)
+        self.assertIn("https://www.twitch.tv/ow_esports/videos", runner2.cmds[0])
+        self.assertNotIn("videos/videos", " ".join(runner2.cmds[0]))
+
+    def test_entries_carry_the_air_date_without_a_backfill_pass(self):
+        """The YouTube flat dump omits the timestamp often enough that the
+        archive needed a separate dating pass. A Twitch dump carries
+        release_timestamp, so a broadcast arrives placeable on the
+        calendar."""
+        entries, err = mf.fetch_twitch_vods(
+            "https://www.twitch.tv/ow_esports",
+            runner=FakeRunner(stdout=self._dump([{
+                "id": "2854348714",
+                "title": "OWCS 2026 | Stage 2 Playoffs | Day 2",
+                "release_timestamp": 1756000000,
+                "duration": 21600, "live_status": "was_live",
+                "channel": "Overwatch Esports"}])))
+        self.assertIsNone(err)
+        self.assertEqual(len(entries), 1)
+        e = entries[0]
+        self.assertEqual(e["videoId"], "2854348714")
+        self.assertEqual(e["durationSeconds"], 21600)
+        self.assertEqual(e["liveBroadcastStatus"], "completed")
+        self.assertTrue(e["publishedAt"].startswith("2025-"))
+
+    def test_a_non_vod_id_is_skipped_rather_than_guessed_at(self):
+        entries, err = mf.fetch_twitch_vods(
+            "https://www.twitch.tv/ow_esports",
+            runner=FakeRunner(stdout=self._dump([
+                {"id": "v2854348714", "title": "prefixed"},   # normalised
+                {"id": "some-clip-slug", "title": "a clip"},  # skipped
+                {"id": None, "title": "no id"},               # skipped
+            ])))
+        self.assertIsNone(err)
+        self.assertEqual([e["videoId"] for e in entries], ["2854348714"])
+
+    def test_every_failure_becomes_a_named_error_never_an_exception(self):
+        for runner, needle in (
+            (FakeRunner(raise_missing=True), "yt-dlp not found"),
+            (FakeRunner(returncode=1, stderr="boom"), "yt-dlp exit 1"),
+            (FakeRunner(stdout="{not json"), "unparseable"),
+        ):
+            with self.subTest(needle=needle):
+                entries, err = mf.fetch_twitch_vods(
+                    "https://www.twitch.tv/ow_esports", runner=runner)
+                self.assertEqual(entries, [])
+                self.assertIn("twitch-videos", err)
+                self.assertIn(needle, err)
+
+    def test_a_candidate_carries_a_twitch_url_intake_accepts(self):
+        """A discovered broadcast is only useful if the same URL survives
+        the intake parser — that round trip is the whole handoff."""
+        ch = {"id": "ow_esports_twitch", "platform": li.TWITCH,
+              "channelId": "ow_esports", "title": "Overwatch Esports",
+              "sourceUrl": "https://www.twitch.tv/ow_esports"}
+        cands = mf.merge_channel_entries(ch, [], [{
+            "videoId": "2854348714",
+            "title": "OWCS 2026 | Stage 2 Playoffs | Day 2 | NA vs EMEA",
+            "publishedAt": "2026-08-24T01:46:40+00:00",
+            "description": "", "channelTitle": "Overwatch Esports",
+            "durationSeconds": 21600, "liveBroadcastStatus": "completed",
+        }], platform=li.TWITCH)
+        self.assertEqual(len(cands), 1)
+        c = cands[0]
+        self.assertEqual(c["platform"], li.TWITCH)
+        self.assertEqual(c["url"], "https://www.twitch.tv/videos/2854348714")
+        self.assertEqual(c["sources"], ["twitch-videos"])
+        self.assertEqual(c["channelRegistryId"], "ow_esports_twitch")
+        parsed = li.parse_link(c["url"])
+        self.assertEqual(parsed["platform"], li.TWITCH)
+        self.assertEqual(parsed["videoId"], c["videoId"])
+
+    def test_the_listing_tab_still_wins_for_duration_and_live_status(self):
+        """The rule the YouTube merge follows — the listing source is
+        authoritative for what RSS cannot carry — must not quietly stop
+        applying just because the source has a different name."""
+        ch = {"id": "ow_esports_twitch", "platform": li.TWITCH,
+              "channelId": "ow_esports", "sourceUrl": "https://www.twitch.tv/x"}
+        cands = mf.merge_channel_entries(ch, [], [{
+            "videoId": "2854348714", "title": "OWCS 2026 Day 2",
+            "publishedAt": None, "description": None, "channelTitle": None,
+            "durationSeconds": 21600, "liveBroadcastStatus": "completed",
+        }], platform=li.TWITCH)
+        self.assertEqual(cands[0]["durationSeconds"], 21600)
+        self.assertEqual(cands[0]["liveBroadcastStatus"], "completed")
+
+    def test_scan_sends_each_platform_to_its_own_source(self):
+        """A channel id only means something inside its own namespace: the
+        Twitch row must never reach the YouTube RSS/streams path, and the
+        YouTube row must never reach the Twitch one."""
+        runner = FakeRunner(stdout=self._dump([]))
+        fetched_rss: list[str] = []
+
+        def fetch(url, timeout=None):
+            fetched_rss.append(url)
+            return b"<feed></feed>"
+
+        chans = [
+            {"id": "yt", "platform": li.YOUTUBE, "channelId": "UCtest",
+             "sourceUrl": "https://www.youtube.com/OW_Esports"},
+            {"id": "tw", "platform": li.TWITCH, "channelId": "ow_esports",
+             "sourceUrl": "https://www.twitch.tv/ow_esports"},
+        ]
+        old = mf.LEDGER_REL
+        mf.LEDGER_REL = os.path.join("work", "nonexistent-ledger.json")
+        try:
+            mf.scan(channels=chans, fetch=fetch, runner=runner)
+        finally:
+            mf.LEDGER_REL = old
+        urls = [" ".join(c) for c in runner.cmds]
+        self.assertTrue(any("youtube.com/channel/UCtest/streams" in u
+                            for u in urls))
+        self.assertTrue(any("twitch.tv/ow_esports/videos" in u for u in urls))
+        # The Twitch login never becomes a YouTube channel id.
+        self.assertFalse(any("ow_esports" in u for u in fetched_rss))
+        self.assertFalse(any("youtube.com/channel/ow_esports" in u
+                             for u in urls))
 
 
 if __name__ == "__main__":

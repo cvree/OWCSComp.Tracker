@@ -87,21 +87,18 @@ def scan_channels(channels: list[dict] | None = None) -> list[dict]:
     """Verified + enabled registry channels with a confirmed channelId —
     the only channels the finder will scan (never a guessed handle).
 
-    YouTube only. Both of this module's sources are YouTube-shaped — the
-    channel RSS feed keyed by a UC id, and `yt-dlp --flat-playlist` on a
-    /streams tab — so a registry row for another platform is skipped here
-    rather than fed to a scanner that would only produce a named error per
-    run. Skipping is not ignoring: intake authorizes those rows (see
-    link_intake.authorize_source), and a platform-native finder is what
-    would scan them.
+    Each row carries its platform, because `scan` reaches for a different
+    source per platform: a YouTube channel is read from its RSS feed and
+    its /streams tab, a Twitch channel from its /videos tab. A channel id
+    only means something inside its own namespace, so a row is never handed
+    to another platform's scanner.
     """
     idx = li.registry_channel_index(channels)
     out = []
     for cid, ch in idx.items():
-        if (ch.get("platform") or li.YOUTUBE) != li.YOUTUBE:
-            continue
         out.append({
             "id": ch.get("id"),
+            "platform": ch.get("platform") or li.YOUTUBE,
             "channelId": cid,
             "title": ch.get("title") or ch.get("id"),
             "sourceUrl": ch.get("sourceUrl"),
@@ -117,7 +114,14 @@ def channel_streams_url(channel: dict) -> str | None:
     whereas a registry `sourceUrl` may be a legacy custom URL
     (youtube.com/OW_Esports) whose /streams sub-path does not. Falls back
     to the recorded sourceUrl only when no channelId exists — which, for a
-    registry channel, `scan_channels` has already ruled out."""
+    registry channel, `scan_channels` has already ruled out.
+
+    YouTube only. /streams is a YouTube path and a channel id only means
+    something inside its own namespace, so a row from another platform
+    returns None rather than a URL that would 404 — `scan` reaches for that
+    platform's own source instead."""
+    if (channel.get("platform") or li.YOUTUBE) != li.YOUTUBE:
+        return None
     cid = channel.get("channelId")
     if cid:
         return f"https://www.youtube.com/channel/{cid}/streams"
@@ -224,6 +228,65 @@ def fetch_streams_tab(channel_url: str, limit: int = DEFAULT_LIMIT,
         # and a broadcast with no date can never be placed on the calendar.
         published = _iso_from_epoch(e.get("timestamp")) or \
             _iso_from_epoch(e.get("release_timestamp"))
+        out.append({
+            "videoId": vid,
+            "title": e.get("title"),
+            "publishedAt": published,
+            "description": e.get("description"),
+            "channelTitle": e.get("channel") or e.get("uploader"),
+            "durationSeconds": int(dur) if isinstance(dur, (int, float)) else None,
+            "liveBroadcastStatus": _LIVE_STATUS.get(e.get("live_status")),
+        })
+    return out, None
+
+
+# ---------------------------------------------------------- twitch VODs
+def fetch_twitch_vods(channel_url: str, limit: int = DEFAULT_LIMIT,
+                      runner=subprocess) -> tuple[list[dict], str | None]:
+    """One `yt-dlp --flat-playlist -J` dump of a Twitch channel's /videos
+    tab. (entries, error); never raises.
+
+    Same shape and same cost as the YouTube streams tab — one request for a
+    whole channel, no key, no quota, no account. The difference that matters
+    is that this one is not refused from a datacentre IP, which is why it is
+    the source an unattended runner can actually follow up on.
+    """
+    url = channel_url.rstrip("/")
+    if not url.endswith("/videos"):
+        url += "/videos"
+    cmd = ["yt-dlp", "--flat-playlist", "--playlist-end", str(limit),
+           "-J", "--no-warnings", url]
+    try:
+        res = runner.run(cmd, capture_output=True, text=True, timeout=120,
+                         **proc_text.PIPE_TEXT)
+    except FileNotFoundError:
+        return [], "twitch-videos: yt-dlp not found on PATH"
+    except Exception as exc:  # noqa: BLE001
+        return [], f"twitch-videos: {type(exc).__name__}: {exc}"
+    if res.returncode != 0:
+        tail = (res.stderr or "").strip()[-300:]
+        return [], f"twitch-videos: yt-dlp exit {res.returncode}: {tail}"
+    try:
+        payload = json.loads(res.stdout or "{}")
+    except ValueError:
+        return [], "twitch-videos: unparseable yt-dlp JSON"
+    out = []
+    for e in payload.get("entries") or []:
+        vid = e.get("id")
+        if not vid:
+            continue
+        # Twitch ids arrive as bare digits, occasionally with a "v" prefix
+        # from older extractor versions. Normalise to what intake accepts,
+        # and skip anything that is not a VOD id rather than guess.
+        vid = str(vid).lstrip("vV")
+        if not vid.isdigit():
+            continue
+        dur = e.get("duration")
+        # Unlike a YouTube flat-playlist dump, a Twitch one carries the air
+        # date reliably — which is the whole reason the YouTube archive
+        # needed a separate backfill pass and this one does not.
+        published = (_iso_from_epoch(e.get("release_timestamp"))
+                     or _iso_from_epoch(e.get("timestamp")))
         out.append({
             "videoId": vid,
             "title": e.get("title"),
@@ -491,14 +554,22 @@ def fill_missing_dates(ledger: dict, *, limit: int = 0, runner=subprocess,
 
 # ---------------------------------------------------------------- merge
 def merge_channel_entries(channel: dict, rss: list[dict],
-                          streams: list[dict]) -> list[dict]:
+                          streams: list[dict], *,
+                          platform: str = li.YOUTUBE) -> list[dict]:
     """Merge both sources for one channel into scored candidates. The
     streams tab wins for duration/live status (RSS has neither); RSS wins
     for published time when both exist. The full description is used for
     likeness scoring and then DROPPED — the ledger stores the verdict and
-    its reasons, not kilobytes of marketing copy."""
+    its reasons, not kilobytes of marketing copy.
+
+    `platform` decides how a candidate's URL is spelled and what its
+    listing source is called. A Twitch channel has one source (its /videos
+    tab, passed as `streams` — it plays the same role the YouTube streams
+    tab does, carrying the authoritative duration and live status) and no
+    RSS feed."""
+    listing_source = "twitch-videos" if platform == li.TWITCH else "streams"
     by_id: dict[str, dict] = {}
-    for src_name, entries in (("rss", rss), ("streams", streams)):
+    for src_name, entries in (("rss", rss), (listing_source, streams)):
         for e in entries:
             vid = e["videoId"]
             cur = by_id.setdefault(vid, {
@@ -513,8 +584,8 @@ def merge_channel_entries(channel: dict, rss: list[dict],
                       "channelTitle"):
                 if cur.get(k) is None and e.get(k) is not None:
                     cur[k] = e[k]
-            # streams tab carries the authoritative duration/live status
-            if src_name == "streams":
+            # the listing tab carries the authoritative duration/live status
+            if src_name == listing_source:
                 if e.get("durationSeconds") is not None:
                     cur["durationSeconds"] = e["durationSeconds"]
                 if e.get("liveBroadcastStatus") is not None:
@@ -529,7 +600,8 @@ def merge_channel_entries(channel: dict, rss: list[dict],
         })
         out.append({
             "videoId": vid,
-            "url": li.canonical_url(vid),
+            "platform": platform,
+            "url": li.canonical_url(vid, platform),
             "title": c.get("title"),
             "publishedAt": c.get("publishedAt"),
             "durationSeconds": c.get("durationSeconds"),
@@ -624,6 +696,18 @@ def scan(channels: list[dict] | None = None, *, limit: int = DEFAULT_LIMIT,
     errors: list[str] = []
     candidates: list[dict] = []
     for ch in chans:
+        platform = ch.get("platform") or li.YOUTUBE
+        if platform == li.TWITCH:
+            # One source, and no RSS feed to merge with it. A Twitch flat
+            # dump already carries the air date, so this platform needs
+            # none of the date backfill the YouTube archive does.
+            entries, err = fetch_twitch_vods(
+                ch.get("sourceUrl") or "", limit=limit, runner=runner)
+            if err:
+                errors.append(err)
+            candidates.extend(merge_channel_entries(
+                ch, [], entries, platform=li.TWITCH))
+            continue
         rss_entries: list[dict] = []
         if ch.get("channelId"):
             rss_entries, err = fetch_rss_channel(ch["channelId"], fetch=fetch)
