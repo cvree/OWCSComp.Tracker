@@ -143,15 +143,27 @@ store keeps resolving. Intake parses and authorizes Twitch VODs with no
 key at all, the finder scans the channel's `/videos` tab, and `self_fill`
 joins a published Twitch match against its own record.
 
-### 2. The worker's host allowlist — the actual blocker now
+### 2. The worker's host allowlist — DONE
 
-`worker.py` keeps its own `ALLOWED_HOSTS`, YouTube-only, and refuses
-anything else before a download starts. So intake now accepts a Twitch VOD
-that the download path will still turn away. This is the same shape of
-change intake just took, and it is deliberately a separate gate: intake
-decides what may be *recorded*, the worker decides what may be *fetched*.
-`video_ingest.is_remote_url` has the same assumption baked into a
-substring check.
+`worker.py` keeps its own `ALLOWED_HOSTS` and it stays its own gate:
+intake decides what may be *recorded*, the worker decides what may be
+*fetched*, and one must not be able to widen the other by accident. Both
+now accept Twitch, and a test asserts they cannot drift apart — a host the
+worker will download must be one intake will admit.
+
+Closing that gate surfaced an older hole worth naming. `validate_source`
+took `payload["videoId"]` on faith over the id in the URL beside it, which
+was survivable while every id came from one namespace. With two, a Twitch
+id beside a YouTube URL would authorize one broadcast and download
+another. A disagreement is now refused rather than resolved in either
+direction.
+
+Still YouTube-only, and deliberately left alone: the operator-facing clip
+tools (`download_vod_clip.py`, `run_owcs_auto.py`,
+`extract_calibration_frames.py`) refuse a non-YouTube source through
+`video_ingest.is_youtube_source`. They are the local-operator path, not
+the one the autopilot drives, and widening them is a separate job with its
+own tests.
 
 ### 3. `autopilot.yml` — the scheduled chain
 

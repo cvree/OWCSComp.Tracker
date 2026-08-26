@@ -177,6 +177,73 @@ class TestSourceValidation(WorkerTestBase):
         }, official_channel_ids={"UCofficial"})
         self.assertEqual(vid, "abc12345678")
 
+    # -------------------------------------------------------- Twitch
+    # This gate decides what may be FETCHED (intake decides what may be
+    # RECORDED). Twitch is here because it is the only source unattended
+    # hardware can actually fetch — measured, see docs/UNATTENDED.md.
+
+    def test_an_official_twitch_vod_is_accepted(self):
+        vid = worker.validate_source({
+            "videoId": "2854348714", "channelId": "ow_esports",
+            "sourceUrl": "https://www.twitch.tv/videos/2854348714",
+        }, official_channel_ids={"ow_esports"})
+        self.assertEqual(vid, "2854348714")
+
+    def test_a_twitch_vod_id_resolves_from_a_bare_url(self):
+        vid = worker.validate_source({
+            "channelId": "ow_esports",
+            "sourceUrl": "https://twitch.tv/videos/2854348714",
+        }, official_channel_ids={"ow_esports"})
+        self.assertEqual(vid, "2854348714")
+
+    def test_a_twitch_channel_or_clip_url_is_not_a_broadcast(self):
+        """A channel URL names whatever is live right now, and a clip is not
+        the broadcast. Neither is downloadable here, so neither resolves."""
+        for url in ("https://www.twitch.tv/ow_esports",
+                    "https://www.twitch.tv/ow_esports/clip/SomeClipName",
+                    "https://www.twitch.tv/videos/not-an-id"):
+            with self.subTest(url=url):
+                with self.assertRaises(worker.SourceValidationError):
+                    worker.validate_source(
+                        {"channelId": "ow_esports", "sourceUrl": url},
+                        official_channel_ids={"ow_esports"})
+
+    def test_an_unverified_twitch_channel_is_still_rejected(self):
+        with self.assertRaises(worker.SourceValidationError):
+            worker.validate_source({
+                "videoId": "2854348714", "channelId": "some_streamer",
+                "sourceUrl": "https://www.twitch.tv/videos/2854348714",
+            }, official_channel_ids={"ow_esports"})
+
+    def test_a_payload_id_that_disagrees_with_its_url_is_refused(self):
+        """This gate used to take the payload id on faith, which was
+        survivable while every id came from one namespace. With two, a
+        Twitch id beside a YouTube URL would authorize one broadcast and
+        download another — so a disagreement is refused rather than
+        resolved in either direction."""
+        for payload_id, url in (
+            ("dQw4w9WgXcQ", "https://www.twitch.tv/videos/2854348714"),
+            ("2854348714", "https://www.youtube.com/watch?v=dQw4w9WgXcQ"),
+            ("vidOTHER", "https://youtu.be/vid123"),
+        ):
+            with self.subTest(payload_id=payload_id):
+                with self.assertRaises(worker.SourceValidationError) as ctx:
+                    worker.validate_source(
+                        {"videoId": payload_id, "channelId": "UCofficial",
+                         "sourceUrl": url},
+                        official_channel_ids={"UCofficial", "ow_esports"})
+                self.assertIn("disagrees", str(ctx.exception))
+
+    def test_intake_and_the_download_gate_accept_the_same_hosts(self):
+        """The two allowlists are deliberately separate — intake must never
+        be able to widen the downloader by accident — but they must not
+        drift apart either, or intake records links the worker will refuse
+        after the fact."""
+        from automation import link_intake as li
+        for host in worker.ALLOWED_HOSTS:
+            self.assertIn(host, li.ALLOWED_HOSTS,
+                          f"{host} is downloadable but not admissible")
+
 
 class TestClaimAndLock(WorkerTestBase):
     def test_claim_and_lock_succeeds(self):
