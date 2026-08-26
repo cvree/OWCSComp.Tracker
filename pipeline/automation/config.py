@@ -193,13 +193,34 @@ def load_all_competitions(path: str = FACEIT_COMPETITIONS) -> list[dict[str, Any
     return list(_load_json(path).get("competitions", []) or [])
 
 
-def load_channels(path: str = BROADCAST_CHANNELS) -> list[dict[str, Any]]:
-    """Enabled official channels with a confirmed channelId (Phase C1/C2)."""
+# Every registry row written before broadcasts existed on more than one
+# platform means YouTube, so that is what an absent `platform` field reads as.
+DEFAULT_PLATFORM = "youtube"
+
+
+def channel_platform(ch: dict[str, Any]) -> str:
+    return ch.get("platform") or DEFAULT_PLATFORM
+
+
+def load_channels(path: str = BROADCAST_CHANNELS, *,
+                  platform: str | None = None) -> list[dict[str, Any]]:
+    """Enabled official channels with a confirmed channelId (Phase C1/C2).
+
+    `platform` narrows the result to one platform's rows. A caller that
+    speaks a platform-specific protocol — anything driving the YouTube Data
+    API, the channel RSS feed or a /streams tab — must pass it, because a
+    channel id is only meaningful inside its own namespace and handing a
+    Twitch login to videos.list can only produce a false error about a
+    channel that is fine.
+    """
     data = _load_json(path)
     out = []
     for ch in data.get("channels", []) or []:
-        if ch.get("enabled") and ch.get("channelId"):
-            out.append(ch)
+        if not (ch.get("enabled") and ch.get("channelId")):
+            continue
+        if platform is not None and channel_platform(ch) != platform:
+            continue
+        out.append(ch)
     return out
 
 

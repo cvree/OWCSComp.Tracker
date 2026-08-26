@@ -46,7 +46,39 @@ REGISTRY = [
     {"id": "disabled_official", "platform": "youtube",
      "channelId": "UCdisabledButReal0", "region": "na", "official": True,
      "enabled": False, "verifiedStatus": "verified"},
+    # The official Twitch destination. Keyed by the channel LOGIN, which is
+    # what a Twitch id namespace looks like.
+    {"id": "ow_esports_twitch", "platform": "twitch",
+     "channelId": "ow_esports", "region": "global", "language": "en",
+     "official": True, "enabled": True, "verifiedStatus": "verified"},
 ]
+
+TWITCH_VOD = "2854348714"
+
+
+def fake_twitch_runner(*, video_id=TWITCH_VOD, login="OW_Esports",
+                       title="OWCS 2026 | Stage 2 Playoffs | Day 2",
+                       duration=21600, is_live=False,
+                       returncode=0, stdout=None, stderr="",
+                       raise_exc=None):
+    """A stand-in for the one `yt-dlp -J` call the Twitch metadata path
+    makes. No network, no yt-dlp binary, no key — which is the point."""
+    def run(cmd, timeout):
+        if raise_exc is not None:
+            raise raise_exc
+        payload = {"id": video_id, "title": title, "uploader_id": login,
+                   "channel": "Overwatch Esports", "duration": duration,
+                   "timestamp": 1756000000, "is_live": is_live,
+                   "description": "OWCS official broadcast"}
+
+        class Proc:
+            pass
+        proc = Proc()
+        proc.returncode = returncode
+        proc.stdout = json.dumps(payload) if stdout is None else stdout
+        proc.stderr = stderr
+        return proc
+    return run
 
 
 def fake_client(*, video_id="dQw4w9WgXcQ", channel_id=OFFICIAL_CHANNEL,
@@ -142,8 +174,14 @@ class TestUrlNormalization(unittest.TestCase):
             "   ": "empty_url",
             "ftp://youtube.com/watch?v=dQw4w9WgXcQ": "unsupported_scheme",
             "https://vimeo.com/watch?v=dQw4w9WgXcQ": "unsupported_host",
-            "https://twitch.tv/videos/12345": "unsupported_host",
             "https://www.youtube.com/@OW_Esports": "no_video_id",
+            # Twitch is a supported HOST now, but only /videos/<id> names a
+            # broadcast: a channel page is whatever is live at the moment,
+            # and a clip is not the VOD.
+            "https://www.twitch.tv/ow_esports": "no_video_id",
+            "https://www.twitch.tv/ow_esports/clip/SomeClipName": "no_video_id",
+            "https://www.twitch.tv/videos/notanid": "malformed_video_id",
+            "https://www.twitch.tv/videos/12345": "malformed_video_id",
             "https://www.youtube.com/watch?list=PLxyz": "no_video_id",
             "https://www.youtube.com/watch?v=tooshort": "malformed_video_id",
             "https://youtu.be/way-too-long-to-be-an-id": "malformed_video_id",
@@ -268,7 +306,7 @@ class TestIngestLink(IntakeTestCase):
 
     def test_refused_url_creates_no_job(self):
         with self.assertRaises(li.LinkIntakeError):
-            li.ingest_link(self.store, "https://twitch.tv/videos/1",
+            li.ingest_link(self.store, "https://vimeo.com/watch?v=abc",
                            client=fake_client(), channels=REGISTRY)
         self.assertEqual(self.store.list_jobs(), [])
 
@@ -574,5 +612,129 @@ class TestStatesReadAsEnglish(unittest.TestCase):
         self.assertEqual(sm.describe("WAT"), "WAT")
 
 
+
+class TestTwitchIntake(IntakeTestCase):
+    """Twitch is the one source unattended hardware can actually fetch.
+
+    GitHub-hosted runners are bot-checked by YouTube on every player client
+    (measured — see docs/UNATTENDED.md), while the same runner resolves a
+    Twitch VOD and pulls frames from it with no cookies and no key. Intake
+    used to reject twitch.tv outright, which meant the only reachable source
+    was the only refused one.
+    """
+
+    def test_a_twitch_vod_is_parsed_canonicalised_and_identified(self):
+        for spelling in (
+            f"https://www.twitch.tv/videos/{TWITCH_VOD}",
+            f"twitch.tv/videos/{TWITCH_VOD}",
+            f"https://m.twitch.tv/videos/{TWITCH_VOD}?t=1h2m3s",
+        ):
+            with self.subTest(url=spelling):
+                p = li.parse_link(spelling)
+                self.assertEqual(p["platform"], li.TWITCH)
+                self.assertEqual(p["videoId"], TWITCH_VOD)
+                self.assertEqual(
+                    p["canonicalUrl"],
+                    f"https://www.twitch.tv/videos/{TWITCH_VOD}")
+
+    def test_the_timestamp_is_a_hint_and_never_changes_identity(self):
+        plain = li.parse_link(f"https://www.twitch.tv/videos/{TWITCH_VOD}")
+        stamped = li.parse_link(
+            f"https://www.twitch.tv/videos/{TWITCH_VOD}?t=1h2m3s")
+        self.assertEqual(stamped["startSeconds"], 3723)
+        self.assertIsNone(plain["startSeconds"])
+        self.assertEqual(li.job_key_for(plain["videoId"], plain["platform"]),
+                         li.job_key_for(stamped["videoId"], stamped["platform"]))
+
+    def test_youtube_job_keys_are_unchanged_by_the_platform_argument(self):
+        """Every key already in a job store must keep resolving."""
+        self.assertEqual(li.job_key_for("dQw4w9WgXcQ"),
+                         li.job_key_for("dQw4w9WgXcQ", li.YOUTUBE))
+        self.assertEqual(li.canonical_url("dQw4w9WgXcQ"),
+                         "https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+
+    def test_two_platforms_never_share_a_job_key(self):
+        self.assertNotEqual(li.job_key_for("123456789", li.TWITCH),
+                            li.job_key_for("123456789", li.YOUTUBE))
+
+    def test_an_official_twitch_vod_auto_approves_with_no_key_at_all(self):
+        res = li.ingest_link(
+            self.store, f"https://www.twitch.tv/videos/{TWITCH_VOD}",
+            client=None,                       # no YouTube client, no API key
+            channels=REGISTRY,
+            twitch_runner=fake_twitch_runner())
+        self.assertTrue(res["created"])
+        self.assertEqual(res["platform"], li.TWITCH)
+        self.assertEqual(res["metadata"]["status"], "ok")
+        self.assertEqual(res["metadata"]["channelId"], "ow_esports")
+        self.assertEqual(res["source"]["state"], li.SOURCE_APPROVED)
+        self.assertTrue(res["source"]["autoApproved"])
+        self.assertEqual(res["source"]["registryChannel"], "ow_esports_twitch")
+
+    def test_an_unregistered_twitch_channel_is_never_auto_approved(self):
+        res = li.ingest_link(
+            self.store, f"https://www.twitch.tv/videos/{TWITCH_VOD}",
+            client=None, channels=REGISTRY,
+            twitch_runner=fake_twitch_runner(login="some_random_streamer"))
+        self.assertEqual(res["source"]["state"], li.SOURCE_PENDING)
+        self.assertEqual(res["source"]["reasonCode"], "channel_not_in_registry")
+
+    def test_a_youtube_channel_id_cannot_authorize_a_twitch_broadcast(self):
+        """Channel ids are only unique WITHIN a platform. Authorization is
+        the last gate before an unattended download, so it must not rest on
+        two id namespaces happening not to overlap."""
+        decision = li.authorize_source(
+            {"status": "ok", "channelId": OFFICIAL_CHANNEL,
+             "channelTitle": "Overwatch Esports"},
+            registry=li.registry_channel_index(REGISTRY),
+            platform=li.TWITCH)
+        self.assertEqual(decision["state"], li.SOURCE_PENDING)
+        self.assertEqual(decision["reasonCode"], "channel_platform_mismatch")
+        self.assertFalse(decision["auto"])
+
+    def test_a_still_live_twitch_stream_is_flagged_not_processed(self):
+        res = li.ingest_link(
+            self.store, f"https://www.twitch.tv/videos/{TWITCH_VOD}",
+            client=None, channels=REGISTRY,
+            twitch_runner=fake_twitch_runner(is_live=True))
+        self.assertEqual(res["metadata"]["liveBroadcastStatus"], "live")
+        self.assertTrue(any("only COMPLETED VODs" in w
+                            for w in res["warnings"]))
+
+    def test_metadata_failure_records_the_link_and_blocks_approval(self):
+        for runner, code in (
+            (fake_twitch_runner(returncode=1,
+                                stderr="ERROR: video does not exist"),
+             "video_not_found"),
+            (fake_twitch_runner(raise_exc=FileNotFoundError("yt-dlp")),
+             "no_ytdlp"),
+            (fake_twitch_runner(stdout="not json at all"),
+             "ytdlp_unparseable"),
+        ):
+            with self.subTest(code=code):
+                store = js.JobStore(os.path.join(self._tmp.name, f"{code}.db"))
+                res = li.ingest_link(
+                    store, f"https://www.twitch.tv/videos/{TWITCH_VOD}",
+                    client=None, channels=REGISTRY, twitch_runner=runner)
+                self.assertTrue(res["created"])   # the link is never dropped
+                self.assertEqual(res["metadata"]["errorCode"], code)
+                self.assertEqual(res["source"]["state"], li.SOURCE_PENDING)
+
+    def test_intake_is_idempotent_across_twitch_url_spellings(self):
+        first = li.ingest_link(
+            self.store, f"https://www.twitch.tv/videos/{TWITCH_VOD}",
+            client=None, channels=REGISTRY,
+            twitch_runner=fake_twitch_runner())
+        second = li.ingest_link(
+            self.store, f"twitch.tv/videos/{TWITCH_VOD}?t=42",
+            client=None, channels=REGISTRY,
+            twitch_runner=fake_twitch_runner())
+        self.assertTrue(first["created"])
+        self.assertFalse(second["created"])
+        self.assertTrue(second["duplicate"])
+        self.assertEqual(len(self.store.list_jobs()), 1)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
+

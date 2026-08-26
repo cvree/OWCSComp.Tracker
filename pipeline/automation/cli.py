@@ -584,7 +584,8 @@ def _run_broadcast_discovery(args: argparse.Namespace) -> int:
     store = js.JobStore(args.db, config=config)
     try:
         client = _build_youtube_client(args, store=None if args.dry_run else store)
-        channels = cfg.load_channels()
+        # sync_broadcasts speaks the YouTube Data API and nothing else.
+        channels = cfg.load_channels(platform=cfg.DEFAULT_PLATFORM)
         disc_summary = bdisc.sync_broadcasts(
             client=client, store=store, channels=channels,
             lookback_days=args.lookback_days or config.lookback_days,

@@ -46,7 +46,7 @@ import os
 import re
 import sys
 import urllib.parse
-from typing import Any
+from typing import Any, Callable
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _PIPELINE_DIR = os.path.dirname(_HERE)
@@ -59,22 +59,56 @@ from . import job_store as js
 from . import models
 from . import state_machine as sm
 from . import youtube_api as yt
+import proc_text  # noqa: E402  (UTF-8 subprocess decoding)
+
+# Platforms a broadcast can live on. YOUTUBE is the historical default and
+# every stored artifact that predates this field means YOUTUBE, so it is
+# spelled as the default everywhere rather than written into old records.
+#
+# TWITCH exists because it is the only source unattended hardware can
+# actually fetch: GitHub-hosted runners are bot-checked by YouTube on every
+# player client (measured — see docs/UNATTENDED.md), while the same runner
+# resolves a Twitch VOD and pulls frames from it with no cookies and no key.
+# config/broadcast_channels.json already records twitch.tv/OW_Esports as an
+# official OWCS destination.
+YOUTUBE = "youtube"
+TWITCH = "twitch"
+PLATFORMS = frozenset({YOUTUBE, TWITCH})
 
 # Hosts a pasted link may use. Deliberately the same set worker.py accepts,
 # plus the youtube-nocookie embed host, so intake can never admit a source
 # the downloader would later reject as unofficial.
-ALLOWED_HOSTS = frozenset({
+YOUTUBE_HOSTS = frozenset({
     "youtube.com", "www.youtube.com", "m.youtube.com", "music.youtube.com",
     "youtu.be", "www.youtu.be", "youtube-nocookie.com",
     "www.youtube-nocookie.com",
 })
 
+TWITCH_HOSTS = frozenset({
+    "twitch.tv", "www.twitch.tv", "m.twitch.tv",
+})
+
+# Kept as the union so callers that only ask "is this host admissible?"
+# keep working unchanged.
+ALLOWED_HOSTS = YOUTUBE_HOSTS | TWITCH_HOSTS
+
+_HOST_PLATFORM = {h: YOUTUBE for h in YOUTUBE_HOSTS}
+_HOST_PLATFORM.update({h: TWITCH for h in TWITCH_HOSTS})
+
 # Path prefixes that carry the video id as the next path element.
 _ID_PATH_PREFIXES = ("live", "embed", "v", "shorts")
 
-# A YouTube video id is 11 chars of [A-Za-z0-9_-]. Validating the SHAPE is
+# A YouTube video id is 11 chars of [A-Za-z0-9_-]. A Twitch VOD id is a bare
+# decimal number (ten digits today, historically fewer — bounded rather than
+# fixed so an id that grows a digit is not refused). Validating the SHAPE is
 # what stops a typo/tracking fragment from becoming a distinct "job".
 _VIDEO_ID_RE = re.compile(r"^[A-Za-z0-9_-]{11}$")
+_TWITCH_ID_RE = re.compile(r"^[0-9]{6,15}$")
+_PLATFORM_ID_RE = {YOUTUBE: _VIDEO_ID_RE, TWITCH: _TWITCH_ID_RE}
+_ID_DESCRIPTION = {
+    YOUTUBE: "11-character YouTube video id",
+    TWITCH: "numeric Twitch VOD id",
+}
 
 # Approval states an intake job's source can be in. Only APPROVED ever
 # permits a download.
@@ -133,30 +167,42 @@ def parse_link(url: str) -> dict[str, Any]:
     raw = (url or "").strip()
     if not raw:
         raise LinkIntakeError("empty_url", "no URL given")
-    # A bare 'youtu.be/xyz' or 'www.youtube.com/watch?v=xyz' paste is common;
-    # add the scheme so urlsplit sees a host instead of a path.
+    # A bare 'youtu.be/xyz', 'www.youtube.com/watch?v=xyz' or
+    # 'twitch.tv/videos/123' paste is common; add the scheme so urlsplit
+    # sees a host instead of a path.
     if "//" not in raw.split("?", 1)[0]:
-        if re.match(r"^(?:www\.|m\.)?(?:youtube\.com|youtu\.be|youtube-nocookie\.com)/", raw, re.I):
+        if re.match(r"^(?:www\.|m\.)?"
+                    r"(?:youtube\.com|youtu\.be|youtube-nocookie\.com|twitch\.tv)/",
+                    raw, re.I):
             raw = "https://" + raw
     parsed = urllib.parse.urlsplit(raw)
     if parsed.scheme.lower() not in ("http", "https"):
         raise LinkIntakeError(
             "unsupported_scheme",
             f"unsupported URL scheme {parsed.scheme!r} — only http/https "
-            f"YouTube links are accepted")
+            f"broadcast links are accepted")
     host = (parsed.hostname or "").lower()
-    if host not in ALLOWED_HOSTS:
+    platform = _HOST_PLATFORM.get(host)
+    if platform is None:
         raise LinkIntakeError(
             "unsupported_host",
-            f"unsupported host {host!r} — only official YouTube hosts "
-            f"({', '.join(sorted(ALLOWED_HOSTS))}) are ever accepted")
+            f"unsupported host {host!r} — only official YouTube and Twitch "
+            f"hosts ({', '.join(sorted(ALLOWED_HOSTS))}) are ever accepted")
 
     query = urllib.parse.parse_qs(parsed.query, keep_blank_values=True)
     fragment = urllib.parse.parse_qs(parsed.fragment, keep_blank_values=True)
     parts = [p for p in parsed.path.split("/") if p]
 
     video_id: str | None = None
-    if host in ("youtu.be", "www.youtu.be"):
+    if platform == TWITCH:
+        # /videos/<id> is the ONLY Twitch path that names a VOD. A channel
+        # URL (twitch.tv/ow_esports) names a live page whose content changes,
+        # and a /clip/ or /<channel>/clip/ URL names a highlight, not the
+        # broadcast — neither is a thing this pipeline can ingest, so both
+        # are refused rather than guessed at.
+        if len(parts) >= 2 and parts[0].lower() == "videos":
+            video_id = parts[1]
+    elif host in ("youtu.be", "www.youtu.be"):
         video_id = parts[0] if parts else None
     else:
         video_id = (query.get("v") or [None])[0]
@@ -167,23 +213,30 @@ def parse_link(url: str) -> dict[str, Any]:
             # than guess a channel handle is a video.
             video_id = None
     if not video_id:
+        if platform == TWITCH:
+            raise LinkIntakeError(
+                "no_video_id",
+                f"could not find a VOD id in {url!r} — paste a "
+                f"twitch.tv/videos/<id> link (a channel or clip URL is not "
+                f"a broadcast this pipeline can read)")
         raise LinkIntakeError(
             "no_video_id",
             f"could not find a video id in {url!r} — paste a watch?v=, "
             f"youtu.be/, /live/ or /embed/ broadcast link")
     video_id = video_id.strip()
-    if not _VIDEO_ID_RE.match(video_id):
+    if not _PLATFORM_ID_RE[platform].match(video_id):
         raise LinkIntakeError(
             "malformed_video_id",
-            f"{video_id!r} is not a valid 11-character YouTube video id")
+            f"{video_id!r} is not a valid {_ID_DESCRIPTION[platform]}")
 
     start = (_timestamp_seconds((query.get("t") or [None])[0])
              or _timestamp_seconds((query.get("start") or [None])[0])
              or _timestamp_seconds((fragment.get("t") or [None])[0]))
     dropped = sorted(k for k in query if k not in ("v", "t", "start"))
     return {
+        "platform": platform,
         "videoId": video_id,
-        "canonicalUrl": canonical_url(video_id),
+        "canonicalUrl": canonical_url(video_id, platform),
         "startSeconds": start,
         "playlistId": (query.get("list") or [None])[0],
         "host": host,
@@ -193,14 +246,30 @@ def parse_link(url: str) -> dict[str, Any]:
     }
 
 
-def canonical_url(video_id: str) -> str:
-    """The ONE spelling of a broadcast URL this system stores and compares."""
+def canonical_url(video_id: str, platform: str = YOUTUBE) -> str:
+    """The ONE spelling of a broadcast URL this system stores and compares.
+
+    `platform` defaults to YOUTUBE so every existing caller — and every
+    artifact written before Twitch existed here — keeps producing exactly
+    the string it produced before.
+    """
+    if platform == TWITCH:
+        return f"https://www.twitch.tv/videos/{video_id}"
     return f"https://www.youtube.com/watch?v={video_id}"
 
 
-def job_key_for(video_id: str) -> str:
+def job_key_for(video_id: str, platform: str = YOUTUBE) -> str:
     """Deterministic job identity — the video id and nothing else, so the
-    same broadcast pasted in five URL spellings is one job."""
+    same broadcast pasted in five URL spellings is one job.
+
+    A YouTube id (11 chars of [A-Za-z0-9_-]) and a Twitch id (bare digits)
+    cannot collide by shape, but identity is not something to leave resting
+    on that: a non-default platform is qualified into the key. YouTube keys
+    are deliberately left unqualified so every key already in a job store
+    keeps resolving.
+    """
+    if platform and platform != YOUTUBE:
+        return models.record_key(f"{platform}:{video_id}")
     return models.record_key(video_id)
 
 
@@ -271,16 +340,121 @@ def fetch_metadata(client: "yt.YouTubeClient", video_id: str) -> dict[str, Any]:
     }
 
 
+# Twitch has no equivalent of the YouTube Data API here — and deliberately
+# needs none. One `yt-dlp -J` call against the VOD returns everything intake
+# actually weighs (title, duration, uploader, whether it was a live
+# broadcast) with no key, no quota and no account, which is the whole reason
+# this platform is reachable from unattended hardware at all.
+TWITCH_METADATA_TIMEOUT = 90
+
+
+def _twitch_runner(cmd: list[str], timeout: int):
+    """Indirection so tests drive this without a network or a yt-dlp binary.
+
+    `proc_text.PIPE_TEXT` rather than bare `text=True`: a broadcast title
+    routinely carries Korean, Japanese or Chinese characters, and letting
+    the locale pick the encoding raises UnicodeDecodeError on the first
+    non-Latin-1 byte under a cp1252 console.
+    """
+    import subprocess
+    return subprocess.run(cmd, capture_output=True, text=True,
+                          timeout=timeout, **proc_text.PIPE_TEXT)
+
+
+def fetch_twitch_metadata(video_id: str, *,
+                          runner: Callable | None = None) -> dict[str, Any]:
+    """Retrieve one Twitch VOD's public metadata, in the shape
+    `fetch_metadata` returns for YouTube.
+
+    Never raises, for the same reason the YouTube path never raises: a link
+    must be recorded either way, and an authorization decision must rest on
+    evidence that was actually retrieved rather than on a hopeful default.
+
+    `channelId` is the channel's Twitch login (`ow_esports`), which is what
+    a Twitch registry row is keyed by — the platform-scoped equivalent of a
+    YouTube UC id.
+    """
+    run = runner or _twitch_runner
+    url = canonical_url(video_id, TWITCH)
+    cmd = ["yt-dlp", "-J", "--skip-download", "--no-warnings",
+           "--socket-timeout", "20", url]
+    try:
+        proc = run(cmd, TWITCH_METADATA_TIMEOUT)
+    except FileNotFoundError as exc:
+        return {"status": "unavailable", "errorCode": "no_ytdlp",
+                "error": f"yt-dlp is not on PATH: {exc}"}
+    except Exception as exc:  # a timeout, a killed process, anything
+        return {"status": "unavailable", "errorCode": "ytdlp_failed",
+                "error": f"{type(exc).__name__}: {exc}"}
+    if proc is None or getattr(proc, "returncode", 1) != 0:
+        err = " ".join(((getattr(proc, "stderr", "") or "")).split())[:400]
+        code = ("video_not_found"
+                if "does not exist" in err.lower() or "not found" in err.lower()
+                else "ytdlp_failed")
+        status = "not_found" if code == "video_not_found" else "unavailable"
+        return {"status": status, "errorCode": code,
+                "error": err or f"yt-dlp exited {getattr(proc, 'returncode', '?')}"}
+    try:
+        item = json.loads(proc.stdout or "{}")
+    except (ValueError, TypeError) as exc:
+        return {"status": "unavailable", "errorCode": "ytdlp_unparseable",
+                "error": f"yt-dlp returned no readable JSON: {exc}"}
+    if not item:
+        return {"status": "not_found", "errorCode": "video_not_found",
+                "error": f"yt-dlp returned nothing for Twitch VOD {video_id!r}"}
+
+    # yt-dlp reports a channel login under several keys depending on the
+    # extractor version; take the first that is actually present rather than
+    # inventing one, and lower-case it because a Twitch login is
+    # case-insensitive while a dict lookup is not.
+    login = (item.get("uploader_id") or item.get("channel_id")
+             or item.get("uploader") or item.get("channel"))
+    login = str(login).lstrip("@").lower() if login else None
+    duration = item.get("duration")
+    started = item.get("release_timestamp") or item.get("timestamp")
+    started_iso = None
+    if isinstance(started, (int, float)):
+        started_iso = (dt.datetime.fromtimestamp(started, dt.timezone.utc)
+                       .replace(microsecond=0).isoformat())
+    # An archived Twitch VOD is by definition a finished broadcast. `is_live`
+    # is only true while the stream is still running, which is exactly the
+    # case intake must refuse.
+    live_status = "live" if item.get("is_live") else "none"
+    return {
+        "status": "ok",
+        "platform": TWITCH,
+        "videoId": str(item.get("id") or video_id),
+        "channelId": login,
+        "channelTitle": item.get("channel") or item.get("uploader"),
+        "title": item.get("title"),
+        "description": item.get("description"),
+        "publishedAt": started_iso,
+        "scheduledStartAt": None,
+        "actualStartAt": started_iso,
+        "actualEndAt": None,
+        "liveBroadcastStatus": live_status,
+        "durationSeconds": int(duration) if isinstance(duration, (int, float)) else None,
+        "privacyStatus": "public",
+    }
+
+
 # ----------------------------------------------------------- authorization
 def authorize_source(metadata: dict, *,
                      registry: dict[str, dict],
-                     likeness: dict | None = None) -> dict[str, Any]:
+                     likeness: dict | None = None,
+                     platform: str = YOUTUBE) -> dict[str, Any]:
     """Decide whether a source is authorized to download WITHOUT a human.
 
     Auto-approval requires all of:
       * metadata retrieved successfully (never approve on missing evidence),
       * a channelId present in the verified official registry,
+      * that registry row being for the SAME platform as the video,
       * the video not failing the broadcast-likeness gate.
+
+    The platform check exists because channel ids are only unique within a
+    platform. A YouTube UC id and a Twitch login cannot collide today, but
+    authorization is the last gate before a download runs unattended, and it
+    should not rest on two id namespaces happening not to overlap.
 
     Everything else -> pending-approval with an explicit reason. This
     function is pure; it writes nothing.
@@ -297,6 +471,17 @@ def authorize_source(metadata: dict, *,
         }
     channel_id = metadata.get("channelId")
     row = registry.get(channel_id) if channel_id else None
+    if row is not None and (row.get("platform") or YOUTUBE) != platform:
+        return {
+            "state": SOURCE_PENDING,
+            "auto": False,
+            "reasonCode": "channel_platform_mismatch",
+            "reason": (f"channel {channel_id!r} is a verified "
+                       f"{row.get('platform') or YOUTUBE} channel, but this "
+                       f"link is a {platform} broadcast — a channel is only "
+                       f"an authority on its own platform"),
+            "registryChannel": None,
+        }
     if row is None:
         return {
             "state": SOURCE_PENDING,
@@ -335,11 +520,13 @@ def ingest_link(store: js.JobStore, url: str, *,
                 channels: list[dict] | None = None,
                 dry_run: bool = False,
                 requested_by: str | None = None,
+                twitch_runner: Callable | None = None,
                 now: str | None = None) -> dict[str, Any]:
     """Turn one pasted URL into (at most) one job.
 
     Returns a result dict describing exactly what happened:
-      {"ok", "videoId", "jobKey", "canonicalUrl", "created", "duplicate",
+      {"ok", "videoId", "platform", "jobKey", "canonicalUrl", "created",
+       "duplicate",
        "dryRun", "state", "source": {...}, "metadata": {...},
        "likeness": {...}, "warnings": [...], "nextCommand": "..."}
 
@@ -351,7 +538,8 @@ def ingest_link(store: js.JobStore, url: str, *,
     """
     parsed = parse_link(url)                      # raises LinkIntakeError
     video_id = parsed["videoId"]
-    job_key = job_key_for(video_id)
+    platform = parsed["platform"]
+    job_key = job_key_for(video_id, platform)
     ts = now or _utcnow_iso()
     warnings: list[str] = []
     if parsed["droppedParams"]:
@@ -359,9 +547,14 @@ def ingest_link(store: js.JobStore, url: str, *,
             f"ignored non-identifying query parameter(s): "
             f"{', '.join(parsed['droppedParams'])}")
 
-    metadata = ({"status": "unavailable", "errorCode": "no_client",
-                 "error": "no YouTube client supplied to intake"}
-                if client is None else fetch_metadata(client, video_id))
+    if platform == TWITCH:
+        # No client, no key, no quota — the whole point of this platform.
+        metadata = fetch_twitch_metadata(video_id, runner=twitch_runner)
+    elif client is None:
+        metadata = {"status": "unavailable", "errorCode": "no_client",
+                    "error": "no YouTube client supplied to intake"}
+    else:
+        metadata = fetch_metadata(client, video_id)
 
     likeness = None
     if metadata.get("status") == "ok":
@@ -396,7 +589,8 @@ def ingest_link(store: js.JobStore, url: str, *,
             f"cannot be auto-approved without verifiable channel evidence")
 
     registry = registry_channel_index(channels)
-    decision = authorize_source(metadata, registry=registry, likeness=likeness)
+    decision = authorize_source(metadata, registry=registry,
+                                likeness=likeness, platform=platform)
 
     source_block = {
         "state": decision["state"],
@@ -420,6 +614,7 @@ def ingest_link(store: js.JobStore, url: str, *,
             "warnings": warnings,
         },
         "videoId": video_id,
+        "platform": platform,
         "sourceUrl": parsed["canonicalUrl"],
         "channelId": metadata.get("channelId"),
         "broadcastAuthority": metadata.get("channelId"),
@@ -441,6 +636,7 @@ def ingest_link(store: js.JobStore, url: str, *,
     result: dict[str, Any] = {
         "ok": True,
         "videoId": video_id,
+        "platform": platform,
         "jobKey": job_key,
         "canonicalUrl": parsed["canonicalUrl"],
         "dryRun": dry_run,

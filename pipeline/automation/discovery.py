@@ -371,7 +371,8 @@ def sync_all(
     """Run FACEIT + calendar sync, then reconcile. Never overwrites conflicts."""
     competitions = competitions if competitions is not None else cfg.load_competitions()
     events = events if events is not None else owcs_calendar.load_events()
-    channels = channels if channels is not None else cfg.load_channels()
+    channels = (channels if channels is not None
+                else cfg.load_channels(platform=cfg.DEFAULT_PLATFORM))
 
     faceit_summary = sync_faceit(
         con=con, store=store, client=client, config=config,

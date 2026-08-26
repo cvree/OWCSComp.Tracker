@@ -112,9 +112,36 @@ class TestRegistries(unittest.TestCase):
         # (regional channels with no evidenced URL, and China on bilibili)
         # must remain disabled — never guessed into existence.
         live = cfg.load_channels()
-        self.assertEqual(len(live), 1)
-        self.assertEqual(live[0]["id"], "ow_esports_global")
-        self.assertEqual(live[0]["channelId"], "UCiAInBL9kUzz1XRxk66v-gw")
+        youtube = [c for c in live if (c.get("platform") or "youtube") == "youtube"]
+        self.assertEqual(len(youtube), 1)
+        self.assertEqual(youtube[0]["id"], "ow_esports_global")
+        self.assertEqual(youtube[0]["channelId"], "UCiAInBL9kUzz1XRxk66v-gw")
+
+    def test_the_twitch_destination_is_enabled_and_carries_its_evidence(self):
+        """The registry recorded twitch.tv/OW_Esports as an official OWCS
+        destination in prose long before it was a row. It is a row now
+        because it is the only source unattended hardware can actually
+        fetch — a GitHub runner is bot-checked by YouTube on every player
+        client, and serves a Twitch VOD with no credential at all.
+
+        Same bar as every other enabled entry: a confirmed id, and evidence
+        naming how it was confirmed."""
+        tw = [c for c in cfg.load_channels() if c.get("platform") == "twitch"]
+        self.assertEqual([c["id"] for c in tw], ["ow_esports_twitch"])
+        row = tw[0]
+        # A Twitch channel's id namespace IS its login, lower-cased — which
+        # is exactly what yt-dlp reports as uploader_id for its VODs.
+        self.assertEqual(row["channelId"], "ow_esports")
+        self.assertEqual(row["channelId"], row["channelId"].lower())
+        self.assertEqual(row["sourceUrl"], "https://www.twitch.tv/ow_esports")
+        self.assertTrue(row["official"])
+        self.assertEqual(row["verifiedStatus"], "verified")
+        for field in ("verificationMethod", "ownershipEvidence", "verifiedDate"):
+            self.assertTrue(row.get(field), f"{field} is empty")
+        # YouTube stays the preferred feed where both carry the same match.
+        yt_row = next(c for c in cfg.load_all_channels()
+                      if c["id"] == "ow_esports_global")
+        self.assertLess(row["priority"], yt_row["priority"])
 
     def test_verified_channel_fields_complete(self):
         ch = next(c for c in cfg.load_all_channels() if c["id"] == "ow_esports_global")

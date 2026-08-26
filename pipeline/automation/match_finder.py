@@ -85,10 +85,21 @@ def snapshot_path() -> str:
 # ------------------------------------------------------------- channels
 def scan_channels(channels: list[dict] | None = None) -> list[dict]:
     """Verified + enabled registry channels with a confirmed channelId —
-    the only channels the finder will scan (never a guessed handle)."""
+    the only channels the finder will scan (never a guessed handle).
+
+    YouTube only. Both of this module's sources are YouTube-shaped — the
+    channel RSS feed keyed by a UC id, and `yt-dlp --flat-playlist` on a
+    /streams tab — so a registry row for another platform is skipped here
+    rather than fed to a scanner that would only produce a named error per
+    run. Skipping is not ignoring: intake authorizes those rows (see
+    link_intake.authorize_source), and a platform-native finder is what
+    would scan them.
+    """
     idx = li.registry_channel_index(channels)
     out = []
     for cid, ch in idx.items():
+        if (ch.get("platform") or li.YOUTUBE) != li.YOUTUBE:
+            continue
         out.append({
             "id": ch.get("id"),
             "channelId": cid,

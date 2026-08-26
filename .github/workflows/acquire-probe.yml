@@ -37,6 +37,15 @@ on:
     branches: [claude/auto-command-web-github-k8cpyg]
     paths: [".github/workflows/acquire-probe.yml"]
 
+# The probe commits nothing, so it cannot race the data workflows — but it
+# does make real requests to two broadcast platforms, and two probes running
+# at once would ask them the same question twice for no extra evidence.
+# Superseded runs are cancelled: the newest answer is the only one that
+# matters, and there is no snapshot to lose.
+concurrency:
+  group: acquire-probe
+  cancel-in-progress: true
+
 permissions:
   contents: read
 

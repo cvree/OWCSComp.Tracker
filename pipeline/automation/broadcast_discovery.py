@@ -110,6 +110,17 @@ def verify_channels(
     now = now or _now()
     results: list[dict] = []
     for ch in channels:
+        # This pass verifies through the YouTube Data API, so it can only
+        # speak to YouTube rows. Reporting a non-YouTube row as an API
+        # "error" would be a false negative about a channel that is fine.
+        if (ch.get("platform") or "youtube") != "youtube":
+            results.append({
+                "id": ch["id"], "status": "skipped",
+                "reason": (f"{ch.get('platform')} channel — this pass "
+                           f"verifies through the YouTube Data API and has "
+                           f"no authority over another platform"),
+            })
+            continue
         cid = ch.get("channelId")
         handle = _handle_from_source_url(ch.get("sourceUrl"))
         if not cid and not handle:
