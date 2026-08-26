@@ -121,9 +121,11 @@
           '<td class="num">' + (r.swappedTo + r.swappedFrom) + "</td>" +
           "</tr>";
       }).join("") +
-      "</tbody><caption>Only compositions with review status “reviewed” or “auto-high” are " +
-      "counted. A hero absent from this table has not been seen in an approved line-up — " +
-      "not that it was never played.</caption></table></div>";
+      "</tbody><caption>Counted from every published composition — each one " +
+      "carries the tier it earned (confirmed, strong or provisional) and the " +
+      "frames it was read from. A hero absent from this table has not been " +
+      "seen in a published line-up — not that it was never played." +
+      "</caption></table></div>";
   }
 
   /* ------------------------------------------------------------ comps */

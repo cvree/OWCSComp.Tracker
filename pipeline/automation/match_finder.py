@@ -884,7 +884,9 @@ def build_report(db_path: str | None = None, *,
                 job = None
                 if store is not None:
                     try:
-                        j = store.get(li.job_key_for(cand["videoId"]))
+                        j = store.get(li.job_key_for(
+                            cand["videoId"],
+                            cand.get("platform") or li.YOUTUBE))
                     except Exception:  # noqa: BLE001
                         j = None
                     if j is not None:

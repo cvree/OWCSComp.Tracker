@@ -54,7 +54,7 @@ from the screen it belongs to.
 | `index.html` | **Dashboard** — one obvious "Submit a game", what the unattended scan filled in since anyone last looked, what needs a person, what is processing, what is blocked, what was recently published, and a small honest system-health strip. |
 | `games.html` | **Games** — one row per game whatever state it is in, including every broadcast the scheduled scan found on its own (grouped separately and labelled as found, not read). This replaced the separate matches / runs / sources / tournaments lists, which were four views of the same thing. Also carries the official season schedule, collapsed, with how many broadcasts have already been found for each event. |
 | `submit.html` | **Submit** — one required field. The link is classified as you type (offline; a connected tracker's own classifier takes over when there is one), known broadcasts autofill the rest, advanced options stay shut, and there is exactly one final button. |
-| `review.html` | **Review** — the human gate, and the best screen in the product. Every detection beside the frame it was read from, confidence as a bar, a fast hero picker, whole-map and whole-line-up approval, swap and map-boundary confirmation, and a full keyboard (`j`/`k` move, `a` approve, `c` correct, `f` flag, `⇧A` approve every clean read). |
+| `review.html` | **Audit** — the human audit, and the best screen in the product. Publication does not wait on it: every detection the detector accepted is already published, and this is where a person checks it against the frame it was read from — confidence as a bar, the tier each reading earned, a fast hero picker, whole-map and whole-line-up confirmation, swap and map-boundary checks, and a full keyboard (`j`/`k` move, `a` approve, `c` correct, `f` flag, `⇧A` approve every clean read). A correction leaves as `corrections/corrections.json`, so git is the audit trail. |
 | `game.html` | **One game**, in whatever state it is in — including `?video=<id>`, a broadcast the scan found that nobody has submitted, which shows exactly what is known and what is not: the six-step progression with live output while it runs, the blocker and its exact fix when it is stuck, and the published maps and line-ups once it is approved. |
 | `stats.html` | **Stats** — heroes, compositions, maps, teams and swaps as five tabs over the same approved dataset. |
 | `teams.html` · `team.html` · `hero.html` | nested profiles, reached from a game or a stats table. |
@@ -90,7 +90,8 @@ forward. Discovered broadcasts appear on the dashboard ("Filling itself"),
 in the games list as their own group, on `submit.html` as one-click
 suggestions, in site search, and each on its own `game.html?video=<id>`
 page. Finding is not reading: nothing here can publish a composition,
-approve a source, or touch the DB — the human review gate is unchanged.
+approve a source, or touch the DB — a discovered broadcast is a candidate,
+not a fact.
 `python3 pipeline/automation/cli.py self-fill [--check]` rebuilds or gates
 it; CI fails if the committed layer is not what a fresh build produces.
 
@@ -494,8 +495,19 @@ pasted URL, metadata only, nothing downloaded or approved.
 open `submit.html`, paste the link or pick a found broadcast, watch the live
 log on the game's own page — then drive every stage from the product itself (retry, autopilot, approve source, approve
 layout, propose/accept identity, detect, publish, export). Audited
-approvals require a typed name and a confirm; nothing is ever approved
-automatically. `tools.html` carries the **download-authentication panel**
+approvals require a typed name and a confirm.
+
+**Publication does not wait for a person** (publish-then-audit). What the
+detector accepted is published carrying the tier it earned — `confirmed`
+(a person checked it), `strong` (hundreds of frames agreed) or
+`provisional` (accepted on weaker evidence) — and `review.html` is where a
+human audits it afterwards, on the published site, against the same frames
+it was read from. The detector's own bar is unchanged and is the bar that
+matters: a slot it cannot read is `UNKNOWN`, never a guess, and a reading
+judged wrong is `rejected` and never published. Two gates still stop for a
+human, and neither is about whether a reading is right: **source
+authorization** (may this be downloaded at all) and **layout approval**
+(does this profile really describe this HUD). `tools.html` carries the **download-authentication panel**
 (yt-dlp version, cookie mode, JS runtime, `curl_cffi`, API-key presence,
 last probe result, live fallback rung, per-layout detection readiness) —
 without exposing a single secret value. On static hosting it stays

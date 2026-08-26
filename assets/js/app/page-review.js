@@ -1,6 +1,21 @@
 /* =====================================================================
    OWCS Comp Tracker — app/page-review.js
-   The review workspace.
+   The audit workspace.
+
+   PUBLISH-THEN-AUDIT
+   ------------------
+   This screen used to be the gate: nothing reached a public page until
+   someone here said yes. It is not a gate any more, because an unattended
+   pipeline has nobody standing at one — everything the DETECTOR accepted
+   is published as it is read, and a person checks it here afterwards,
+   against the same frames it was read from.
+
+   What that changes is the stakes, not the method. When this was a gate,
+   a missed reading meant data sat unpublished; now it means a wrong
+   reading is public until someone catches it. So the audit has to be
+   genuinely open — it reads the PUBLISHED dataset, on the published site,
+   and everything published is auditable here whether or not anyone has
+   looked at it before.
 
    THE RULE THIS FILE EXISTS TO ENFORCE
    ------------------------------------
@@ -46,11 +61,13 @@
   document.addEventListener("DOMContentLoaded", () => {
     P.evidence.wire(document);
     P.api.mountStatus("mode-status", {
-      readonlyTitle: "Reviewing here produces a correction file, not a live write",
+      readonlyTitle: "Auditing here produces a correction file, not a live write",
       readonlyBody: "<p>There is no tracker behind this page, so decisions cannot be written " +
         "straight to the record. They are kept in this browser and exported as " +
         "<code>corrections/corrections.json</code> — the same file the pipeline reads, and the " +
-        "same one git keeps as the audit trail. Nothing is lost and nothing is faked.</p>",
+        "same one git keeps as the audit trail. Nothing is lost and nothing is faked.</p>" +
+        "<p>That is the normal way to audit this site: a correction arrives as a committed, " +
+        "attributed change that anyone can read, rather than an invisible edit to a database.</p>",
     });
 
     $("reviewer").value = P.api.reviewer();
@@ -77,31 +94,59 @@
   });
 
   /* ------------------------------------------------------------ queue */
-  function reviewable() {
-    /* A game is reviewable if it is waiting, or if it has any detection
-       that has not been through a person. Published games stay listed
-       when they still carry unreviewed stints — re-review is legitimate
-       and hiding it would make the record look cleaner than it is. */
-    return G.all().filter((g) => g.state === "review" || stintsOf(g).some(needsPerson));
+  function auditable() {
+    /* PUBLISH-THEN-AUDIT. Nothing waits on a person to reach the public
+       pages any more, so "reviewable" is not a queue of blocked work — it
+       is everything a person is entitled to check. That means every game
+       carrying a published detection, whether or not anyone has looked at
+       it, because an audit you cannot re-open is not an audit.
+
+       Ordered by how much a person is likely to be needed: games carrying
+       provisional reads first, then unaudited ones, then everything
+       already confirmed — which stays listed, because hiding it would
+       make the record look more checked than it is. */
+    const score = (g) => {
+      const st = stintsOf(g);
+      if (st.some(isProvisional)) return 0;
+      if (st.some(needsPerson)) return 1;
+      return 2;
+    };
+    return G.all()
+      .filter((g) => g.state === "review" || stintsOf(g).length)
+      .map((g, i) => ({ g: g, i: i, rank: score(g) }))
+      .sort((a, b) => a.rank - b.rank || a.i - b.i)
+      .map((x) => x.g);
   }
+  /* Kept under its old name for every existing caller. */
+  const reviewable = auditable;
 
   function renderQueue() {
     const items = reviewable();
     const host = $("queue");
     if (!items.length) {
       host.innerHTML = '<div style="padding:var(--s-5)">' +
-        P.empty("✓", "Nothing waiting",
-          "Every detection on record has been through a person.") + "</div>";
+        P.empty("—", "Nothing published yet",
+          "When a broadcast has been read, every hero it found appears " +
+          "here beside the frame it came from.") + "</div>";
       return;
     }
     host.innerHTML = items.map((g) => {
-      const pending = stintsOf(g).filter(needsPerson).length;
+      const st = stintsOf(g);
+      const prov = st.filter(isProvisional).length;
+      const pending = st.filter(needsPerson).length;
       const done = Object.keys(decisionsFor(g.id)).length;
+      /* Say what is actually true of this game, strongest signal first:
+         provisional reads are where a person is worth most, "unconfirmed"
+         only means nobody has looked yet, and "all confirmed" is the
+         genuinely finished state. */
+      const note = prov
+        ? '<span style="color:var(--amber, var(--gold-hi))">' + prov + " provisional</span>"
+        : pending ? "<span>" + pending + " unaudited</span>"
+          : "<span>all confirmed</span>";
       return '<button class="qitem" type="button" data-game="' + esc(g.id) + '"' +
         (current && current.id === g.id ? ' aria-current="true"' : "") + ">" +
         '<span class="qitem__t">' + esc(g.title) + "</span>" +
-        '<span class="qitem__m">' + P.stateChip(g.state) +
-        (pending ? "<span>" + pending + " unconfirmed</span>" : "<span>all confirmed</span>") +
+        '<span class="qitem__m">' + P.stateChip(g.state) + note +
         (done ? '<span style="color:var(--gold-hi)">' + done + " decided</span>" : "") +
         "</span></button>";
     }).join("");
@@ -132,7 +177,11 @@
       /* the export lists a rejected swap in both arrays */
       .filter((s, i, arr) => arr.findIndex((x) => x.id === s.id) === i);
   }
+  /* Not "blocked on a person" — "no person has confirmed this yet". */
   const needsPerson = (s) => s.reviewStatus !== "reviewed" && s.reviewStatus !== "rejected";
+  /* Published on weaker evidence than the rest, so it is where an
+     auditor's attention is worth most. */
+  const isProvisional = (s) => P.auditTier(s) === "provisional";
   const isClean = (s) =>
     s.meanConfidence != null && s.meanConfidence >= CLEAN_FLOOR &&
     (s.minConfidence == null || s.minConfidence >= CLEAN_FLOOR * 0.9);

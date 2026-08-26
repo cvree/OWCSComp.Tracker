@@ -908,10 +908,12 @@ def link_status(store: js.JobStore, *, job_key: str | None = None,
                 ) -> list[dict[str, Any]]:
     """Operator-facing status for one link (by job key, video id or URL) or
     for every intake job when nothing is specified."""
+    platform = YOUTUBE
     if url:
-        video_id = parse_link(url)["videoId"]
+        parsed = parse_link(url)
+        video_id, platform = parsed["videoId"], parsed["platform"]
     if video_id and not job_key:
-        job_key = job_key_for(video_id)
+        job_key = job_key_for(video_id, platform)
     if job_key:
         job = store.get(job_key)
         jobs = [job] if job else []

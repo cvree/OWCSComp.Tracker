@@ -92,16 +92,47 @@
   P.teams = () => (D && D.teams) || [];
   P.maps = () => (D && D.mapsCatalog) || [];
 
-  /* Everything the product will show a fan as a fact. The gate that keeps
-     an unreviewed detection out of production lives in the exporter; this
-     mirrors it so nothing slips through client-side either. */
-  P.APPROVED = ["reviewed", "auto-high"];
+  /* Everything the product will show a fan as a fact.
+
+     PUBLISH-THEN-AUDIT. This used to be ["reviewed", "auto-high"]: a
+     detection reached these pages only after a person signed it off. That
+     is a review-BEFORE-publication model and it does not survive an
+     unattended pipeline — nobody is standing at the gate, so the gate is
+     just a place data stops.
+
+     Everything the DETECTOR accepted is published now, carrying the tier
+     it earned, and a person audits it here afterwards (review.html reads
+     this same published dataset). The detector's own bar is untouched: an
+     unreadable slot is UNKNOWN and never becomes a composition at all.
+     'rejected' is the one state that never publishes — it is the record of
+     something judged wrong, and publishing it would publish a known error.
+
+     The gate lives in the exporter; this mirrors it so a page and the
+     export can never disagree about what is publishable. */
+  P.PUBLISHED = ["reviewed", "auto-high", "needs-review"];
+  /* The subset behind which there is either a person or overwhelming
+     agreement. Not a publication gate — a LABEL, so a reader can always
+     tell what is behind a number. */
+  P.AUDITED = ["reviewed", "auto-high"];
+  /* Kept: several call sites read P.APPROVED meaning "what publishes". */
+  P.APPROVED = P.PUBLISHED;
+
+  P.AUDIT_TIERS = {
+    "reviewed": "confirmed",
+    "auto-high": "strong",
+    "needs-review": "provisional",
+  };
+  /* An unrecognised state reads as the WEAKEST tier. An unknown
+     provenance is not a confirmed one. */
+  P.auditTier = (row) => (row && row.auditTier)
+    || P.AUDIT_TIERS[row && row.reviewStatus] || "provisional";
+
   P.publishedComps = (filter) => {
     if (!D) return [];
     const overridden = new Set(
       (D.compSnapshots || []).filter((c) => c.overridesId).map((c) => c.overridesId));
     return (D.compSnapshots || []).filter((c) => {
-      if (P.APPROVED.indexOf(c.reviewStatus) < 0) return false;
+      if (P.PUBLISHED.indexOf(c.reviewStatus) < 0) return false;
       if (c.source !== "cv" && c.source !== "manual") return false;
       if (overridden.has(c.id)) return false;
       return !filter || filter(c);

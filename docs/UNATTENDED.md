@@ -124,8 +124,8 @@ above is the worst case of six deliberately-scattered reads.
 | calibrate the HUD | operator runs `calibrate_source.py` | computational already; refuses below 0.55 | an auto-approve threshold |
 | forge templates | operator runs `template_forge.py` | build → gate → held-out validation is already one command | promote only `VALIDATED` heroes |
 | ingest the map | operator runs `ingest_map.py` | pure OpenCV, offline | nothing |
-| review detections | **human gate, by design** | policy decision — see below | a confidence rule |
-| export + publish | `export_data.py --public` | already gated by CI | a PR the workflow merges on green |
+| review detections | **audit, after publication** | ✅ **done** | — |
+| export + publish | `export_data.py --public` | ✅ **done** (`--publish`) | — |
 | deploy | `pages.yml` | ✅ already | nothing |
 
 Only two rows are genuinely open: **Twitch as a source**, and **what
@@ -165,7 +165,7 @@ tools (`download_vod_clip.py`, `run_owcs_auto.py`,
 the one the autopilot drives, and widening them is a separate job with its
 own tests.
 
-### 3. `autopilot.yml` — the scheduled chain — IN REPORT MODE
+### 3. `autopilot.yml` — the scheduled chain
 
 The workflow exists and runs every six hours, offset from the scan. It
 picks the next fetchable broadcast (`match_finder.next_fetchable` — oldest
@@ -185,17 +185,18 @@ It already joins the shared `owcs-generated-data` concurrency group, so it
 is serialised against the other data workflows from the moment it starts
 writing rather than at the moment someone remembers.
 
+In `process` mode the chain now runs to publication — that step is wired
+up (`--publish`), and the workflow owns the single push.
+
 Still to wire up, in this order:
 
 1. **Calibrate the Twitch package.** `calibrate_source.py` is
    computational and runs fine on a runner; it refuses below confidence
-   0.55. This is the first thing `process` mode will stop at.
+   0.55. This is the first thing `process` mode will stop at, and it is
+   the reason the schedule still defaults to `report`.
 2. **Forge its templates.** `template_forge.py` is already one command:
    build → gate → provenance → held-out validation → gated promotion. Only
    `VALIDATED` heroes promote; the rest read `UNKNOWN`, which is safe.
-3. **Publication.** Per the rule below, with the detector's floors
-   untouched, committing through the same PR-and-green-CI path
-   `discovery.yml` already uses.
 
 ### 4. The four gates
 
@@ -215,7 +216,7 @@ rather than a person:
 
 ---
 
-## The publication rule — decided
+## The publication rule — decided and wired up
 
 The product used to state plainly that **nothing is ever approved
 automatically**: hero compositions reached production only through a human
@@ -249,12 +250,48 @@ than one that publishes nothing. Any future change that moves
 `unknown_floor`, `min_margin`, or the consensus thresholds is a change to
 this decision, not an implementation detail of it.
 
-`how-it-works.html` still tells visitors a human reviews every detection
-before it is published. That is **true today** — nothing publishes
-unattended yet — so it stays as it is. It must be rewritten in the same
-change that enables publication, not after it: a site that describes a
-review gate it no longer has is lying about the provenance of its own
-data, which is the one thing this project sells.
+### Where the human went
+
+The review did not disappear; it moved to the other side of publication,
+and it moved onto the published site.
+
+* **`review.html` is the audit surface**, not a gate. It reads the
+  published dataset, on the published site, and lists everything published
+  — not a queue of blocked work. Games carrying `provisional` reads sort
+  first, because that is where a person's attention is worth most;
+  confirmed ones stay listed, because hiding them would make the record
+  look more checked than it is.
+* **A correction is a commit.** With no tracker behind the page, decisions
+  export as `corrections/corrections.json` — the same file the pipeline
+  reads, which git keeps as the audit trail. An audit produces an
+  attributed, reversible, public change rather than an invisible edit to a
+  database.
+* **A correction never deletes the detection it corrects.** That was
+  already true and still is: what the detector saw stays exactly as
+  recorded, with the correction as an additional layer beside it.
+
+`how-it-works.html` was rewritten in the same change, not after it: the
+six steps now end at "Published, open for audit", and the page says
+plainly that a person comes after publication rather than before it. A
+site that describes a review gate it no longer has would be lying about
+the provenance of its own data, which is the one thing this project
+sells.
+
+### What still stops for a human
+
+Two gates remain, and neither is about whether a reading is right:
+
+* **Source authorization** — whether a link may be downloaded at all. A
+  channel in the verified registry auto-approves; anything else waits.
+* **Layout approval** — whether a calibration profile really describes
+  this broadcast's HUD. A detection cannot settle this; a wrong layout
+  produces confident nonsense rather than an honest `UNKNOWN`.
+
+Publication itself is opt-in per run (`--publish`), not because it needs
+judgement but because it **writes**: it regenerates the export, runs the
+validation and packaging checks, and commits. A local dry run should not
+push commits by surprise. The unattended workflow asks for it explicitly,
+and pushes in exactly one place.
 
 ---
 

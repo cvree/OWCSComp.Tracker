@@ -24,9 +24,13 @@
 # `process` is a deliberate dispatch, and it is what the report is for:
 # read where it stops before letting it write.
 #
-# Nothing here can publish a composition on its own even in `process`
-# mode. Publication is a separate, explicit step that is not wired up
-# yet — see docs/UNATTENDED.md, "The publication rule".
+# In `process` mode this DOES publish: publication is no longer a human
+# gate. What the detector accepted is published carrying the tier it
+# earned, and a person audits it afterwards on the published site
+# (review.html). What did not change is the detector's own bar — an
+# unreadable slot is UNKNOWN and never becomes a composition at all — nor
+# any of the checks publication runs (export regeneration + validation,
+# the packaging check). See docs/UNATTENDED.md, "The publication rule".
 # =====================================================================
 name: autopilot
 
@@ -60,7 +64,7 @@ concurrency:
   cancel-in-progress: false
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   autopilot:
@@ -127,11 +131,17 @@ jobs:
           if [ "$MODE" = "process" ]; then
             # --auto-accept covers exactly one gate: SEGMENT identity, and
             # it runs through the same accept-proposed gate a human uses,
-            # refusing incomplete proposals. Source, layout, detection
-            # review and publication are untouched by it.
+            # refusing incomplete proposals. Source authorization and
+            # layout approval are untouched by it and still stop.
+            #
+            # --publish runs the publication step (export regeneration +
+            # validation, packaging check, commit). --no-push leaves the
+            # push to the step below, so this workflow owns the one place
+            # this repository is written to.
             python pipeline/automation/cli.py convert-link \
               --url "$URL" --requested-by autopilot \
               --auto-accept --accepted-by autopilot \
+              --publish --no-push \
               --max-steps "$MAX_STEPS" --json 2>&1 | tee chain.log
           else
             # Report mode: record the link and read back exactly which
@@ -143,6 +153,23 @@ jobs:
             python pipeline/automation/cli.py link-status \
               --url "$URL" 2>&1 | tee -a chain.log || true
           fi
+
+      # The publication step above commits to a branch of its own but does
+      # not push it (--no-push). Pushing is done here, once, so there is a
+      # single place in this workflow that writes to the repository.
+      - name: Push the publication, if one was made
+        if: env.MODE == 'process'
+        env:
+          MODE: ${{ inputs.mode || 'report' }}
+        run: |
+          branch="$(git rev-parse --abbrev-ref HEAD)"
+          case "$branch" in
+            data/publish-*) ;;
+            *) echo "no publication branch was created — nothing to push"
+               exit 0 ;;
+          esac
+          git push -u origin "$branch"
+          echo "::notice::pushed $branch"
 
       - name: Report where it stopped
         if: always()

@@ -735,6 +735,59 @@ class TestTwitchIntake(IntakeTestCase):
         self.assertEqual(len(self.store.list_jobs()), 1)
 
 
+class TestJobKeyLookupsCarryThePlatform(IntakeTestCase):
+    """A job is stored under a PLATFORM-QUALIFIED key. Every lookup path
+    has to compute the same key, or a Twitch job is written once and then
+    invisible to everything that goes looking for it — intake would create
+    it again on the next scan, the CLI would report it missing, and the
+    finder would render it as never-queued.
+
+    This is a class of bug, not five bugs, so it is tested as one: the key
+    a lookup computes must equal the key intake wrote."""
+
+    def test_intake_writes_and_finds_the_same_key(self):
+        res = li.ingest_link(
+            self.store, f"https://www.twitch.tv/videos/{TWITCH_VOD}",
+            client=None, channels=REGISTRY,
+            twitch_runner=fake_twitch_runner())
+        self.assertTrue(res["created"])
+        self.assertIsNotNone(self.store.get(res["jobKey"]))
+        # The key a caller derives from the URL alone must match it.
+        parsed = li.parse_link(f"https://www.twitch.tv/videos/{TWITCH_VOD}")
+        self.assertEqual(
+            li.job_key_for(parsed["videoId"], parsed["platform"]),
+            res["jobKey"])
+
+    def test_link_status_finds_a_twitch_job_by_its_url(self):
+        """The path that regressed: link_status parsed the URL for its id
+        and then dropped the platform when building the key."""
+        res = li.ingest_link(
+            self.store, f"https://www.twitch.tv/videos/{TWITCH_VOD}",
+            client=None, channels=REGISTRY,
+            twitch_runner=fake_twitch_runner())
+        rows = li.link_status(
+            self.store, url=f"https://www.twitch.tv/videos/{TWITCH_VOD}")
+        self.assertEqual([r["jobKey"] for r in rows], [res["jobKey"]])
+
+    def test_a_youtube_lookup_is_unaffected(self):
+        res = li.ingest_link(self.store, "https://youtu.be/dQw4w9WgXcQ",
+                             client=fake_client(), channels=REGISTRY)
+        rows = li.link_status(self.store,
+                              url="https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+        self.assertEqual([r["jobKey"] for r in rows], [res["jobKey"]])
+        self.assertEqual(res["jobKey"], li.job_key_for("dQw4w9WgXcQ"))
+
+    def test_re_ingesting_a_twitch_link_never_makes_a_second_job(self):
+        """If a lookup computed a different key, intake would look for an
+        existing job, not find its own, and create another."""
+        for _ in range(3):
+            li.ingest_link(
+                self.store, f"https://www.twitch.tv/videos/{TWITCH_VOD}",
+                client=None, channels=REGISTRY,
+                twitch_runner=fake_twitch_runner())
+        self.assertEqual(len(self.store.list_jobs()), 1)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
 

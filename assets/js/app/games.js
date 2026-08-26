@@ -33,8 +33,9 @@
       say: "All ten hero portraits read off the HUD, swaps tracked." },
     { key: "linked", label: "Match linked",
       say: "Teams, maps and scores attached to the detections." },
-    { key: "ready", label: "Ready for review",
-      say: "Waiting for a person to confirm or correct it." },
+    { key: "ready", label: "Published, open for audit",
+      say: "Published with the evidence it was read from — check it and "
+        + "correct anything wrong." },
   ];
   G.STEPS = STEPS;
 
@@ -375,7 +376,7 @@
 
   /* One published composition per team for this match, newest first, so
      a card can show the actual heroes instead of another chip. Nothing
-     is invented: if review has not approved anything, this is empty and
+     is invented: if the detector accepted nothing here, this is empty and
      the card simply does not show a line-up. */
   G.cardComps = function (g, limit) {
     if (!g || !g.match) return [];
