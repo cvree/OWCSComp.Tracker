@@ -139,14 +139,15 @@
       '<span class="stat__v">' + esc(v) + "</span>" +
       '<span class="stat__note">' + note + "</span></div>";
 
-    /* The rollup is ordered newest-first by air date, which orders almost
-       nothing here: 246 of 250 broadcasts have no date, so that sort fell
-       back to the event name and the dashboard showed five arbitrary
-       events. Size is a fact the archive actually has, so the biggest
-       events lead. */
+    /* Most recent first, with size as the tie-break for anything still
+       undated. This sort was briefly size-only: while the per-video date
+       lookup was being refused, 246 of 250 broadcasts had no date at all
+       and ordering by `lastAt` fell through to the event name, so the
+       dashboard showed five arbitrary events. */
     const events = (d.events || []).filter((e) => e.found > 0)
-      .slice().sort((a, b) => b.broadcasts - a.broadcasts ||
-        b.runtimeSeconds - a.runtimeSeconds ||
+      .slice().sort((a, b) =>
+        String(b.lastAt || "").localeCompare(String(a.lastAt || "")) ||
+        b.broadcasts - a.broadcasts ||
         String(a.name).localeCompare(String(b.name)))
       .slice(0, 5);
     const seasons = (d.seasons || []).filter((x) => x.season != null);
@@ -186,16 +187,16 @@
       (events.length
         ? '<div class="table-wrap u-mt-4"><table class="tbl">' +
           "<thead><tr><th>Event the scan recognised</th><th>Broadcasts found</th>" +
-          "<th>Published</th><th>Runtime</th></tr></thead><tbody>" +
+          "<th>Published</th><th>When it ran</th></tr></thead><tbody>" +
           events.map((e) => "<tr><td><b>" + esc(e.name) + "</b>" +
             (e.days && e.days.length
               ? ' <span class="dim small">day ' + esc(e.days.join(", ")) + "</span>" : "") +
             "</td><td>" + esc(e.broadcasts) + "</td><td>" + esc(e.published) +
             '</td><td class="dim small u-nowrap">' +
-            esc(P.fmtHours(e.runtimeSeconds) || "not reported") + "</td></tr>").join("") +
+            esc(P.games.eventDates(e) || "date not stated") + "</td></tr>").join("") +
           "</tbody><caption>Events are read from the broadcast titles themselves — " +
-          "never from a source that could be wrong about them. Runtime is what the " +
-          "source reported for the broadcasts found so far.</caption>" +
+          "never from a source that could be wrong about them. The window is the " +
+          "air date of the first and last broadcast found on the event.</caption>" +
           "</table></div>"
         : "");
   }

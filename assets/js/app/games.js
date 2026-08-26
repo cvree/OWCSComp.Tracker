@@ -518,11 +518,27 @@
       "</tr>";
   };
 
+  /* An event's window, as its own broadcasts' air dates report it. One
+     date when it ran on a single day, a range otherwise, and nothing at
+     all when none of its broadcasts carry a date. */
+  G.eventDates = function (ev) {
+    if (!ev || !ev.firstAt) return null;
+    const first = P.fmtDate(ev.firstAt);
+    const last = ev.lastAt ? P.fmtDate(ev.lastAt) : first;
+    return first === last ? first : first + " – " + last;
+  };
+
   /* The one-line reading of an event: what its own broadcasts say about
      it, folded. Every part is omitted when the titles never said it. */
   G.eventMeta = function (ev) {
     if (!ev) return [];
     const out = [];
+    /* When it ran, first — an archive is read by date before anything
+       else. Only present because the scan can date its broadcasts; an
+       event whose rows are all undated simply has no range and says
+       nothing rather than guessing one. */
+    const span = G.eventDates(ev);
+    if (span) out.push(span);
     const runtime = P.fmtHours ? P.fmtHours(ev.runtimeSeconds) : null;
     if (runtime) {
       out.push(ev.runtimeKnown < ev.broadcasts

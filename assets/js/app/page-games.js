@@ -240,8 +240,16 @@
       let firstOpen = true;
       return '<div class="stack u-mt-4">' + seasons.map((season) => {
         const byEvent = bySeason.get(season);
-        const keys = Array.from(byEvent.keys())
-          .sort((a, b) => byEvent.get(b).length - byEvent.get(a).length);
+        /* Newest first. Size was the ordering while the scan could not
+           date anything and every `lastAt` was null; now that they all
+           carry one, an archive orders by when it happened. Size stays
+           as the tie-break for the events that still have no date. */
+        const keys = Array.from(byEvent.keys()).sort((a, b) => {
+          const ea = evByKey.get(a), eb = evByKey.get(b);
+          const la = (ea && ea.lastAt) || "", lb = (eb && eb.lastAt) || "";
+          if (la !== lb) return lb.localeCompare(la);
+          return byEvent.get(b).length - byEvent.get(a).length;
+        });
         const n = keys.reduce((t, k) => t + byEvent.get(k).length, 0);
         const runtime = P.fmtHours(keys.reduce((t, k) => {
           const ev = evByKey.get(k);
