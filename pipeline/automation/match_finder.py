@@ -581,6 +581,54 @@ def fill_missing_dates(ledger: dict, *, limit: int = 0, runner=subprocess,
     return ledger, errors, filled
 
 
+# ------------------------------------------------------- unattended queue
+def fetchable_queue(ledger: dict, *, platform: str = li.TWITCH) -> list[dict]:
+    """The broadcasts an unattended run may pick up, best first.
+
+    Narrow on purpose. Three filters, each for its own reason:
+
+    * **Platform.** A GitHub-hosted runner is bot-checked by YouTube on
+      every player client and cannot fetch a YouTube VOD (measured — see
+      docs/UNATTENDED.md). Queueing one would only produce a job that can
+      never move, so the unattended queue is the platform the hardware can
+      actually reach.
+    * **Not refused.** A refused candidate is one the broadcast-likeness
+      gate has already said is not a match broadcast.
+    * **Likely, not merely unrefused.** "unlikely" means the gate scored it
+      as a promo/guide/short and said so with reasons. A human can override
+      that by pasting the link; an unattended run has no business doing so.
+
+    Order is oldest-first, so the archive completes in the order it aired
+    rather than whichever way a scan happened to sort. A dateless row sorts
+    LAST rather than first: `None` would otherwise compare as the earliest
+    possible date and let every undated row jump the queue.
+    """
+    rows = [r for r in (ledger.get("candidates") or [])
+            if isinstance(r, dict) and r.get("url")
+            and (r.get("platform") or li.YOUTUBE) == platform
+            and not (r.get("likeness") or {}).get("refused")
+            and (r.get("likeness") or {}).get("confidence") == "likely"]
+    rows.sort(key=lambda r: (r.get("publishedAt") is None,
+                             str(r.get("publishedAt") or ""),
+                             str(r.get("videoId") or "")))
+    return rows
+
+
+def next_fetchable(ledger: dict, *, platform: str = li.TWITCH,
+                   exclude: set | None = None) -> dict | None:
+    """The one broadcast an unattended run should pick up next, or None.
+
+    `exclude` is the set of video ids already processed or in flight — the
+    caller owns that knowledge (it lives in the job store, not the scan
+    ledger), and passing it here keeps this function pure.
+    """
+    skip = exclude or set()
+    for row in fetchable_queue(ledger, platform=platform):
+        if str(row.get("videoId")) not in skip:
+            return row
+    return None
+
+
 # ---------------------------------------------------------------- merge
 def merge_channel_entries(channel: dict, rss: list[dict],
                           streams: list[dict], *,

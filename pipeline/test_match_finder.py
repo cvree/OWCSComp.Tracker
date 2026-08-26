@@ -785,5 +785,80 @@ class TestTwitchDateBackfill(unittest.TestCase):
             mf.fill_missing_dates(self._ledger(), limit=1, fetch_meta=meta)
 
 
+class TestUnattendedQueue(unittest.TestCase):
+    """What an unattended run is allowed to pick up on its own.
+
+    Every filter here is a refusal to let a scheduled job do something a
+    person would have had to decide."""
+
+    @staticmethod
+    def _ledger():
+        def row(vid, platform, published, confidence="likely", refused=False,
+                url=None):
+            return {"videoId": vid, "platform": platform,
+                    "url": url or f"https://www.twitch.tv/videos/{vid}",
+                    "publishedAt": published,
+                    "likeness": {"confidence": confidence, "refused": refused}}
+        return {"candidates": [
+            row("2854348714", "twitch", "2026-08-20T00:00:00+00:00"),
+            row("2853861755", "twitch", "2026-08-01T00:00:00+00:00"),
+            row("2853399482", "twitch", None),
+            row("2852904382", "twitch", "2026-07-01T00:00:00+00:00",
+                confidence="unlikely"),
+            row("2852428517", "twitch", "2026-07-01T00:00:00+00:00", refused=True),
+            row("dQw4w9WgXcQ", "youtube", "2026-06-01T00:00:00+00:00",
+                url="https://www.youtube.com/watch?v=dQw4w9WgXcQ"),
+        ]}
+
+    def test_oldest_first_so_the_archive_completes_in_order(self):
+        self.assertEqual([r["videoId"] for r in mf.fetchable_queue(self._ledger())],
+                         ["2853861755", "2854348714", "2853399482"])
+
+    def test_a_dateless_row_sorts_last_not_first(self):
+        """None would otherwise compare as the earliest possible date and
+        let every undated row jump the whole queue."""
+        q = mf.fetchable_queue(self._ledger())
+        self.assertEqual(q[-1]["videoId"], "2853399482")
+
+    def test_a_youtube_row_is_never_queued_unattended(self):
+        """This hardware cannot fetch one, so queueing it would only make a
+        job that can never move."""
+        ids = [r["videoId"] for r in mf.fetchable_queue(self._ledger())]
+        self.assertNotIn("dQw4w9WgXcQ", ids)
+
+    def test_unlikely_and_refused_are_both_left_for_a_human(self):
+        ids = [r["videoId"] for r in mf.fetchable_queue(self._ledger())]
+        self.assertNotIn("2852904382", ids)   # scored unlikely, with reasons
+        self.assertNotIn("2852428517", ids)   # refused outright
+
+    def test_next_skips_what_is_already_in_flight(self):
+        led = self._ledger()
+        self.assertEqual(mf.next_fetchable(led)["videoId"], "2853861755")
+        self.assertEqual(
+            mf.next_fetchable(led, exclude={"2853861755"})["videoId"], "2854348714")
+        self.assertIsNone(
+            mf.next_fetchable(led, exclude={"2854348714", "2853861755", "2853399482"}))
+
+    def test_an_empty_or_junk_ledger_yields_nothing_rather_than_raising(self):
+        for led in ({}, {"candidates": None}, {"candidates": ["not a dict"]},
+                    {"candidates": [{"videoId": "1", "platform": "twitch"}]}):
+            with self.subTest(ledger=led):
+                self.assertEqual(mf.fetchable_queue(led), [])
+                self.assertIsNone(mf.next_fetchable(led))
+
+    def test_the_queued_url_is_one_the_download_gate_will_accept(self):
+        """The handoff that matters: discovery -> intake -> the worker.
+        A queued URL the downloader refuses is a job that dies at the
+        last gate, after everything upstream said yes."""
+        from automation import worker as w
+        for row in mf.fetchable_queue(self._ledger()):
+            parsed = li.parse_link(row["url"])
+            self.assertEqual(parsed["videoId"], row["videoId"])
+            vid = w.validate_source(
+                {"sourceUrl": row["url"], "channelId": "ow_esports"},
+                official_channel_ids={"ow_esports"})
+            self.assertEqual(vid, row["videoId"])
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

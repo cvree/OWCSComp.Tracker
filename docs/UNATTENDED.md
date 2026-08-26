@@ -165,14 +165,37 @@ tools (`download_vod_clip.py`, `run_owcs_auto.py`,
 the one the autopilot drives, and widening them is a separate job with its
 own tests.
 
-### 3. `autopilot.yml` — the scheduled chain
+### 3. `autopilot.yml` — the scheduled chain — IN REPORT MODE
 
-`pipeline/automation/autopilot.py` already drives every automatic stage in
-a row and stops honestly at the first human gate. Unattended operation is
-that loop, on a cron, picking the oldest unprocessed discovered broadcast,
-then committing through the same PR-and-green-CI path `discovery.yml`
-already uses. Concurrency must join the existing shared data group so it
-can never race the other committing workflows.
+The workflow exists and runs every six hours, offset from the scan. It
+picks the next fetchable broadcast (`match_finder.next_fetchable` — oldest
+first, dateless last, Twitch only because this hardware cannot fetch
+YouTube, and `likely` only because "unlikely" is a verdict with reasons
+that a scheduled job has no business overriding), drives the stages, and
+prints the gate it reached.
+
+**It writes nothing by default, and that is not timidity.** No Twitch
+broadcast has ever been calibrated here: the HUD layout and the per-source
+hero templates detection needs do not exist for this package yet. A chain
+that cannot yet detect must not be able to publish, so the schedule runs
+in `report` mode and `process` is a deliberate dispatch. Read where it
+stops before letting it write — that is what the report is for.
+
+It already joins the shared `owcs-generated-data` concurrency group, so it
+is serialised against the other data workflows from the moment it starts
+writing rather than at the moment someone remembers.
+
+Still to wire up, in this order:
+
+1. **Calibrate the Twitch package.** `calibrate_source.py` is
+   computational and runs fine on a runner; it refuses below confidence
+   0.55. This is the first thing `process` mode will stop at.
+2. **Forge its templates.** `template_forge.py` is already one command:
+   build → gate → provenance → held-out validation → gated promotion. Only
+   `VALIDATED` heroes promote; the rest read `UNKNOWN`, which is safe.
+3. **Publication.** Per the rule below, with the detector's floors
+   untouched, committing through the same PR-and-green-CI path
+   `discovery.yml` already uses.
 
 ### 4. The four gates
 
