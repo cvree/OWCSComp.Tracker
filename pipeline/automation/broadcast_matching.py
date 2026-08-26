@@ -241,7 +241,8 @@ def broadcast_likeness(video: dict) -> dict:
         # matches. A real VOD nearly always carries one or the other.
         score += LIKENESS_PENALTY_UNKNOWN_DURATION
         reasons.append(f"{LIKENESS_PENALTY_UNKNOWN_DURATION} no duration and no "
-                       f"livestream metadata — nothing says this is long-form")
+                       f"livestream metadata — nothing says this is a long "
+                       f"broadcast")
 
     has_tournament_terms = any(t in norm for t in _TOURNAMENT_TERMS)
     has_match_format = bool(_MATCH_FORMAT_RE.search(norm))

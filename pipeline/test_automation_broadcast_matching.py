@@ -699,8 +699,18 @@ class TestBroadcastLikeness(unittest.TestCase):
                         "the point of this test is that it passes DESPITE a "
                         "failing score, not because the score rescued it")
         self.assertFalse(r["refused"])
-        self.assertIn("long-form", r["reasons"][0],
-                      "the reason that decided the verdict must be stated first")
+        self.assertTrue(r["reasons"][0].startswith("long-form:"),
+                        "the reason that decided the verdict must be stated "
+                        "first, and must be identifiable by a prefix rather "
+                        "than a substring: the unknown-duration penalty also "
+                        "mentions long broadcasts, and a substring match "
+                        "conflates the two")
+        others = [x for x in bm.broadcast_likeness(
+            video(title="Some clip", description="", liveBroadcastStatus="none",
+                  durationSeconds=None, actualStartAt=None,
+                  scheduledStartAt=None))["reasons"] if "long-form:" in x]
+        self.assertEqual(others, [],
+                         "no other reason may carry the deciding prefix")
 
     def test_just_under_the_hour_still_has_to_earn_it(self):
         under = bm.LIKENESS_LONGFORM_DURATION_SECONDS - 1
