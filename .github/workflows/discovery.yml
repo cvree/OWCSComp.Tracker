@@ -382,20 +382,54 @@ jobs:
         run: |
           git config user.name  "owcs-discovery[bot]"
           git config user.email "actions@users.noreply.github.com"
+          GENERATED_FILES="assets/js/data.js assets/data/public_data.v1.js
+            data/owcs.sqlite assets/data/team_asset_sources.json
+            assets/data/team_coverage.v1.json"
+
+          # TIMESTAMP-ONLY GUARD. Every one of these exports stamps itself
+          # with the moment it ran (meta.generatedAt / generated_at /
+          # lastSynced) even when the underlying teams/matches/coverage
+          # facts are byte-identical to what is already committed — a raw
+          # `git diff --cached --quiet` cannot tell "real data changed"
+          # from "only the clock moved" and would open a data-update PR
+          # every single hour regardless. PR #82 is a real example: its
+          # entire merged diff was three timestamp fields, no team or
+          # calendar fact actually changed. meaningful_diff.py normalizes
+          # those volatile fields away before comparing.
+          if ! python3 pipeline/automation/meaningful_diff.py $GENERATED_FILES; then
+            echo "No validated calendar/team changes this run — nothing to publish (only generation timestamps moved)."
+            exit 0
+          fi
+
           # Stage each generated file only if it exists. The previous form
           # (`git add a b c 2>/dev/null || true`) staged NOTHING at all when
           # any single path was absent — one missing optional export silently
           # dropped a real calendar update, and the step then reported
           # "nothing to publish".
-          for f in assets/js/data.js assets/data/public_data.v1.js \
-                   data/owcs.sqlite assets/data/team_asset_sources.json \
-                   assets/data/team_coverage.v1.json; do
+          for f in $GENERATED_FILES; do
             if [ -e "$f" ]; then git add "$f"; fi
           done
           if git diff --cached --quiet; then
             echo "No validated calendar/team changes this run — nothing to publish."
             exit 0
           fi
+
+          # DUPLICATE-PR GUARD. Every hour this step can find real changes;
+          # if the PREVIOUS run's PR is still open (its own merge attempt is
+          # mid-flight, or failed and is waiting on a human), opening a
+          # second, third, fourth... PR for overlapping data is exactly how
+          # #79-#82 piled up — an uncontrolled backlog of unmergeable
+          # discovery PRs instead of one PR that eventually merges or gets
+          # closed. Skip publishing this run rather than compounding it; the
+          # data is reproducible, so the very next scheduled run tries again
+          # once the existing PR is out of the way.
+          EXISTING_PR=$(gh pr list --state open --json number,headRefName \
+              --jq '[.[] | select(.headRefName | startswith("auto/discovery-"))][0].number' 2>/dev/null || true)
+          if [ -n "$EXISTING_PR" ] && [ "$EXISTING_PR" != "null" ]; then
+            echo "An open discovery PR (#$EXISTING_PR) already exists — skipping a new PR this run to avoid an uncontrolled backlog. This run's regenerated data is reproducible and will be re-offered once #$EXISTING_PR is merged or closed."
+            exit 0
+          fi
+
           BR="auto/discovery-$(date -u +'%Y%m%d-%H%M')"
           git checkout -b "$BR"
           git commit -m "data: discovery calendar + team update ($(date -u +'%Y-%m-%d %H:%M') UTC)"
@@ -447,16 +481,46 @@ jobs:
           # then resolves empty, checkout/push/gh all fail on the bad
           # credential, and the step fails loudly rather than quietly
           # reverting to the old best-effort behavior.
-          if gh pr checks "$BR" --watch --fail-fast; then
+          #
+          # RACE-CONDITION GUARD. `gh pr checks --watch` used to be called
+          # here immediately after `gh pr create`. At that instant GitHub
+          # has not necessarily created ci.yml's check-suite for the new
+          # commit yet, and gh treats a PR that currently reports ZERO
+          # checks as "nothing to watch" rather than "not started yet" —
+          # it returns immediately instead of waiting for a check to
+          # appear. That is exactly how PR #82 was left open: this step
+          # finished in ~6 seconds, a full second before ci.yml's run even
+          # started, saw no checks, and fell straight through to the
+          # "waiting for a human" branch — even though ci.yml went green
+          # about ten minutes later. Poll for at least one check to be
+          # REPORTED before handing off to --watch, so --watch always has
+          # something real to wait on.
+          echo "Waiting for CI to register on $BR..."
+          CHECKS_SEEN=0
+          for i in $(seq 1 30); do
+            COUNT=$(gh pr checks "$BR" --json state --jq 'length' 2>/dev/null || echo 0)
+            if [ "${COUNT:-0}" -gt 0 ]; then
+              CHECKS_SEEN=1
+              break
+            fi
+            sleep 10
+          done
+
+          if [ "$CHECKS_SEEN" -eq 0 ]; then
+            echo "merged=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::No CI check ever registered for $BR within 5 "
+            echo "::warning::minutes — ci.yml may require manual approval to "
+            echo "::warning::run for this actor (Settings > Actions > General), "
+            echo "::warning::or BOT_PAT may lack access. The PR is open and "
+            echo "::warning::waiting for a human — nothing shipped."
+          elif gh pr checks "$BR" --watch --fail-fast; then
             gh pr merge --squash --delete-branch "$BR"
             echo "merged=true" >> "$GITHUB_OUTPUT"
           else
             echo "merged=false" >> "$GITHUB_OUTPUT"
             echo "::warning::No passing CI conclusion for $BR — a real CI "
-            echo "::warning::failure, or ci.yml requires manual approval to "
-            echo "::warning::run for this actor (Settings > Actions > General). "
-            echo "::warning::The PR is open and waiting for a human — nothing "
-            echo "::warning::shipped."
+            echo "::warning::failure. The PR is open and waiting for a human — "
+            echo "::warning::nothing shipped."
           fi
 
       - name: Summary

@@ -396,6 +396,90 @@ class TestWorkflowsThatWaitOnOtherWorkflows(unittest.TestCase):
                         f"{ci_timeout}m) but gives up sooner")
 
 
+class TestDiscoveryAutoMergeIsRobust(unittest.TestCase):
+    """Regression coverage for the PR #82 incident: the discovery workflow
+    opened a real PR whose CI (ci.yml) went green about ten minutes later,
+    but the workflow's own "Open data-update PR" step had already reported
+    merged=false and moved on within ~6 seconds of pushing — before ci.yml
+    had even started. `gh pr checks "$BR" --watch --fail-fast` was called
+    immediately after `gh pr create`, and a PR that reports zero checks at
+    that instant is treated by gh as "nothing to watch", not "not started
+    yet". The fix polls for at least one check to be reported before ever
+    calling --watch."""
+
+    def setUp(self):
+        self.text = _workflow_text("discovery.yml")
+
+    def test_checks_watch_is_preceded_by_a_registration_wait(self):
+        watch_idx = self.text.index('gh pr checks "$BR" --watch --fail-fast')
+        preceding = self.text[:watch_idx]
+        # The wait loop must appear AFTER the PR is created/pushed and
+        # BEFORE --watch is ever called, so --watch always has a real
+        # check to block on instead of racing ci.yml's check-suite creation.
+        self.assertIn(
+            'gh pr checks "$BR" --json state --jq \'length\'', preceding,
+            "discovery.yml calls `gh pr checks --watch` without first "
+            "confirming a check has actually been reported for $BR — this "
+            "is the exact race that left PR #82 open despite green CI")
+        self.assertIn("sleep 10", preceding)
+
+    def test_no_uncontrolled_backlog_of_open_discovery_prs(self):
+        """An open auto/discovery-* PR must block a new one from being
+        opened on top of it — otherwise every hour with real changes and
+        an unresolved previous PR compounds into a growing backlog (this
+        is literally how #79, #80, #81 and #82 accumulated)."""
+        self.assertIn('startswith("auto/discovery-")', self.text)
+        guard_idx = self.text.index('startswith("auto/discovery-")')
+        create_idx = self.text.index("if gh pr create")
+        self.assertLess(
+            guard_idx, create_idx,
+            "the open-PR guard must run BEFORE a new branch/PR is created")
+
+    def test_bot_pat_is_the_only_credential_for_push_and_pr_creation(self):
+        """The checkout token and the PR step's GH_TOKEN must both be
+        BOT_PAT, with no fallback to the default GITHUB_TOKEN — a
+        GITHUB_TOKEN-authored push/PR cannot trigger ci.yml (GitHub's
+        anti-recursion rule), which is the original #47-#77 incident."""
+        self.assertIn("token: ${{ secrets.BOT_PAT }}", self.text)
+        self.assertIn("GH_TOKEN: ${{ secrets.BOT_PAT }}", self.text)
+        self.assertNotIn("secrets.GITHUB_TOKEN", self.text,
+                          "discovery.yml must never reference the default "
+                          "GITHUB_TOKEN as a fallback for push/PR auth")
+
+
+class TestNoTimestampOnlyPublishing(unittest.TestCase):
+    """PR #82's entire merged diff was three generation-timestamp fields —
+    no team or calendar fact actually changed. A raw `git diff --cached
+    --quiet` can't tell that apart from a real change, so every workflow
+    that commits a generated export (whose format embeds a wall-clock
+    generatedAt) must gate on meaningful_diff.py first."""
+
+    def test_every_workflow_that_commits_a_timestamped_export_gates_on_it(self):
+        for name in ("discovery.yml", "pipeline.yml", "update-data.yml"):
+            text = _workflow_text(name)
+            with self.subTest(workflow=name):
+                self.assertIn(
+                    "pipeline/automation/meaningful_diff.py", text,
+                    f"{name} commits a generated export with a wall-clock "
+                    f"timestamp but never checks meaningful_diff.py before "
+                    f"deciding whether to publish")
+
+
+class TestPipelineValidationActuallyBlocks(unittest.TestCase):
+    """pipeline.yml used to run `validate_data.py || echo ...`, which meant
+    a HARD referential-integrity error (validate_data.py's own exit code 1)
+    was logged but never stopped the run — run_batch/export/commit all kept
+    going and could publish on top of broken data."""
+
+    def test_validate_data_step_has_no_error_swallowing_fallback(self):
+        text = _workflow_text("pipeline.yml")
+        idx = text.index("pipeline/validate_data.py")
+        line = text[idx:text.index("\n", idx)]
+        self.assertNotIn("||", line,
+                          f"pipeline.yml swallows validate_data.py's exit "
+                          f"code: {line!r}")
+
+
 class TestTextIoIsPortable(unittest.TestCase):
     """Windows' default text encoding is cp1252, not UTF-8. This repo reads
     and writes UTF-8 JSON/JS containing non-ASCII team and player names

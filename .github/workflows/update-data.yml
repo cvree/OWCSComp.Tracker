@@ -77,6 +77,17 @@ jobs:
           set -euo pipefail
           git config user.name  "owcs-pipeline[bot]"
           git config user.email "actions@users.noreply.github.com"
+          # TIMESTAMP-ONLY GUARD: export_data.py stamps every export with the
+          # moment it ran even when the underlying facts are identical to
+          # what's already committed. A raw `git diff --cached --quiet`
+          # can't tell that apart from a real change and would push a
+          # no-op commit (and redeploy Pages for nothing) every run.
+          if ! python3 pipeline/automation/meaningful_diff.py \
+              assets/js/data.js assets/data/public_data.v1.js data/owcs.sqlite; then
+            echo "No data changes this run (only generation timestamps moved)."
+            echo "committed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           for f in assets/js/data.js assets/data/public_data.v1.js data/owcs.sqlite; do
             if [ -e "$f" ]; then git add "$f"; fi
           done
