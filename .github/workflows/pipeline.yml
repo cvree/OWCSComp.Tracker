@@ -102,8 +102,15 @@ jobs:
       - name: Apply manual comp corrections
         run: python3 pipeline/apply_corrections.py
 
-      - name: Validate data quality (warnings do not fail the run)
-        run: python3 pipeline/validate_data.py || echo "validation reported errors (see log)"
+      # validate_data.py itself already distinguishes WARNINGS (exit 0) from
+      # hard referential-integrity ERRORS (exit 1) — see its own docstring.
+      # This step used to swallow that with `|| echo ...`, so a hard error
+      # was reported but never actually blocked the run: run_batch/export
+      # kept going and committed on top of broken data. No `|| ...` here:
+      # a hard error now fails this step, fails the job, and nothing gets
+      # published.
+      - name: Validate data quality (hard errors block publishing)
+        run: python3 pipeline/validate_data.py
 
       - name: Run pipeline batch
         run: |
