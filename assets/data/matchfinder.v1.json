@@ -7,7 +7,7 @@
       "durationSeconds": null,
       "firstSeenAt": "2026-08-25T21:20:04+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "unlikely",
         "reasons": [
@@ -35,7 +35,7 @@
       "durationSeconds": 31900,
       "firstSeenAt": "2026-08-25T21:20:04+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -65,7 +65,7 @@
       "durationSeconds": null,
       "firstSeenAt": "2026-08-25T21:20:04+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "unlikely",
         "reasons": [
@@ -94,7 +94,7 @@
       "durationSeconds": null,
       "firstSeenAt": "2026-08-25T21:20:04+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "unlikely",
         "reasons": [
@@ -122,7 +122,7 @@
       "durationSeconds": null,
       "firstSeenAt": "2026-08-25T21:20:04+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "unlikely",
         "reasons": [
@@ -151,7 +151,7 @@
       "durationSeconds": null,
       "firstSeenAt": "2026-08-25T21:20:04+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "unlikely",
         "reasons": [
@@ -179,7 +179,7 @@
       "durationSeconds": null,
       "firstSeenAt": "2026-08-25T21:20:04+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "unlikely",
         "reasons": [
@@ -208,7 +208,7 @@
       "durationSeconds": null,
       "firstSeenAt": "2026-08-25T21:20:04+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "unlikely",
         "reasons": [
@@ -237,7 +237,7 @@
       "durationSeconds": 34071,
       "firstSeenAt": "2026-08-25T21:20:04+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -267,7 +267,7 @@
       "durationSeconds": 37741,
       "firstSeenAt": "2026-08-25T21:20:04+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -297,7 +297,7 @@
       "durationSeconds": null,
       "firstSeenAt": "2026-08-25T21:20:04+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "unlikely",
         "reasons": [
@@ -325,7 +325,7 @@
       "durationSeconds": 42900,
       "firstSeenAt": "2026-08-25T21:20:04+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -355,7 +355,7 @@
       "durationSeconds": null,
       "firstSeenAt": "2026-08-25T21:20:04+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "unlikely",
         "reasons": [
@@ -383,7 +383,7 @@
       "durationSeconds": null,
       "firstSeenAt": "2026-08-14T19:37:26+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "unlikely",
         "reasons": [
@@ -411,7 +411,7 @@
       "durationSeconds": null,
       "firstSeenAt": "2026-08-13T19:44:34+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "unlikely",
         "reasons": [
@@ -517,6 +517,96 @@
       "title": "Partner Team packs go on sale TOMORROW \ud83d\udd25 which #OWCS team will you be repping? #overwatch #esports",
       "url": "https://www.youtube.com/watch?v=9ZAiB4vVTfY",
       "videoId": "9ZAiB4vVTfY"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 24375,
+      "firstSeenAt": "2026-08-10T08:17:09+00:00",
+      "job": null,
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "long-form: 406m of runtime is longer than any promo, clip or cutdown \u2014 considered a broadcast regardless of what the title says",
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (24375s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "refusalReason": null,
+        "refused": false,
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": "2026-08-10T16:42:50Z",
+      "sources": [
+        "streams",
+        "youtube-api"
+      ],
+      "title": "OWCS x FACEIT League | Stage 3 Promotion/Relegation Matches",
+      "url": "https://www.youtube.com/watch?v=9LMVyFVrFRE",
+      "videoId": "9LMVyFVrFRE"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 22789,
+      "firstSeenAt": "2026-08-03T22:34:18+00:00",
+      "job": null,
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "long-form: 379m of runtime is longer than any promo, clip or cutdown \u2014 considered a broadcast regardless of what the title says",
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (22789s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "refusalReason": null,
+        "refused": false,
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": "2026-08-09T17:42:34Z",
+      "sources": [
+        "streams",
+        "youtube-api"
+      ],
+      "title": "Calling All Heroes 2026:Season Playoffs | Day 2",
+      "url": "https://www.youtube.com/watch?v=1IcfQbcgJ6o",
+      "videoId": "1IcfQbcgJ6o"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 21185,
+      "firstSeenAt": "2026-08-03T22:34:18+00:00",
+      "job": null,
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "long-form: 353m of runtime is longer than any promo, clip or cutdown \u2014 considered a broadcast regardless of what the title says",
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (21185s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "refusalReason": null,
+        "refused": false,
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": "2026-08-08T17:43:29Z",
+      "sources": [
+        "streams",
+        "youtube-api"
+      ],
+      "title": "Calling All Heroes 2026:Season Playoffs | Day 1",
+      "url": "https://www.youtube.com/watch?v=zNK1kK7qZps",
+      "videoId": "zNK1kK7qZps"
     },
     {
       "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
@@ -721,6 +811,36 @@
     {
       "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
       "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 31849,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "long-form: 530m of runtime is longer than any promo, clip or cutdown \u2014 considered a broadcast regardless of what the title says",
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (31849s)",
+          "-10 no team/competition relationship signal"
+        ],
+        "refusalReason": null,
+        "refused": false,
+        "score": 35
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": "2026-08-02T09:11:29Z",
+      "sources": [
+        "streams",
+        "youtube-api"
+      ],
+      "title": "[DROPS] OWCS 2026 | Midseason Championship Day 5",
+      "url": "https://www.youtube.com/watch?v=3eRcSk9b2L8",
+      "videoId": "3eRcSk9b2L8"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
       "channelTitle": "Overwatch Esports",
       "durationSeconds": null,
       "firstSeenAt": "2026-08-01T16:14:45+00:00",
@@ -773,6 +893,36 @@
       "title": "As we get into the #OWCSMSC Playoffs, the 8 teams explain why you should root for them!\ud83d\udd25 #overwatch",
       "url": "https://www.youtube.com/watch?v=TxcbbqNZ02w",
       "videoId": "TxcbbqNZ02w"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 24861,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "long-form: 414m of runtime is longer than any promo, clip or cutdown \u2014 considered a broadcast regardless of what the title says",
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (24861s)",
+          "-10 no team/competition relationship signal"
+        ],
+        "refusalReason": null,
+        "refused": false,
+        "score": 35
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": "2026-08-01T09:15:17Z",
+      "sources": [
+        "streams",
+        "youtube-api"
+      ],
+      "title": "[DROPS] OWCS 2026 | Midseason Championship Day 4",
+      "url": "https://www.youtube.com/watch?v=-8v_Ob1Fc88",
+      "videoId": "-8v_Ob1Fc88"
     },
     {
       "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
@@ -890,6 +1040,36 @@
     {
       "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
       "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 25656,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "long-form: 427m of runtime is longer than any promo, clip or cutdown \u2014 considered a broadcast regardless of what the title says",
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (25656s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "refusalReason": null,
+        "refused": false,
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": "2026-07-31T09:11:20Z",
+      "sources": [
+        "streams",
+        "youtube-api"
+      ],
+      "title": "[DROPS] OWCS 2026 | Midseason Championship Day 3",
+      "url": "https://www.youtube.com/watch?v=1maoxsSkDGo",
+      "videoId": "1maoxsSkDGo"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
       "channelTitle": "Overwatch Esports",
       "durationSeconds": null,
       "firstSeenAt": "2026-07-30T22:44:06+00:00",
@@ -915,6 +1095,36 @@
       "title": "A cheeky 4k from Shy for Weibo Gaming \ud83e\udd2d #OWCSMSC #overwatch #owcs #esports #overwatchclips",
       "url": "https://www.youtube.com/watch?v=nR0pRT9y534",
       "videoId": "nR0pRT9y534"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 25087,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "long-form: 418m of runtime is longer than any promo, clip or cutdown \u2014 considered a broadcast regardless of what the title says",
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (25087s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "refusalReason": null,
+        "refused": false,
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": "2026-07-30T09:14:53Z",
+      "sources": [
+        "streams",
+        "youtube-api"
+      ],
+      "title": "[DROPS] OWCS 2026 | Midseason Championship Day 2",
+      "url": "https://www.youtube.com/watch?v=h3pgxhsUCt0",
+      "videoId": "h3pgxhsUCt0"
     },
     {
       "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
@@ -971,6 +1181,36 @@
       "title": "The Midseason Championship at @e@ewcs underway! \ud83c\udfc6\u200b @playoverwatch #OWCS #OWCSMSC",
       "url": "https://www.youtube.com/watch?v=UzJu7ep6EWY",
       "videoId": "UzJu7ep6EWY"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 40894,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "long-form: 681m of runtime is longer than any promo, clip or cutdown \u2014 considered a broadcast regardless of what the title says",
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (40894s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "refusalReason": null,
+        "refused": false,
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": "2026-07-29T09:16:50Z",
+      "sources": [
+        "streams",
+        "youtube-api"
+      ],
+      "title": "[DROPS] OWCS 2026 | Midseason Championship Day 1",
+      "url": "https://www.youtube.com/watch?v=2NE1nq75sv8",
+      "videoId": "2NE1nq75sv8"
     },
     {
       "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
@@ -1177,6 +1417,35 @@
     {
       "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
       "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 2502,
+      "firstSeenAt": "2026-07-29T23:14:15+00:00",
+      "job": null,
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (2502s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "refusalReason": null,
+        "refused": false,
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": "2026-07-14T17:47:21Z",
+      "sources": [
+        "streams",
+        "youtube-api"
+      ],
+      "title": "OWWC Group Draw",
+      "url": "https://www.youtube.com/watch?v=_lCIzOn4Z34",
+      "videoId": "_lCIzOn4Z34"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
       "channelTitle": "Overwatch Esports",
       "durationSeconds": null,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
@@ -1207,299 +1476,10 @@
       "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
       "channelRegistryId": "ow_esports_global",
       "channelTitle": "ow_esports_global",
-      "durationSeconds": 20573,
-      "firstSeenAt": "2026-08-25T21:20:04+00:00",
-      "job": null,
-      "lastSeenAt": "2026-08-26T00:27:15+00:00",
-      "likeness": {
-        "confidence": "likely",
-        "reasons": [
-          "long-form: 342m of runtime is longer than any promo, clip or cutdown \u2014 considered a broadcast regardless of what the title says",
-          "+25 livestream metadata (completed)",
-          "+20 substantial duration (20573s)",
-          "+15 tournament/broadcast terminology in title/description"
-        ],
-        "refusalReason": null,
-        "refused": false,
-        "score": 60
-      },
-      "liveBroadcastStatus": "completed",
-      "publishedAt": null,
-      "sources": [
-        "streams"
-      ],
-      "title": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 4 Day 3",
-      "url": "https://www.youtube.com/watch?v=Dmp0TOC1WFU",
-      "videoId": "Dmp0TOC1WFU"
-    },
-    {
-      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
-      "channelRegistryId": "ow_esports_global",
-      "channelTitle": "ow_esports_global",
-      "durationSeconds": 24375,
-      "firstSeenAt": "2026-08-10T08:17:09+00:00",
-      "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
-      "likeness": {
-        "confidence": "likely",
-        "reasons": [
-          "long-form: 406m of runtime is longer than any promo, clip or cutdown \u2014 considered a broadcast regardless of what the title says",
-          "+25 livestream metadata (completed)",
-          "+20 substantial duration (24375s)",
-          "+15 tournament/broadcast terminology in title/description"
-        ],
-        "refusalReason": null,
-        "refused": false,
-        "score": 60
-      },
-      "liveBroadcastStatus": "completed",
-      "publishedAt": null,
-      "sources": [
-        "streams"
-      ],
-      "title": "OWCS x FACEIT League | Stage 3 Promotion/Relegation Matches",
-      "url": "https://www.youtube.com/watch?v=9LMVyFVrFRE",
-      "videoId": "9LMVyFVrFRE"
-    },
-    {
-      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
-      "channelRegistryId": "ow_esports_global",
-      "channelTitle": "ow_esports_global",
-      "durationSeconds": 22789,
-      "firstSeenAt": "2026-08-03T22:34:18+00:00",
-      "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
-      "likeness": {
-        "confidence": "likely",
-        "reasons": [
-          "long-form: 379m of runtime is longer than any promo, clip or cutdown \u2014 considered a broadcast regardless of what the title says",
-          "+25 livestream metadata (completed)",
-          "+20 substantial duration (22789s)",
-          "+15 tournament/broadcast terminology in title/description"
-        ],
-        "refusalReason": null,
-        "refused": false,
-        "score": 60
-      },
-      "liveBroadcastStatus": "completed",
-      "publishedAt": null,
-      "sources": [
-        "streams"
-      ],
-      "title": "Calling All Heroes 2026:Season Playoffs | Day 2",
-      "url": "https://www.youtube.com/watch?v=1IcfQbcgJ6o",
-      "videoId": "1IcfQbcgJ6o"
-    },
-    {
-      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
-      "channelRegistryId": "ow_esports_global",
-      "channelTitle": "ow_esports_global",
-      "durationSeconds": 21185,
-      "firstSeenAt": "2026-08-03T22:34:18+00:00",
-      "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
-      "likeness": {
-        "confidence": "likely",
-        "reasons": [
-          "long-form: 353m of runtime is longer than any promo, clip or cutdown \u2014 considered a broadcast regardless of what the title says",
-          "+25 livestream metadata (completed)",
-          "+20 substantial duration (21185s)",
-          "+15 tournament/broadcast terminology in title/description"
-        ],
-        "refusalReason": null,
-        "refused": false,
-        "score": 60
-      },
-      "liveBroadcastStatus": "completed",
-      "publishedAt": null,
-      "sources": [
-        "streams"
-      ],
-      "title": "Calling All Heroes 2026:Season Playoffs | Day 1",
-      "url": "https://www.youtube.com/watch?v=zNK1kK7qZps",
-      "videoId": "zNK1kK7qZps"
-    },
-    {
-      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
-      "channelRegistryId": "ow_esports_global",
-      "channelTitle": "ow_esports_global",
-      "durationSeconds": 31849,
-      "firstSeenAt": "2026-07-29T23:14:15+00:00",
-      "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
-      "likeness": {
-        "confidence": "likely",
-        "reasons": [
-          "long-form: 530m of runtime is longer than any promo, clip or cutdown \u2014 considered a broadcast regardless of what the title says",
-          "+25 livestream metadata (completed)",
-          "+20 substantial duration (31849s)",
-          "-10 no team/competition relationship signal"
-        ],
-        "refusalReason": null,
-        "refused": false,
-        "score": 35
-      },
-      "liveBroadcastStatus": "completed",
-      "publishedAt": null,
-      "sources": [
-        "streams"
-      ],
-      "title": "[DROPS] OWCS 2026 | Midseason Championship Day 5",
-      "url": "https://www.youtube.com/watch?v=3eRcSk9b2L8",
-      "videoId": "3eRcSk9b2L8"
-    },
-    {
-      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
-      "channelRegistryId": "ow_esports_global",
-      "channelTitle": "ow_esports_global",
-      "durationSeconds": 24861,
-      "firstSeenAt": "2026-07-29T23:14:15+00:00",
-      "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
-      "likeness": {
-        "confidence": "likely",
-        "reasons": [
-          "long-form: 414m of runtime is longer than any promo, clip or cutdown \u2014 considered a broadcast regardless of what the title says",
-          "+25 livestream metadata (completed)",
-          "+20 substantial duration (24861s)",
-          "-10 no team/competition relationship signal"
-        ],
-        "refusalReason": null,
-        "refused": false,
-        "score": 35
-      },
-      "liveBroadcastStatus": "completed",
-      "publishedAt": null,
-      "sources": [
-        "streams"
-      ],
-      "title": "[DROPS] OWCS 2026 | Midseason Championship Day 4",
-      "url": "https://www.youtube.com/watch?v=-8v_Ob1Fc88",
-      "videoId": "-8v_Ob1Fc88"
-    },
-    {
-      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
-      "channelRegistryId": "ow_esports_global",
-      "channelTitle": "ow_esports_global",
-      "durationSeconds": 25656,
-      "firstSeenAt": "2026-07-29T23:14:15+00:00",
-      "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
-      "likeness": {
-        "confidence": "likely",
-        "reasons": [
-          "long-form: 427m of runtime is longer than any promo, clip or cutdown \u2014 considered a broadcast regardless of what the title says",
-          "+25 livestream metadata (completed)",
-          "+20 substantial duration (25656s)",
-          "+15 tournament/broadcast terminology in title/description"
-        ],
-        "refusalReason": null,
-        "refused": false,
-        "score": 60
-      },
-      "liveBroadcastStatus": "completed",
-      "publishedAt": null,
-      "sources": [
-        "streams"
-      ],
-      "title": "[DROPS] OWCS 2026 | Midseason Championship Day 3",
-      "url": "https://www.youtube.com/watch?v=1maoxsSkDGo",
-      "videoId": "1maoxsSkDGo"
-    },
-    {
-      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
-      "channelRegistryId": "ow_esports_global",
-      "channelTitle": "ow_esports_global",
-      "durationSeconds": 25087,
-      "firstSeenAt": "2026-07-29T23:14:15+00:00",
-      "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
-      "likeness": {
-        "confidence": "likely",
-        "reasons": [
-          "long-form: 418m of runtime is longer than any promo, clip or cutdown \u2014 considered a broadcast regardless of what the title says",
-          "+25 livestream metadata (completed)",
-          "+20 substantial duration (25087s)",
-          "+15 tournament/broadcast terminology in title/description"
-        ],
-        "refusalReason": null,
-        "refused": false,
-        "score": 60
-      },
-      "liveBroadcastStatus": "completed",
-      "publishedAt": null,
-      "sources": [
-        "streams"
-      ],
-      "title": "[DROPS] OWCS 2026 | Midseason Championship Day 2",
-      "url": "https://www.youtube.com/watch?v=h3pgxhsUCt0",
-      "videoId": "h3pgxhsUCt0"
-    },
-    {
-      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
-      "channelRegistryId": "ow_esports_global",
-      "channelTitle": "ow_esports_global",
-      "durationSeconds": 40894,
-      "firstSeenAt": "2026-07-29T23:14:15+00:00",
-      "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
-      "likeness": {
-        "confidence": "likely",
-        "reasons": [
-          "long-form: 681m of runtime is longer than any promo, clip or cutdown \u2014 considered a broadcast regardless of what the title says",
-          "+25 livestream metadata (completed)",
-          "+20 substantial duration (40894s)",
-          "+15 tournament/broadcast terminology in title/description"
-        ],
-        "refusalReason": null,
-        "refused": false,
-        "score": 60
-      },
-      "liveBroadcastStatus": "completed",
-      "publishedAt": null,
-      "sources": [
-        "streams"
-      ],
-      "title": "[DROPS] OWCS 2026 | Midseason Championship Day 1",
-      "url": "https://www.youtube.com/watch?v=2NE1nq75sv8",
-      "videoId": "2NE1nq75sv8"
-    },
-    {
-      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
-      "channelRegistryId": "ow_esports_global",
-      "channelTitle": "ow_esports_global",
-      "durationSeconds": 2502,
-      "firstSeenAt": "2026-07-29T23:14:15+00:00",
-      "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
-      "likeness": {
-        "confidence": "likely",
-        "reasons": [
-          "+25 livestream metadata (completed)",
-          "+20 substantial duration (2502s)",
-          "+15 tournament/broadcast terminology in title/description"
-        ],
-        "refusalReason": null,
-        "refused": false,
-        "score": 60
-      },
-      "liveBroadcastStatus": "completed",
-      "publishedAt": null,
-      "sources": [
-        "streams"
-      ],
-      "title": "OWWC Group Draw",
-      "url": "https://www.youtube.com/watch?v=_lCIzOn4Z34",
-      "videoId": "_lCIzOn4Z34"
-    },
-    {
-      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
-      "channelRegistryId": "ow_esports_global",
-      "channelTitle": "ow_esports_global",
       "durationSeconds": 34113,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -1513,9 +1493,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-07-05T16:32:12Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2026 | NA/EMEA | Stage 2 Playoffs Day 3",
       "url": "https://www.youtube.com/watch?v=nD5lLLWDkY0",
@@ -1528,7 +1509,7 @@
       "durationSeconds": 24414,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -1542,9 +1523,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-07-04T16:32:13Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2026 | NA/EMEA | Stage 2 Playoffs Day 2",
       "url": "https://www.youtube.com/watch?v=jkSiX___Qwc",
@@ -1557,7 +1539,7 @@
       "durationSeconds": 20606,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -1571,9 +1553,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-07-03T16:31:58Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2026 | NA/EMEA | Stage 2 Playoffs Day 1",
       "url": "https://www.youtube.com/watch?v=AfCXDIMPsLE",
@@ -1586,7 +1569,7 @@
       "durationSeconds": 28383,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -1600,9 +1583,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-06-28T16:37:20Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2026 | NA/EMEA | Stage 2 Week 3 Day 2",
       "url": "https://www.youtube.com/watch?v=tm8tcr2UUJM",
@@ -1615,7 +1599,7 @@
       "durationSeconds": 25657,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -1629,9 +1613,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-06-27T16:38:37Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2026 | NA/EMEA | Stage 2 Week 3 Day 1",
       "url": "https://www.youtube.com/watch?v=d9uylXw_-dE",
@@ -1644,7 +1629,7 @@
       "durationSeconds": 27361,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -1658,9 +1643,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-06-21T16:36:43Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2026 | NA/EMEA | Stage 2 Week 2 Day 2",
       "url": "https://www.youtube.com/watch?v=SA72IfyTpkE",
@@ -1673,7 +1659,7 @@
       "durationSeconds": 28697,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -1687,9 +1673,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-06-20T16:37:30Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2026 | NA/EMEA | Stage 2 Week 2 Day 1",
       "url": "https://www.youtube.com/watch?v=nHLa2dANVVE",
@@ -1702,7 +1689,7 @@
       "durationSeconds": 28455,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -1716,9 +1703,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-06-14T16:36:47Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2026 | NA/EMEA | Stage 2 Week 1 Day 2",
       "url": "https://www.youtube.com/watch?v=Z2hQctC7Jzw",
@@ -1731,7 +1719,7 @@
       "durationSeconds": 25714,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -1745,9 +1733,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-06-13T16:32:38Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2026 | NA/EMEA | Stage 2 Opening Day",
       "url": "https://www.youtube.com/watch?v=uEtw5nhdk_Q",
@@ -1760,7 +1749,7 @@
       "durationSeconds": 42373,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -1774,9 +1763,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-06-07T08:42:35Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWWC 2026 | Online Qualifiers Day 5: EMEA/AMER",
       "url": "https://www.youtube.com/watch?v=SrVV_lrHSHI",
@@ -1789,7 +1779,7 @@
       "durationSeconds": 42899,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -1803,9 +1793,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-06-06T11:42:21Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWWC 2026 | Online Qualifiers Day 4: EMEA/AMER",
       "url": "https://www.youtube.com/watch?v=WeRIASu3eIA",
@@ -1818,7 +1809,7 @@
       "durationSeconds": 37659,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -1832,9 +1823,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-05-31T11:41:32Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWWC 2026 | Online Qualifiers Day 3",
       "url": "https://www.youtube.com/watch?v=8G52yz1iXsQ",
@@ -1847,7 +1839,7 @@
       "durationSeconds": 20974,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -1861,9 +1853,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-05-31T05:47:22Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWWC 2026 | Online Qualifiers Day 3",
       "url": "https://www.youtube.com/watch?v=fEye24gKxVw",
@@ -1876,7 +1869,7 @@
       "durationSeconds": 42899,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -1890,9 +1883,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-05-30T05:34:23Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWWC 2026 | Online Qualifiers Day 2",
       "url": "https://www.youtube.com/watch?v=WP8Hhfx7jDQ",
@@ -1905,7 +1899,7 @@
       "durationSeconds": 20389,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -1919,9 +1913,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-05-29T05:46:36Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWWC 2026 | Online Qualifiers Day 1",
       "url": "https://www.youtube.com/watch?v=V2EbSwDME8M",
@@ -1934,7 +1929,7 @@
       "durationSeconds": 33100,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -1948,9 +1943,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-05-24T02:32:21Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2026 | Champions Clash Day 3",
       "url": "https://www.youtube.com/watch?v=jS8r0kqgoV4",
@@ -1963,7 +1959,7 @@
       "durationSeconds": 35152,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -1977,9 +1973,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-05-23T02:16:20Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2026 | Champions Clash Day 2",
       "url": "https://www.youtube.com/watch?v=2eaD-hKLacU",
@@ -1992,7 +1989,7 @@
       "durationSeconds": 26826,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2006,9 +2003,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-05-22T02:00:57Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2026 | Champions Clash Day 1",
       "url": "https://www.youtube.com/watch?v=m_nGAbgpHi8",
@@ -2021,7 +2019,7 @@
       "durationSeconds": 23139,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2035,9 +2033,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-04-26T13:17:46Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Collegiate Championship | Finals",
       "url": "https://www.youtube.com/watch?v=IiySuNpNFhU",
@@ -2050,7 +2049,7 @@
       "durationSeconds": 35667,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2064,9 +2063,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-04-25T12:30:36Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Collegiate Championship | Day 1",
       "url": "https://www.youtube.com/watch?v=QDDVIxCS3Mc",
@@ -2079,7 +2079,7 @@
       "durationSeconds": 24335,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2093,9 +2093,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-04-12T16:32:29Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2026 | NA/EMEA | Stage 1 Playoffs Day 3",
       "url": "https://www.youtube.com/watch?v=Q998tVE7B-w",
@@ -2108,7 +2109,7 @@
       "durationSeconds": 22581,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2122,9 +2123,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-04-11T16:31:44Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2026 | NA/EMEA | Stage 1 Playoffs Day 2",
       "url": "https://www.youtube.com/watch?v=HnFJBXRmXLk",
@@ -2137,7 +2139,7 @@
       "durationSeconds": 24105,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2151,9 +2153,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-04-10T16:31:32Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2026 | NA/EMEA | Stage 1 Playoffs Day 1",
       "url": "https://www.youtube.com/watch?v=E0xzLwD9sS0",
@@ -2166,7 +2169,7 @@
       "durationSeconds": 28484,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2180,9 +2183,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-04-05T16:31:36Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2026 | NA/EMEA | Stage 1 Week 3 Day 2",
       "url": "https://www.youtube.com/watch?v=4UUdEv86ky8",
@@ -2195,7 +2199,7 @@
       "durationSeconds": 29782,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2209,9 +2213,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-04-04T16:31:22Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2026 | NA/EMEA | Stage 1 Week 3 Day 1",
       "url": "https://www.youtube.com/watch?v=NkhPh-56KFI",
@@ -2224,7 +2229,7 @@
       "durationSeconds": 26566,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2238,9 +2243,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-03-29T16:31:54Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2026 | NA/EMEA | Stage 1 Week 2 Day 2",
       "url": "https://www.youtube.com/watch?v=WBv1DiynaOQ",
@@ -2253,7 +2259,7 @@
       "durationSeconds": 26418,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2267,9 +2273,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-03-28T16:32:05Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2026 | NA/EMEA | Stage 1 Week 2 Day 1",
       "url": "https://www.youtube.com/watch?v=8hgnhV9lqCA",
@@ -2282,7 +2289,7 @@
       "durationSeconds": 26540,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2296,9 +2303,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-03-22T16:33:04Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2026 | NA/EMEA | Stage 1 Day 2",
       "url": "https://www.youtube.com/watch?v=KCoiZ7xO1ao",
@@ -2311,7 +2319,7 @@
       "durationSeconds": 29536,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2325,9 +2333,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-03-21T16:32:42Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2026 | NA/EMEA | Stage 1 Opening Day",
       "url": "https://www.youtube.com/watch?v=tObGLXuxF34",
@@ -2340,7 +2349,7 @@
       "durationSeconds": 21470,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2354,9 +2363,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-03-15T17:45:22Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Collegiate Spring Season Playoffs 2026 Day 3",
       "url": "https://www.youtube.com/watch?v=3fcZy0ToP8s",
@@ -2369,7 +2379,7 @@
       "durationSeconds": 21281,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2383,9 +2393,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-03-14T17:57:42Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Collegiate Spring Season Playoffs 2026 Day 2",
       "url": "https://www.youtube.com/watch?v=aNHUebYwOHo",
@@ -2398,7 +2409,7 @@
       "durationSeconds": 13430,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2412,9 +2423,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-03-13T23:30:36Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Collegiate Spring Season Playoffs 2026 [Day 1]",
       "url": "https://www.youtube.com/watch?v=6FNhfLsKyMI",
@@ -2427,7 +2439,7 @@
       "durationSeconds": 29771,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2441,9 +2453,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-02-15T05:30:56Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "2026 OWCS Pre-Season Bootcamp Day-3",
       "url": "https://www.youtube.com/watch?v=9DCg7_mbC4c",
@@ -2456,7 +2469,7 @@
       "durationSeconds": 32256,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2470,9 +2483,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-02-14T05:30:41Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "2026 OWCS Pre-Season Bootcamp Day-2",
       "url": "https://www.youtube.com/watch?v=J9g82a93O8Y",
@@ -2485,7 +2499,7 @@
       "durationSeconds": 27641,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2499,9 +2513,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-02-13T05:32:08Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "2026 OWCS Pre-Season Bootcamp Day-1",
       "url": "https://www.youtube.com/watch?v=ly-JP0ayjdU",
@@ -2514,7 +2529,7 @@
       "durationSeconds": 35937,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2528,9 +2543,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2026-02-08T18:49:29Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] FACEIT League Season 7 - Master Division Playoffs",
       "url": "https://www.youtube.com/watch?v=uXYKInwf1z4",
@@ -2543,7 +2559,7 @@
       "durationSeconds": 20453,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2557,9 +2573,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-12-14T18:46:22Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Calling All Heroes 2025: Championship | Finals",
       "url": "https://www.youtube.com/watch?v=0ewSCtCYSNY",
@@ -2572,7 +2589,7 @@
       "durationSeconds": 17370,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2586,9 +2603,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-12-13T18:49:53Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Calling All Heroes 2025: Championship | Day 3",
       "url": "https://www.youtube.com/watch?v=XY77sT0Cc2s",
@@ -2601,7 +2619,7 @@
       "durationSeconds": 20197,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2615,9 +2633,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-12-07T18:37:47Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Calling All Heroes 2025: Championship | Day 2",
       "url": "https://www.youtube.com/watch?v=aJZEKFUXYlM",
@@ -2630,7 +2649,7 @@
       "durationSeconds": 5058,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2644,9 +2663,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-12-07T00:36:30Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Calling All Heroes 2025: Championship | Day 1",
       "url": "https://www.youtube.com/watch?v=LZhD2lp6Hgg",
@@ -2659,7 +2679,7 @@
       "durationSeconds": 20937,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2673,9 +2693,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-12-06T18:45:52Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Calling All Heroes 2025: Championship | Day 1",
       "url": "https://www.youtube.com/watch?v=68h59ArOiXo",
@@ -2688,7 +2709,7 @@
       "durationSeconds": 27485,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2702,9 +2723,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-11-30T20:00:15Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] [REBROADCAST] 2025 OWCS World Finals - Day 5",
       "url": "https://www.youtube.com/watch?v=51QZTfBduSY",
@@ -2717,7 +2739,7 @@
       "durationSeconds": 27492,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2731,9 +2753,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-11-30T09:32:49Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | World Finals | Day 5",
       "url": "https://www.youtube.com/watch?v=oWNXeN_erD0",
@@ -2746,7 +2769,7 @@
       "durationSeconds": 33613,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2760,9 +2783,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-11-29T21:00:05Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] [REBROADCAST] 2025 OWCS World Finals - Day 4",
       "url": "https://www.youtube.com/watch?v=ZbfgFp8mi-s",
@@ -2775,7 +2799,7 @@
       "durationSeconds": 33495,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2789,9 +2813,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-11-29T09:33:05Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | World Finals | Day 4",
       "url": "https://www.youtube.com/watch?v=m-tlVHvl15E",
@@ -2804,7 +2829,7 @@
       "durationSeconds": 29919,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2818,9 +2843,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-11-28T21:00:27Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] [REBROADCAST] 2025 OWCS World Finals - Day 3",
       "url": "https://www.youtube.com/watch?v=_D2MNjrkPVQ",
@@ -2833,7 +2859,7 @@
       "durationSeconds": 29877,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-08-26T13:40:09+00:00",
+      "lastSeenAt": "2026-08-26T18:15:03+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2847,9 +2873,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-11-28T10:32:25Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | World Finals | Day 3",
       "url": "https://www.youtube.com/watch?v=MLg4m1hwWrs",
@@ -2876,9 +2903,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-11-27T20:00:44Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] [REBROADCAST] 2025 OWCS World Finals - Day 2",
       "url": "https://www.youtube.com/watch?v=Y5FqtpdEwjc",
@@ -2905,9 +2933,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-11-27T10:32:09Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] 2025 OWCS World Finals - Day 2",
       "url": "https://www.youtube.com/watch?v=oPmT0PIFlZ0",
@@ -2934,9 +2963,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-11-26T10:32:04Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] 2025 OWCS World Finals - Day 1",
       "url": "https://www.youtube.com/watch?v=-HFNCpEMXcU",
@@ -2963,9 +2993,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-11-16T18:40:33Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Collegiate Homecoming 2025 [FINALS]",
       "url": "https://www.youtube.com/watch?v=k7Wa3FaIH_Q",
@@ -2992,9 +3023,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-11-15T18:42:08Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Collegiate Homecoming 2025 [Day 3]",
       "url": "https://www.youtube.com/watch?v=JNQhY0nODqY",
@@ -3021,9 +3053,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-11-09T18:41:10Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Collegiate Homecoming 2025 [Day 2]",
       "url": "https://www.youtube.com/watch?v=DaafD8PMpio",
@@ -3050,9 +3083,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-11-08T18:48:33Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Collegiate Homecoming 2025 [Day 1]",
       "url": "https://www.youtube.com/watch?v=wRLVFGV5f6s",
@@ -3079,9 +3113,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-11-01T23:45:58Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Calling All Heroes 2025: LCQ Finals",
       "url": "https://www.youtube.com/watch?v=utUNnBbwtFY",
@@ -3108,9 +3143,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-10-26T16:33:06Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | NA & EMEA | Stage 3 Playoffs Day 4",
       "url": "https://www.youtube.com/watch?v=OgC6iLkRxqI",
@@ -3137,9 +3173,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-10-26T05:31:02Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "2025 Overwatch Champions Series ASIA Road to World Finals (OWCS ASIA) Day 3",
       "url": "https://www.youtube.com/watch?v=fzTZEFtUawc",
@@ -3166,9 +3203,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-10-25T16:32:46Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | NA & EMEA | Stage 3 Playoffs Day 3",
       "url": "https://www.youtube.com/watch?v=3i4IV1P7axI",
@@ -3195,9 +3233,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-10-25T05:31:38Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "2025 Overwatch Champions Series ASIA Road to World Finals (OWCS ASIA) Day 2",
       "url": "https://www.youtube.com/watch?v=P5xElCPI6nQ",
@@ -3224,9 +3263,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-10-24T23:48:49Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Calling All Heroes 2025: LCQ Day 1",
       "url": "https://www.youtube.com/watch?v=zlJJJpw8UXc",
@@ -3253,9 +3293,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-10-24T05:31:42Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "2025 Overwatch Champions Series ASIA Road to World Finals (OWCS ASIA) Day 1",
       "url": "https://www.youtube.com/watch?v=o50ZBAHfFWk",
@@ -3282,9 +3323,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-10-19T16:33:07Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | NA & EMEA | Stage 3 Playoffs Day 2",
       "url": "https://www.youtube.com/watch?v=ttiIZD3gYrM",
@@ -3311,9 +3353,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-10-18T16:32:57Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | NA & EMEA | Stage 3 Playoffs Day 1",
       "url": "https://www.youtube.com/watch?v=R9lXX2ejLvs",
@@ -3340,9 +3383,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-10-12T16:32:53Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | NA & EMEA | Stage 3 Week 6 Day 2",
       "url": "https://www.youtube.com/watch?v=oqqrGSQB5WY",
@@ -3369,9 +3413,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-10-11T16:33:26Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | NA & EMEA | Stage 3 Week 6 Day 1",
       "url": "https://www.youtube.com/watch?v=AeR9I6CmxOc",
@@ -3398,9 +3443,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-10-05T16:33:23Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | NA & EMEA | Stage 3 Week 5 Day 2",
       "url": "https://www.youtube.com/watch?v=_V5sZ1XMZ_c",
@@ -3427,9 +3473,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-10-04T16:32:49Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | NA & EMEA | Stage 3 Week 5 Day 1",
       "url": "https://www.youtube.com/watch?v=1Kt8pqv8eGs",
@@ -3456,9 +3503,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-09-28T16:33:46Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | NA & EMEA | Stage 3 Week 4 Day 2",
       "url": "https://www.youtube.com/watch?v=OTFTBP-NiEU",
@@ -3485,9 +3533,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-09-27T16:33:31Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | NA & EMEA | Stage 3 Week 4 Day 1",
       "url": "https://www.youtube.com/watch?v=f7v_MfMvOws",
@@ -3514,9 +3563,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-09-21T16:33:45Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | NA & EMEA | Stage 3 Week 3 Day 2",
       "url": "https://www.youtube.com/watch?v=1VlxLEzpj2g",
@@ -3543,9 +3593,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-09-20T16:34:27Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | NA & EMEA | Stage 3 Week 3 Day 1",
       "url": "https://www.youtube.com/watch?v=DHAHJ-cr9-4",
@@ -3572,9 +3623,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-09-17T23:48:18Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Calling All Heroes 2025: Summer Stage Finals",
       "url": "https://www.youtube.com/watch?v=lg9jT1V9FGE",
@@ -3601,9 +3653,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-09-14T16:33:06Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | NA & EMEA | Stage 3 Week 2 Day 2",
       "url": "https://www.youtube.com/watch?v=yrbAirTRWyI",
@@ -3630,9 +3683,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-09-13T16:43:31Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | NA & EMEA | Stage 3 Week 2 Day 1",
       "url": "https://www.youtube.com/watch?v=M5H8zEUHXqU",
@@ -3659,9 +3713,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-09-10T23:48:14Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Calling All Heroes 2025: Summer Stage Playoffs Day 2",
       "url": "https://www.youtube.com/watch?v=YrJ3yjDeDOA",
@@ -3688,9 +3743,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-09-07T16:32:47Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | NA & EMEA | Stage 3 Week 1 Day 2",
       "url": "https://www.youtube.com/watch?v=V41Nx0GSGSA",
@@ -3717,9 +3773,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-09-06T16:33:51Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | NA & EMEA | Stage 3 Opening Day",
       "url": "https://www.youtube.com/watch?v=PAX7-BTPaEQ",
@@ -3746,9 +3803,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-09-03T23:50:48Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Calling All Heroes 2025: Summer Stage Playoffs Day 1",
       "url": "https://www.youtube.com/watch?v=OTzxbKloE_Y",
@@ -3775,9 +3833,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-08-03T12:00:56Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | Midseason Championship at EWC | Final Day",
       "url": "https://www.youtube.com/watch?v=ncbbj2CvK0M",
@@ -3804,42 +3863,14 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-08-02T12:00:46Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | Midseason Championship at EWC | Day 3",
       "url": "https://www.youtube.com/watch?v=EJDnqViPgqA",
       "videoId": "EJDnqViPgqA"
-    },
-    {
-      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
-      "channelRegistryId": "ow_esports_global",
-      "channelTitle": "ow_esports_global",
-      "durationSeconds": 36311,
-      "firstSeenAt": "2026-08-25T21:20:04+00:00",
-      "job": null,
-      "lastSeenAt": "2026-08-26T00:27:15+00:00",
-      "likeness": {
-        "confidence": "likely",
-        "reasons": [
-          "long-form: 605m of runtime is longer than any promo, clip or cutdown \u2014 considered a broadcast regardless of what the title says",
-          "+25 livestream metadata (completed)",
-          "+20 substantial duration (36311s)",
-          "+15 tournament/broadcast terminology in title/description"
-        ],
-        "refusalReason": null,
-        "refused": false,
-        "score": 60
-      },
-      "liveBroadcastStatus": "completed",
-      "publishedAt": null,
-      "sources": [
-        "streams"
-      ],
-      "title": "[DROPS] OWCS 2025 | Midseason Championship Day 2 [A Stream]",
-      "url": "https://www.youtube.com/watch?v=8Pdh-LYuPEI",
-      "videoId": "8Pdh-LYuPEI"
     },
     {
       "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
@@ -3862,13 +3893,44 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-08-01T12:21:37Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | Midseason Championship Day 2 [B Stream]",
       "url": "https://www.youtube.com/watch?v=o-_Lp79YFj8",
       "videoId": "o-_Lp79YFj8"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 36311,
+      "firstSeenAt": "2026-08-25T21:20:04+00:00",
+      "job": null,
+      "lastSeenAt": "2026-08-26T00:27:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "long-form: 605m of runtime is longer than any promo, clip or cutdown \u2014 considered a broadcast regardless of what the title says",
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (36311s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "refusalReason": null,
+        "refused": false,
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": "2025-08-01T12:03:16Z",
+      "sources": [
+        "streams",
+        "youtube-api"
+      ],
+      "title": "[DROPS] OWCS 2025 | Midseason Championship Day 2 [A Stream]",
+      "url": "https://www.youtube.com/watch?v=8Pdh-LYuPEI",
+      "videoId": "8Pdh-LYuPEI"
     },
     {
       "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
@@ -3891,9 +3953,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-07-31T12:17:01Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | Midseason Championship Day 1 [B Stream]",
       "url": "https://www.youtube.com/watch?v=sluRRwitd4s",
@@ -3920,9 +3983,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-07-31T11:59:11Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | Midseason Championship Day 1 [A Stream]",
       "url": "https://www.youtube.com/watch?v=2kGe0otzk4w",
@@ -3949,9 +4013,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-07-19T11:30:26Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2025 | MSC Last Chance Qualifier Day 3",
       "url": "https://www.youtube.com/watch?v=tt1FEjprjhM",
@@ -3978,9 +4043,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-07-18T12:36:19Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2025 | MSC Last Chance Qualifier Day 2",
       "url": "https://www.youtube.com/watch?v=wSjpuGNU-iA",
@@ -4007,9 +4073,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-07-17T11:27:51Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2025 | MSC Last Chance Qualifier Day 1",
       "url": "https://www.youtube.com/watch?v=2RE8U8Copu0",
@@ -4036,9 +4103,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-07-13T16:34:02Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2025 | Stage 2 Promotion/Relegation Tournament",
       "url": "https://www.youtube.com/watch?v=rscEE7bNCF0",
@@ -4065,9 +4133,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-07-06T18:09:46Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] FACEIT League Season 5 - Master Division Playoffs Day 2",
       "url": "https://www.youtube.com/watch?v=3FdzilsfbZY",
@@ -4094,9 +4163,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-07-05T16:37:06Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] FACEIT League Season 5 - Master Division Playoffs Day 1",
       "url": "https://www.youtube.com/watch?v=pYHTPQd_9Qw",
@@ -4123,9 +4193,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-06-29T16:33:02Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 2 Playoffs Day 4",
       "url": "https://www.youtube.com/watch?v=LRh0S9g_1Vc",
@@ -4152,9 +4223,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-06-28T16:36:32Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 2 Playoffs Day 3",
       "url": "https://www.youtube.com/watch?v=zMQ70vf8OEE",
@@ -4181,9 +4253,10 @@
         "score": 35
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-06-26T16:42:46Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[Rerun] Overwatch 2 Stadium Asia Streamer Showdown",
       "url": "https://www.youtube.com/watch?v=Sh2mgXorFMk",
@@ -4210,9 +4283,10 @@
         "score": 35
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-06-26T09:31:42Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch 2 Stadium Asia Streamer Showdown",
       "url": "https://www.youtube.com/watch?v=SzQEoQgNjRo",
@@ -4239,9 +4313,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-06-22T16:32:47Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | EMEA & NA | Playoffs Day 2",
       "url": "https://www.youtube.com/watch?v=4p9WsqAVkl8",
@@ -4268,9 +4343,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-06-22T07:30:55Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "2025 Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs Day 3 [Grand Finals]",
       "url": "https://www.youtube.com/watch?v=91Z5vrPZfm0",
@@ -4297,9 +4373,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-06-21T16:32:11Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 2 Playoffs Day 1",
       "url": "https://www.youtube.com/watch?v=RXNXeT1Shos",
@@ -4326,9 +4403,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-06-21T07:30:46Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "2025 Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs Day 2 [Semi Finals]",
       "url": "https://www.youtube.com/watch?v=6STpOXLwZf8",
@@ -4355,9 +4433,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-06-20T07:30:36Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "2025 Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs Day 1 [Round of 6]",
       "url": "https://www.youtube.com/watch?v=fJrJU4ETxGs",
@@ -4384,9 +4463,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-06-15T16:32:26Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 2 Week 6 Day 2",
       "url": "https://www.youtube.com/watch?v=2nHcIUad-5A",
@@ -4413,9 +4493,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-06-14T16:33:51Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 2 Week 6 Day 1",
       "url": "https://www.youtube.com/watch?v=7JKZXjz5aQc",
@@ -4442,9 +4523,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-06-11T23:45:13Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Calling All Heroes 2025: Spring Stage Finals",
       "url": "https://www.youtube.com/watch?v=YB0gK0OntuU",
@@ -4471,9 +4553,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-06-08T16:37:06Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 2 Week 5 Day 2",
       "url": "https://www.youtube.com/watch?v=ozAZH-PvFlc",
@@ -4500,9 +4583,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-06-07T16:34:01Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 2 Week 5 Day 1",
       "url": "https://www.youtube.com/watch?v=hGiQcAnmzXg",
@@ -4529,9 +4613,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-06-04T23:44:50Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Calling All Heroes 2025: Spring Stage Playoffs Day 2",
       "url": "https://www.youtube.com/watch?v=bwpX0zsf95g",
@@ -4558,9 +4643,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-06-01T16:32:11Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 2 Week 4 Day 2",
       "url": "https://www.youtube.com/watch?v=XM_ZhJAJnII",
@@ -4587,9 +4673,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-05-31T16:36:11Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 2 Week 4 Day 1",
       "url": "https://www.youtube.com/watch?v=tb8lYU47X7A",
@@ -4616,9 +4703,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-05-28T23:50:20Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Calling All Heroes 2025: Spring Stage Playoffs Day 1",
       "url": "https://www.youtube.com/watch?v=651q5ysZV28",
@@ -4645,9 +4733,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-05-25T16:34:06Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 2 Week 3 Day 2",
       "url": "https://www.youtube.com/watch?v=NPzF0Enbmf0",
@@ -4674,9 +4763,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-05-24T16:34:01Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 2 Week 3 Day 1",
       "url": "https://www.youtube.com/watch?v=J2m3kJCoNzM",
@@ -4703,9 +4793,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-05-18T16:33:32Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 2 Week 2 Day 2",
       "url": "https://www.youtube.com/watch?v=aSAnxFJiU-M",
@@ -4732,9 +4823,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-05-17T16:34:16Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 2 Week 2 Day 1",
       "url": "https://www.youtube.com/watch?v=MlK6aXSZCYQ",
@@ -4761,9 +4853,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-05-11T16:34:56Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 2 Week 1 Day 2",
       "url": "https://www.youtube.com/watch?v=HN7N52JYOBA",
@@ -4790,9 +4883,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-05-10T16:33:41Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 2 Week 1 Day 1",
       "url": "https://www.youtube.com/watch?v=2cQVf-tNHfQ",
@@ -4820,9 +4914,10 @@
         "score": 75
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-05-06T18:34:11Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "100 Soldiers vs. 1 Gorilla | Overwatch 2 Showmatch",
       "url": "https://www.youtube.com/watch?v=00mQP9D3DXk",
@@ -4849,9 +4944,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-04-20T04:02:36Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | Champions Clash Day 3",
       "url": "https://www.youtube.com/watch?v=WzqiOFig1DA",
@@ -4878,9 +4974,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-04-19T04:28:11Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | Champions Clash Day 2",
       "url": "https://www.youtube.com/watch?v=8wbAE3pIj2o",
@@ -4907,9 +5004,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-04-18T04:19:56Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | Champions Clash Day 1",
       "url": "https://www.youtube.com/watch?v=z6zeAoVkOjM",
@@ -4936,9 +5034,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-04-13T16:51:20Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2025 Stage 1 Promotion/Relegation",
       "url": "https://www.youtube.com/watch?v=cTkI9hAwNDc",
@@ -4965,9 +5064,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-04-06T14:42:05Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "FACEIT League Season 4 Master Division Finals | OWCS Relegation Qualifier",
       "url": "https://www.youtube.com/watch?v=9qtbteXyX4c",
@@ -4994,9 +5094,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-03-16T07:31:42Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "2025 Overwatch Champions Series ASIA Stage1 (OWCS ASIA) Playoffs Day 3",
       "url": "https://www.youtube.com/watch?v=MRD6Dk9A6-c",
@@ -5023,9 +5124,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-03-15T07:31:42Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "2025 Overwatch Champions Series ASIA Stage1 (OWCS ASIA) Playoffs Day 2",
       "url": "https://www.youtube.com/watch?v=aEPeG5DwGwk",
@@ -5052,9 +5154,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-03-14T07:33:28Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "2025 Overwatch Champions Series ASIA Stage1 (OWCS ASIA) Playoffs Day 1",
       "url": "https://www.youtube.com/watch?v=rd12-oRNsPo",
@@ -5081,9 +5184,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-03-09T16:46:36Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 1 Playoffs Day 4",
       "url": "https://www.youtube.com/watch?v=K2wLJbpK_GY",
@@ -5110,9 +5214,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-03-08T17:31:01Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 1 Playoffs Day 3",
       "url": "https://www.youtube.com/watch?v=AEFrmDOC6hg",
@@ -5139,9 +5244,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-03-02T17:32:51Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 1 Playoffs Day 2",
       "url": "https://www.youtube.com/watch?v=G6pRLS5RkHY",
@@ -5168,9 +5274,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-03-02T07:30:57Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "2025 Overwatch Champions Series KOREA Stage1 (OWCS KOREA) Playoffs Day 3 [Grand Finals]",
       "url": "https://www.youtube.com/watch?v=V42xhZK4GNQ",
@@ -5197,9 +5304,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-03-01T17:35:11Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 1 Playoffs Day 1",
       "url": "https://www.youtube.com/watch?v=rncfvRkkWRo",
@@ -5226,9 +5334,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-03-01T07:31:46Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "2025 Overwatch Champions Series KOREA Stage1 (OWCS KOREA) Playoffs Day 2 [Semi Finals]",
       "url": "https://www.youtube.com/watch?v=usRILx8AEBk",
@@ -5255,9 +5364,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-02-28T07:31:08Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "2025 Overwatch Champions Series KOREA Stage1 (OWCS KOREA) Playoffs Day 1 [Round of 6]",
       "url": "https://www.youtube.com/watch?v=AY3qgCKyE8w",
@@ -5284,9 +5394,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-02-23T17:31:44Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 1 Week 4 Day 3",
       "url": "https://www.youtube.com/watch?v=xsJAYYKqtEo",
@@ -5313,9 +5424,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-02-22T17:31:11Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 1 Week 4 Day 2",
       "url": "https://www.youtube.com/watch?v=EiZ3YjBtwzE",
@@ -5342,9 +5454,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-02-21T17:38:51Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 1 Week 4 Day 1",
       "url": "https://www.youtube.com/watch?v=w-KjMkod1sw",
@@ -5371,9 +5484,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-02-16T17:33:26Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 1 Week 3 Day 3",
       "url": "https://www.youtube.com/watch?v=2Ah2PG8UsEg",
@@ -5400,9 +5514,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-02-15T17:59:42Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 1 Week 3 Day 2",
       "url": "https://www.youtube.com/watch?v=yHaF0eLkLhU",
@@ -5429,9 +5544,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-02-14T17:16:37Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 1 Week 3 Day 1",
       "url": "https://www.youtube.com/watch?v=guRQNjwYVcE",
@@ -5458,9 +5574,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-02-09T17:30:14Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 1 Week 2 Day 3",
       "url": "https://www.youtube.com/watch?v=iEDUQ7AECbA",
@@ -5487,9 +5604,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-02-08T17:30:24Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 1 Week 2 Day 2",
       "url": "https://www.youtube.com/watch?v=6YwiiOP_TvI",
@@ -5516,9 +5634,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-02-07T17:30:13Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 1 Week 2 Day 1",
       "url": "https://www.youtube.com/watch?v=S9szrVmVlFU",
@@ -5545,9 +5664,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-02-02T17:30:20Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 1 Week 1 Day 3",
       "url": "https://www.youtube.com/watch?v=NugogHdAL74",
@@ -5574,9 +5694,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-02-01T17:30:22Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 1 Week 1 Day 2",
       "url": "https://www.youtube.com/watch?v=4pS2ysxFCTU",
@@ -5603,9 +5724,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-01-31T17:31:32Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] OWCS 2025 | EMEA & NA | Stage 1 Week 1 Day 1",
       "url": "https://www.youtube.com/watch?v=rdvjIDUCwWw",
@@ -5632,9 +5754,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-01-12T18:41:54Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Calling All Heroes: Championship Finals 2024-25 Day 4",
       "url": "https://www.youtube.com/watch?v=2HPieCMDwtk",
@@ -5661,9 +5784,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-01-11T18:42:19Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Calling All Heroes: Championship 2024-25 Day 3",
       "url": "https://www.youtube.com/watch?v=3578U0oAhaY",
@@ -5690,9 +5814,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-01-11T00:46:09Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Calling All Heroes: Championship 2024-25 Day 2",
       "url": "https://www.youtube.com/watch?v=W6TUVdWsZvU",
@@ -5719,9 +5844,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-01-10T00:51:29Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Calling All Heroes: Championship 2024-25 Day 1",
       "url": "https://www.youtube.com/watch?v=l2ExFIDS_rA",
@@ -5748,9 +5874,10 @@
         "score": 35
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2025-01-05T18:50:23Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Calling All Heroes: LCQ & Rising Spotlight 2024-25",
       "url": "https://www.youtube.com/watch?v=I4cJkq2rF_A",
@@ -5777,9 +5904,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-12-15T18:44:02Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Calling All Heroes: Major 3 2024-25 [Day 2 - Finals]",
       "url": "https://www.youtube.com/watch?v=rFgJWeFL4ts",
@@ -5806,9 +5934,10 @@
         "score": 35
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-12-14T18:45:53Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Calling All Heroes: Major 3 2024-25 [Day1]",
       "url": "https://www.youtube.com/watch?v=zyyvgEbtSdc",
@@ -5835,9 +5964,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-11-24T10:31:30Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] 2024 OWCS World Finals - Day 3",
       "url": "https://www.youtube.com/watch?v=U-lvfWuVEMU",
@@ -5864,9 +5994,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-11-23T09:44:31Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] 2024 OWCS World Finals - Day 2",
       "url": "https://www.youtube.com/watch?v=LLuwGfq8VWg",
@@ -5893,9 +6024,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-11-22T09:27:56Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "[DROPS] 2024 OWCS World Finals - Day 1",
       "url": "https://www.youtube.com/watch?v=7MgRxlMJMFA",
@@ -5922,9 +6054,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-11-17T18:43:47Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Collegiate Homecoming 2024 [Finals]",
       "url": "https://www.youtube.com/watch?v=tGUQuEGOzeU",
@@ -5951,9 +6084,10 @@
         "score": 35
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-11-16T18:45:23Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Collegiate Homecoming 2024 [Day 4]",
       "url": "https://www.youtube.com/watch?v=UXZLrSfTnCk",
@@ -5980,9 +6114,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-11-10T18:45:45Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Collegiate Homecoming 2024 [Day 3]",
       "url": "https://www.youtube.com/watch?v=WVyadVHKkkk",
@@ -6009,9 +6144,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-11-09T18:45:17Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Collegiate Homecoming 2024 [Day 2]",
       "url": "https://www.youtube.com/watch?v=m3Yj-YVBQNw",
@@ -6038,9 +6174,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-11-03T18:50:13Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Calling All Heroes: Minor 3 2024-25 [Day 2 - Finals]",
       "url": "https://www.youtube.com/watch?v=8S94RFMnIs0",
@@ -6067,9 +6204,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-11-03T18:44:47Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Collegiate Homecoming 2024 [Day 1]",
       "url": "https://www.youtube.com/watch?v=rnJ8bNJaj0o",
@@ -6096,9 +6234,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-11-02T17:51:48Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Calling All Heroes: Minor 3 2024-25 [Day 1]",
       "url": "https://www.youtube.com/watch?v=WbcHkM1GQfY",
@@ -6125,9 +6264,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-10-13T16:50:40Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2024 | EMEA & NA Stage 4 - Main Event Day 4",
       "url": "https://www.youtube.com/watch?v=qsmVdc_gjh0",
@@ -6154,9 +6294,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-10-12T15:47:46Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2024 | EMEA & NA Stage 4 - Main Event Day 3",
       "url": "https://www.youtube.com/watch?v=Ywz77n34FSU",
@@ -6183,9 +6324,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-10-11T15:49:46Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2024 | EMEA & NA Stage 4 - Main Event Day 2",
       "url": "https://www.youtube.com/watch?v=QZ2smyBUH48",
@@ -6212,9 +6354,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-10-10T15:49:06Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2024 | EMEA & NA Stage 4 - Main Event Day 1",
       "url": "https://www.youtube.com/watch?v=gOrK9N5WUlU",
@@ -6241,9 +6384,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-10-06T15:45:59Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2024 | EMEA & NA Stage 4 - Groups Day 5",
       "url": "https://www.youtube.com/watch?v=NXG4sBdErF0",
@@ -6270,9 +6414,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-10-05T15:50:46Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2024 | EMEA & NA Stage 4 - Groups Day 4",
       "url": "https://www.youtube.com/watch?v=wejDGwKQZus",
@@ -6299,9 +6444,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-10-05T07:32:57Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series ASIA Stage2 (OWCS ASIA) Grand Finals",
       "url": "https://www.youtube.com/watch?v=tTwn8XpBRyU",
@@ -6328,9 +6474,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-09-29T15:49:52Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2024 | EMEA & NA Stage 4 - Groups Day 3",
       "url": "https://www.youtube.com/watch?v=fH8bSXyfvAI",
@@ -6357,9 +6504,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-09-29T05:32:57Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series ASIA Stage2 (OWCS ASIA) Day 3",
       "url": "https://www.youtube.com/watch?v=AC7YPpEh0MQ",
@@ -6386,9 +6534,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-09-28T15:55:11Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2024 | EMEA & NA Stage 4 - Groups Day 2",
       "url": "https://www.youtube.com/watch?v=KEivgi12a9w",
@@ -6415,9 +6564,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-09-28T05:34:27Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series ASIA Stage2 (OWCS ASIA) Day 2",
       "url": "https://www.youtube.com/watch?v=WJZ83B43b5I",
@@ -6444,9 +6594,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-09-27T05:37:27Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series ASIA Stage2 (OWCS ASIA) Day 1",
       "url": "https://www.youtube.com/watch?v=5-yV2xt1zyY",
@@ -6473,9 +6624,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-09-15T17:52:41Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Calling All Heroes: Minor 2 2024-25 [Day 2 - Finals]",
       "url": "https://www.youtube.com/watch?v=46pVgaV5N2o",
@@ -6502,9 +6654,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-09-15T07:31:22Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs Day 3 [Grand Finals]",
       "url": "https://www.youtube.com/watch?v=9W27qI06RFU",
@@ -6531,9 +6684,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-09-15T03:31:17Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Grand Finals",
       "url": "https://www.youtube.com/watch?v=SWItY0RnCnk",
@@ -6560,9 +6714,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-09-14T17:49:14Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Calling All Heroes: Minor 2 2024-25 [Day 1]",
       "url": "https://www.youtube.com/watch?v=tsgmLHINVTI",
@@ -6589,9 +6744,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-09-13T08:32:48Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series stage 2 ASIA (OWCS ASIA) WILDCARD",
       "url": "https://www.youtube.com/watch?v=GAf5Oh8z580",
@@ -6618,9 +6774,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-09-11T09:32:46Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Playoffs Day 2",
       "url": "https://www.youtube.com/watch?v=f3UmTCUVaYk",
@@ -6647,9 +6804,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-09-10T09:32:06Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Playoffs Day 1",
       "url": "https://www.youtube.com/watch?v=4fEGj8bkVdM",
@@ -6677,9 +6835,10 @@
         "score": 75
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-09-09T11:37:26Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) LCQ Game 3",
       "url": "https://www.youtube.com/watch?v=4PnkT6U7dhI",
@@ -6706,9 +6865,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-09-08T07:31:52Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs Day 2 [Semifinals]",
       "url": "https://www.youtube.com/watch?v=Aeneus1iksg",
@@ -6735,9 +6895,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-09-07T07:35:32Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Playoffs Day 1 [Quarterfinals]",
       "url": "https://www.youtube.com/watch?v=2mI_xhm6DFE",
@@ -6764,13 +6925,44 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-09-05T09:42:52Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series PACIFIC Stage2 (OWCS PACIFIC) Week 5",
       "url": "https://www.youtube.com/watch?v=5t-dV_vUKfY",
       "videoId": "5t-dV_vUKfY"
+    },
+    {
+      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+      "channelRegistryId": "ow_esports_global",
+      "channelTitle": "ow_esports_global",
+      "durationSeconds": 20573,
+      "firstSeenAt": "2026-08-25T21:20:04+00:00",
+      "job": null,
+      "lastSeenAt": "2026-08-26T00:27:15+00:00",
+      "likeness": {
+        "confidence": "likely",
+        "reasons": [
+          "long-form: 342m of runtime is longer than any promo, clip or cutdown \u2014 considered a broadcast regardless of what the title says",
+          "+25 livestream metadata (completed)",
+          "+20 substantial duration (20573s)",
+          "+15 tournament/broadcast terminology in title/description"
+        ],
+        "refusalReason": null,
+        "refused": false,
+        "score": 60
+      },
+      "liveBroadcastStatus": "completed",
+      "publishedAt": "2024-09-04T09:39:34Z",
+      "sources": [
+        "streams",
+        "youtube-api"
+      ],
+      "title": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 4 Day 3",
+      "url": "https://www.youtube.com/watch?v=Dmp0TOC1WFU",
+      "videoId": "Dmp0TOC1WFU"
     },
     {
       "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
@@ -6793,9 +6985,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-09-03T09:33:42Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 4 Day 2",
       "url": "https://www.youtube.com/watch?v=by4M5mIM6rw",
@@ -6822,9 +7015,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-09-02T09:37:32Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 4 Day 1",
       "url": "https://www.youtube.com/watch?v=hbEPzaE1h_Y",
@@ -6851,9 +7045,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-09-01T16:46:12Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2024 | EMEA & NA Stage 3 - Main Event Day 4",
       "url": "https://www.youtube.com/watch?v=DEDUZlLe54E",
@@ -6880,9 +7075,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-09-01T07:31:47Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 4 Day 3",
       "url": "https://www.youtube.com/watch?v=eYWRfOVOgyk",
@@ -6909,9 +7105,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-08-31T15:45:36Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2024 | EMEA & NA Stage 3 - Main Event Day 3",
       "url": "https://www.youtube.com/watch?v=BBJHHE8q1Ho",
@@ -6938,9 +7135,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-08-31T07:33:37Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 4 Day 2",
       "url": "https://www.youtube.com/watch?v=ZACBXrBbVkE",
@@ -6967,9 +7165,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-08-30T15:46:15Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2024 | EMEA & NA Stage 3 - Main Event Day 2",
       "url": "https://www.youtube.com/watch?v=tnfAwsor0AY",
@@ -6996,9 +7195,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-08-30T07:33:07Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 4 Day 1",
       "url": "https://www.youtube.com/watch?v=RzqmO7jJPd8",
@@ -7025,9 +7225,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-08-29T15:46:29Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2024 | EMEA & NA Stage 3 - Main Event Day 1",
       "url": "https://www.youtube.com/watch?v=BlvI88Hgg4g",
@@ -7054,9 +7255,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-08-29T09:31:52Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series PACIFIC Stage2 (OWCS PACIFIC) Week 4",
       "url": "https://www.youtube.com/watch?v=bgDOEEhbYik",
@@ -7083,9 +7285,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-08-28T07:35:51Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 3 Day 3",
       "url": "https://www.youtube.com/watch?v=saSBVHKY2y8",
@@ -7112,9 +7315,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-08-27T09:33:51Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 3 Day 2",
       "url": "https://www.youtube.com/watch?v=-vtAeblc66E",
@@ -7141,9 +7345,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-08-26T09:35:37Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 3 Day 1",
       "url": "https://www.youtube.com/watch?v=xmhYf8DEmGw",
@@ -7170,9 +7375,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-08-25T15:46:02Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2024 | EMEA & NA Stage 3 - Groups Day 5",
       "url": "https://www.youtube.com/watch?v=Bu79ap3JB-I",
@@ -7199,9 +7405,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-08-25T05:31:07Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 3 Day 3",
       "url": "https://www.youtube.com/watch?v=wPtD-tWumu8",
@@ -7228,9 +7435,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-08-24T15:46:22Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2024 | EMEA & NA Stage 3 - Groups Day 4",
       "url": "https://www.youtube.com/watch?v=er4CyZ-TYeM",
@@ -7257,9 +7465,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-08-24T07:35:27Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 3 Day 2",
       "url": "https://www.youtube.com/watch?v=zKOx1WTPwEQ",
@@ -7286,9 +7495,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-08-23T07:32:37Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 3 Day 1",
       "url": "https://www.youtube.com/watch?v=zHPB0UbbXVo",
@@ -7315,9 +7525,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-08-22T09:30:22Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series PACIFIC Stage2 (OWCS PACIFIC) Week 3",
       "url": "https://www.youtube.com/watch?v=tC52jkizbnk",
@@ -7344,9 +7555,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-08-21T09:37:06Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 2 Day 3",
       "url": "https://www.youtube.com/watch?v=5UwN-fHHgDw",
@@ -7373,9 +7585,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-08-20T09:39:31Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 2 Day 2",
       "url": "https://www.youtube.com/watch?v=Su0vrvYj5XE",
@@ -7402,9 +7615,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-08-19T09:33:56Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 2 Day 1",
       "url": "https://www.youtube.com/watch?v=DOkb_iLF0uo",
@@ -7431,9 +7645,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-08-18T15:46:10Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2024 | EMEA & NA Stage 3 - Groups Day 3",
       "url": "https://www.youtube.com/watch?v=HLgVyTFfbvo",
@@ -7460,9 +7675,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-08-18T07:34:02Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 2 Day 3",
       "url": "https://www.youtube.com/watch?v=cGHH1ZQ_Ork",
@@ -7489,9 +7705,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-08-17T15:46:28Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2024 | EMEA & NA Stage 3 - Groups Day 2",
       "url": "https://www.youtube.com/watch?v=hu6O_k60EDM",
@@ -7518,9 +7735,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-08-17T07:36:47Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 2 Day 2",
       "url": "https://www.youtube.com/watch?v=9_mzkLYlpxU",
@@ -7547,9 +7765,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-08-16T07:38:46Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 2 Day 1",
       "url": "https://www.youtube.com/watch?v=F_hcb6fH-FY",
@@ -7576,9 +7795,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-08-15T09:31:07Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series PACIFIC Stage2 (OWCS PACIFIC) Week 2",
       "url": "https://www.youtube.com/watch?v=v4XyOBuENKA",
@@ -7605,9 +7825,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-08-14T09:43:22Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 1 Day 3",
       "url": "https://www.youtube.com/watch?v=S4qO8YnB_2I",
@@ -7634,9 +7855,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-08-13T09:45:22Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 1 Day 2",
       "url": "https://www.youtube.com/watch?v=t0GlSzUkj3g",
@@ -7663,9 +7885,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-08-12T09:45:17Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 1 Day 1",
       "url": "https://www.youtube.com/watch?v=agFVFljrKXo",
@@ -7692,9 +7915,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-08-11T07:30:46Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 1 Day 3",
       "url": "https://www.youtube.com/watch?v=CM6bZMw-ru8",
@@ -7721,9 +7945,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-08-10T07:32:42Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 1 Day 2",
       "url": "https://www.youtube.com/watch?v=-kX-6nEmMjU",
@@ -7750,9 +7975,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-08-09T07:30:22Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series KOREA Stage2 (OWCS KOREA) Week 1 Day 1",
       "url": "https://www.youtube.com/watch?v=QBoORcyzC_E",
@@ -7779,9 +8005,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-08-08T09:30:27Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series PACIFIC Stage2 (OWCS PACIFIC) Week 1",
       "url": "https://www.youtube.com/watch?v=gYQN4zdll8A",
@@ -7808,9 +8035,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-08-04T17:49:57Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Calling All Heroes: Major 2 2024-25 [Day 2 - Finals]",
       "url": "https://www.youtube.com/watch?v=gMv_oYxAz1U",
@@ -7837,9 +8065,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-08-03T17:47:57Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Calling All Heroes: Major 2 2024-25 [Day 1]",
       "url": "https://www.youtube.com/watch?v=W_wgHapW7iY",
@@ -7866,9 +8095,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-07-07T18:19:50Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Calling All Heroes: Minor 1 2024-25 [Day 2 - Finals]",
       "url": "https://www.youtube.com/watch?v=RDrq_egO66Y",
@@ -7895,9 +8125,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-07-06T17:49:43Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Calling All Heroes: Minor 1 2024-25 [Day 1]",
       "url": "https://www.youtube.com/watch?v=1QzyhUfZ-Ok",
@@ -7924,9 +8155,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-06-09T17:53:07Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Calling All Heroes: Major 1 2024-25 [Day 2 - Finals]",
       "url": "https://www.youtube.com/watch?v=V5_eh0BzyEo",
@@ -7953,9 +8185,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-06-08T17:43:34Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Calling All Heroes: Major 1 2024-25 [Day 1]",
       "url": "https://www.youtube.com/watch?v=RKPYCwGppf0",
@@ -7982,9 +8215,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-06-02T15:30:50Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2024 | Dallas Major: Day 3",
       "url": "https://www.youtube.com/watch?v=KZUx8fQuc5s",
@@ -8011,9 +8245,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-06-01T17:28:37Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2024 | Dallas Major: Day 2",
       "url": "https://www.youtube.com/watch?v=-UDC5ZYP4po",
@@ -8040,9 +8275,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-05-31T17:19:37Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2024 | Dallas Major: Day 1",
       "url": "https://www.youtube.com/watch?v=KHygZyucW0M",
@@ -8069,9 +8305,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-05-19T17:45:57Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Collegiate Championship 2024 [FINALS]",
       "url": "https://www.youtube.com/watch?v=ejxb8hQfY54",
@@ -8098,9 +8335,10 @@
         "score": 35
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-05-18T17:45:42Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Collegiate Championship 2024 [Day 5]",
       "url": "https://www.youtube.com/watch?v=_R_xt5-pzNE",
@@ -8127,9 +8365,10 @@
         "score": 35
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-05-17T23:45:46Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Collegiate Championship 2024 [Day 4]",
       "url": "https://www.youtube.com/watch?v=P7MKJhHYgAs",
@@ -8156,9 +8395,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-05-12T17:47:57Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Collegiate Championship 2024 [Day 3]",
       "url": "https://www.youtube.com/watch?v=YpvQoWEO_0c",
@@ -8185,9 +8425,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-05-11T17:50:01Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Collegiate Championship 2024 [Day 2]",
       "url": "https://www.youtube.com/watch?v=QhbT8QkrBog",
@@ -8214,9 +8455,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-05-10T23:52:57Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Collegiate Championship 2024 [Day 1]",
       "url": "https://www.youtube.com/watch?v=KDnjjP0cfcE",
@@ -8243,9 +8485,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-04-28T16:44:54Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2024 | EMEA & NA Stage 2 - Main Event Day 4",
       "url": "https://www.youtube.com/watch?v=R4DnMC-ft3M",
@@ -8272,9 +8515,10 @@
         "score": 35
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-04-28T05:32:27Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series ASIA (OWCS ASIA) Day 4",
       "url": "https://www.youtube.com/watch?v=9Z4fg3FEclE",
@@ -8301,9 +8545,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-04-27T15:44:41Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2024 | EMEA & NA Stage 2 - Main Event Day 3",
       "url": "https://www.youtube.com/watch?v=Yhxzaa5zAFw",
@@ -8330,9 +8575,10 @@
         "score": 60
       },
       "liveBroadcastStatus": "completed",
-      "publishedAt": null,
+      "publishedAt": "2024-04-27T05:35:17Z",
       "sources": [
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "Overwatch Champions Series ASIA (OWCS ASIA) Day 3",
       "url": "https://www.youtube.com/watch?v=cpNi0CYgZKo",
@@ -8347,25 +8593,9 @@
       "title": "ow_esports_global"
     }
   ],
-  "generatedAt": "2026-08-26T13:40:09+00:00",
+  "generatedAt": "2026-08-26T18:15:03+00:00",
   "schema": "matchfinder.v1",
-  "sourceErrors": [
-    "date-backfill Dmp0TOC1WFU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-    "date-backfill 9LMVyFVrFRE: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-    "date-backfill 1IcfQbcgJ6o: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-    "date-backfill zNK1kK7qZps: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-    "date-backfill 3eRcSk9b2L8: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-    "date-backfill -8v_Ob1Fc88: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-    "date-backfill 1maoxsSkDGo: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-    "date-backfill h3pgxhsUCt0: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-    "date-backfill 2NE1nq75sv8: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-    "date-backfill _lCIzOn4Z34: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-    "date-backfill nD5lLLWDkY0: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-    "date-backfill jkSiX___Qwc: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-    "date-backfill AfCXDIMPsLE: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-    "date-backfill tm8tcr2UUJM: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-    "date-backfill d9uylXw_-dE: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies"
-  ],
+  "sourceErrors": [],
   "summary": {
     "ignoredTooShort": 0,
     "likely": 250,
