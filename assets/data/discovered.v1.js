@@ -30,7 +30,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -84,10 +84,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": 31900,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 531m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (31900s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -143,7 +144,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -198,7 +199,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -254,7 +255,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -309,7 +310,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -363,7 +364,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -418,7 +419,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -473,10 +474,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": 34071,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 567m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (34071s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -532,10 +534,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": 37741,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 629m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (37741s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -591,7 +594,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -645,10 +648,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": 42900,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 715m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (42900s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -704,7 +708,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -758,7 +762,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-08-14T19:37:26+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -812,7 +816,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-08-13T19:44:34+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -2329,16 +2333,17 @@ window.OWCS_DISCOVERED = {
     "eventIds": [],
     "eventName": null,
     "matchedBy": null,
-    "why": "no calendar event covers this date"
+    "why": "the broadcast has no publish date"
    },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
    "channelTitle": "ow_esports_global",
    "durationSeconds": 20573,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 342m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (20573s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -2368,10 +2373,9 @@ window.OWCS_DISCOVERED = {
     "week": 4,
     "year": null
    },
-   "publishedAt": "2024-09-04T00:00:00+00:00",
+   "publishedAt": null,
    "sources": [
-    "streams",
-    "video-metadata"
+    "streams"
    ],
    "state": "found",
    "title": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Week 4 Day 3",
@@ -2392,10 +2396,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24375,
    "firstSeenAt": "2026-08-10T08:17:09+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 406m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (24375s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -2446,10 +2451,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 22789,
    "firstSeenAt": "2026-08-03T22:34:18+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 379m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (22789s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -2500,10 +2506,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 21185,
    "firstSeenAt": "2026-08-03T22:34:18+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 353m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (21185s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -2554,10 +2561,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 31849,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 530m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (31849s)",
      "-10 no team/competition relationship signal"
@@ -2608,10 +2616,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24861,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 414m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (24861s)",
      "-10 no team/competition relationship signal"
@@ -2662,10 +2671,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 25656,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 427m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (25656s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -2716,10 +2726,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 25087,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 418m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (25087s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -2770,10 +2781,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 40894,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 681m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (40894s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -2824,7 +2836,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 2502,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -2878,10 +2890,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 34113,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 568m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (34113s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -2935,10 +2948,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24414,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 406m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (24414s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -2988,10 +3002,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 20606,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 343m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (20606s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -3045,10 +3060,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 28383,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 473m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (28383s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -3102,10 +3118,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 25657,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 427m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (25657s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -3159,10 +3176,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 27361,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 456m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (27361s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -3216,10 +3234,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 28697,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 478m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (28697s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -3273,10 +3292,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 28455,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 474m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (28455s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -3330,10 +3350,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 25714,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 428m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (25714s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -3387,10 +3408,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 42373,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 706m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (42373s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -3443,10 +3465,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 42899,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 714m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (42899s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -3499,10 +3522,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 37659,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 627m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (37659s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -3553,10 +3577,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 20974,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 349m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (20974s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -3607,10 +3632,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 42899,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 714m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (42899s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -3661,10 +3687,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 20389,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 339m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (20389s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -3715,10 +3742,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 33100,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 551m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (33100s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -3769,10 +3797,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 35152,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 585m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (35152s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -3823,10 +3852,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 26826,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 447m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (26826s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -3877,10 +3907,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 23139,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 385m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (23139s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -3931,10 +3962,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 35667,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 594m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (35667s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -3985,10 +4017,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24335,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 405m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (24335s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -4042,10 +4075,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 22581,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 376m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (22581s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -4099,10 +4133,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24105,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 401m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (24105s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -4156,10 +4191,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 28484,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 474m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (28484s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -4213,10 +4249,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 29782,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 496m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (29782s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -4270,10 +4307,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 26566,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 442m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (26566s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -4327,10 +4365,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 26418,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 440m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (26418s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -4384,10 +4423,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 26540,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 442m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (26540s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -4441,10 +4481,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 29536,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 492m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (29536s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -4498,10 +4539,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 21470,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 357m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (21470s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -4552,10 +4594,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 21281,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 354m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (21281s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -4606,10 +4649,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 13430,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 223m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (13430s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -4660,10 +4704,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 29771,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 496m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (29771s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -4714,10 +4759,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 32256,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 537m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (32256s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -4768,10 +4814,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 27641,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 460m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (27641s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -4822,10 +4869,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 35937,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 598m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (35937s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -4876,10 +4924,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 20453,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 340m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (20453s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -4930,10 +4979,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 17370,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 289m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (17370s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -4984,10 +5034,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 20197,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 336m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (20197s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -5038,10 +5089,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 5058,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 84m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (5058s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -5092,10 +5144,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 20937,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 348m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (20937s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -5146,10 +5199,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 27485,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 458m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (27485s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -5200,10 +5254,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 27492,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 458m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (27492s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -5254,10 +5309,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 33613,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 560m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (33613s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -5308,10 +5364,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 33495,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 558m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (33495s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -5362,10 +5419,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 29919,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 498m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (29919s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -5416,10 +5474,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 29877,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 497m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (29877s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -5470,10 +5529,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 26562,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 442m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (26562s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -5524,10 +5584,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 26283,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 438m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (26283s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -5578,10 +5639,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 20697,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 344m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (20697s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -5632,10 +5694,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 22819,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 380m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (22819s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -5686,10 +5749,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 22024,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 367m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (22024s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -5740,10 +5804,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24828,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 413m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (24828s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -5794,10 +5859,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 23736,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 395m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (23736s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -5848,10 +5914,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 15997,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 266m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (15997s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -5902,10 +5969,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 30773,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 512m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (30773s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -5959,10 +6027,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 26531,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 442m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (26531s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -6013,10 +6082,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 29632,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 493m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (29632s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -6070,10 +6140,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 35971,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 599m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (35971s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -6124,10 +6195,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 14310,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 238m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (14310s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -6178,10 +6250,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 29386,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 489m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (29386s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -6232,10 +6305,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 23453,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 390m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (23453s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -6289,10 +6363,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24435,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 407m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (24435s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -6346,10 +6421,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24619,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 410m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (24619s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -6403,10 +6479,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 29166,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 486m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (29166s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -6460,10 +6537,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 20705,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 345m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (20705s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -6517,10 +6595,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 30702,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 511m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (30702s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -6574,10 +6653,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 17480,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 291m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (17480s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -6631,10 +6711,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24406,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 406m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (24406s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -6688,10 +6769,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 22181,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 369m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (22181s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -6745,10 +6827,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 30339,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 505m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (30339s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -6802,10 +6885,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 14434,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 240m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (14434s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -6856,10 +6940,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 21456,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 357m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (21456s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -6913,10 +6998,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 23081,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 384m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (23081s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -6970,10 +7056,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 16636,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 277m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (16636s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -7024,10 +7111,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 25935,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 432m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (25935s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -7081,10 +7169,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 28690,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 478m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (28690s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -7138,10 +7227,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 20189,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 336m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (20189s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -7192,10 +7282,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 32945,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 549m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (32945s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -7246,10 +7337,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 30861,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 514m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (30861s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -7300,10 +7392,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 36311,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 605m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (36311s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -7354,10 +7447,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 20987,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 349m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (20987s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -7408,10 +7502,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 36313,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 605m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (36313s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -7462,10 +7557,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 33945,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 565m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (33945s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -7516,10 +7612,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 26675,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 444m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (26675s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -7570,10 +7667,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 13310,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 221m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (13310s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -7624,10 +7722,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 26691,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 444m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (26691s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -7678,10 +7777,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 38371,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 639m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (38371s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -7732,10 +7832,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 37137,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 618m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (37137s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -7786,10 +7887,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 42877,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 714m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (42877s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -7840,10 +7942,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 32505,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 541m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (32505s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -7897,10 +8000,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24366,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 406m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (24366s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -7954,10 +8058,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 15766,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 262m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (15766s)",
      "-10 no team/competition relationship signal"
@@ -8008,10 +8113,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 16461,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 274m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (16461s)",
      "-10 no team/competition relationship signal"
@@ -8062,10 +8168,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 22095,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 368m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (22095s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -8119,10 +8226,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 19811,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 330m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (19811s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -8175,10 +8283,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 21176,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 352m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (21176s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -8232,10 +8341,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 15481,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 258m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (15481s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -8288,10 +8398,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 17490,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 291m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (17490s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -8344,10 +8455,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 26728,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 445m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (26728s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -8401,10 +8513,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 25745,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 429m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (25745s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -8458,10 +8571,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 19427,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 323m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (19427s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -8512,10 +8626,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 19380,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 323m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (19380s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -8569,10 +8684,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 27250,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 454m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (27250s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -8626,10 +8742,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 18871,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 314m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (18871s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -8680,10 +8797,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 16725,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 278m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (16725s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -8737,10 +8855,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 28894,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 481m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (28894s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -8794,10 +8913,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 18467,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 307m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (18467s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -8848,10 +8968,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 22439,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 373m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (22439s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -8905,10 +9026,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24905,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 415m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (24905s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -8962,10 +9084,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24785,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 413m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (24785s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -9019,10 +9142,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 21035,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 350m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (21035s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -9076,10 +9200,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 28941,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 482m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (28941s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -9133,10 +9258,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 30816,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 513m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (30816s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -9190,10 +9316,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 5325,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 88m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (5325s)",
      "+15 tournament/broadcast terminology in title/description",
@@ -9248,10 +9375,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 29866,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 497m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (29866s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -9302,10 +9430,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 30891,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 514m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (30891s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -9356,10 +9485,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 30101,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 501m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (30101s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -9410,10 +9540,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 30109,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 501m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (30109s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -9464,10 +9595,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 26587,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 443m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (26587s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -9518,10 +9650,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 21771,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 362m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (21771s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -9572,10 +9705,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 16326,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 272m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (16326s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -9626,10 +9760,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 18316,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 305m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (18316s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -9680,10 +9815,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 35646,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 594m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (35646s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -9737,10 +9873,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24475,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 407m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (24475s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -9794,10 +9931,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 19800,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 330m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (19800s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -9851,10 +9989,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 21216,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 353m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (21216s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -9907,10 +10046,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 19859,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 330m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (19859s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -9964,10 +10104,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 19456,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 324m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (19456s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -10020,10 +10161,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 18875,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 314m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (18875s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -10076,10 +10218,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 19421,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 323m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (19421s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -10133,10 +10276,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 26581,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 443m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (26581s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -10190,10 +10334,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 27330,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 455m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (27330s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -10247,10 +10392,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 22216,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 370m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (22216s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -10304,10 +10450,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 19255,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 320m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (19255s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -10361,10 +10508,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 27616,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 460m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (27616s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -10418,10 +10566,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 18910,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 315m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (18910s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -10475,10 +10624,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 23480,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 391m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (23480s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -10532,10 +10682,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24111,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 401m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (24111s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -10589,10 +10740,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24912,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 415m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (24912s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -10646,10 +10798,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 30903,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 515m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (30903s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -10703,10 +10856,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 28169,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 469m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (28169s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -10760,10 +10914,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 20195,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 336m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (20195s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -10814,10 +10969,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 22803,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 380m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (22803s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -10868,10 +11024,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 13962,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 232m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (13962s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -10922,10 +11079,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 13824,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 230m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (13824s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -10976,10 +11134,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 23140,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 385m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (23140s)",
      "-10 no team/competition relationship signal"
@@ -11030,10 +11189,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 27049,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 450m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (27049s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -11084,10 +11244,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 22679,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 377m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (22679s)",
      "-10 no team/competition relationship signal"
@@ -11138,10 +11299,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 20877,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 347m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (20877s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -11192,10 +11354,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 25814,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 430m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (25814s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -11246,10 +11409,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 31535,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 525m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (31535s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -11300,10 +11464,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24822,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 413m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (24822s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -11354,10 +11519,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 23741,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 395m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (23741s)",
      "-10 no team/competition relationship signal"
@@ -11408,10 +11574,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 21953,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 365m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (21953s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -11462,10 +11629,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 21190,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 353m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (21190s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -11516,10 +11684,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 28234,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 470m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (28234s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -11570,10 +11739,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 20621,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 343m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (20621s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -11624,10 +11794,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24276,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 404m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (24276s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -11678,10 +11849,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 27551,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 459m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (27551s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -11735,10 +11907,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 37460,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 624m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (37460s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -11792,10 +11965,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 28800,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 480m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (28800s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -11849,10 +12023,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 35905,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 598m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (35905s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -11906,10 +12081,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 30760,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 512m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (30760s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -11963,10 +12139,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 33631,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 560m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (33631s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -12020,10 +12197,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 23720,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 395m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (23720s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -12074,10 +12252,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 30915,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 515m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (30915s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -12131,10 +12310,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 26510,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 441m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (26510s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -12185,10 +12365,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 36002,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 600m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (36002s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -12242,10 +12423,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 32256,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 537m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (32256s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -12296,10 +12478,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 23603,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 393m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (23603s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -12350,10 +12533,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 33806,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 563m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (33806s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -12404,10 +12588,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 10651,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 177m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (10651s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -12460,10 +12645,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 12610,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 210m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (12610s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -12516,10 +12702,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24773,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 412m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (24773s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -12570,10 +12757,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 15840,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 264m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (15840s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -12624,10 +12812,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 25220,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 420m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (25220s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -12680,10 +12869,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 14450,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 240m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (14450s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -12736,10 +12926,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 10311,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 171m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (10311s)",
      "+15 tournament/broadcast terminology in title/description",
@@ -12793,10 +12984,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 22175,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 369m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (22175s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -12849,10 +13041,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 12990,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 216m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (12990s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -12905,10 +13098,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 18815,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 313m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (18815s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -12961,10 +13155,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 21375,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 356m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (21375s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -13017,10 +13212,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 19495,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 324m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (19495s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -13073,10 +13269,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 26501,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 441m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (26501s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -13130,10 +13327,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 23920,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 398m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (23920s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -13186,10 +13384,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 30370,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 506m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (30370s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -13243,10 +13442,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 23684,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 394m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (23684s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -13299,10 +13499,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 30521,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 508m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (30521s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -13356,10 +13557,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 22335,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 372m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (22335s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -13412,10 +13614,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 33915,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 565m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (33915s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -13469,10 +13672,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 17261,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 287m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (17261s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -13525,10 +13729,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 22960,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 382m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (22960s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -13581,10 +13786,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 18448,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 307m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (18448s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -13637,10 +13843,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 17751,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 295m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (17751s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -13693,10 +13900,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 35691,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 594m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (35691s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -13750,10 +13958,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24105,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 401m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (24105s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -13806,10 +14015,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 36966,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 616m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (36966s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -13863,10 +14073,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 18570,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 309m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (18570s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -13919,10 +14130,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 20800,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 346m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (20800s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -13975,10 +14187,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 18595,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 309m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (18595s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -14031,10 +14244,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 14631,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 243m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (14631s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -14087,10 +14301,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 18791,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 313m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (18791s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -14143,10 +14358,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 15881,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 264m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (15881s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -14199,10 +14415,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 33685,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 561m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (33685s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -14256,10 +14473,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 21941,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 365m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (21941s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -14312,10 +14530,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 31871,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 531m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (31871s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -14369,10 +14588,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24640,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 410m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (24640s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -14425,10 +14645,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 17276,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 287m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (17276s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -14481,10 +14702,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 16555,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 275m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (16555s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -14537,10 +14759,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 18120,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 302m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (18120s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -14593,10 +14816,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 18326,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 305m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (18326s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -14649,10 +14873,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 25655,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 427m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (25655s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -14705,10 +14930,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 23081,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 384m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (23081s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -14761,10 +14987,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 21775,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 362m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (21775s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -14817,10 +15044,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 26946,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 449m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (26946s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -14873,10 +15101,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 14173,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 236m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (14173s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -14929,10 +15158,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 29158,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 485m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (29158s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -14983,10 +15213,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 22158,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 369m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (22158s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -15037,10 +15268,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24876,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 414m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (24876s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -15091,10 +15323,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 20937,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 348m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (20937s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -15145,10 +15378,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24050,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 400m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (24050s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -15199,10 +15433,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 23951,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 399m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (23951s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -15253,10 +15488,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 31366,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 522m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (31366s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -15307,10 +15543,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 29941,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 499m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (29941s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -15361,10 +15598,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 36822,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 613m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (36822s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -15415,10 +15653,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 15676,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 261m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (15676s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -15469,10 +15708,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 21595,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 359m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (21595s)",
      "-10 no team/competition relationship signal"
@@ -15523,10 +15763,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 12565,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 209m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (12565s)",
      "-10 no team/competition relationship signal"
@@ -15577,10 +15818,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 23565,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 392m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (23565s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -15631,10 +15873,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 22656,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 377m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (22656s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -15685,10 +15928,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 10695,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 178m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (10695s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -15739,10 +15983,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 27175,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 452m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (27175s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -15796,10 +16041,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 21856,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 364m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (21856s)",
      "-10 no team/competition relationship signal"
@@ -15850,10 +16096,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 32817,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 546m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (32817s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -15907,10 +16154,11 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24736,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-08-25T21:20:04+00:00",
+   "lastSeenAt": "2026-08-26T00:27:15+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
+     "long-form: 412m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
      "+25 livestream metadata (completed)",
      "+20 substantial duration (24736s)",
      "+15 tournament/broadcast terminology in title/description"
@@ -15977,24 +16225,6 @@ window.OWCS_DISCOVERED = {
    "name": "Overwatch World Cup 2026 — Group Stage",
    "published": 0,
    "regions": []
-  },
-  {
-   "broadcasts": 12,
-   "calendarEventIds": [],
-   "days": [
-    1,
-    2,
-    3
-   ],
-   "firstAt": "2024-09-04T00:00:00+00:00",
-   "found": 12,
-   "key": "overwatch-champions-series-japan-stage2-owcs-japan",
-   "lastAt": "2024-09-04T00:00:00+00:00",
-   "name": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN)",
-   "published": 0,
-   "regions": [
-    "japan"
-   ]
   },
   {
    "broadcasts": 3,
@@ -16257,6 +16487,24 @@ window.OWCS_DISCOVERED = {
    "key": "overwatch-champions-series-japan-stage2-owcs-japan-grand-finals",
    "lastAt": null,
    "name": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN) Grand Finals",
+   "published": 0,
+   "regions": [
+    "japan"
+   ]
+  },
+  {
+   "broadcasts": 12,
+   "calendarEventIds": [],
+   "days": [
+    1,
+    2,
+    3
+   ],
+   "firstAt": null,
+   "found": 12,
+   "key": "overwatch-champions-series-japan-stage2-owcs-japan",
+   "lastAt": null,
+   "name": "Overwatch Champions Series JAPAN Stage2 (OWCS JAPAN)",
    "published": 0,
    "regions": [
     "japan"
@@ -17463,7 +17711,7 @@ window.OWCS_DISCOVERED = {
    "regions": []
   }
  ],
- "generatedAt": "2026-08-25T21:20:04+00:00",
+ "generatedAt": "2026-08-26T00:27:15+00:00",
  "inputs": [
   {
    "loaded": true,
@@ -17490,10 +17738,11 @@ window.OWCS_DISCOVERED = {
     "title": "ow_esports_global"
    }
   ],
-  "generatedAt": "2026-08-25T21:20:04+00:00",
+  "generatedAt": "2026-08-26T00:27:15+00:00",
   "intervalHours": 6.0,
-  "nextExpectedAt": "2026-08-26T03:20:04+00:00",
+  "nextExpectedAt": "2026-08-26T06:27:15+00:00",
   "sourceErrors": [
+   "date-backfill Dmp0TOC1WFU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
    "date-backfill 9LMVyFVrFRE: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
    "date-backfill 1IcfQbcgJ6o: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
    "date-backfill zNK1kK7qZps: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
@@ -17532,213 +17781,7 @@ window.OWCS_DISCOVERED = {
    "date-backfill 8hgnhV9lqCA: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
    "date-backfill KCoiZ7xO1ao: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
    "date-backfill tObGLXuxF34: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 3fcZy0ToP8s: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill aNHUebYwOHo: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 6FNhfLsKyMI: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 9DCg7_mbC4c: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill J9g82a93O8Y: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill ly-JP0ayjdU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill uXYKInwf1z4: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 0ewSCtCYSNY: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill XY77sT0Cc2s: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill aJZEKFUXYlM: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill LZhD2lp6Hgg: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 68h59ArOiXo: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 51QZTfBduSY: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill oWNXeN_erD0: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill ZbfgFp8mi-s: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill m-tlVHvl15E: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill _D2MNjrkPVQ: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill MLg4m1hwWrs: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill Y5FqtpdEwjc: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill oPmT0PIFlZ0: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill -HFNCpEMXcU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill k7Wa3FaIH_Q: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill JNQhY0nODqY: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill DaafD8PMpio: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill wRLVFGV5f6s: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill utUNnBbwtFY: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill OgC6iLkRxqI: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill fzTZEFtUawc: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 3i4IV1P7axI: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill P5xElCPI6nQ: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill zlJJJpw8UXc: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill o50ZBAHfFWk: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill ttiIZD3gYrM: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill R9lXX2ejLvs: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill oqqrGSQB5WY: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill AeR9I6CmxOc: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill _V5sZ1XMZ_c: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 1Kt8pqv8eGs: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill OTFTBP-NiEU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill f7v_MfMvOws: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 1VlxLEzpj2g: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill DHAHJ-cr9-4: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill lg9jT1V9FGE: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill yrbAirTRWyI: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill M5H8zEUHXqU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill YrJ3yjDeDOA: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill V41Nx0GSGSA: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill PAX7-BTPaEQ: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill OTzxbKloE_Y: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill ncbbj2CvK0M: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill EJDnqViPgqA: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 8Pdh-LYuPEI: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill o-_Lp79YFj8: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill sluRRwitd4s: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 2kGe0otzk4w: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill tt1FEjprjhM: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill wSjpuGNU-iA: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 2RE8U8Copu0: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill rscEE7bNCF0: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 3FdzilsfbZY: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill pYHTPQd_9Qw: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill LRh0S9g_1Vc: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill zMQ70vf8OEE: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill Sh2mgXorFMk: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill SzQEoQgNjRo: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 4p9WsqAVkl8: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 91Z5vrPZfm0: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill RXNXeT1Shos: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 6STpOXLwZf8: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill fJrJU4ETxGs: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 2nHcIUad-5A: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 7JKZXjz5aQc: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill YB0gK0OntuU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill ozAZH-PvFlc: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill hGiQcAnmzXg: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill bwpX0zsf95g: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill XM_ZhJAJnII: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill tb8lYU47X7A: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 651q5ysZV28: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill NPzF0Enbmf0: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill J2m3kJCoNzM: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill aSAnxFJiU-M: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill MlK6aXSZCYQ: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill HN7N52JYOBA: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 2cQVf-tNHfQ: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 00mQP9D3DXk: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill WzqiOFig1DA: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 8wbAE3pIj2o: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill z6zeAoVkOjM: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill cTkI9hAwNDc: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 9qtbteXyX4c: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill MRD6Dk9A6-c: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill aEPeG5DwGwk: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill rd12-oRNsPo: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill K2wLJbpK_GY: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill AEFrmDOC6hg: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill G6pRLS5RkHY: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill V42xhZK4GNQ: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill rncfvRkkWRo: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill usRILx8AEBk: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill AY3qgCKyE8w: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill xsJAYYKqtEo: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill EiZ3YjBtwzE: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill w-KjMkod1sw: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 2Ah2PG8UsEg: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill yHaF0eLkLhU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill guRQNjwYVcE: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill iEDUQ7AECbA: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 6YwiiOP_TvI: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill S9szrVmVlFU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill NugogHdAL74: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 4pS2ysxFCTU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill rdvjIDUCwWw: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 2HPieCMDwtk: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 3578U0oAhaY: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill W6TUVdWsZvU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill l2ExFIDS_rA: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill I4cJkq2rF_A: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill rFgJWeFL4ts: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill zyyvgEbtSdc: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill U-lvfWuVEMU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill LLuwGfq8VWg: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 7MgRxlMJMFA: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill tGUQuEGOzeU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill UXZLrSfTnCk: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill WVyadVHKkkk: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill m3Yj-YVBQNw: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 8S94RFMnIs0: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill rnJ8bNJaj0o: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill WbcHkM1GQfY: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill qsmVdc_gjh0: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill Ywz77n34FSU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill QZ2smyBUH48: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill gOrK9N5WUlU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill NXG4sBdErF0: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill wejDGwKQZus: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill tTwn8XpBRyU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill fH8bSXyfvAI: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill AC7YPpEh0MQ: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill KEivgi12a9w: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill WJZ83B43b5I: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 5-yV2xt1zyY: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 46pVgaV5N2o: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 9W27qI06RFU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill SWItY0RnCnk: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill tsgmLHINVTI: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill GAf5Oh8z580: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill f3UmTCUVaYk: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 4fEGj8bkVdM: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 4PnkT6U7dhI: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill Aeneus1iksg: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 2mI_xhm6DFE: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 5t-dV_vUKfY: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill by4M5mIM6rw: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill hbEPzaE1h_Y: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill DEDUZlLe54E: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill eYWRfOVOgyk: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill BBJHHE8q1Ho: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill ZACBXrBbVkE: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill tnfAwsor0AY: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill RzqmO7jJPd8: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill BlvI88Hgg4g: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill bgDOEEhbYik: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill saSBVHKY2y8: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill -vtAeblc66E: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill xmhYf8DEmGw: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill Bu79ap3JB-I: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill wPtD-tWumu8: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill er4CyZ-TYeM: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill zKOx1WTPwEQ: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill zHPB0UbbXVo: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill tC52jkizbnk: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 5UwN-fHHgDw: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill Su0vrvYj5XE: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill DOkb_iLF0uo: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill HLgVyTFfbvo: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill cGHH1ZQ_Ork: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill hu6O_k60EDM: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 9_mzkLYlpxU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill F_hcb6fH-FY: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill v4XyOBuENKA: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill S4qO8YnB_2I: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill t0GlSzUkj3g: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill agFVFljrKXo: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill CM6bZMw-ru8: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill -kX-6nEmMjU: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill QBoORcyzC_E: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill gYQN4zdll8A: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill gMv_oYxAz1U: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill W_wgHapW7iY: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill RDrq_egO66Y: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 1QzyhUfZ-Ok: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill V5_eh0BzyEo: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill RKPYCwGppf0: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill KZUx8fQuc5s: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill -UDC5ZYP4po: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill KHygZyucW0M: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill ejxb8hQfY54: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill _R_xt5-pzNE: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill P7MKJhHYgAs: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill YpvQoWEO_0c: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill QhbT8QkrBog: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill KDnjjP0cfcE: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill R4DnMC-ft3M: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill 9Z4fg3FEclE: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill Yhxzaa5zAFw: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies",
-   "date-backfill cpNi0CYgZKo: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies"
+   "date-backfill 3fcZy0ToP8s: yt-dlp exit 1: w-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies"
   ],
   "staleAfterHours": 24
  },
