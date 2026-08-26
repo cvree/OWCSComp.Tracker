@@ -29,6 +29,10 @@ on:
         description: "Broadcast URL to probe"
         required: false
         default: "https://www.youtube.com/live/jkSiX___Qwc"
+      twitch_channel:
+        description: "Official Twitch channel to probe for VODs"
+        required: false
+        default: "ow_esports"
   push:
     branches: [claude/auto-command-web-github-k8cpyg]
     paths: [".github/workflows/acquire-probe.yml"]
@@ -55,12 +59,12 @@ jobs:
           pip install --quiet yt-dlp
           echo "yt-dlp $(yt-dlp --version)"
 
-      - name: Resolve a direct media URL (every player client, in order)
-        id: resolve
+      - name: YouTube — resolve a direct media URL (every player client)
+        id: yt
         env:
           PROBE_URL: ${{ inputs.url || 'https://www.youtube.com/live/jkSiX___Qwc' }}
         run: |
-          python - <<'PY' | tee resolve.log
+          python - <<'PY' | tee resolve-youtube.log
           import os, subprocess, urllib.parse
           url = os.environ["PROBE_URL"]
           # One `-g` per client. The default web client is the one most
@@ -87,20 +91,76 @@ jobs:
               else:
                   err = " ".join((p.stderr or "").split())[:180]
                   print(f"{name:14s} FAIL  {err}")
-          print(f"::notice::first working client: {winner or 'NONE'}")
+          print(f"::notice::youtube: first working client: {winner or 'NONE'}")
           with open(os.environ["GITHUB_OUTPUT"], "a") as fh:
               fh.write(f"client={winner or ''}\n")
           PY
 
-      - name: Pull sparse frames with remote_frames.py (byte-range reads)
-        if: steps.resolve.outputs.client != ''
+      # The same broadcasts are streamed on Twitch (config/broadcast_channels.json
+      # records twitch.tv/OW_Esports as an official OWCS destination). Twitch has
+      # no equivalent of YouTube's datacentre bot check, so if its VODs resolve
+      # here, the whole acquisition step can stay on free GitHub hardware.
+      - name: Twitch — list the official channel's VODs and resolve the newest
+        id: tw
         env:
-          PROBE_URL: ${{ inputs.url || 'https://www.youtube.com/live/jkSiX___Qwc' }}
+          TWITCH_CHANNEL: ${{ inputs.twitch_channel || 'ow_esports' }}
+        run: |
+          python - <<'PY' | tee resolve-twitch.log
+          import os, json, subprocess, urllib.parse
+          ch = os.environ["TWITCH_CHANNEL"]
+          def run(cmd, timeout=180):
+              try:
+                  return subprocess.run(cmd, capture_output=True, text=True,
+                                        timeout=timeout)
+              except subprocess.TimeoutExpired:
+                  return None
+          listing = run(["yt-dlp", "-J", "--flat-playlist", "--playlist-end", "5",
+                         "--no-warnings", f"https://www.twitch.tv/{ch}/videos"])
+          vid = None
+          if listing is None:
+              print("listing        TIMEOUT")
+          elif listing.returncode != 0:
+              print("listing        FAIL  " + " ".join(
+                  (listing.stderr or "").split())[:220])
+          else:
+              try:
+                  data = json.loads(listing.stdout)
+              except Exception as exc:
+                  data = {}
+                  print(f"listing        UNPARSEABLE {exc}")
+              entries = data.get("entries") or []
+              print(f"listing        OK    {len(entries)} recent VODs")
+              for e in entries[:5]:
+                  print(f"  - {str(e.get('title'))[:70]!r} "
+                        f"dur={e.get('duration')} url={e.get('url')}")
+              if entries:
+                  vid = entries[0].get("url") or entries[0].get("id")
+          if vid:
+              if not str(vid).startswith("http"):
+                  vid = f"https://www.twitch.tv/videos/{vid}"
+              fmt = "bv*[height<=720]/best[height<=720]/best"
+              p = run(["yt-dlp", "-g", "-f", fmt, "--no-warnings", vid])
+              out = (p.stdout or "").strip().splitlines() if p else []
+              if p and p.returncode == 0 and out and out[0].startswith("http"):
+                  host = urllib.parse.urlparse(out[0]).netloc
+                  print(f"resolve        OK    host={host} url_len={len(out[0])}")
+                  with open(os.environ["GITHUB_OUTPUT"], "a") as fh:
+                      fh.write(f"url={vid}\n")
+              else:
+                  err = " ".join(((p.stderr if p else "") or "").split())[:220]
+                  print(f"resolve        FAIL  {err}")
+          print("::notice::twitch probe complete")
+          PY
+
+      - name: Pull sparse frames with remote_frames.py (byte-range reads)
+        if: steps.yt.outputs.client != '' || steps.tw.outputs.url != ''
+        env:
+          MEDIA_URL: ${{ steps.tw.outputs.url || inputs.url || 'https://www.youtube.com/live/jkSiX___Qwc' }}
         run: |
           pip install --quiet -r requirements.txt
           # Six frames a minute apart out of the middle of the broadcast:
           # the shape a calibration scan actually asks for.
-          python pipeline/remote_frames.py --url "$PROBE_URL" \
+          python pipeline/remote_frames.py --url "$MEDIA_URL" \
             --offsets 1900,1960,2020,2080,2140,2200 --height 720 --json \
             | tee frames.json
           echo "--- frames on disk ---"
@@ -114,7 +174,10 @@ jobs:
             echo "### Runner acquisition probe"
             echo ""
             echo '```'
-            cat resolve.log 2>/dev/null || echo "(resolve step produced no log)"
+            echo "-- youtube --"
+            cat resolve-youtube.log 2>/dev/null || echo "(no log)"
+            echo "-- twitch --"
+            cat resolve-twitch.log 2>/dev/null || echo "(no log)"
             echo '```'
             echo ""
             if [ -s frames.json ]; then
@@ -123,6 +186,6 @@ jobs:
               cat frames.json
               echo '```'
             else
-              echo "No media URL resolved on this runner - frame acquisition not attempted."
+              echo "No media URL resolved on this runner on EITHER source - frame acquisition not attempted."
             fi
           } >> "$GITHUB_STEP_SUMMARY"
