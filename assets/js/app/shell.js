@@ -233,7 +233,20 @@
 
     if (P.games) {
       const c = P.games.counts();
-      push(c.published + " of " + c.total + " games published", { dot: false });
+      /* The TOTAL is only honest on a page that loaded the working record
+         (assets/js/data.js). Pages that do not — teams, stats — cannot see
+         the capture runs that never became a match, so the same sentence
+         read "1 of 254 games published" on the dashboard and "1 of 252" on
+         teams: one strip, two totals, on a site whose whole claim is that
+         it does not state what it cannot back. Where the denominator is
+         not knowable, the strip states the numerator alone rather than a
+         number that is quietly wrong. */
+      if (P.work) {
+        push(c.published + " of " + c.total + " games published", { dot: false });
+      } else {
+        push(c.published + " published game" + (c.published === 1 ? "" : "s"),
+          { dot: false });
+      }
       if (c.review) push(c.review + " waiting on review", { tone: "warn" });
       if (c.working) push(c.working + " processing", { tone: "live" });
     }
