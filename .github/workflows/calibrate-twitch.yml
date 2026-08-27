@@ -38,7 +38,12 @@ on:
       max_samples:
         description: "Sample budget for the calibration ladder"
         required: false
-        default: "48"
+        # 48 was not enough: the ladder reported "25 clean frames but only
+        # 1/4 regions of the broadcast — too clustered to calibrate from"
+        # on a 10.5h VOD, having spent the budget before it could spread.
+        # It refuses on clustering by design, so the budget has to cover
+        # the broadcast, not just fill up.
+        default: "144"
   push:
     paths: [".github/workflows/calibrate-twitch.yml"]
 
@@ -89,14 +94,53 @@ jobs:
               cands = [c for c in mf.merge_channel_entries(
                           row, [], entries, platform=li.TWITCH)
                        if (c.get("likeness") or {}).get("confidence") == "likely"]
+              # The registry restricts this channel to the event families it
+              # actually broadcasts, and calibrating against a product the
+              # layouts do not describe is exactly how the last run burned
+              # 822 MB to reach a correct refusal. Apply the SAME gate
+              # production intake applies, so this can never calibrate
+              # against something intake would turn away.
+              allowed = []
+              for c in cands:
+                  ok, why = li.event_type_allowed(c.get("title"), row)
+                  if ok:
+                      allowed.append(c)
+                  else:
+                      print(f"  skip: {str(c.get('title'))[:56]} — {why[:60]}")
+              # Intake's rule is deliberately permissive: a title naming no
+              # family passes, because most legitimate titles name none.
+              # That is right for intake and wrong for CALIBRATION, where
+              # the whole point is to match the committed OWCS packages —
+              # a title like "CAH Season Playoffs" clears intake precisely
+              # because it says nothing, and says nothing about whether its
+              # overlay is the one these layouts describe.
+              #
+              # So prefer a broadcast that POSITIVELY names an allowed
+              # family, and fall back to the merely-not-refused only if
+              # there is no such thing.
+              named = [c for c in allowed
+                       if li.event_family(c.get("title"))
+                       in (row.get("allowedEventTypes") or [])]
+              best = named or allowed
+              if named:
+                  print(f"  {len(named)} broadcast(s) explicitly name an "
+                        f"allowed event family")
               # A REBROADCAST is the same content aired again, and tends to
               # carry more filler around it. Prefer an original airing when
               # one is available; fall back rather than refuse.
-              live = [c for c in cands
+              live = [c for c in best
                       if "rebroadcast" not in str(c.get("title", "")).lower()]
-              pool = live or cands
+              pool = live or best
               if not pool:
-                  print("no likely broadcast found"); raise SystemExit(1)
+                  print("no broadcast this channel is registered for was found")
+                  raise SystemExit(1)
+              # Longest first. The ladder refuses when its clean frames are
+              # too clustered to calibrate from, and a longer broadcast
+              # carries more gameplay windows spread further apart — which
+              # is exactly what that refusal was asking for. Recency is
+              # irrelevant here; material is not.
+              pool.sort(key=lambda c: c.get("durationSeconds") or 0,
+                        reverse=True)
               pick = pool[0]
               url = pick["url"]
               dur = pick.get("durationSeconds") or 0
@@ -112,7 +156,7 @@ jobs:
         id: calib
         env:
           URL: ${{ steps.pick.outputs.url }}
-          MAX_SAMPLES: ${{ inputs.max_samples || '48' }}
+          MAX_SAMPLES: ${{ inputs.max_samples || '144' }}
         run: |
           set -o pipefail
           mkdir -p out
