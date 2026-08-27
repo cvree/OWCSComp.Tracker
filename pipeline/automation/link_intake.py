@@ -438,6 +438,72 @@ def fetch_twitch_metadata(video_id: str, *,
     }
 
 
+# ------------------------------------------------------------ event family
+# `allowedEventTypes` has been a documented field on every channel registry
+# row since Phase C1 — "restricts a channel to the event families it
+# actually broadcasts" — and until now NOTHING read it. It was documentation
+# describing an enforcement that did not exist.
+#
+# It matters because these channels really do carry more than one product.
+# The official Overwatch Esports channels broadcast the Champions Series
+# (OWCS) and the World Cup (OWWC), and those are different productions with
+# their own overlays. A calibration run against an OWWC broadcast using an
+# OWCS layout package refuses at the chip grid — which is the correct
+# outcome, reached expensively, after acquiring frames from a ten-hour VOD.
+# Refusing at intake is the same answer for free.
+#
+# Families are matched as WHOLE WORDS. A substring match would see "owcs"
+# inside a longer token and, worse, "ow" inside ordinary English.
+_EVENT_FAMILIES = {
+    "owcs": re.compile(r"\bowcs\b", re.I),
+    "owwc": re.compile(r"\bowwc\b|\boverwatch\s+world\s+cup\b", re.I),
+    "owl": re.compile(r"\bowl\b|\boverwatch\s+league\b", re.I),
+}
+
+
+def event_family(title: str | None) -> str | None:
+    """Which event family a broadcast's own TITLE names, or None.
+
+    None is the honest and common answer: plenty of legitimate broadcast
+    titles name no family at all. It must never be read as "not allowed" —
+    absence of evidence is not evidence, and treating it as a refusal would
+    reject most of the archive.
+
+    When a title names more than one family the FIRST match in declaration
+    order wins, deterministically; in practice a title naming two products
+    is naming a crossover, and the stricter reading is the safer one.
+    """
+    text = str(title or "")
+    if not text.strip():
+        return None
+    for family, pattern in _EVENT_FAMILIES.items():
+        if pattern.search(text):
+            return family
+    return None
+
+
+def event_type_allowed(title: str | None, row: dict | None) -> tuple[bool, str | None]:
+    """(allowed, refusal_reason) for one broadcast against one registry row.
+
+    Only a RECOGNISED family that the row does not allow is refused. An
+    unrecognised title, an empty `allowedEventTypes`, or a missing row all
+    pass — this gate exists to catch a broadcast that says what it is and
+    says something the channel is not authorized for, not to demand that
+    every title identify itself.
+    """
+    allowed = (row or {}).get("allowedEventTypes") or []
+    if not allowed:
+        return True, None
+    family = event_family(title)
+    if family is None or family in allowed:
+        return True, None
+    return False, (
+        f"this broadcast's own title names {family.upper()}, and the "
+        f"channel is registered for {', '.join(sorted(allowed)).upper()} "
+        f"only — a different product means a different overlay, so its "
+        f"layouts do not describe it")
+
+
 # ----------------------------------------------------------- authorization
 def authorize_source(metadata: dict, *,
                      registry: dict[str, dict],
@@ -449,6 +515,7 @@ def authorize_source(metadata: dict, *,
       * metadata retrieved successfully (never approve on missing evidence),
       * a channelId present in the verified official registry,
       * that registry row being for the SAME platform as the video,
+      * the broadcast naming no event family the row disallows,
       * the video not failing the broadcast-likeness gate.
 
     The platform check exists because channel ids are only unique within a
@@ -491,6 +558,19 @@ def authorize_source(metadata: dict, *,
                        f"({metadata.get('channelTitle') or 'unknown title'}) "
                        f"is not a verified official OWCS broadcast channel"),
             "registryChannel": None,
+        }
+    # The channel is official, but is it official FOR THIS PRODUCT? A
+    # registry row that lists allowedEventTypes is stating which event
+    # families it actually broadcasts, and that statement is now enforced.
+    allowed, why_not = event_type_allowed(metadata.get("title"), row)
+    if not allowed:
+        return {
+            "state": SOURCE_PENDING,
+            "auto": False,
+            "reasonCode": "event_type_not_allowed",
+            "reason": (f"channel {channel_id} is the verified official "
+                       f"registry entry {row.get('id')!r}, but {why_not}"),
+            "registryChannel": row.get("id"),
         }
     if likeness and likeness.get("confidence") == "unlikely":
         return {
