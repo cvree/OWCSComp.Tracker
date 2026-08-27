@@ -56,7 +56,7 @@
     "`mode=verify-channels` dispatch)."
   ],
   "version": 3,
-  "updated": "2026-07-24",
+  "updated": "2026-08-26",
   "channels": [
     {
       "id": "ow_esports_global",
@@ -68,7 +68,9 @@
       "language": "en",
       "official": true,
       "priority": 100,
-      "allowedEventTypes": ["owcs"],
+      "allowedEventTypes": [
+        "owcs"
+      ],
       "sourceUrl": "https://www.youtube.com/OW_Esports",
       "ownershipEvidence": "Originally evidenced from Liquipedia's Overwatch Champions Series page, which lists https://www.youtube.com/OW_Esports as the official YouTube channel alongside the official Twitch (twitch.tv/OW_Esports), Discord, Instagram and X/Twitter accounts, credited to Blizzard Entertainment in partnership with FACEIT/WDG/NetEase. CONFIRMED live via the YouTube Data API on 2026-07-24 (GitHub Actions verify-channels dispatch): channels.list resolved this sourceUrl to channel id UCiAInBL9kUzz1XRxk66v-gw, channel title 'Overwatch Esports', with uploads playlist UUiAInBL9kUzz1XRxk66v-gw. Quota cost: 1 unit.",
       "verificationMethod": "YouTube Data API v3 channels.list (resolved via the channel's public handle from sourceUrl) — see docs/YOUTUBE-DISCOVERY.md",
@@ -88,7 +90,9 @@
       "language": "ko",
       "official": true,
       "priority": 90,
-      "allowedEventTypes": ["owcs"],
+      "allowedEventTypes": [
+        "owcs"
+      ],
       "sourceUrl": null,
       "ownershipEvidence": null,
       "verificationMethod": null,
@@ -108,7 +112,9 @@
       "language": "ja",
       "official": true,
       "priority": 85,
-      "allowedEventTypes": ["owcs"],
+      "allowedEventTypes": [
+        "owcs"
+      ],
       "sourceUrl": null,
       "ownershipEvidence": null,
       "verificationMethod": null,
@@ -128,7 +134,9 @@
       "language": "en",
       "official": true,
       "priority": 80,
-      "allowedEventTypes": ["owcs"],
+      "allowedEventTypes": [
+        "owcs"
+      ],
       "sourceUrl": null,
       "ownershipEvidence": null,
       "verificationMethod": null,
@@ -148,7 +156,9 @@
       "language": "zh",
       "official": true,
       "priority": 75,
-      "allowedEventTypes": ["owcs"],
+      "allowedEventTypes": [
+        "owcs"
+      ],
       "sourceUrl": null,
       "ownershipEvidence": null,
       "verificationMethod": null,
@@ -157,6 +167,28 @@
       "disabledReason": "platform is bilibili, not YouTube — unsupported by the Phase C2 YouTube Data API client. This entry is kept in the registry so coverage reporting shows China as an explicit coverage_state=unsupported-source region rather than a silent gap; it will never be driven by the YouTube discovery layer.",
       "preferredLayout": null,
       "enabled": false
+    },
+    {
+      "id": "ow_esports_twitch",
+      "name": "Overwatch Esports (Twitch)",
+      "platform": "twitch",
+      "channelId": "ow_esports",
+      "uploadsPlaylistId": null,
+      "region": "global",
+      "language": "en",
+      "official": true,
+      "priority": 90,
+      "allowedEventTypes": [
+        "owcs"
+      ],
+      "sourceUrl": "https://www.twitch.tv/ow_esports",
+      "ownershipEvidence": "This registry's own ow_esports_global entry records twitch.tv/OW_Esports as an official OWCS broadcast destination, credited to Blizzard Entertainment in partnership with FACEIT/WDG/NetEase, alongside the YouTube channel verified on 2026-07-24. This row makes that recorded destination a first-class source rather than a line of prose.",
+      "verificationMethod": "yt-dlp on a GitHub-hosted runner (acquire-probe workflow, run 2): --flat-playlist on https://www.twitch.tv/ow_esports/videos listed the channel's recent VODs unauthenticated, and `yt-dlp -g` resolved the newest of them to a playable 720p media URL with no cookies, no API key and no account.",
+      "verifiedDate": "2026-08-26",
+      "verifiedStatus": "verified",
+      "disabledReason": null,
+      "preferredLayout": null,
+      "enabled": true
     }
   ]
 }

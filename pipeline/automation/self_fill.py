@@ -379,12 +379,16 @@ _VIDEO_ID_RES = (
     re.compile(r"[?&]v=([A-Za-z0-9_-]{6,})"),
     re.compile(r"youtu\.be/([A-Za-z0-9_-]{6,})"),
     re.compile(r"youtube\.com/(?:live|embed|shorts)/([A-Za-z0-9_-]{6,})"),
+    # A Twitch VOD. Without this a broadcast discovered on Twitch and later
+    # published would never join against its own published record, and the
+    # site would offer to process a match it had already published.
+    re.compile(r"twitch\.tv/videos/([0-9]{6,15})"),
 )
 
 
 def video_id_from_url(url: str | None) -> str | None:
-    """The YouTube video id inside a URL, in any of the forms the published
-    dataset uses (watch?v=, youtu.be/, /live/, /embed/)."""
+    """The video id inside a URL, in any of the forms the published dataset
+    uses (watch?v=, youtu.be/, /live/, /embed/, twitch.tv/videos/)."""
     text = str(url or "")
     for pattern in _VIDEO_ID_RES:
         m = pattern.search(text)
@@ -693,8 +697,14 @@ def build(*, snapshot: dict | None = None, public: dict | None = None,
         cal = match_calendar_event(parsed, row.get("publishedAt"), events)
         state = broadcast_state(row, published)
         likeness = row.get("likeness") or {}
+        # Absent means YouTube — the platform every row meant before
+        # broadcasts existed on more than one. Emitting it only when it
+        # differs keeps a YouTube-only scan rebuilding byte-identically
+        # instead of restating one constant across 288 rows.
+        platform = row.get("platform") or "youtube"
         broadcasts.append({
             "videoId": row["videoId"],
+            **({"platform": platform} if platform != "youtube" else {}),
             "url": row.get("url"),
             "title": row.get("title"),
             "channelId": row.get("channelId"),

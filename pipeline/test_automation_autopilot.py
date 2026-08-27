@@ -127,23 +127,36 @@ class TestHumanGates(AutopilotBase):
         self.assertEqual(res["stop"], ap.STOP_HUMAN_GATE)
         self.assertIn("--auto-accept", res["stopDetail"])
 
-    def test_detection_review_is_always_human_even_with_auto_accept(self):
+    def test_detection_no_longer_waits_for_a_person(self):
+        """PUBLISH-THEN-AUDIT. This used to be the gate that stopped every
+        unattended run forever: approving comps into production was always
+        a human decision, and unattended there is no human. The detector's
+        own bar is what still holds — an unreadable slot is UNKNOWN and
+        never becomes a composition at all."""
         job = self.create()
         for s in (sm.DOWNLOADING, sm.DOWNLOADED, sm.SEGMENTING,
                   sm.NEEDS_REVIEW):
             self.store.transition(job.job_key, s)
         sid = self.make_pending_segment()
         self.approve_segment(sid)
+        self.set_extracted(sid)
         self.store.update_payload(job.job_key,
                                   {"detection": {"ingestId": "x"}})
-        res = self.run_ap(job.job_key, auto_accept=True)
-        self.assertTrue(res["ok"])
-        self.assertEqual(res["stop"], ap.STOP_HUMAN_GATE)
-        self.assertIn("never automatic", res["stopDetail"])
-        # and the job did NOT advance itself past the review
-        self.assertEqual(self.store.get(job.job_key).state, sm.NEEDS_REVIEW)
 
-    def test_committed_detection_stops_before_publication(self):
+        def fake_commit(store, lock_mgr, con, job_key, **kw):
+            return {"ok": True, "summary": {"written": True}}
+
+        res = self.run_ap(job.job_key, auto_accept=True, run_one=fake_commit)
+        # It advanced itself past the old gate rather than stopping there.
+        self.assertEqual(self.store.get(job.job_key).state, sm.APPROVED)
+        self.assertNotIn("never automatic", res.get("stopDetail") or "")
+        published = [st for st in res["steps"] if st["action"] == "publish"]
+        self.assertTrue(published, "the review stage recorded no publish step")
+
+    def test_publication_is_opt_in_per_run_because_it_writes(self):
+        """Not a review gate — a write gate. Publication regenerates the
+        export, runs the packaging and reproducibility checks and commits,
+        so a local dry run must not do it by surprise."""
         job = self.create()
         for s in (sm.DOWNLOADING, sm.DOWNLOADED, sm.SEGMENTING,
                   sm.NEEDS_REVIEW, sm.READY_FOR_DETECTION, sm.PROCESSING,
@@ -159,8 +172,65 @@ class TestHumanGates(AutopilotBase):
         res = self.run_ap(job.job_key, run_one=fake_commit)
         self.assertTrue(res["ok"])
         self.assertEqual(res["stop"], ap.STOP_HUMAN_GATE)
-        self.assertIn("process-approved-job --publish", res["stopDetail"])
+        self.assertIn("--publish", res["stopDetail"])
+        # The reason given must not be the removed review gate.
+        self.assertNotIn("supervised", res["stopDetail"])
         self.assertEqual(self.store.get(job.job_key).state, sm.APPROVED)
+
+    def test_with_publish_it_runs_the_publication_step(self):
+        job = self.create()
+        for s in (sm.DOWNLOADING, sm.DOWNLOADED, sm.SEGMENTING,
+                  sm.NEEDS_REVIEW, sm.READY_FOR_DETECTION, sm.PROCESSING,
+                  sm.NEEDS_REVIEW, sm.APPROVED):
+            self.store.transition(job.job_key, s)
+        sid = self.make_pending_segment()
+        self.approve_segment(sid)
+        self.set_extracted(sid)
+        calls = []
+
+        def fake_commit(store, lock_mgr, con, job_key, **kw):
+            return {"ok": True, "summary": {"written": True}}
+
+        def fake_publish(store, j):
+            calls.append(j.job_key)
+            return {"ok": True}
+
+        res = self.run_ap(job.job_key, run_one=fake_commit,
+                          publish=True, publish_fn=fake_publish)
+        self.assertEqual(calls, [job.job_key])
+        self.assertTrue(res["ok"])
+        self.assertEqual(res["stop"], ap.STOP_TERMINAL)
+        self.assertIn("auditable", res["stopDetail"])
+
+    def test_a_refused_publication_is_reported_not_swallowed(self):
+        """publish_job enforces preconditions, export validation and the
+        packaging check. Removing the human review removed the WAIT, not
+        the checks — a refusal must still stop the loop and say why."""
+        job = self.create()
+        for s in (sm.DOWNLOADING, sm.DOWNLOADED, sm.SEGMENTING,
+                  sm.NEEDS_REVIEW, sm.READY_FOR_DETECTION, sm.PROCESSING,
+                  sm.NEEDS_REVIEW, sm.APPROVED):
+            self.store.transition(job.job_key, s)
+        sid = self.make_pending_segment()
+        self.approve_segment(sid)
+        self.set_extracted(sid)
+
+        def fake_commit(store, lock_mgr, con, job_key, **kw):
+            return {"ok": True, "summary": {"written": True}}
+
+        for publish_fn, needle in (
+            (lambda s_, j_: {"ok": False, "code": "export_drift",
+                             "reason": "the committed export is not "
+                                       "reproducible"}, "reproducible"),
+            (lambda s_, j_: (_ for _ in ()).throw(RuntimeError("boom")),
+             "RuntimeError"),
+        ):
+            with self.subTest(needle=needle):
+                res = self.run_ap(job.job_key, run_one=fake_commit,
+                                  publish=True, publish_fn=publish_fn)
+                self.assertFalse(res["ok"])
+                self.assertEqual(res["stop"], ap.STOP_BLOCKED)
+                self.assertIn(needle, res["stopDetail"])
 
 
 class TestLoopMechanics(AutopilotBase):

@@ -993,5 +993,59 @@ class TestFindMatchesWritesWhatTheGateChecks(unittest.TestCase):
                 "the one the validate step recomputes from disk")
 
 
+class TestPlatform(unittest.TestCase):
+    """Twitch broadcasts reach the site through the same layer YouTube ones
+    do. The platform rides along only where it is informative."""
+
+    @staticmethod
+    def _twitch_candidate():
+        row = candidate("2854348714",
+                        "OWCS 2026 | Stage 2 Playoffs | Day 2 | NA vs EMEA")
+        row["platform"] = "twitch"
+        row["url"] = "https://www.twitch.tv/videos/2854348714"
+        row["sources"] = ["twitch-videos"]
+        row["channelRegistryId"] = "ow_esports_twitch"
+        return row
+
+    def test_a_twitch_broadcast_carries_its_platform_and_its_own_url(self):
+        b = row_for(build([self._twitch_candidate()]), "2854348714")
+        self.assertEqual(b["platform"], "twitch")
+        self.assertEqual(b["url"], "https://www.twitch.tv/videos/2854348714")
+
+    def test_a_youtube_broadcast_does_not_restate_the_default(self):
+        """288 committed rows saying "youtube" is one constant repeated, not
+        information — and it would make every YouTube-only scan rewrite the
+        committed artifact."""
+        b = row_for(build([candidate("YTONLY00001", "OWCS 2026 Day 1")]),
+                    "YTONLY00001")
+        self.assertNotIn("platform", b)
+
+    def test_a_published_twitch_broadcast_joins_its_own_record(self):
+        """Without a Twitch spelling in video_id_from_url the site would
+        keep offering to process a match it had already published."""
+        public = {
+            "matches": [{
+                "id": "m-tw",
+                "streamUrl": "https://www.twitch.tv/videos/2854348714",
+                "sources": [{"type": "vod",
+                             "url": "https://www.twitch.tv/videos/2854348714"}],
+            }],
+            "captureRuns": [], "vodSources": [],
+        }
+        payload = sf.build(snapshot=snapshot([self._twitch_candidate()]),
+                           public=public, calendar=CALENDAR, interval_hours=6)
+        b = row_for(payload, "2854348714")
+        self.assertEqual(b["state"], sf.STATE_PUBLISHED)
+        self.assertEqual(b["matchId"], "m-tw")
+
+    def test_the_twitch_vod_url_is_recognised_on_its_own(self):
+        self.assertEqual(
+            sf.video_id_from_url("https://www.twitch.tv/videos/2854348714"),
+            "2854348714")
+        # A channel page carries no VOD id, and must not yield one.
+        self.assertIsNone(
+            sf.video_id_from_url("https://www.twitch.tv/ow_esports"))
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

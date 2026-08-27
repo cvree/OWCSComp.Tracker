@@ -510,7 +510,8 @@ def build_intake_cmd(p: dict) -> tuple[list[str] | None, str | None, dict | None
     if p.get("autoAccept"):
         cmd += ["--auto-accept", "--accepted-by", "control-room"]
     info = {"videoId": parsed["videoId"],
-            "jobKey": ali.job_key_for(parsed["videoId"]),
+            "platform": parsed["platform"],
+            "jobKey": ali.job_key_for(parsed["videoId"], parsed["platform"]),
             "canonicalUrl": parsed["canonicalUrl"]}
     return cmd, None, info
 

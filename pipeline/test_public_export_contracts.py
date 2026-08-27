@@ -80,24 +80,54 @@ FIVE_A = ["dva", "sojourn", "tracer", "lucio", "kiriko"]
 FIVE_B = ["rein", "ashe", "genji", "ana", "mercy"]
 
 
-class TestApprovedSnapshotGate(unittest.TestCase):
-    def test_only_approved_review_states_count(self):
+class TestPublishedSnapshotGate(unittest.TestCase):
+    """Publish-then-audit: everything the DETECTOR accepted is published,
+    carrying the tier it earned. The one state that never publishes is
+    'rejected' — the record of something judged wrong, by the pipeline or
+    by a person. Publishing that would be publishing a known error."""
+
+    def test_every_state_but_rejected_publishes(self):
         rows = [snap("s1", "m1", "m1-m1", "a", FIVE_A, status="auto-high"),
                 snap("s2", "m1", "m1-m1", "b", FIVE_B, status="reviewed"),
                 snap("s3", "m1", "m1-m1", "b", FIVE_B, status="needs-review"),
                 snap("s4", "m1", "m1-m1", "b", FIVE_B, status="rejected")]
-        self.assertEqual([s["id"] for s in ex.approved_snapshots(rows)],
-                         ["s1", "s2"])
+        self.assertEqual([s["id"] for s in ex.published_snapshots(rows)],
+                         ["s1", "s2", "s3"])
+
+    def test_a_rejected_reading_is_never_published(self):
+        rows = [snap("s4", "m1", "m1-m1", "b", FIVE_B, status="rejected")]
+        self.assertEqual(ex.published_snapshots(rows), [])
+
+    def test_each_state_maps_to_a_tier_a_reader_can_act_on(self):
+        self.assertEqual(ex.audit_tier("reviewed"), "confirmed")
+        self.assertEqual(ex.audit_tier("auto-high"), "strong")
+        self.assertEqual(ex.audit_tier("needs-review"), "provisional")
+
+    def test_an_unrecognised_state_is_never_silently_upgraded(self):
+        """A status this build does not know about must read as the
+        WEAKEST tier, not the strongest — an unknown provenance is not a
+        confirmed one."""
+        for unknown in ("", None, "something-new", "approved"):
+            with self.subTest(status=unknown):
+                self.assertEqual(ex.audit_tier(unknown), "provisional")
+
+    def test_the_old_name_still_means_the_states_that_publish(self):
+        """`approved_snapshots` / APPROVED_REVIEW_STATES kept their meaning
+        ("what publishes") while the set behind them widened, so nothing
+        importing them silently changed behaviour in the other direction."""
+        self.assertIs(ex.approved_snapshots, ex.published_snapshots)
+        self.assertEqual(tuple(ex.APPROVED_REVIEW_STATES),
+                         tuple(ex.PUBLISHED_REVIEW_STATES))
 
     def test_faceit_sourced_snapshots_can_never_supply_comps(self):
         rows = [snap("s1", "m1", "m1-m1", "a", FIVE_A, source="faceit")]
-        self.assertEqual(ex.approved_snapshots(rows), [])
+        self.assertEqual(ex.published_snapshots(rows), [])
 
     def test_a_manual_override_excludes_the_cv_row_it_corrects(self):
         rows = [snap("cv1", "m1", "m1-m1", "a", FIVE_A),
                 snap("man1", "m1", "m1-m1", "a", FIVE_B, source="manual",
                      status="reviewed", overrides="cv1")]
-        kept = [s["id"] for s in ex.approved_snapshots(rows)]
+        kept = [s["id"] for s in ex.published_snapshots(rows)]
         self.assertEqual(kept, ["man1"])
 
 
@@ -353,8 +383,21 @@ class TestProductionExportContracts(unittest.TestCase):
         self.assertIn("withheldMatches", meta)
         self.assertIn("withheldCount", meta)
         self.assertEqual(meta["withheldCount"], len(meta["withheldMatches"]))
-        self.assertEqual(sorted(meta["approvedReviewStates"]),
-                         sorted(ex.APPROVED_REVIEW_STATES))
+        self.assertEqual(sorted(meta["publishedReviewStates"]),
+                         sorted(ex.PUBLISHED_REVIEW_STATES))
+        self.assertEqual(sorted(meta["auditedReviewStates"]),
+                         sorted(ex.AUDITED_REVIEW_STATES))
+        self.assertEqual(meta["publicationModel"], "publish-then-audit")
+        self.assertTrue(meta.get("publicationNote"))
+        self.assertEqual(meta["auditTiers"], dict(ex.AUDIT_TIERS))
+
+    def test_the_publication_model_is_stated_in_the_data_not_only_in_prose(self):
+        """A page describing a review gate the pipeline no longer has would
+        be lying about the provenance of its own data. The export states
+        the model itself, so a page can render it rather than assert it."""
+        meta = self.data["meta"]
+        self.assertEqual(meta["publicationModel"], "publish-then-audit")
+        self.assertNotIn("rejected", meta["publishedReviewStates"])
 
     def test_no_withheld_match_appears_in_any_aggregate(self):
         withheld = {b["matchId"] for b in self.data["meta"]["withheldMatches"]}
@@ -367,14 +410,44 @@ class TestProductionExportContracts(unittest.TestCase):
             for e in row["evidence"]:
                 self.assertNotIn(e["matchId"], withheld)
 
-    def test_every_published_comp_snapshot_is_in_an_approved_state(self):
+    def test_every_published_comp_snapshot_is_in_a_published_state(self):
         for c in self.data["compSnapshots"]:
-            self.assertIn(c["reviewStatus"], ex.APPROVED_REVIEW_STATES, c["id"])
+            self.assertIn(c["reviewStatus"], ex.PUBLISHED_REVIEW_STATES, c["id"])
+            self.assertNotEqual(c["reviewStatus"], "rejected", c["id"])
             self.assertIn(c["source"], ("cv", "manual"), c["id"])
 
-    def test_every_published_hero_stint_is_in_an_approved_state(self):
+    def test_every_published_hero_stint_is_in_a_published_state(self):
         for s in self.data["heroStints"]:
-            self.assertIn(s["reviewStatus"], ex.APPROVED_REVIEW_STATES, s["id"])
+            self.assertIn(s["reviewStatus"], ex.PUBLISHED_REVIEW_STATES, s["id"])
+            self.assertNotEqual(s["reviewStatus"], "rejected", s["id"])
+
+    def test_every_published_fact_carries_the_tier_it_earned(self):
+        """A reader can always tell what is behind a published claim —
+        that is the whole basis on which publishing without a prior human
+        review is defensible."""
+        tiers = set(ex.AUDIT_TIERS.values())
+        for key in ("compSnapshots", "heroStints"):
+            for row in self.data[key]:
+                self.assertIn(row.get("auditTier"), tiers,
+                              f"{key} {row['id']} has no audit tier")
+                self.assertEqual(row["auditTier"],
+                                 ex.audit_tier(row["reviewStatus"]),
+                                 f"{key} {row['id']} tier disagrees with its "
+                                 f"own review status")
+
+    def test_a_provisional_composition_names_the_slots_that_made_it_one(self):
+        """An auditor opens a provisional line-up already knowing where to
+        look, instead of re-reading all five slots to find the weak one."""
+        for c in self.data["compSnapshots"]:
+            self.assertIsInstance(c.get("provisionalSlots"), list, c["id"])
+            if c["auditTier"] == "provisional":
+                self.assertTrue(
+                    c["provisionalSlots"],
+                    f"{c['id']} is provisional but names no slot for it")
+            else:
+                self.assertEqual(
+                    c["provisionalSlots"], [],
+                    f"{c['id']} is {c['auditTier']} yet names provisional slots")
 
     def test_the_rejected_swap_ledger_holds_only_non_confirmed_swaps(self):
         for s in self.data["rejectedSwaps"]:

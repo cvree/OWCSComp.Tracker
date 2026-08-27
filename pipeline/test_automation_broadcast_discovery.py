@@ -514,8 +514,13 @@ class TestVerifiedRegistryStability(unittest.TestCase):
     def test_only_enabled_verified_channel_drives_discovery(self):
         # cfg.load_channels() is what sync_broadcasts/discover_channel_videos
         # actually iterate over — prove it is exactly the one verified entry.
-        live = cfg.load_channels()
+        # YouTube discovery iterates the YouTube rows; a Twitch row is a
+        # real authority for intake but has nothing to do with this API,
+        # and handing its login to videos.list could only produce a false
+        # error about a channel that is fine.
+        live = cfg.load_channels(platform=cfg.DEFAULT_PLATFORM)
         self.assertEqual([c["id"] for c in live], ["ow_esports_global"])
+        self.assertNotIn("ow_esports_twitch", [c["id"] for c in live])
         with tempfile.TemporaryDirectory() as d:
             self._real_channel_fixture(d)
             with open(os.path.join(d, f"playlistItems_{yt._slug(VERIFIED_UPLOADS_PLAYLIST_ID)}_page1.json"), "w", encoding="utf-8") as f:

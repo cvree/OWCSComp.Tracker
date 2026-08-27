@@ -3,9 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Review — OWCS Comp Tracker</title>
-<meta name="description" content="Confirm or correct what the detector read: every hero prediction shown next to the frame it came from, with a one-key approve and a fast hero picker.">
-<meta name="robots" content="noindex">
+<title>Audit — OWCS Comp Tracker</title>
+<meta name="description" content="Audit what was published: every hero read shown next to the frame it came from, with its confidence, the tier it earned, and a fast way to correct anything wrong.">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/archivo-var-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/saira-condensed-700-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -18,18 +17,24 @@
 <main id="main" class="shell shell--wide">
 
   <div class="page-head page-head--tight">
-    <p class="eyebrow eyebrow--amber">Human gate</p>
-    <h1>Review</h1>
+    <p class="eyebrow eyebrow--amber">Human audit</p>
+    <h1>Audit</h1>
     <p class="lede">Every hero the detector read, shown next to the actual frame it read it
-      from. Confirm what is right, correct what is not, flag what you are unsure about.
-      Nothing reaches the public pages until you do.</p>
+      from. Nothing waits on you: readings the detector accepted are already published,
+      each carrying the tier it earned. This is where a person checks them — confirm what
+      is right, correct what is not, flag what you are unsure about, and the correction
+      goes into the record with your name on it.</p>
+    <p class="dim small" style="max-width:74ch">Start with anything marked
+      <b>provisional</b>: the detector accepted it on weaker evidence than the rest.
+      A reading it could <i>not</i> accept was never published at all — an unreadable
+      slot is recorded as unknown, never guessed.</p>
   </div>
 
   <div id="mode-status" style="max-width:74ch"></div>
 
   <div class="rw u-mt-6">
     <aside class="rw__queue" aria-label="Games waiting for review">
-      <h2>Waiting for review</h2>
+      <h2>Published, auditable</h2>
       <div id="queue"></div>
       <div class="card-head" style="border-top:1px solid var(--line);border-bottom:0">
         <label class="label" for="reviewer" style="flex:0 0 auto">Signed as</label>

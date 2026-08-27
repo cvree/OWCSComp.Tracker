@@ -473,9 +473,20 @@ class TestStreamsUrlResolution(unittest.TestCase):
                       runner.cmds[0])
 
     def test_the_real_registry_channel_resolves_canonically(self):
-        for ch in mf.scan_channels():
+        youtube = [c for c in mf.scan_channels()
+                   if c["platform"] == li.YOUTUBE]
+        self.assertTrue(youtube)
+        for ch in youtube:
             self.assertRegex(mf.channel_streams_url(ch),
                              r"^https://www\.youtube\.com/channel/UC[\w-]+/streams$")
+
+    def test_a_non_youtube_row_has_no_streams_url(self):
+        """/streams is a YouTube path. Building one for a Twitch row would
+        produce a URL that can only 404 — scan reaches for that platform's
+        own source instead."""
+        for ch in mf.scan_channels():
+            if ch["platform"] != li.YOUTUBE:
+                self.assertIsNone(mf.channel_streams_url(ch))
 
 
 class TestLedgerSnapshotFallback(unittest.TestCase):
@@ -553,6 +564,300 @@ class TestChannelAuthority(unittest.TestCase):
         ]
         chans = mf.scan_channels(rows)
         self.assertEqual([c["id"] for c in chans], ["ok"])
+
+
+class TestTwitchSource(unittest.TestCase):
+    """Twitch is the source an unattended runner can actually follow up on.
+
+    A GitHub-hosted runner is bot-checked by YouTube on every player client,
+    and resolves a Twitch VOD with no credential at all (measured — see
+    docs/UNATTENDED.md). Finding a broadcast the pipeline can never fetch is
+    only half a discovery.
+    """
+
+    @staticmethod
+    def _dump(entries):
+        return json.dumps({"entries": entries})
+
+    def test_it_reads_the_videos_tab_not_the_streams_tab(self):
+        runner = FakeRunner(stdout=self._dump([]))
+        mf.fetch_twitch_vods("https://www.twitch.tv/ow_esports", runner=runner)
+        self.assertIn("https://www.twitch.tv/ow_esports/videos", runner.cmds[0])
+        # Already-suffixed URLs are not double-suffixed.
+        runner2 = FakeRunner(stdout=self._dump([]))
+        mf.fetch_twitch_vods("https://www.twitch.tv/ow_esports/videos",
+                             runner=runner2)
+        self.assertIn("https://www.twitch.tv/ow_esports/videos", runner2.cmds[0])
+        self.assertNotIn("videos/videos", " ".join(runner2.cmds[0]))
+
+    def test_a_timestamp_is_used_when_the_dump_carries_one(self):
+        """When the flat dump does carry a timestamp it is read, preferring
+        release_timestamp (when the stream went live) over timestamp.
+
+        It usually does NOT. A live scan of the real channel returned
+        fifteen VODs and every one of them was dateless — the same gap the
+        YouTube listing has, which is why the backfill below exists for
+        both platforms."""
+        entries, err = mf.fetch_twitch_vods(
+            "https://www.twitch.tv/ow_esports",
+            runner=FakeRunner(stdout=self._dump([{
+                "id": "2854348714",
+                "title": "OWCS 2026 | Stage 2 Playoffs | Day 2",
+                "release_timestamp": 1756000000,
+                "duration": 21600, "live_status": "was_live",
+                "channel": "Overwatch Esports"}])))
+        self.assertIsNone(err)
+        self.assertEqual(len(entries), 1)
+        e = entries[0]
+        self.assertEqual(e["videoId"], "2854348714")
+        self.assertEqual(e["durationSeconds"], 21600)
+        self.assertEqual(e["liveBroadcastStatus"], "completed")
+        self.assertTrue(e["publishedAt"].startswith("2025-"))
+
+    def test_a_non_vod_id_is_skipped_rather_than_guessed_at(self):
+        entries, err = mf.fetch_twitch_vods(
+            "https://www.twitch.tv/ow_esports",
+            runner=FakeRunner(stdout=self._dump([
+                {"id": "v2854348714", "title": "prefixed"},   # normalised
+                {"id": "some-clip-slug", "title": "a clip"},  # skipped
+                {"id": None, "title": "no id"},               # skipped
+            ])))
+        self.assertIsNone(err)
+        self.assertEqual([e["videoId"] for e in entries], ["2854348714"])
+
+    def test_every_failure_becomes_a_named_error_never_an_exception(self):
+        for runner, needle in (
+            (FakeRunner(raise_missing=True), "yt-dlp not found"),
+            (FakeRunner(returncode=1, stderr="boom"), "yt-dlp exit 1"),
+            (FakeRunner(stdout="{not json"), "unparseable"),
+        ):
+            with self.subTest(needle=needle):
+                entries, err = mf.fetch_twitch_vods(
+                    "https://www.twitch.tv/ow_esports", runner=runner)
+                self.assertEqual(entries, [])
+                self.assertIn("twitch-videos", err)
+                self.assertIn(needle, err)
+
+    def test_a_candidate_carries_a_twitch_url_intake_accepts(self):
+        """A discovered broadcast is only useful if the same URL survives
+        the intake parser — that round trip is the whole handoff."""
+        ch = {"id": "ow_esports_twitch", "platform": li.TWITCH,
+              "channelId": "ow_esports", "title": "Overwatch Esports",
+              "sourceUrl": "https://www.twitch.tv/ow_esports"}
+        cands = mf.merge_channel_entries(ch, [], [{
+            "videoId": "2854348714",
+            "title": "OWCS 2026 | Stage 2 Playoffs | Day 2 | NA vs EMEA",
+            "publishedAt": "2026-08-24T01:46:40+00:00",
+            "description": "", "channelTitle": "Overwatch Esports",
+            "durationSeconds": 21600, "liveBroadcastStatus": "completed",
+        }], platform=li.TWITCH)
+        self.assertEqual(len(cands), 1)
+        c = cands[0]
+        self.assertEqual(c["platform"], li.TWITCH)
+        self.assertEqual(c["url"], "https://www.twitch.tv/videos/2854348714")
+        self.assertEqual(c["sources"], ["twitch-videos"])
+        self.assertEqual(c["channelRegistryId"], "ow_esports_twitch")
+        parsed = li.parse_link(c["url"])
+        self.assertEqual(parsed["platform"], li.TWITCH)
+        self.assertEqual(parsed["videoId"], c["videoId"])
+
+    def test_the_listing_tab_still_wins_for_duration_and_live_status(self):
+        """The rule the YouTube merge follows — the listing source is
+        authoritative for what RSS cannot carry — must not quietly stop
+        applying just because the source has a different name."""
+        ch = {"id": "ow_esports_twitch", "platform": li.TWITCH,
+              "channelId": "ow_esports", "sourceUrl": "https://www.twitch.tv/x"}
+        cands = mf.merge_channel_entries(ch, [], [{
+            "videoId": "2854348714", "title": "OWCS 2026 Day 2",
+            "publishedAt": None, "description": None, "channelTitle": None,
+            "durationSeconds": 21600, "liveBroadcastStatus": "completed",
+        }], platform=li.TWITCH)
+        self.assertEqual(cands[0]["durationSeconds"], 21600)
+        self.assertEqual(cands[0]["liveBroadcastStatus"], "completed")
+
+    def test_scan_sends_each_platform_to_its_own_source(self):
+        """A channel id only means something inside its own namespace: the
+        Twitch row must never reach the YouTube RSS/streams path, and the
+        YouTube row must never reach the Twitch one."""
+        runner = FakeRunner(stdout=self._dump([]))
+        fetched_rss: list[str] = []
+
+        def fetch(url, timeout=None):
+            fetched_rss.append(url)
+            return b"<feed></feed>"
+
+        chans = [
+            {"id": "yt", "platform": li.YOUTUBE, "channelId": "UCtest",
+             "sourceUrl": "https://www.youtube.com/OW_Esports"},
+            {"id": "tw", "platform": li.TWITCH, "channelId": "ow_esports",
+             "sourceUrl": "https://www.twitch.tv/ow_esports"},
+        ]
+        old = mf.LEDGER_REL
+        mf.LEDGER_REL = os.path.join("work", "nonexistent-ledger.json")
+        try:
+            mf.scan(channels=chans, fetch=fetch, runner=runner)
+        finally:
+            mf.LEDGER_REL = old
+        urls = [" ".join(c) for c in runner.cmds]
+        self.assertTrue(any("youtube.com/channel/UCtest/streams" in u
+                            for u in urls))
+        self.assertTrue(any("twitch.tv/ow_esports/videos" in u for u in urls))
+        # The Twitch login never becomes a YouTube channel id.
+        self.assertFalse(any("ow_esports" in u for u in fetched_rss))
+        self.assertFalse(any("youtube.com/channel/ow_esports" in u
+                             for u in urls))
+
+
+class TestTwitchDateBackfill(unittest.TestCase):
+    """Measured, not assumed: a live scan of the real channel returned
+    fifteen Twitch VODs and every one of them arrived with no air date, so
+    the flat dump is no more forthcoming here than YouTube's is.
+
+    The difference that matters is what happens next. The per-video lookup
+    that fills the gap is REFUSED on YouTube from a GitHub-hosted runner —
+    which is why the API path exists and is primary there — and is served
+    on Twitch. So the path this repo had already written, and had to route
+    around for YouTube, is exactly the one that works for Twitch.
+    """
+
+    @staticmethod
+    def _ledger():
+        return {"candidates": [
+            {"videoId": "2854348714", "platform": "twitch",
+             "title": "OWCS 2026 | Day 2", "publishedAt": None,
+             "likeness": {"confidence": "likely", "refused": False},
+             "sources": ["twitch-videos"]},
+            {"videoId": "dQw4w9WgXcQ",
+             "title": "OWCS 2026 | Day 1", "publishedAt": None,
+             "likeness": {"confidence": "likely", "refused": False},
+             "sources": ["streams"]},
+        ]}
+
+    def test_each_row_is_looked_up_on_its_own_platform(self):
+        seen = []
+
+        def meta(vid, platform):
+            seen.append((vid, platform))
+            return {"publishedAt": "2026-08-24T01:46:40+00:00",
+                    "durationSeconds": 21600,
+                    "liveBroadcastStatus": "completed"}, None
+
+        led, errors, filled = mf.fill_missing_dates(
+            self._ledger(), limit=5, fetch_meta=meta)
+        self.assertEqual(errors, [])
+        self.assertEqual(filled, 2)
+        self.assertEqual(sorted(seen), sorted([
+            ("2854348714", li.TWITCH), ("dQw4w9WgXcQ", li.YOUTUBE)]))
+
+    def test_the_lookup_url_is_the_row_platform_url(self):
+        """A Twitch id sent to a YouTube URL would 404 forever, and the
+        circuit breaker would read that as the source refusing us."""
+        runner = FakeRunner(stdout=json.dumps(
+            {"id": "2854348714", "release_timestamp": 1756000000}))
+        fields, err = mf.fetch_video_metadata(
+            "2854348714", runner=runner, platform=li.TWITCH)
+        self.assertIsNone(err)
+        self.assertIn("https://www.twitch.tv/videos/2854348714", runner.cmds[0])
+        self.assertTrue(fields["publishedAt"].startswith("2025-"))
+        # and the default is unchanged for every existing caller
+        runner2 = FakeRunner(stdout=json.dumps({"id": "dQw4w9WgXcQ"}))
+        mf.fetch_video_metadata("dQw4w9WgXcQ", runner=runner2)
+        self.assertIn("https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+                      runner2.cmds[0])
+
+    def test_a_fetcher_written_against_the_old_arity_still_works(self):
+        """The injected fetcher is a test seam that predates platforms."""
+        def meta(vid):
+            return {"publishedAt": "2026-08-24T00:00:00+00:00"}, None
+
+        _led, errors, filled = mf.fill_missing_dates(
+            self._ledger(), limit=5, fetch_meta=meta)
+        self.assertEqual((errors, filled), ([], 2))
+
+    def test_a_typeerror_inside_a_fetcher_is_never_swallowed(self):
+        """Deciding arity by signature rather than by catching TypeError:
+        a real bug inside a fetcher must not be retried as a different
+        call and turned into a silent wrong answer."""
+        def meta(vid, platform):
+            raise TypeError("a real bug inside the fetcher")
+
+        with self.assertRaises(TypeError):
+            mf.fill_missing_dates(self._ledger(), limit=1, fetch_meta=meta)
+
+
+class TestUnattendedQueue(unittest.TestCase):
+    """What an unattended run is allowed to pick up on its own.
+
+    Every filter here is a refusal to let a scheduled job do something a
+    person would have had to decide."""
+
+    @staticmethod
+    def _ledger():
+        def row(vid, platform, published, confidence="likely", refused=False,
+                url=None):
+            return {"videoId": vid, "platform": platform,
+                    "url": url or f"https://www.twitch.tv/videos/{vid}",
+                    "publishedAt": published,
+                    "likeness": {"confidence": confidence, "refused": refused}}
+        return {"candidates": [
+            row("2854348714", "twitch", "2026-08-20T00:00:00+00:00"),
+            row("2853861755", "twitch", "2026-08-01T00:00:00+00:00"),
+            row("2853399482", "twitch", None),
+            row("2852904382", "twitch", "2026-07-01T00:00:00+00:00",
+                confidence="unlikely"),
+            row("2852428517", "twitch", "2026-07-01T00:00:00+00:00", refused=True),
+            row("dQw4w9WgXcQ", "youtube", "2026-06-01T00:00:00+00:00",
+                url="https://www.youtube.com/watch?v=dQw4w9WgXcQ"),
+        ]}
+
+    def test_oldest_first_so_the_archive_completes_in_order(self):
+        self.assertEqual([r["videoId"] for r in mf.fetchable_queue(self._ledger())],
+                         ["2853861755", "2854348714", "2853399482"])
+
+    def test_a_dateless_row_sorts_last_not_first(self):
+        """None would otherwise compare as the earliest possible date and
+        let every undated row jump the whole queue."""
+        q = mf.fetchable_queue(self._ledger())
+        self.assertEqual(q[-1]["videoId"], "2853399482")
+
+    def test_a_youtube_row_is_never_queued_unattended(self):
+        """This hardware cannot fetch one, so queueing it would only make a
+        job that can never move."""
+        ids = [r["videoId"] for r in mf.fetchable_queue(self._ledger())]
+        self.assertNotIn("dQw4w9WgXcQ", ids)
+
+    def test_unlikely_and_refused_are_both_left_for_a_human(self):
+        ids = [r["videoId"] for r in mf.fetchable_queue(self._ledger())]
+        self.assertNotIn("2852904382", ids)   # scored unlikely, with reasons
+        self.assertNotIn("2852428517", ids)   # refused outright
+
+    def test_next_skips_what_is_already_in_flight(self):
+        led = self._ledger()
+        self.assertEqual(mf.next_fetchable(led)["videoId"], "2853861755")
+        self.assertEqual(
+            mf.next_fetchable(led, exclude={"2853861755"})["videoId"], "2854348714")
+        self.assertIsNone(
+            mf.next_fetchable(led, exclude={"2854348714", "2853861755", "2853399482"}))
+
+    def test_an_empty_or_junk_ledger_yields_nothing_rather_than_raising(self):
+        for led in ({}, {"candidates": None}, {"candidates": ["not a dict"]},
+                    {"candidates": [{"videoId": "1", "platform": "twitch"}]}):
+            with self.subTest(ledger=led):
+                self.assertEqual(mf.fetchable_queue(led), [])
+                self.assertIsNone(mf.next_fetchable(led))
+
+    def test_the_queued_url_is_one_the_download_gate_will_accept(self):
+        """The handoff that matters: discovery -> intake -> the worker.
+        A queued URL the downloader refuses is a job that dies at the
+        last gate, after everything upstream said yes."""
+        from automation import worker as w
+        for row in mf.fetchable_queue(self._ledger()):
+            parsed = li.parse_link(row["url"])
+            self.assertEqual(parsed["videoId"], row["videoId"])
+            vid = w.validate_source(
+                {"sourceUrl": row["url"], "channelId": "ow_esports"},
+                official_channel_ids={"ow_esports"})
+            self.assertEqual(vid, row["videoId"])
 
 
 if __name__ == "__main__":

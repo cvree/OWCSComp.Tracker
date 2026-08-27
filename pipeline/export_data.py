@@ -871,20 +871,75 @@ def calibration_summary(source_id: str | None, roster: int) -> dict | None:
 # than only eyeballed in a browser.
 #
 # THE RULE, identical to stats.js's: only comp snapshots whose reviewStatus
-# is 'reviewed' or 'auto-high' and whose source is 'cv' or 'manual' count. A
-# manual snapshot overrides the cv one it corrects. Anything else — including
-# every unreviewed detection — contributes to nothing.
-# =====================================================================
-APPROVED_REVIEW_STATES = ("reviewed", "auto-high")
+# is a PUBLISHED state and whose source is 'cv' or 'manual' count. A manual
+# snapshot overrides the cv one it corrects.
+#
+# WHAT CHANGED, AND WHY IT IS NOT A LOWERING OF THE BAR
+# ----------------------------------------------------
+# This gate used to be ('reviewed', 'auto-high'): a detection reached the
+# public site only after a person signed it off, and a 'needs-review'
+# reading contributed to nothing. That was a review-BEFORE-publication
+# model, and it does not survive an unattended pipeline — nobody is at the
+# gate, so the gate is just a place data stops.
+#
+# The model is now publish-then-audit: everything the DETECTOR accepted is
+# published, carrying the tier it earned, and a human audits it on the
+# published site afterwards (review.html reads the published dataset;
+# corrections land in corrections/corrections.json, which git keeps as the
+# audit trail).
+#
+# The bar the detector applies is untouched, and it is the bar that
+# matters. A slot that cannot clear `unknown_floor` reads UNKNOWN; a slot
+# whose best and runner-up are too close to separate fails `min_margin`
+# and reads UNKNOWN; a hero with no template is UNKNOWN. None of those
+# become stints at all, so none of them can be published by this change.
+# What this changes is only the SECOND, human-facing tier that sat on top:
+# 'needs-review' meant "a person should look at this", not "the detector
+# does not believe it".
+#
+# 'rejected' is the one state that is never published — it is the record
+# of something having been judged wrong, by the pipeline or by a person,
+# and publishing it would be publishing a known error.
+PUBLISHED_REVIEW_STATES = ("reviewed", "auto-high", "needs-review")
+
+#: The subset a human has personally confirmed, or the detector was
+#: overwhelmingly sure of. Kept as a NAMED concept because the site labels
+#: provenance per composition — a reader can always tell which tier a
+#: number came from — even though both tiers now publish.
+AUDITED_REVIEW_STATES = ("reviewed", "auto-high")
+
+# Public vocabulary. The DB's status names describe a review QUEUE that no
+# longer exists; these describe what a reader is actually being told about
+# a published fact.
+AUDIT_TIERS = {
+    "reviewed": "confirmed",      # a person audited this and confirmed it
+    "auto-high": "strong",        # overwhelming temporal agreement
+    "needs-review": "provisional",  # accepted, weaker evidence, audit first
+}
+
+# Backwards-compatible alias. Several consumers and tests imported this
+# name when it meant "the states that publish"; it still means exactly
+# that, and it is the wider set now.
+APPROVED_REVIEW_STATES = PUBLISHED_REVIEW_STATES
 
 
-def approved_snapshots(snapshots: list[dict]) -> list[dict]:
+def audit_tier(review_status: str | None) -> str:
+    """The public tier for one DB review status. Unknown states are
+    reported as 'provisional' rather than silently upgraded."""
+    return AUDIT_TIERS.get(review_status or "", "provisional")
+
+
+def published_snapshots(snapshots: list[dict]) -> list[dict]:
     """The publishable subset — the one gate every aggregate below shares."""
     overridden = {c["overridesId"] for c in snapshots if c.get("overridesId")}
     return [c for c in snapshots
-            if c.get("reviewStatus") in APPROVED_REVIEW_STATES
+            if c.get("reviewStatus") in PUBLISHED_REVIEW_STATES
             and c.get("source") in ("cv", "manual")
             and c["id"] not in overridden]
+
+
+#: Older name for the same function, kept so nothing that imported it breaks.
+approved_snapshots = published_snapshots
 
 
 def _map_index(matches: list[dict]) -> dict[str, dict]:
@@ -1153,14 +1208,17 @@ def build_map_mode_stats(matches: list[dict],
 def provisional_reasons(con, match_id: str) -> list[str]:
     """Why a match must NOT reach the public site yet, if any.
 
-    A "provisional" match is one carrying CV output that no human has signed
-    off. The export already only reads `ingest_runs` with status='complete'
-    and only emits comp snapshots in an approved review state — this function
-    is the explicit, testable statement of that rule, and it closes the two
-    ways a provisional row could still slip through:
+    A withheld match is one whose READING never finished — not one waiting
+    on a person. Publication no longer waits on a human review (see
+    PUBLISHED_REVIEW_STATES), so the only thing that withholds a match now
+    is incompleteness: there is nothing to publish, and therefore nothing
+    to audit either.
 
-      * an ingest run that exists but is not complete (a dry run, a crash, a
-        detection awaiting review) — its map must publish no compositions;
+    This function is the explicit, testable statement of that rule, and it
+    closes the two ways an unfinished row could still slip through:
+
+      * an ingest run that exists but is not complete (a dry run, a crash,
+        a detection run that died mid-map) — its map publishes nothing;
       * a match flagged `needs_review` / a non-final lifecycle while carrying
         map results.
 
@@ -1172,8 +1230,9 @@ def provisional_reasons(con, match_id: str) -> list[str]:
     incomplete = [r["id"] for r in runs if (r["status"] or "") != "complete"]
     if incomplete:
         reasons.append(
-            f"ingest run(s) {', '.join(incomplete)} are not complete — their "
-            f"detections have not been reviewed and committed")
+            f"ingest run(s) {', '.join(incomplete)} are not complete — the "
+            f"broadcast was not read all the way through, so there is no "
+            f"finished result to publish")
     row = con.execute("SELECT * FROM matches WHERE id=?", (match_id,)).fetchone()
     if row is None:
         reasons.append(f"match {match_id} does not exist in the content DB")
@@ -1279,7 +1338,7 @@ def build_public_payload(con) -> dict:
             stints = _stints_for_map(con, mr["id"])
             map_pub_id_for_stints = f"{mid}-m{mr['map_order']}"
             for st in stints:
-                if rv(st, "status") not in APPROVED_REVIEW_STATES:
+                if rv(st, "status") not in PUBLISHED_REVIEW_STATES:
                     continue
                 evs, eve = rv(st, "evidence_start"), rv(st, "evidence_end")
                 hero_stints_out.append({
@@ -1293,6 +1352,10 @@ def build_public_payload(con) -> dict:
                     "meanConfidence": rv(st, "mean_conf"),
                     "minConfidence": rv(st, "min_conf"),
                     "reviewStatus": rv(st, "status"),
+                    # What a READER is told about this fact. The DB status
+                    # names a review queue that no longer exists; this
+                    # names the evidence behind the published claim.
+                    "auditTier": audit_tier(rv(st, "status")),
                     "source": ("manual" if rv(st, "manual_override") else
                                rv(st, "source", "cv")),
                     "detectorVersion": rv(st, "detector_version"),
@@ -1379,13 +1442,16 @@ def build_public_payload(con) -> dict:
             if run is None:
                 continue
             frames_rel = f"reports/ingest/{run['id']}/frames"
-            approved = {"auto-high", "reviewed"}
+            approved = set(AUDITED_REVIEW_STATES)
             for team in (m["team_a"], m["team_b"]):
                 for t in _snapshot_times(con, mr["id"], team, rounds):
                     heroes5, rows = _comp_at(stints, team, t)
                     if len(heroes5) != 5:
                         continue
                     statuses = {r_["status"] for r_ in rows}
+                    # A composition is only as strong as its weakest slot:
+                    # five heroes read together are one claim, and one
+                    # provisional slot makes the whole line-up provisional.
                     review = ("auto-high" if statuses <= approved
                               else "needs-review")
                     manual = any(rv(r_, "manual_override") for r_ in rows)
@@ -1404,6 +1470,13 @@ def build_public_payload(con) -> dict:
                         "confidence": (round(sum(confs) / len(confs), 3)
                                        if confs else None),
                         "reviewStatus": review,
+                        "auditTier": audit_tier(review),
+                        # Which slots made this line-up provisional, so an
+                        # auditor opens the composition already knowing
+                        # where to look instead of re-reading all five.
+                        "provisionalSlots": sorted(
+                            rv(r_, "slot") for r_ in rows
+                            if r_["status"] not in AUDITED_REVIEW_STATES),
                         "evidenceRunId": run["id"],
                         "evidenceFrame": _nearest_frame(frames_rel, t),
                     })
@@ -1516,7 +1589,9 @@ def build_public_payload(con) -> dict:
                 f"{len(maps_out)} map"
                 f"{' was' if len(maps_out) == 1 else 's were'} read off the "
                 "broadcast. The series scoreline was not recorded, so it is "
-                "not shown — only what was actually read and confirmed is."),
+                "not shown — only what was actually read is, and every "
+                "reading here can be checked against the frame it came "
+                "from."),
             "maps": maps_out,
         })
 
@@ -1682,8 +1757,10 @@ def build_public_payload(con) -> dict:
         mo["summary"] = ("Withheld from publication: "
                          + "; ".join(reasons)
                          + ". Calendar facts only — no composition, swap or "
-                           "score from this match is published until review "
-                           "is complete.")
+                           "score from this match is published. This is not "
+                           "a match waiting on a person: it is one whose "
+                           "reading never finished, so there is nothing yet "
+                           "to publish or audit.")
     blocked_ids = {b["matchId"] for b in blocked}
     if blocked_ids:
         snaps_out = [s for s in snaps_out if s["matchId"] not in blocked_ids]
@@ -1709,19 +1786,37 @@ def build_public_payload(con) -> dict:
             "demo": False,
             "generatedAt": now,
             "note": ("Production export from data/owcs.sqlite — only "
-                     "captured, staged and reviewed data; no invented "
-                     "values."),
+                     "captured and staged data; no invented values."),
             # Publication provenance: what was withheld and why, so a gap on
             # the site is always explainable from the export itself.
             "withheldMatches": blocked,
             "withheldCount": len(blocked),
-            "approvedReviewStates": list(APPROVED_REVIEW_STATES),
+            "publishedReviewStates": list(PUBLISHED_REVIEW_STATES),
+            "auditedReviewStates": list(AUDITED_REVIEW_STATES),
+            "auditTiers": dict(AUDIT_TIERS),
+            # The publication model, stated in the data rather than only in
+            # prose on a page that could drift away from it.
+            "publicationModel": "publish-then-audit",
+            "publicationNote": (
+                "Every composition the DETECTOR accepted is published, "
+                "carrying the tier it earned: 'confirmed' means a person "
+                "audited it, 'strong' means overwhelming temporal "
+                "agreement, 'provisional' means accepted on weaker "
+                "evidence and worth auditing first. A reading the detector "
+                "did not accept is not here at all — an unreadable slot is "
+                "UNKNOWN, never a guess — and a 'rejected' reading is "
+                "never published. Audit any published composition against "
+                "its own evidence on review.html; corrections land in "
+                "corrections/corrections.json, which git keeps as the "
+                "audit trail."),
             "aggregatesNote": ("compFrequency/compWinRate/heroPickRates/"
                                "teamHeroPools/teamMapRecords/mapStats/"
-                               "modeStats are derived from the approved comp "
-                               "snapshots in THIS file, after provisional "
-                               "matches were withheld — they can never "
-                               "include a withheld match."),
+                               "modeStats are derived from the published "
+                               "comp snapshots in THIS file, after "
+                               "withheld matches were removed — they can "
+                               "never include a withheld match, and every "
+                               "snapshot they count carries its own "
+                               "auditTier."),
         },
         "regions": REGIONS,
         "teams": teams,

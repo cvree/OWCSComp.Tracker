@@ -71,9 +71,19 @@ def resume_target_for(state: str) -> str:
 
 # Only these domains are ever accepted as an "official" broadcast source —
 # never an arbitrary URL, never a shell string, never an unofficial mirror.
-ALLOWED_HOSTS = frozenset({
+#
+# Twitch is here because it is the only source unattended hardware can
+# actually fetch: a GitHub-hosted runner is bot-checked by YouTube on every
+# player client and serves a Twitch VOD with no credential at all
+# (measured — see docs/UNATTENDED.md). This list is deliberately kept as
+# its own gate rather than deferring to link_intake: intake decides what
+# may be RECORDED, this decides what may be FETCHED, and one should not be
+# able to widen the other by accident.
+YOUTUBE_HOSTS = frozenset({
     "youtube.com", "www.youtube.com", "m.youtube.com", "youtu.be",
 })
+TWITCH_HOSTS = frozenset({"twitch.tv", "www.twitch.tv", "m.twitch.tv"})
+ALLOWED_HOSTS = YOUTUBE_HOSTS | TWITCH_HOSTS
 
 REQUIRED_TOOLS = ("ffmpeg", "ffprobe", "yt-dlp")
 
@@ -228,6 +238,16 @@ class SourceValidationError(ValueError):
 def _video_id_from_url(url: str) -> str | None:
     parsed = urlparse(url)
     host = (parsed.hostname or "").lower()
+    if host in TWITCH_HOSTS:
+        # /videos/<id> is the only Twitch path that names a VOD. A channel
+        # URL names whatever is live right now and a clip is not the
+        # broadcast — neither is a thing this pipeline can download, so
+        # both resolve to no id and are refused by the caller.
+        parts = [p for p in parsed.path.split("/") if p]
+        if len(parts) >= 2 and parts[0].lower() == "videos":
+            vid = parts[1].lstrip("vV")
+            return vid if vid.isdigit() else None
+        return None
     if host in ("youtu.be",):
         vid = parsed.path.strip("/")
         return vid or None
@@ -268,10 +288,20 @@ def validate_source(payload: dict, *, official_channel_ids: set | None = None,
         raise SourceValidationError(
             f"unsupported/unofficial domain: {host!r} "
             f"(only {sorted(ALLOWED_HOSTS)} are ever accepted)")
-    video_id = payload.get("videoId") or _video_id_from_url(url)
+    from_url = _video_id_from_url(url)
+    video_id = payload.get("videoId") or from_url
     if not video_id or not str(video_id).strip():
         raise SourceValidationError(f"could not resolve a video id from {url!r}")
     video_id = str(video_id).strip()
+    # A payload id and a URL that disagree is  never both right, and this is
+    # the gate that decides what gets fetched. It used to take the payload
+    # id on faith, which was survivable while every id came from one
+    # namespace; with two, a Twitch id beside a YouTube URL (or the
+    # reverse) would authorize one broadcast and download another.
+    if from_url and video_id != from_url:
+        raise SourceValidationError(
+            f"payload video id {video_id!r} disagrees with the id in its own "
+            f"source URL ({from_url!r}) — refusing rather than choosing one")
 
     manual_ok = manual_approved_video_ids and video_id in manual_approved_video_ids
     if manual_ok:

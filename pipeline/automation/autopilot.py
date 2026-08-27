@@ -21,9 +21,16 @@ What the autopilot NEVER does, deliberately:
     `approve-source --confirm` (the audited human gate);
   * approve a LAYOUT — a freshly-calibrated layout always stops on
     `approve-layout --confirm` after a human has looked at the sheet;
-  * approve a DETECTION review — the gate that lets hero compositions reach
-    production is always a human decision, `--auto-accept` or not;
-  * publish — `process-approved-job --publish` stays a supervised command.
+  * approve a DETECTION review — there is no such gate any more. What the
+    detector accepted is published and audited afterwards on the published
+    site (publish-then-audit; see `_handle_review` for why, and for what
+    did NOT change: the detector's own UNKNOWN and margin floors).
+
+Publication itself is opt-in per run (`publish=True`) — not because it
+needs a human's judgement, but because it WRITES: it regenerates the
+export, runs the packaging and reproducibility gates, and commits. A local
+dry run should not push commits by surprise; the unattended workflow asks
+for it explicitly.
 
 `auto_accept=True` covers exactly one gate: SEGMENT identity review. It runs
 the identity proposer on every pending segment and accepts each proposal
@@ -218,9 +225,16 @@ def run_autopilot(store: js.JobStore, lock_mgr: lk.LockManager,
                   manual_approved_video_ids: set | None = None,
                   samples: int = 8, ocr_engine: str = "easyocr",
                   run_one=None, propose_fn=None, accept_fn=None,
-                  extract_fn=None) -> dict:
+                  extract_fn=None, publish: bool = False, push: bool = True,
+                  publish_fn=None) -> dict:
     """Drive one job through every automatic stage until a human gate,
     a terminal state, or a blocker. Returns a full report:
+
+    Publication is NOT a human gate any more (see `_handle_review`): what
+    the detector accepted is published and audited afterwards. The gates
+    that remain are the ones about AUTHORITY and SETUP — whether a source
+    may be downloaded at all, and whether a layout describes this
+    broadcast — neither of which a detection can settle.
 
       {"ok", "jobKey", "state", "stop", "stopDetail", "steps": [...],
        "blocking": [...], "nextCommand": "..."}
@@ -363,11 +377,24 @@ def run_autopilot(store: js.JobStore, lock_mgr: lk.LockManager,
                 break
             after = store.get(job_key).state
             if after == sm.APPROVED and before == sm.APPROVED:
-                # Detection committed. Publication is a supervised command —
-                # a legitimate resting point, not a loop.
-                stop = STOP_HUMAN_GATE
-                detail = ("detection committed — publication stays "
-                          "supervised: process-approved-job --publish")
+                # Detection committed. Publication is the last step, and it
+                # is no longer a human decision (see `_handle_review`) — but
+                # it WRITES: it regenerates the export, runs the packaging
+                # and reproducibility gates, commits and pushes. So it is
+                # opt-in per run rather than something a local dry run does
+                # by surprise. The unattended workflow passes publish=True.
+                if not publish:
+                    stop = STOP_HUMAN_GATE
+                    detail = ("detection committed and ready to publish — "
+                              "re-run with --publish to regenerate the "
+                              "export and commit it (publication is not a "
+                              "review gate any more; it is audited after "
+                              "the fact on review.html)")
+                    break
+                ok, why = _publish(store, job_key, steps,
+                                   publish_fn=publish_fn, push=push)
+                stop = STOP_TERMINAL if ok else STOP_BLOCKED
+                detail = why
                 break
             if after == before:
                 stop = STOP_NO_PROGRESS
@@ -388,14 +415,30 @@ def _handle_review(store: js.JobStore, job, steps: list[dict], *,
     pending = _list_segments(store, video_id, "pending")
     approved = _list_segments(store, video_id, "approved")
 
-    # Detection review: the job ran detection (payload carries the summary)
-    # and no segment is pending — the review on the table is whether hero
-    # compositions reach production. ALWAYS a human decision.
+    # Detection review used to stop here: approving comps into production
+    # was always a human decision, and this was the gate.
+    #
+    # PUBLISH-THEN-AUDIT. It is not a gate any more. An unattended pipeline
+    # has nobody standing at one, so the gate was not a safeguard — it was
+    # the place every unattended run stopped forever. What the detector
+    # accepted is published, carrying the tier it earned, and a person
+    # audits it afterwards on the published site (review.html reads the
+    # published dataset; corrections land in corrections/corrections.json,
+    # which git keeps as the audit trail).
+    #
+    # The detector's own bar is untouched and it is the bar that matters:
+    # a slot that cannot clear `unknown_floor`, or whose best and runner-up
+    # are too close to separate, reads UNKNOWN and never becomes a
+    # composition at all. A reading judged wrong is 'rejected' and is never
+    # published. What this removed is only the second, human-facing tier —
+    # 'needs-review' meant "a person should look at this", not "the
+    # detector does not believe it".
     if job.payload.get("detection") and not pending:
-        return (STOP_HUMAN_GATE,
-                "detection candidates await HUMAN review — approving comps "
-                "into production is never automatic (review the ingest "
-                "report, then transition the job to APPROVED)")
+        store.transition(job.job_key, sm.APPROVED)
+        _step(steps, sm.NEEDS_REVIEW, "publish", True,
+              "detection complete — published for audit (publish-then-audit; "
+              "the detector's UNKNOWN/margin floors are unchanged)")
+        return ("continue", "detection published for audit")
 
     if pending:
         if not auto_accept:
@@ -436,6 +479,41 @@ def _handle_review(store: js.JobStore, job, steps: list[dict], *,
     return (STOP_BLOCKED,
             f"no approved segment to detect ({len(pending)} pending, "
             f"{len(approved)} approved) — review or re-segment first")
+
+
+def _publish(store: js.JobStore, job_key: str, steps: list[dict], *,
+             publish_fn, push: bool) -> tuple[bool, str]:
+    """Run the publication step. Every gate publish.publish_job already
+    enforces still runs — preconditions, export regeneration + validation,
+    the packaging check — so removing the human review did not remove the
+    checks; it removed the WAIT."""
+    job = store.get(job_key)
+    fn = publish_fn
+    if fn is None:
+        from . import publish as pub
+        from . import segment_identity as si
+
+        def fn(store_, job_):
+            segments = si.list_segments(store_.con,
+                                        video_id=job_.payload.get("videoId"),
+                                        status="approved")
+            if not segments:
+                return {"ok": False, "code": "no_approved_segment",
+                        "reason": "nothing approved to publish"}
+            return pub.publish_job(store_, store_.con, job_, segments[0],
+                                   dry_run=False, push=push)
+    try:
+        result = fn(store, job)
+    except Exception as exc:  # noqa: BLE001 — a stage never kills the loop
+        _step(steps, sm.APPROVED, "publish", False,
+              f"{type(exc).__name__}: {exc}")
+        return False, f"publication failed: {type(exc).__name__}: {exc}"
+    ok = bool(result.get("ok"))
+    why = (result.get("reason") or result.get("code")
+           or ("published" if ok else "publication refused"))
+    _step(steps, sm.APPROVED, "publish", ok, why)
+    return ok, ("published — now auditable on review.html" if ok
+                else f"publication refused: {why}")
 
 
 def _ensure_extracted(store: js.JobStore, job, steps: list[dict], *,

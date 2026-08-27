@@ -1,0 +1,193 @@
+# =====================================================================
+# OWCS Comp Tracker — unattended processing chain (REPORT MODE)
+# ---------------------------------------------------------------------
+# The scheduled half of "a broadcast airs and the site updates itself".
+# Discovery already runs unattended (match-finder.yml). This is what
+# happens next: take the oldest likely broadcast nobody has processed,
+# drive it through every automatic stage, and say exactly where it
+# stopped.
+#
+# WHY THIS IS POSSIBLE AT ALL, and only on one source: a GitHub-hosted
+# runner is bot-checked by YouTube on every player client and cannot
+# fetch a YouTube VOD, while the same runner resolves a Twitch VOD and
+# pulls frames from it with no credential (measured — docs/UNATTENDED.md
+# and the acquire-probe workflow). So the queue this reads is the Twitch
+# one.
+#
+# WHY IT WRITES NOTHING BY DEFAULT. Every stage downstream of the media
+# is deterministic and already runs on this hardware in ci.yml, but no
+# Twitch broadcast has ever been calibrated here: the HUD layout and the
+# per-source hero templates that detection needs do not exist for this
+# package yet. A chain that cannot yet detect must not be able to
+# publish, so the schedule runs in `report` mode — it drives the stages,
+# writes nothing to the repo, and prints the gate it reached. Turning on
+# `process` is a deliberate dispatch, and it is what the report is for:
+# read where it stops before letting it write.
+#
+# In `process` mode this DOES publish: publication is no longer a human
+# gate. What the detector accepted is published carrying the tier it
+# earned, and a person audits it afterwards on the published site
+# (review.html). What did not change is the detector's own bar — an
+# unreadable slot is UNKNOWN and never becomes a composition at all — nor
+# any of the checks publication runs (export regeneration + validation,
+# the packaging check). See docs/UNATTENDED.md, "The publication rule".
+# =====================================================================
+name: autopilot
+
+on:
+  schedule:
+    # Every 6 hours, offset from match-finder so a scan finishes before
+    # this reads its ledger.
+    - cron: "40 3,9,15,21 * * *"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "report (writes nothing) | process (drive the stages)"
+        required: false
+        default: "report"
+        type: choice
+        options: [report, process]
+      url:
+        description: "Process one specific broadcast URL instead of the queue"
+        required: false
+      max_steps:
+        description: "Safety cap on automatic stages per run"
+        required: false
+        default: "12"
+
+# This chain will commit generated data once it can publish, and the
+# repo's rule is that everything writing generated data serialises on ONE
+# group. Joining it now — while still read-only — costs nothing and means
+# the group is already right when it starts writing.
+concurrency:
+  group: owcs-generated-data
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  autopilot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install system + Python dependencies
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          python -m pip install --upgrade pip --quiet
+          pip install --quiet -r requirements.txt
+
+      - name: Pick the next fetchable broadcast
+        id: pick
+        env:
+          FORCED_URL: ${{ inputs.url }}
+        run: |
+          python - <<'PY' | tee pick.log
+          import json, os, sys
+          sys.path.insert(0, "pipeline")
+          from automation import link_intake as li
+          from automation import match_finder as mf
+
+          forced = (os.environ.get("FORCED_URL") or "").strip()
+          if forced:
+              parsed = li.parse_link(forced)      # refuses loudly if unusable
+              print(f"forced: {parsed['canonicalUrl']} ({parsed['platform']})")
+              chosen = parsed["canonicalUrl"]
+          else:
+              # The filters and the ordering live in match_finder, where
+              # the test suite can hold them to account — a workflow is a
+              # thin caller, not a place to keep policy.
+              ledger = mf.load_ledger()
+              queue = mf.fetchable_queue(ledger)
+              print(f"{len(queue)} fetchable broadcast(s) queued")
+              row = mf.next_fetchable(ledger)
+              chosen = row["url"] if row else ""
+              if row:
+                  print(f"chosen: {str(row.get('publishedAt'))[:10]}  "
+                        f"{str(row.get('title'))[:70]}")
+                  print(f"        {chosen}")
+          if not chosen:
+              print("::notice::nothing to process — no likely Twitch broadcast queued")
+          with open(os.environ["GITHUB_OUTPUT"], "a") as fh:
+              fh.write(f"url={chosen}\n")
+          PY
+
+      - name: Drive the automatic stages
+        if: steps.pick.outputs.url != ''
+        env:
+          MODE: ${{ inputs.mode || 'report' }}
+          URL: ${{ steps.pick.outputs.url }}
+          MAX_STEPS: ${{ inputs.max_steps || '12' }}
+        run: |
+          set -o pipefail
+          python pipeline/automation/cli.py init-db
+          if [ "$MODE" = "process" ]; then
+            # --auto-accept covers exactly one gate: SEGMENT identity, and
+            # it runs through the same accept-proposed gate a human uses,
+            # refusing incomplete proposals. Source authorization and
+            # layout approval are untouched by it and still stop.
+            #
+            # --publish runs the publication step (export regeneration +
+            # validation, packaging check, commit). --no-push leaves the
+            # push to the step below, so this workflow owns the one place
+            # this repository is written to.
+            python pipeline/automation/cli.py convert-link \
+              --url "$URL" --requested-by autopilot \
+              --auto-accept --accepted-by autopilot \
+              --publish --no-push \
+              --max-steps "$MAX_STEPS" --json 2>&1 | tee chain.log
+          else
+            # Report mode: record the link and read back exactly which
+            # stage it is at and what is blocking it. Nothing is fetched
+            # and nothing is written to the repo.
+            python pipeline/automation/cli.py ingest-link \
+              --url "$URL" --requested-by autopilot --dry-run 2>&1 \
+              | tee chain.log
+            python pipeline/automation/cli.py link-status \
+              --url "$URL" 2>&1 | tee -a chain.log || true
+          fi
+
+      # The publication step above commits to a branch of its own but does
+      # not push it (--no-push). Pushing is done here, once, so there is a
+      # single place in this workflow that writes to the repository.
+      - name: Push the publication, if one was made
+        if: env.MODE == 'process'
+        env:
+          MODE: ${{ inputs.mode || 'report' }}
+        run: |
+          branch="$(git rev-parse --abbrev-ref HEAD)"
+          case "$branch" in
+            data/publish-*) ;;
+            *) echo "no publication branch was created — nothing to push"
+               exit 0 ;;
+          esac
+          git push -u origin "$branch"
+          echo "::notice::pushed $branch"
+
+      - name: Report where it stopped
+        if: always()
+        run: |
+          {
+            echo "### Autopilot — ${{ inputs.mode || 'report' }} mode"
+            echo ""
+            echo '```'
+            cat pick.log 2>/dev/null || echo "(no selection log)"
+            echo ""
+            cat chain.log 2>/dev/null || echo "(the chain did not run)"
+            echo '```'
+            echo ""
+            echo "Report mode writes nothing. See docs/UNATTENDED.md for"
+            echo "the gates this chain still has to clear before it can"
+            echo "publish on its own."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Never leave media behind
+        if: always()
+        run: rm -rf data/worker/jobs work/remote_frames || true

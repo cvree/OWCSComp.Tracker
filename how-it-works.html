@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>How it works — OWCS Comp Tracker</title>
-<meta name="description" content="How a broadcast becomes reviewed match data, what published means here, what this site does not claim, and how to run your own copy.">
+<meta name="description" content="How a broadcast becomes published match data, what published means here, how anyone can audit it against the original frames, and how to run your own copy.">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/archivo-var-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/saira-condensed-700-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -26,9 +26,13 @@
   <section class="band" aria-labelledby="h-steps">
     <div class="sec-head"><h2 id="h-steps">The six steps</h2></div>
     <div class="card"><div class="flow" id="steps"></div></div>
-    <p class="dim small u-mt-4" style="max-width:70ch">Steps one to five are the machine.
-      Step six is a person, and it is not optional: nothing appears on a public page until
-      someone has looked at what the detector read and said yes.</p>
+    <p class="dim small u-mt-4" style="max-width:70ch">All six steps are the machine, and
+      it runs unattended: a broadcast that airs is found, read and published without anyone
+      starting it. A person comes <em>after</em> publication, not before it — every reading
+      is published beside the frame it came from, and
+      <a href="review.html">anyone can audit it</a> and correct what is wrong. That is a
+      deliberate trade: the alternative is a queue that only moves when someone is
+      available, and a site that goes stale whenever nobody is.</p>
   </section>
 
   <section class="band" aria-labelledby="h-published">
@@ -38,9 +42,14 @@
         <h3>A published line-up has all four of these</h3>
         <ul class="stack u-mt-4" style="padding-left:1.1em;color:var(--tx-2)">
           <li>Five heroes read off the actual broadcast frame, not entered by hand from memory.</li>
-          <li>A confidence score the detector was willing to stand behind, or a person's explicit approval.</li>
+          <li>A confidence the detector was willing to stand behind. A slot it could not
+            read is recorded as <b>unknown</b> — it is never guessed, and a line-up with
+            an unknown slot is not a line-up.</li>
           <li>The image file it was read from, kept and linked.</li>
-          <li>A named review status of <b>reviewed</b> or <b>auto-high</b>. Anything else is withheld.</li>
+          <li>The tier it earned, stated on the page: <b>confirmed</b> (a person checked
+            it), <b>strong</b> (hundreds of frames agreed), or <b>provisional</b>
+            (accepted, but on weaker evidence — worth auditing first). A reading judged
+            wrong is marked <b>rejected</b> and is never published.</li>
         </ul>
       </div>
       <div class="card">
@@ -69,8 +78,12 @@
         is public and permanent.</p>
       <p class="dim">This is deliberate. A tracker that quietly overwrites its own mistakes
         cannot be audited, and a tracker that cannot be audited is just an opinion.</p>
+      <p class="dim">Because publication no longer waits on a person, the audit is the
+        real safeguard rather than a formality — so it is open on the published site
+        itself, not behind an operator's tool. Anything you can read, you can check
+        against the frame it came from.</p>
       <div class="row u-mt-4">
-        <a class="btn btn--sm" href="review.html">See the review workspace</a>
+        <a class="btn btn--sm" href="review.html">Audit the published data</a>
       </div>
     </div>
   </section>

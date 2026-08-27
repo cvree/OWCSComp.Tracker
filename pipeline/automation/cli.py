@@ -584,7 +584,8 @@ def _run_broadcast_discovery(args: argparse.Namespace) -> int:
     store = js.JobStore(args.db, config=config)
     try:
         client = _build_youtube_client(args, store=None if args.dry_run else store)
-        channels = cfg.load_channels()
+        # sync_broadcasts speaks the YouTube Data API and nothing else.
+        channels = cfg.load_channels(platform=cfg.DEFAULT_PLATFORM)
         disc_summary = bdisc.sync_broadcasts(
             client=client, store=store, channels=channels,
             lookback_days=args.lookback_days or config.lookback_days,
@@ -1423,7 +1424,9 @@ def _run_autopilot(store: "js.JobStore", args: argparse.Namespace,
         accepted_by=args.accepted_by or args.worker_id,
         for_harvest=getattr(args, "for_harvest", False),
         max_steps=args.max_steps or ap.DEFAULT_MAX_STEPS,
-        samples=args.samples, ocr_engine=args.ocr_engine)
+        samples=args.samples, ocr_engine=args.ocr_engine,
+        publish=getattr(args, "publish", False),
+        push=not getattr(args, "no_push", False))
     if not args.no_export:
         _save_intake_export(store)
     return result
@@ -1432,15 +1435,21 @@ def _run_autopilot(store: "js.JobStore", args: argparse.Namespace,
 def cmd_autopilot(args: argparse.Namespace) -> int:
     """`autopilot --job <key> | --url <url>` — advance an EXISTING intake job
     through every automatic stage in one command, stopping honestly at the
-    first human gate (source/layout/detection review, publication)."""
+    first gate that is not the machine's to open (source authorization,
+    layout approval). Detection review is NOT one of those any more: what
+    the detector accepted is published and audited afterwards. `--publish`
+    additionally runs the publication step, which writes."""
     store = js.JobStore(args.db)
     try:
         if bool(args.job) == bool(args.url):
             print("[autopilot] provide exactly one of --job / --url")
             return 1
         try:
-            job_key = args.job or li.job_key_for(
-                li.parse_link(args.url)["videoId"])
+            if args.job:
+                job_key = args.job
+            else:
+                _p = li.parse_link(args.url)
+                job_key = li.job_key_for(_p["videoId"], _p["platform"])
         except li.LinkIntakeError as exc:
             print(f"[autopilot] REFUSED [{exc.code}] {exc}")
             return 1
@@ -1570,7 +1579,9 @@ def cmd_find_matches(args: argparse.Namespace) -> int:
             for cand in ledger["candidates"]:
                 if (cand.get("likeness") or {}).get("confidence") != "likely":
                     continue
-                if store.get(li.job_key_for(cand["videoId"])) is not None:
+                if store.get(li.job_key_for(
+                        cand["videoId"],
+                        cand.get("platform") or li.YOUTUBE)) is not None:
                     continue
                 try:
                     res = li.ingest_link(
@@ -2168,8 +2179,18 @@ def main(argv: list[str] | None = None) -> int:
         sp.add_argument("--auto-accept", action="store_true",
                         help="accept clean machine identity proposals for "
                              "pending SEGMENTS through the accept-proposed "
-                             "gate (source/layout/detection review and "
-                             "publication always stay human)")
+                             "gate (source authorization and layout approval "
+                             "still stop for a human)")
+        sp.add_argument("--publish", action="store_true",
+                        help="run the publication step once detection is "
+                             "committed: regenerate + validate the export, "
+                             "run the packaging check, commit and push. "
+                             "Publication is not a review gate — what the "
+                             "detector accepted is audited AFTER the fact on "
+                             "review.html — but it writes, so it is opt-in")
+        sp.add_argument("--no-push", action="store_true",
+                        help="with --publish: create the publication commit "
+                             "but do not push it (the caller pushes)")
         sp.add_argument("--accepted-by", default=None,
                         help="your name/handle, recorded on every "
                              "auto-accepted segment's reviewer note")

@@ -249,9 +249,14 @@ def main() -> int:
     serve.RUNNER = fr
     code, j = api(port, "/api/intake/link", {})
     check("missing url -> 400", code == 400 and "url" in j["error"])
-    code, j = api(port, "/api/intake/link", {"url": "https://twitch.tv/x"})
-    check("non-YouTube host refused with the parser's stable code",
+    code, j = api(port, "/api/intake/link", {"url": "https://vimeo.com/x"})
+    check("an unsupported host is refused with the parser's stable code",
           code == 400 and "unsupported_host" in j["error"])
+    # Twitch IS a supported host (it is the one source unattended hardware
+    # can fetch), but only /videos/<id> names a broadcast.
+    code, j = api(port, "/api/intake/link", {"url": "https://twitch.tv/ow_esports"})
+    check("a Twitch channel page is refused — it is not a VOD",
+          code == 400 and "no_video_id" in j["error"])
     code, j = api(port, "/api/intake/link", {"url": "https://youtu.be/short"})
     check("malformed video id refused", code == 400
           and "malformed_video_id" in j["error"])

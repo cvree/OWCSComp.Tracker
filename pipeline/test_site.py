@@ -9,10 +9,12 @@ there is one suite.
 
 What it guards, in order of how much it would hurt to lose:
 
-  1. THE CREDIBILITY RULES. Only reviewed/auto-high renders; comps come
-     from cv or manual and never from FACEIT; a manual correction never
-     deletes the detection it corrects; every published claim resolves to
-     an evidence file that exists on disk.
+  1. THE CREDIBILITY RULES. Everything the DETECTOR accepted renders,
+     carrying the tier it earned, and 'rejected' never does — the page's
+     gate and the exporter's must BE the same set; comps come from cv or
+     manual and never from FACEIT; a manual correction never deletes the
+     detection it corrects; every published claim resolves to an evidence
+     file that exists on disk.
   2. THE INFORMATION ARCHITECTURE. Five nav entries, one page per job, no
      dead links, no orphan pages, no page reintroducing a deleted one.
   3. NO DEMO DATA CAN REACH A PAGE. The fixture is a test asset now.
@@ -167,8 +169,33 @@ def test_no_demo_data_reaches_a_page() -> None:
 def test_credibility_rules() -> None:
     print("the credibility rules, in the code that renders:")
     core = read("assets/js/app/core.js")
-    check("the approved review states are hard-coded",
-          'P.APPROVED = ["reviewed", "auto-high"]' in core)
+    # Stronger than pinning a literal: the page's gate and the exporter's
+    # must BE the same set. A literal only catches an edit to this file;
+    # this catches the two drifting apart in either direction, which is the
+    # failure that would actually publish something a page then hides (or
+    # worse, render something the export never published).
+    import ast
+    import re as _re
+
+    def _py_states(name: str) -> list:
+        src = read("pipeline/export_data.py")
+        m = _re.search(rf"^{name} = (\(.*?\))", src, _re.M | _re.S)
+        return sorted(ast.literal_eval(m.group(1))) if m else []
+
+    def _js_states(name: str) -> list:
+        m = _re.search(rf"P\.{name} = (\[[^\]]*\]);", core)
+        return sorted(json.loads(m.group(1))) if m else []
+
+    check("the page's publication gate is the exporter's, exactly",
+          _js_states("PUBLISHED") == _py_states("PUBLISHED_REVIEW_STATES")
+          != [])
+    check("the audited subset agrees too, so a tier label cannot drift",
+          _js_states("AUDITED") == _py_states("AUDITED_REVIEW_STATES") != [])
+    check("a rejected reading is never publishable, on either side",
+          "rejected" not in _js_states("PUBLISHED")
+          and "rejected" not in _py_states("PUBLISHED_REVIEW_STATES"))
+    check("an unknown review status reads as the weakest tier",
+          '|| "provisional"' in core)
     check("a non-cv, non-manual source can never render as a comp",
           'c.source !== "cv" && c.source !== "manual"' in core)
     check("an overridden detection is dropped in favour of the correction",
@@ -249,7 +276,10 @@ def test_the_six_steps() -> None:
     steps = re.findall(r'label: "([^"]+)",\n\s+say:', games)
     check(f"the six steps are declared in one place ({steps})",
           steps == ["Source found", "Video captured", "Gameplay detected",
-                    "Heroes detected", "Match linked", "Ready for review"])
+                    "Heroes detected", "Match linked",
+                    "Published, open for audit"])
+    check("the last step is publication, not a queue waiting on a person",
+          "Ready for review" not in games)
     check("the explainer renders the same definitions, so it cannot drift",
           "P.games.STEPS" in read("assets/js/app/page-how.js"))
     check("every step is explained in words a newcomer can read",
