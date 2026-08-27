@@ -1,0 +1,246 @@
+# =====================================================================
+# OWCS Comp Tracker — calibrate the Twitch broadcast package
+# ---------------------------------------------------------------------
+# The readiness probe left one question open, and left it open honestly:
+# all committed layouts scored 0.000 against a Twitch VOD, but with
+# `gameplay 0/12` — not one sampled frame was live play, so the score
+# said nothing about whether the HUD actually matches. Twelve blind
+# samples over the middle of an 8.5-hour rebroadcast is the wrong way to
+# find gameplay.
+#
+# calibrate_remote.py is the right way: it walks a ladder (60s -> 30s ->
+# 15s, then densifies where it can pay off) precisely to FIND gameplay
+# windows in a long VOD, and it refuses below calibrate_source's own
+# confidence floor rather than writing a layout nobody should trust.
+#
+# So this asks the question properly, in two parts:
+#
+#   1. Re-fingerprint the committed layouts against frames that are
+#      ACTUALLY gameplay. If one matches, the layout gate was never
+#      closed and there is nothing to calibrate or approve — the best
+#      possible outcome, and the one the naive probe could not see.
+#   2. Only if none matches, calibrate a new layout and upload it with
+#      its calibration sheet as an artifact for a human to look at.
+#
+# It COMMITS NOTHING. A layout is a thing a person approves by merging
+# it, so this produces the artifact and stops. That is the repo's own
+# model: a committed layout is reused automatically BECAUSE a human
+# approved it when it was committed.
+# =====================================================================
+name: calibrate-twitch
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "Twitch VOD (blank = newest likely non-rebroadcast)"
+        required: false
+      max_samples:
+        description: "Sample budget for the calibration ladder"
+        required: false
+        # 48 was not enough: the ladder reported "25 clean frames but only
+        # 1/4 regions of the broadcast — too clustered to calibrate from"
+        # on a 10.5h VOD, having spent the budget before it could spread.
+        # It refuses on clustering by design, so the budget has to cover
+        # the broadcast, not just fill up.
+        default: "144"
+  push:
+    paths: [".github/workflows/calibrate-twitch.yml"]
+
+concurrency:
+  group: calibrate-twitch
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  calibrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install system + Python dependencies
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          python -m pip install --upgrade pip --quiet
+          pip install --quiet -r requirements.txt
+
+      - name: Pick a broadcast likely to contain live play
+        id: pick
+        env:
+          FORCED_URL: ${{ inputs.url }}
+        run: |
+          python - <<'PY' | tee pick.log
+          import os, sys
+          sys.path.insert(0, "pipeline")
+          from automation import config as cfg
+          from automation import link_intake as li
+          from automation import match_finder as mf
+
+          url = (os.environ.get("FORCED_URL") or "").strip()
+          dur = 0
+          if not url:
+              row = cfg.load_channels(platform="twitch")[0]
+              entries, err = mf.fetch_twitch_vods(row["sourceUrl"], limit=20)
+              if err:
+                  print(f"REFUSED: {err}"); raise SystemExit(1)
+              cands = [c for c in mf.merge_channel_entries(
+                          row, [], entries, platform=li.TWITCH)
+                       if (c.get("likeness") or {}).get("confidence") == "likely"]
+              # The registry restricts this channel to the event families it
+              # actually broadcasts, and calibrating against a product the
+              # layouts do not describe is exactly how the last run burned
+              # 822 MB to reach a correct refusal. Apply the SAME gate
+              # production intake applies, so this can never calibrate
+              # against something intake would turn away.
+              allowed = []
+              for c in cands:
+                  ok, why = li.event_type_allowed(c.get("title"), row)
+                  if ok:
+                      allowed.append(c)
+                  else:
+                      print(f"  skip: {str(c.get('title'))[:56]} — {why[:60]}")
+              # Intake's rule is deliberately permissive: a title naming no
+              # family passes, because most legitimate titles name none.
+              # That is right for intake and wrong for CALIBRATION, where
+              # the whole point is to match the committed OWCS packages —
+              # a title like "CAH Season Playoffs" clears intake precisely
+              # because it says nothing, and says nothing about whether its
+              # overlay is the one these layouts describe.
+              #
+              # So prefer a broadcast that POSITIVELY names an allowed
+              # family, and fall back to the merely-not-refused only if
+              # there is no such thing.
+              named = [c for c in allowed
+                       if li.event_family(c.get("title"))
+                       in (row.get("allowedEventTypes") or [])]
+              best = named or allowed
+              if named:
+                  print(f"  {len(named)} broadcast(s) explicitly name an "
+                        f"allowed event family")
+              # A REBROADCAST is the same content aired again, and tends to
+              # carry more filler around it. Prefer an original airing when
+              # one is available; fall back rather than refuse.
+              live = [c for c in best
+                      if "rebroadcast" not in str(c.get("title", "")).lower()]
+              pool = live or best
+              if not pool:
+                  print("no broadcast this channel is registered for was found")
+                  raise SystemExit(1)
+              # Longest first. The ladder refuses when its clean frames are
+              # too clustered to calibrate from, and a longer broadcast
+              # carries more gameplay windows spread further apart — which
+              # is exactly what that refusal was asking for. Recency is
+              # irrelevant here; material is not.
+              pool.sort(key=lambda c: c.get("durationSeconds") or 0,
+                        reverse=True)
+              pick = pool[0]
+              url = pick["url"]
+              dur = pick.get("durationSeconds") or 0
+              print(f"title   : {str(pick.get('title'))[:72]}")
+              print(f"original: {'yes' if live else 'no — only rebroadcasts available'}")
+          print(f"url     : {url}")
+          print(f"duration: {dur/3600:.1f}h" if dur else "duration: unknown")
+          with open(os.environ["GITHUB_OUTPUT"], "a") as fh:
+              fh.write(f"url={url}\n")
+          PY
+
+      - name: Calibrate from sparse remote frames (the real ladder)
+        id: calib
+        env:
+          URL: ${{ steps.pick.outputs.url }}
+          MAX_SAMPLES: ${{ inputs.max_samples || '144' }}
+        run: |
+          set -o pipefail
+          mkdir -p out
+          # --out is where a layout would land IF the ladder clears the
+          # confidence floor. No --force: a refusal must stay a refusal.
+          python pipeline/calibrate_remote.py \
+            --url "$URL" --source-id owcs_twitch_ow_esports \
+            --out out/owcs_twitch_ow_esports.json \
+            --sheet out/owcs_twitch_ow_esports-sheet.png \
+            --frames-dir out/frames \
+            --windows-out out/windows.json \
+            --max-samples "$MAX_SAMPLES" \
+            2>&1 | tee calibrate.log || true
+          echo "--- produced ---"
+          ls -la out/ 2>/dev/null || true
+
+      # The question the naive probe could not answer: with frames that are
+      # ACTUALLY gameplay, does a layout we already have match?
+      - name: Do the committed layouts match, now that we have real gameplay?
+        if: always()
+        run: |
+          python - <<'PY' | tee refingerprint.log
+          import os, sys, glob
+          sys.path.insert(0, "pipeline")
+          import cv2
+          from automation import layout_resolver as lr
+
+          paths = sorted(glob.glob("out/frames/*.png")) + \
+                  sorted(glob.glob("out/frames/*.jpg"))
+          frames = [f for f in (cv2.imread(p) for p in paths) if f is not None]
+          print(f"{len(frames)} gameplay frame(s) the ladder kept")
+          if not frames:
+              print("\nThe ladder found no gameplay frames at all. That is a "
+                    "\nfinding about this BROADCAST, not about the HUD: with no "
+                    "\nlive play sampled there is nothing to fingerprint, and "
+                    "\nstill nothing said either way about whether a committed "
+                    "\nlayout would match. Try another VOD.")
+              raise SystemExit(0)
+
+          cands = lr.load_candidate_layouts()
+          v = lr.match_layouts(frames, cands)
+          for s in v["ranked"]:
+              fp = s["fingerprint"]
+              note = f"  [{fp['note']}]" if fp.get("note") else ""
+              print(f"  {s['layoutId']:24s} score {fp['score']:.3f}  "
+                    f"gameplay {fp['gameplay']}/{fp['frames']}{note}")
+          print(f"\nDECISION: {v['decision'].upper()}\n  {v['reason']}")
+          if v["decision"] == "reuse":
+              print("\n>>> NOTHING TO DO. A layout already committed matches this "
+                    "\n>>> broadcast, so the layout gate opens automatically and "
+                    "\n>>> no new layout and no approval are needed.")
+          else:
+              print("\n>>> A NEW LAYOUT IS NEEDED. If the calibration step above "
+                    "\n>>> cleared the confidence floor, its layout + sheet are "
+                    "\n>>> attached as an artifact for a human to review.")
+          PY
+
+      - uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: twitch-calibration
+          path: |
+            out/*.json
+            out/*.png
+            calibrate.log
+            refingerprint.log
+            pick.log
+          if-no-files-found: warn
+
+      - name: Report
+        if: always()
+        run: |
+          {
+            echo "### Twitch calibration"
+            echo ""
+            echo '```'
+            cat pick.log 2>/dev/null || true
+            echo ""
+            tail -40 calibrate.log 2>/dev/null || echo "(calibration produced no log)"
+            echo ""
+            cat refingerprint.log 2>/dev/null || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Keep no media
+        if: always()
+        run: rm -rf work/remote_frames || true

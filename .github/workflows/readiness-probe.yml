@@ -1,0 +1,217 @@
+# =====================================================================
+# OWCS Comp Tracker — unattended readiness probe (read-only, $0)
+# ---------------------------------------------------------------------
+# ONE question: if the unattended chain ran right now against a real
+# Twitch broadcast, where exactly would it stop — and is that stop a
+# thing a HUMAN has to clear, or one the machine clears itself?
+#
+# The chain has two gates that are not about whether a reading is right:
+# source authorization and layout approval. Source authorization is
+# already automatic for a verified registry channel. Layout is the open
+# question, and it has a subtlety worth measuring rather than assuming:
+#
+#   layout_resolver reuses an ALREADY-COMMITTED layout AUTOMATICALLY
+#   (a human approved that file when it was committed). Only a NEWLY
+#   CALIBRATED layout needs `approve-layout --confirm`.
+#
+# OWCS reuses one broadcast overlay across a whole stage, and a Twitch
+# stream carries the SAME production feed as the YouTube one — so the
+# committed owcs_jksix_qwc layout may well fingerprint-match a Twitch
+# VOD, and the layout gate may already be open with nothing to do.
+# That is a measurement, not a hope, so this measures it.
+#
+# It also reports the thing that actually caps output: hero template
+# coverage. A hero with no template reads UNKNOWN (never a guess), and
+# a composition needs five named heroes, so coverage is the real ceiling.
+#
+# Read-only. No secrets, no commits, no media kept.
+# =====================================================================
+name: readiness-probe
+
+on:
+  # Runs whenever this probe itself changes, on any branch, so the answer
+  # can be measured before the workflow is on the default branch. It writes
+  # nothing, so running it on a feature branch costs a few free minutes.
+  push:
+    paths: [".github/workflows/readiness-probe.yml"]
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "Twitch VOD to probe (blank = newest from the finder)"
+        required: false
+      samples:
+        description: "Frames to fingerprint against"
+        required: false
+        default: "12"
+
+concurrency:
+  group: readiness-probe
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install system + Python dependencies
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          python -m pip install --upgrade pip --quiet
+          pip install --quiet -r requirements.txt
+
+      - name: Where would the unattended chain actually stop?
+        env:
+          FORCED_URL: ${{ inputs.url }}
+          SAMPLES: ${{ inputs.samples || '12' }}
+        run: |
+          python - <<'PY' | tee readiness.log
+          import os, sys, subprocess, json, glob
+          sys.path.insert(0, "pipeline")
+          import cv2
+          from automation import config as cfg
+          from automation import link_intake as li
+          from automation import match_finder as mf
+          from automation import layout_resolver as lr
+          import template_bootstrap as tb
+
+          def head(t):
+              print(f"\n{'=' * 68}\n{t}\n{'=' * 68}")
+
+          # ---------------------------------------------------- 1. a broadcast
+          head("1. A REAL TWITCH BROADCAST")
+          url = (os.environ.get("FORCED_URL") or "").strip()
+          if not url:
+              rows = [c for c in cfg.load_channels(platform="twitch")]
+              entries, err = mf.fetch_twitch_vods(rows[0]["sourceUrl"], limit=10)
+              if err:
+                  print(f"REFUSED: {err}")
+                  raise SystemExit(0)
+              cands = mf.merge_channel_entries(rows[0], [], entries,
+                                               platform=li.TWITCH)
+              likely = [c for c in cands
+                        if (c.get("likeness") or {}).get("confidence") == "likely"]
+              if not likely:
+                  print("no likely broadcast found")
+                  raise SystemExit(0)
+              pick = likely[0]
+              url, dur = pick["url"], pick.get("durationSeconds") or 0
+              print(f"{str(pick.get('title'))[:70]}\n{url}  ({dur/3600:.1f}h)")
+          else:
+              dur = 0
+              print(url)
+
+          # ------------------------------------------------ 2. source authority
+          head("2. GATE — SOURCE AUTHORIZATION")
+          parsed = li.parse_link(url)
+          meta = li.fetch_twitch_metadata(parsed["videoId"])
+          decision = li.authorize_source(
+              meta, registry=li.registry_channel_index(),
+              platform=parsed["platform"])
+          auto = decision["state"] == li.SOURCE_APPROVED
+          print(f"{'AUTOMATIC' if auto else 'NEEDS A HUMAN'} — {decision['reason']}")
+          if not dur:
+              dur = meta.get("durationSeconds") or 0
+
+          # ------------------------------------------------------- 3. frames
+          head("3. FRAMES (sparse, byte-range)")
+          n = int(os.environ["SAMPLES"])
+          # Sample across the middle of the broadcast, where gameplay lives.
+          offs = [int(dur * f) for f in
+                  [0.25 + 0.5 * i / max(n - 1, 1) for i in range(n)]] or [1800]
+          out = subprocess.run(
+              [sys.executable, "pipeline/remote_frames.py", "--url", url,
+               "--offsets", ",".join(str(o) for o in offs),
+               "--height", "720", "--json"],
+              capture_output=True, text=True, timeout=900)
+          if out.returncode != 0:
+              print("frame acquisition FAILED:\n" + (out.stderr or "")[-800:])
+              raise SystemExit(0)
+          # remote_frames prints "[remote] ..." progress to stdout ahead of
+          # its JSON, so parse from the first brace rather than the start.
+          raw = out.stdout or ""
+          brace = raw.find("{")
+          if brace < 0:
+              print("no JSON in frame acquisition output:\n" + raw[-800:])
+              raise SystemExit(0)
+          for line in raw[:brace].splitlines():
+              if line.strip():
+                  print(f"  {line.strip()}")
+          frames_map = json.loads(raw[brace:])["frames"]
+          paths = [p for _, p in sorted(frames_map.items(), key=lambda kv: float(kv[0]))]
+          frames = [f for f in (cv2.imread(p) for p in paths) if f is not None]
+          print(f"{len(frames)} frame(s) decoded from {len(paths)} acquired")
+
+          # ------------------------------------------------------- 4. layout
+          head("4. GATE — LAYOUT")
+          cands = lr.load_candidate_layouts()
+          print(f"{len(cands)} committed layout(s) with real chip geometry: "
+                f"{[c['layoutId'] for c in cands]}\n")
+          verdict = lr.match_layouts(frames, cands)
+          for s in verdict["ranked"]:
+              fp = s["fingerprint"]
+              note = f"  [{fp['note']}]" if fp.get("note") else ""
+              print(f"  {s['layoutId']:24s} score {fp['score']:.3f}  "
+                    f"gameplay {fp['gameplay']}/{fp['frames']}{note}")
+          print(f"\nbars: reuse >= {lr.AUTO_REUSE_SCORE}, "
+                f"candidate >= {lr.MIN_CANDIDATE_SCORE}, "
+                f"margin >= {lr.MIN_SCORE_MARGIN}")
+          print(f"DECISION: {verdict['decision'].upper()}")
+          print(f"  {verdict['reason']}")
+          reuse = verdict["decision"] == "reuse"
+          print(f"\n{'AUTOMATIC — a committed layout is reused, no human needed'
+                   if reuse else
+                   'NEEDS A HUMAN — a new layout would be calibrated, and a '
+                   'freshly calibrated layout always waits for approve-layout'}")
+
+          # ---------------------------------------------------- 5. templates
+          head("5. THE REAL CEILING — HERO TEMPLATE COVERAGE")
+          if reuse:
+              import db as content_db
+              tdir = lr._templates_dir_of(verdict["best"]["path"])
+              con = content_db.connect()
+              status = (tb.template_set_status(tdir, tb.full_roster(con))
+                        if tdir else None)
+              if status:
+                  print(f"package : {status['templatesDir']}")
+                  print(f"covered : {status['coveredCount']}/"
+                        f"{status['rosterSize']} heroes "
+                        f"({status['coveragePct']}%)")
+                  missing = status.get("uncoveredNames") or status.get("uncovered") or []
+                  print(f"uncovered ({len(missing)}): "
+                        f"{', '.join(str(m) for m in missing[:18])}"
+                        f"{' …' if len(missing) > 18 else ''}")
+                  print(f"\n{status['note']}")
+                  print("\nA composition needs five NAMED heroes, so a map in which "
+                        "\nany team fields an uncovered hero publishes no composition "
+                        "\nfor that team. This is the real cap on output — not a gate "
+                        "\nsomeone forgot to open.")
+              else:
+                  print("no template directory resolved for this layout")
+          else:
+              print("(skipped — no layout reused)")
+          PY
+
+      - name: Verdict
+        if: always()
+        run: |
+          {
+            echo "### Unattended readiness"
+            echo ""
+            echo '```'
+            cat readiness.log 2>/dev/null || echo "(no log)"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Keep no media
+        if: always()
+        run: rm -rf work/remote_frames || true

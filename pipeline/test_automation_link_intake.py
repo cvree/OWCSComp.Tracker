@@ -37,7 +37,8 @@ OTHER_CHANNEL = "UCsomeRandomUploader00"
 REGISTRY = [
     {"id": "ow_esports_global", "platform": "youtube",
      "channelId": OFFICIAL_CHANNEL, "region": "global", "language": "en",
-     "official": True, "enabled": True, "verifiedStatus": "verified"},
+     "official": True, "enabled": True, "verifiedStatus": "verified",
+     "allowedEventTypes": ["owcs"]},
     # An enabled row with NO confirmed channel id can never authorize.
     {"id": "ow_esports_korea", "platform": "youtube", "channelId": None,
      "region": "korea", "official": True, "enabled": True,
@@ -50,7 +51,10 @@ REGISTRY = [
     # what a Twitch id namespace looks like.
     {"id": "ow_esports_twitch", "platform": "twitch",
      "channelId": "ow_esports", "region": "global", "language": "en",
-     "official": True, "enabled": True, "verifiedStatus": "verified"},
+     "official": True, "enabled": True, "verifiedStatus": "verified",
+     # Mirrors the real registry row: every committed channel restricts
+     # itself to OWCS, and that restriction is enforced now.
+     "allowedEventTypes": ["owcs"]},
 ]
 
 TWITCH_VOD = "2854348714"
@@ -794,6 +798,85 @@ class TestJobKeyLookupsCarryThePlatform(IntakeTestCase):
                 client=None, channels=REGISTRY,
                 twitch_runner=fake_twitch_runner())
         self.assertEqual(len(self.store.list_jobs()), 1)
+
+
+class TestEventTypeIsEnforced(IntakeTestCase):
+    """`allowedEventTypes` has been on every registry row since Phase C1,
+    documented as restricting a channel to the event families it actually
+    broadcasts — and nothing read it. It was documentation describing an
+    enforcement that did not exist.
+
+    It matters because these channels really do carry more than one
+    product: the official Overwatch Esports channels broadcast both the
+    Champions Series and the World Cup, which are different productions
+    with different overlays. Calibrating an OWWC broadcast against an OWCS
+    layout package refuses at the chip grid — the right answer, reached
+    only after pulling frames from a ten-hour VOD. Refusing at intake is
+    the same answer for free.
+    """
+
+    def test_the_family_is_read_from_the_title(self):
+        self.assertEqual(li.event_family("[DROPS] OWWC 2026 | Group Stage"),
+                         "owwc")
+        self.assertEqual(li.event_family("OWCS 2026 | Stage 2 Playoffs"),
+                         "owcs")
+        self.assertEqual(li.event_family("Overwatch World Cup 2026"), "owwc")
+        self.assertEqual(li.event_family("Overwatch League 2019"), "owl")
+
+    def test_a_title_naming_no_family_is_not_a_refusal(self):
+        """The common, honest answer. Most legitimate broadcast titles name
+        no family, and treating absence of evidence as evidence would
+        reject most of the archive."""
+        for title in ("Some Random Stream", "", None, "   "):
+            with self.subTest(title=title):
+                self.assertIsNone(li.event_family(title))
+                self.assertEqual(
+                    li.event_type_allowed(title, {"allowedEventTypes": ["owcs"]}),
+                    (True, None))
+
+    def test_a_family_is_matched_as_a_whole_word(self):
+        """A substring match would find 'owl' inside 'bowl' and 'owcs'
+        inside a longer token."""
+        for title in ("a bowl of soup", "Slowcs highlights", "meowcs"):
+            with self.subTest(title=title):
+                self.assertIsNone(li.event_family(title))
+
+    def test_an_empty_or_missing_allow_list_permits_everything(self):
+        for row in ({}, {"allowedEventTypes": []}, None):
+            with self.subTest(row=row):
+                self.assertEqual(
+                    li.event_type_allowed("OWWC 2026 Group Stage", row),
+                    (True, None))
+
+    def test_an_owwc_broadcast_is_refused_on_an_owcs_only_channel(self):
+        res = li.ingest_link(
+            self.store, f"https://www.twitch.tv/videos/{TWITCH_VOD}",
+            client=None, channels=REGISTRY,
+            twitch_runner=fake_twitch_runner(
+                title="[DROPS] OWWC 2026 | Group Stage Day 2"))
+        self.assertTrue(res["created"])      # still recorded, never dropped
+        self.assertEqual(res["source"]["state"], li.SOURCE_PENDING)
+        self.assertEqual(res["source"]["reasonCode"], "event_type_not_allowed")
+        self.assertIn("OWWC", res["source"]["reason"])
+
+    def test_an_owcs_broadcast_on_the_same_channel_still_auto_approves(self):
+        """The enforcement must not cost the case it was built to protect."""
+        res = li.ingest_link(
+            self.store, f"https://www.twitch.tv/videos/{TWITCH_VOD}",
+            client=None, channels=REGISTRY,
+            twitch_runner=fake_twitch_runner(
+                title="OWCS 2026 | Stage 2 Playoffs | Day 2"))
+        self.assertEqual(res["source"]["state"], li.SOURCE_APPROVED)
+        self.assertTrue(res["source"]["autoApproved"])
+
+    def test_a_youtube_broadcast_naming_no_family_is_unaffected(self):
+        """Every archived YouTube broadcast predates this gate. One whose
+        title does not identify a product must keep auto-approving exactly
+        as it did before."""
+        res = li.ingest_link(self.store, "https://youtu.be/dQw4w9WgXcQ",
+                             client=fake_client(title="Untitled Broadcast"),
+                             channels=REGISTRY)
+        self.assertEqual(res["source"]["state"], li.SOURCE_APPROVED)
 
 
 if __name__ == "__main__":
