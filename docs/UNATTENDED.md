@@ -358,26 +358,94 @@ with. Three candidate explanations, and they are not equally likely:
    likely, since the gameplay filter (which reads the same HUD structurally)
    was satisfied.
 
-So the honest state is: **acquisition works, gameplay detection works,
-calibration has not yet been given a fair test.** The next run should target
-an actual OWCS broadcast with a sample budget spread across the whole VOD,
-and `allowedEventTypes` should be enforced on the Twitch path so the queue
-stops offering OWWC in the first place.
+So the honest state at that point was: acquisition works, gameplay
+detection works, calibration had not yet been given a fair test.
 
 Note also the cost: 822 MB for 48 frames — ~17 MB each, well above the
 3.8 MB measured earlier, because seeking deep into a 10.5 h HLS stream pulls
 more per read. A full calibration pass is not free, though it is still far
 below downloading a 10.5-hour broadcast.
 
+### Given a fair test, a committed layout matches — perfectly
+
+`allowedEventTypes` is enforced now, so the picker skips OWWC entirely;
+it prefers a broadcast that positively names an allowed family, tiebreaks
+on duration rather than recency (a longer broadcast spreads the ladder's
+samples further, which is what the clustering refusal was asking for), and
+the budget went 48 → 144. That put it on the 8.9 h **OWCS 2026 Midseason
+Championship** — the flagship product these layouts were built from.
+
+The ladder ran for thirteen minutes and kept 19 gameplay frames. Against
+those:
+
+```
+  owcs_8c105lnzlam    score 1.000  gameplay 19/19
+  owcs_jksix_qwc      score 0.000  gameplay 0/19
+  owcs_nd5lllwdky0    score 0.000  gameplay 0/19
+
+DECISION: REUSE
+  owcs_8c105lnzlam reproduced its own HUD structure on 19/19 sampled
+  frames (score 1.000, margin 1.000)
+```
+
+**A committed layout describes the Twitch broadcast exactly** — a perfect
+score on every frame, with the full margin over both other candidates. The
+layout gate opens automatically, because reusing an already-committed
+layout is automatic by design: a human approved that file when it was
+committed. No new layout, no calibration sheet, no approval.
+
+Which means every gate before detection is now measured, not assumed:
+
+| gate | verdict |
+|---|---|
+| find broadcasts | automatic — `match-finder.yml`, every 6 h |
+| source authorization | automatic — verified registry entry, no credential |
+| acquire frames | works on a free runner |
+| gameplay detection | 19/19 frames kept |
+| **layout** | **automatic reuse, score 1.000** |
+
+Worth recording plainly, because the record should not flatter the
+process: the three earlier "failures" here were all instrumentation, not
+the pipeline. `score 0.000` was blind sampling; the chip-grid refusal was
+calibrating against the wrong product with a budget too small to spread.
+Each time the pipeline returned a correct answer to a badly-put question.
+The one real defect the wrong questions exposed —
+`allowedEventTypes` never being read by any code — was worth the detour.
+
 ### What still stops for a human
 
-Two gates remain, and neither is about whether a reading is right:
+Neither of the two remaining gates is about whether a reading is right,
+and **on the measured path neither of them currently stops anything**:
 
 * **Source authorization** — whether a link may be downloaded at all. A
-  channel in the verified registry auto-approves; anything else waits.
+  channel in the verified registry auto-approves, and the official Twitch
+  channel is one, so this is automatic today. Anything else waits.
 * **Layout approval** — whether a calibration profile really describes
   this broadcast's HUD. A detection cannot settle this; a wrong layout
-  produces confident nonsense rather than an honest `UNKNOWN`.
+  produces confident nonsense rather than an honest `UNKNOWN`. This only
+  applies to a NEWLY CALIBRATED layout: reusing an already-committed one
+  is automatic, and `owcs_8c105lnzlam` matches the Twitch broadcast at
+  score 1.000, so nothing is waiting here either.
+
+They stay as gates because they are the right gates — a channel that
+falls out of the registry, or a broadcast package nobody has calibrated,
+should stop. They are simply not stopping this path.
+
+**The real cap is hero template coverage: 8 of 52.** That is not a gate
+anyone can open, it is a ceiling. An uncovered hero reads `UNKNOWN` —
+never guessed — and a composition needs five NAMED heroes, so a map in
+which either team fields an uncovered hero publishes no composition for
+that team. The eight covered heroes are exactly those from the Nepal
+milestone map, because that is the footage they were cut from.
+
+Raising it is a decision before it is work: `template_bootstrap` states
+plainly that official hero art is used ONLY to help a human name a
+cluster and is never written into a template set, "because an official
+splash render does not look like a broadcast's HUD portrait and a
+template cut from one would quietly poison detection". Human labelling is
+deliberately the only writer of hero PNGs. An automatic path would have
+to keep that guarantee — cutting templates from real broadcast crops and
+letting held-out validation gate promotion — rather than relax it.
 
 Publication itself is opt-in per run (`--publish`), not because it needs
 judgement but because it **writes**: it regenerates the export, runs the
