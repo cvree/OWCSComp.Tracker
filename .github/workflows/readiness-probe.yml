@@ -136,7 +136,17 @@ jobs:
           if out.returncode != 0:
               print("frame acquisition FAILED:\n" + (out.stderr or "")[-800:])
               raise SystemExit(0)
-          frames_map = json.loads(out.stdout)["frames"]
+          # remote_frames prints "[remote] ..." progress to stdout ahead of
+          # its JSON, so parse from the first brace rather than the start.
+          raw = out.stdout or ""
+          brace = raw.find("{")
+          if brace < 0:
+              print("no JSON in frame acquisition output:\n" + raw[-800:])
+              raise SystemExit(0)
+          for line in raw[:brace].splitlines():
+              if line.strip():
+                  print(f"  {line.strip()}")
+          frames_map = json.loads(raw[brace:])["frames"]
           paths = [p for _, p in sorted(frames_map.items(), key=lambda kv: float(kv[0]))]
           frames = [f for f in (cv2.imread(p) for p in paths) if f is not None]
           print(f"{len(frames)} frame(s) decoded from {len(paths)} acquired")
