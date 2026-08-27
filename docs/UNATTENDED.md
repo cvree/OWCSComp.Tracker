@@ -311,9 +311,63 @@ desk, breaks and waiting screens.
 
 Which is exactly the problem `calibrate_remote.py` already exists to solve:
 it walks a ladder (60 s → 30 s → 15 s, then densifies) specifically to find
-gameplay windows in a long VOD, instead of sampling blind. The open question
-is therefore still open, and the way to close it is that tool, not more
-naive samples.
+gameplay windows in a long VOD, instead of sampling blind.
+
+### Running the real ladder overturned that first reading
+
+`.github/workflows/calibrate-twitch.yml` ran it against
+`[DROPS] OWWC 2026 | Group Stage Day 2` (10.5 h, an original airing rather
+than a rebroadcast):
+
+```
+pass 1: 60s over whole broadcast — 48 new sample(s), 2 chunk(s) of up to 24
+pass 1 chunk 1: 11 clean so far — 11/12 clean frames
+pass 1 chunk 2: 25 clean so far — 25 clean frames but only 1/4 regions of
+                the broadcast — too clustered to calibrate from
+provisional calibration from 16 screened frame(s)
+  frames acquired: 0 · yt-dlp calls: 4 · ffmpeg reads: 48
+  bytes over the wire: 822.0 MB · sample budget reached (48)
+REFUSED — the screened frames did not yield a chip grid — only one side
+produced grid candidates; left chip row not found (32 candidate blobs
+pooled from 16 frames) — are these live-gameplay frames?; right chip row
+not found (61 candidate blobs pooled from 16 frames)
+```
+
+**Gameplay is found on Twitch.** 11 of 12 frames in the first chunk passed
+the gameplay filter, 25 clean overall. So the earlier `gameplay 0/12` was
+purely an artifact of blind sampling, exactly as suspected — that question
+is now settled, and settled the good way.
+
+What refused is the next thing along: the **chip grid**. The HUD's two
+ult-charge chip rows were not found in frames the gameplay filter was happy
+with. Three candidate explanations, and they are not equally likely:
+
+1. **This is OWWC, not OWCS.** The Overwatch World Cup is a different
+   production from the Champions Series and may well carry a different
+   overlay. Every committed layout here is an OWCS package. Note that the
+   channel registry row restricts this channel to
+   `allowedEventTypes: ["owcs"]` — but the Twitch finder path does not
+   enforce that field, so an OWWC broadcast was queued and calibrated
+   against as though it were OWCS. That is a real gap, and it is probably
+   this result's cause.
+2. **The sample was too clustered.** The ladder itself says so: 25 clean
+   frames but only 1/4 of the broadcast covered, because a 48-sample budget
+   over 10.5 h in chunks of 24 ran out before it spread. Calibrating from
+   one region of one broadcast is exactly what it refuses to do.
+3. The Twitch encode differs enough to defeat chip detection — least
+   likely, since the gameplay filter (which reads the same HUD structurally)
+   was satisfied.
+
+So the honest state is: **acquisition works, gameplay detection works,
+calibration has not yet been given a fair test.** The next run should target
+an actual OWCS broadcast with a sample budget spread across the whole VOD,
+and `allowedEventTypes` should be enforced on the Twitch path so the queue
+stops offering OWWC in the first place.
+
+Note also the cost: 822 MB for 48 frames — ~17 MB each, well above the
+3.8 MB measured earlier, because seeking deep into a 10.5 h HLS stream pulls
+more per read. A full calibration pass is not free, though it is still far
+below downloading a 10.5-hour broadcast.
 
 ### What still stops for a human
 
