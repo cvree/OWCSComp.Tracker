@@ -712,10 +712,18 @@ class TestTwitchIntake(IntakeTestCase):
              "ytdlp_unparseable"),
         ):
             with self.subTest(code=code):
+                # A store of its own per subtest, closed explicitly rather
+                # than left for teardown: Windows refuses to delete an open
+                # sqlite file (POSIX allows unlinking one that is still
+                # held), so an unclosed extra store here fails tearDown's
+                # tempdir cleanup on that platform only.
                 store = js.JobStore(os.path.join(self._tmp.name, f"{code}.db"))
-                res = li.ingest_link(
-                    store, f"https://www.twitch.tv/videos/{TWITCH_VOD}",
-                    client=None, channels=REGISTRY, twitch_runner=runner)
+                try:
+                    res = li.ingest_link(
+                        store, f"https://www.twitch.tv/videos/{TWITCH_VOD}",
+                        client=None, channels=REGISTRY, twitch_runner=runner)
+                finally:
+                    store.close()
                 self.assertTrue(res["created"])   # the link is never dropped
                 self.assertEqual(res["metadata"]["errorCode"], code)
                 self.assertEqual(res["source"]["state"], li.SOURCE_PENDING)
