@@ -277,6 +277,44 @@ site that describes a review gate it no longer has would be lying about
 the provenance of its own data, which is the one thing this project
 sells.
 
+### Measured: where the chain actually stops today
+
+`.github/workflows/readiness-probe.yml` runs the real decision path against
+a real Twitch broadcast and reports each gate's own verdict. Run against
+`[REBROADCAST] [DROPS] OWWC 2026 | Group Stage Day 4` (8.5 h,
+`twitch.tv/videos/2854348714`):
+
+| step | result |
+|---|---|
+| find a broadcast | ✅ the finder returned it from the official Twitch channel |
+| **source authorization** | ✅ **AUTOMATIC** — "channel `ow_esports` is the verified official registry entry `ow_esports_twitch`" |
+| acquire frames | ✅ 12/12 sparse frames fetched and decoded |
+| **layout** | ❌ **NO_MATCH** — all three committed layouts scored **0.000** |
+
+So the first gate is already open with nothing to do. The layout gate is
+not, and the numbers say why in a way worth reading carefully:
+
+```
+owcs_8c105lnzlam   score 0.000  gameplay 0/12
+owcs_jksix_qwc     score 0.000  gameplay 0/12
+owcs_nd5lllwdky0   score 0.000  gameplay 0/12
+```
+
+**`gameplay 0/12`.** Not one sampled frame was classified as live play at
+all. That is a different finding from "the Twitch HUD differs from the
+YouTube HUD", and the two must not be confused: a layout cannot reproduce
+its own HUD structure on a frame that has no HUD in it, so on this evidence
+the fingerprint says nothing about whether the committed layout would match.
+Twelve frames spread over the middle half of an eight-and-a-half-hour
+rebroadcast is simply a bad way to find live play — most of that runtime is
+desk, breaks and waiting screens.
+
+Which is exactly the problem `calibrate_remote.py` already exists to solve:
+it walks a ladder (60 s → 30 s → 15 s, then densifies) specifically to find
+gameplay windows in a long VOD, instead of sampling blind. The open question
+is therefore still open, and the way to close it is that tool, not more
+naive samples.
+
 ### What still stops for a human
 
 Two gates remain, and neither is about whether a reading is right:
