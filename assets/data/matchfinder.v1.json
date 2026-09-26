@@ -7,7 +7,7 @@
       "durationSeconds": null,
       "firstSeenAt": "2026-09-26T11:49:12+00:00",
       "job": null,
-      "lastSeenAt": "2026-09-26T11:49:12+00:00",
+      "lastSeenAt": "2026-09-26T16:46:22+00:00",
       "likeness": {
         "confidence": "unlikely",
         "reasons": [
@@ -37,7 +37,7 @@
       "durationSeconds": null,
       "firstSeenAt": "2026-09-24T21:49:58+00:00",
       "job": null,
-      "lastSeenAt": "2026-09-26T11:49:12+00:00",
+      "lastSeenAt": "2026-09-26T16:46:22+00:00",
       "likeness": {
         "confidence": "unlikely",
         "reasons": [
@@ -67,7 +67,7 @@
       "durationSeconds": null,
       "firstSeenAt": "2026-09-16T21:43:47+00:00",
       "job": null,
-      "lastSeenAt": "2026-09-26T11:49:12+00:00",
+      "lastSeenAt": "2026-09-26T16:46:22+00:00",
       "likeness": {
         "confidence": "unlikely",
         "reasons": [
@@ -96,7 +96,7 @@
       "durationSeconds": null,
       "firstSeenAt": "2026-09-16T21:43:47+00:00",
       "job": null,
-      "lastSeenAt": "2026-09-26T11:49:12+00:00",
+      "lastSeenAt": "2026-09-26T16:46:22+00:00",
       "likeness": {
         "confidence": "unlikely",
         "reasons": [
@@ -122,28 +122,26 @@
       "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
       "channelRegistryId": "ow_esports_global",
       "channelTitle": "Overwatch Esports",
-      "durationSeconds": 33695,
+      "durationSeconds": null,
       "firstSeenAt": "2026-09-13T16:38:24+00:00",
       "job": null,
-      "lastSeenAt": "2026-09-26T11:49:12+00:00",
+      "lastSeenAt": "2026-09-26T16:46:22+00:00",
       "likeness": {
-        "confidence": "likely",
+        "confidence": "unlikely",
         "reasons": [
-          "long-form: 561m of runtime is longer than any promo, clip or cutdown \u2014 considered a broadcast regardless of what the title says",
-          "+25 livestream metadata (completed)",
-          "+20 substantial duration (33695s)",
+          "-10 no livestream timing metadata",
+          "-15 no duration and no livestream metadata \u2014 nothing says this is a long broadcast",
           "+15 tournament/broadcast terminology in title/description"
         ],
         "refusalReason": null,
         "refused": false,
-        "score": 60
+        "score": -10
       },
-      "liveBroadcastStatus": "completed",
+      "liveBroadcastStatus": null,
       "platform": "youtube",
       "publishedAt": "2026-09-14T01:54:59+00:00",
       "sources": [
-        "rss",
-        "streams"
+        "rss"
       ],
       "title": "[DROPS] Overwatch World Cup 2026 | Finals Day 2",
       "url": "https://www.youtube.com/watch?v=YKS066sN_-o",
@@ -156,7 +154,7 @@
       "durationSeconds": null,
       "firstSeenAt": "2026-09-14T13:22:25+00:00",
       "job": null,
-      "lastSeenAt": "2026-09-26T11:49:12+00:00",
+      "lastSeenAt": "2026-09-26T16:46:22+00:00",
       "likeness": {
         "confidence": "unlikely",
         "reasons": [
@@ -182,28 +180,26 @@
       "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
       "channelRegistryId": "ow_esports_global",
       "channelTitle": "Overwatch Esports",
-      "durationSeconds": 38653,
+      "durationSeconds": null,
       "firstSeenAt": "2026-09-12T20:57:52+00:00",
       "job": null,
-      "lastSeenAt": "2026-09-26T11:49:12+00:00",
+      "lastSeenAt": "2026-09-26T16:46:22+00:00",
       "likeness": {
-        "confidence": "likely",
+        "confidence": "unlikely",
         "reasons": [
-          "long-form: 644m of runtime is longer than any promo, clip or cutdown \u2014 considered a broadcast regardless of what the title says",
-          "+25 livestream metadata (completed)",
-          "+20 substantial duration (38653s)",
+          "-10 no livestream timing metadata",
+          "-15 no duration and no livestream metadata \u2014 nothing says this is a long broadcast",
           "+15 tournament/broadcast terminology in title/description"
         ],
         "refusalReason": null,
         "refused": false,
-        "score": 60
+        "score": -10
       },
-      "liveBroadcastStatus": "completed",
+      "liveBroadcastStatus": null,
       "platform": "youtube",
       "publishedAt": "2026-09-13T03:55:29+00:00",
       "sources": [
-        "rss",
-        "streams"
+        "rss"
       ],
       "title": "[DROPS] Overwatch World Cup 2026 | Finals Day 1",
       "url": "https://www.youtube.com/watch?v=oBcta85_RMA",
@@ -216,7 +212,7 @@
       "durationSeconds": null,
       "firstSeenAt": "2026-09-13T12:18:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-09-26T11:49:12+00:00",
+      "lastSeenAt": "2026-09-26T16:46:22+00:00",
       "likeness": {
         "confidence": "unlikely",
         "reasons": [
@@ -245,7 +241,7 @@
       "durationSeconds": null,
       "firstSeenAt": "2026-09-12T20:57:52+00:00",
       "job": null,
-      "lastSeenAt": "2026-09-26T11:49:12+00:00",
+      "lastSeenAt": "2026-09-26T16:46:22+00:00",
       "likeness": {
         "confidence": "unlikely",
         "reasons": [
@@ -274,7 +270,7 @@
       "durationSeconds": null,
       "firstSeenAt": "2026-09-12T11:16:13+00:00",
       "job": null,
-      "lastSeenAt": "2026-09-26T11:49:12+00:00",
+      "lastSeenAt": "2026-09-26T16:46:22+00:00",
       "likeness": {
         "confidence": "unlikely",
         "reasons": [
@@ -303,7 +299,7 @@
       "durationSeconds": null,
       "firstSeenAt": "2026-09-12T11:16:13+00:00",
       "job": null,
-      "lastSeenAt": "2026-09-26T11:49:12+00:00",
+      "lastSeenAt": "2026-09-26T16:46:22+00:00",
       "likeness": {
         "confidence": "unlikely",
         "reasons": [
@@ -332,7 +328,7 @@
       "durationSeconds": null,
       "firstSeenAt": "2026-09-11T21:20:18+00:00",
       "job": null,
-      "lastSeenAt": "2026-09-26T11:49:12+00:00",
+      "lastSeenAt": "2026-09-26T16:46:22+00:00",
       "likeness": {
         "confidence": "unlikely",
         "reasons": [
@@ -361,7 +357,7 @@
       "durationSeconds": null,
       "firstSeenAt": "2026-09-10T21:12:52+00:00",
       "job": null,
-      "lastSeenAt": "2026-09-26T11:49:12+00:00",
+      "lastSeenAt": "2026-09-26T16:46:22+00:00",
       "likeness": {
         "confidence": "unlikely",
         "reasons": [
@@ -390,7 +386,7 @@
       "durationSeconds": null,
       "firstSeenAt": "2026-09-10T16:41:37+00:00",
       "job": null,
-      "lastSeenAt": "2026-09-26T11:49:12+00:00",
+      "lastSeenAt": "2026-09-26T16:46:22+00:00",
       "likeness": {
         "confidence": "unlikely",
         "reasons": [
@@ -420,7 +416,7 @@
       "durationSeconds": null,
       "firstSeenAt": "2026-09-09T21:13:16+00:00",
       "job": null,
-      "lastSeenAt": "2026-09-26T11:49:12+00:00",
+      "lastSeenAt": "2026-09-26T16:46:22+00:00",
       "likeness": {
         "confidence": "unlikely",
         "reasons": [
@@ -11451,14 +11447,15 @@
       "title": "ow_esports_twitch"
     }
   ],
-  "generatedAt": "2026-09-26T11:49:12+00:00",
+  "generatedAt": "2026-09-26T16:46:22+00:00",
   "schema": "matchfinder.v1",
   "sourceErrors": [
-    "date-backfill (api): 68 of 126 video(s) were not returned by the API \u2014 deleted, private or region-blocked."
+    "streams-tab: yt-dlp exit 1: ERROR: UCiAInBL9kUzz1XRxk66v-gw page 1: Unable to download API page: HTTP Error 403: Forbidden (caused by <HTTPError 403: Forbidden>)",
+    "date-backfill (api): 68 of 68 video(s) were not returned by the API \u2014 deleted, private or region-blocked."
   ],
   "summary": {
-    "ignoredTooShort": 1,
-    "likely": 324,
+    "ignoredTooShort": 0,
+    "likely": 322,
     "total": 381,
     "tracked": 0
   }

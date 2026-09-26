@@ -26,7 +26,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-09-26T11:49:12+00:00",
-   "lastSeenAt": "2026-09-26T11:49:12+00:00",
+   "lastSeenAt": "2026-09-26T16:46:22+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -77,7 +77,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-09-24T21:49:58+00:00",
-   "lastSeenAt": "2026-09-26T11:49:12+00:00",
+   "lastSeenAt": "2026-09-26T16:46:22+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -128,7 +128,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-09-16T21:43:47+00:00",
-   "lastSeenAt": "2026-09-26T11:49:12+00:00",
+   "lastSeenAt": "2026-09-26T16:46:22+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -178,7 +178,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-09-16T21:43:47+00:00",
-   "lastSeenAt": "2026-09-26T11:49:12+00:00",
+   "lastSeenAt": "2026-09-26T16:46:22+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -226,26 +226,21 @@ window.OWCS_DISCOVERED = {
    },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
    "channelTitle": "Overwatch Esports",
-   "durationSeconds": 33695,
+   "durationSeconds": null,
    "firstSeenAt": "2026-09-13T16:38:24+00:00",
-   "lastSeenAt": "2026-09-26T11:49:12+00:00",
+   "lastSeenAt": "2026-09-26T16:46:22+00:00",
    "likeness": {
-    "confidence": "likely",
+    "confidence": "unlikely",
     "reasons": [
-     "long-form: 561m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
-     "+25 livestream metadata (completed)",
-     "+20 substantial duration (33695s)",
+     "-10 no livestream timing metadata",
+     "-15 no duration and no livestream metadata — nothing says this is a long broadcast",
      "+15 tournament/broadcast terminology in title/description"
     ],
-    "score": 60
+    "score": -10
    },
-   "liveStatus": "completed",
+   "liveStatus": null,
    "matchId": null,
-   "nextAction": {
-    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=YKS066sN_-o\"",
-    "href": "submit.html?url=https://www.youtube.com/watch?v=YKS066sN_-o",
-    "label": "Process this broadcast"
-   },
+   "nextAction": null,
    "parsed": {
     "cleanTitle": "Overwatch World Cup 2026 | Finals Day 2",
     "companion": false,
@@ -262,14 +257,13 @@ window.OWCS_DISCOVERED = {
    },
    "publishedAt": "2026-09-14T01:54:59+00:00",
    "sources": [
-    "rss",
-    "streams"
+    "rss"
    ],
-   "state": "found",
+   "state": "ignored",
    "title": "[DROPS] Overwatch World Cup 2026 | Finals Day 2",
    "url": "https://www.youtube.com/watch?v=YKS066sN_-o",
    "videoId": "YKS066sN_-o",
-   "why": "Found automatically. Nobody has processed it yet."
+   "why": "Scored as unlikely to be a match broadcast."
   },
   {
    "calendar": {
@@ -284,7 +278,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-09-14T13:22:25+00:00",
-   "lastSeenAt": "2026-09-26T11:49:12+00:00",
+   "lastSeenAt": "2026-09-26T16:46:22+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -332,26 +326,21 @@ window.OWCS_DISCOVERED = {
    },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
    "channelTitle": "Overwatch Esports",
-   "durationSeconds": 38653,
+   "durationSeconds": null,
    "firstSeenAt": "2026-09-12T20:57:52+00:00",
-   "lastSeenAt": "2026-09-26T11:49:12+00:00",
+   "lastSeenAt": "2026-09-26T16:46:22+00:00",
    "likeness": {
-    "confidence": "likely",
+    "confidence": "unlikely",
     "reasons": [
-     "long-form: 644m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
-     "+25 livestream metadata (completed)",
-     "+20 substantial duration (38653s)",
+     "-10 no livestream timing metadata",
+     "-15 no duration and no livestream metadata — nothing says this is a long broadcast",
      "+15 tournament/broadcast terminology in title/description"
     ],
-    "score": 60
+    "score": -10
    },
-   "liveStatus": "completed",
+   "liveStatus": null,
    "matchId": null,
-   "nextAction": {
-    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=oBcta85_RMA\"",
-    "href": "submit.html?url=https://www.youtube.com/watch?v=oBcta85_RMA",
-    "label": "Process this broadcast"
-   },
+   "nextAction": null,
    "parsed": {
     "cleanTitle": "Overwatch World Cup 2026 | Finals Day 1",
     "companion": false,
@@ -368,14 +357,13 @@ window.OWCS_DISCOVERED = {
    },
    "publishedAt": "2026-09-13T03:55:29+00:00",
    "sources": [
-    "rss",
-    "streams"
+    "rss"
    ],
-   "state": "found",
+   "state": "ignored",
    "title": "[DROPS] Overwatch World Cup 2026 | Finals Day 1",
    "url": "https://www.youtube.com/watch?v=oBcta85_RMA",
    "videoId": "oBcta85_RMA",
-   "why": "Found automatically. Nobody has processed it yet."
+   "why": "Scored as unlikely to be a match broadcast."
   },
   {
    "calendar": {
@@ -390,7 +378,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-09-13T12:18:20+00:00",
-   "lastSeenAt": "2026-09-26T11:49:12+00:00",
+   "lastSeenAt": "2026-09-26T16:46:22+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -440,7 +428,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-09-12T20:57:52+00:00",
-   "lastSeenAt": "2026-09-26T11:49:12+00:00",
+   "lastSeenAt": "2026-09-26T16:46:22+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -490,7 +478,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-09-12T11:16:13+00:00",
-   "lastSeenAt": "2026-09-26T11:49:12+00:00",
+   "lastSeenAt": "2026-09-26T16:46:22+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -540,7 +528,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-09-12T11:16:13+00:00",
-   "lastSeenAt": "2026-09-26T11:49:12+00:00",
+   "lastSeenAt": "2026-09-26T16:46:22+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -590,7 +578,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-09-11T21:20:18+00:00",
-   "lastSeenAt": "2026-09-26T11:49:12+00:00",
+   "lastSeenAt": "2026-09-26T16:46:22+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -640,7 +628,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-09-10T21:12:52+00:00",
-   "lastSeenAt": "2026-09-26T11:49:12+00:00",
+   "lastSeenAt": "2026-09-26T16:46:22+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -692,7 +680,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-09-10T16:41:37+00:00",
-   "lastSeenAt": "2026-09-26T11:49:12+00:00",
+   "lastSeenAt": "2026-09-26T16:46:22+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -743,7 +731,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-09-09T21:13:16+00:00",
-   "lastSeenAt": "2026-09-26T11:49:12+00:00",
+   "lastSeenAt": "2026-09-26T16:46:22+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -21621,8 +21609,8 @@ window.OWCS_DISCOVERED = {
   }
  ],
  "counts": {
-  "found": 323,
-  "ignored": 57,
+  "found": 321,
+  "ignored": 59,
   "published": 1,
   "queued": 0,
   "review": 0,
@@ -21631,43 +21619,13 @@ window.OWCS_DISCOVERED = {
  },
  "dateCoverage": {
   "blocked": true,
-  "considered": 324,
+  "considered": 322,
   "failedLookups": 1,
-  "known": 256,
+  "known": 254,
   "reason": "The scan reads a whole channel in one cheap request, and that listing carries no air date. The per-video lookup that would supply one is currently being refused by the source, so these broadcasts keep the date they came with — none.",
   "unknown": 68
  },
  "events": [
-  {
-   "broadcasts": 2,
-   "calendarEventIds": [],
-   "channels": [
-    "Overwatch Esports"
-   ],
-   "dated": 2,
-   "days": [
-    1,
-    2
-   ],
-   "firstAt": "2026-09-13T03:55:29+00:00",
-   "found": 2,
-   "key": "overwatch-world-cup-2026-finals",
-   "lastAt": "2026-09-14T01:54:59+00:00",
-   "name": "Overwatch World Cup 2026 — Finals",
-   "phases": [
-    "finals"
-   ],
-   "published": 0,
-   "regions": [],
-   "runtimeKnown": 2,
-   "runtimeSeconds": 72348,
-   "season": 2026,
-   "stages": [],
-   "weeks": [],
-   "years": [
-    2026
-   ]
-  },
   {
    "broadcasts": 1,
    "calendarEventIds": [],
@@ -25095,7 +25053,7 @@ window.OWCS_DISCOVERED = {
    ]
   }
  ],
- "generatedAt": "2026-09-26T11:49:12+00:00",
+ "generatedAt": "2026-09-26T16:46:22+00:00",
  "inputs": [
   {
    "loaded": true,
@@ -25128,19 +25086,20 @@ window.OWCS_DISCOVERED = {
     "title": "ow_esports_twitch"
    }
   ],
-  "generatedAt": "2026-09-26T11:49:12+00:00",
+  "generatedAt": "2026-09-26T16:46:22+00:00",
   "intervalHours": 6.0,
-  "nextExpectedAt": "2026-09-26T17:49:12+00:00",
+  "nextExpectedAt": "2026-09-26T22:46:22+00:00",
   "sourceErrors": [
-   "date-backfill (api): 68 of 126 video(s) were not returned by the API — deleted, private or region-blocked."
+   "streams-tab: yt-dlp exit 1: ERROR: UCiAInBL9kUzz1XRxk66v-gw page 1: Unable to download API page: HTTP Error 403: Forbidden (caused by <HTTPError 403: Forbidden>)",
+   "date-backfill (api): 68 of 68 video(s) were not returned by the API — deleted, private or region-blocked."
   ],
   "staleAfterHours": 24
  },
  "schema": "discovered.v1",
  "seasons": [
   {
-   "broadcasts": 100,
-   "dated": 50,
+   "broadcasts": 98,
+   "dated": 48,
    "eventKeys": [
     "2026-owcs-champions-clash",
     "2026-owcs-pre-season-bootcamp",
@@ -25148,7 +25107,6 @@ window.OWCS_DISCOVERED = {
     "calling-all-heroes-2026-championship-finals",
     "calling-all-heroes-2026-season-playoffs",
     "overwatch-collegiate-spring-season-playoffs-2026",
-    "overwatch-world-cup-2026-finals",
     "overwatch-world-cup-2026-group-stage",
     "owcs-2026-champions-clash",
     "owcs-2026-midseason-championship",
@@ -25166,11 +25124,11 @@ window.OWCS_DISCOVERED = {
     "owwc-2026-online-qualifiers",
     "owwc-2026-online-qualifiers-emea-amer"
    ],
-   "events": 23,
-   "found": 99,
+   "events": 22,
+   "found": 97,
    "published": 1,
-   "runtimeKnown": 100,
-   "runtimeSeconds": 2947895,
+   "runtimeKnown": 98,
+   "runtimeSeconds": 2875547,
    "season": 2026
   },
   {
@@ -25302,17 +25260,17 @@ window.OWCS_DISCOVERED = {
   }
  ],
  "summary": {
-  "awaitingProcessing": 323,
+  "awaitingProcessing": 321,
   "broadcastsKnown": 381,
   "calendarLinked": 16,
   "channelsScanned": 2,
-  "datedBroadcasts": 256,
-  "events": 114,
-  "ignored": 57,
+  "datedBroadcasts": 254,
+  "events": 113,
+  "ignored": 59,
   "inFlight": 0,
   "published": 1,
-  "runtimeKnown": 324,
-  "runtimeSeconds": 8231244,
+  "runtimeKnown": 322,
+  "runtimeSeconds": 8158896,
   "seasons": 3
  }
 };
