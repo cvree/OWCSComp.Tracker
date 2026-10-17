@@ -122,69 +122,11 @@
     {
       "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
       "channelRegistryId": "ow_esports_global",
-      "channelTitle": "Overwatch Esports",
-      "durationSeconds": null,
-      "firstSeenAt": "2026-10-16T11:55:22+00:00",
-      "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
-      "likeness": {
-        "confidence": "likely",
-        "reasons": [
-          "+25 livestream metadata (upcoming)",
-          "+15 tournament/broadcast terminology in title/description"
-        ],
-        "refusalReason": null,
-        "refused": false,
-        "score": 40
-      },
-      "liveBroadcastStatus": "upcoming",
-      "platform": "youtube",
-      "publishedAt": "2026-10-12T19:27:59+00:00",
-      "sources": [
-        "rss",
-        "streams"
-      ],
-      "title": "OWCS 2026 | NA/EMEA | Stage 3 Week 2 Day 2",
-      "url": "https://www.youtube.com/watch?v=3ZK1AJ3kZMY",
-      "videoId": "3ZK1AJ3kZMY"
-    },
-    {
-      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
-      "channelRegistryId": "ow_esports_global",
-      "channelTitle": "Overwatch Esports",
-      "durationSeconds": null,
-      "firstSeenAt": "2026-10-16T11:55:22+00:00",
-      "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
-      "likeness": {
-        "confidence": "likely",
-        "reasons": [
-          "+25 livestream metadata (upcoming)",
-          "+15 tournament/broadcast terminology in title/description"
-        ],
-        "refusalReason": null,
-        "refused": false,
-        "score": 40
-      },
-      "liveBroadcastStatus": "upcoming",
-      "platform": "youtube",
-      "publishedAt": "2026-10-12T19:24:36+00:00",
-      "sources": [
-        "rss",
-        "streams"
-      ],
-      "title": "OWCS 2026 | NA/EMEA | Stage 3 Week 2 Day 1",
-      "url": "https://www.youtube.com/watch?v=y70Na3pRbBo",
-      "videoId": "y70Na3pRbBo"
-    },
-    {
-      "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
-      "channelRegistryId": "ow_esports_global",
-      "channelTitle": "Overwatch Esports",
+      "channelTitle": "ow_esports_global",
       "durationSeconds": 30271,
       "firstSeenAt": "2026-10-11T13:32:53+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -199,10 +141,10 @@
       },
       "liveBroadcastStatus": "completed",
       "platform": "youtube",
-      "publishedAt": "2026-10-12T01:31:36+00:00",
+      "publishedAt": "2026-10-11T16:39:16Z",
       "sources": [
-        "rss",
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2026 | NA/EMEA | Stage 3 Week 1 Day 2",
       "url": "https://www.youtube.com/watch?v=f9IhuWN__Kg",
@@ -211,11 +153,11 @@
     {
       "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
       "channelRegistryId": "ow_esports_global",
-      "channelTitle": "Overwatch Esports",
+      "channelTitle": "ow_esports_global",
       "durationSeconds": 29558,
       "firstSeenAt": "2026-10-10T13:04:10+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -230,10 +172,10 @@
       },
       "liveBroadcastStatus": "completed",
       "platform": "youtube",
-      "publishedAt": "2026-10-11T01:13:23+00:00",
+      "publishedAt": "2026-10-10T16:38:10Z",
       "sources": [
-        "rss",
-        "streams"
+        "streams",
+        "youtube-api"
       ],
       "title": "OWCS 2026 | NA/EMEA | Stage 3 Opening Day",
       "url": "https://www.youtube.com/watch?v=qDSbCmBTgYI",
@@ -630,7 +572,7 @@
       "durationSeconds": 33695,
       "firstSeenAt": "2026-09-13T16:38:24+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -720,7 +662,7 @@
       "durationSeconds": 38653,
       "firstSeenAt": "2026-09-12T20:57:52+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -956,7 +898,7 @@
       "durationSeconds": 19369,
       "firstSeenAt": "2026-09-06T11:21:51+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -987,7 +929,7 @@
       "durationSeconds": 14837,
       "firstSeenAt": "2026-09-05T10:55:41+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -1106,7 +1048,7 @@
       "durationSeconds": 18406,
       "firstSeenAt": "2026-08-28T12:14:46+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -1137,7 +1079,7 @@
       "durationSeconds": 17463,
       "firstSeenAt": "2026-08-28T12:14:46+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -1374,7 +1316,7 @@
       "durationSeconds": 31900,
       "firstSeenAt": "2026-08-25T21:20:04+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -1465,7 +1407,7 @@
       "durationSeconds": 34071,
       "firstSeenAt": "2026-08-25T21:20:04+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -1525,7 +1467,7 @@
       "durationSeconds": 37741,
       "firstSeenAt": "2026-08-25T21:20:04+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -1585,7 +1527,7 @@
       "durationSeconds": 42900,
       "firstSeenAt": "2026-08-25T21:20:04+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -1759,7 +1701,7 @@
       "durationSeconds": 24375,
       "firstSeenAt": "2026-08-10T08:17:09+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -1790,7 +1732,7 @@
       "durationSeconds": 22789,
       "firstSeenAt": "2026-08-03T22:34:18+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -1821,7 +1763,7 @@
       "durationSeconds": 21185,
       "firstSeenAt": "2026-08-03T22:34:18+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2052,7 +1994,7 @@
       "durationSeconds": 31849,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2139,7 +2081,7 @@
       "durationSeconds": 24861,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2283,7 +2225,7 @@
       "durationSeconds": 25656,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2343,7 +2285,7 @@
       "durationSeconds": 25087,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2430,7 +2372,7 @@
       "durationSeconds": 40894,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2663,7 +2605,7 @@
       "durationSeconds": 2502,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2722,7 +2664,7 @@
       "durationSeconds": 34113,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2753,7 +2695,7 @@
       "durationSeconds": 24414,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2784,7 +2726,7 @@
       "durationSeconds": 20606,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2815,7 +2757,7 @@
       "durationSeconds": 28383,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2846,7 +2788,7 @@
       "durationSeconds": 25657,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2877,7 +2819,7 @@
       "durationSeconds": 27361,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2908,7 +2850,7 @@
       "durationSeconds": 28697,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2939,7 +2881,7 @@
       "durationSeconds": 28455,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -2970,7 +2912,7 @@
       "durationSeconds": 25714,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -3001,7 +2943,7 @@
       "durationSeconds": 42373,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -3032,7 +2974,7 @@
       "durationSeconds": 42899,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -3063,7 +3005,7 @@
       "durationSeconds": 37659,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -3094,7 +3036,7 @@
       "durationSeconds": 20974,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -3125,7 +3067,7 @@
       "durationSeconds": 42899,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -3156,7 +3098,7 @@
       "durationSeconds": 20389,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -3187,7 +3129,7 @@
       "durationSeconds": 33100,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -3218,7 +3160,7 @@
       "durationSeconds": 35152,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -3249,7 +3191,7 @@
       "durationSeconds": 26826,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -3280,7 +3222,7 @@
       "durationSeconds": 23139,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -3311,7 +3253,7 @@
       "durationSeconds": 35667,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -3342,7 +3284,7 @@
       "durationSeconds": 24335,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -3373,7 +3315,7 @@
       "durationSeconds": 22581,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -3404,7 +3346,7 @@
       "durationSeconds": 24105,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -3435,7 +3377,7 @@
       "durationSeconds": 28484,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -3466,7 +3408,7 @@
       "durationSeconds": 29782,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -3497,7 +3439,7 @@
       "durationSeconds": 26566,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -3528,7 +3470,7 @@
       "durationSeconds": 26418,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -3559,7 +3501,7 @@
       "durationSeconds": 26540,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -3590,7 +3532,7 @@
       "durationSeconds": 29536,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -3621,7 +3563,7 @@
       "durationSeconds": 21470,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -3652,7 +3594,7 @@
       "durationSeconds": 21281,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -3683,7 +3625,7 @@
       "durationSeconds": 13430,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -3714,7 +3656,7 @@
       "durationSeconds": 29771,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -3745,7 +3687,7 @@
       "durationSeconds": 32256,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -3776,7 +3718,7 @@
       "durationSeconds": 27641,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -3807,7 +3749,7 @@
       "durationSeconds": 35937,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -3838,7 +3780,7 @@
       "durationSeconds": 20453,
       "firstSeenAt": "2026-07-29T23:14:15+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -9881,7 +9823,7 @@
       "durationSeconds": 30748,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -9911,7 +9853,7 @@
       "durationSeconds": 31937,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -9941,7 +9883,7 @@
       "durationSeconds": 32770,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -9971,7 +9913,7 @@
       "durationSeconds": 34089,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -10001,7 +9943,7 @@
       "durationSeconds": 32400,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -10031,7 +9973,7 @@
       "durationSeconds": 37782,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -10061,7 +10003,7 @@
       "durationSeconds": 43424,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -10091,7 +10033,7 @@
       "durationSeconds": 24371,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -10121,7 +10063,7 @@
       "durationSeconds": 22788,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -10151,7 +10093,7 @@
       "durationSeconds": 21184,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -10181,7 +10123,7 @@
       "durationSeconds": 30221,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -10211,7 +10153,7 @@
       "durationSeconds": 32045,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -10241,7 +10183,7 @@
       "durationSeconds": 23240,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -10271,7 +10213,7 @@
       "durationSeconds": 25187,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -10301,7 +10243,7 @@
       "durationSeconds": 24070,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -10331,7 +10273,7 @@
       "durationSeconds": 25830,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -10361,7 +10303,7 @@
       "durationSeconds": 23433,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -10391,7 +10333,7 @@
       "durationSeconds": 25493,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -10421,7 +10363,7 @@
       "durationSeconds": 39232,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -10451,7 +10393,7 @@
       "durationSeconds": 41156,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -10481,7 +10423,7 @@
       "durationSeconds": 2473,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -10510,7 +10452,7 @@
       "durationSeconds": 34175,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -10540,7 +10482,7 @@
       "durationSeconds": 25048,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -10570,7 +10512,7 @@
       "durationSeconds": 20743,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -10600,7 +10542,7 @@
       "durationSeconds": 28490,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -10630,7 +10572,7 @@
       "durationSeconds": 25848,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -10660,7 +10602,7 @@
       "durationSeconds": 27380,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -10690,7 +10632,7 @@
       "durationSeconds": 28789,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -10720,7 +10662,7 @@
       "durationSeconds": 28558,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -10750,7 +10692,7 @@
       "durationSeconds": 25766,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -10780,7 +10722,7 @@
       "durationSeconds": 42389,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -10810,7 +10752,7 @@
       "durationSeconds": 43240,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -10840,7 +10782,7 @@
       "durationSeconds": 37836,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -10870,7 +10812,7 @@
       "durationSeconds": 21882,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -10900,7 +10842,7 @@
       "durationSeconds": 58055,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -10930,7 +10872,7 @@
       "durationSeconds": 20430,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -10960,7 +10902,7 @@
       "durationSeconds": 33033,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -10990,7 +10932,7 @@
       "durationSeconds": 33170,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -11020,7 +10962,7 @@
       "durationSeconds": 35019,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -11050,7 +10992,7 @@
       "durationSeconds": 35184,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -11080,7 +11022,7 @@
       "durationSeconds": 26368,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -11110,7 +11052,7 @@
       "durationSeconds": 26863,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -11140,7 +11082,7 @@
       "durationSeconds": 1569,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -11169,7 +11111,7 @@
       "durationSeconds": 21521,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -11199,7 +11141,7 @@
       "durationSeconds": 35667,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -11229,7 +11171,7 @@
       "durationSeconds": 24569,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -11259,7 +11201,7 @@
       "durationSeconds": 22772,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -11289,7 +11231,7 @@
       "durationSeconds": 24195,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -11319,7 +11261,7 @@
       "durationSeconds": 28568,
       "firstSeenAt": "2026-08-27T10:34:20+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -11678,7 +11620,7 @@
       "durationSeconds": 17455,
       "firstSeenAt": "2026-08-29T21:16:21+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -11708,7 +11650,7 @@
       "durationSeconds": 18406,
       "firstSeenAt": "2026-08-30T21:35:25+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -11738,7 +11680,7 @@
       "durationSeconds": 14837,
       "firstSeenAt": "2026-09-05T20:43:28+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -11768,7 +11710,7 @@
       "durationSeconds": 19368,
       "firstSeenAt": "2026-09-07T05:14:27+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -11798,7 +11740,7 @@
       "durationSeconds": 38802,
       "firstSeenAt": "2026-09-12T20:57:52+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -11828,7 +11770,7 @@
       "durationSeconds": 27599,
       "firstSeenAt": "2026-09-13T05:23:28+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -11858,7 +11800,7 @@
       "durationSeconds": 33761,
       "firstSeenAt": "2026-09-13T16:38:24+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -11888,7 +11830,7 @@
       "durationSeconds": 30850,
       "firstSeenAt": "2026-09-14T13:22:25+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -11918,7 +11860,7 @@
       "durationSeconds": 29713,
       "firstSeenAt": "2026-10-10T22:00:10+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -11948,7 +11890,7 @@
       "durationSeconds": 30460,
       "firstSeenAt": "2026-10-11T22:28:57+00:00",
       "job": null,
-      "lastSeenAt": "2026-10-16T21:43:30+00:00",
+      "lastSeenAt": "2026-10-17T05:00:43+00:00",
       "likeness": {
         "confidence": "likely",
         "reasons": [
@@ -11988,15 +11930,16 @@
       "title": "ow_esports_twitch"
     }
   ],
-  "generatedAt": "2026-10-16T21:43:30+00:00",
+  "generatedAt": "2026-10-17T05:00:43+00:00",
   "schema": "matchfinder.v1",
   "sourceErrors": [
-    "date-backfill (api): 70 of 126 video(s) were not returned by the API \u2014 deleted, private or region-blocked."
+    "rss UCiAInBL9kUzz1XRxk66v-gw: HTTPError: HTTP Error 404: Not Found",
+    "date-backfill (api): 70 of 130 video(s) were not returned by the API \u2014 deleted, private or region-blocked."
   ],
   "summary": {
-    "ignoredTooShort": 1,
-    "likely": 330,
-    "total": 399,
+    "ignoredTooShort": 3,
+    "likely": 328,
+    "total": 397,
     "tracked": 0
   }
 }
