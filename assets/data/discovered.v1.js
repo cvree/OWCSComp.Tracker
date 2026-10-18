@@ -26,7 +26,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": 27862,
    "firstSeenAt": "2026-10-17T11:11:38+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -85,7 +85,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-10-17T20:59:10+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -135,7 +135,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-10-16T21:43:30+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -190,7 +190,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-10-16T11:55:22+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -240,7 +240,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-10-14T21:56:55+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -291,7 +291,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-10-14T12:24:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -341,16 +341,16 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-10-18T11:44:07+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
-     "+25 livestream metadata (upcoming)",
+     "+25 livestream metadata (live)",
      "+15 tournament/broadcast terminology in title/description"
     ],
     "score": 40
    },
-   "liveStatus": "upcoming",
+   "liveStatus": "live",
    "matchId": null,
    "nextAction": {
     "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=3ZK1AJ3kZMY\"",
@@ -398,7 +398,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": 30271,
    "firstSeenAt": "2026-10-11T13:32:53+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -457,7 +457,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": 29558,
    "firstSeenAt": "2026-10-10T13:04:10+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -516,7 +516,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-10-08T23:33:45+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -567,7 +567,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-10-07T23:19:27+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -617,7 +617,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-10-06T22:48:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -667,7 +667,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-10-02T22:34:17+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -717,7 +717,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-09-30T22:38:28+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -768,7 +768,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "Overwatch Esports",
    "durationSeconds": null,
    "firstSeenAt": "2026-09-29T22:38:41+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "unlikely",
     "reasons": [
@@ -1173,7 +1173,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 33695,
    "firstSeenAt": "2026-09-13T16:38:24+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -1330,7 +1330,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 38653,
    "firstSeenAt": "2026-09-12T20:57:52+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -1740,7 +1740,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 19369,
    "firstSeenAt": "2026-09-06T11:21:51+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -1796,7 +1796,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 14837,
    "firstSeenAt": "2026-09-05T10:55:41+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -2003,7 +2003,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 18406,
    "firstSeenAt": "2026-08-28T12:14:46+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -2059,7 +2059,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 17463,
    "firstSeenAt": "2026-08-28T12:14:46+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -2494,7 +2494,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 31900,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -2664,7 +2664,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 34071,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -2778,7 +2778,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 37741,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -2892,7 +2892,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 42900,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -3224,7 +3224,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24375,
    "firstSeenAt": "2026-08-10T08:17:09+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -3284,7 +3284,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 22789,
    "firstSeenAt": "2026-08-03T22:34:18+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -3344,7 +3344,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 21185,
    "firstSeenAt": "2026-08-03T22:34:18+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -3786,7 +3786,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 31849,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -3954,7 +3954,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24861,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -4231,7 +4231,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 25656,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -4346,7 +4346,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 25087,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -4514,7 +4514,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 40894,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -4958,7 +4958,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 2502,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -5074,7 +5074,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 34113,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -5139,7 +5139,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24414,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -5200,7 +5200,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 20606,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -5259,7 +5259,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 28383,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -5318,7 +5318,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 25657,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -5377,7 +5377,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 27361,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -5436,7 +5436,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 28697,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -5495,7 +5495,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 28455,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -5554,7 +5554,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 25714,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -5613,7 +5613,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 42373,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -5671,7 +5671,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 42899,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -5729,7 +5729,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 37659,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -5785,7 +5785,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 20974,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -5841,7 +5841,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 42899,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -5897,7 +5897,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 20389,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -5953,7 +5953,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 33100,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -6009,7 +6009,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 35152,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -6065,7 +6065,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 26826,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -6121,7 +6121,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 23139,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -6177,7 +6177,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 35667,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -6233,7 +6233,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24335,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -6292,7 +6292,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 22581,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -6351,7 +6351,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24105,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -6410,7 +6410,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 28484,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -6469,7 +6469,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 29782,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -6528,7 +6528,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 26566,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -6587,7 +6587,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 26418,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -6646,7 +6646,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 26540,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -6705,7 +6705,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 29536,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -6764,7 +6764,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 21470,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -6820,7 +6820,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 21281,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -6876,7 +6876,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 13430,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -6932,7 +6932,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 29771,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -6988,7 +6988,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 32256,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -7044,7 +7044,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 27641,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -7100,7 +7100,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 35937,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -7156,7 +7156,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 20453,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -18699,7 +18699,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 30748,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -18755,7 +18755,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 31937,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -18811,7 +18811,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 32770,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -18867,7 +18867,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 34089,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -18923,7 +18923,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 32400,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -18979,7 +18979,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 37782,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -19035,7 +19035,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 43424,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -19091,7 +19091,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 24371,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -19147,7 +19147,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 22788,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -19203,7 +19203,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 21184,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -19259,7 +19259,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 30221,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -19315,7 +19315,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 32045,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -19371,7 +19371,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 23240,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -19427,7 +19427,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 25187,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -19483,7 +19483,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 24070,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -19539,7 +19539,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 25830,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -19595,7 +19595,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 23433,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -19651,7 +19651,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 25493,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -19707,7 +19707,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 39232,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -19763,7 +19763,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 41156,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -19819,7 +19819,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 2473,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -19874,7 +19874,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 34175,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -19930,7 +19930,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 25048,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -19986,7 +19986,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 20743,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -20042,7 +20042,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 28490,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -20098,7 +20098,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 25848,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -20154,7 +20154,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 27380,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -20210,7 +20210,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 28789,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -20266,7 +20266,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 28558,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -20322,7 +20322,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 25766,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -20378,7 +20378,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 42389,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -20434,7 +20434,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 43240,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -20490,7 +20490,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 37836,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -20546,7 +20546,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 21882,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -20602,7 +20602,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 58055,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -20658,7 +20658,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 20430,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -20714,7 +20714,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 33033,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -20770,7 +20770,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 33170,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -20826,7 +20826,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 35019,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -20882,7 +20882,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 35184,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -20938,7 +20938,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 26368,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -20994,7 +20994,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 26863,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -21050,7 +21050,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 1569,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -21105,7 +21105,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 21521,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -21161,7 +21161,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 35667,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -21217,7 +21217,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 24569,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -21276,7 +21276,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 22772,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -22080,7 +22080,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 17455,
    "firstSeenAt": "2026-08-29T21:16:21+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -22136,7 +22136,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 18406,
    "firstSeenAt": "2026-08-30T21:35:25+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -22192,7 +22192,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 14837,
    "firstSeenAt": "2026-09-05T20:43:28+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -22248,7 +22248,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 19368,
    "firstSeenAt": "2026-09-07T05:14:27+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -22304,7 +22304,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 38802,
    "firstSeenAt": "2026-09-12T20:57:52+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -22360,7 +22360,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 27599,
    "firstSeenAt": "2026-09-13T05:23:28+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -22416,7 +22416,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 33761,
    "firstSeenAt": "2026-09-13T16:38:24+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -22472,7 +22472,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 30850,
    "firstSeenAt": "2026-09-14T13:22:25+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -22528,7 +22528,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 29713,
    "firstSeenAt": "2026-10-10T22:00:10+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -22584,7 +22584,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 30460,
    "firstSeenAt": "2026-10-11T22:28:57+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -22640,7 +22640,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_twitch",
    "durationSeconds": 28027,
    "firstSeenAt": "2026-10-17T20:59:10+00:00",
-   "lastSeenAt": "2026-10-18T16:08:56+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -22682,24 +22682,80 @@ window.OWCS_DISCOVERED = {
    "url": "https://www.twitch.tv/videos/2903351742",
    "videoId": "2903351742",
    "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "the broadcast has no publish date"
+   },
+   "channelId": "ow_esports",
+   "channelTitle": "ow_esports_twitch",
+   "durationSeconds": 15966,
+   "firstSeenAt": "2026-10-18T21:03:08+00:00",
+   "lastSeenAt": "2026-10-18T21:03:08+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "long-form: 266m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
+     "-10 no livestream timing metadata",
+     "+20 substantial duration (15966s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 25
+   },
+   "liveStatus": null,
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.twitch.tv/videos/2904314132\"",
+    "href": "submit.html?url=https://www.twitch.tv/videos/2904314132",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2026 | Stage 3 Week 2 Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "owcs-2026-stage-3",
+    "eventName": "OWCS 2026 — Stage 3",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": 3,
+    "week": 2,
+    "year": 2026
+   },
+   "platform": "twitch",
+   "publishedAt": null,
+   "sources": [
+    "twitch-videos"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWCS 2026 | Stage 3 Week 2 Day 2",
+   "url": "https://www.twitch.tv/videos/2904314132",
+   "videoId": "2904314132",
+   "why": "Found automatically. Nobody has processed it yet."
   }
  ],
  "counts": {
-  "found": 330,
+  "found": 331,
   "ignored": 70,
   "published": 1,
   "queued": 0,
   "review": 0,
-  "total": 401,
+  "total": 402,
   "working": 0
  },
  "dateCoverage": {
   "blocked": true,
-  "considered": 331,
+  "considered": 332,
   "failedLookups": 1,
   "known": 260,
   "reason": "The scan reads a whole channel in one cheap request, and that listing carries no air date. The per-video lookup that would supply one is currently being refused by the source, so these broadcasts keep the date they came with — none.",
-  "unknown": 71
+  "unknown": 72
  },
  "events": [
   {
@@ -25939,7 +25995,7 @@ window.OWCS_DISCOVERED = {
    ]
   },
   {
-   "broadcasts": 3,
+   "broadcasts": 4,
    "calendarEventIds": [],
    "channels": [
     "ow_esports_twitch"
@@ -25950,15 +26006,15 @@ window.OWCS_DISCOVERED = {
     2
    ],
    "firstAt": null,
-   "found": 3,
+   "found": 4,
    "key": "owcs-2026-stage-3",
    "lastAt": null,
    "name": "OWCS 2026 — Stage 3",
    "phases": [],
    "published": 0,
    "regions": [],
-   "runtimeKnown": 3,
-   "runtimeSeconds": 88200,
+   "runtimeKnown": 4,
+   "runtimeSeconds": 104166,
    "season": 2026,
    "stages": [
     3
@@ -26257,7 +26313,7 @@ window.OWCS_DISCOVERED = {
    ]
   }
  ],
- "generatedAt": "2026-10-18T16:08:56+00:00",
+ "generatedAt": "2026-10-18T21:03:08+00:00",
  "inputs": [
   {
    "loaded": true,
@@ -26290,18 +26346,18 @@ window.OWCS_DISCOVERED = {
     "title": "ow_esports_twitch"
    }
   ],
-  "generatedAt": "2026-10-18T16:08:56+00:00",
+  "generatedAt": "2026-10-18T21:03:08+00:00",
   "intervalHours": 6.0,
-  "nextExpectedAt": "2026-10-18T22:08:56+00:00",
+  "nextExpectedAt": "2026-10-19T03:03:08+00:00",
   "sourceErrors": [
-   "date-backfill (api): 71 of 127 video(s) were not returned by the API — deleted, private or region-blocked."
+   "date-backfill (api): 72 of 128 video(s) were not returned by the API — deleted, private or region-blocked."
   ],
   "staleAfterHours": 24
  },
  "schema": "discovered.v1",
  "seasons": [
   {
-   "broadcasts": 107,
+   "broadcasts": 108,
    "dated": 54,
    "eventKeys": [
     "2026-owcs-champions-clash",
@@ -26332,10 +26388,10 @@ window.OWCS_DISCOVERED = {
     "owwc-2026-online-qualifiers-emea-amer"
    ],
    "events": 26,
-   "found": 106,
+   "found": 107,
    "published": 1,
-   "runtimeKnown": 106,
-   "runtimeSeconds": 3123786,
+   "runtimeKnown": 107,
+   "runtimeSeconds": 3139752,
    "season": 2026
   },
   {
@@ -26467,8 +26523,8 @@ window.OWCS_DISCOVERED = {
   }
  ],
  "summary": {
-  "awaitingProcessing": 330,
-  "broadcastsKnown": 401,
+  "awaitingProcessing": 331,
+  "broadcastsKnown": 402,
   "calendarLinked": 16,
   "channelsScanned": 2,
   "datedBroadcasts": 260,
@@ -26476,8 +26532,8 @@ window.OWCS_DISCOVERED = {
   "ignored": 70,
   "inFlight": 0,
   "published": 1,
-  "runtimeKnown": 330,
-  "runtimeSeconds": 8407135,
+  "runtimeKnown": 331,
+  "runtimeSeconds": 8423101,
   "seasons": 3
  }
 };
