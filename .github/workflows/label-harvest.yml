@@ -27,12 +27,6 @@
 name: label-harvest
 
 on:
-  # TEMPORARY: one proving run from the feature branch, because
-  # workflow_dispatch only exists once a workflow is on the default branch.
-  # Removed before merge. (Re-run after the isolated-frame window fix.)
-  push:
-    branches: [claude/focused-meitner-kgzl0d]
-    paths: [".github/workflows/label-harvest.yml"]
   workflow_dispatch:
     inputs:
       url:

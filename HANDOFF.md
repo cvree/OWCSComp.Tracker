@@ -43,14 +43,22 @@ failed its own leave-one-out safety test at 4.64% against a 2% ceiling.
   calibration ladder, samples ±180 s around each gameplay frame, commits
   the cards, keeps member crops as a 90-day artifact. `label-forge.yml`
   fires when a `labels.json` is committed.
-* Proven on real footage: run 1 against **OWCS 2026 Midseason Championship
-  Day 1** (Twitch 2831815423) worked end to end but found only 5 cards —
-  isolated ladder frames formed no gameplay window. Fixed with
-  `windows_around`; see the run log in the commit history for run 2.
+* Proven on real footage, on a free runner, against **OWCS 2026 Midseason
+  Championship Day 1** (Twitch 2831815423, 11.4 h). Run 1 worked end to end
+  but found only 5 cards — the ladder's dozen isolated gameplay frames formed
+  no window. Fixed with `windows_around`. Run 2: **11 gameplay windows, 396
+  frames (4.6 GB) in 9 min, 190 gameplay frames → 1,900 portraits → 46
+  cards, 26 linked by the timeline** — real, recognisable portraits (Kiriko,
+  Lúcio, Jetcat, Tracer, …), committed as `labelling/2831815423-owcs_8c105lnzlam`
+  with its member crops in that run's artifact (90 days).
 
-**Committed batches waiting for a person:** `nepal-qad-twis` (18 cards —
-naming them replaces the failing `owcs_jksix_qwc` set with one that passes
-leave-one-out), plus whatever label-harvest has added.
+**Committed batches waiting for a person:**
+* `2831815423-owcs_8c105lnzlam` — 46 cards from the Midseason Championship
+  on Twitch. **Name this one first**: it is the package that matches the
+  live broadcast, and today it validates 0 heroes. Its member crops live in
+  label-harvest run 40936340554's artifact until ~2027-01-27.
+* `nepal-qad-twis` — 18 cards; naming them replaces the failing
+  `owcs_jksix_qwc` set with one that passes leave-one-out.
 
 **2. The map story** (`assets/js/app/mapstory.js`) on `game.html` and the
 dashboard: ten role-coloured lanes against one clock, rounds banded, swap
@@ -74,9 +82,9 @@ weekly (bot pushes never trigger it).
 
 1. **Name the cards** at `label.html` (start with `nepal-qad-twis`), then
    press *Commit on GitHub*. The forge does the rest.
-2. Merge this branch. **Remove the temporary `push:` trigger from
-   `label-harvest.yml` first** (it exists only because workflow_dispatch
-   needs the workflow on the default branch).
+2. Merge this branch. (The temporary `push:` trigger used for the two
+   proving runs has already been removed from `label-harvest.yml`; after
+   the merge it runs on demand from the Actions tab.)
 3. Push a `v0.1.0` tag so `windows-app.yml` publishes the installer the
    README links to.
 4. When `owcs_8c105lnzlam` has ~25 validated heroes, dispatch `autopilot`
