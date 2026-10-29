@@ -598,10 +598,11 @@ def fill_missing_dates(ledger: dict, *, limit: int = 0, runner=subprocess,
 
 
 # ------------------------------------------------------- unattended queue
-def fetchable_queue(ledger: dict, *, platform: str = li.TWITCH) -> list[dict]:
+def fetchable_queue(ledger: dict, *, platform: str = li.TWITCH,
+                    prefer_families: tuple[str, ...] = ("owcs",)) -> list[dict]:
     """The broadcasts an unattended run may pick up, best first.
 
-    Narrow on purpose. Three filters, each for its own reason:
+    Narrow on purpose. Four filters, each for its own reason:
 
     * **Platform.** A GitHub-hosted runner is bot-checked by YouTube on
       every player client and cannot fetch a YouTube VOD (measured — see
@@ -621,10 +622,13 @@ def fetchable_queue(ledger: dict, *, platform: str = li.TWITCH) -> list[dict]:
       first, the same dead row would head the queue on every run. See
       `_delisted`.
 
-    Order is oldest-first, so the archive completes in the order it aired
-    rather than whichever way a scan happened to sort. A dateless row sorts
-    LAST rather than first: `None` would otherwise compare as the earliest
-    possible date and let every undated row jump the queue.
+    Order: a title that positively names a `prefer_families` event first,
+    because the committed layouts describe that production's overlay and a
+    Collegiate or Calling All Heroes broadcast may not carry it; an original
+    airing before its rebroadcast, which is the same footage again; then
+    oldest-first, so the archive completes in the order it aired. A
+    dateless row sorts LAST within its group: `None` would otherwise compare
+    as the earliest possible date and let every undated row jump the queue.
     """
     gone = _delisted(ledger, platform=platform)
     rows = [r for r in (ledger.get("candidates") or [])
@@ -633,7 +637,9 @@ def fetchable_queue(ledger: dict, *, platform: str = li.TWITCH) -> list[dict]:
             and not (r.get("likeness") or {}).get("refused")
             and (r.get("likeness") or {}).get("confidence") == "likely"
             and str(r.get("videoId")) not in gone]
-    rows.sort(key=lambda r: (r.get("publishedAt") is None,
+    rows.sort(key=lambda r: (li.event_family(r.get("title")) not in prefer_families,
+                             "rebroadcast" in str(r.get("title") or "").lower(),
+                             r.get("publishedAt") is None,
                              str(r.get("publishedAt") or ""),
                              str(r.get("videoId") or "")))
     return rows

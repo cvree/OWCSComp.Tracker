@@ -839,6 +839,22 @@ class TestUnattendedQueue(unittest.TestCase):
         self.assertIsNone(
             mf.next_fetchable(led, exclude={"2854348714", "2853861755", "2853399482"}))
 
+    def test_a_named_owcs_original_goes_before_everything_else(self):
+        """The committed layouts describe the OWCS overlay. A Collegiate
+        broadcast and a rebroadcast both wait behind an OWCS original."""
+        led = {"candidates": [
+            {"videoId": "1", "platform": "twitch", "url": "https://www.twitch.tv/videos/1",
+             "title": "[DROPS] Collegiate Championship | Day 1", "publishedAt": None,
+             "likeness": {"confidence": "likely"}},
+            {"videoId": "2", "platform": "twitch", "url": "https://www.twitch.tv/videos/2",
+             "title": "[REBROADCAST] OWCS 2026 | Midseason Day 1", "publishedAt": None,
+             "likeness": {"confidence": "likely"}},
+            {"videoId": "3", "platform": "twitch", "url": "https://www.twitch.tv/videos/3",
+             "title": "OWCS 2026 | Midseason Day 1", "publishedAt": None,
+             "likeness": {"confidence": "likely"}},
+        ]}
+        self.assertEqual([r["videoId"] for r in mf.fetchable_queue(led)], ["3", "2", "1"])
+
     def test_a_vod_the_channel_no_longer_lists_is_not_queued(self):
         """Twitch deletes past broadcasts. The ledger keeps every row it
         ever saw, so without this the oldest — already deleted — VOD heads
