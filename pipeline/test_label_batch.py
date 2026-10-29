@@ -207,6 +207,22 @@ class TestPicking(unittest.TestCase):
         q = [self.row("1", "Overwatch Spotlight", 30000)]
         self.assertIsNone(lb.pick_broadcast(q, allowed_families=["owcs"]))
 
+    def test_isolated_gameplay_frames_still_open_windows(self):
+        """The real failure: the ladder stops at a dozen clean frames spread
+        over eleven hours. Each must open a window around itself, or the
+        dense pass samples nothing."""
+        clean = [7440.0, 8940.0, 14160.0, 17160.0, 23940.0]
+        wins = lb.windows_around(clean, reach=180, duration=41156)
+        self.assertEqual(len(wins), 5)
+        self.assertEqual((wins[0]["start"], wins[0]["end"]), (7260.0, 7620.0))
+        offs = lb.dense_offsets(wins, step=10, pad=0, duration=41156, budget=360)
+        self.assertGreater(len(offs), 150)
+
+    def test_overlapping_windows_merge(self):
+        wins = lb.windows_around([100.0, 250.0, 2000.0], reach=180, duration=2100)
+        self.assertEqual([(w["start"], w["end"]) for w in wins],
+                         [(0.0, 430.0), (1820.0, 2100)])
+
     def test_dense_offsets_cover_every_window_within_budget(self):
         wins = [{"start": 1000, "end": 1900}, {"start": 5000, "end": 5900}]
         offs = lb.dense_offsets(wins, step=10, pad=60, duration=9000, budget=60)

@@ -174,25 +174,50 @@ def dense_offsets(windows: list[dict], *, step: float, pad: float,
     return sorted(set(out))
 
 
+def windows_around(offsets: list[float], *, reach: float,
+                   duration: float | None = None) -> list[dict]:
+    """A window of ±`reach` seconds around each known gameplay frame,
+    overlapping ones merged.
+
+    Why not `calibrate_remote.gameplay_windows`: that groups RUNS of clean
+    samples, and the ladder deliberately stops once a handful of clean frames
+    are spread across the broadcast — so on a real eleven-hour broadcast it
+    returned twelve isolated frames, no run, no window, and the dense pass
+    sampled nothing. A map lasts ten minutes or more, so the minutes either
+    side of a frame that showed live play are overwhelmingly live play too;
+    the gameplay filter still checks every frame that comes back."""
+    spans = sorted((max(0.0, t - reach),
+                    min(duration, t + reach) if duration else t + reach)
+                   for t in offsets)
+    out: list[dict] = []
+    for a, b in spans:
+        if out and a <= out[-1]["end"]:
+            out[-1]["end"] = max(out[-1]["end"], b)
+            out[-1]["samples"] += 1
+        else:
+            out.append({"start": a, "end": b, "samples": 1})
+    return out
+
+
 def harvest_remote(url: str, layout: dict, *, step: float = 10.0,
-                   max_frames: int = 360, pad: float = 60.0,
+                   max_frames: int = 360, reach: float = 180.0,
                    source=None, duration: float | None = None,
                    probe_fn=None) -> tuple[dict[float, str], dict]:
     """Frames from inside the broadcast's gameplay, fetched remotely.
 
-    The gameplay windows come from `calibrate_remote.acquire` — the same
+    Where the gameplay is comes from `calibrate_remote.acquire` — the same
     ladder that already finds live play in a nine-hour broadcast without
-    downloading it — and the dense pass samples only inside them."""
+    downloading it — and the dense pass samples only around what it found."""
     import calibrate_remote as cr
     import remote_frames as rf
 
     src = source or rf.RemoteFrameSource(url, height=720)
     duration = duration if duration is not None else cr._probe_duration(url, probe_fn)
     scan = cr.acquire(src, duration, trial_fn=None)
-    windows = cr.gameplay_windows(list(scan["clean"]))
+    windows = windows_around(list(scan["clean"]), reach=reach, duration=duration)
     log(f"gameplay windows: {len(windows)} "
         + ", ".join(f"{w['start']:.0f}–{w['end']:.0f}s" for w in windows[:8]))
-    offsets = dense_offsets(windows, step=step, pad=pad,
+    offsets = dense_offsets(windows, step=step, pad=0.0,
                             duration=duration, budget=max_frames)
     frames: dict[float, str] = dict(scan["clean"])
     for i in range(0, len(offsets), 24):
