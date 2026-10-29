@@ -1,0 +1,560 @@
+{
+ "schema": "label-batch.v1",
+ "batchId": "2831815423-owcs_8c105lnzlam",
+ "createdAt": "2026-10-29T18:58:41+00:00",
+ "source": {
+  "url": "https://www.twitch.tv/videos/2831815423",
+  "platform": "twitch",
+  "videoId": "2831815423",
+  "title": "OWCS 2026 | Midseason Championship Day 1"
+ },
+ "layoutId": "owcs_8c105lnzlam",
+ "templatesDir": "templates/owcs_8c105lnzlam",
+ "roi": {
+  "roi": null,
+  "from": "none",
+  "reason": "no flat band in the lower part of the slot \u2014 the whole box looks like portrait, so no ROI is proposed and matching is unchanged"
+ },
+ "cropsDir": "work/label-crops/2831815423-owcs_8c105lnzlam",
+ "cropsArtifact": {
+  "name": "label-crops-2831815423-owcs_8c105lnzlam",
+  "runId": 40935569575
+ },
+ "acquisition": {
+  "windows": [],
+  "scanStop": "enough evidence: 12 clean frames across 5 regions",
+  "offsetsRequested": 0,
+  "framesAcquired": 12,
+  "durationSeconds": 41156.0,
+  "transfer": {
+   "framesFromCache": 0,
+   "framesFetched": 48,
+   "framesMissing": 0,
+   "seconds": 69.4,
+   "bytesDownloaded": 432580356
+  },
+  "method": "remote-frames",
+  "frameStates": {
+   "gameplay": 9,
+   "no-hud": 3
+  }
+ },
+ "policy": {
+  "clusterSimilarity": 0.62,
+  "minClusterSize": 5,
+  "memberCap": 80,
+  "nestInside": 0.8,
+  "featureSide": 24
+ },
+ "counts": {
+  "crops": 90,
+  "clusters": 30,
+  "cards": 5,
+  "linkedCards": 0,
+  "cropsInSmallClusters": 52,
+  "membersKept": 38
+ },
+ "honesty": "Cards are grouped by picture similarity and linked by the timeline. Neither names a hero: a person does, on label.html, and only templates that then pass held-out validation are promoted. Official hero art and other packages' templates were measured as label suggestions and were wrong every time, so none are offered.",
+ "cards": [
+  {
+   "id": "c00",
+   "size": 12,
+   "side": "both",
+   "tFirst": 7440.0,
+   "tLast": 23940.0,
+   "mainSlot": "b5",
+   "slots": {
+    "a4": {
+     "n": 4,
+     "tFirst": 8520.0,
+     "tLast": 17160.0
+    },
+    "a5": {
+     "n": 3,
+     "tFirst": 7440.0,
+     "tLast": 23940.0
+    },
+    "b4": {
+     "n": 1,
+     "tFirst": 7440.0,
+     "tLast": 7440.0
+    },
+    "b5": {
+     "n": 4,
+     "tFirst": 8940.0,
+     "tLast": 23940.0
+    }
+   },
+   "nestedIn": null,
+   "image": "c00.png",
+   "samples": [
+    {
+     "image": "c00_s0.png",
+     "t": 7440.0,
+     "slot": "a5"
+    },
+    {
+     "image": "c00_s1.png",
+     "t": 8520.0,
+     "slot": "a4"
+    },
+    {
+     "image": "c00_s2.png",
+     "t": 8940.0,
+     "slot": "b5"
+    },
+    {
+     "image": "c00_s3.png",
+     "t": 12660.0,
+     "slot": "b5"
+    },
+    {
+     "image": "c00_s4.png",
+     "t": 17160.0,
+     "slot": "a4"
+    },
+    {
+     "image": "c00_s5.png",
+     "t": 23940.0,
+     "slot": "b5"
+    }
+   ],
+   "members": [
+    [
+     "t0007440.0_a5.png",
+     7440.0,
+     "a5"
+    ],
+    [
+     "t0007440.0_b4.png",
+     7440.0,
+     "b4"
+    ],
+    [
+     "t0008520.0_a4.png",
+     8520.0,
+     "a4"
+    ],
+    [
+     "t0008940.0_a4.png",
+     8940.0,
+     "a4"
+    ],
+    [
+     "t0008940.0_b5.png",
+     8940.0,
+     "b5"
+    ],
+    [
+     "t0009300.0_a4.png",
+     9300.0,
+     "a4"
+    ],
+    [
+     "t0009300.0_b5.png",
+     9300.0,
+     "b5"
+    ],
+    [
+     "t0012660.0_b5.png",
+     12660.0,
+     "b5"
+    ],
+    [
+     "t0014160.0_a5.png",
+     14160.0,
+     "a5"
+    ],
+    [
+     "t0017160.0_a4.png",
+     17160.0,
+     "a4"
+    ],
+    [
+     "t0023940.0_a5.png",
+     23940.0,
+     "a5"
+    ],
+    [
+     "t0023940.0_b5.png",
+     23940.0,
+     "b5"
+    ]
+   ]
+  },
+  {
+   "id": "c01",
+   "size": 9,
+   "side": "both",
+   "tFirst": 7440.0,
+   "tLast": 17160.0,
+   "mainSlot": "b3",
+   "slots": {
+    "a3": {
+     "n": 4,
+     "tFirst": 8520.0,
+     "tLast": 17160.0
+    },
+    "b3": {
+     "n": 5,
+     "tFirst": 7440.0,
+     "tLast": 12660.0
+    }
+   },
+   "nestedIn": null,
+   "image": "c01.png",
+   "samples": [
+    {
+     "image": "c01_s0.png",
+     "t": 7440.0,
+     "slot": "b3"
+    },
+    {
+     "image": "c01_s1.png",
+     "t": 8520.0,
+     "slot": "b3"
+    },
+    {
+     "image": "c01_s2.png",
+     "t": 8940.0,
+     "slot": "a3"
+    },
+    {
+     "image": "c01_s3.png",
+     "t": 9300.0,
+     "slot": "a3"
+    },
+    {
+     "image": "c01_s4.png",
+     "t": 9300.0,
+     "slot": "b3"
+    },
+    {
+     "image": "c01_s5.png",
+     "t": 17160.0,
+     "slot": "a3"
+    }
+   ],
+   "members": [
+    [
+     "t0007440.0_b3.png",
+     7440.0,
+     "b3"
+    ],
+    [
+     "t0008520.0_a3.png",
+     8520.0,
+     "a3"
+    ],
+    [
+     "t0008520.0_b3.png",
+     8520.0,
+     "b3"
+    ],
+    [
+     "t0008940.0_a3.png",
+     8940.0,
+     "a3"
+    ],
+    [
+     "t0008940.0_b3.png",
+     8940.0,
+     "b3"
+    ],
+    [
+     "t0009300.0_a3.png",
+     9300.0,
+     "a3"
+    ],
+    [
+     "t0009300.0_b3.png",
+     9300.0,
+     "b3"
+    ],
+    [
+     "t0012660.0_b3.png",
+     12660.0,
+     "b3"
+    ],
+    [
+     "t0017160.0_a3.png",
+     17160.0,
+     "a3"
+    ]
+   ]
+  },
+  {
+   "id": "c02",
+   "size": 6,
+   "side": "both",
+   "tFirst": 7440.0,
+   "tLast": 23940.0,
+   "mainSlot": "b4",
+   "slots": {
+    "a1": {
+     "n": 1,
+     "tFirst": 17160.0,
+     "tLast": 17160.0
+    },
+    "a3": {
+     "n": 1,
+     "tFirst": 7440.0,
+     "tLast": 7440.0
+    },
+    "a4": {
+     "n": 1,
+     "tFirst": 23940.0,
+     "tLast": 23940.0
+    },
+    "a5": {
+     "n": 1,
+     "tFirst": 17160.0,
+     "tLast": 17160.0
+    },
+    "b1": {
+     "n": 1,
+     "tFirst": 8520.0,
+     "tLast": 8520.0
+    },
+    "b4": {
+     "n": 1,
+     "tFirst": 8520.0,
+     "tLast": 8520.0
+    }
+   },
+   "nestedIn": null,
+   "image": "c02.png",
+   "samples": [
+    {
+     "image": "c02_s0.png",
+     "t": 7440.0,
+     "slot": "a3"
+    },
+    {
+     "image": "c02_s1.png",
+     "t": 8520.0,
+     "slot": "b1"
+    },
+    {
+     "image": "c02_s2.png",
+     "t": 8520.0,
+     "slot": "b4"
+    },
+    {
+     "image": "c02_s3.png",
+     "t": 17160.0,
+     "slot": "a1"
+    },
+    {
+     "image": "c02_s4.png",
+     "t": 17160.0,
+     "slot": "a5"
+    },
+    {
+     "image": "c02_s5.png",
+     "t": 23940.0,
+     "slot": "a4"
+    }
+   ],
+   "members": [
+    [
+     "t0007440.0_a3.png",
+     7440.0,
+     "a3"
+    ],
+    [
+     "t0008520.0_b1.png",
+     8520.0,
+     "b1"
+    ],
+    [
+     "t0008520.0_b4.png",
+     8520.0,
+     "b4"
+    ],
+    [
+     "t0017160.0_a1.png",
+     17160.0,
+     "a1"
+    ],
+    [
+     "t0017160.0_a5.png",
+     17160.0,
+     "a5"
+    ],
+    [
+     "t0023940.0_a4.png",
+     23940.0,
+     "a4"
+    ]
+   ]
+  },
+  {
+   "id": "c03",
+   "size": 6,
+   "side": "both",
+   "tFirst": 7440.0,
+   "tLast": 14160.0,
+   "mainSlot": "b4",
+   "slots": {
+    "a4": {
+     "n": 1,
+     "tFirst": 7440.0,
+     "tLast": 7440.0
+    },
+    "a5": {
+     "n": 2,
+     "tFirst": 8940.0,
+     "tLast": 9300.0
+    },
+    "b4": {
+     "n": 3,
+     "tFirst": 8940.0,
+     "tLast": 14160.0
+    }
+   },
+   "nestedIn": null,
+   "image": "c03.png",
+   "samples": [
+    {
+     "image": "c03_s0.png",
+     "t": 7440.0,
+     "slot": "a4"
+    },
+    {
+     "image": "c03_s1.png",
+     "t": 8940.0,
+     "slot": "a5"
+    },
+    {
+     "image": "c03_s2.png",
+     "t": 8940.0,
+     "slot": "b4"
+    },
+    {
+     "image": "c03_s3.png",
+     "t": 9300.0,
+     "slot": "a5"
+    },
+    {
+     "image": "c03_s4.png",
+     "t": 9300.0,
+     "slot": "b4"
+    },
+    {
+     "image": "c03_s5.png",
+     "t": 14160.0,
+     "slot": "b4"
+    }
+   ],
+   "members": [
+    [
+     "t0007440.0_a4.png",
+     7440.0,
+     "a4"
+    ],
+    [
+     "t0008940.0_a5.png",
+     8940.0,
+     "a5"
+    ],
+    [
+     "t0008940.0_b4.png",
+     8940.0,
+     "b4"
+    ],
+    [
+     "t0009300.0_a5.png",
+     9300.0,
+     "a5"
+    ],
+    [
+     "t0009300.0_b4.png",
+     9300.0,
+     "b4"
+    ],
+    [
+     "t0014160.0_b4.png",
+     14160.0,
+     "b4"
+    ]
+   ]
+  },
+  {
+   "id": "c04",
+   "size": 5,
+   "side": "both",
+   "tFirst": 8940.0,
+   "tLast": 14160.0,
+   "mainSlot": "b1",
+   "slots": {
+    "a2": {
+     "n": 1,
+     "tFirst": 9300.0,
+     "tLast": 9300.0
+    },
+    "b1": {
+     "n": 4,
+     "tFirst": 8940.0,
+     "tLast": 14160.0
+    }
+   },
+   "nestedIn": null,
+   "image": "c04.png",
+   "samples": [
+    {
+     "image": "c04_s0.png",
+     "t": 8940.0,
+     "slot": "b1"
+    },
+    {
+     "image": "c04_s1.png",
+     "t": 9300.0,
+     "slot": "a2"
+    },
+    {
+     "image": "c04_s2.png",
+     "t": 9300.0,
+     "slot": "b1"
+    },
+    {
+     "image": "c04_s3.png",
+     "t": 12660.0,
+     "slot": "b1"
+    },
+    {
+     "image": "c04_s4.png",
+     "t": 14160.0,
+     "slot": "b1"
+    }
+   ],
+   "members": [
+    [
+     "t0008940.0_b1.png",
+     8940.0,
+     "b1"
+    ],
+    [
+     "t0009300.0_a2.png",
+     9300.0,
+     "a2"
+    ],
+    [
+     "t0009300.0_b1.png",
+     9300.0,
+     "b1"
+    ],
+    [
+     "t0012660.0_b1.png",
+     12660.0,
+     "b1"
+    ],
+    [
+     "t0014160.0_b1.png",
+     14160.0,
+     "b1"
+    ]
+   ]
+  }
+ ]
+}
