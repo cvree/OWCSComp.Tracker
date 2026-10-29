@@ -493,10 +493,10 @@
     f.innerHTML =
       '<div class="ftr__in">' +
         "<div><h2>OWCS Comp Tracker</h2>" +
-        "<p>The portal that turns competitive Overwatch broadcasts into reviewed, " +
-        "trustworthy structured data. A composition is published only after a person " +
-        "has confirmed what the detector read, and every published fact links back to " +
-        "the frame it came from.</p>" +
+        "<p>The portal that turns competitive Overwatch broadcasts into trustworthy, " +
+        "structured data. A hero the tracker cannot read stays unknown — never a guess — " +
+        "and every published fact carries the tier it earned and links back to the " +
+        "frame it came from, so anyone can check it.</p>" +
         '<p class="u-mt-3"><a href="how-it-works.html">How it works, in plain language →</a></p></div>' +
         "<div><h2>Product</h2><ul>" +
           '<li><a href="index.html">Dashboard</a></li>' +

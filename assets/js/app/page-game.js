@@ -383,7 +383,7 @@
     }
     return '<section class="band" aria-labelledby="h-maps">' +
       '<div class="sec-head"><h2 id="h-maps">Maps and line-ups</h2>' +
-      '<span class="dim small">Every hero shown was confirmed by a person</span></div>' +
+      '<span class="dim small">Every hero shown links to the frame it was read from</span></div>' +
       '<div class="stack-lg">' + maps.map(mapCard).join("") + "</div></section>";
   }
 

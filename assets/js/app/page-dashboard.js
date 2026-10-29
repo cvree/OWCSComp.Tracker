@@ -188,7 +188,7 @@
         (errs ? " <b>" + errs + " source error" + (errs === 1 ? "" : "s") +
           "</b> on the last run." : "") +
         " Finding a broadcast is not reading it: nothing here becomes match data until " +
-        "it has been processed and a person has confirmed what the detector saw.</p>" +
+        "it has been processed and the detector has read it off the frames.</p>" +
         (archiveHours
           ? "<p>What it has found so far: <b>" + esc(archiveHours) +
             "</b> of official broadcast across <b>" + esc(s.events || 0) +
