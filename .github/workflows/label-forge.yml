@@ -1,0 +1,158 @@
+# =====================================================================
+# OWCS Comp Tracker — learn heroes from named cards (label-forge)
+# ---------------------------------------------------------------------
+# The second half of teaching the tracker a hero. Runs when someone
+# commits labelling/<batch>/labels.json — which label.html does in two
+# clicks — or on demand.
+#
+#   labels.json ─► evidence manifest (every member crop of a named card)
+#               ─► template_forge: build slice → quality gate → dead zone
+#               ─► template_validate: held-out frames + leave-one-hero-out
+#               ─► promote ONLY heroes that VALIDATED into the layout's set
+#
+# The bar is the forge's, unchanged: a name a person gives does not make a
+# template trusted, passing a test on frames it was never cut from does.
+# A refused hero keeps whatever production already had.
+#
+# The member crops come from the label-harvest run that made the batch
+# (its artifact). A batch built from a committed ingest report already
+# references committed crops and needs no download.
+# =====================================================================
+name: label-forge
+
+on:
+  push:
+    paths:
+      - "labelling/*/labels.json"
+  workflow_dispatch:
+    inputs:
+      batch:
+        description: "Batch id (labelling/<batch>)"
+        required: true
+      promote:
+        description: "Promote heroes that validate"
+        type: boolean
+        default: true
+
+concurrency:
+  group: owcs-generated-data
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  actions: write   # read the harvest artifact; dispatch pages.yml
+
+jobs:
+  forge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 2
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip --quiet
+          pip install --quiet -r requirements.txt
+
+      - name: Which batches were named
+        id: which
+        env:
+          INPUT_BATCH: ${{ inputs.batch }}
+        run: |
+          if [ -n "$INPUT_BATCH" ]; then
+            batches="$INPUT_BATCH"
+          else
+            batches=$(git diff --name-only HEAD~1 HEAD -- 'labelling/*/labels.json' \
+                      | cut -d/ -f2 | sort -u | tr '\n' ' ')
+          fi
+          echo "batches=$batches" >> "$GITHUB_OUTPUT"
+          echo "batches: ${batches:-none}"
+
+      - name: Fetch each batch's member crops
+        if: steps.which.outputs.batches != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BATCHES: ${{ steps.which.outputs.batches }}
+        run: |
+          for b in $BATCHES; do
+            read -r name run cdir < <(python - "$b" <<'PY'
+          import json, sys
+          b = json.load(open(f"labelling/{sys.argv[1]}/batch.json"))
+          a = b.get("cropsArtifact") or {}
+          print(a.get("name", "-"), a.get("runId", "-"), b["cropsDir"])
+          PY
+            )
+            if [ "$name" = "-" ]; then
+              echo "$b: crops are committed at $cdir"; continue
+            fi
+            mkdir -p "$cdir"
+            gh run download "$run" --name "$name" --dir "$cdir" \
+              || echo "::warning::$b: artifact $name from run $run is gone (artifacts last 90 days) — re-run label-harvest for this broadcast"
+          done
+
+      - name: Forge, validate, promote
+        if: steps.which.outputs.batches != ''
+        env:
+          BATCHES: ${{ steps.which.outputs.batches }}
+          PROMOTE: ${{ github.event_name == 'push' || inputs.promote }}
+        run: |
+          set -o pipefail
+          flag=""; [ "$PROMOTE" = "true" ] && flag="--promote"
+          for b in $BATCHES; do
+            python pipeline/label_forge.py --batch "$b" $flag 2>&1 | tee -a forge.log
+          done
+          python pipeline/hero_coverage.py 2>&1 | head -n 40 | tee coverage.log
+
+      - name: Validate before committing
+        if: steps.which.outputs.batches != ''
+        run: |
+          python pipeline/test_label_batch.py
+          python pipeline/label_batch.py --index --check
+          python pipeline/check_packaging.py
+
+      - name: Commit what was learned
+        id: commit
+        if: steps.which.outputs.batches != ''
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name  "owcs-label-forge[bot]"
+          git config user.email "actions@users.noreply.github.com"
+          git add labelling assets/data/labelling.v1.js templates
+          if git diff --cached --quiet; then
+            echo "committed=false" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          git commit -m "templates: learned from named cards (${{ steps.which.outputs.batches }})"
+          pushed=false
+          for attempt in 1 2 3; do
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
+            if git push origin "HEAD:${GITHUB_REF_NAME}"; then pushed=true; break; fi
+            sleep $((attempt * 5))
+          done
+          [ "$pushed" = "true" ] || { echo "::error::could not push"; exit 1; }
+          echo "committed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Redeploy the site
+        if: steps.commit.outputs.committed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run pages.yml --ref "${GITHUB_REF_NAME}"
+
+      - name: Report
+        if: always()
+        run: |
+          {
+            echo "### What the tracker learned"
+            echo '```'
+            cat forge.log 2>/dev/null | grep -v '^\[forge\]\|^\[validate\]' || echo "(nothing forged)"
+            echo
+            cat coverage.log 2>/dev/null || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"

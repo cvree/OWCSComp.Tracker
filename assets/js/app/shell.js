@@ -62,6 +62,8 @@
       match: ["tools.html"] },
     { href: "calibrate.html", label: "Calibrate", note: "Teach the tracker a new HUD",
       match: ["calibrate.html"] },
+    { href: "label.html", label: "Name the heroes", note: "Teach the tracker a new hero",
+      match: ["label.html"] },
   ];
 
   /* --------------------------------------------------------- header */
@@ -317,6 +319,7 @@
      ["How it works", "how-it-works.html", "In plain language"],
      ["Tools & diagnostics", "tools.html", "For operators"],
      ["Calibrate a broadcast", "calibrate.html", "Teach the tracker a new HUD"],
+     ["Name the heroes", "label.html", "Teach the tracker a new hero, one card at a time"],
      ["Guides", "guide.html", "Step-by-step walkthroughs for every task"],
      ["Guide: submit a game", "guide.html#submit", "From a pasted link to a queued job"],
      ["Guide: review detections", "guide.html#review", "The human gates, in order"],
@@ -512,6 +515,7 @@
           '<li><a href="guide.html">Guides — every step, walked through</a></li>' +
           '<li><a href="tools.html">Tools &amp; diagnostics</a></li>' +
           '<li><a href="calibrate.html">Calibrate a broadcast</a></li>' +
+          '<li><a href="label.html">Name the heroes</a></li>' +
           '<li><a href="styleguide.html">Design system</a></li>' +
           '<li><a href="how-it-works.html#run-it-yourself">Run your own copy</a></li>' +
         "</ul></div>" +

@@ -1702,6 +1702,7 @@ html.lightbox-open, html.lightbox-open body { overflow: hidden; }
    19b. Charts — see app/charts.js for the rules these implement
  * ------------------------------------------------------------------ */
 .ch { margin: 0; display: grid; gap: var(--s-3); }
+.ch--stack { gap: var(--s-2); }
 .ch__title { font: 600 13.5px/1.4 var(--f-body); color: var(--tx); }
 .ch__rows { display: grid; gap: var(--s-2); }
 .ch__row {
@@ -1751,6 +1752,105 @@ a.ch__key:hover .ch__name { color: var(--gold-hi); }
 @media (max-width: 640px) {
   .ch__row { grid-template-columns: minmax(0, 1fr) auto; }
   .ch__track { grid-column: 1 / -1; }
+}
+
+/* ------------------------------------------------------------------ *
+   19c. Name the heroes — see app/page-label.js
+   A card wall. The portrait is the content, so it is shown big and
+   crisp (nearest-neighbour: a 35px broadcast crop must not be smeared
+   into something the broadcast never showed), and a named card takes
+   its hero's role colour on one edge — the same signal a hero tile
+   already uses.
+ * ------------------------------------------------------------------ */
+.lb-batches { display: grid; gap: var(--s-4); grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); }
+.lb-batch { display: grid; gap: var(--s-4); padding: var(--s-5); color: inherit; text-decoration: none; }
+.lb-batch h2 { font-size: 1.15rem; margin: var(--s-2) 0 var(--s-1); }
+.lb-batch__faces { display: flex; gap: 4px; flex-wrap: wrap; }
+.lb-batch__face, .lb-card__face, .lb-card__samples img {
+  image-rendering: pixelated; background: var(--well); border-radius: var(--r-1);
+}
+.lb-batch__body { display: grid; gap: var(--s-1); }
+
+.lb-progress { height: 6px; border-radius: var(--r-pill); background: var(--s3); overflow: hidden; }
+.lb-progress__fill {
+  display: block; height: 100%; border-radius: inherit; background: var(--gold);
+  transition: width var(--t-3) var(--ease);
+}
+
+.lb-title { font-size: clamp(1.3rem, 2.4vw, 1.8rem); margin: var(--s-2) 0 var(--s-4); }
+.lb-bar {
+  position: sticky; top: calc(var(--header-h) + var(--s-2)); z-index: 5;
+  display: grid; gap: var(--s-3); padding: var(--s-4) var(--s-5);
+  grid-template-columns: auto 1fr auto; align-items: center;
+  background: var(--s1); box-shadow: var(--sh-2);
+}
+.lb-bar__big { font: 700 2rem/1 var(--f-display); color: var(--gold-hi); }
+.lb-bar__who { width: 150px; min-height: 36px; }
+
+.lb-lineup { margin-top: var(--s-5); }
+.lb-lineup__body { display: grid; gap: var(--s-5); padding: var(--s-5); grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.lb-lineup__side { display: grid; gap: var(--s-3); }
+.lb-lineup__slots { display: flex; gap: var(--s-2); }
+.lb-slot {
+  width: 52px; height: 52px; padding: 5px; display: grid; place-items: center;
+  background: var(--well); border: 1px dashed var(--line-2); border-radius: var(--r-2);
+  color: var(--tx-3); font: 600 12px/1 var(--f-mono); cursor: pointer;
+}
+.lb-slot:disabled { cursor: default; opacity: .5; }
+.lb-slot:hover:not(:disabled) { border-color: var(--line-3); color: var(--tx); }
+.lb-slot:has(.hero) { border-style: solid; background: var(--s2); }
+.lb-verdict { font: 600 12px/1.4 var(--f-body); }
+.lb-verdict--ok { color: var(--emerald); }
+.lb-verdict--warn { color: var(--amber); }
+
+.lb-grid {
+  display: grid; gap: var(--s-4); margin-top: var(--s-4);
+  grid-template-columns: repeat(auto-fill, minmax(268px, 1fr));
+}
+.lb-card {
+  position: relative; display: grid; gap: var(--s-3); padding: var(--s-4);
+  background: var(--s1); border: 1px solid var(--line); border-radius: var(--r-3);
+  transition: border-color var(--t-2) var(--ease), background var(--t-2) var(--ease), transform var(--t-2) var(--ease);
+}
+.lb-card:hover { border-color: var(--line-2); }
+.lb-card.is-focus, .lb-card:focus { outline: none; border-color: var(--gold); }
+.lb-card.is-named { background: var(--s2); }
+.lb-card.is-named::before {
+  content: ""; position: absolute; left: -1px; top: 12px; bottom: 12px; width: 3px;
+  border-radius: var(--r-pill); background: var(--grey);
+}
+.lb-card[data-role="Tank"]::before { background: var(--role-tank); }
+.lb-card[data-role="Damage"]::before { background: var(--role-damage); }
+.lb-card[data-role="Support"]::before { background: var(--role-support); }
+.lb-card.is-skipped { opacity: .55; }
+.lb-card__top { display: grid; grid-template-columns: 112px 1fr; gap: var(--s-4); align-items: center; }
+.lb-card__n { position: absolute; top: var(--s-2); right: var(--s-3); color: var(--tx-3); font-size: 11.5px; }
+.lb-card__face { width: 112px; height: 112px; border: 1px solid var(--line-2); }
+.lb-card__face--sm { width: 64px; height: 64px; }
+.lb-card__answer { display: grid; justify-items: start; gap: var(--s-1); }
+.lb-card__ask { font: 600 1.15rem/1.2 var(--f-display); color: var(--tx-2); }
+.lb-card__samples { display: flex; gap: 4px; }
+.lb-card__samples img { width: 35px; height: 35px; flex: 0 0 auto; }
+.lb-card__meta { margin: 0; }
+.lb-card__link {
+  display: grid; gap: var(--s-2); padding: var(--s-2) var(--s-3);
+  background: var(--wash-indigo); border-radius: var(--r-2); font-size: 12.5px; color: #c4cbf0;
+}
+.lb-card__link .btn { justify-self: start; }
+.lb-card__actions { display: flex; gap: var(--s-2); }
+
+.lb-learned { margin-top: var(--s-5); }
+.lb-learned__grid { display: grid; gap: var(--s-3); padding: var(--s-5); grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+.lb-learned__hero { display: flex; gap: var(--s-3); align-items: center; color: var(--tx-3); }
+.lb-learned__hero.is-kept { color: var(--emerald); }
+
+@media (max-width: 720px) {
+  .lb-bar { grid-template-columns: 1fr; position: static; }
+  .lb-batches { grid-template-columns: 1fr; }
+  .lb-lineup__slots .lb-slot { width: 44px; height: 44px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lb-card, .lb-progress__fill { transition: none; }
 }
 
 /* ------------------------------------------------------------------ *

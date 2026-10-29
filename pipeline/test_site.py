@@ -48,6 +48,7 @@ PRODUCT_PAGES = {
     "hero.html": "One hero",
     "how-it-works.html": "Explainer",
     "tools.html": "Operator tools",
+    "label.html": "Name the heroes",
     # Added by the candy-brutalist pass. Both build the standard shell, so
     # they are product pages, not standalone tools. `guide.html` is the
     # walkthrough surface — every technical step, with the exact command;

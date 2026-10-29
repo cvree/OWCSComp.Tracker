@@ -65,6 +65,11 @@ jobs:
       - name: Discovery layer must match a fresh build (self-fill)
         run: python pipeline/automation/cli.py self-fill --check
 
+      # label.html renders this index; a stale one shows cards that do not
+      # exist or hides ones waiting for a name.
+      - name: Hero-card index must match the committed batches
+        run: python pipeline/label_batch.py --index --check
+
       - name: Offline test suite
         # OpenCV comes from requirements.txt here, so the site suite must run
         # its report-builder checks rather than skipping them the way the

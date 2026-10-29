@@ -1,0 +1,204 @@
+# =====================================================================
+# OWCS Comp Tracker — cut a broadcast into hero cards (label-harvest)
+# ---------------------------------------------------------------------
+# The first half of teaching the tracker a hero, on free hardware.
+#
+# Hero template coverage is the ceiling on everything the site publishes,
+# and raising it needs a person to say "that portrait is Kiriko". This
+# workflow does everything up to that moment:
+#
+#   1. picks a broadcast the runner can fetch (Twitch — YouTube bot-checks
+#      GitHub's IP ranges), still listed, that positively names OWCS, the
+#      longest original airing first, never one already batched;
+#   2. finds its live play with the calibration ladder, samples densely
+#      inside it, keeps only frames the gameplay filter accepts;
+#   3. cuts all ten hero portraits from each, groups the ones that look
+#      alike into cards, and links the cards the timeline ties together;
+#   4. commits the cards (labelling/<batch>/ + assets/data/labelling.v1.js)
+#      and redeploys the site, so label.html shows them.
+#
+# The raw member crops the forge will build from are NOT committed: they
+# travel as this run's artifact, and the batch records which one.
+#
+# Writes nothing a page treats as a fact. A card is a grouping, never a
+# name; label-forge.yml is what turns a person's names into templates,
+# and only the ones that pass held-out validation.
+# =====================================================================
+name: label-harvest
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "Broadcast URL (blank = the best still-listed OWCS broadcast)"
+        required: false
+      layout:
+        description: "Layout id describing that broadcast's HUD"
+        required: false
+        default: "owcs_8c105lnzlam"
+      max_frames:
+        description: "Frames to sample inside the gameplay windows"
+        required: false
+        default: "360"
+
+concurrency:
+  group: owcs-generated-data
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  actions: write   # dispatch pages.yml after the commit
+
+jobs:
+  harvest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install system + Python dependencies
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          python -m pip install --upgrade pip --quiet
+          pip install --quiet -r requirements.txt
+
+      - name: Pick the broadcast
+        id: pick
+        env:
+          FORCED_URL: ${{ inputs.url }}
+          LAYOUT: ${{ inputs.layout || 'owcs_8c105lnzlam' }}
+        run: |
+          python - <<'PY' | tee pick.log
+          import os, re, sys
+          sys.path.insert(0, "pipeline")
+          from automation import config as cfg
+          from automation import link_intake as li
+          from automation import match_finder as mf
+          import label_batch as lb
+
+          forced = (os.environ.get("FORCED_URL") or "").strip()
+          title = ""
+          if forced:
+              parsed = li.parse_link(forced)
+              url, vid = parsed["canonicalUrl"], parsed["videoId"]
+          else:
+              row = cfg.load_channels(platform="twitch")[0]
+              queue = mf.fetchable_queue(mf.load_ledger())
+              pick = lb.pick_broadcast(
+                  queue, allowed_families=row.get("allowedEventTypes") or [],
+                  exclude=lb.batched_video_ids())
+              if not pick:
+                  print("::notice::nothing to harvest — every listed OWCS "
+                        "broadcast already has a batch")
+                  raise SystemExit(0)
+              url, vid, title = pick["url"], pick["videoId"], pick.get("title") or ""
+              print(f"chosen: {title[:72]} ({(pick.get('durationSeconds') or 0)/3600:.1f}h)")
+          batch = re.sub(r"[^A-Za-z0-9_.-]+", "-", f"{vid}-{os.environ['LAYOUT']}")
+          print(f"url   : {url}\nbatch : {batch}")
+          with open(os.environ["GITHUB_OUTPUT"], "a") as fh:
+              fh.write(f"url={url}\nbatch={batch}\n")
+              fh.write("title<<EOT\n" + title + "\nEOT\n")
+          PY
+
+      - name: Cut it into cards
+        if: steps.pick.outputs.url != ''
+        env:
+          URL: ${{ steps.pick.outputs.url }}
+          TITLE: ${{ steps.pick.outputs.title }}
+          BATCH: ${{ steps.pick.outputs.batch }}
+          LAYOUT: ${{ inputs.layout || 'owcs_8c105lnzlam' }}
+          MAX_FRAMES: ${{ inputs.max_frames || '360' }}
+        run: |
+          set -o pipefail
+          python pipeline/label_batch.py --url "$URL" --title "$TITLE" \
+            --layout "layouts/$LAYOUT.json" --batch "$BATCH" \
+            --max-frames "$MAX_FRAMES" 2>&1 | tee harvest.log
+
+      - name: Record where the member crops live
+        if: steps.pick.outputs.url != ''
+        env:
+          BATCH: ${{ steps.pick.outputs.batch }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          python - <<'PY'
+          import json, os, sys
+          sys.path.insert(0, "pipeline")
+          import label_batch as lb
+          path = os.path.join("labelling", os.environ["BATCH"], "batch.json")
+          b = json.load(open(path))
+          b["cropsArtifact"] = {"name": f"label-crops-{os.environ['BATCH']}",
+                                "runId": int(os.environ["RUN_ID"])}
+          with open(path, "w") as f:
+              json.dump(b, f, indent=1); f.write("\n")
+          lb.write_index()
+          PY
+
+      - name: Keep the member crops as an artifact
+        if: steps.pick.outputs.url != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: label-crops-${{ steps.pick.outputs.batch }}
+          path: work/label-crops/${{ steps.pick.outputs.batch }}
+          retention-days: 90
+          if-no-files-found: error
+
+      - name: Validate before committing
+        if: steps.pick.outputs.url != ''
+        run: |
+          python pipeline/test_label_batch.py
+          python pipeline/label_batch.py --index --check
+          python pipeline/check_packaging.py
+
+      - name: Commit the cards
+        id: commit
+        if: steps.pick.outputs.url != ''
+        env:
+          BATCH: ${{ steps.pick.outputs.batch }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name  "owcs-label-harvest[bot]"
+          git config user.email "actions@users.noreply.github.com"
+          git add "labelling/$BATCH" assets/data/labelling.v1.js
+          if git diff --cached --quiet; then
+            echo "committed=false" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          git commit -m "labelling: cards to name for $BATCH"
+          pushed=false
+          for attempt in 1 2 3; do
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
+            if git push origin "HEAD:${GITHUB_REF_NAME}"; then pushed=true; break; fi
+            sleep $((attempt * 5))
+          done
+          [ "$pushed" = "true" ] || { echo "::error::could not push"; exit 1; }
+          echo "committed=true" >> "$GITHUB_OUTPUT"
+
+      # A GITHUB_TOKEN push does not trigger other workflows; an explicit
+      # dispatch does. Without this the cards would sit unseen until a
+      # human pushed something.
+      - name: Redeploy the site
+        if: steps.commit.outputs.committed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run pages.yml --ref "${GITHUB_REF_NAME}"
+
+      - name: Report
+        if: always()
+        env:
+          BATCH: ${{ steps.pick.outputs.batch }}
+        run: |
+          {
+            echo "### Hero cards"
+            echo '```'
+            cat pick.log 2>/dev/null || true
+            tail -n 25 harvest.log 2>/dev/null || echo "(no harvest ran)"
+            echo '```'
+            if [ -n "${BATCH:-}" ]; then
+              echo "Name them at \`label.html?batch=$BATCH\` on the published site."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
