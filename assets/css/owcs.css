@@ -1958,13 +1958,23 @@ a.ch__key:hover .ch__name { color: var(--gold-hi); }
 .ms-era__bar span { display: block; height: 100%; border-radius: inherit; background: var(--gold); }
 .ms-era__time { font-size: 11.5px; color: var(--tx-2); white-space: nowrap; }
 
+.ms > *, .ms-now > *, .ms-eras .grid > * { min-width: 0; }
 @media (max-width: 900px) {
-  .ms-now { grid-template-columns: 1fr; justify-items: center; }
-  .ms-now__team, .ms-now__team[data-side="b"] { justify-items: center; }
-  .ms-now__slot, .ms-now__gap { width: 56px; min-height: 56px; }
-  .ms-now__slot .hero--lg, .ms-now__slot .hero--lg .hero__face { width: 56px; height: 56px; }
+  /* Five portraits always share the row, whatever the width: a fixed
+     84px row is wider than a phone and drags the whole story with it. */
+  .ms { --ms-label: 24px; --ms-gap: 6px; }
+  .ms-now { grid-template-columns: 1fr; padding: var(--s-4); gap: var(--s-4); }
+  .ms-now__team, .ms-now__team[data-side="b"] { justify-items: stretch; }
+  .ms-now__heroes { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+  .ms-now__slot { width: auto; min-height: 0; }
+  .ms-now__slot .hero--lg, .ms-now__slot .hero--lg .hero__face { width: 100%; height: auto; aspect-ratio: 1; }
+  .ms-now__gap { width: 100%; height: auto; aspect-ratio: 1; }
   .ms-now__slot .hero__name { display: none; }
+  .ms-now__time { font-size: 1.7rem; }
+  .ms-round i { display: none; }
   .ms-seg__name { display: none; }
+  .ms-era { grid-template-columns: auto minmax(40px, 1fr); }
+  .ms-era__time { grid-column: 1 / -1; }
 }
 @media (prefers-reduced-motion: reduce) {
   .ms-now__slot.is-new .hero__face { animation: none; }
