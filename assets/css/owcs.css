@@ -1969,6 +1969,42 @@ a.ch__key:hover .ch__name { color: var(--gold-hi); }
 }
 
 /* ------------------------------------------------------------------ *
+   19e. Broadcast calendar — see app/archive.js
+   Indigo = found by a machine, nobody has read it; gold = published.
+   The two meanings the system already gives those colours.
+ * ------------------------------------------------------------------ */
+.arc { --cell: 14px; --gap: 3px; overflow: hidden; }
+.arc-body { display: grid; gap: var(--s-5); padding: var(--s-5); }
+.arc-year { display: grid; gap: var(--s-2); }
+.arc-year__head { display: flex; align-items: baseline; gap: var(--s-3); flex-wrap: wrap; }
+.arc-year__n { font: 700 1.25rem/1 var(--f-display); color: var(--tx); }
+.arc-gold { color: var(--gold-hi); font-weight: 600; }
+.arc-scroll { overflow-x: auto; padding-bottom: 4px; }
+.arc-grid { display: grid; gap: 4px; width: max-content; }
+.arc-months {
+  display: grid; grid-template-columns: repeat(var(--weeks), var(--cell)); column-gap: var(--gap);
+  font: 500 10px/1 var(--f-mono); color: var(--tx-3); height: 12px;
+}
+.arc-month { white-space: nowrap; }
+.arc-days {
+  display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, var(--cell));
+  grid-auto-columns: var(--cell); gap: var(--gap);
+}
+.arc-cell {
+  display: block; width: var(--cell); height: var(--cell); border-radius: 3px;
+  background: var(--s2); outline-offset: 1px;
+}
+.arc-cell--pad { background: transparent; }
+.arc-cell[data-level="1"] { background: color-mix(in srgb, var(--indigo) 30%, var(--s2)); }
+.arc-cell[data-level="2"] { background: color-mix(in srgb, var(--indigo) 52%, var(--s2)); }
+.arc-cell[data-level="3"] { background: color-mix(in srgb, var(--indigo) 76%, var(--s2)); }
+.arc-cell[data-level="4"] { background: var(--indigo); }
+.arc-cell[data-published="true"] { background: var(--gold); box-shadow: 0 0 10px rgba(243, 167, 47, .55); }
+a.arc-cell:hover, a.arc-cell:focus-visible { outline: 2px solid var(--tx); }
+.arc-key { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.arc-key .arc-cell { display: inline-block; }
+
+/* ------------------------------------------------------------------ *
    20. Command palette / search
  * ------------------------------------------------------------------ */
 .palette { position: fixed; inset: 0; z-index: 140; display: grid; place-items: start center; padding-top: 12vh; }
