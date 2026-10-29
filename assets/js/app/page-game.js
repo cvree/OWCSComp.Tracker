@@ -131,15 +131,21 @@
   function renderBody() {
     const parts = [];
 
+    /* A published game is what a visitor came for, so its maps lead and
+       the progression that produced them follows. Anything still moving
+       leads with where it has got to. */
+    const published = game.state === "published" || game.compCount;
     if (game.blockers.length) parts.push(blockerSection());
     if (game.broadcast) parts.push(discoverySection());
+    if (published && game.state === "published") parts.push(publishedSection());
     parts.push(flowSection());
     if (game.state === "working") parts.push(liveSection());
     if (game.state === "review") parts.push(reviewCallSection());
-    if (game.state === "published" || game.compCount) parts.push(publishedSection());
+    if (published && game.state !== "published") parts.push(publishedSection());
     parts.push(diagnosticsSection());
 
     document.getElementById("body").innerHTML = parts.join("");
+    if (P.mapStory) P.mapStory.wire(document.getElementById("body"), game);
 
     document.getElementById("body").addEventListener("click", (e) => {
       const c = e.target.closest("[data-copy]");
@@ -423,7 +429,7 @@
           m.winner === game.teamA ? "a" : m.winner === game.teamB ? "b" : null) +
       "</div>" +
       '<div class="grid grid--2 u-mt-5">' + side(game.teamA) + side(game.teamB) + "</div>" +
-      mapTimeline(m, comps, swaps) +
+      ((P.mapStory && P.mapStory.html(m, game)) || mapTimeline(m, comps, swaps)) +
       (swaps.length
         ? '<div class="u-mt-5"><p class="label">Confirmed mid-map swaps</p>' +
           '<div class="stack u-mt-3">' + swaps.map(swapRow).join("") + "</div></div>"
