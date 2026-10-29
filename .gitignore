@@ -137,3 +137,11 @@ assets/data/intake.v1.json
 # during a review loop, several MB per round. Curated screenshots that are
 # worth keeping live directly in docs/screenshots/.
 docs/screenshots/review/
+
+# --- Stray screenshots and browser-automation logs ---
+# 25 design screenshots from an unrelated project and a folder of
+# Playwright MCP page dumps had been committed at the root, and Pages
+# publishes the root. Screenshots that document THIS product belong in
+# docs/screenshots/.
+/*.png
+.playwright-mcp/
