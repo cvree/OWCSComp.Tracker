@@ -721,6 +721,26 @@ class TestApiDateBackfill(unittest.TestCase):
         for secret in ("test-key", "api_key", "cookie"):
             self.assertNotIn(secret, blob)
 
+    def test_a_twitch_id_is_never_sent_to_the_youtube_api(self):
+        """The API cannot know a Twitch VOD. Sending one used to leave every
+        Twitch row dateless forever and report all of them, on every scan,
+        as 'deleted, private or region-blocked'."""
+        led = self._ledger(2)
+        led["candidates"].append(dict(
+            led["candidates"][0], videoId="2854348714", platform="twitch",
+            url="https://www.twitch.tv/videos/2854348714"))
+        calls = []
+        client = self._client(
+            {c["videoId"]: self._video(c["videoId"],
+                                       start="2026-07-04T18:00:00+00:00")
+             for c in led["candidates"][:2]}, calls=calls)
+        led, errors, filled = mf.fill_missing_dates_via_api(led, client=client)
+        self.assertEqual(filled, 2)
+        self.assertEqual(errors, [])
+        self.assertNotIn("2854348714", [v for call in calls for v in call])
+        twitch = [c for c in led["candidates"] if c["videoId"] == "2854348714"]
+        self.assertIsNone(twitch[0]["publishedAt"])
+
 
 class TestIsoDurations(unittest.TestCase):
     def test_common_broadcast_shapes(self):
@@ -913,6 +933,27 @@ class TestDateBackfill(unittest.TestCase):
         row = {c["videoId"]: c for c in led["candidates"]}["NODATE00001"]
         self.assertEqual(row["publishedAt"], "2026-07-15T00:00:00+00:00")
         self.assertIn("video-metadata", row["sources"])
+
+    def test_a_platform_walk_spends_its_budget_on_that_platform_only(self):
+        """How Twitch is dated when YouTube already went through the API:
+        the budget must not leak onto rows another source owns."""
+        led = self.ledger()
+        led["candidates"].append(dict(
+            candidate("2854348714", "OWCS 2026 | Stage 2 Day 4",
+                      published=None), job=None, platform="twitch",
+            url="https://www.twitch.tv/videos/2854348714"))
+        calls = []
+
+        def meta(vid, platform):
+            calls.append((vid, platform))
+            return {"publishedAt": "2026-08-20T00:00:00+00:00"}, None
+
+        led, errors, filled = mf.fill_missing_dates(
+            led, limit=5, fetch_meta=meta, platform="twitch")
+        self.assertEqual(calls, [("2854348714", "twitch")])
+        self.assertEqual((errors, filled), ([], 1))
+        rows = {c["videoId"]: c for c in led["candidates"]}
+        self.assertIsNone(rows["NODATE00001"]["publishedAt"])
 
     def test_a_release_timestamp_is_read_from_the_streams_tab(self):
         """A finished livestream carries release_timestamp far more often

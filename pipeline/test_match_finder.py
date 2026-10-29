@@ -839,6 +839,35 @@ class TestUnattendedQueue(unittest.TestCase):
         self.assertIsNone(
             mf.next_fetchable(led, exclude={"2854348714", "2853861755", "2853399482"}))
 
+    def test_a_vod_the_channel_no_longer_lists_is_not_queued(self):
+        """Twitch deletes past broadcasts. The ledger keeps every row it
+        ever saw, so without this the oldest — already deleted — VOD heads
+        the queue on every run and every run fails on it."""
+        led = self._ledger()
+        for r in led["candidates"]:
+            r["channelId"] = "ow_esports"
+            r["lastSeenAt"] = "2026-10-29T13:44:37+00:00"
+        led["candidates"][1]["lastSeenAt"] = "2026-08-29T16:52:35+00:00"
+        ids = [r["videoId"] for r in mf.fetchable_queue(led)]
+        self.assertNotIn("2853861755", ids)
+        self.assertEqual(ids, ["2854348714", "2853399482"])
+
+    def test_a_channel_the_last_scan_could_not_read_keeps_its_queue(self):
+        """Delisted is judged against the newest listing OF THAT CHANNEL. A
+        scan that failed to read one leaves its rows on the previous
+        listing, and that must not read as all of them having vanished."""
+        led = self._ledger()
+        for r in led["candidates"]:
+            r["channelId"] = "ow_esports"
+            r["lastSeenAt"] = "2026-10-20T00:00:00+00:00"
+        led["candidates"].append(dict(
+            led["candidates"][0], videoId="9990000001", channelId="other",
+            lastSeenAt="2026-10-29T13:44:37+00:00",
+            url="https://www.twitch.tv/videos/9990000001"))
+        ids = [r["videoId"] for r in mf.fetchable_queue(led)]
+        self.assertIn("2853861755", ids)
+        self.assertIn("9990000001", ids)
+
     def test_an_empty_or_junk_ledger_yields_nothing_rather_than_raising(self):
         for led in ({}, {"candidates": None}, {"candidates": ["not a dict"]},
                     {"candidates": [{"videoId": "1", "platform": "twitch"}]}):
