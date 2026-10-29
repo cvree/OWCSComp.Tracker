@@ -130,10 +130,10 @@ jobs:
           sys.path.insert(0, "pipeline")
           import label_batch as lb
           path = os.path.join("labelling", os.environ["BATCH"], "batch.json")
-          b = json.load(open(path))
+          b = json.load(open(path, encoding="utf-8"))
           b["cropsArtifact"] = {"name": f"label-crops-{os.environ['BATCH']}",
                                 "runId": int(os.environ["RUN_ID"])}
-          with open(path, "w") as f:
+          with open(path, "w", encoding="utf-8") as f:
               json.dump(b, f, indent=1); f.write("\n")
           lb.write_index()
           PY

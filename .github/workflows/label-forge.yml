@@ -84,7 +84,7 @@ jobs:
           for b in $BATCHES; do
             read -r name run cdir < <(python - "$b" <<'PY'
           import json, sys
-          b = json.load(open(f"labelling/{sys.argv[1]}/batch.json"))
+          b = json.load(open(f"labelling/{sys.argv[1]}/batch.json", encoding="utf-8"))
           a = b.get("cropsArtifact") or {}
           print(a.get("name", "-"), a.get("runId", "-"), b["cropsDir"])
           PY

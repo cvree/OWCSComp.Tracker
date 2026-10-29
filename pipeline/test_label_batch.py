@@ -138,8 +138,8 @@ class TestCards(unittest.TestCase):
                        layout_id="owcs_jksix_qwc", source={"title": "Nepal"},
                        out_dir=out, crops_dir=os.path.join(REPORT, "evidence"),
                        write_crops=False, created_at=FIXED_TIME)
-        a = open(os.path.join(root, "labelling", "nepal", "batch.json")).read()
-        b = open(os.path.join(out, "batch.json")).read()
+        a = open(os.path.join(root, "labelling", "nepal", "batch.json"), encoding="utf-8").read()
+        b = open(os.path.join(out, "batch.json"), encoding="utf-8").read()
         self.assertEqual(a, b)
 
     def test_no_card_carries_a_name(self):
@@ -174,10 +174,10 @@ class TestIndex(unittest.TestCase):
         d = tempfile.mkdtemp()
         shutil.copytree(os.path.join(root, "labelling", "nepal"), os.path.join(d, "nepal"))
         self.assertEqual(lb.build_index(d)["batches"][0]["state"], "needs-labels")
-        with open(os.path.join(d, "nepal", "labels.json"), "w") as f:
+        with open(os.path.join(d, "nepal", "labels.json"), "w", encoding="utf-8") as f:
             json.dump({"labels": {"c00": "kiriko"}}, f)
         self.assertEqual(lb.build_index(d)["batches"][0]["state"], "labelled")
-        with open(os.path.join(d, "nepal", "forge-report.json"), "w") as f:
+        with open(os.path.join(d, "nepal", "forge-report.json"), "w", encoding="utf-8") as f:
             json.dump({"promotion": {"promotedHeroes": ["kiriko"]}}, f)
         row = lb.build_index(d)["batches"][0]
         self.assertEqual((row["state"], row["promoted"]), ("forged", ["kiriko"]))
@@ -279,7 +279,7 @@ class TestForge(unittest.TestCase):
         and the leave-one-hero-out safety test must pass too."""
         key = answer_key()
         labels = {c["id"]: (majority(c, key) or "skip") for c in self.batch["cards"]}
-        with open(os.path.join(self.root, "nepal", "labels.json"), "w") as f:
+        with open(os.path.join(self.root, "nepal", "labels.json"), "w", encoding="utf-8") as f:
             json.dump({"batchId": "nepal", "labelledBy": "test", "labels": labels}, f)
         s = lf.run("nepal", promote=False, root=self.root,
                    staging_root=os.path.join(self.root, "_staging"))

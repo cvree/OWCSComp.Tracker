@@ -93,7 +93,7 @@ weekly (bot pushes never trigger it).
 
 ### Test status
 
-109 suites (new: `test_label_batch.py`, 25 checks), `render_check.js` over
+109 suites (new: `test_label_batch.py`, 25 checks — 109/109 green after the encoding fix below), `render_check.js` over
 14 pages, `test_meta_hub.py`, `check_packaging.py`, and the CI gates
 (`export --check`, `self-fill --check`, `label_batch --index --check`) all
 green.
