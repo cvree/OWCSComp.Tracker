@@ -132,6 +132,11 @@ from **that PC's local database**, and does not upload the database itself:
 
 ### Phase 1 — hero templates for the Twitch package (the unblocker)
 
+**Status (2026-10-29): built and proven.** `label_batch.py`, `label.html`,
+`label_forge.py`, `label-harvest.yml`, `label-forge.yml` — see
+`HANDOFF.md` (fifteenth pass). What remains is the human step: naming the
+cards.
+
 This is the only phase that needs a person, and it needs one only once per
 hero.
 

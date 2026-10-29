@@ -223,6 +223,43 @@ thrown out (see `docs/PUBLIC_DATA_CONTRACT.md`).
 
 ---
 
+## Teach the tracker a hero — the job that unlocks everything
+
+A line-up is only published when all five heroes are named, and the tracker
+can only name a hero it has been shown on that broadcast's HUD. That
+coverage is the ceiling on every number this site publishes, so raising it
+is a five-minute job a person can do in the browser:
+
+1. **`label-harvest`** (GitHub Actions, free) picks an OWCS broadcast still on
+   Twitch, finds its live play, and cuts every hero portrait into **cards** —
+   one card per hero look, grouped by similarity (99.3% pure on the Nepal
+   crops) and linked by the timeline (a grey "dead" portrait sits inside its
+   hero's own stint, so the page can offer "same hero as card 3").
+2. **`label.html`** — name each card from a role-sorted picker. A live
+   line-up preview checks your work against 1 tank / 2 damage / 2 support.
+   Press **Commit on GitHub**: it opens GitHub with `labels.json` filled in.
+3. **`label-forge`** runs on that commit: the existing forge builds reference
+   images from the named cards, tests them on parts of the broadcast they
+   were never cut from, and keeps **only** the heroes that pass. On Nepal,
+   naming 16 cards gives 8/8 heroes validated at 100% on 789 unseen crops,
+   with 0.00% false names for heroes it was not taught.
+
+```bash
+python3 pipeline/label_batch.py --url "<twitch-vod>" --layout layouts/owcs_8c105lnzlam.json
+python3 pipeline/label_forge.py --batch <batch> --promote     # after naming
+```
+
+## How the data is shown
+
+* **Map story** (`assets/js/app/mapstory.js`) — every map as ten lanes of
+  heroes against one clock: rounds, swaps (each opens its before/after
+  frames), both line-ups at the playhead, drag or press **Play** to replay
+  the map, and which compositions each team actually ran and for how long.
+  On every game page and on the dashboard.
+* **Broadcast calendar** (`assets/js/app/archive.js`) — every official
+  broadcast the scan found, 2024–2026, as a day grid: indigo = found,
+  gold = published.
+
 ## The pipeline (source → site)
 
 ```
@@ -576,7 +613,9 @@ New CV tables (`pipeline/schema.sql`): `ingest_runs`, `slot_observations`,
   renders its honest fallback).
 - **Round times ±1 sample.** Round boundaries come from clustering the
   center point-emblem at the 5 s sample rate.
-- **Hero coverage is 8 of 52 on the best package, not 52 of 52.** Those
+- **Hero coverage is 8 of 52 on the best package, not 52 of 52** — and 0
+  validated on the package that matches the live Twitch broadcast. The
+  labelling loop above is how that number rises. Those
   eight (`templates/owcs_jksix_qwc`) are fully provenanced and validated on
   held-out frames from the Nepal broadcast — 1,861 trials, zero confident
   wrong answers — and the control room's **Hero coverage** page shows the

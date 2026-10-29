@@ -1,6 +1,99 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
-## CURRENT STATUS (authoritative — 2026-08-15, fourteenth pass) — the site fills itself
+## CURRENT STATUS (authoritative — 2026-10-29, fifteenth pass) — teach it heroes, show the story
+
+> Read `docs/ROADMAP-TO-READY.md` first: the audit this pass started from,
+> and the ordered path to a site that fills itself. Everything below the
+> next section is still true; this pass added to it.
+
+### Where it actually stood
+
+Two months of green workflows had produced no match data: `autopilot` ran
+~225 times in report mode, the published export was dated 2026-08-26, and
+it held one map. The ceiling was not a gate but **hero template coverage**:
+the layout that matches the live Twitch broadcast (`owcs_8c105lnzlam`, score
+1.000) could validate **0** heroes, and the best package (`owcs_jksix_qwc`)
+failed its own leave-one-out safety test at 4.64% against a 2% ceiling.
+
+### What this pass built
+
+**1. The labelling loop — the unblocker** (`pipeline/label_batch.py`,
+`pipeline/label_forge.py`, `label.html`, `assets/js/app/page-label.js`,
+`.github/workflows/label-harvest.yml`, `.github/workflows/label-forge.yml`).
+
+* `label_batch` cuts every hero portrait from every gameplay frame, groups
+  them by correlation across all ten slots, and links a card to the bigger
+  card whose stint it sits inside in its own slot (a grey/ult portrait of
+  the same hero). Measured on the 3,070 committed Nepal crops: **18 cards
+  at 99.3% purity; 6/6 timeline links correct.** Official art (0/18) and
+  other packages' templates (0/9) were measured as suggestions and are
+  NOT offered.
+* `label.html` is the card wall: role-sorted hero picker, one-click accept
+  of a timeline link, a live line-up preview that checks 1 tank / 2 damage /
+  2 support, and a **"Commit on GitHub"** link that opens GitHub's new-file
+  page with `labelling/<batch>/labels.json` filled in. No key, no server.
+* `label_forge` turns names into an evidence manifest (`labelSource:
+  "human-cluster"`) and hands it to the EXISTING forge unchanged: build
+  slice → quality gate → dead zone → held-out validation → leave-one-out →
+  promote only `VALIDATED`. On Nepal, card names gave **8/8 heroes
+  VALIDATED, 100% on 789 held-out crops, 0.00% leave-one-out** (the
+  production package from the same broadcast: 4.64%).
+* `label-harvest.yml` runs on a free runner against Twitch: picks the
+  longest still-listed original that names OWCS, finds live play with the
+  calibration ladder, samples ±180 s around each gameplay frame, commits
+  the cards, keeps member crops as a 90-day artifact. `label-forge.yml`
+  fires when a `labels.json` is committed.
+* Proven on real footage: run 1 against **OWCS 2026 Midseason Championship
+  Day 1** (Twitch 2831815423) worked end to end but found only 5 cards —
+  isolated ladder frames formed no gameplay window. Fixed with
+  `windows_around`; see the run log in the commit history for run 2.
+
+**Committed batches waiting for a person:** `nepal-qad-twis` (18 cards —
+naming them replaces the failing `owcs_jksix_qwc` set with one that passes
+leave-one-out), plus whatever label-harvest has added.
+
+**2. The map story** (`assets/js/app/mapstory.js`) on `game.html` and the
+dashboard: ten role-coloured lanes against one clock, rounds banded, swap
+markers that open their frames, both line-ups at the playhead in large
+portraits, drag / arrow keys / **Play** (14 s replay), rejected swaps one
+toggle away, and "what each team ran" (sub-30 s stint edges counted as
+brief changes, not listed). Built only from recorded stints.
+
+**3. The broadcast calendar** (`assets/js/app/archive.js`) on `games.html`:
+every dated official broadcast 2024–2026 as a day grid (indigo = found,
+gold = published), each day linked to its broadcast.
+
+**4. Fixes:** YouTube Data API was sent Twitch ids (all 74 Twitch rows
+stayed dateless); the unattended queue headed with a deleted Twitch VOD;
+the queue now prefers named OWCS originals; dashboard copy claimed a review
+gate that publish-then-audit removed; `.ch--stack` unstyled; 25 screenshots
+from an unrelated project were being served from the root; CI now runs
+weekly (bot pushes never trigger it).
+
+### What a person needs to do next
+
+1. **Name the cards** at `label.html` (start with `nepal-qad-twis`), then
+   press *Commit on GitHub*. The forge does the rest.
+2. Merge this branch. **Remove the temporary `push:` trigger from
+   `label-harvest.yml` first** (it exists only because workflow_dispatch
+   needs the workflow on the default branch).
+3. Push a `v0.1.0` tag so `windows-app.yml` publishes the installer the
+   README links to.
+4. When `owcs_8c105lnzlam` has ~25 validated heroes, dispatch `autopilot`
+   with `mode=process` on one broadcast, audit it on `review.html`, then
+   make `process` the scheduled default.
+
+### Test status
+
+109 suites (new: `test_label_batch.py`, 25 checks), `render_check.js` over
+14 pages, `test_meta_hub.py`, `check_packaging.py`, and the CI gates
+(`export --check`, `self-fill --check`, `label_batch --index --check`) all
+green.
+
+---
+
+
+## Fourteenth pass (2026-08-15) — the site fills itself
 
 > Additive to every pass below. This one touched **no** detector, no
 > database schema, no publishing gate and no review flow. It closed the gap
