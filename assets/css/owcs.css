@@ -1875,6 +1875,7 @@ a.ch__key:hover .ch__name { color: var(--gold-hi); }
   border: 1px dashed var(--line-2); color: var(--tx-3); font: 600 1.4rem/1 var(--f-display);
 }
 .ms-now__clock { display: grid; justify-items: center; gap: var(--s-1); min-width: 120px; }
+.ms-now__round { letter-spacing: .02em; }
 .ms-now__time { font-size: 2.1rem; font-weight: 500; line-height: 1; color: var(--gold-hi); letter-spacing: -.02em; }
 .ms-now__slot.is-new .hero__face { animation: ms-pop 420ms var(--ease) both, ms-ring 900ms var(--ease) both; }
 @keyframes ms-pop {
@@ -1928,6 +1929,7 @@ a.ch__key:hover .ch__name { color: var(--gold-hi); }
   box-shadow: 0 0 14px rgba(243, 167, 47, .55);
 }
 .ms-mark:hover, .ms-mark:focus-visible { background: var(--gold-hi); outline: none; box-shadow: 0 0 20px rgba(255, 192, 97, .8); }
+.ms-mark--swap { z-index: 3; }
 .ms-mark--rejected {
   display: none; width: 10px; height: 10px; background: transparent;
   border: 1.5px solid var(--grey); box-shadow: none;
