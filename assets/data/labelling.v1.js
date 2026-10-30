@@ -10287,28 +10287,27 @@ window.OWCS_LABELLING = {
     "vendetta"
    ],
    "state": "forged",
-   "promoted": [
-    "dva",
-    "jetcat",
-    "lucio",
-    "mauga",
-    "ram",
-    "shion",
-    "tracer"
-   ],
+   "promoted": [],
    "refused": [
     "ana",
     "ball",
     "bastion",
     "cass",
+    "dva",
     "emre",
     "freja",
     "hazard",
+    "jetcat",
     "kiriko",
+    "lucio",
+    "mauga",
     "orisa",
+    "ram",
     "reaper",
+    "shion",
     "sojourn",
     "sym",
+    "tracer",
     "vendetta"
    ],
    "labels": {
@@ -10361,135 +10360,38 @@ window.OWCS_LABELLING = {
    },
    "labelledBy": "CV",
    "verdicts": {
-    "ana": "REVIEW",
+    "ana": "VALIDATED",
     "ball": "WEAK",
-    "bastion": "REVIEW",
+    "bastion": "VALIDATED",
     "cass": "WEAK",
     "dva": "VALIDATED",
-    "emre": "REVIEW",
+    "emre": "VALIDATED",
     "freja": "WEAK",
     "hazard": "WEAK",
     "jetcat": "VALIDATED",
-    "kiriko": "REVIEW",
+    "kiriko": "VALIDATED",
     "lucio": "VALIDATED",
     "mauga": "VALIDATED",
     "orisa": "WEAK",
     "ram": "VALIDATED",
-    "reaper": "REVIEW",
+    "reaper": "VALIDATED",
     "shion": "VALIDATED",
-    "sojourn": "REVIEW",
-    "sym": "REVIEW",
+    "sojourn": "VALIDATED",
+    "sym": "VALIDATED",
     "tracer": "VALIDATED",
-    "vendetta": "REVIEW"
+    "vendetta": "VALIDATED"
    },
-   "review": {
-    "ana": {
-     "trials": 37,
-     "correct": 32,
-     "unknown": 5,
-     "wrong": 0,
-     "accuracy": 0.865,
-     "confusedWith": {},
-     "cards": [
-      "c13",
-      "c20"
-     ]
-    },
-    "bastion": {
-     "trials": 23,
-     "correct": 15,
-     "unknown": 8,
-     "wrong": 0,
-     "accuracy": 0.652,
-     "confusedWith": {},
-     "cards": [
-      "c27",
-      "c28"
-     ]
-    },
-    "emre": {
-     "trials": 28,
-     "correct": 18,
-     "unknown": 10,
-     "wrong": 0,
-     "accuracy": 0.643,
-     "confusedWith": {},
-     "cards": [
-      "c24",
-      "c25"
-     ]
-    },
-    "kiriko": {
-     "trials": 125,
-     "correct": 112,
-     "unknown": 13,
-     "wrong": 0,
-     "accuracy": 0.896,
-     "confusedWith": {},
-     "cards": [
-      "c00",
-      "c07"
-     ]
-    },
-    "reaper": {
-     "trials": 48,
-     "correct": 43,
-     "unknown": 5,
-     "wrong": 0,
-     "accuracy": 0.896,
-     "confusedWith": {},
-     "cards": [
-      "c11",
-      "c45"
-     ]
-    },
-    "sojourn": {
-     "trials": 134,
-     "correct": 38,
-     "unknown": 94,
-     "wrong": 2,
-     "accuracy": 0.284,
-     "confusedWith": {
-      "vendetta": 2
-     },
-     "cards": [
-      "c03",
-      "c18",
-      "c37",
-      "c38",
-      "c39",
-      "c42",
-      "c44"
-     ]
-    },
-    "sym": {
-     "trials": 81,
-     "correct": 63,
-     "unknown": 17,
-     "wrong": 1,
-     "accuracy": 0.778,
-     "confusedWith": {
-      "vendetta": 1
-     },
-     "cards": [
-      "c08",
-      "c19"
-     ]
-    },
-    "vendetta": {
-     "trials": 50,
-     "correct": 35,
-     "unknown": 15,
-     "wrong": 0,
-     "accuracy": 0.7,
-     "confusedWith": {},
-     "cards": [
-      "c09",
-      "c23"
-     ]
-    }
-   },
-   "approved": [],
+   "review": {},
+   "approved": [
+    "ana",
+    "bastion",
+    "emre",
+    "kiriko",
+    "reaper",
+    "sojourn",
+    "sym",
+    "vendetta"
+   ],
    "rejected": [],
    "slotRoles": [
     "damage",
