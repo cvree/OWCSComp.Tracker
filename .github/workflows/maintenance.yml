@@ -42,6 +42,12 @@ on:
         description: "prune-branches: space-separated branch names to keep"
         required: false
 
+# It writes refs, so it serialises with everything else that writes to
+# this repository rather than racing a data commit.
+concurrency:
+  group: owcs-generated-data
+  cancel-in-progress: false
+
 permissions:
   contents: write
   actions: write
