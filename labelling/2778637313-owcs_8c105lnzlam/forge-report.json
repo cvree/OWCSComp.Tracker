@@ -4,7 +4,7 @@
  "layoutId": "owcs_8c105lnzlam",
  "templatesDir": "templates/owcs_8c105lnzlam",
  "labelledBy": "[DROPS] 2026 OWCS Champions Clash | Day 2",
- "labelledAt": "2026-10-30T19:30:29Z",
+ "labelledAt": "2026-10-30T19:37:34Z",
  "cardsNamed": 66,
  "templatesWritten": 114,
  "passed": false,
@@ -616,7 +616,7 @@
  },
  "forgeVersion": 4,
  "promote": true,
- "labelsDigest": "1da76f32a3bd82fa1a32b83b2cc9400f8bf152ada4f065cf7a7d6802b1a0e7d0",
+ "labelsDigest": "12d3d5f564e12380f529bd955f6cea24ac36e7f5bae9db6e62f0b59a151ffdd6",
  "productionSet": {
   "safe": false,
   "falseMatch": {
