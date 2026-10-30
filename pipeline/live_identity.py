@@ -39,6 +39,9 @@ import team_identify as ti
 # any resolvable reading, and at least MIN_FRAMES of them.
 MIN_SHARE = 0.5
 MIN_FRAMES = 2
+# At or below this share of agreeing frames, a named value is flagged for a
+# person (the owner's 90% rule) — named, but not yet trusted.
+CHECK_SHARE = 0.9
 THRESHOLDS = ("otsu", 150, 190)
 MODES = ("7", "6")          # tesseract page-seg: single line, then block
 _GAME_RE = re.compile(r"\b[GC]AME\s*([0-9|Il])(?![A-Za-z0-9])")
@@ -178,6 +181,14 @@ def identify(frames: list, layout: dict, *, known_maps: list[dict],
         out[side] = w
     out["frames"] = len(frames)
     out["complete"] = all(out[k]["value"] for k in ("map", "team_a", "team_b"))
+    # The owner's rule: a value that won 90% or less of the frames that
+    # read anything is shown to a person before it is relied on.
+    for k in ("map", "game", "team_a", "team_b"):
+        w = out[k]
+        voting = sum(1 for vals in per[k] if vals) or 1
+        w["share"] = round(w["votes"] / voting, 3) if w["value"] else 0.0
+    out["needsCheck"] = sorted(k for k in ("map", "game", "team_a", "team_b")
+                               if out[k]["value"] and out[k]["share"] <= CHECK_SHARE)
     return out
 
 

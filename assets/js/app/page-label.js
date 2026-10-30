@@ -113,12 +113,43 @@
   const draft = store.get(KEY) || {};
   const labels = Object.assign({}, batch.labels || {}, draft.labels || {});
   let signedAs = draft.signedAs || "";
+  /* The person's double-check of heroes the forge measured at or below 90%. */
+  const approved = new Set(draft.approved || batch.approved || []);
+  const rejected = new Set(draft.rejected || batch.rejected || []);
+  const review = batch.review || {};
   const cards = batch.cards || [];
   const byId = {};
   cards.forEach((c, i) => { byId[c.id] = c; c.n = i + 1; });
   let focusIdx = 0;
 
-  function save() { store.set(KEY, { labels: labels, signedAs: signedAs }); }
+  /* ------------------------------------------------------- role lock */
+  /* OWCS broadcasts print each team in a fixed role order (on these
+     packages: damage, damage, tank, support, support). A card's slot
+     therefore says what role its hero plays — the picker leads with that
+     role, and a name of another role is flagged before it is committed. */
+  const ROLE_OF = { tank: "Tank", damage: "Damage", support: "Support" };
+  const slotRoles = (batch.slotRoles || []).map((r) => ROLE_OF[r] || null);
+  const roleOfSlot = (slot) => slotRoles.length ? slotRoles[Number(String(slot).slice(-1)) - 1] || null : null;
+  function cardRole(c) {
+    if (!c || !slotRoles.length) return null;
+    const tally = {};
+    Object.keys(c.slots || {}).forEach((k) => {
+      const r = roleOfSlot(k);
+      if (r) tally[r] = (tally[r] || 0) + ((c.slots[k] || {}).n || 0);
+    });
+    const best = Object.keys(tally).sort((a, b) => tally[b] - tally[a])[0];
+    return best || null;
+  }
+  const roleClash = (c) => {
+    const h = heroOf(c);
+    const want = cardRole(c);
+    return h && want && P.hero(h).role && P.hero(h).role !== want ? want : null;
+  };
+
+  function save() {
+    store.set(KEY, { labels: labels, signedAs: signedAs,
+      approved: Array.from(approved), rejected: Array.from(rejected) });
+  }
   const heroOf = (c) => labels[c.id] && labels[c.id] !== SKIP ? labels[c.id] : null;
   const namedCount = () => cards.filter((c) => labels[c.id]).length;
 
@@ -159,8 +190,12 @@
         '<span class="tag">' + label + "</span>" + verdict + "</div>" +
         '<div class="lb-lineup__slots">' + rows[key].map((r) => {
           const h = r.card && heroOf(r.card);
-          return '<button type="button" class="lb-slot" data-card="' + esc(r.card ? r.card.id : "") + '"' +
-            (r.card ? "" : " disabled") + ' title="Slot ' + esc(r.slot) + '">' +
+          const want = roleOfSlot(r.slot);
+          const clash = h && want && P.hero(h).role !== want;
+          return '<button type="button" class="lb-slot' + (clash ? " lb-slot--warn" : "") + '" data-card="' +
+            esc(r.card ? r.card.id : "") + '"' + (r.card ? "" : " disabled") +
+            ' title="Slot ' + esc(r.slot) + (want ? " · the " + want.toLowerCase() + " slot" : "") +
+            (clash ? " — " + esc(P.hero(h).name) + " is not a " + want.toLowerCase() : "") + '">' +
             (h ? P.heroTile(h, { size: "sm" })
               : '<span class="lb-slot__q">' + (r.card ? "#" + r.card.n : "—") + "</span>") +
             "</button>";
@@ -206,6 +241,9 @@
       '<p class="lb-card__meta dim small">Seen <b>' + c.size + "</b>× · " + esc(where) +
         " · " + esc(slots.join(", ")) + " · " + esc(P.fmtClock(c.tFirst)) + "–" + esc(P.fmtClock(c.tLast)) + "</p>" +
       link +
+      (roleClash(c) ? '<p class="lb-card__warn small">⚠ This portrait sits in the ' +
+        esc(roleClash(c).toLowerCase()) + " slot, and " + esc(P.hero(heroOf(c)).name) + " is " +
+        esc(String(P.hero(heroOf(c)).role || "").toLowerCase()) + ". Check the name.</p>" : "") +
       '<div class="lb-card__actions">' +
         '<button type="button" class="btn btn--sm ' + (h ? "btn--ghost" : "btn--primary") +
           '" data-name="' + esc(c.id) + '">' + (h ? "Change" : "Name it") + "</button>" +
@@ -223,21 +261,65 @@
       (loo ? '<span class="dim small">' + esc(loo.note || "") + "</span>" : "") + "</div>" +
       '<div class="lb-learned__grid">' + ids.sort().map((id) => {
         const kept = v[id] === "VALIDATED";
-        return '<div class="lb-learned__hero' + (kept ? " is-kept" : "") + '">' + P.heroTile(id, { size: "sm" }) +
-          '<span class="small">' + (kept ? "✓ learned" : "✗ not yet — " + esc(String(v[id]).toLowerCase())) + "</span></div>";
+        const ask = v[id] === "REVIEW";
+        return '<div class="lb-learned__hero' + (kept ? " is-kept" : "") + (ask ? " is-ask" : "") + '">' +
+          P.heroTile(id, { size: "sm" }) + '<span class="small">' +
+          (kept ? "✓ learned" : ask ? (approved.has(id) ? "✓ you approved — next run" : "? double-check below")
+            : "✗ not yet — " + esc(String(v[id]).toLowerCase())) + "</span></div>";
       }).join("") + "</div></div>";
+  }
+
+  /* ---------------------------------------------- the double-check */
+  /* The owner's rule: above 90% the tracker learns a hero on its own; at
+     or below, a person looks first. Each hero here shows how it measured
+     on frames it was never taught from, and every card it was taught from —
+     a wrong card is the usual reason, and it is visible at a glance. */
+  function reviewHtml() {
+    const ids = Object.keys(review).sort();
+    if (!ids.length) return "";
+    return '<div class="card lb-review"><div class="card-head"><h2>Double-check ' + ids.length +
+      " hero" + (ids.length === 1 ? "" : "es") + "</h2>" +
+      '<span class="dim small">measured at 90% or less — look, then approve or flag</span></div>' +
+      '<div class="lb-review__list">' + ids.map((id) => {
+        const r = review[id];
+        const pct = r.trials ? Math.round((r.correct / r.trials) * 100) : 0;
+        const wrong = Object.keys(r.confusedWith || {}).map((h) =>
+          r.confusedWith[h] + "× as " + esc(P.hero(h).name)).join(", ");
+        const thumbs = (r.cards || []).map((cid) => byId[cid]).filter(Boolean).map((c) =>
+          '<button type="button" class="lb-review__card" data-card="' + esc(c.id) + '" title="Card #' + c.n + '">' +
+          '<img src="labelling/' + esc(batch.batchId) + "/" + esc(c.image) + '" alt="Card ' + c.n +
+          '" width="56" height="56" loading="lazy"></button>').join("");
+        const state = approved.has(id) ? "approved" : rejected.has(id) ? "rejected" : "";
+        return '<div class="lb-review__hero' + (state ? " is-" + state : "") + '">' +
+          '<div class="lb-review__who">' + P.heroTile(id) +
+            '<p class="small"><b>' + pct + "%</b> right on " + r.trials + " unseen frames · " +
+              r.unknown + " unsure" + (wrong ? " · <span class=\"lb-review__wrong\">read " + wrong + "</span>" : "") + "</p></div>" +
+          '<div class="lb-review__cards" aria-label="Cards named ' + esc(P.hero(id).name) + '">' + thumbs + "</div>" +
+          '<div class="lb-review__act">' +
+            '<button type="button" class="btn btn--sm ' + (state === "approved" ? "btn--good" : "btn--ghost") +
+              '" data-approve="' + esc(id) + '" aria-pressed="' + (state === "approved") + '">✓ All ' +
+              esc(P.hero(id).name) + "</button>" +
+            '<button type="button" class="btn btn--sm ' + (state === "rejected" ? "btn--danger" : "btn--quiet") +
+              '" data-reject="' + esc(id) + '" aria-pressed="' + (state === "rejected") + '">Something’s off</button>' +
+          "</div></div>";
+      }).join("") + "</div>" +
+      '<p class="dim small">Approving tells the tracker these cards really are that hero; it still has to pass ' +
+      "the safety checks before it is used. Something’s off? Open a card and fix its name.</p></div>";
   }
 
   function labelsJson() {
     const out = {};
     cards.forEach((c) => { if (labels[c.id]) out[c.id] = labels[c.id]; });
-    return JSON.stringify({
+    const doc = {
       schema: "label-labels.v1",
       batchId: batch.batchId,
       labelledBy: signedAs || null,
       labelledAt: new Date().toISOString().replace(/\.\d+Z$/, "Z"),
       labels: out,
-    }, null, 1) + "\n";
+    };
+    if (approved.size) doc.approved = Array.from(approved).sort();
+    if (rejected.size) doc.rejected = Array.from(rejected).sort();
+    return JSON.stringify(doc, null, 1) + "\n";
   }
 
   function render() {
@@ -259,6 +341,7 @@
           '<button type="button" class="btn btn--quiet" id="copy">Copy</button>' +
         "</div></div>" +
       verdictsHtml() +
+      reviewHtml() +
       renderLineup() +
       '<p class="dim small u-mt-5">Keys: <kbd>j</kbd>/<kbd>k</kbd> move · ' +
         '<kbd>Enter</kbd> name · <kbd>y</kbd> accept the linked name · ' +
@@ -299,14 +382,18 @@
   let pickerActive = 0;
   let pickerList = [];
 
+  let pickerRole = null;
   function openPicker(id) {
     pickerFor = id;
     const c = byId[id];
+    pickerRole = cardRole(c);
     $("picker-context").innerHTML =
       '<img class="lb-card__face lb-card__face--sm" src="labelling/' + esc(batch.batchId) + "/" + esc(c.image) +
       '" alt="" width="64" height="64">' +
       '<span class="dim small">Card #' + c.n + " · seen " + c.size + "× · " +
-      esc(Object.keys(c.slots || {}).join(", ")) + "</span>";
+      esc(Object.keys(c.slots || {}).join(", ")) +
+      (pickerRole ? " · <b>" + esc(pickerRole.toLowerCase()) + " slot</b> — " +
+        esc(pickerRole.toLowerCase()) + " heroes first" : "") + "</span>";
     $("picker-q").value = "";
     renderPickerGrid("");
     $("picker-modal").hidden = false;
@@ -321,12 +408,17 @@
   }
   function renderPickerGrid(q) {
     const query = String(q || "").trim().toLowerCase();
+    /* The slot's role leads; the others follow, never hidden — a stray
+       portrait in the wrong slot still has to be nameable. */
+    const rank = (h) => (pickerRole && h.role === pickerRole ? -1 : ROLES.indexOf(h.role));
     pickerList = P.heroes().slice().sort((a, b) =>
-      ROLES.indexOf(a.role) - ROLES.indexOf(b.role) || a.name.localeCompare(b.name))
+      rank(a) - rank(b) || a.name.localeCompare(b.name))
       .filter((h) => !query || h.name.toLowerCase().indexOf(query) >= 0 || h.id.indexOf(query) >= 0);
     pickerActive = 0;
+    const lead = pickerRole ? pickerList.filter((h) => h.role === pickerRole).length : 0;
     $("picker-grid").innerHTML = pickerList.length
       ? pickerList.map((h, i) =>
+        (lead && i === lead ? '<p class="picker__divider dim small">Other roles</p>' : "") +
         '<button type="button" class="picker__opt" role="option" data-pick="' + esc(h.id) +
         '" data-active="' + (i === 0) + '" aria-selected="' + (i === 0) + '">' +
         P.heroTile(h.id, { size: "sm" }) + "</button>").join("")
@@ -349,8 +441,16 @@
 
   function wire() {
     $("label-app").addEventListener("click", (e) => {
-      const t = e.target.closest("[data-name],[data-skip],[data-accept],[data-card],#download,#copy");
+      const t = e.target.closest("[data-name],[data-skip],[data-accept],[data-approve],[data-reject],[data-card],#download,#copy");
       if (!t) return;
+      if (t.dataset.approve || t.dataset.reject) {
+        const id = t.dataset.approve || t.dataset.reject;
+        const into = t.dataset.approve ? approved : rejected;
+        const other = t.dataset.approve ? rejected : approved;
+        if (into.has(id)) into.delete(id); else { into.add(id); other.delete(id); }
+        refresh();
+        return;
+      }
       if (t.id === "download") {
         P.download("labels.json", labelsJson());
         return;
@@ -369,7 +469,7 @@
         if (parentHero) setLabel(c.id, parentHero);
         return;
       }
-      if (t.classList.contains("lb-slot") && t.dataset.card) {
+      if ((t.classList.contains("lb-slot") || t.classList.contains("lb-review__card")) && t.dataset.card) {
         const el = document.querySelector('.lb-card[data-card="' + t.dataset.card + '"]');
         if (el) { el.scrollIntoView({ block: "center", behavior: "smooth" }); el.focus({ preventScroll: true }); }
       }

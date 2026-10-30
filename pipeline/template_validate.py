@@ -28,15 +28,22 @@ misleading thing this file could do.
 
 ### The four verdicts
 
-  VALIDATED    — enough held-out trials, accuracy at or above the bar, and
-                 **zero wrong answers**. A wrong answer is disqualifying on
-                 its own: an UNKNOWN costs a data point, a confident wrong
-                 hero corrupts a published composition.
-  WEAK         — no wrong answers, but too few trials or too many UNKNOWNs.
-                 Usable, not proven. Needs more evidence or a better crop.
-  FAILED       — the template confidently returned the wrong hero on a
-                 held-out frame. This is the one that must never ship.
+  VALIDATED    — enough held-out trials, accuracy ABOVE 90%, and wrong
+                 answers on at most 2% of them. Promoted with no one asked.
+  REVIEW       — enough trials, but accuracy at or below 90% or more than
+                 2% wrong. Not promoted on its own: a person double-checks
+                 the misreads it lists and approves it or not (the owner's
+                 rule, 2026-10-30: "when 90% confidence or less have me
+                 double check"). Until then it costs data, never corrupts it.
+  WEAK         — no wrong answers, but too few trials. Usable, not proven.
+  FAILED       — more than 10% of held-out frames read as the WRONG hero:
+                 a template that is broken, not borderline.
   UNVERIFIABLE — no held-out evidence, or no provenance to prove separation.
+
+A single wrong read used to fail a hero outright (Tracer: 112/130 right, one
+wrong, FAILED). With each slot limited to its role (detect.lib_for_slot) a
+wrong read is rarer and always within one role, and the owner chose to see
+the borderline cases rather than lose them.
 
 ### Negative evidence
 
@@ -66,8 +73,8 @@ import db  # noqa: E402
 import template_bootstrap as tb  # noqa: E402
 import template_evidence as te  # noqa: E402
 
-VALIDATED, WEAK, FAILED, UNVERIFIABLE = (
-    "VALIDATED", "WEAK", "FAILED", "UNVERIFIABLE")
+VALIDATED, REVIEW, WEAK, FAILED, UNVERIFIABLE = (
+    "VALIDATED", "REVIEW", "WEAK", "FAILED", "UNVERIFIABLE")
 
 # Held-out trials a hero needs before "it works" means anything. Ten frames
 # spread across a map is a real test; two adjacent frames is a coincidence.
@@ -75,6 +82,10 @@ MIN_TRIALS = 12
 # correct / trials. UNKNOWNs count against this (they are a miss), wrong
 # answers are handled separately and are always disqualifying.
 MIN_ACCURACY = 0.90
+# Wrong answers a hero may carry and still be promoted with no one asked,
+# and the share past which it is broken rather than borderline.
+MAX_WRONG_RATE = 0.02
+FAILED_WRONG_RATE = 0.10
 # A held-out crop must be at least this far in time from every frame the
 # hero's templates were cut from. Broadcast portraits barely change between
 # adjacent samples, so a 5-second gap proves nothing.
@@ -268,7 +279,8 @@ def validate(templates_dir: str, manifest: dict, *,
             missing_crops += 1
             continue
         gray = cv2.cvtColor(colour, cv2.COLOR_BGR2GRAY)
-        read = detect.read_slot(gray, lib, floor=profile["floor"],
+        read = detect.read_slot(gray, detect.lib_for_slot(lib, profile, record.get("slot")),
+                                floor=profile["floor"],
                                 min_margin=profile["minMargin"],
                                 roi=profile["roi"])
         got = read["hero"]
@@ -336,28 +348,29 @@ def validate(templates_dir: str, manifest: dict, *,
         if not e["separationProvable"]:
             e["verdict"] = UNVERIFIABLE
             e["why"] = e["separationNote"]
-        elif e["wrong"]:
+        elif trials and e["wrong"] / trials > FAILED_WRONG_RATE:
             e["verdict"] = FAILED
-            e["why"] = (f"{e['wrong']} held-out frame(s) read as the WRONG "
-                        f"hero ({', '.join(sorted(e['confusedWith']))}) — a "
-                        f"confident wrong answer corrupts a published "
-                        f"composition and is disqualifying on its own")
+            e["why"] = (f"{e['wrong']}/{trials} held-out frame(s) read as the "
+                        f"WRONG hero ({', '.join(sorted(e['confusedWith']))}) "
+                        f"— over {FAILED_WRONG_RATE * 100:.0f}%: this template "
+                        f"is broken, not borderline")
         elif trials < min_trials:
-            e["verdict"] = WEAK if trials else UNVERIFIABLE
+            e["verdict"] = (WEAK if not e["wrong"] else REVIEW) if trials else UNVERIFIABLE
             e["why"] = (f"only {trials} held-out trial(s); {min_trials} are "
                         f"needed before 'it works' means anything"
                         if trials else
                         "no held-out evidence for this hero in this manifest")
-        elif accuracy < min_accuracy:
-            e["verdict"] = WEAK
-            e["why"] = (f"{correct}/{trials} correct ({accuracy * 100:.0f}%) "
-                        f"with {e['unknown']} UNKNOWN — below the "
-                        f"{min_accuracy * 100:.0f}% bar. No wrong answers, so "
-                        f"this loses data rather than corrupting it")
+        elif accuracy <= min_accuracy or e["wrong"] / trials > MAX_WRONG_RATE:
+            e["verdict"] = REVIEW
+            e["why"] = (f"{correct}/{trials} correct ({accuracy * 100:.0f}%), "
+                        f"{e['unknown']} UNKNOWN, {e['wrong']} wrong"
+                        + (f" ({', '.join(sorted(e['confusedWith']))})" if e["wrong"] else "")
+                        + f" — at or below {min_accuracy * 100:.0f}% or over "
+                        f"{MAX_WRONG_RATE * 100:.0f}% wrong: a person double-checks")
         else:
             e["verdict"] = VALIDATED
-            e["why"] = (f"{correct}/{trials} held-out frame(s) correct, zero "
-                        f"wrong, min margin {e['minMargin']}")
+            e["why"] = (f"{correct}/{trials} held-out frame(s) correct, "
+                        f"{e['wrong']} wrong, min margin {e['minMargin']}")
 
     fm_rate = (false_match["matched"] / false_match["trials"]
                if false_match["trials"] else 0.0)
@@ -399,10 +412,11 @@ def validate(templates_dir: str, manifest: dict, *,
         },
         "heroes": per_hero,
         "counts": {v: counts.get(v, 0)
-                   for v in (VALIDATED, WEAK, FAILED, UNVERIFIABLE)},
+                   for v in (VALIDATED, REVIEW, WEAK, FAILED, UNVERIFIABLE)},
         "falseMatch": false_match,
         "missingCrops": missing_crops,
-        "passed": (counts.get(FAILED, 0) == 0 and false_match["passed"]),
+        "passed": (counts.get(FAILED, 0) == 0 and counts.get(REVIEW, 0) == 0
+                   and false_match["passed"]),
     }
 
 
@@ -478,7 +492,9 @@ def leave_one_out(templates_dir: str, manifest: dict, *,
                 continue
             gray = cv2.cvtColor(colour, cv2.COLOR_BGR2GRAY)
             trials += 1
-            read = detect.read_slot(gray, reduced, floor=profile["floor"],
+            read = detect.read_slot(gray, detect.lib_for_slot(reduced, profile,
+                                                              record.get("slot")),
+                                    floor=profile["floor"],
                                     min_margin=profile["minMargin"],
                                     roi=profile["roi"])
             if read["hero"] == "UNKNOWN":

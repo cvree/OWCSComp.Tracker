@@ -478,6 +478,13 @@ def _read(path: str):
         return None
 
 
+def _slot_roles(layout_id: str | None) -> list[str] | None:
+    """The layout's role order (damage/tank/support per slot), for the page."""
+    lay = _read(os.path.join(db.REPO_ROOT, "layouts", f"{layout_id}.json")) if layout_id else None
+    roles = (lay or {}).get("slot_roles")
+    return [str(r).lower() for r in roles] if roles else None
+
+
 def build_index(root: str = LABEL_ROOT) -> dict:
     """What the labelling page renders: every batch, how far it has got,
     and its cards (without the member lists, which only the forge needs).
@@ -516,6 +523,16 @@ def build_index(root: str = LABEL_ROOT) -> dict:
                 "labelledBy": labels.get("labelledBy"),
                 "verdicts": {h: v.get("verdict") for h, v in
                              (forged.get("heroes") or {}).items()},
+                # What a person double-checks: heroes the forge measured at or
+                # below 90%, with the evidence and the cards they came from.
+                "review": {h: {k: v.get(k) for k in ("trials", "correct", "unknown",
+                                                     "wrong", "accuracy",
+                                                     "confusedWith", "cards")}
+                           for h, v in sorted((forged.get("heroes") or {}).items())
+                           if v.get("verdict") == "REVIEW"},
+                "approved": sorted(labels.get("approved") or []),
+                "rejected": sorted(labels.get("rejected") or []),
+                "slotRoles": _slot_roles(b.get("layoutId")),
                 "leaveOneOut": forged.get("leaveOneOut"),
                 "counts": b.get("counts") or {},
                 "cards": [{k: c.get(k) for k in card_keys}

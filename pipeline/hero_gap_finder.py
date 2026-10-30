@@ -207,7 +207,8 @@ def scan_frames(frames_dir: str, layout: dict, templates_dir: str, *,
                 crop = gray[y:y + h, x:x + w]
                 if crop.size == 0:
                     continue
-                read = detect.read_slot(crop, lib, floor=profile["floor"],
+                read = detect.read_slot(crop, detect.lib_for_slot(lib, profile, i),
+                                        floor=profile["floor"],
                                         min_margin=profile["minMargin"],
                                         roi=profile["roi"])
                 if read["hero"] != "UNKNOWN":

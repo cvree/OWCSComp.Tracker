@@ -182,8 +182,9 @@
   /* Published on weaker evidence than the rest, so it is where an
      auditor's attention is worth most. */
   const isProvisional = (s) => P.auditTier(s) === "provisional";
+  /* The owner's rule: above 90% is clean; at 90% or less a person checks. */
   const isClean = (s) =>
-    s.meanConfidence != null && s.meanConfidence >= CLEAN_FLOOR &&
+    s.meanConfidence != null && s.meanConfidence > CLEAN_FLOOR &&
     (s.minConfidence == null || s.minConfidence >= CLEAN_FLOOR * 0.9);
 
   /* ------------------------------------------------- decision storage */

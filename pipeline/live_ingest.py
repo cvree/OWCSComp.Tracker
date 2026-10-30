@@ -160,7 +160,8 @@ def identify_maps(maps: list[dict], samples: list[dict], layout: dict) -> list[d
     for m in maps:
         i = m.get("identity") or {}
         log(f"#{m['index']} " + " · ".join(
-            str((i.get(k) or {}).get("value") or "?") for k in ("map", "game", "team_a", "team_b")))
+            str((i.get(k) or {}).get("value") or "?") for k in ("map", "game", "team_a", "team_b"))
+            + (f"  [check: {', '.join(i['needsCheck'])}]" if i.get("needsCheck") else ""))
     return maps
 
 

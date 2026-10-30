@@ -139,6 +139,8 @@
     "_note": "How this broadcast spells a map, where it differs from the catalog.",
     "ATLAS": "aatlis"
   },
+  "slot_roles": ["damage", "damage", "tank", "support", "support"],
+  "_slot_roles_note": "Each team's portraits in broadcast order. Measured on human-labelled crops (~4,700 Midseason/EWC26 crops); detect.lib_for_slot limits each slot to heroes of its role.",
   "match_threshold": 0.6,
   "templates_dir": "templates/owcs_8c105lnzlam"
 }
