@@ -128,6 +128,17 @@
       54
     ]
   ],
+  "identity_zones": {
+    "_note": "Fractions of the frame (x, y, w, h). The top strip of the EWC26/Midseason broadcast: the map name banner left of the centre logo (two lines when long), 'GAME N' right of it, and each team's name bar. Measured on 80 frames from 20 maps of Twitch 2831815423 (live-probe).",
+    "map": [0.35, 0.0, 0.0922, 0.0611],
+    "game": [0.5688, 0.0111, 0.075, 0.0389],
+    "team_a": [0.0781, 0.0514, 0.1875, 0.0333],
+    "team_b": [0.7266, 0.0514, 0.1953, 0.0333]
+  },
+  "map_aliases": {
+    "_note": "How this broadcast spells a map, where it differs from the catalog.",
+    "ATLAS": "aatlis"
+  },
   "match_threshold": 0.6,
   "templates_dir": "templates/owcs_8c105lnzlam"
 }

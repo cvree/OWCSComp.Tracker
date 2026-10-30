@@ -133,6 +133,37 @@ def find_maps(samples: list[dict], *, step: float = DEFAULT_STEP,
     return merge_into_maps(cands, map_gap=map_gap, min_map=min_map)
 
 
+def identify_maps(maps: list[dict], samples: list[dict], layout: dict) -> list[dict]:
+    """Name each window's map and teams from its own frames (live_identity),
+    when the layout says where the broadcast prints them and OCR is here."""
+    if not layout.get("identity_zones"):
+        return maps
+    try:
+        import pytesseract
+        pytesseract.get_tesseract_version()
+    except Exception as exc:   # noqa: BLE001 — any missing piece means skip
+        log(f"identity skipped (needs pytesseract + the tesseract binary): {exc}")
+        return maps
+    import sqlite3
+    import db
+    import live_identity as lid
+    import map_identify as mi
+    import team_identify as ti
+    con = sqlite3.connect(db.DB_PATH)
+    con.row_factory = sqlite3.Row
+    try:
+        known_maps, known_teams = mi.known_maps_from_db(con), ti.known_teams_from_db(con)
+    finally:
+        con.close()
+    maps = lid.attach(maps, samples, layout, known_maps=known_maps,
+                      known_teams=known_teams)
+    for m in maps:
+        i = m.get("identity") or {}
+        log(f"#{m['index']} " + " · ".join(
+            str((i.get(k) or {}).get("value") or "?") for k in ("map", "game", "team_a", "team_b")))
+    return maps
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--url", required=True)
@@ -154,6 +185,7 @@ def main(argv=None) -> int:
         return 1
     samples = sample_timeline(src, duration, layout, step=args.step)
     maps = find_maps(samples, step=args.step)
+    maps = identify_maps(maps, samples, layout)
     os.makedirs(args.out, exist_ok=True)
     states: dict[str, int] = {}
     for s in samples:
