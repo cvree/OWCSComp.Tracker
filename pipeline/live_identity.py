@@ -249,19 +249,31 @@ def harmonise_names(maps: list[dict]) -> list[dict]:
 
 
 def series(maps: list[dict]) -> list[list[dict]]:
-    """Runs of adjacent maps that are one series: each shares a team with
-    the one before it and its game number goes up."""
+    """Runs of adjacent maps that are one series.
+
+    The same two teams on the next map continue the series unless its game
+    number starts over; a map whose game number was not read stays in it
+    (Midseason Day 5: game 5 of Twisted Minds vs Weibo, unread, would
+    otherwise have stood as a series of its own). One team in common is
+    enough when the game number goes up — that is a misread opponent."""
+    def teams_of(m):
+        i = m.get("identity") or {}
+        return {(i.get(s) or {}).get("value") for s in ("team_a", "team_b")} - {None}
+
+    def game_of(m):
+        return ((m.get("identity") or {}).get("game") or {}).get("value")
+
     out: list[list[dict]] = []
     for m in maps:
-        i = m.get("identity") or {}
-        teams = {(i.get(s) or {}).get("value") for s in ("team_a", "team_b")} - {None}
-        game = (i.get("game") or {}).get("value")
         if out:
-            p = out[-1][-1].get("identity") or {}
-            pteams = {(p.get(s) or {}).get("value") for s in ("team_a", "team_b")} - {None}
-            pgame = (p.get("game") or {}).get("value")
-            if teams & pteams and game and pgame and game > pgame:
-                out[-1].append(m)
+            run = out[-1]
+            teams, pteams = teams_of(m), teams_of(run[-1])
+            game = game_of(m)
+            pgame = next((g for g in map(game_of, reversed(run)) if g), None)
+            rising = game is None or pgame is None or game > pgame
+            if (teams and teams == pteams and rising) or \
+                    (teams & pteams and game and pgame and game > pgame):
+                run.append(m)
                 continue
         out.append([m])
     return out
