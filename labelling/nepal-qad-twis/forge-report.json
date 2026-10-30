@@ -223,6 +223,7 @@
   "dropped": {},
   "droppedTotal": 0,
   "offRole": 0,
+  "strayCards": [],
   "kept": 1145
  },
  "tuning": {
@@ -454,7 +455,7 @@
    }
   ]
  },
- "forgeVersion": 4,
+ "forgeVersion": 5,
  "promote": true,
  "labelsDigest": "29d542ee2c2b3d70687e65c4e93ec758e4fa33a7ac63a88a0a6891d63449cb81",
  "productionSet": {

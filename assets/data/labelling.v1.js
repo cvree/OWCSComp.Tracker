@@ -3402,7 +3402,7 @@ window.OWCS_LABELLING = {
     "lucio": "REVIEW",
     "mei": "REVIEW",
     "mizuki": "REVIEW",
-    "pharah": "REVIEW",
+    "pharah": "WEAK",
     "rein": "VALIDATED",
     "shion": "WEAK",
     "sigma": "REVIEW",
@@ -3425,11 +3425,11 @@ window.OWCS_LABELLING = {
      ]
     },
     "bastion": {
-     "trials": 102,
-     "correct": 89,
+     "trials": 101,
+     "correct": 88,
      "unknown": 13,
      "wrong": 0,
-     "accuracy": 0.873,
+     "accuracy": 0.871,
      "confusedWith": {},
      "cards": [
       "c11",
@@ -3467,11 +3467,11 @@ window.OWCS_LABELLING = {
      ]
     },
     "lucio": {
-     "trials": 124,
-     "correct": 102,
-     "unknown": 22,
+     "trials": 116,
+     "correct": 96,
+     "unknown": 20,
      "wrong": 0,
-     "accuracy": 0.823,
+     "accuracy": 0.828,
      "confusedWith": {},
      "cards": [
       "c07",
@@ -3482,11 +3482,11 @@ window.OWCS_LABELLING = {
      ]
     },
     "mei": {
-     "trials": 68,
+     "trials": 58,
      "correct": 34,
-     "unknown": 34,
+     "unknown": 24,
      "wrong": 0,
-     "accuracy": 0.5,
+     "accuracy": 0.586,
      "confusedWith": {},
      "cards": [
       "c25",
@@ -3496,11 +3496,11 @@ window.OWCS_LABELLING = {
      ]
     },
     "mizuki": {
-     "trials": 150,
-     "correct": 124,
-     "unknown": 26,
+     "trials": 132,
+     "correct": 75,
+     "unknown": 57,
      "wrong": 0,
-     "accuracy": 0.827,
+     "accuracy": 0.568,
      "confusedWith": {},
      "cards": [
       "c16",
@@ -3510,18 +3510,6 @@ window.OWCS_LABELLING = {
       "c40",
       "c46",
       "c57"
-     ]
-    },
-    "pharah": {
-     "trials": 20,
-     "correct": 16,
-     "unknown": 4,
-     "wrong": 0,
-     "accuracy": 0.8,
-     "confusedWith": {},
-     "cards": [
-      "c29",
-      "c49"
      ]
     },
     "sigma": {
@@ -3556,10 +3544,10 @@ window.OWCS_LABELLING = {
     },
     "sym": {
      "trials": 228,
-     "correct": 126,
-     "unknown": 102,
+     "correct": 123,
+     "unknown": 105,
      "wrong": 0,
-     "accuracy": 0.553,
+     "accuracy": 0.539,
      "confusedWith": {},
      "cards": [
       "c01",
@@ -3591,12 +3579,12 @@ window.OWCS_LABELLING = {
     "support"
    ],
    "leaveOneOut": {
-    "trials": 1041,
-    "matched": 55,
-    "rate": 0.0528,
+    "trials": 1030,
+    "matched": 57,
+    "rate": 0.0553,
     "ceiling": 0.02,
     "passed": false,
-    "note": "Leave-one-out false-match test over 1041 real crops: 55 (5.28%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
+    "note": "Leave-one-out false-match test over 1030 real crops: 57 (5.53%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
     "confusablePairs": [
      {
       "hero": "sojourn",
@@ -3625,18 +3613,10 @@ window.OWCS_LABELLING = {
      {
       "hero": "mizuki",
       "readAs": "lucio",
-      "count": 3,
-      "trials": 99,
-      "share": 0.03,
-      "note": "with no mizuki template in the set, 3 of 99 real mizuki portraits (3%) were confidently read as lucio instead of UNKNOWN"
-     },
-     {
-      "hero": "lucio",
-      "readAs": "mizuki",
-      "count": 1,
-      "trials": 87,
-      "share": 0.011,
-      "note": "with no lucio template in the set, 1 of 87 real lucio portraits (1%) were confidently read as mizuki instead of UNKNOWN"
+      "count": 6,
+      "trials": 106,
+      "share": 0.057,
+      "note": "with no mizuki template in the set, 6 of 106 real mizuki portraits (6%) were confidently read as lucio instead of UNKNOWN"
      },
      {
       "hero": "sojourn",
@@ -7731,10 +7711,10 @@ window.OWCS_LABELLING = {
     },
     "bastion": {
      "trials": 199,
-     "correct": 162,
-     "unknown": 37,
+     "correct": 163,
+     "unknown": 36,
      "wrong": 0,
-     "accuracy": 0.814,
+     "accuracy": 0.819,
      "confusedWith": {},
      "cards": [
       "c11",
@@ -7817,12 +7797,12 @@ window.OWCS_LABELLING = {
     "support"
    ],
    "leaveOneOut": {
-    "trials": 1450,
-    "matched": 44,
-    "rate": 0.0303,
+    "trials": 1452,
+    "matched": 43,
+    "rate": 0.0296,
     "ceiling": 0.02,
     "passed": false,
-    "note": "Leave-one-out false-match test over 1450 real crops: 44 (3.03%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
+    "note": "Leave-one-out false-match test over 1452 real crops: 43 (2.96%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
     "confusablePairs": [
      {
       "hero": "tracer",
@@ -7847,14 +7827,6 @@ window.OWCS_LABELLING = {
       "trials": 38,
       "share": 0.105,
       "note": "with no zarya template in the set, 4 of 38 real zarya portraits (11%) were confidently read as sigma instead of UNKNOWN"
-     },
-     {
-      "hero": "pharah",
-      "readAs": "cass",
-      "count": 1,
-      "trials": 11,
-      "share": 0.091,
-      "note": "with no pharah template in the set, 1 of 11 real pharah portraits (9%) were confidently read as cass instead of UNKNOWN"
      },
      {
       "hero": "winston",

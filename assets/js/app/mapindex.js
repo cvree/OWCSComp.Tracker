@@ -114,5 +114,57 @@
     return e.maps.length + " maps · " + series(e.maps).length + " series indexed";
   }
 
-  P.mapIndex = { entry: entry, ids: ids, html: html, summary: summary, vodAt: vodAt };
+  /* Every indexed map a team played, newest broadcast first:
+     [{ videoId, url, title, m, opponent }]. */
+  function forTeam(teamId) {
+    const titles = {};
+    (P.discovered ? P.discovered() : []).forEach((b) => { titles[b.videoId] = b; });
+    const out = [];
+    ids().forEach((vid) => {
+      const e = entry(vid);
+      (e.maps || []).forEach((m) => {
+        const a = m.team_a && m.team_a.id === teamId, b = m.team_b && m.team_b.id === teamId;
+        if (!a && !b) return;
+        const meta = titles[vid] || {};
+        out.push({ videoId: vid, url: e.url, m: m, opponent: a ? m.team_b : m.team_a,
+          title: (meta.parsed && meta.parsed.cleanTitle) || meta.title || "Broadcast " + vid,
+          when: meta.publishedAt || "" });
+      });
+    });
+    return out.sort((x, y) => String(y.when).localeCompare(String(x.when)) || x.m.start - y.m.start);
+  }
+
+  /* A team's maps as rows, grouped by broadcast. */
+  function teamHtml_(teamId) {
+    const rows = forTeam(teamId);
+    if (!rows.length) return "";
+    const groups = [];
+    rows.forEach((r) => {
+      const g = groups[groups.length - 1];
+      if (g && g.videoId === r.videoId) g.rows.push(r);
+      else groups.push({ videoId: r.videoId, title: r.title, rows: [r] });
+    });
+    return '<div class="mi">' + groups.map((g) =>
+      '<section class="mi-series"><header class="mi-series__head">' +
+        '<a class="mi-series__title" href="game.html?video=' + encodeURIComponent(g.videoId) + '#maps">' +
+        esc(g.title) + '</a><span class="dim small">' + g.rows.length + " map" +
+        (g.rows.length === 1 ? "" : "s") + "</span></header>" +
+      '<ol class="mi-maps">' + g.rows.map((r) => {
+        const info = r.m.map ? P.mapInfo(r.m.map) : null;
+        return '<li class="mi-map mi-map--team">' +
+          '<span class="mi-map__game mono">' + (r.m.game ? "G" + r.m.game : "—") + "</span>" +
+          '<span class="mi-map__name">' + esc(info ? info.name : "Map not read") +
+            (info && info.mode && !/unknown/i.test(info.mode)
+              ? '<span class="mi-map__mode">' + esc(info.mode) + "</span>" : "") + "</span>" +
+          '<span class="mi-map__vs small"><span class="dim">vs</span>' + teamHtml(r.opponent) + "</span>" +
+          '<span class="mi-map__when mono small dim">' + esc(P.fmtClock(r.m.start)) + " · " +
+            Math.round(Math.max(0, r.m.end - r.m.start) / 60) + "m</span>" +
+          '<span></span>' +
+          '<a class="btn btn--sm btn--primary mi-map__watch" href="' + esc(vodAt(r.url, r.m.start)) +
+            '" target="_blank" rel="noopener">▶ Watch</a></li>';
+      }).join("") + "</ol></section>").join("") + "</div>";
+  }
+
+  P.mapIndex = { entry: entry, ids: ids, html: html, summary: summary, vodAt: vodAt,
+    forTeam: forTeam, teamHtml: teamHtml_ };
 })();

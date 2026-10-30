@@ -153,7 +153,7 @@
     ]
    ],
    "holdoutStarts": 20880.0,
-   "recordedAt": "2026-10-30T19:42:31+00:00"
+   "recordedAt": "2026-10-30T20:17:29+00:00"
   },
   {
    "file": "ball.v1.png",
@@ -184,7 +184,7 @@
     ]
    ],
    "holdoutStarts": 20880.0,
-   "recordedAt": "2026-10-30T19:42:31+00:00"
+   "recordedAt": "2026-10-30T20:17:29+00:00"
   },
   {
    "file": "ball.v2.png",
@@ -215,7 +215,7 @@
     ]
    ],
    "holdoutStarts": 20880.0,
-   "recordedAt": "2026-10-30T19:42:31+00:00"
+   "recordedAt": "2026-10-30T20:17:29+00:00"
   },
   {
    "file": "ball.v3.png",
@@ -246,7 +246,7 @@
     ]
    ],
    "holdoutStarts": 20880.0,
-   "recordedAt": "2026-10-30T19:42:31+00:00"
+   "recordedAt": "2026-10-30T20:17:29+00:00"
   },
   {
    "file": "bastion.png",
@@ -773,7 +773,7 @@
     ]
    ],
    "holdoutStarts": 16392.0,
-   "recordedAt": "2026-10-30T19:42:31+00:00"
+   "recordedAt": "2026-10-30T20:17:29+00:00"
   },
   {
    "file": "juno.v1.png",
@@ -804,7 +804,7 @@
     ]
    ],
    "holdoutStarts": 16392.0,
-   "recordedAt": "2026-10-30T19:42:31+00:00"
+   "recordedAt": "2026-10-30T20:17:29+00:00"
   },
   {
    "file": "juno.v2.png",
@@ -835,7 +835,7 @@
     ]
    ],
    "holdoutStarts": 16392.0,
-   "recordedAt": "2026-10-30T19:42:31+00:00"
+   "recordedAt": "2026-10-30T20:17:29+00:00"
   },
   {
    "file": "juno.v3.png",
@@ -866,7 +866,7 @@
     ]
    ],
    "holdoutStarts": 16392.0,
-   "recordedAt": "2026-10-30T19:42:31+00:00"
+   "recordedAt": "2026-10-30T20:17:29+00:00"
   },
   {
    "file": "kiriko.png",
@@ -1765,7 +1765,7 @@
     ]
    ],
    "holdoutStarts": 20880.0,
-   "recordedAt": "2026-10-30T19:42:31+00:00"
+   "recordedAt": "2026-10-30T20:17:29+00:00"
   },
   {
    "file": "rein.v1.png",
@@ -1796,7 +1796,7 @@
     ]
    ],
    "holdoutStarts": 20880.0,
-   "recordedAt": "2026-10-30T19:42:31+00:00"
+   "recordedAt": "2026-10-30T20:17:29+00:00"
   },
   {
    "file": "rein.v2.png",
@@ -1827,7 +1827,7 @@
     ]
    ],
    "holdoutStarts": 20880.0,
-   "recordedAt": "2026-10-30T19:42:31+00:00"
+   "recordedAt": "2026-10-30T20:17:29+00:00"
   },
   {
    "file": "rein.v3.png",
@@ -1858,7 +1858,7 @@
     ]
    ],
    "holdoutStarts": 20880.0,
-   "recordedAt": "2026-10-30T19:42:31+00:00"
+   "recordedAt": "2026-10-30T20:17:29+00:00"
   },
   {
    "file": "shion.png",
@@ -2261,7 +2261,7 @@
     ]
    ],
    "holdoutStarts": 16344.0,
-   "recordedAt": "2026-10-30T19:42:31+00:00"
+   "recordedAt": "2026-10-30T20:17:29+00:00"
   },
   {
    "file": "tracer.v1.png",
@@ -2292,7 +2292,7 @@
     ]
    ],
    "holdoutStarts": 16344.0,
-   "recordedAt": "2026-10-30T19:42:31+00:00"
+   "recordedAt": "2026-10-30T20:17:29+00:00"
   },
   {
    "file": "tracer.v2.png",
@@ -2323,7 +2323,7 @@
     ]
    ],
    "holdoutStarts": 16344.0,
-   "recordedAt": "2026-10-30T19:42:31+00:00"
+   "recordedAt": "2026-10-30T20:17:29+00:00"
   },
   {
    "file": "tracer.v3.png",
@@ -2516,6 +2516,14 @@
   },
   {
    "at": "2026-10-30T19:42:31+00:00",
+   "sourceVideo": "https://www.twitch.tv/videos/2812835664",
+   "sourceClip": "labelling/2812835664-owcs_8c105lnzlam",
+   "labeledBy": "template_forge --promote (held-out validated)",
+   "layoutId": "owcs_8c105lnzlam",
+   "files": 15
+  },
+  {
+   "at": "2026-10-30T20:17:29+00:00",
    "sourceVideo": "https://www.twitch.tv/videos/2812835664",
    "sourceClip": "labelling/2812835664-owcs_8c105lnzlam",
    "labeledBy": "template_forge --promote (held-out validated)",

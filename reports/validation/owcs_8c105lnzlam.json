@@ -1,10 +1,10 @@
 {
- "generatedAt": "2026-10-30T19:42:30+00:00",
+ "generatedAt": "2026-10-30T20:17:28+00:00",
  "templatesDir": "work/label-forge/_2812835664-owcs_8c105lnzlam/final",
  "evidence": {
   "sourceReport": "labelling/2812835664-owcs_8c105lnzlam",
   "layoutId": "owcs_8c105lnzlam",
-  "labeledCrops": 1953,
+  "labeledCrops": 1881,
   "labelMethod": "a person named each card on label.html"
  },
  "thresholds": {
@@ -89,21 +89,21 @@
    ],
    "separationProvable": true,
    "separationNote": "",
-   "trials": 150,
-   "correct": 43,
-   "unknown": 107,
+   "trials": 139,
+   "correct": 38,
+   "unknown": 101,
    "wrong": 0,
    "contaminated": 0,
    "confusedWith": {},
    "byState": {
     "gameplay": {
-     "trials": 150,
-     "correct": 43,
-     "accuracy": 0.287
+     "trials": 139,
+     "correct": 38,
+     "accuracy": 0.273
     }
    },
    "byLabelSource": {
-    "human-cluster": 150
+    "human-cluster": 139
    },
    "examples": [
     {
@@ -215,12 +215,12 @@
      "slot": "b2"
     }
    ],
-   "accuracy": 0.2867,
-   "meanScore": 0.6223,
+   "accuracy": 0.2734,
+   "meanScore": 0.6219,
    "minScore": 0.396,
    "minMargin": 0.001,
    "verdict": "REVIEW",
-   "why": "43/150 correct (29%), 107 UNKNOWN, 0 wrong \u2014 at or below 90% or over 2% wrong: a person double-checks"
+   "why": "38/139 correct (27%), 101 UNKNOWN, 0 wrong \u2014 at or below 90% or over 2% wrong: a person double-checks"
   },
   "cass": {
    "heroId": "cass",
@@ -972,21 +972,21 @@
    ],
    "separationProvable": true,
    "separationNote": "",
-   "trials": 173,
+   "trials": 163,
    "correct": 5,
-   "unknown": 168,
+   "unknown": 158,
    "wrong": 0,
    "contaminated": 0,
    "confusedWith": {},
    "byState": {
     "gameplay": {
-     "trials": 173,
+     "trials": 163,
      "correct": 5,
-     "accuracy": 0.029
+     "accuracy": 0.031
     }
    },
    "byLabelSource": {
-    "human-cluster": 173
+    "human-cluster": 163
    },
    "examples": [
     {
@@ -1098,12 +1098,12 @@
      "slot": "a4"
     }
    ],
-   "accuracy": 0.0289,
-   "meanScore": 0.5539,
-   "minScore": 0.31,
+   "accuracy": 0.0307,
+   "meanScore": 0.5612,
+   "minScore": 0.334,
    "minMargin": 0.008,
    "verdict": "REVIEW",
-   "why": "5/173 correct (3%), 168 UNKNOWN, 0 wrong \u2014 at or below 90% or over 2% wrong: a person double-checks"
+   "why": "5/163 correct (3%), 158 UNKNOWN, 0 wrong \u2014 at or below 90% or over 2% wrong: a person double-checks"
   },
   "mauga": {
    "heroId": "mauga",
@@ -1141,21 +1141,21 @@
    ],
    "separationProvable": true,
    "separationNote": "",
-   "trials": 75,
+   "trials": 65,
    "correct": 25,
-   "unknown": 50,
+   "unknown": 40,
    "wrong": 0,
    "contaminated": 0,
    "confusedWith": {},
    "byState": {
     "gameplay": {
-     "trials": 75,
+     "trials": 65,
      "correct": 25,
-     "accuracy": 0.333
+     "accuracy": 0.385
     }
    },
    "byLabelSource": {
-    "human-cluster": 75
+    "human-cluster": 65
    },
    "examples": [
     {
@@ -1267,12 +1267,12 @@
      "slot": "a1"
     }
    ],
-   "accuracy": 0.3333,
-   "meanScore": 0.635,
+   "accuracy": 0.3846,
+   "meanScore": 0.6495,
    "minScore": 0.454,
    "minMargin": 0.032,
    "verdict": "REVIEW",
-   "why": "25/75 correct (33%), 50 UNKNOWN, 0 wrong \u2014 at or below 90% or over 2% wrong: a person double-checks"
+   "why": "25/65 correct (38%), 40 UNKNOWN, 0 wrong \u2014 at or below 90% or over 2% wrong: a person double-checks"
   },
   "mizuki": {
    "heroId": "mizuki",
@@ -1284,21 +1284,21 @@
    ],
    "separationProvable": true,
    "separationNote": "",
-   "trials": 181,
-   "correct": 31,
-   "unknown": 150,
+   "trials": 150,
+   "correct": 28,
+   "unknown": 122,
    "wrong": 0,
    "contaminated": 0,
    "confusedWith": {},
    "byState": {
     "gameplay": {
-     "trials": 181,
-     "correct": 31,
-     "accuracy": 0.171
+     "trials": 150,
+     "correct": 28,
+     "accuracy": 0.187
     }
    },
    "byLabelSource": {
-    "human-cluster": 181
+    "human-cluster": 150
    },
    "examples": [
     {
@@ -1410,12 +1410,12 @@
      "slot": "a5"
     }
    ],
-   "accuracy": 0.1713,
-   "meanScore": 0.5898,
+   "accuracy": 0.1867,
+   "meanScore": 0.5818,
    "minScore": 0.358,
    "minMargin": 0.001,
    "verdict": "REVIEW",
-   "why": "31/181 correct (17%), 150 UNKNOWN, 0 wrong \u2014 at or below 90% or over 2% wrong: a person double-checks"
+   "why": "28/150 correct (19%), 122 UNKNOWN, 0 wrong \u2014 at or below 90% or over 2% wrong: a person double-checks"
   },
   "ram": {
    "heroId": "ram",
@@ -1992,8 +1992,8 @@
   "UNVERIFIABLE": 6
  },
  "falseMatch": {
-  "trials": 280,
-  "unknown": 279,
+  "trials": 270,
+  "unknown": 269,
   "matched": 1,
   "matchedAs": {
    "jetcat": 1
@@ -2001,7 +2001,7 @@
   "byHero": {
    "sojourn": 160,
    "bap": 54,
-   "pharah": 36,
+   "pharah": 26,
    "wuyang": 30
   },
   "examples": [
@@ -2015,15 +2015,15 @@
     "slot": "b4"
    }
   ],
-  "rate": 0.0036,
+  "rate": 0.0037,
   "passed": true,
-  "note": "280 crop(s) of heroes this set has NO template for. Every one should read UNKNOWN; 1 did not (0.4%, ceiling 2.0%)."
+  "note": "270 crop(s) of heroes this set has NO template for. Every one should read UNKNOWN; 1 did not (0.4%, ceiling 2.0%)."
  },
  "missingCrops": 0,
  "passed": false,
  "leaveOneOut": {
   "confusablePairs": [],
-  "generatedAt": "2026-10-30T19:42:31+00:00",
+  "generatedAt": "2026-10-30T20:17:28+00:00",
   "templatesDir": "/home/runner/work/OWCSComp.Tracker/OWCSComp.Tracker/work/label-forge/_2812835664-owcs_8c105lnzlam/final",
   "heroes": {
    "ball": {
@@ -2117,14 +2117,14 @@
     "note": "with lucio removed, 0/120 of its own crops were still confidently named (n/a)"
    },
    "mei": {
-    "trials": 75,
-    "unknown": 75,
+    "trials": 65,
+    "unknown": 65,
     "matched": 0,
     "rate": 0.0,
     "matchedAs": {},
     "examples": [],
     "passed": true,
-    "note": "with mei removed, 0/75 of its own crops were still confidently named (n/a)"
+    "note": "with mei removed, 0/65 of its own crops were still confidently named (n/a)"
    },
    "mizuki": {
     "trials": 120,
@@ -2187,11 +2187,11 @@
     "note": "with tracer removed, 0/21 of its own crops were still confidently named (n/a)"
    }
   },
-  "trials": 1066,
+  "trials": 1056,
   "matched": 0,
   "rate": 0.0,
   "ceiling": 0.02,
   "passed": true,
-  "note": "Leave-one-out false-match test over 1066 real crops: 0 (0.00%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%."
+  "note": "Leave-one-out false-match test over 1056 real crops: 0 (0.00%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%."
  }
 }

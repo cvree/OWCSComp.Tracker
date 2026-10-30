@@ -45,18 +45,21 @@
     const pools = {};
     ((D && D.teamHeroPools) || []).forEach((p) => { pools[p.teamId] = p; });
 
+    const known = (r) => r && !/^(unknown|all)$/i.test(r);
     set("body", '<div class="grid grid--3">' + teams.map((t) => {
       const pool = pools[t.id];
+      const seen = P.mapIndex ? P.mapIndex.forTeam(t.id) : [];
       return '<a class="card card--hoverable rv" href="team.html?id=' + encodeURIComponent(t.id) +
         '" style="text-decoration:none;color:inherit">' +
         P.teamPlate(t.id, { size: "lg" }) +
-        '<p class="dim small u-mt-4">' + esc(P.regionName(t.region)) +
-        (t.roster && t.roster.length ? " · " + t.roster.length + " players on record" : "") +
-        "</p>" +
+        '<p class="dim small u-mt-4">' + [known(t.region) ? esc(P.regionName(t.region)) : "",
+          t.roster && t.roster.length ? t.roster.length + " players on record" : "",
+          seen.length ? "▶ " + seen.length + " map" + (seen.length === 1 ? "" : "s") + " to watch" : ""]
+          .filter(Boolean).join(" · ") + "</p>" +
         (pool
           ? '<div class="comp comp--tight u-mt-4">' +
             pool.heroes.slice(0, 8).map((h) => P.heroTile(h.hero, { size: "xs" })).join("") + "</div>"
-          : '<p class="dim small u-mt-3">No approved composition data yet.</p>') +
+          : seen.length ? "" : '<p class="dim small u-mt-3">No approved composition data yet.</p>') +
         "</a>";
     }).join("") + "</div>");
   }
@@ -75,6 +78,7 @@
       { label: t.name }]));
 
     const games = P.games.all().filter((g) => g.teamA === t.id || g.teamB === t.id);
+    const seen = P.mapIndex ? P.mapIndex.forTeam(t.id) : [];
     const pool = ((D && D.teamHeroPools) || []).filter((p) => p.teamId === t.id)[0];
     const rec = ((D && D.teamMapRecords) || []).filter((r) => r.teamId === t.id)[0];
 
@@ -87,17 +91,26 @@
           esc(t.code || "?") + '">'
         : P.teamCrest(t)) +
       '</span><h1 style="font-size:clamp(1.7rem,3.4vw,2.6rem)">' + esc(t.name) + "</h1></span>" +
-      '<span class="chip chip--outline">' + esc(P.regionName(t.region)) + "</span>" +
+      (t.region && !/^(unknown|all)$/i.test(t.region)
+        ? '<span class="chip chip--outline">' + esc(P.regionName(t.region)) + "</span>" : "") +
       (t.status ? '<span class="chip chip--outline">' + esc(t.status) + "</span>" : "") +
       "</div>" +
       '<p class="lede u-mt-4">' +
       (pool
         ? "Seen playing " + pool.poolSize + " different hero(es) across " + pool.appearances +
           " approved map(s)."
-        : "No approved composition data for this team yet — nothing it has played has been " +
-          "through review.") + "</p></div>");
+        : seen.length
+          ? "On " + seen.length + " indexed map" + (seen.length === 1 ? "" : "s") +
+            " — every one a click from playing. Compositions follow once the tracker reads them."
+          : "No approved composition data for this team yet — nothing it has played has been " +
+            "through review.") + "</p></div>");
 
     const parts = [];
+    if (seen.length) {
+      parts.push('<section class="band" id="maps"><div class="sec-head"><h2>Every map, ready to watch</h2>' +
+        '<span class="dim small">read off the broadcast, nobody involved</span></div>' +
+        P.mapIndex.teamHtml(t.id) + "</section>");
+    }
 
     if (pool) {
       parts.push('<section class="band"><div class="sec-head"><h2>Hero pool</h2>' +

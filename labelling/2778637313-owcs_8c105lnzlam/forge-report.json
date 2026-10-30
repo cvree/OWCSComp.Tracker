@@ -19,12 +19,12 @@
   "note": "no crops of uncovered heroes in this manifest \u2014 the false-match half of the test did not run, so this set is unproven against portraits it has no template for"
  },
  "leaveOneOut": {
-  "trials": 1450,
-  "matched": 44,
-  "rate": 0.0303,
+  "trials": 1452,
+  "matched": 43,
+  "rate": 0.0296,
   "ceiling": 0.02,
   "passed": false,
-  "note": "Leave-one-out false-match test over 1450 real crops: 44 (3.03%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
+  "note": "Leave-one-out false-match test over 1452 real crops: 43 (2.96%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
   "confusablePairs": [
    {
     "hero": "tracer",
@@ -49,14 +49,6 @@
     "trials": 38,
     "share": 0.105,
     "note": "with no zarya template in the set, 4 of 38 real zarya portraits (11%) were confidently read as sigma instead of UNKNOWN"
-   },
-   {
-    "hero": "pharah",
-    "readAs": "cass",
-    "count": 1,
-    "trials": 11,
-    "share": 0.091,
-    "note": "with no pharah template in the set, 1 of 11 real pharah portraits (9%) were confidently read as cass instead of UNKNOWN"
    },
    {
     "hero": "winston",
@@ -122,10 +114,10 @@
   "bastion": {
    "verdict": "REVIEW",
    "trials": 199,
-   "correct": 162,
-   "unknown": 37,
+   "correct": 163,
+   "unknown": 36,
    "wrong": 0,
-   "accuracy": 0.814,
+   "accuracy": 0.819,
    "confusedWith": {},
    "cards": [
     "c11",
@@ -148,11 +140,11 @@
   },
   "cass": {
    "verdict": "VALIDATED",
-   "trials": 127,
-   "correct": 86,
-   "unknown": 41,
+   "trials": 123,
+   "correct": 87,
+   "unknown": 36,
    "wrong": 0,
-   "accuracy": 0.677,
+   "accuracy": 0.707,
    "confusedWith": {},
    "cards": [
     "c05",
@@ -348,10 +340,10 @@
   "pharah": {
    "verdict": "WEAK",
    "trials": 11,
-   "correct": 8,
-   "unknown": 3,
+   "correct": 11,
+   "unknown": 0,
    "wrong": 0,
-   "accuracy": 0.727,
+   "accuracy": 1.0,
    "confusedWith": {},
    "cards": [
     "c38",
@@ -549,19 +541,38 @@
    "c45": 12,
    "c50": 1,
    "c60": 2,
-   "c61": 1,
+   "c61": 6,
    "c65": 1
   },
-  "droppedTotal": 111,
+  "droppedTotal": 116,
   "offRole": 111,
-  "kept": 2280
+  "strayCards": [
+   "c61"
+  ],
+  "kept": 2275
  },
  "tuning": {
   "base": {
    "floor": 0.6,
    "margin": 0.25
   },
-  "chosen": null,
+  "chosen": {
+   "floor": 0.6,
+   "margin": 0.25,
+   "validated": [
+    "ana",
+    "ball",
+    "echo",
+    "mizuki",
+    "ram",
+    "sigma",
+    "sym",
+    "winston"
+   ],
+   "safe": true,
+   "looRate": 0.0025,
+   "falseMatchRate": 0.0122
+  },
   "tried": [
    {
     "floor": 0.6,
@@ -576,9 +587,9 @@
      "sym",
      "winston"
     ],
-    "safe": false,
-    "looRate": 0.0026,
-    "falseMatchRate": 0.0567
+    "safe": true,
+    "looRate": 0.0025,
+    "falseMatchRate": 0.0122
    },
    {
     "floor": 0.65,
@@ -592,9 +603,9 @@
      "sym",
      "winston"
     ],
-    "safe": false,
+    "safe": true,
     "looRate": 0.0,
-    "falseMatchRate": 0.0567
+    "falseMatchRate": 0.0122
    },
    {
     "floor": 0.7,
@@ -608,24 +619,23 @@
      "sym",
      "winston"
     ],
-    "safe": false,
+    "safe": true,
     "looRate": 0.0,
-    "falseMatchRate": 0.0567
+    "falseMatchRate": 0.0122
    }
   ]
  },
- "forgeVersion": 4,
+ "forgeVersion": 5,
  "promote": true,
  "labelsDigest": "12d3d5f564e12380f529bd955f6cea24ac36e7f5bae9db6e62f0b59a151ffdd6",
  "productionSet": {
   "safe": false,
   "falseMatch": {
-   "trials": 162,
-   "unknown": 153,
-   "matched": 9,
+   "trials": 154,
+   "unknown": 150,
+   "matched": 4,
    "matchedAs": {
-    "sigma": 4,
-    "cass": 5
+    "sigma": 4
    },
    "byHero": {
     "zarya": 49,
@@ -634,21 +644,20 @@
     "hog": 14,
     "emre": 11,
     "brig": 16,
-    "juno": 8,
     "widow": 7,
     "doomfist": 6
    },
-   "rate": 0.0556,
+   "rate": 0.026,
    "passed": false,
-   "note": "162 crop(s) of heroes this set has NO template for. Every one should read UNKNOWN; 9 did not (5.6%, ceiling 2.0%)."
+   "note": "154 crop(s) of heroes this set has NO template for. Every one should read UNKNOWN; 4 did not (2.6%, ceiling 2.0%)."
   },
   "leaveOneOut": {
-   "trials": 1410,
+   "trials": 1420,
    "matched": 4,
    "rate": 0.0028,
    "ceiling": 0.02,
    "passed": true,
-   "note": "Leave-one-out false-match test over 1410 real crops: 4 (0.28%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
+   "note": "Leave-one-out false-match test over 1420 real crops: 4 (0.28%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
    "confusablePairs": [
     {
      "hero": "bap",
@@ -679,6 +688,7 @@
    "genji": "REVIEW",
    "illari": "REVIEW",
    "jetcat": "VALIDATED",
+   "juno": "WEAK",
    "kiriko": "REVIEW",
    "lucio": "VALIDATED",
    "mauga": "VALIDATED",
@@ -686,6 +696,7 @@
    "mizuki": "VALIDATED",
    "ram": "VALIDATED",
    "reaper": "REVIEW",
+   "rein": "UNVERIFIABLE",
    "shion": "UNVERIFIABLE",
    "sigma": "VALIDATED",
    "sojourn": "REVIEW",

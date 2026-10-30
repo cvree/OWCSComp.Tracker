@@ -24,14 +24,16 @@
   <section class="shell shell--wide">
     <div class="opener">
       <div class="page-head page-head--tight">
-        <p class="eyebrow eyebrow--gold">OWCS data</p>
-        <h1>Turn broadcasts into<br><span class="hl hl--gold">reviewed match data.</span></h1>
-        <p class="lede">Every hero composition and swap, read automatically off the broadcast
-          HUD. A slot the tracker cannot read stays unknown — never a guess — and every
-          line-up it does publish links to the frame it came from, so anyone can check it.</p>
+        <p class="eyebrow eyebrow--gold">OWCS · pro play, read off the broadcast</p>
+        <h1>Every OWCS map.<br><span class="hl hl--gold">Named, timed, ready to watch.</span></h1>
+        <p class="lede">The tracker reads each broadcast's own HUD — the map, both teams, the
+          heroes — and turns a twelve-hour VOD into a list you can jump straight into.
+          Anything it is not sure of is marked, never guessed, and every line-up links to
+          the frame it was read from.</p>
         <div class="row u-mt-4">
-          <a class="btn btn--primary" href="submit.html">Submit a broadcast</a>
-          <a class="btn btn--ghost" href="games.html">Browse games</a>
+          <a class="btn btn--primary" href="#watch-band">▶ Watch any map</a>
+          <a class="btn btn--ghost" href="teams.html">Teams</a>
+          <a class="btn btn--quiet" href="submit.html">Submit a broadcast</a>
         </div>
         <div id="mode-status" class="u-mt-4" style="max-width:70ch"></div>
       </div>
@@ -49,6 +51,16 @@
     <p class="dim small" id="watch-sub"></p>
     <div id="watch"></div>
   </section>
+
+  <!-- Every team on record, by how much of them there is to watch. -->
+  <section class="shell shell--wide band" id="field-band" hidden aria-labelledby="h-field">
+    <div class="sec-head">
+      <h2 id="h-field">The field</h2>
+      <a class="sec-link" href="teams.html">Every team →</a>
+    </div>
+    <div class="field" id="field"></div>
+  </section>
+
 
   <section class="shell shell--wide band" id="story-band" hidden aria-labelledby="h-story">
     <div class="sec-head">

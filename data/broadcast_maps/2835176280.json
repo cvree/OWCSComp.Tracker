@@ -13,7 +13,7 @@
    "series": 1,
    "start": 3360,
    "team_a": {
-    "id": null,
+    "id": "t1",
     "name": "T1"
    },
    "team_b": {
@@ -30,7 +30,7 @@
    "series": 1,
    "start": 4710,
    "team_a": {
-    "id": null,
+    "id": "t1",
     "name": "T1"
    },
    "team_b": {
@@ -49,7 +49,7 @@
    "series": 1,
    "start": 5580,
    "team_a": {
-    "id": null,
+    "id": "t1",
     "name": "T1"
    },
    "team_b": {
@@ -70,7 +70,7 @@
     "name": "TWISTED MINDS"
    },
    "team_b": {
-    "id": null,
+    "id": "weibo-gaming",
     "name": "WEIBO GAMING"
    }
   },
@@ -83,7 +83,7 @@
    "series": 2,
    "start": 9390,
    "team_a": {
-    "id": null,
+    "id": "weibo-gaming",
     "name": "WEIBO GAMING"
    },
    "team_b": {
@@ -100,7 +100,7 @@
    "series": 2,
    "start": 10590,
    "team_a": {
-    "id": null,
+    "id": "weibo-gaming",
     "name": "WEIBO GAMING"
    },
    "team_b": {
@@ -121,7 +121,7 @@
     "name": "TWISTED MINDS"
    },
    "team_b": {
-    "id": null,
+    "id": "weibo-gaming",
     "name": "WEIBO GAMING"
    }
   },
@@ -138,7 +138,7 @@
     "name": "TWISTED MINDS"
    },
    "team_b": {
-    "id": null,
+    "id": "weibo-gaming",
     "name": "WEIBO GAMING"
    }
   },
@@ -151,11 +151,11 @@
    "series": 4,
    "start": 16230,
    "team_a": {
-    "id": null,
+    "id": "t1",
     "name": "T1"
    },
    "team_b": {
-    "id": null,
+    "id": "weibo-gaming",
     "name": "WEIBO GAMING"
    }
   },
@@ -170,11 +170,11 @@
    "series": 4,
    "start": 17310,
    "team_a": {
-    "id": null,
+    "id": "t1",
     "name": "T1"
    },
    "team_b": {
-    "id": null,
+    "id": "weibo-gaming",
     "name": "WEIBO GAMING"
    }
   },
@@ -189,11 +189,11 @@
    "series": 4,
    "start": 19260,
    "team_a": {
-    "id": null,
+    "id": "t1",
     "name": "T1"
    },
    "team_b": {
-    "id": null,
+    "id": "weibo-gaming",
     "name": "WEIBO GAMING"
    }
   },

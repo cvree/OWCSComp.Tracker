@@ -96,18 +96,33 @@ jobs:
           python pipeline/live_ingest.py --url "$URL" --layout "layouts/$LAYOUT.json" \
             --out probe --step "$STEP" 2>&1 | tee probe.log
 
-      - name: Publish the map index
+      - name: Publish the map index and its teams
         id: publish
         if: steps.which.outputs.url != ''
         shell: bash
+        env:
+          URL: ${{ steps.which.outputs.url }}
         run: |
           set -euo pipefail
-          python pipeline/broadcast_maps.py --from-timeline probe/timeline.json --index
+          python pipeline/broadcast_maps.py --from-timeline probe/timeline.json
+          # every team the broadcast named becomes a team, with the logo cut
+          # from the HUD (the frames are still cached on this runner)
+          python pipeline/broadcast_teams.py --timeline probe/timeline.json --url "$URL"
+          python pipeline/broadcast_maps.py --index
           python pipeline/broadcast_maps.py --index --check
+          if [ -n "$(git status --porcelain data/owcs.sqlite)" ]; then
+            python pipeline/export_data.py --public
+            python pipeline/export_data.py --check --public
+            python pipeline/build_asset_manifest.py
+            python pipeline/test_assets.py
+          fi
           python pipeline/test_live_identity.py
+          python pipeline/test_broadcast_teams.py
           git config user.name  "owcs-live-probe[bot]"
           git config user.email "actions@users.noreply.github.com"
-          git add data/broadcast_maps assets/data/broadcast_maps.v1.js
+          git add data/broadcast_maps assets/data/broadcast_maps.v1.js data/owcs.sqlite \
+            assets/img/teams assets/data/public_data.v1.js assets/js/data.js \
+            assets/data/asset_manifest.json assets/data/team_asset_sources.json
           if git diff --cached --quiet; then
             echo "committed=false" >> "$GITHUB_OUTPUT"; exit 0
           fi
@@ -123,7 +138,8 @@ jobs:
           echo "committed=true" >> "$GITHUB_OUTPUT"
 
       - name: Redeploy the site
-        if: steps.publish.outputs.committed == 'true'
+        # the Pages environment only deploys from main
+        if: steps.publish.outputs.committed == 'true' && github.ref_name == 'main'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh workflow run pages.yml --ref "${GITHUB_REF_NAME}"

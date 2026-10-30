@@ -365,6 +365,7 @@
   },
   "droppedTotal": 32,
   "offRole": 32,
+  "strayCards": [],
   "kept": 1487
  },
  "tuning": {
@@ -446,7 +447,7 @@
    }
   ]
  },
- "forgeVersion": 4,
+ "forgeVersion": 5,
  "promote": true,
  "labelsDigest": "f371530cc21dda769aba308353c772c14a7d2413dd17bcb72540cd848d98550f",
  "productionSet": {
@@ -467,11 +468,11 @@
   },
   "leaveOneOut": {
    "trials": 995,
-   "matched": 20,
-   "rate": 0.0201,
+   "matched": 21,
+   "rate": 0.0211,
    "ceiling": 0.02,
    "passed": false,
-   "note": "Leave-one-out false-match test over 995 real crops: 20 (2.01%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
+   "note": "Leave-one-out false-match test over 995 real crops: 21 (2.11%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
    "confusablePairs": [
     {
      "hero": "sojourn",
@@ -480,6 +481,14 @@
      "trials": 108,
      "share": 0.167,
      "note": "with no sojourn template in the set, 18 of 108 real sojourn portraits (17%) were confidently read as vendetta instead of UNKNOWN"
+    },
+    {
+     "hero": "dva",
+     "readAs": "mauga",
+     "count": 1,
+     "trials": 44,
+     "share": 0.023,
+     "note": "with no dva template in the set, 1 of 44 real dva portraits (2%) were confidently read as mauga instead of UNKNOWN"
     },
     {
      "hero": "sym",
@@ -508,13 +517,15 @@
    "echo": "UNVERIFIABLE",
    "emre": "REVIEW",
    "jetcat": "VALIDATED",
+   "juno": "UNVERIFIABLE",
    "kiriko": "REVIEW",
    "lucio": "VALIDATED",
-   "mauga": "VALIDATED",
+   "mauga": "REVIEW",
    "mei": "UNVERIFIABLE",
    "mizuki": "UNVERIFIABLE",
    "ram": "VALIDATED",
    "reaper": "VALIDATED",
+   "rein": "UNVERIFIABLE",
    "shion": "VALIDATED",
    "sigma": "UNVERIFIABLE",
    "sojourn": "REVIEW",

@@ -21,12 +21,12 @@
   "note": "5 crop(s) of heroes this set has NO template for. Every one should read UNKNOWN; 0 did not (0.0%, ceiling 2.0%)."
  },
  "leaveOneOut": {
-  "trials": 1041,
-  "matched": 55,
-  "rate": 0.0528,
+  "trials": 1030,
+  "matched": 57,
+  "rate": 0.0553,
   "ceiling": 0.02,
   "passed": false,
-  "note": "Leave-one-out false-match test over 1041 real crops: 55 (5.28%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
+  "note": "Leave-one-out false-match test over 1030 real crops: 57 (5.53%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
   "confusablePairs": [
    {
     "hero": "sojourn",
@@ -55,18 +55,10 @@
    {
     "hero": "mizuki",
     "readAs": "lucio",
-    "count": 3,
-    "trials": 99,
-    "share": 0.03,
-    "note": "with no mizuki template in the set, 3 of 99 real mizuki portraits (3%) were confidently read as lucio instead of UNKNOWN"
-   },
-   {
-    "hero": "lucio",
-    "readAs": "mizuki",
-    "count": 1,
-    "trials": 87,
-    "share": 0.011,
-    "note": "with no lucio template in the set, 1 of 87 real lucio portraits (1%) were confidently read as mizuki instead of UNKNOWN"
+    "count": 6,
+    "trials": 106,
+    "share": 0.057,
+    "note": "with no mizuki template in the set, 6 of 106 real mizuki portraits (6%) were confidently read as lucio instead of UNKNOWN"
    },
    {
     "hero": "sojourn",
@@ -106,11 +98,11 @@
   },
   "bastion": {
    "verdict": "REVIEW",
-   "trials": 102,
-   "correct": 89,
+   "trials": 101,
+   "correct": 88,
    "unknown": 13,
    "wrong": 0,
-   "accuracy": 0.873,
+   "accuracy": 0.871,
    "confusedWith": {},
    "cards": [
     "c11",
@@ -188,11 +180,11 @@
   },
   "lucio": {
    "verdict": "REVIEW",
-   "trials": 124,
-   "correct": 102,
-   "unknown": 22,
+   "trials": 116,
+   "correct": 96,
+   "unknown": 20,
    "wrong": 0,
-   "accuracy": 0.823,
+   "accuracy": 0.828,
    "confusedWith": {},
    "cards": [
     "c07",
@@ -204,11 +196,11 @@
   },
   "mei": {
    "verdict": "REVIEW",
-   "trials": 68,
+   "trials": 58,
    "correct": 34,
-   "unknown": 34,
+   "unknown": 24,
    "wrong": 0,
-   "accuracy": 0.5,
+   "accuracy": 0.586,
    "confusedWith": {},
    "cards": [
     "c25",
@@ -219,11 +211,11 @@
   },
   "mizuki": {
    "verdict": "REVIEW",
-   "trials": 150,
-   "correct": 124,
-   "unknown": 26,
+   "trials": 132,
+   "correct": 75,
+   "unknown": 57,
    "wrong": 0,
-   "accuracy": 0.827,
+   "accuracy": 0.568,
    "confusedWith": {},
    "cards": [
     "c16",
@@ -236,12 +228,12 @@
    ]
   },
   "pharah": {
-   "verdict": "REVIEW",
-   "trials": 20,
-   "correct": 16,
-   "unknown": 4,
+   "verdict": "WEAK",
+   "trials": 8,
+   "correct": 6,
+   "unknown": 2,
    "wrong": 0,
-   "accuracy": 0.8,
+   "accuracy": 0.75,
    "confusedWith": {},
    "cards": [
     "c29",
@@ -308,10 +300,10 @@
   "sym": {
    "verdict": "REVIEW",
    "trials": 228,
-   "correct": 126,
-   "unknown": 102,
+   "correct": 123,
+   "unknown": 105,
    "wrong": 0,
-   "accuracy": 0.553,
+   "accuracy": 0.539,
    "confusedWith": {},
    "cards": [
     "c01",
@@ -376,10 +368,17 @@
    "ball.v1.png",
    "ball.v2.png",
    "ball.v3.png",
+   "juno.png",
+   "juno.v1.png",
+   "juno.v2.png",
+   "juno.v3.png",
+   "rein.png",
+   "rein.v1.png",
+   "rein.v2.png",
+   "rein.v3.png",
    "tracer.png",
    "tracer.v1.png",
-   "tracer.v2.png",
-   "tracer.v3.png"
+   "tracer.v2.png"
   ],
   "refused": {
    "bap": "REVIEW",
@@ -391,7 +390,7 @@
    "lucio": "REVIEW",
    "mei": "REVIEW",
    "mizuki": "REVIEW",
-   "pharah": "REVIEW",
+   "pharah": "WEAK",
    "shion": "WEAK",
    "sigma": "REVIEW",
    "sojourn": "REVIEW",
@@ -410,13 +409,29 @@
    "c13": 12,
    "c14": 1,
    "c39": 4,
+   "c40": 15,
    "c43": 3,
+   "c45": 11,
+   "c46": 11,
+   "c47": 10,
+   "c49": 10,
+   "c50": 10,
    "c54": 3,
-   "c56": 1
+   "c56": 1,
+   "c57": 5
   },
-  "droppedTotal": 40,
+  "droppedTotal": 112,
   "offRole": 40,
-  "kept": 1953
+  "strayCards": [
+   "c40",
+   "c45",
+   "c46",
+   "c47",
+   "c49",
+   "c50",
+   "c57"
+  ],
+  "kept": 1881
  },
  "tuning": {
   "base": {
@@ -428,14 +443,13 @@
    "margin": 0.25,
    "validated": [
     "ball",
-    "bastion",
     "juno",
     "rein",
     "tracer"
    ],
    "safe": true,
    "looRate": 0.0,
-   "falseMatchRate": 0.0056
+   "falseMatchRate": 0.0059
   },
   "tried": [
    {
@@ -443,21 +457,19 @@
     "margin": 0.25,
     "validated": [
      "ball",
-     "bastion",
      "juno",
      "rein",
      "tracer"
     ],
     "safe": true,
     "looRate": 0.0,
-    "falseMatchRate": 0.0056
+    "falseMatchRate": 0.0059
    },
    {
     "floor": 0.65,
     "margin": 0.25,
     "validated": [
      "ball",
-     "bastion",
      "juno",
      "rein",
      "tracer"
@@ -481,14 +493,14 @@
    }
   ]
  },
- "forgeVersion": 4,
+ "forgeVersion": 5,
  "promote": true,
  "labelsDigest": "f73b403c58b2c0b744ba9c897fb9447736d1b194ddf5c500d87f26b290b80e02",
  "productionSet": {
   "safe": true,
   "falseMatch": {
-   "trials": 280,
-   "unknown": 279,
+   "trials": 270,
+   "unknown": 269,
    "matched": 1,
    "matchedAs": {
     "jetcat": 1
@@ -496,20 +508,20 @@
    "byHero": {
     "sojourn": 160,
     "bap": 54,
-    "pharah": 36,
+    "pharah": 26,
     "wuyang": 30
    },
-   "rate": 0.0036,
+   "rate": 0.0037,
    "passed": true,
-   "note": "280 crop(s) of heroes this set has NO template for. Every one should read UNKNOWN; 1 did not (0.4%, ceiling 2.0%)."
+   "note": "270 crop(s) of heroes this set has NO template for. Every one should read UNKNOWN; 1 did not (0.4%, ceiling 2.0%)."
   },
   "leaveOneOut": {
-   "trials": 1066,
+   "trials": 1056,
    "matched": 0,
    "rate": 0.0,
    "ceiling": 0.02,
    "passed": true,
-   "note": "Leave-one-out false-match test over 1066 real crops: 0 (0.00%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
+   "note": "Leave-one-out false-match test over 1056 real crops: 0 (0.00%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
    "confusablePairs": []
   },
   "verdicts": {

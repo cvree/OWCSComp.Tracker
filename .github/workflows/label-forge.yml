@@ -21,7 +21,10 @@
 name: label-forge
 
 on:
+  # main only: a branch that merely carries a labels.json commit (any PR
+  # that brings main in) must not forge into itself or redeploy the site.
   push:
+    branches: [main]
     paths:
       - "labelling/*/labels.json"
   # A run replaced in the queue, or a push this workflow never saw, leaves a
@@ -168,7 +171,8 @@ jobs:
           echo "committed=true" >> "$GITHUB_OUTPUT"
 
       - name: Redeploy the site
-        if: steps.commit.outputs.committed == 'true'
+        # the Pages environment only deploys from main
+        if: steps.commit.outputs.committed == 'true' && github.ref_name == 'main'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh workflow run pages.yml --ref "${GITHUB_REF_NAME}"

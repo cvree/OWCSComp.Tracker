@@ -16,6 +16,7 @@
     P.api.mountStatus("mode-status", { compact: true });
     renderShowcase();
     renderWatch();
+    renderField();
     renderStory();
     renderTiles();
     renderAutofill();
@@ -44,6 +45,27 @@
       P.mapIndex.summary(newest) + " — read off the broadcast, nobody involved.";
     document.getElementById("watch-link").href = "game.html?video=" + encodeURIComponent(newest) + "#maps";
     document.getElementById("watch").innerHTML = P.mapIndex.html(newest, { limit: 3 });
+    band.hidden = false;
+  }
+
+  /* ------------------------------------------------------------ field
+     Every team, its mark and how many maps of it there are to watch —
+     the most-watched first. A team with no logo yet shows its crest. */
+  function renderField() {
+    const band = document.getElementById("field-band");
+    if (!band) return;
+    const teams = P.teams().map((t) => ({ t: t,
+      n: P.mapIndex ? P.mapIndex.forTeam(t.id).length : 0 }))
+      .sort((a, b) => b.n - a.n || a.t.name.localeCompare(b.t.name));
+    if (!teams.length) return;
+    document.getElementById("field").innerHTML = teams.map(({ t, n }) =>
+      '<a class="field__team" href="team.html?id=' + encodeURIComponent(t.id) + '">' +
+        '<span class="field__logo">' + (t.logoUrl
+          ? '<img src="' + esc(t.logoUrl) + '" alt="" width="48" height="48" loading="lazy">'
+          : P.teamCrest(t)) + "</span>" +
+        '<span class="field__name">' + esc(t.name) + "</span>" +
+        '<span class="field__n">' + (n ? "▶ " + n + " map" + (n === 1 ? "" : "s") : "&nbsp;") + "</span></a>"
+    ).join("");
     band.hidden = false;
   }
 
