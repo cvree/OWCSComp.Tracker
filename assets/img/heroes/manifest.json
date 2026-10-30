@@ -63,7 +63,7 @@
    "size": 23
   },
   "mauga": {
-   "file": "templates/owcs_jksix_qwc/mauga.v3.png",
+   "file": "templates/owcs_jksix_qwc/mauga.v2.png",
    "source": "owcs_jksix_qwc",
    "score": 6.2625,
    "size": 22
@@ -113,7 +113,7 @@
   "sojourn": {
    "file": "templates/owcs_jksix_qwc/sojourn.v3.png",
    "source": "owcs_jksix_qwc",
-   "score": 6.187,
+   "score": 5.9386,
    "size": 22
   },
   "sym": {
