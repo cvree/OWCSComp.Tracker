@@ -1,0 +1,496 @@
+{
+ "schema": "label-forge-report.v1",
+ "batchId": "nepal-qad-twis",
+ "layoutId": "owcs_jksix_qwc",
+ "templatesDir": "templates/owcs_jksix_qwc",
+ "labelledBy": "cv",
+ "labelledAt": "2026-10-30T19:42:06Z",
+ "cardsNamed": 18,
+ "templatesWritten": 32,
+ "passed": true,
+ "falseMatch": {
+  "trials": 10,
+  "unknown": 10,
+  "matched": 0,
+  "matchedAs": {},
+  "byHero": {
+   "sigma": 5,
+   "mizuki": 5
+  },
+  "rate": 0.0,
+  "passed": true,
+  "note": "10 crop(s) of heroes this set has NO template for. Every one should read UNKNOWN; 0 did not (0.0%, ceiling 2.0%)."
+ },
+ "leaveOneOut": {
+  "trials": 611,
+  "matched": 0,
+  "rate": 0.0,
+  "ceiling": 0.02,
+  "passed": true,
+  "note": "Leave-one-out false-match test over 611 real crops: 0 (0.00%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
+  "confusablePairs": []
+ },
+ "heroes": {
+  "dva": {
+   "verdict": "VALIDATED",
+   "trials": 53,
+   "correct": 53,
+   "unknown": 0,
+   "wrong": 0,
+   "accuracy": 1.0,
+   "confusedWith": {},
+   "cards": [
+    "c03"
+   ]
+  },
+  "juno": {
+   "verdict": "VALIDATED",
+   "trials": 93,
+   "correct": 93,
+   "unknown": 0,
+   "wrong": 0,
+   "accuracy": 1.0,
+   "confusedWith": {},
+   "cards": [
+    "c09",
+    "c10"
+   ]
+  },
+  "kiriko": {
+   "verdict": "VALIDATED",
+   "trials": 106,
+   "correct": 106,
+   "unknown": 0,
+   "wrong": 0,
+   "accuracy": 1.0,
+   "confusedWith": {},
+   "cards": [
+    "c00",
+    "c08"
+   ]
+  },
+  "lucio": {
+   "verdict": "VALIDATED",
+   "trials": 126,
+   "correct": 126,
+   "unknown": 0,
+   "wrong": 0,
+   "accuracy": 1.0,
+   "confusedWith": {},
+   "cards": [
+    "c02",
+    "c13",
+    "c15"
+   ]
+  },
+  "mauga": {
+   "verdict": "VALIDATED",
+   "trials": 108,
+   "correct": 108,
+   "unknown": 0,
+   "wrong": 0,
+   "accuracy": 1.0,
+   "confusedWith": {},
+   "cards": [
+    "c07",
+    "c12"
+   ]
+  },
+  "shion": {
+   "verdict": "VALIDATED",
+   "trials": 109,
+   "correct": 109,
+   "unknown": 0,
+   "wrong": 0,
+   "accuracy": 1.0,
+   "confusedWith": {},
+   "cards": [
+    "c05",
+    "c11"
+   ]
+  },
+  "sojourn": {
+   "verdict": "VALIDATED",
+   "trials": 58,
+   "correct": 58,
+   "unknown": 0,
+   "wrong": 0,
+   "accuracy": 1.0,
+   "confusedWith": {},
+   "cards": [
+    "c04"
+   ]
+  },
+  "sym": {
+   "verdict": "VALIDATED",
+   "trials": 136,
+   "correct": 136,
+   "unknown": 0,
+   "wrong": 0,
+   "accuracy": 1.0,
+   "confusedWith": {},
+   "cards": [
+    "c01",
+    "c06",
+    "c14"
+   ]
+  }
+ },
+ "promotion": {
+  "promotedHeroes": [
+   "dva",
+   "juno",
+   "kiriko",
+   "lucio",
+   "mauga",
+   "shion",
+   "sojourn",
+   "sym"
+  ],
+  "promoted": [
+   "dva.png",
+   "dva.v1.png",
+   "dva.v2.png",
+   "dva.v3.png",
+   "juno.png",
+   "juno.v1.png",
+   "juno.v2.png",
+   "juno.v3.png",
+   "kiriko.png",
+   "kiriko.v1.png",
+   "kiriko.v2.png",
+   "kiriko.v3.png",
+   "lucio.png",
+   "lucio.v1.png",
+   "lucio.v2.png",
+   "lucio.v3.png",
+   "mauga.png",
+   "mauga.v1.png",
+   "mauga.v2.png",
+   "mauga.v3.png",
+   "shion.png",
+   "shion.v1.png",
+   "shion.v2.png",
+   "shion.v3.png",
+   "sojourn.png",
+   "sojourn.v1.png",
+   "sojourn.v2.png",
+   "sojourn.v3.png",
+   "sym.png",
+   "sym.v1.png",
+   "sym.v2.png",
+   "sym.v3.png"
+  ],
+  "superseded": [
+   "dva.png",
+   "dva.v1.png",
+   "dva.v2.png",
+   "dva.v3.png",
+   "juno.png",
+   "juno.v1.png",
+   "juno.v2.png",
+   "juno.v3.png",
+   "kiriko.png",
+   "kiriko.v1.png",
+   "kiriko.v2.png",
+   "kiriko.v3.png",
+   "lucio.png",
+   "lucio.v1.png",
+   "lucio.v2.png",
+   "lucio.v3.png",
+   "mauga.png",
+   "mauga.v1.png",
+   "mauga.v2.png",
+   "mauga.v3.png",
+   "shion.png",
+   "shion.v1.png",
+   "shion.v2.png",
+   "shion.v3.png",
+   "sojourn.png",
+   "sojourn.v1.png",
+   "sojourn.v2.png",
+   "sojourn.v3.png",
+   "sym.png",
+   "sym.v1.png",
+   "sym.v2.png",
+   "sym.v3.png"
+  ],
+  "refused": {},
+  "dryRun": false
+ },
+ "cleaning": {
+  "threshold": 0.45,
+  "dropped": {},
+  "droppedTotal": 0,
+  "offRole": 0,
+  "kept": 1145
+ },
+ "tuning": {
+  "base": {
+   "floor": 0.6,
+   "margin": 0.12
+  },
+  "chosen": {
+   "floor": 0.6,
+   "margin": 0.12,
+   "validated": [
+    "dva",
+    "juno",
+    "kiriko",
+    "lucio",
+    "mauga",
+    "shion",
+    "sojourn",
+    "sym"
+   ],
+   "safe": true,
+   "looRate": 0.0,
+   "falseMatchRate": 0.0
+  },
+  "tried": [
+   {
+    "floor": 0.6,
+    "margin": 0.12,
+    "validated": [
+     "dva",
+     "juno",
+     "kiriko",
+     "lucio",
+     "mauga",
+     "shion",
+     "sojourn",
+     "sym"
+    ],
+    "safe": true,
+    "looRate": 0.0,
+    "falseMatchRate": 0.0
+   },
+   {
+    "floor": 0.6,
+    "margin": 0.15,
+    "validated": [
+     "dva",
+     "juno",
+     "kiriko",
+     "lucio",
+     "mauga",
+     "shion",
+     "sojourn",
+     "sym"
+    ],
+    "safe": true,
+    "looRate": 0.0,
+    "falseMatchRate": 0.0
+   },
+   {
+    "floor": 0.6,
+    "margin": 0.2,
+    "validated": [
+     "dva",
+     "juno",
+     "kiriko",
+     "lucio",
+     "mauga",
+     "shion",
+     "sojourn",
+     "sym"
+    ],
+    "safe": true,
+    "looRate": 0.0,
+    "falseMatchRate": 0.0
+   },
+   {
+    "floor": 0.6,
+    "margin": 0.25,
+    "validated": [
+     "dva",
+     "juno",
+     "kiriko",
+     "lucio",
+     "mauga",
+     "shion",
+     "sojourn",
+     "sym"
+    ],
+    "safe": true,
+    "looRate": 0.0,
+    "falseMatchRate": 0.0
+   },
+   {
+    "floor": 0.65,
+    "margin": 0.12,
+    "validated": [
+     "dva",
+     "juno",
+     "kiriko",
+     "lucio",
+     "mauga",
+     "shion",
+     "sojourn",
+     "sym"
+    ],
+    "safe": true,
+    "looRate": 0.0,
+    "falseMatchRate": 0.0
+   },
+   {
+    "floor": 0.65,
+    "margin": 0.15,
+    "validated": [
+     "dva",
+     "juno",
+     "kiriko",
+     "lucio",
+     "mauga",
+     "shion",
+     "sojourn",
+     "sym"
+    ],
+    "safe": true,
+    "looRate": 0.0,
+    "falseMatchRate": 0.0
+   },
+   {
+    "floor": 0.65,
+    "margin": 0.2,
+    "validated": [
+     "dva",
+     "juno",
+     "kiriko",
+     "lucio",
+     "mauga",
+     "shion",
+     "sojourn",
+     "sym"
+    ],
+    "safe": true,
+    "looRate": 0.0,
+    "falseMatchRate": 0.0
+   },
+   {
+    "floor": 0.65,
+    "margin": 0.25,
+    "validated": [
+     "dva",
+     "juno",
+     "kiriko",
+     "lucio",
+     "mauga",
+     "shion",
+     "sojourn",
+     "sym"
+    ],
+    "safe": true,
+    "looRate": 0.0,
+    "falseMatchRate": 0.0
+   },
+   {
+    "floor": 0.7,
+    "margin": 0.12,
+    "validated": [
+     "dva",
+     "juno",
+     "kiriko",
+     "lucio",
+     "mauga",
+     "shion",
+     "sojourn",
+     "sym"
+    ],
+    "safe": true,
+    "looRate": 0.0,
+    "falseMatchRate": 0.0
+   },
+   {
+    "floor": 0.7,
+    "margin": 0.15,
+    "validated": [
+     "dva",
+     "juno",
+     "kiriko",
+     "lucio",
+     "mauga",
+     "shion",
+     "sojourn",
+     "sym"
+    ],
+    "safe": true,
+    "looRate": 0.0,
+    "falseMatchRate": 0.0
+   },
+   {
+    "floor": 0.7,
+    "margin": 0.2,
+    "validated": [
+     "dva",
+     "juno",
+     "kiriko",
+     "lucio",
+     "mauga",
+     "shion",
+     "sojourn",
+     "sym"
+    ],
+    "safe": true,
+    "looRate": 0.0,
+    "falseMatchRate": 0.0
+   },
+   {
+    "floor": 0.7,
+    "margin": 0.25,
+    "validated": [
+     "dva",
+     "juno",
+     "kiriko",
+     "lucio",
+     "mauga",
+     "shion",
+     "sojourn",
+     "sym"
+    ],
+    "safe": true,
+    "looRate": 0.0,
+    "falseMatchRate": 0.0
+   }
+  ]
+ },
+ "forgeVersion": 4,
+ "promote": true,
+ "labelsDigest": "29d542ee2c2b3d70687e65c4e93ec758e4fa33a7ac63a88a0a6891d63449cb81",
+ "productionSet": {
+  "safe": true,
+  "falseMatch": {
+   "trials": 10,
+   "unknown": 10,
+   "matched": 0,
+   "matchedAs": {},
+   "byHero": {
+    "sigma": 5,
+    "mizuki": 5
+   },
+   "rate": 0.0,
+   "passed": true,
+   "note": "10 crop(s) of heroes this set has NO template for. Every one should read UNKNOWN; 0 did not (0.0%, ceiling 2.0%)."
+  },
+  "leaveOneOut": {
+   "trials": 611,
+   "matched": 0,
+   "rate": 0.0,
+   "ceiling": 0.02,
+   "passed": true,
+   "note": "Leave-one-out false-match test over 611 real crops: 0 (0.00%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
+   "confusablePairs": []
+  },
+  "verdicts": {
+   "dva": "VALIDATED",
+   "juno": "VALIDATED",
+   "kiriko": "VALIDATED",
+   "lucio": "VALIDATED",
+   "mauga": "VALIDATED",
+   "shion": "VALIDATED",
+   "sojourn": "VALIDATED",
+   "sym": "VALIDATED"
+  },
+  "suspectTemplates": []
+ }
+}
