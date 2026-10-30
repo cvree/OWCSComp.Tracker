@@ -1,0 +1,814 @@
+{
+ "schema": "label-forge-report.v1",
+ "batchId": "2778637313-owcs_8c105lnzlam",
+ "layoutId": "owcs_8c105lnzlam",
+ "templatesDir": "templates/owcs_8c105lnzlam",
+ "labelledBy": "cvv",
+ "labelledAt": "2026-10-30T08:14:32Z",
+ "cardsNamed": 66,
+ "templatesWritten": 112,
+ "passed": false,
+ "falseMatch": {
+  "trials": 0,
+  "unknown": 0,
+  "matched": 0,
+  "matchedAs": {},
+  "byHero": {},
+  "rate": 0.0,
+  "passed": true,
+  "note": "no crops of uncovered heroes in this manifest \u2014 the false-match half of the test did not run, so this set is unproven against portraits it has no template for"
+ },
+ "leaveOneOut": {
+  "trials": 1517,
+  "matched": 320,
+  "rate": 0.2109,
+  "ceiling": 0.02,
+  "passed": false,
+  "note": "Leave-one-out false-match test over 1517 real crops: 320 (21.09%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
+  "confusablePairs": [
+   {
+    "hero": "emre",
+    "readAs": "ball",
+    "count": 3,
+    "trials": 3,
+    "share": 1.0,
+    "note": "with no emre template in the set, 3 of 3 real emre portraits (100%) were confidently read as ball instead of UNKNOWN"
+   },
+   {
+    "hero": "sigma",
+    "readAs": "echo",
+    "count": 62,
+    "trials": 71,
+    "share": 0.873,
+    "note": "with no sigma template in the set, 62 of 71 real sigma portraits (87%) were confidently read as echo instead of UNKNOWN"
+   },
+   {
+    "hero": "dva",
+    "readAs": "kiriko",
+    "count": 59,
+    "trials": 102,
+    "share": 0.578,
+    "note": "with no dva template in the set, 59 of 102 real dva portraits (58%) were confidently read as kiriko instead of UNKNOWN"
+   },
+   {
+    "hero": "pharah",
+    "readAs": "cass",
+    "count": 5,
+    "trials": 11,
+    "share": 0.455,
+    "note": "with no pharah template in the set, 5 of 11 real pharah portraits (45%) were confidently read as cass instead of UNKNOWN"
+   },
+   {
+    "hero": "sym",
+    "readAs": "ram",
+    "count": 34,
+    "trials": 82,
+    "share": 0.415,
+    "note": "with no sym template in the set, 34 of 82 real sym portraits (41%) were confidently read as ram instead of UNKNOWN"
+   },
+   {
+    "hero": "cass",
+    "readAs": "zarya",
+    "count": 31,
+    "trials": 103,
+    "share": 0.301,
+    "note": "with no cass template in the set, 31 of 103 real cass portraits (30%) were confidently read as zarya instead of UNKNOWN"
+   },
+   {
+    "hero": "tracer",
+    "readAs": "torb",
+    "count": 27,
+    "trials": 98,
+    "share": 0.276,
+    "note": "with no tracer template in the set, 27 of 98 real tracer portraits (28%) were confidently read as torb instead of UNKNOWN"
+   },
+   {
+    "hero": "tracer",
+    "readAs": "jetcat",
+    "count": 24,
+    "trials": 98,
+    "share": 0.245,
+    "note": "with no tracer template in the set, 24 of 98 real tracer portraits (24%) were confidently read as jetcat instead of UNKNOWN"
+   },
+   {
+    "hero": "torb",
+    "readAs": "jetcat",
+    "count": 3,
+    "trials": 14,
+    "share": 0.214,
+    "note": "with no torb template in the set, 3 of 14 real torb portraits (21%) were confidently read as jetcat instead of UNKNOWN"
+   },
+   {
+    "hero": "echo",
+    "readAs": "sigma",
+    "count": 2,
+    "trials": 10,
+    "share": 0.2,
+    "note": "with no echo template in the set, 2 of 10 real echo portraits (20%) were confidently read as sigma instead of UNKNOWN"
+   },
+   {
+    "hero": "jetcat",
+    "readAs": "tracer",
+    "count": 10,
+    "trials": 59,
+    "share": 0.169,
+    "note": "with no jetcat template in the set, 10 of 59 real jetcat portraits (17%) were confidently read as tracer instead of UNKNOWN"
+   },
+   {
+    "hero": "cass",
+    "readAs": "bap",
+    "count": 14,
+    "trials": 103,
+    "share": 0.136,
+    "note": "with no cass template in the set, 14 of 103 real cass portraits (14%) were confidently read as bap instead of UNKNOWN"
+   },
+   {
+    "hero": "winston",
+    "readAs": "hog",
+    "count": 2,
+    "trials": 16,
+    "share": 0.125,
+    "note": "with no winston template in the set, 2 of 16 real winston portraits (12%) were confidently read as hog instead of UNKNOWN"
+   },
+   {
+    "hero": "zarya",
+    "readAs": "mei",
+    "count": 7,
+    "trials": 65,
+    "share": 0.108,
+    "note": "with no zarya template in the set, 7 of 65 real zarya portraits (11%) were confidently read as mei instead of UNKNOWN"
+   },
+   {
+    "hero": "zarya",
+    "readAs": "jetcat",
+    "count": 5,
+    "trials": 65,
+    "share": 0.077,
+    "note": "with no zarya template in the set, 5 of 65 real zarya portraits (8%) were confidently read as jetcat instead of UNKNOWN"
+   },
+   {
+    "hero": "ball",
+    "readAs": "bastion",
+    "count": 2,
+    "trials": 29,
+    "share": 0.069,
+    "note": "with no ball template in the set, 2 of 29 real ball portraits (7%) were confidently read as bastion instead of UNKNOWN"
+   },
+   {
+    "hero": "bap",
+    "readAs": "sojourn",
+    "count": 3,
+    "trials": 51,
+    "share": 0.059,
+    "note": "with no bap template in the set, 3 of 51 real bap portraits (6%) were confidently read as sojourn instead of UNKNOWN"
+   },
+   {
+    "hero": "sigma",
+    "readAs": "reaper",
+    "count": 4,
+    "trials": 71,
+    "share": 0.056,
+    "note": "with no sigma template in the set, 4 of 71 real sigma portraits (6%) were confidently read as reaper instead of UNKNOWN"
+   },
+   {
+    "hero": "bap",
+    "readAs": "illari",
+    "count": 2,
+    "trials": 51,
+    "share": 0.039,
+    "note": "with no bap template in the set, 2 of 51 real bap portraits (4%) were confidently read as illari instead of UNKNOWN"
+   },
+   {
+    "hero": "cass",
+    "readAs": "ball",
+    "count": 4,
+    "trials": 103,
+    "share": 0.039,
+    "note": "with no cass template in the set, 4 of 103 real cass portraits (4%) were confidently read as ball instead of UNKNOWN"
+   },
+   {
+    "hero": "kiriko",
+    "readAs": "dva",
+    "count": 3,
+    "trials": 98,
+    "share": 0.031,
+    "note": "with no kiriko template in the set, 3 of 98 real kiriko portraits (3%) were confidently read as dva instead of UNKNOWN"
+   },
+   {
+    "hero": "sojourn",
+    "readAs": "winston",
+    "count": 2,
+    "trials": 76,
+    "share": 0.026,
+    "note": "with no sojourn template in the set, 2 of 76 real sojourn portraits (3%) were confidently read as winston instead of UNKNOWN"
+   },
+   {
+    "hero": "bap",
+    "readAs": "mizuki",
+    "count": 1,
+    "trials": 51,
+    "share": 0.02,
+    "note": "with no bap template in the set, 1 of 51 real bap portraits (2%) were confidently read as mizuki instead of UNKNOWN"
+   },
+   {
+    "hero": "kiriko",
+    "readAs": "bap",
+    "count": 2,
+    "trials": 98,
+    "share": 0.02,
+    "note": "with no kiriko template in the set, 2 of 98 real kiriko portraits (2%) were confidently read as bap instead of UNKNOWN"
+   },
+   {
+    "hero": "bastion",
+    "readAs": "dva",
+    "count": 2,
+    "trials": 108,
+    "share": 0.019,
+    "note": "with no bastion template in the set, 2 of 108 real bastion portraits (2%) were confidently read as dva instead of UNKNOWN"
+   },
+   {
+    "hero": "jetcat",
+    "readAs": "torb",
+    "count": 1,
+    "trials": 59,
+    "share": 0.017,
+    "note": "with no jetcat template in the set, 1 of 59 real jetcat portraits (2%) were confidently read as torb instead of UNKNOWN"
+   },
+   {
+    "hero": "zarya",
+    "readAs": "echo",
+    "count": 1,
+    "trials": 65,
+    "share": 0.015,
+    "note": "with no zarya template in the set, 1 of 65 real zarya portraits (2%) were confidently read as echo instead of UNKNOWN"
+   },
+   {
+    "hero": "ana",
+    "readAs": "mizuki",
+    "count": 1,
+    "trials": 96,
+    "share": 0.01,
+    "note": "with no ana template in the set, 1 of 96 real ana portraits (1%) were confidently read as mizuki instead of UNKNOWN"
+   },
+   {
+    "hero": "cass",
+    "readAs": "illari",
+    "count": 1,
+    "trials": 103,
+    "share": 0.01,
+    "note": "with no cass template in the set, 1 of 103 real cass portraits (1%) were confidently read as illari instead of UNKNOWN"
+   },
+   {
+    "hero": "dva",
+    "readAs": "bastion",
+    "count": 1,
+    "trials": 102,
+    "share": 0.01,
+    "note": "with no dva template in the set, 1 of 102 real dva portraits (1%) were confidently read as bastion instead of UNKNOWN"
+   },
+   {
+    "hero": "mei",
+    "readAs": "ball",
+    "count": 1,
+    "trials": 101,
+    "share": 0.01,
+    "note": "with no mei template in the set, 1 of 101 real mei portraits (1%) were confidently read as ball instead of UNKNOWN"
+   },
+   {
+    "hero": "tracer",
+    "readAs": "ball",
+    "count": 1,
+    "trials": 98,
+    "share": 0.01,
+    "note": "with no tracer template in the set, 1 of 98 real tracer portraits (1%) were confidently read as ball instead of UNKNOWN"
+   }
+  ]
+ },
+ "heroes": {
+  "ana": {
+   "verdict": "VALIDATED",
+   "trials": 96,
+   "correct": 91,
+   "unknown": 5,
+   "wrong": 0,
+   "accuracy": 0.948,
+   "confusedWith": {},
+   "cards": [
+    "c18",
+    "c20"
+   ]
+  },
+  "ball": {
+   "verdict": "WEAK",
+   "trials": 29,
+   "correct": 24,
+   "unknown": 5,
+   "wrong": 0,
+   "accuracy": 0.828,
+   "confusedWith": {},
+   "cards": [
+    "c26",
+    "c45"
+   ]
+  },
+  "bap": {
+   "verdict": "FAILED",
+   "trials": 51,
+   "correct": 36,
+   "unknown": 12,
+   "wrong": 3,
+   "accuracy": 0.706,
+   "confusedWith": {
+    "illari": 2,
+    "mizuki": 1
+   },
+   "cards": [
+    "c31",
+    "c36",
+    "c40"
+   ]
+  },
+  "bastion": {
+   "verdict": "VALIDATED",
+   "trials": 199,
+   "correct": 182,
+   "unknown": 17,
+   "wrong": 0,
+   "accuracy": 0.915,
+   "confusedWith": {},
+   "cards": [
+    "c11",
+    "c12",
+    "c16"
+   ]
+  },
+  "brig": {
+   "verdict": "WEAK",
+   "trials": 16,
+   "correct": 4,
+   "unknown": 12,
+   "wrong": 0,
+   "accuracy": 0.25,
+   "confusedWith": {},
+   "cards": [
+    "c50",
+    "c56"
+   ]
+  },
+  "cass": {
+   "verdict": "FAILED",
+   "trials": 123,
+   "correct": 56,
+   "unknown": 54,
+   "wrong": 13,
+   "accuracy": 0.455,
+   "confusedWith": {
+    "bap": 10,
+    "illari": 1,
+    "ball": 2
+   },
+   "cards": [
+    "c05",
+    "c28",
+    "c49",
+    "c52",
+    "c59",
+    "c61"
+   ]
+  },
+  "doomfist": {
+   "verdict": "WEAK",
+   "trials": 3,
+   "correct": 1,
+   "unknown": 2,
+   "wrong": 0,
+   "accuracy": 0.333,
+   "confusedWith": {},
+   "cards": [
+    "c62"
+   ]
+  },
+  "dva": {
+   "verdict": "FAILED",
+   "trials": 140,
+   "correct": 79,
+   "unknown": 57,
+   "wrong": 4,
+   "accuracy": 0.564,
+   "confusedWith": {
+    "bastion": 1,
+    "kiriko": 3
+   },
+   "cards": [
+    "c07",
+    "c25",
+    "c33",
+    "c37"
+   ]
+  },
+  "echo": {
+   "verdict": "WEAK",
+   "trials": 10,
+   "correct": 8,
+   "unknown": 2,
+   "wrong": 0,
+   "accuracy": 0.8,
+   "confusedWith": {},
+   "cards": [
+    "c29"
+   ]
+  },
+  "emre": {
+   "verdict": "WEAK",
+   "trials": 3,
+   "correct": 1,
+   "unknown": 2,
+   "wrong": 0,
+   "accuracy": 0.333,
+   "confusedWith": {},
+   "cards": [
+    "c48"
+   ]
+  },
+  "genji": {
+   "verdict": "WEAK",
+   "trials": 31,
+   "correct": 27,
+   "unknown": 4,
+   "wrong": 0,
+   "accuracy": 0.871,
+   "confusedWith": {},
+   "cards": [
+    "c35",
+    "c54"
+   ]
+  },
+  "hog": {
+   "verdict": "WEAK",
+   "trials": 2,
+   "correct": 2,
+   "unknown": 0,
+   "wrong": 0,
+   "accuracy": 1.0,
+   "confusedWith": {},
+   "cards": [
+    "c44"
+   ]
+  },
+  "illari": {
+   "verdict": "WEAK",
+   "trials": 19,
+   "correct": 17,
+   "unknown": 2,
+   "wrong": 0,
+   "accuracy": 0.895,
+   "confusedWith": {},
+   "cards": [
+    "c41",
+    "c55"
+   ]
+  },
+  "jetcat": {
+   "verdict": "WEAK",
+   "trials": 59,
+   "correct": 46,
+   "unknown": 13,
+   "wrong": 0,
+   "accuracy": 0.78,
+   "confusedWith": {},
+   "cards": [
+    "c02"
+   ]
+  },
+  "juno": {
+   "verdict": "WEAK",
+   "trials": 6,
+   "correct": 6,
+   "unknown": 0,
+   "wrong": 0,
+   "accuracy": 1.0,
+   "confusedWith": {},
+   "cards": [
+    "c53"
+   ]
+  },
+  "kiriko": {
+   "verdict": "FAILED",
+   "trials": 196,
+   "correct": 161,
+   "unknown": 30,
+   "wrong": 5,
+   "accuracy": 0.821,
+   "confusedWith": {
+    "bap": 2,
+    "jetcat": 1,
+    "zarya": 2
+   },
+   "cards": [
+    "c00",
+    "c08",
+    "c10"
+   ]
+  },
+  "lucio": {
+   "verdict": "VALIDATED",
+   "trials": 187,
+   "correct": 175,
+   "unknown": 12,
+   "wrong": 0,
+   "accuracy": 0.936,
+   "confusedWith": {},
+   "cards": [
+    "c06",
+    "c14",
+    "c15"
+   ]
+  },
+  "mauga": {
+   "verdict": "WEAK",
+   "trials": 19,
+   "correct": 17,
+   "unknown": 2,
+   "wrong": 0,
+   "accuracy": 0.895,
+   "confusedWith": {},
+   "cards": [
+    "c39",
+    "c46"
+   ]
+  },
+  "mei": {
+   "verdict": "VALIDATED",
+   "trials": 101,
+   "correct": 95,
+   "unknown": 6,
+   "wrong": 0,
+   "accuracy": 0.941,
+   "confusedWith": {},
+   "cards": [
+    "c13",
+    "c23"
+   ]
+  },
+  "mizuki": {
+   "verdict": "VALIDATED",
+   "trials": 52,
+   "correct": 52,
+   "unknown": 0,
+   "wrong": 0,
+   "accuracy": 1.0,
+   "confusedWith": {},
+   "cards": [
+    "c22",
+    "c27"
+   ]
+  },
+  "pharah": {
+   "verdict": "WEAK",
+   "trials": 11,
+   "correct": 10,
+   "unknown": 1,
+   "wrong": 0,
+   "accuracy": 0.909,
+   "confusedWith": {},
+   "cards": [
+    "c38",
+    "c42"
+   ]
+  },
+  "ram": {
+   "verdict": "VALIDATED",
+   "trials": 52,
+   "correct": 51,
+   "unknown": 1,
+   "wrong": 0,
+   "accuracy": 0.981,
+   "confusedWith": {},
+   "cards": [
+    "c19",
+    "c43"
+   ]
+  },
+  "reaper": {
+   "verdict": "WEAK",
+   "trials": 20,
+   "correct": 17,
+   "unknown": 3,
+   "wrong": 0,
+   "accuracy": 0.85,
+   "confusedWith": {},
+   "cards": [
+    "c47",
+    "c60",
+    "c63"
+   ]
+  },
+  "sigma": {
+   "verdict": "FAILED",
+   "trials": 71,
+   "correct": 28,
+   "unknown": 41,
+   "wrong": 2,
+   "accuracy": 0.394,
+   "confusedWith": {
+    "echo": 2
+   },
+   "cards": [
+    "c03",
+    "c65"
+   ]
+  },
+  "sojourn": {
+   "verdict": "FAILED",
+   "trials": 76,
+   "correct": 68,
+   "unknown": 7,
+   "wrong": 1,
+   "accuracy": 0.895,
+   "confusedWith": {
+    "winston": 1
+   },
+   "cards": [
+    "c21",
+    "c24",
+    "c51"
+   ]
+  },
+  "sym": {
+   "verdict": "VALIDATED",
+   "trials": 82,
+   "correct": 80,
+   "unknown": 2,
+   "wrong": 0,
+   "accuracy": 0.976,
+   "confusedWith": {},
+   "cards": [
+    "c17",
+    "c34",
+    "c64"
+   ]
+  },
+  "torb": {
+   "verdict": "FAILED",
+   "trials": 14,
+   "correct": 2,
+   "unknown": 11,
+   "wrong": 1,
+   "accuracy": 0.143,
+   "confusedWith": {
+    "jetcat": 1
+   },
+   "cards": [
+    "c32"
+   ]
+  },
+  "tracer": {
+   "verdict": "FAILED",
+   "trials": 130,
+   "correct": 112,
+   "unknown": 17,
+   "wrong": 1,
+   "accuracy": 0.862,
+   "confusedWith": {
+    "jetcat": 1
+   },
+   "cards": [
+    "c01",
+    "c04"
+   ]
+  },
+  "widow": {
+   "verdict": "WEAK",
+   "trials": 3,
+   "correct": 3,
+   "unknown": 0,
+   "wrong": 0,
+   "accuracy": 1.0,
+   "confusedWith": {},
+   "cards": [
+    "c58"
+   ]
+  },
+  "winston": {
+   "verdict": "VALIDATED",
+   "trials": 16,
+   "correct": 16,
+   "unknown": 0,
+   "wrong": 0,
+   "accuracy": 1.0,
+   "confusedWith": {},
+   "cards": [
+    "c30"
+   ]
+  },
+  "zarya": {
+   "verdict": "FAILED",
+   "trials": 65,
+   "correct": 32,
+   "unknown": 20,
+   "wrong": 13,
+   "accuracy": 0.492,
+   "confusedWith": {
+    "mei": 7,
+    "jetcat": 5,
+    "echo": 1
+   },
+   "cards": [
+    "c09",
+    "c57"
+   ]
+  }
+ },
+ "promotion": {
+  "promotedHeroes": [
+   "ana",
+   "bastion",
+   "lucio",
+   "mei",
+   "mizuki",
+   "ram",
+   "sym",
+   "winston"
+  ],
+  "promoted": [
+   "ana.png",
+   "ana.v1.png",
+   "ana.v2.png",
+   "ana.v3.png",
+   "bastion.png",
+   "bastion.v1.png",
+   "bastion.v2.png",
+   "bastion.v3.png",
+   "lucio.png",
+   "lucio.v1.png",
+   "lucio.v2.png",
+   "lucio.v3.png",
+   "mei.png",
+   "mei.v1.png",
+   "mei.v2.png",
+   "mei.v3.png",
+   "mizuki.png",
+   "mizuki.v1.png",
+   "mizuki.v2.png",
+   "mizuki.v3.png",
+   "ram.png",
+   "ram.v1.png",
+   "ram.v2.png",
+   "ram.v3.png",
+   "sym.png",
+   "sym.v1.png",
+   "sym.v2.png",
+   "sym.v3.png",
+   "winston.png",
+   "winston.v1.png",
+   "winston.v2.png",
+   "winston.v3.png"
+  ],
+  "superseded": [
+   "bastion.png",
+   "bastion.v1.png",
+   "bastion.v2.png",
+   "bastion.v3.png",
+   "lucio.png",
+   "lucio.v1.png",
+   "lucio.v2.png",
+   "lucio.v3.png",
+   "mizuki.a.png",
+   "mizuki.b.png",
+   "mizuki.png",
+   "ram.png",
+   "ram.v1.png",
+   "ram.v2.png",
+   "ram.v3.png",
+   "winston.a.png",
+   "winston.b.png",
+   "winston.png"
+  ],
+  "refused": {
+   "ball": "WEAK",
+   "bap": "FAILED",
+   "brig": "WEAK",
+   "cass": "FAILED",
+   "doomfist": "WEAK",
+   "dva": "FAILED",
+   "echo": "WEAK",
+   "emre": "WEAK",
+   "genji": "WEAK",
+   "hog": "WEAK",
+   "illari": "WEAK",
+   "jetcat": "WEAK",
+   "juno": "WEAK",
+   "kiriko": "FAILED",
+   "mauga": "WEAK",
+   "pharah": "WEAK",
+   "reaper": "WEAK",
+   "sigma": "FAILED",
+   "sojourn": "FAILED",
+   "torb": "FAILED",
+   "tracer": "FAILED",
+   "widow": "WEAK",
+   "zarya": "FAILED"
+  },
+  "dryRun": false
+ }
+}
