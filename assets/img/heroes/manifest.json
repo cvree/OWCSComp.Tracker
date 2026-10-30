@@ -2,11 +2,23 @@
  "note": "Hero portraits upscaled from REAL broadcast template crops (see 'file' per hero). The synthetic starter templates are never used.",
  "size": 96,
  "heroes": {
+  "ana": {
+   "file": "templates/owcs_8c105lnzlam/ana.v1.png",
+   "source": "owcs_8c105lnzlam",
+   "score": 7.1684,
+   "size": 23
+  },
   "ball": {
    "file": "templates/owcs_8c105lnzlam/ball.b.png",
    "source": "owcs_8c105lnzlam",
    "score": 6.6471,
    "size": 24
+  },
+  "bastion": {
+   "file": "templates/owcs_8c105lnzlam/bastion.v3.png",
+   "source": "owcs_8c105lnzlam",
+   "score": 6.3137,
+   "size": 23
   },
   "cass": {
    "file": "templates/owcs_8c105lnzlam/cass.png",
@@ -15,10 +27,10 @@
    "size": 24
   },
   "dva": {
-   "file": "templates/owcs_jksix_qwc/dva.v3.png",
-   "source": "owcs_jksix_qwc",
-   "score": 7.077,
-   "size": 22
+   "file": "templates/owcs_8c105lnzlam/dva.v2.png",
+   "source": "owcs_8c105lnzlam",
+   "score": 7.0924,
+   "size": 23
   },
   "jetcat": {
    "file": "templates/owcs_8c105lnzlam/jetcat.b.png",
@@ -27,52 +39,70 @@
    "size": 24
   },
   "juno": {
-   "file": "templates/owcs_jksix_qwc/juno.v1.png",
+   "file": "templates/owcs_jksix_qwc/juno.png",
    "source": "owcs_jksix_qwc",
-   "score": 6.8563,
+   "score": 6.7708,
    "size": 22
   },
   "kiriko": {
-   "file": "templates/owcs_jksix_qwc/kiriko.png",
-   "source": "owcs_jksix_qwc",
-   "score": 7.1445,
-   "size": 22
+   "file": "templates/owcs_8c105lnzlam/kiriko.png",
+   "source": "owcs_8c105lnzlam",
+   "score": 7.2966,
+   "size": 23
   },
   "lucio": {
-   "file": "templates/owcs_8c105lnzlam/lucio.png",
+   "file": "templates/owcs_8c105lnzlam/lucio.v3.png",
    "source": "owcs_8c105lnzlam",
-   "score": 6.719,
-   "size": 24
+   "score": 6.6298,
+   "size": 23
   },
   "mauga": {
-   "file": "templates/owcs_jksix_qwc/mauga.png",
+   "file": "templates/owcs_jksix_qwc/mauga.v3.png",
    "source": "owcs_jksix_qwc",
-   "score": 6.6158,
+   "score": 6.2625,
    "size": 22
+  },
+  "mei": {
+   "file": "templates/owcs_8c105lnzlam/mei.v1.png",
+   "source": "owcs_8c105lnzlam",
+   "score": 7.2384,
+   "size": 23
   },
   "mizuki": {
-   "file": "templates/owcs_8c105lnzlam/mizuki.a.png",
+   "file": "templates/owcs_8c105lnzlam/mizuki.v3.png",
    "source": "owcs_8c105lnzlam",
-   "score": 6.2722,
-   "size": 24
+   "score": 6.779,
+   "size": 23
+  },
+  "ram": {
+   "file": "templates/owcs_8c105lnzlam/ram.v1.png",
+   "source": "owcs_8c105lnzlam",
+   "score": 7.2441,
+   "size": 23
+  },
+  "reaper": {
+   "file": "templates/owcs_8c105lnzlam/reaper.v2.png",
+   "source": "owcs_8c105lnzlam",
+   "score": 6.1993,
+   "size": 23
   },
   "shion": {
-   "file": "templates/owcs_jksix_qwc/shion.png",
-   "source": "owcs_jksix_qwc",
-   "score": 6.4571,
-   "size": 22
+   "file": "templates/owcs_8c105lnzlam/shion.png",
+   "source": "owcs_8c105lnzlam",
+   "score": 6.7494,
+   "size": 23
   },
   "sojourn": {
    "file": "templates/owcs_jksix_qwc/sojourn.v3.png",
    "source": "owcs_jksix_qwc",
-   "score": 6.6255,
+   "score": 6.187,
    "size": 22
   },
   "sym": {
-   "file": "templates/owcs_jksix_qwc/sym.v2.png",
-   "source": "owcs_jksix_qwc",
-   "score": 6.7517,
-   "size": 22
+   "file": "templates/owcs_8c105lnzlam/sym.v2.png",
+   "source": "owcs_8c105lnzlam",
+   "score": 6.8463,
+   "size": 23
   },
   "tracer": {
    "file": "templates/owcs_8c105lnzlam/tracer.png",
@@ -81,10 +111,10 @@
    "size": 24
   },
   "winston": {
-   "file": "templates/owcs_8c105lnzlam/winston.b.png",
+   "file": "templates/owcs_8c105lnzlam/winston.v2.png",
    "source": "owcs_8c105lnzlam",
-   "score": 6.2589,
-   "size": 24
+   "score": 7.498,
+   "size": 23
   }
  }
 }

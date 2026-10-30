@@ -108,12 +108,22 @@ jobs:
           for b in $BATCHES; do
             python pipeline/label_forge.py --batch "$b" $flag 2>&1 | tee -a forge.log
           done
+          # a promotion moves old crops into _superseded/; the site's hero
+          # portraits are cut from the live crops, so recut them every time
+          python pipeline/build_hero_portraits.py | tail -n 1
+          # the public export carries each hero's portraitUrl; re-export only
+          # when the portraits really changed, never for a timestamp alone
+          if [ -n "$(git status --porcelain assets/img/heroes)" ]; then
+            python pipeline/export_data.py --public | tail -n 2
+          fi
           python pipeline/hero_coverage.py 2>&1 | head -n 40 | tee coverage.log
 
       - name: Validate before committing
         if: steps.which.outputs.batches != ''
         run: |
           python pipeline/test_label_batch.py
+          python pipeline/test_calibration_dashboard.py
+          python pipeline/export_data.py --check --public
           python pipeline/label_batch.py --index --check
           python pipeline/check_packaging.py
 
@@ -125,7 +135,11 @@ jobs:
           set -euo pipefail
           git config user.name  "owcs-label-forge[bot]"
           git config user.email "actions@users.noreply.github.com"
-          git add labelling assets/data/labelling.v1.js templates
+          # templates: what was promoted. layouts: a detector bar the forge
+          # raised (never lowered). reports/validation: the proof the
+          # coverage page reads. assets/img/heroes: portraits recut from them.
+          git add labelling assets/data/labelling.v1.js templates layouts reports/validation \
+            assets/img/heroes assets/js/data.js assets/data/public_data.v1.js
           if git diff --cached --quiet; then
             echo "committed=false" >> "$GITHUB_OUTPUT"; exit 0
           fi

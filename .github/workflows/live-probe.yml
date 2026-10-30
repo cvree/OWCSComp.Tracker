@@ -1,0 +1,114 @@
+# =====================================================================
+# OWCS Comp Tracker — where are the maps? (live-probe, dispatch only)
+# ---------------------------------------------------------------------
+# Runs pipeline/live_ingest.py against one broadcast on a free runner:
+# samples the whole broadcast remotely, classifies every sample with the
+# layout's gameplay filter, and splits the live play into map windows —
+# without downloading the broadcast.
+#
+# It writes nothing to main. The timeline, plus four full frames from each
+# map window (what a person or a later step needs to read the teams and the
+# map name off the HUD), go to a scratch branch `probe/<video id>` so they
+# can be inspected anywhere git reaches; delete it with the maintenance
+# workflow's prune or by hand when done.
+# =====================================================================
+name: live-probe
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "Broadcast URL (Twitch)"
+        required: true
+      layout:
+        description: "Layout id"
+        required: false
+        default: "owcs_8c105lnzlam"
+      step:
+        description: "Seconds between timeline samples"
+        required: false
+        default: "30"
+
+# It pushes (to a scratch branch), so it queues with every other
+# repo-writing workflow rather than racing one.
+concurrency:
+  group: owcs-generated-data
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          python -m pip install --upgrade pip --quiet
+          pip install --quiet -r requirements.txt
+
+      - name: Find the maps
+        env:
+          URL: ${{ inputs.url }}
+          LAYOUT: ${{ inputs.layout || 'owcs_8c105lnzlam' }}
+          STEP: ${{ inputs.step || '30' }}
+        run: |
+          set -o pipefail
+          python pipeline/live_ingest.py --url "$URL" --layout "layouts/$LAYOUT.json" \
+            --out probe --step "$STEP" 2>&1 | tee probe.log
+
+      - name: Keep four frames from each map
+        env:
+          URL: ${{ inputs.url }}
+        run: |
+          python - <<'PY'
+          import json, os, shutil, sys
+          sys.path.insert(0, "pipeline")
+          import remote_frames as rf
+          t = json.load(open("probe/timeline.json", encoding="utf-8"))
+          src = rf.RemoteFrameSource(os.environ["URL"], height=720)
+          os.makedirs("probe/frames", exist_ok=True)
+          for m in t["maps"]:
+              span = m["end"] - m["start"]
+              offs = [round(m["start"] + span * f, 1) for f in (0.08, 0.35, 0.65, 0.92)]
+              got = src.grab(offs)
+              for o in offs:
+                  if got.get(o):
+                      shutil.copy(got[o], f"probe/frames/map{m['index']:02d}_t{int(o):06d}.jpg")
+          print(len(os.listdir("probe/frames")), "frames kept")
+          PY
+
+      - name: Push to a scratch branch
+        env:
+          URL: ${{ inputs.url }}
+        run: |
+          set -euo pipefail
+          vid=$(python3 -c "import os,sys; sys.path.insert(0,'pipeline'); from automation import link_intake as li; print(li.parse_link(os.environ['URL'])['videoId'])")
+          cp probe.log probe/
+          git config user.name  "owcs-live-probe[bot]"
+          git config user.email "actions@users.noreply.github.com"
+          git checkout --orphan "probe/$vid"
+          git rm -rq --cached . >/dev/null
+          git add -f probe
+          git commit -qm "probe: map windows for $vid"
+          git push -f origin "probe/$vid"
+          echo "::notice::pushed probe/$vid"
+
+      - name: Report
+        if: always()
+        run: |
+          {
+            echo "### Map windows"
+            echo '```'
+            tail -n 5 probe.log 2>/dev/null || echo "(no probe ran)"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
