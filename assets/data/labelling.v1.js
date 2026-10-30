@@ -7232,39 +7232,38 @@ window.OWCS_LABELLING = {
     "zarya"
    ],
    "state": "forged",
-   "promoted": [
+   "promoted": [],
+   "refused": [
     "ana",
     "ball",
-    "bastion",
-    "dva",
-    "echo",
-    "kiriko",
-    "lucio",
-    "mei",
-    "mizuki",
-    "ram",
-    "sigma",
-    "sym",
-    "winston"
-   ],
-   "refused": [
     "bap",
+    "bastion",
     "brig",
     "cass",
     "doomfist",
+    "dva",
+    "echo",
     "emre",
     "genji",
     "hog",
     "illari",
     "jetcat",
     "juno",
+    "kiriko",
+    "lucio",
     "mauga",
+    "mei",
+    "mizuki",
     "pharah",
+    "ram",
     "reaper",
+    "sigma",
     "sojourn",
+    "sym",
     "torb",
     "tracer",
     "widow",
+    "winston",
     "zarya"
    ],
    "labels": {
@@ -7335,159 +7334,132 @@ window.OWCS_LABELLING = {
     "c64": "sym",
     "c65": "sigma"
    },
-   "labelledBy": "cvv",
+   "labelledBy": "[DROPS] 2026 OWCS Champions Clash | Day 2",
    "verdicts": {
-    "ana": "VALIDATED",
+    "ana": "REVIEW",
     "ball": "VALIDATED",
-    "bap": "REVIEW",
-    "bastion": "VALIDATED",
+    "bap": "VALIDATED",
+    "bastion": "REVIEW",
     "brig": "WEAK",
-    "cass": "REVIEW",
+    "cass": "VALIDATED",
     "doomfist": "WEAK",
-    "dva": "VALIDATED",
+    "dva": "REVIEW",
     "echo": "VALIDATED",
     "emre": "WEAK",
-    "genji": "REVIEW",
+    "genji": "VALIDATED",
     "hog": "WEAK",
-    "illari": "REVIEW",
-    "jetcat": "REVIEW",
+    "illari": "VALIDATED",
+    "jetcat": "VALIDATED",
     "juno": "WEAK",
-    "kiriko": "VALIDATED",
-    "lucio": "VALIDATED",
-    "mauga": "REVIEW",
-    "mei": "VALIDATED",
+    "kiriko": "REVIEW",
+    "lucio": "REVIEW",
+    "mauga": "VALIDATED",
+    "mei": "REVIEW",
     "mizuki": "VALIDATED",
     "pharah": "WEAK",
     "ram": "VALIDATED",
-    "reaper": "REVIEW",
+    "reaper": "VALIDATED",
     "sigma": "VALIDATED",
-    "sojourn": "REVIEW",
+    "sojourn": "VALIDATED",
     "sym": "VALIDATED",
     "torb": "WEAK",
-    "tracer": "REVIEW",
+    "tracer": "VALIDATED",
     "widow": "WEAK",
     "winston": "VALIDATED",
     "zarya": "FAILED"
    },
    "review": {
-    "bap": {
-     "trials": 44,
-     "correct": 36,
-     "unknown": 6,
-     "wrong": 2,
-     "accuracy": 0.818,
+    "ana": {
+     "trials": 94,
+     "correct": 83,
+     "unknown": 11,
+     "wrong": 0,
+     "accuracy": 0.883,
+     "confusedWith": {},
+     "cards": [
+      "c18",
+      "c20"
+     ]
+    },
+    "bastion": {
+     "trials": 199,
+     "correct": 162,
+     "unknown": 37,
+     "wrong": 0,
+     "accuracy": 0.814,
+     "confusedWith": {},
+     "cards": [
+      "c11",
+      "c12",
+      "c16"
+     ]
+    },
+    "dva": {
+     "trials": 138,
+     "correct": 114,
+     "unknown": 24,
+     "wrong": 0,
+     "accuracy": 0.826,
+     "confusedWith": {},
+     "cards": [
+      "c07",
+      "c25",
+      "c33",
+      "c37"
+     ]
+    },
+    "kiriko": {
+     "trials": 187,
+     "correct": 130,
+     "unknown": 56,
+     "wrong": 1,
+     "accuracy": 0.695,
      "confusedWith": {
-      "illari": 2
+      "jetcat": 1
      },
      "cards": [
-      "c31",
-      "c36",
-      "c40"
+      "c00",
+      "c08",
+      "c10"
      ]
     },
-    "cass": {
-     "trials": 127,
-     "correct": 94,
-     "unknown": 33,
+    "lucio": {
+     "trials": 186,
+     "correct": 167,
+     "unknown": 19,
      "wrong": 0,
-     "accuracy": 0.74,
+     "accuracy": 0.898,
      "confusedWith": {},
      "cards": [
-      "c05",
-      "c28",
-      "c49",
-      "c52",
-      "c59",
-      "c61"
+      "c06",
+      "c14",
+      "c15"
      ]
     },
-    "genji": {
-     "trials": 31,
-     "correct": 25,
-     "unknown": 6,
-     "wrong": 0,
-     "accuracy": 0.806,
-     "confusedWith": {},
-     "cards": [
-      "c35",
-      "c54"
-     ]
-    },
-    "illari": {
-     "trials": 19,
-     "correct": 17,
-     "unknown": 2,
-     "wrong": 0,
-     "accuracy": 0.895,
-     "confusedWith": {},
-     "cards": [
-      "c41",
-      "c55"
-     ]
-    },
-    "jetcat": {
-     "trials": 59,
-     "correct": 50,
-     "unknown": 9,
-     "wrong": 0,
-     "accuracy": 0.847,
-     "confusedWith": {},
-     "cards": [
-      "c02"
-     ]
-    },
-    "mauga": {
-     "trials": 19,
-     "correct": 17,
-     "unknown": 2,
-     "wrong": 0,
-     "accuracy": 0.895,
-     "confusedWith": {},
-     "cards": [
-      "c39",
-      "c46"
-     ]
-    },
-    "reaper": {
-     "trials": 19,
-     "correct": 6,
-     "unknown": 13,
-     "wrong": 0,
-     "accuracy": 0.316,
-     "confusedWith": {},
-     "cards": [
-      "c47",
-      "c60",
-      "c63"
-     ]
-    },
-    "sojourn": {
-     "trials": 75,
-     "correct": 60,
+    "mei": {
+     "trials": 101,
+     "correct": 86,
      "unknown": 15,
      "wrong": 0,
-     "accuracy": 0.8,
+     "accuracy": 0.851,
      "confusedWith": {},
      "cards": [
-      "c21",
-      "c24",
-      "c51"
-     ]
-    },
-    "tracer": {
-     "trials": 122,
-     "correct": 70,
-     "unknown": 52,
-     "wrong": 0,
-     "accuracy": 0.574,
-     "confusedWith": {},
-     "cards": [
-      "c01",
-      "c04"
+      "c13",
+      "c23"
      ]
     }
    },
-   "approved": [],
+   "approved": [
+    "bap",
+    "cass",
+    "genji",
+    "illari",
+    "jetcat",
+    "mauga",
+    "reaper",
+    "sojourn",
+    "tracer"
+   ],
    "rejected": [],
    "slotRoles": [
     "damage",
@@ -7498,19 +7470,19 @@ window.OWCS_LABELLING = {
    ],
    "leaveOneOut": {
     "trials": 1450,
-    "matched": 58,
-    "rate": 0.04,
+    "matched": 44,
+    "rate": 0.0303,
     "ceiling": 0.02,
     "passed": false,
-    "note": "Leave-one-out false-match test over 1450 real crops: 58 (4.00%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
+    "note": "Leave-one-out false-match test over 1450 real crops: 44 (3.03%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
     "confusablePairs": [
      {
       "hero": "tracer",
       "readAs": "torb",
-      "count": 40,
+      "count": 35,
       "trials": 97,
-      "share": 0.412,
-      "note": "with no tracer template in the set, 40 of 97 real tracer portraits (41%) were confidently read as torb instead of UNKNOWN"
+      "share": 0.361,
+      "note": "with no tracer template in the set, 35 of 97 real tracer portraits (36%) were confidently read as torb instead of UNKNOWN"
      },
      {
       "hero": "torb",
@@ -7521,20 +7493,20 @@ window.OWCS_LABELLING = {
       "note": "with no torb template in the set, 1 of 3 real torb portraits (33%) were confidently read as bastion instead of UNKNOWN"
      },
      {
-      "hero": "pharah",
-      "readAs": "cass",
-      "count": 3,
-      "trials": 11,
-      "share": 0.273,
-      "note": "with no pharah template in the set, 3 of 11 real pharah portraits (27%) were confidently read as cass instead of UNKNOWN"
-     },
-     {
       "hero": "zarya",
       "readAs": "sigma",
       "count": 4,
       "trials": 38,
       "share": 0.105,
       "note": "with no zarya template in the set, 4 of 38 real zarya portraits (11%) were confidently read as sigma instead of UNKNOWN"
+     },
+     {
+      "hero": "pharah",
+      "readAs": "cass",
+      "count": 1,
+      "trials": 11,
+      "share": 0.091,
+      "note": "with no pharah template in the set, 1 of 11 real pharah portraits (9%) were confidently read as cass instead of UNKNOWN"
      },
      {
       "hero": "winston",
@@ -7545,44 +7517,12 @@ window.OWCS_LABELLING = {
       "note": "with no winston template in the set, 1 of 16 real winston portraits (6%) were confidently read as hog instead of UNKNOWN"
      },
      {
-      "hero": "mauga",
-      "readAs": "hog",
-      "count": 1,
-      "trials": 19,
-      "share": 0.053,
-      "note": "with no mauga template in the set, 1 of 19 real mauga portraits (5%) were confidently read as hog instead of UNKNOWN"
-     },
-     {
       "hero": "bap",
       "readAs": "illari",
       "count": 2,
       "trials": 44,
       "share": 0.045,
       "note": "with no bap template in the set, 2 of 44 real bap portraits (5%) were confidently read as illari instead of UNKNOWN"
-     },
-     {
-      "hero": "bastion",
-      "readAs": "torb",
-      "count": 4,
-      "trials": 108,
-      "share": 0.037,
-      "note": "with no bastion template in the set, 4 of 108 real bastion portraits (4%) were confidently read as torb instead of UNKNOWN"
-     },
-     {
-      "hero": "cass",
-      "readAs": "pharah",
-      "count": 1,
-      "trials": 107,
-      "share": 0.009,
-      "note": "with no cass template in the set, 1 of 107 real cass portraits (1%) were confidently read as pharah instead of UNKNOWN"
-     },
-     {
-      "hero": "cass",
-      "readAs": "sojourn",
-      "count": 1,
-      "trials": 107,
-      "share": 0.009,
-      "note": "with no cass template in the set, 1 of 107 real cass portraits (1%) were confidently read as sojourn instead of UNKNOWN"
      }
     ]
    },
