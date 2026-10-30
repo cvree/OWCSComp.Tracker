@@ -1,7 +1,27 @@
 {
  "window_days": 30,
- "generated_at": "2026-08-26T05:06:38+00:00",
+ "generated_at": "2026-10-30T22:58:16+00:00",
  "teams": [
+  {
+   "id": "ag-al",
+   "name": "AG.AL",
+   "region": "Unknown",
+   "status": "active",
+   "states": [
+    "identity-verified",
+    "logo-verified",
+    "schedule-discovered"
+   ],
+   "matches": 0,
+   "broadcastsLocated": 0,
+   "capturedMaps": 0,
+   "blockingIssue": "no matches for this team inside the current window",
+   "hasFaceitId": false,
+   "logoState": "logo-verified",
+   "hasRoster": false,
+   "needsReview": false,
+   "reviewReason": null
+  },
   {
    "id": "qadsiah",
    "name": "Al Qadsiah",
@@ -42,6 +62,46 @@
    "reviewReason": null
   },
   {
+   "id": "dallas-fuel",
+   "name": "Dallas Fuel",
+   "region": "Unknown",
+   "status": "active",
+   "states": [
+    "identity-verified",
+    "logo-verified",
+    "schedule-discovered"
+   ],
+   "matches": 0,
+   "broadcastsLocated": 0,
+   "capturedMaps": 0,
+   "blockingIssue": "no matches for this team inside the current window",
+   "hasFaceitId": false,
+   "logoState": "logo-verified",
+   "hasRoster": false,
+   "needsReview": false,
+   "reviewReason": null
+  },
+  {
+   "id": "geekay-esports",
+   "name": "Geekay Esports",
+   "region": "Unknown",
+   "status": "active",
+   "states": [
+    "identity-verified",
+    "logo-verified",
+    "schedule-discovered"
+   ],
+   "matches": 0,
+   "broadcastsLocated": 0,
+   "capturedMaps": 0,
+   "blockingIssue": "no matches for this team inside the current window",
+   "hasFaceitId": false,
+   "logoState": "logo-verified",
+   "hasRoster": false,
+   "needsReview": false,
+   "reviewReason": null
+  },
+  {
    "id": "gen",
    "name": "Gen.G Esports",
    "region": "Asia",
@@ -56,6 +116,46 @@
    "hasFaceitId": false,
    "logoState": "none",
    "hasRoster": true,
+   "needsReview": false,
+   "reviewReason": null
+  },
+  {
+   "id": "globant",
+   "name": "Globant",
+   "region": "Unknown",
+   "status": "active",
+   "states": [
+    "identity-verified",
+    "logo-verified",
+    "schedule-discovered"
+   ],
+   "matches": 0,
+   "broadcastsLocated": 0,
+   "capturedMaps": 0,
+   "blockingIssue": "no matches for this team inside the current window",
+   "hasFaceitId": false,
+   "logoState": "logo-verified",
+   "hasRoster": false,
+   "needsReview": false,
+   "reviewReason": null
+  },
+  {
+   "id": "jd-gaming",
+   "name": "JD Gaming",
+   "region": "Unknown",
+   "status": "active",
+   "states": [
+    "identity-verified",
+    "logo-verified",
+    "schedule-discovered"
+   ],
+   "matches": 0,
+   "broadcastsLocated": 0,
+   "capturedMaps": 0,
+   "blockingIssue": "no matches for this team inside the current window",
+   "hasFaceitId": false,
+   "logoState": "logo-verified",
+   "hasRoster": false,
    "needsReview": false,
    "reviewReason": null
   },
@@ -116,6 +216,26 @@
    "reviewReason": null
   },
   {
+   "id": "t1",
+   "name": "T1",
+   "region": "Unknown",
+   "status": "active",
+   "states": [
+    "identity-verified",
+    "logo-verified",
+    "schedule-discovered"
+   ],
+   "matches": 0,
+   "broadcastsLocated": 0,
+   "capturedMaps": 0,
+   "blockingIssue": "no matches for this team inside the current window",
+   "hasFaceitId": false,
+   "logoState": "logo-verified",
+   "hasRoster": false,
+   "needsReview": false,
+   "reviewReason": null
+  },
+  {
    "id": "falcons",
    "name": "Team Falcons",
    "region": "Asia",
@@ -131,6 +251,46 @@
    "hasFaceitId": false,
    "logoState": "logo-verified",
    "hasRoster": true,
+   "needsReview": false,
+   "reviewReason": null
+  },
+  {
+   "id": "team-liquid",
+   "name": "Team Liquid",
+   "region": "Unknown",
+   "status": "active",
+   "states": [
+    "identity-verified",
+    "logo-verified",
+    "schedule-discovered"
+   ],
+   "matches": 0,
+   "broadcastsLocated": 0,
+   "capturedMaps": 0,
+   "blockingIssue": "no matches for this team inside the current window",
+   "hasFaceitId": false,
+   "logoState": "logo-verified",
+   "hasRoster": false,
+   "needsReview": false,
+   "reviewReason": null
+  },
+  {
+   "id": "team-secret",
+   "name": "Team Secret",
+   "region": "Unknown",
+   "status": "active",
+   "states": [
+    "identity-verified",
+    "logo-verified",
+    "schedule-discovered"
+   ],
+   "matches": 0,
+   "broadcastsLocated": 0,
+   "capturedMaps": 0,
+   "blockingIssue": "no matches for this team inside the current window",
+   "hasFaceitId": false,
+   "logoState": "logo-verified",
+   "hasRoster": false,
    "needsReview": false,
    "reviewReason": null
   },
@@ -155,6 +315,66 @@
    "reviewReason": null
   },
   {
+   "id": "varrel",
+   "name": "Varrel",
+   "region": "Unknown",
+   "status": "active",
+   "states": [
+    "identity-verified",
+    "logo-verified",
+    "schedule-discovered"
+   ],
+   "matches": 0,
+   "broadcastsLocated": 0,
+   "capturedMaps": 0,
+   "blockingIssue": "no matches for this team inside the current window",
+   "hasFaceitId": false,
+   "logoState": "logo-verified",
+   "hasRoster": false,
+   "needsReview": false,
+   "reviewReason": null
+  },
+  {
+   "id": "virtus-pro",
+   "name": "Virtus Pro",
+   "region": "Unknown",
+   "status": "active",
+   "states": [
+    "identity-verified",
+    "logo-verified",
+    "schedule-discovered"
+   ],
+   "matches": 0,
+   "broadcastsLocated": 0,
+   "capturedMaps": 0,
+   "blockingIssue": "no matches for this team inside the current window",
+   "hasFaceitId": false,
+   "logoState": "logo-verified",
+   "hasRoster": false,
+   "needsReview": false,
+   "reviewReason": null
+  },
+  {
+   "id": "weibo-gaming",
+   "name": "Weibo Gaming",
+   "region": "Unknown",
+   "status": "active",
+   "states": [
+    "identity-verified",
+    "logo-verified",
+    "schedule-discovered"
+   ],
+   "matches": 0,
+   "broadcastsLocated": 0,
+   "capturedMaps": 0,
+   "blockingIssue": "no matches for this team inside the current window",
+   "hasFaceitId": false,
+   "logoState": "logo-verified",
+   "hasRoster": false,
+   "needsReview": false,
+   "reviewReason": null
+  },
+  {
    "id": "zeta",
    "name": "ZETA Division",
    "region": "Asia",
@@ -175,11 +395,11 @@
   }
  ],
  "counts": {
-  "schedule_discovered": 9,
-  "identity_verified": 0,
+  "schedule_discovered": 20,
+  "identity_verified": 11,
   "roster_verified": 0,
   "logo_candidate": 2,
-  "logo_verified": 5,
+  "logo_verified": 16,
   "broadcast_located": 0,
   "composition_captured": 2,
   "needs_review": 0,
