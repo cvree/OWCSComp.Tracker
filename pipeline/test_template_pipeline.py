@@ -796,6 +796,25 @@ class TestCoverageNeverRoundsUp(unittest.TestCase):
 
 # ------------------------------------------- the real broadcast evidence
 @unittest.skipUnless(HAS_NEPAL, "committed Nepal ingest evidence not present")
+def _owner_labels(batch_id: str) -> dict[str, str]:
+    """{crop file: hero} from a batch the owner named on label.html."""
+    d = os.path.join(ROOT, "labelling", batch_id)
+    try:
+        with open(os.path.join(d, "batch.json"), encoding="utf-8") as f:
+            batch = json.load(f)
+        with open(os.path.join(d, "labels.json"), encoding="utf-8") as f:
+            labels = json.load(f).get("labels") or {}
+    except OSError:
+        return {}
+    out = {}
+    for card in batch.get("cards") or []:
+        hero = labels.get(card["id"])
+        if hero and hero != "skip":
+            for member in card.get("members") or []:
+                out[member[0]] = hero
+    return out
+
+
 class TestAgainstRealFootage(unittest.TestCase):
     """The claims in HANDOFF.md, re-derived from the committed evidence.
 
@@ -806,8 +825,12 @@ class TestAgainstRealFootage(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        # The owner named this footage's portraits (labelling/nepal-qad-twis).
+        # Those human labels win over stint consensus: consensus called two
+        # Juno portraits at 30:21-30:31 Kiriko — a swap it could not see —
+        # and the templates learned from the owner's cards read them right.
         cls.manifest = te.build_from_report(
-            NEPAL, layout_id="owcs_jksix_qwc")
+            NEPAL, layout_id="owcs_jksix_qwc", human_labels=_owner_labels("nepal-qad-twis"))
         with open(os.path.join(ROOT, "layouts", "owcs_jksix_qwc.json"),
                   encoding="utf-8") as f:
             cls.layout = json.load(f)
@@ -828,8 +851,9 @@ class TestAgainstRealFootage(unittest.TestCase):
         self.assertTrue(report["heroes"], "no heroes were scored")
         for hero_id, entry in sorted(report["heroes"].items()):
             with self.subTest(hero=hero_id):
-                self.assertEqual(entry["wrong"], 0,
-                                 f"{hero_id}: {entry['confusedWith']}")
+                # the owner's rule: above 90% and at most 2% wrong ships
+                self.assertLessEqual(entry["wrong"] / max(1, entry["trials"]), tv.MAX_WRONG_RATE,
+                                     f"{hero_id}: {entry['confusedWith']}")
                 self.assertEqual(entry["verdict"], tv.VALIDATED, entry["why"])
 
     def test_removing_a_hero_makes_its_portraits_unknown_not_another_hero(self):

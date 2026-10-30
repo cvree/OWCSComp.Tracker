@@ -17,7 +17,7 @@ window.OWCS_BROADCAST_MAPS = {
      "series": 1,
      "start": 3840,
      "team_a": {
-      "id": null,
+      "id": "varrel",
       "name": "VARREL"
      },
      "team_b": {
@@ -34,7 +34,7 @@ window.OWCS_BROADCAST_MAPS = {
      "series": 1,
      "start": 4680,
      "team_a": {
-      "id": null,
+      "id": "varrel",
       "name": "VARREL"
      },
      "team_b": {
@@ -55,7 +55,7 @@ window.OWCS_BROADCAST_MAPS = {
       "name": "CRAZY RACCOON"
      },
      "team_b": {
-      "id": null,
+      "id": "team-secret",
       "name": "TEAM SECRET"
      }
     },
@@ -69,7 +69,7 @@ window.OWCS_BROADCAST_MAPS = {
      "series": 2,
      "start": 8760,
      "team_a": {
-      "id": null,
+      "id": "team-secret",
       "name": "TEAM SECRET"
      },
      "team_b": {
@@ -86,11 +86,11 @@ window.OWCS_BROADCAST_MAPS = {
      "series": 3,
      "start": 12480,
      "team_a": {
-      "id": null,
+      "id": "ag-al",
       "name": "AG.AL"
      },
      "team_b": {
-      "id": null,
+      "id": "geekay-esports",
       "name": "GEEKAY ESPORTS"
      }
     },
@@ -105,11 +105,11 @@ window.OWCS_BROADCAST_MAPS = {
      "series": 3,
      "start": 13530,
      "team_a": {
-      "id": null,
+      "id": "ag-al",
       "name": "AG.AL"
      },
      "team_b": {
-      "id": null,
+      "id": "geekay-esports",
       "name": "GEEKAY ESPORTS"
      }
     },
@@ -128,7 +128,7 @@ window.OWCS_BROADCAST_MAPS = {
       "name": "SPACESTATION GAMING"
      },
      "team_b": {
-      "id": null,
+      "id": "jd-gaming",
       "name": "JD GAMING"
      }
     },
@@ -141,7 +141,7 @@ window.OWCS_BROADCAST_MAPS = {
      "series": 4,
      "start": 18810,
      "team_a": {
-      "id": null,
+      "id": "jd-gaming",
       "name": "JD GAMING"
      },
      "team_b": {
@@ -162,7 +162,7 @@ window.OWCS_BROADCAST_MAPS = {
       "name": "SPACESTATION GAMING"
      },
      "team_b": {
-      "id": null,
+      "id": "jd-gaming",
       "name": "JD GAMING"
      }
     },
@@ -177,7 +177,7 @@ window.OWCS_BROADCAST_MAPS = {
      "series": 5,
      "start": 22470,
      "team_a": {
-      "id": null,
+      "id": "t1",
       "name": "T1"
      },
      "team_b": {
@@ -196,7 +196,7 @@ window.OWCS_BROADCAST_MAPS = {
      "series": 5,
      "start": 24990,
      "team_a": {
-      "id": null,
+      "id": "t1",
       "name": "T1"
      },
      "team_b": {
@@ -213,7 +213,7 @@ window.OWCS_BROADCAST_MAPS = {
      "series": 5,
      "start": 25950,
      "team_a": {
-      "id": null,
+      "id": "t1",
       "name": "T1"
      },
      "team_b": {
@@ -232,11 +232,11 @@ window.OWCS_BROADCAST_MAPS = {
      "series": 6,
      "start": 29220,
      "team_a": {
-      "id": null,
+      "id": "team-liquid",
       "name": "TEAM LIQUID"
      },
      "team_b": {
-      "id": null,
+      "id": "weibo-gaming",
       "name": "WEIBO GAMING"
      }
     },
@@ -249,11 +249,11 @@ window.OWCS_BROADCAST_MAPS = {
      "series": 6,
      "start": 30510,
      "team_a": {
-      "id": null,
+      "id": "team-liquid",
       "name": "TEAM LIQUID"
      },
      "team_b": {
-      "id": null,
+      "id": "weibo-gaming",
       "name": "WEIBO GAMING"
      }
     },
@@ -268,11 +268,11 @@ window.OWCS_BROADCAST_MAPS = {
      "series": 6,
      "start": 32010,
      "team_a": {
-      "id": null,
+      "id": "team-liquid",
       "name": "TEAM LIQUID"
      },
      "team_b": {
-      "id": null,
+      "id": "weibo-gaming",
       "name": "WEIBO GAMING"
      }
     },
@@ -285,11 +285,11 @@ window.OWCS_BROADCAST_MAPS = {
      "series": 7,
      "start": 34620,
      "team_a": {
-      "id": null,
+      "id": "virtus-pro",
       "name": "VIRTUS PRO"
      },
      "team_b": {
-      "id": null,
+      "id": "globant",
       "name": "GLOBANT"
      }
     },
@@ -302,11 +302,11 @@ window.OWCS_BROADCAST_MAPS = {
      "series": 7,
      "start": 35400,
      "team_a": {
-      "id": null,
+      "id": "virtus-pro",
       "name": "VIRTUS PRO"
      },
      "team_b": {
-      "id": null,
+      "id": "globant",
       "name": "GLOBANT"
      }
     },
@@ -319,7 +319,7 @@ window.OWCS_BROADCAST_MAPS = {
      "series": 8,
      "start": 37980,
      "team_a": {
-      "id": null,
+      "id": "dallas-fuel",
       "name": "DALLAS FUEL"
      },
      "team_b": {
@@ -340,7 +340,7 @@ window.OWCS_BROADCAST_MAPS = {
       "name": "TEAM FALCONS"
      },
      "team_b": {
-      "id": null,
+      "id": "dallas-fuel",
       "name": "DALLAS FUEL"
      }
     }
@@ -361,7 +361,7 @@ window.OWCS_BROADCAST_MAPS = {
      "series": 1,
      "start": 3360,
      "team_a": {
-      "id": null,
+      "id": "t1",
       "name": "T1"
      },
      "team_b": {
@@ -378,7 +378,7 @@ window.OWCS_BROADCAST_MAPS = {
      "series": 1,
      "start": 4710,
      "team_a": {
-      "id": null,
+      "id": "t1",
       "name": "T1"
      },
      "team_b": {
@@ -397,7 +397,7 @@ window.OWCS_BROADCAST_MAPS = {
      "series": 1,
      "start": 5580,
      "team_a": {
-      "id": null,
+      "id": "t1",
       "name": "T1"
      },
      "team_b": {
@@ -418,7 +418,7 @@ window.OWCS_BROADCAST_MAPS = {
       "name": "TWISTED MINDS"
      },
      "team_b": {
-      "id": null,
+      "id": "weibo-gaming",
       "name": "WEIBO GAMING"
      }
     },
@@ -431,7 +431,7 @@ window.OWCS_BROADCAST_MAPS = {
      "series": 2,
      "start": 9390,
      "team_a": {
-      "id": null,
+      "id": "weibo-gaming",
       "name": "WEIBO GAMING"
      },
      "team_b": {
@@ -448,7 +448,7 @@ window.OWCS_BROADCAST_MAPS = {
      "series": 2,
      "start": 10590,
      "team_a": {
-      "id": null,
+      "id": "weibo-gaming",
       "name": "WEIBO GAMING"
      },
      "team_b": {
@@ -469,7 +469,7 @@ window.OWCS_BROADCAST_MAPS = {
       "name": "TWISTED MINDS"
      },
      "team_b": {
-      "id": null,
+      "id": "weibo-gaming",
       "name": "WEIBO GAMING"
      }
     },
@@ -486,7 +486,7 @@ window.OWCS_BROADCAST_MAPS = {
       "name": "TWISTED MINDS"
      },
      "team_b": {
-      "id": null,
+      "id": "weibo-gaming",
       "name": "WEIBO GAMING"
      }
     },
@@ -499,11 +499,11 @@ window.OWCS_BROADCAST_MAPS = {
      "series": 3,
      "start": 16230,
      "team_a": {
-      "id": null,
+      "id": "t1",
       "name": "T1"
      },
      "team_b": {
-      "id": null,
+      "id": "weibo-gaming",
       "name": "WEIBO GAMING"
      }
     },
@@ -518,11 +518,11 @@ window.OWCS_BROADCAST_MAPS = {
      "series": 3,
      "start": 17310,
      "team_a": {
-      "id": null,
+      "id": "t1",
       "name": "T1"
      },
      "team_b": {
-      "id": null,
+      "id": "weibo-gaming",
       "name": "WEIBO GAMING"
      }
     },
@@ -537,11 +537,11 @@ window.OWCS_BROADCAST_MAPS = {
      "series": 3,
      "start": 19260,
      "team_a": {
-      "id": null,
+      "id": "t1",
       "name": "T1"
      },
      "team_b": {
-      "id": null,
+      "id": "weibo-gaming",
       "name": "WEIBO GAMING"
      }
     },

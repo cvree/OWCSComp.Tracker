@@ -1,0 +1,7 @@
+{
+ "source": "Official OWCS broadcast graphics (HUD team plate)",
+ "sourceKind": "broadcast-hud",
+ "video": "2831815423",
+ "method": "median of the team's HUD logo plate over every indexed frame; dark mark kept, redrawn white on transparency",
+ "recordedAt": "2026-10-30T19:47:04+00:00"
+}

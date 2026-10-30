@@ -394,6 +394,25 @@ class TestForge(unittest.TestCase):
         self.assertIn("sits in a slot of another role",
                       {c["excludedBecause"] for c in out["excluded"]})
 
+    def test_a_small_card_unlike_its_hero_is_set_aside_whole(self):
+        """A 'Cassidy' card that was really a jumble of other faces."""
+        lay = capture.load_layout(LAYOUT)
+        manifest, _ = self._labelled_manifest()
+        hero = manifest["crops"][0]["hero"]
+        role_slot = manifest["crops"][0]["slot"]
+        others = [c for c in manifest["crops"] if c["hero"] != hero and c["slot"] == role_slot][:6]
+        self.assertGreaterEqual(len(others), 3)
+        junk = [dict(c, hero=hero, clusterId="cJUNK") for c in others]
+        out, rep = lf.clean_cards(dict(manifest, crops=manifest["crops"] + junk), lay)
+        self.assertIn("cJUNK", rep["strayCards"])
+        self.assertFalse(any(c["clusterId"] == "cJUNK" for c in out["crops"]))
+
+    def test_no_real_card_is_set_aside_as_a_stray(self):
+        lay = capture.load_layout(LAYOUT)
+        manifest, _ = self._labelled_manifest()
+        _, rep = lf.clean_cards(manifest, lay)
+        self.assertEqual(rep["strayCards"], [])
+
     def test_an_approved_review_hero_is_promotable_and_failed_is_not(self):
         import template_validate as tv
         val = {"heroes": {"tracer": {"verdict": tv.REVIEW, "why": "86%"},

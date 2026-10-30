@@ -59,7 +59,8 @@ STAGING_ROOT = os.path.join(db.REPO_ROOT, "work", "label-forge")
 # set. 3: the set may hold no template that looks like another hero.
 # 4: role lock — each slot reads only heroes of its role; off-role crops
 # leave their card; a person double-checks what lands at or below 90%.
-FORGE_VERSION = 4
+# 5: a small card unlike its hero's main card is set aside whole.
+FORGE_VERSION = 5
 
 
 class ForgeRefusal(Exception):
@@ -167,6 +168,8 @@ def build_manifest(batch: dict, named: dict[str, str], *,
 # on the first live Twitch batch four named cards carried a stray portrait
 # of another hero, and a template cut from that stray teaches the wrong face.
 CARD_KEEP = 0.45
+SMALL_CARD = 20      # a card this small can be a stray as a whole
+HERO_KEEP = 0.30     # ...when it resembles its hero's main card less than this
 
 
 def clean_cards(manifest: dict, layout: dict, *,
@@ -216,10 +219,37 @@ def clean_cards(manifest: dict, layout: dict, *,
                 keep.add(i)
             else:
                 dropped[card] = dropped.get(card, 0) + 1
+    # A small card that does not look like its hero's main card is not that
+    # hero, whatever it was named: on Midseason two 'Cassidy' cards were a
+    # jumble of faces and blurred transitions, and the templates cut from
+    # them named other damage heroes Cassidy. Measured on Nepal, every real
+    # alternate look (grey, ult, other team) of a hero scores 0.36-0.89
+    # against its main card; small ones 0.73.
+    stray_cards: set[str] = set()
+    by_hero_card: dict[str, dict[str, list[int]]] = {}
+    for i in keep:
+        c = manifest["crops"][i]
+        by_hero_card.setdefault(c["hero"], {}).setdefault(c["clusterId"], []).append(i)
+    for hero, cards in by_hero_card.items():
+        if len(cards) < 2:
+            continue
+        main = max(cards, key=lambda k: len(cards[k]))
+        ref = lb.features([{"img": imgs[i]} for i in cards[main]], roi).mean(axis=0)
+        ref = ref / (float((ref ** 2).sum() ** 0.5) or 1.0)
+        for card, idx in cards.items():
+            if card == main or len(idx) >= SMALL_CARD:
+                continue
+            sim = float((lb.features([{"img": imgs[i]} for i in idx], roi) @ ref).mean())
+            if sim < HERO_KEEP:
+                stray_cards.add(card)
+                keep.difference_update(idx)
+                dropped[card] = dropped.get(card, 0) + len(idx)
     out = dict(manifest)
     out["crops"] = [c for i, c in enumerate(manifest["crops"]) if i in keep]
     out["excluded"] = [dict(c, excludedBecause=(
                            "sits in a slot of another role" if i in off_role else
+                           "a small card that does not look like this hero's main card"
+                           if c["clusterId"] in stray_cards else
                            "does not look like the rest of its card"))
                        for i, c in enumerate(manifest["crops"]) if i not in keep]
     by_hero: dict[str, int] = {}
@@ -231,7 +261,7 @@ def clean_cards(manifest: dict, layout: dict, *,
                          byLabelSource={LABEL_SOURCE: len(out["crops"])})
     return out, {"threshold": CARD_KEEP, "dropped": dict(sorted(dropped.items())),
                  "droppedTotal": sum(dropped.values()), "offRole": len(off_role),
-                 "kept": len(out["crops"])}
+                 "strayCards": sorted(stray_cards), "kept": len(out["crops"])}
 
 
 # ------------------------------------------------------------ safety tuning

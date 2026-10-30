@@ -11,7 +11,7 @@
      "url": "https://storage.googleapis.com/alqadsiah-public-website/main/fav.png",
      "sourceKind": "official-website",
      "authorityRank": 1,
-     "note": "alqadsiah.com official site favicon (50x50) \u2014 low-res, human review before approval",
+     "note": "alqadsiah.com official site favicon (50x50) — low-res, human review before approval",
      "discoveredAt": "2026-07-25T23:31:56+00:00",
      "state": "validated",
      "localPath": "C:\\Users\\eppol\\Claude Code\\owcs\\data\\asset_staging\\qadsiah\\d35e679a54257f5b.png",
@@ -229,7 +229,7 @@
      "url": "https://www.nrg.gg/cdn/shop/files/NRG-72.72-Sq_96x96.png",
      "sourceKind": "official-website",
      "authorityRank": 1,
-     "note": "nrg.gg official site icon (72x72) \u2014 low-res, human review before approval",
+     "note": "nrg.gg official site icon (72x72) — low-res, human review before approval",
      "discoveredAt": "2026-07-25T23:31:56+00:00",
      "state": "validated",
      "localPath": "C:\\Users\\eppol\\Claude Code\\owcs\\data\\asset_staging\\nrg\\d94584884509f315.png",
@@ -242,6 +242,72 @@
      "aspectRatio": 1.0
     }
    ]
+  },
+  "ag-al": {
+   "sourceUrl": "https://www.twitch.tv/videos/2831815423",
+   "sourceKind": "official-owcs-broadcast",
+   "attribution": "AG.AL mark as drawn by the official OWCS broadcast HUD (team plate), cut from the indexed broadcast and redrawn white.",
+   "retrievedAt": "2026-10-30T20:01:40+00:00"
+  },
+  "dallas-fuel": {
+   "sourceUrl": "https://www.twitch.tv/videos/2831815423",
+   "sourceKind": "official-owcs-broadcast",
+   "attribution": "Dallas Fuel mark as drawn by the official OWCS broadcast HUD (team plate), cut from the indexed broadcast and redrawn white.",
+   "retrievedAt": "2026-10-30T20:01:40+00:00"
+  },
+  "geekay-esports": {
+   "sourceUrl": "https://www.twitch.tv/videos/2831815423",
+   "sourceKind": "official-owcs-broadcast",
+   "attribution": "Geekay Esports mark as drawn by the official OWCS broadcast HUD (team plate), cut from the indexed broadcast and redrawn white.",
+   "retrievedAt": "2026-10-30T20:01:40+00:00"
+  },
+  "globant": {
+   "sourceUrl": "https://www.twitch.tv/videos/2831815423",
+   "sourceKind": "official-owcs-broadcast",
+   "attribution": "Globant mark as drawn by the official OWCS broadcast HUD (team plate), cut from the indexed broadcast and redrawn white.",
+   "retrievedAt": "2026-10-30T20:01:40+00:00"
+  },
+  "jd-gaming": {
+   "sourceUrl": "https://www.twitch.tv/videos/2831815423",
+   "sourceKind": "official-owcs-broadcast",
+   "attribution": "JD Gaming mark as drawn by the official OWCS broadcast HUD (team plate), cut from the indexed broadcast and redrawn white.",
+   "retrievedAt": "2026-10-30T20:01:40+00:00"
+  },
+  "t1": {
+   "sourceUrl": "https://www.twitch.tv/videos/2831815423",
+   "sourceKind": "official-owcs-broadcast",
+   "attribution": "T1 mark as drawn by the official OWCS broadcast HUD (team plate), cut from the indexed broadcast and redrawn white.",
+   "retrievedAt": "2026-10-30T20:01:40+00:00"
+  },
+  "team-liquid": {
+   "sourceUrl": "https://www.twitch.tv/videos/2831815423",
+   "sourceKind": "official-owcs-broadcast",
+   "attribution": "Team Liquid mark as drawn by the official OWCS broadcast HUD (team plate), cut from the indexed broadcast and redrawn white.",
+   "retrievedAt": "2026-10-30T20:01:40+00:00"
+  },
+  "team-secret": {
+   "sourceUrl": "https://www.twitch.tv/videos/2831815423",
+   "sourceKind": "official-owcs-broadcast",
+   "attribution": "Team Secret mark as drawn by the official OWCS broadcast HUD (team plate), cut from the indexed broadcast and redrawn white.",
+   "retrievedAt": "2026-10-30T20:01:40+00:00"
+  },
+  "varrel": {
+   "sourceUrl": "https://www.twitch.tv/videos/2831815423",
+   "sourceKind": "official-owcs-broadcast",
+   "attribution": "Varrel mark as drawn by the official OWCS broadcast HUD (team plate), cut from the indexed broadcast and redrawn white.",
+   "retrievedAt": "2026-10-30T20:01:40+00:00"
+  },
+  "virtus-pro": {
+   "sourceUrl": "https://www.twitch.tv/videos/2831815423",
+   "sourceKind": "official-owcs-broadcast",
+   "attribution": "Virtus Pro mark as drawn by the official OWCS broadcast HUD (team plate), cut from the indexed broadcast and redrawn white.",
+   "retrievedAt": "2026-10-30T20:01:40+00:00"
+  },
+  "weibo-gaming": {
+   "sourceUrl": "https://www.twitch.tv/videos/2831815423",
+   "sourceKind": "official-owcs-broadcast",
+   "attribution": "Weibo Gaming mark as drawn by the official OWCS broadcast HUD (team plate), cut from the indexed broadcast and redrawn white.",
+   "retrievedAt": "2026-10-30T20:01:40+00:00"
   }
  }
 }

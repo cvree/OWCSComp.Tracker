@@ -2229,6 +2229,29 @@ a.mi-team:hover .mi-team__name { text-decoration: underline; }
   border: 1px solid rgba(232, 163, 61, .4); cursor: help; }
 .mi-map__watch { white-space: nowrap; }
 .mi-more { margin: 0; }
+/* the field — every team's mark, a quiet wall that lights up on hover */
+.field { display: grid; gap: var(--s-3); grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); }
+.field__team { display: grid; justify-items: center; gap: var(--s-2); padding: var(--s-4) var(--s-3) var(--s-3);
+  border: 1px solid var(--line); border-radius: var(--r-4); background: var(--s1); text-decoration: none;
+  color: var(--tx-2); transition: border-color .2s, transform .2s, background .2s; }
+.field__team:hover, .field__team:focus-visible { border-color: rgba(243, 167, 47, .55); background: var(--s2);
+  transform: translateY(-2px); color: var(--tx); }
+.field__logo { display: grid; place-items: center; width: 48px; height: 48px; }
+.field__logo img, .field__logo svg { width: 48px; height: 48px; object-fit: contain; }
+.field__team:not(:hover) .field__logo img { opacity: .9; }
+.field__name { font: 700 .92rem/1.15 var(--f-display); letter-spacing: .02em; text-align: center; }
+.field__n { font-size: .72rem; color: var(--gold); letter-spacing: .02em; }
+@media (prefers-reduced-motion: reduce) { .field__team { transition: none; } .field__team:hover { transform: none; } }
+@media (max-width: 640px) {
+  .field { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s-2); }
+  .field__team { padding: var(--s-3) var(--s-1) var(--s-2); gap: var(--s-1); border-radius: var(--r-3); }
+  .field__logo, .field__logo img, .field__logo svg { width: 34px; height: 34px; }
+  .field__name { font-size: .7rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+  .field__n { font-size: .62rem; }
+}
+.mi-series__title { font: 700 1.05rem/1.2 var(--f-display); color: var(--tx); text-decoration: none; }
+.mi-series__title:hover { color: var(--gold-hi); }
+.mi-map--team { grid-template-columns: 2.5rem minmax(9rem, 1fr) minmax(0, 1.4fr) auto auto auto; }
 @media (max-width: 760px) {
   .mi-map { grid-template-columns: 2rem 1fr auto; grid-template-areas:
     "g name watch" "g vs vs" "g when check"; row-gap: var(--s-1); padding: var(--s-3); }
