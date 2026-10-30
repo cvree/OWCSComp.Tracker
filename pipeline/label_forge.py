@@ -40,6 +40,7 @@ CLI:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import shutil
@@ -53,6 +54,10 @@ LABELS_SCHEMA = "label-labels.v1"
 LABEL_SOURCE = "human-cluster"
 SKIP = "skip"
 STAGING_ROOT = os.path.join(db.REPO_ROOT, "work", "label-forge")
+# Bumped when the forge's rules change in a way that should re-forge every
+# batch already forged under the old ones. 2: clean, tune, safety-checked
+# set. 3: the set may hold no template that looks like another hero.
+FORGE_VERSION = 3
 
 
 class ForgeRefusal(Exception):
@@ -252,6 +257,45 @@ def _candidate_set(staging: str, production: str, validation: dict, tmp: str) ->
     return tmp
 
 
+# A template that matches another hero's template this well, and clearly
+# better than any of its own hero's, is that other hero under the wrong name.
+# The hand-made starter set carried two Symmetra portraits as tracer.a/.b for
+# months: 0.91 against sym, 0.55 against tracer; every Symmetra crop then
+# read as Tracer. Genuine look-alikes (Ana/Mauga, Sym/Tracer variants) stay
+# well inside these bounds on every committed set.
+SUSPECT_SCORE = 0.80
+SUSPECT_GAP = 0.15
+
+
+def suspect_templates(set_dir: str, layout: dict) -> list[dict]:
+    """Templates in `set_dir` that look like another hero, not their own."""
+    import cv2
+    import detect
+    try:
+        lib = detect.load_templates(set_dir, roi=detect.portrait_roi(layout))
+    except FileNotFoundError:
+        return []
+    out = []
+    for hero, tpls in sorted(lib.items()):
+        for img, fn in tpls:
+            best: dict[str, float] = {}
+            for other, others in lib.items():
+                for img2, fn2 in others:
+                    if other == hero and fn2 == fn:
+                        continue
+                    t = img2 if img2.shape == img.shape else \
+                        cv2.resize(img2, (img.shape[1], img.shape[0]))
+                    sc = float(cv2.matchTemplate(img, t, cv2.TM_CCOEFF_NORMED).max())
+                    best[other] = max(best.get(other, -1.0), sc)
+            own = best.get(hero, -1.0)
+            near = max(((sc, h) for h, sc in best.items() if h != hero),
+                       default=(-1.0, ""))
+            if near[0] >= SUSPECT_SCORE and near[0] - own >= SUSPECT_GAP:
+                out.append({"file": fn, "hero": hero, "looksLike": near[1],
+                            "score": round(near[0], 3), "ownScore": round(own, 3)})
+    return out
+
+
 def _safety(set_dir: str, manifest: dict, layout: dict, *, repo_root: str,
             sample: int | None) -> dict:
     """Does this set stay quiet about heroes it cannot name? Both halves:
@@ -265,8 +309,10 @@ def _safety(set_dir: str, manifest: dict, layout: dict, *, repo_root: str,
                            limit_per_hero=sample or 120)
     fm = val.get("falseMatch") or {}
     fm_ok = not fm.get("trials") or bool(fm.get("passed"))
+    suspects = suspect_templates(set_dir, layout)
     return {"validation": val, "loo": loo, "falseMatchOk": fm_ok,
-            "safe": fm_ok and bool(loo.get("passed"))}
+            "suspects": suspects,
+            "safe": fm_ok and bool(loo.get("passed")) and not suspects}
 
 
 def tune_profile(staging: str, production: str, manifest: dict, layout: dict, *,
@@ -331,6 +377,36 @@ def write_layout_profile(path: str, floor: float, margin: float,
     json.loads(text)        # never write a layout that does not parse
     with open(path, "w", encoding="utf-8") as f:
         f.write(text)
+
+
+def labels_digest(path: str) -> str | None:
+    """What the forge records about the labels it read, so a later run can
+    tell whether they changed since."""
+    try:
+        with open(path, "rb") as f:
+            return hashlib.sha256(f.read()).hexdigest()
+    except OSError:
+        return None
+
+
+def stale_batches(root: str = lb.LABEL_ROOT) -> list[str]:
+    """Batches whose labels were never promoted by this forge as they stand.
+
+    A batch is stale when it has labels.json and its forge-report.json is
+    missing, was a dry run, came from an older FORGE_VERSION, or read labels
+    that have changed since. Forging only what the last commit touched lost
+    batches whenever a queued run was replaced or a push carried two; this
+    makes every run pick up whatever an earlier one missed."""
+    out = []
+    for name in sorted(os.listdir(root)) if os.path.isdir(root) else []:
+        digest = labels_digest(os.path.join(root, name, "labels.json"))
+        if not digest:
+            continue
+        rep = lb._read(os.path.join(root, name, "forge-report.json")) or {}
+        if (rep.get("forgeVersion") != FORGE_VERSION or not rep.get("promote")
+                or rep.get("labelsDigest") != digest):
+            out.append(name)
+    return out
 
 
 def summarise(batch: dict, labels: dict, named: dict[str, str],
@@ -431,6 +507,11 @@ def run(batch_id: str, *, promote: bool = False, root: str = lb.LABEL_ROOT,
                                    sample=None)
         safe = bool(chosen) and production_check["safe"]
         if not safe:
+            for sus in production_check.get("suspects") or []:
+                log(f"REFUSED: {sus['file']} (named {sus['hero']}) matches "
+                    f"{sus['looksLike']} at {sus['score']} but its own hero at "
+                    f"{sus['ownScore']} — move it to _superseded/ if it is "
+                    f"really {sus['looksLike']}")
             log("REFUSED: no detector bar on the grid keeps this set under the "
                 "false-name ceiling — nothing is promoted")
             promotion = {"promotedHeroes": [], "promoted": [], "superseded": [],
@@ -461,6 +542,9 @@ def run(batch_id: str, *, promote: bool = False, root: str = lb.LABEL_ROOT,
     summary = summarise(batch, labels, named, report, validation, promotion, loo)
     summary["cleaning"] = cleaning
     summary["tuning"] = tuning
+    summary["forgeVersion"] = FORGE_VERSION
+    summary["promote"] = bool(promote)
+    summary["labelsDigest"] = labels_digest(os.path.join(bdir, "labels.json"))
     if production_check:
         pv = production_check["validation"]
         summary["productionSet"] = {
@@ -471,6 +555,7 @@ def run(batch_id: str, *, promote: bool = False, root: str = lb.LABEL_ROOT,
                             for k in ("trials", "matched", "rate", "ceiling",
                                       "passed", "note", "confusablePairs")},
             "verdicts": {h: e.get("verdict") for h, e in (pv.get("heroes") or {}).items()},
+            "suspectTemplates": production_check.get("suspects") or [],
         }
     with open(os.path.join(bdir, "forge-report.json"), "w", encoding="utf-8") as f:
         json.dump(summary, f, indent=1, default=str)
@@ -481,10 +566,18 @@ def run(batch_id: str, *, promote: bool = False, root: str = lb.LABEL_ROOT,
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    ap.add_argument("--batch", required=True)
+    ap.add_argument("--batch")
     ap.add_argument("--promote", action="store_true",
                     help="copy VALIDATED heroes into the layout's template set")
+    ap.add_argument("--stale", action="store_true",
+                    help="print the batches whose labels this forge has not "
+                         "promoted as they stand, and exit")
     args = ap.parse_args(argv)
+    if args.stale:
+        print(" ".join(stale_batches()))
+        return 0
+    if not args.batch:
+        ap.error("--batch is required (or --stale)")
     try:
         s = run(args.batch, promote=args.promote)
     except ForgeRefusal as exc:
