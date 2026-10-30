@@ -351,24 +351,34 @@ class TestHeldOutIsEnforced(Temp):
                              min_gap=30.0)
         self.assertEqual(report["heroes"]["ana"]["verdict"], tv.WEAK)
 
-    def test_one_wrong_answer_fails_the_hero_outright(self):
-        """Accuracy is not the bar. A confident wrong hero is disqualifying.
-
-        An UNKNOWN loses a data point; a wrong hero writes false data into a
-        published composition, so no amount of otherwise-good accuracy
-        redeems it.
-        """
+    def _with_wrong(self, n_crops: int, wrong_at: list[int]):
         tdir = self._set(with_provenance=True, offsets=(100.0,))
-        man = self._manifest([500.0 + i * 10 for i in range(40)])
-        # One crop is actually the OTHER hero's art, still labelled 'ana'.
-        bad = man["crops"][5]
-        cv2.imwrite(os.path.join(ROOT, man["cropsDir"], bad["file"]),
-                    portrait(22))
-        report = tv.validate(tdir, man, min_gap=30.0)
+        man = self._manifest([500.0 + i * 10 for i in range(n_crops)])
+        # These crops are actually the OTHER hero's art, still labelled 'ana'.
+        for i in wrong_at:
+            cv2.imwrite(os.path.join(ROOT, man["cropsDir"], man["crops"][i]["file"]),
+                        portrait(22))
+        return tv.validate(tdir, man, min_gap=30.0)
+
+    def test_one_wrong_answer_in_forty_goes_to_a_person(self):
+        """The owner's rule: at or below 90% confidence, or more than 2%
+        wrong, a person double-checks. One wrong in 40 is 2.5%: not promoted
+        on its own, not thrown away either."""
+        report = self._with_wrong(40, [5])
         entry = report["heroes"]["ana"]
         self.assertEqual(entry["wrong"], 1)
-        self.assertEqual(entry["verdict"], tv.FAILED)
-        self.assertGreater(entry["accuracy"], 0.9)   # still "accurate"
+        self.assertEqual(entry["verdict"], tv.REVIEW, entry["why"])
+        self.assertIn("double-checks", entry["why"])
+        self.assertFalse(report["passed"])
+
+    def test_one_wrong_answer_in_sixty_is_within_the_bar(self):
+        report = self._with_wrong(60, [5])
+        self.assertEqual(report["heroes"]["ana"]["verdict"], tv.VALIDATED,
+                         report["heroes"]["ana"]["why"])
+
+    def test_a_template_wrong_on_over_a_tenth_is_broken(self):
+        report = self._with_wrong(30, [1, 4, 7, 10])
+        self.assertEqual(report["heroes"]["ana"]["verdict"], tv.FAILED)
         self.assertFalse(report["passed"])
 
 

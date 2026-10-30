@@ -364,6 +364,48 @@ class TestForge(unittest.TestCase):
         self.assertLessEqual(len(changed), 3, changed)
         self.assertTrue(all(l.startswith(' "') for l in changed), changed)
 
+    def test_role_lock_limits_a_slot_to_its_role(self):
+        """OWCS broadcasts print damage, damage, tank, support, support."""
+        import detect
+        lay = capture.load_layout(os.path.join(ROOT, "layouts", "owcs_8c105lnzlam.json"))
+        prof = detect.detector_profile(lay)
+        self.assertEqual(prof["slotRoles"], ["Damage", "Damage", "Tank", "Support", "Support"])
+        lib = {"ram": [], "sojourn": [], "jetcat": [], "tracer": []}
+        self.assertEqual(set(detect.lib_for_slot(lib, prof, "a3")), {"ram"})
+        self.assertEqual(set(detect.lib_for_slot(lib, prof, "b1")), {"sojourn", "tracer"})
+        self.assertEqual(set(detect.lib_for_slot(lib, prof, 5)), {"jetcat"})
+        self.assertEqual(detect.lib_for_slot(lib, {"slotRoles": None}, "a3"), lib)
+
+    def test_slot_roles_must_make_a_legal_team(self):
+        import detect
+        with self.assertRaises(ValueError):
+            detect.slot_roles({"slot_roles": ["tank", "tank", "damage", "support", "support"]})
+
+    def test_a_crop_from_another_roles_slot_leaves_its_card(self):
+        lay = capture.load_layout(LAYOUT)
+        manifest, _ = self._labelled_manifest()
+        tank = next(c for c in manifest["crops"] if c["slot"].endswith("3"))
+        stray = dict(tank, hero="kiriko", clusterId="cX")   # a support named in the tank slot
+        manifest = dict(manifest, crops=manifest["crops"] + [stray])
+        out, rep = lf.clean_cards(manifest, lay)
+        self.assertGreaterEqual(rep["offRole"], 1)
+        self.assertNotIn(stray["file"] + "|kiriko",
+                         {c["file"] + "|" + c["hero"] for c in out["crops"]})
+        self.assertIn("sits in a slot of another role",
+                      {c["excludedBecause"] for c in out["excluded"]})
+
+    def test_an_approved_review_hero_is_promotable_and_failed_is_not(self):
+        import template_validate as tv
+        val = {"heroes": {"tracer": {"verdict": tv.REVIEW, "why": "86%"},
+                          "sym": {"verdict": tv.FAILED, "why": "broken"},
+                          "ana": {"verdict": tv.REVIEW, "why": "88%"}}}
+        out = lf.apply_approvals(val, {"approved": ["tracer", "sym"], "labelledBy": "cvree"})
+        self.assertEqual(out["heroes"]["tracer"]["verdict"], tv.VALIDATED)
+        self.assertEqual(out["heroes"]["tracer"]["approvedBy"], "cvree")
+        self.assertEqual(out["heroes"]["sym"]["verdict"], tv.FAILED)
+        self.assertEqual(out["heroes"]["ana"]["verdict"], tv.REVIEW)
+        self.assertEqual(val["heroes"]["tracer"]["verdict"], tv.REVIEW, "input untouched")
+
     def test_a_template_of_another_hero_is_caught(self):
         """The starter set carried two Symmetra portraits as tracer.a/.b; every
         Symmetra crop then read as Tracer. A copy of one hero's template under

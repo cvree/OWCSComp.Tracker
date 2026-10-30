@@ -249,6 +249,8 @@
   "section of the validation report. Re-measure when a second source is",
   "harvested for this layout."
  ],
+ "slot_roles": ["damage", "damage", "tank", "support", "support"],
+ "_slot_roles_note": "Each team's portraits in broadcast order. Measured on human-labelled crops (2,798 Nepal crops, one exception); detect.lib_for_slot limits each slot to heroes of its role.",
  "match_threshold": 0.6,
  "anchor": {
   "rect": [

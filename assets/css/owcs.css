@@ -1843,6 +1843,32 @@ a.ch__key:hover .ch__name { color: var(--gold-hi); }
 .lb-learned__grid { display: grid; gap: var(--s-3); padding: var(--s-5); grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
 .lb-learned__hero { display: flex; gap: var(--s-3); align-items: center; color: var(--tx-3); }
 .lb-learned__hero.is-kept { color: var(--emerald); }
+.lb-learned__hero.is-ask { color: var(--amber); }
+/* role lock: a name whose role does not fit its slot */
+.lb-slot--warn { border-color: var(--amber) !important; box-shadow: 0 0 0 1px var(--amber) inset; }
+.lb-card__warn { margin: 0 var(--s-4) var(--s-3); padding: var(--s-2) var(--s-3); border-left: 3px solid var(--amber);
+  background: var(--wash-amber); color: var(--amber); border-radius: 4px; }
+.picker__divider { grid-column: 1 / -1; margin: var(--s-3) 0 var(--s-1); text-transform: uppercase; letter-spacing: .08em; }
+/* the double-check: heroes measured at 90% or less */
+.lb-review { margin-top: var(--s-5); border-left: 3px solid var(--amber); }
+.lb-review__list { display: grid; gap: var(--s-3); padding: var(--s-4) var(--s-5); }
+.lb-review > .dim { padding: 0 var(--s-5) var(--s-4); }
+.lb-review__hero { display: grid; gap: var(--s-3) var(--s-5); align-items: center;
+  grid-template-columns: minmax(180px, 240px) 1fr auto; padding: var(--s-3);
+  border: 1px solid var(--line); border-radius: 8px; background: var(--s1); }
+.lb-review__hero.is-approved { border-color: rgba(53, 207, 141, .55); }
+.lb-review__hero.is-rejected { border-color: rgba(229, 72, 77, .55); }
+.lb-review__who p { margin: var(--s-1) 0 0; color: var(--tx-2); }
+.lb-review__wrong { color: var(--amber); }
+.lb-review__cards { display: flex; flex-wrap: wrap; gap: var(--s-2); }
+.lb-review__card { padding: 0; border: 1px solid var(--line-2); border-radius: 6px; background: none; cursor: pointer; line-height: 0; }
+.lb-review__card:hover, .lb-review__card:focus-visible { border-color: var(--line-3); }
+.lb-review__card img { border-radius: 5px; }
+.lb-review__act { display: flex; flex-direction: column; gap: var(--s-2); }
+@media (max-width: 760px) {
+  .lb-review__hero { grid-template-columns: 1fr; }
+  .lb-review__act { flex-direction: row; flex-wrap: wrap; }
+}
 
 @media (max-width: 720px) {
   .lb-bar { grid-template-columns: 1fr; position: static; }

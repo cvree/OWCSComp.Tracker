@@ -92,6 +92,17 @@ class TestIdentify(unittest.TestCase):
         self.assertEqual((r["team_a"]["value"], r["team_a"]["known"]), ("AG.AL", False))
         self.assertEqual((r["team_b"]["value"], r["team_b"]["known"]), ("zeta", True))
         self.assertTrue(r["complete"])
+        # SAMOA won 3 of the 3 frames that resolved a map; AG.AL 4 of 4.
+        self.assertEqual(r["needsCheck"], [])
+
+    def test_a_value_carried_by_ninety_percent_or_less_is_flagged(self):
+        maps = ["SAMOA"] * 9 + ["NEPAL"]
+        ocr = fake_ocr({"map": maps, "game": ["GAME 2"],
+                        "team_a": ["y AG.AL"], "team_b": ["ZETA DIVISION \\"]})
+        known = MAPS + [{"id": "nepal", "name": "Nepal", "mode": "control"}]
+        r = lid.identify([FRAME] * 10, LAYOUT, known_maps=known, known_teams=TEAMS, ocr=ocr)
+        self.assertEqual((r["map"]["value"], r["map"]["share"]), ("samoa", 0.9))
+        self.assertEqual(r["needsCheck"], ["map"])
 
     def test_an_unknown_team_is_never_guessed_into_a_known_one(self):
         """team_identify's fuzzy cutoff read GEEKAY ESPORTS as Gen.G Esports."""

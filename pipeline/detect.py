@@ -104,7 +104,68 @@ def detector_profile(layout: dict | None) -> dict:
         "roi": portrait_roi(layout),
         "floor": float(layout.get("unknown_floor", UNKNOWN_FLOOR)),
         "minMargin": float(layout.get("min_margin", MIN_MARGIN)),
+        "slotRoles": slot_roles(layout),
     }
+
+
+# ------------------------------------------------------------- role lock
+# Overwatch competitive is role-locked: every team is one tank, two damage,
+# two support. OWCS broadcasts go further and print each team's portraits in
+# a FIXED role order, so a slot's position says which role its hero plays.
+# Measured on every human-labelled crop (2026-10-30): slots 1-2 damage, slot
+# 3 tank, slots 4-5 support on both the Nepal package (2,798 crops, one
+# exception) and the Midseason package (~4,700 crops, the ~3% exceptions
+# being stray crops inside labelled cards). A layout states its order under
+# `slot_roles`; a slot then only competes among heroes of its role — 14 to
+# 24 candidates instead of 52, and a whole class of confusions (Ramattra
+# swallowing Sojourn, Tracer read as Jetcat) cannot happen at all.
+ROLE_NAMES = {"tank": "Tank", "damage": "Damage", "dps": "Damage",
+              "support": "Support"}
+
+
+def slot_roles(layout: dict | None) -> list[str] | None:
+    """['Damage', 'Damage', 'Tank', 'Support', 'Support'] or None."""
+    raw = (layout or {}).get("slot_roles")
+    if not raw:
+        return None
+    roles = [ROLE_NAMES.get(str(r).lower()) for r in raw]
+    if len(roles) != 5 or None in roles or sorted(roles) != sorted(
+            ["Tank", "Damage", "Damage", "Support", "Support"]):
+        raise ValueError(f"slot_roles {raw!r} must be five roles making one "
+                         f"tank, two damage and two support")
+    return roles
+
+
+_HERO_ROLES: dict | None = None
+
+
+def hero_roles() -> dict[str, str]:
+    """{hero_id: 'Tank'|'Damage'|'Support'} from the heroes table, cached."""
+    global _HERO_ROLES
+    if _HERO_ROLES is None:
+        con = db.connect()
+        try:
+            _HERO_ROLES = {r["id"]: r["role"]
+                           for r in con.execute("SELECT id, role FROM heroes")}
+        finally:
+            con.close()
+    return _HERO_ROLES
+
+
+def lib_for_slot(lib: dict, profile: dict | None, slot: str | int | None) -> dict:
+    """The part of `lib` a slot may answer with under the layout's role lock.
+
+    `slot` is a key like 'a3' / 'b5' or a 1-based index. Without slot_roles,
+    or without a slot, the whole library — nothing changes."""
+    roles = (profile or {}).get("slotRoles")
+    if not roles or slot is None:
+        return lib
+    idx = int(str(slot)[-1]) if not isinstance(slot, int) else slot
+    if not 1 <= idx <= 5:
+        return lib
+    want = roles[idx - 1]
+    known = hero_roles()
+    return {h: t for h, t in lib.items() if known.get(h) == want}
 
 
 # ------------------------------------------------------------- templates

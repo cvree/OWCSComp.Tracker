@@ -162,6 +162,11 @@ def layout_coverage(con, layout_id: str, *,
             ), "re-forge this package with pipeline/template_forge.py"
         elif verdict == "VALIDATED":
             state, blocker, action = READY, None, None
+        elif verdict == "REVIEW":
+            state, blocker, action = UNPROVEN, (
+                "measured at 90% or less on unseen frames — a person "
+                "double-checks before it is used"
+            ), "approve or flag it under “Double-check” on label.html"
         elif verdict in ("FAILED",):
             state, blocker, action = BLOCKED, (
                 "held-out validation caught a confident WRONG answer"

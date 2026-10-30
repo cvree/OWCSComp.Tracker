@@ -3289,6 +3289,16 @@ window.OWCS_LABELLING = {
    "labels": {},
    "labelledBy": null,
    "verdicts": {},
+   "review": {},
+   "approved": [],
+   "rejected": [],
+   "slotRoles": [
+    "damage",
+    "damage",
+    "tank",
+    "support",
+    "support"
+   ],
    "leaveOneOut": null,
    "counts": {
     "crops": 2470,
@@ -7358,6 +7368,16 @@ window.OWCS_LABELLING = {
     "winston": "VALIDATED",
     "zarya": "FAILED"
    },
+   "review": {},
+   "approved": [],
+   "rejected": [],
+   "slotRoles": [
+    "damage",
+    "damage",
+    "tank",
+    "support",
+    "support"
+   ],
    "leaveOneOut": {
     "trials": 1517,
     "matched": 319,
@@ -10471,6 +10491,16 @@ window.OWCS_LABELLING = {
     "tracer": "FAILED",
     "vendetta": "FAILED"
    },
+   "review": {},
+   "approved": [],
+   "rejected": [],
+   "slotRoles": [
+    "damage",
+    "damage",
+    "tank",
+    "support",
+    "support"
+   ],
    "leaveOneOut": {
     "trials": 989,
     "matched": 200,
@@ -11543,6 +11573,16 @@ window.OWCS_LABELLING = {
    "labels": {},
    "labelledBy": null,
    "verdicts": {},
+   "review": {},
+   "approved": [],
+   "rejected": [],
+   "slotRoles": [
+    "damage",
+    "damage",
+    "tank",
+    "support",
+    "support"
+   ],
    "leaveOneOut": null,
    "counts": {
     "crops": 3070,

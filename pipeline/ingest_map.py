@@ -337,7 +337,8 @@ def observe(t: float, frame_path: str, layout_scaled: dict, lib: dict,
     for side in ("a", "b"):
         for i, (x, y, w, h) in enumerate(layout_scaled[f"slots_{side}"], 1):
             crop = gray[y:y + h, x:x + w]
-            read = detect.read_slot(crop, lib, floor=profile["floor"],
+            read = detect.read_slot(crop, detect.lib_for_slot(lib, profile, i),
+                                    floor=profile["floor"],
                                     min_margin=profile["minMargin"],
                                     roi=profile["roi"])
             key = f"{side}{i}"

@@ -57,7 +57,9 @@ STAGING_ROOT = os.path.join(db.REPO_ROOT, "work", "label-forge")
 # Bumped when the forge's rules change in a way that should re-forge every
 # batch already forged under the old ones. 2: clean, tune, safety-checked
 # set. 3: the set may hold no template that looks like another hero.
-FORGE_VERSION = 3
+# 4: role lock — each slot reads only heroes of its role; off-role crops
+# leave their card; a person double-checks what lands at or below 90%.
+FORGE_VERSION = 4
 
 
 class ForgeRefusal(Exception):
@@ -188,8 +190,20 @@ def clean_cards(manifest: dict, layout: dict, *,
     roi = layout.get("portrait_roi")
     dropped: dict[str, int] = {}
     keep: set[int] = set()
+    # Role lock first: the broadcast prints each role in fixed slots, so a
+    # crop from a slot of another role is a stray whatever it looks like.
+    import detect
+    roles = detect.slot_roles(layout)
+    off_role: set[int] = set()
+    if roles:
+        hero_role = detect.hero_roles()
+        for i, c in enumerate(manifest["crops"]):
+            idx_slot = int(str(c.get("slot", "0"))[-1] or 0)
+            if 1 <= idx_slot <= 5 and hero_role.get(c["hero"]) not in (None, roles[idx_slot - 1]):
+                off_role.add(i)
+                dropped[c["clusterId"]] = dropped.get(c["clusterId"], 0) + 1
     for card, idx in by_card.items():
-        idx = [i for i in idx if i in imgs]
+        idx = [i for i in idx if i in imgs and i not in off_role]
         if len(idx) < 3:
             keep.update(idx)
             continue
@@ -204,7 +218,9 @@ def clean_cards(manifest: dict, layout: dict, *,
                 dropped[card] = dropped.get(card, 0) + 1
     out = dict(manifest)
     out["crops"] = [c for i, c in enumerate(manifest["crops"]) if i in keep]
-    out["excluded"] = [dict(c, excludedBecause="does not look like the rest of its card")
+    out["excluded"] = [dict(c, excludedBecause=(
+                           "sits in a slot of another role" if i in off_role else
+                           "does not look like the rest of its card"))
                        for i, c in enumerate(manifest["crops"]) if i not in keep]
     by_hero: dict[str, int] = {}
     for c in out["crops"]:
@@ -214,7 +230,8 @@ def clean_cards(manifest: dict, layout: dict, *,
                          heroes=len(by_hero), byHero=dict(sorted(by_hero.items())),
                          byLabelSource={LABEL_SOURCE: len(out["crops"])})
     return out, {"threshold": CARD_KEEP, "dropped": dict(sorted(dropped.items())),
-                 "droppedTotal": sum(dropped.values()), "kept": len(out["crops"])}
+                 "droppedTotal": sum(dropped.values()), "offRole": len(off_role),
+                 "kept": len(out["crops"])}
 
 
 # ------------------------------------------------------------ safety tuning
@@ -241,6 +258,24 @@ def _with_profile(layout: dict, floor: float, margin: float) -> dict:
     out["unknown_floor"], out["min_margin"] = floor, margin
     out.pop("_gs_cache", None)
     return out
+
+
+def apply_approvals(validation: dict, labels: dict) -> dict:
+    """A person's double-check: heroes they approved on label.html move from
+    REVIEW to VALIDATED (and still face the set's safety checks); FAILED is
+    not approvable. Returns a copy; the measured numbers are untouched."""
+    import template_validate as tv
+    approved = set(labels.get("approved") or [])
+    if not approved:
+        return validation
+    who = labels.get("labelledBy") or "a person"
+    heroes = {}
+    for h, e in (validation.get("heroes") or {}).items():
+        if h in approved and e.get("verdict") == tv.REVIEW:
+            e = dict(e, verdict=tv.VALIDATED, approvedBy=who,
+                     why=f"{e.get('why')} — approved by {who} on double-check")
+        heroes[h] = e
+    return dict(validation, heroes=heroes)
 
 
 def _candidate_set(staging: str, production: str, validation: dict, tmp: str) -> str:
@@ -501,6 +536,7 @@ def run(batch_id: str, *, promote: bool = False, root: str = lb.LABEL_ROOT,
                                  min_gap=tf.DEFAULT_HOLDOUT_GAP, repo_root=repo_root)
         loo = tv.leave_one_out(staging, manifest, layout=layout,
                                min_gap=tf.DEFAULT_HOLDOUT_GAP, repo_root=repo_root)
+        validation = apply_approvals(validation, labels)
         cand = _candidate_set(staging, production, validation,
                               os.path.join(staging_root, f"_{batch_id}", "final"))
         production_check = _safety(cand, manifest, layout, repo_root=repo_root,
