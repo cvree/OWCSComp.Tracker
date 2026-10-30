@@ -3,8 +3,9 @@
 # ---------------------------------------------------------------------
 # Runs pipeline/live_ingest.py against one broadcast on a free runner:
 # samples the whole broadcast remotely, classifies every sample with the
-# layout's gameplay filter, and splits the live play into map windows —
-# without downloading the broadcast.
+# layout's gameplay filter, splits the live play into map windows, and names
+# each window's map, game number and teams from the HUD text
+# (live_identity.py) — without downloading the broadcast.
 #
 # It writes nothing to main. The timeline, plus four full frames from each
 # map window (what a person or a later step needs to read the teams and the
@@ -52,9 +53,10 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          # tesseract reads the map, game and team names off the HUD strip
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg tesseract-ocr
           python -m pip install --upgrade pip --quiet
-          pip install --quiet -r requirements.txt
+          pip install --quiet -r requirements.txt pytesseract
 
       - name: Find the maps
         env:
@@ -109,6 +111,6 @@ jobs:
           {
             echo "### Map windows"
             echo '```'
-            tail -n 5 probe.log 2>/dev/null || echo "(no probe ran)"
+            grep -E "map window|^\[live-ingest\] #" probe.log 2>/dev/null || echo "(no probe ran)"
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
