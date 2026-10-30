@@ -6,7 +6,7 @@
  "labelledBy": "cvv",
  "labelledAt": "2026-10-30T08:14:32Z",
  "cardsNamed": 66,
- "templatesWritten": 112,
+ "templatesWritten": 114,
  "passed": false,
  "falseMatch": {
   "trials": 0,
@@ -19,271 +19,103 @@
   "note": "no crops of uncovered heroes in this manifest \u2014 the false-match half of the test did not run, so this set is unproven against portraits it has no template for"
  },
  "leaveOneOut": {
-  "trials": 1517,
-  "matched": 319,
-  "rate": 0.2103,
+  "trials": 1450,
+  "matched": 58,
+  "rate": 0.04,
   "ceiling": 0.02,
   "passed": false,
-  "note": "Leave-one-out false-match test over 1517 real crops: 319 (21.03%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
+  "note": "Leave-one-out false-match test over 1450 real crops: 58 (4.00%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
   "confusablePairs": [
    {
-    "hero": "emre",
-    "readAs": "ball",
-    "count": 3,
+    "hero": "tracer",
+    "readAs": "torb",
+    "count": 40,
+    "trials": 97,
+    "share": 0.412,
+    "note": "with no tracer template in the set, 40 of 97 real tracer portraits (41%) were confidently read as torb instead of UNKNOWN"
+   },
+   {
+    "hero": "torb",
+    "readAs": "bastion",
+    "count": 1,
     "trials": 3,
-    "share": 1.0,
-    "note": "with no emre template in the set, 3 of 3 real emre portraits (100%) were confidently read as ball instead of UNKNOWN"
-   },
-   {
-    "hero": "sigma",
-    "readAs": "echo",
-    "count": 62,
-    "trials": 71,
-    "share": 0.873,
-    "note": "with no sigma template in the set, 62 of 71 real sigma portraits (87%) were confidently read as echo instead of UNKNOWN"
-   },
-   {
-    "hero": "dva",
-    "readAs": "kiriko",
-    "count": 59,
-    "trials": 102,
-    "share": 0.578,
-    "note": "with no dva template in the set, 59 of 102 real dva portraits (58%) were confidently read as kiriko instead of UNKNOWN"
+    "share": 0.333,
+    "note": "with no torb template in the set, 1 of 3 real torb portraits (33%) were confidently read as bastion instead of UNKNOWN"
    },
    {
     "hero": "pharah",
     "readAs": "cass",
-    "count": 5,
-    "trials": 11,
-    "share": 0.455,
-    "note": "with no pharah template in the set, 5 of 11 real pharah portraits (45%) were confidently read as cass instead of UNKNOWN"
-   },
-   {
-    "hero": "sym",
-    "readAs": "ram",
-    "count": 34,
-    "trials": 82,
-    "share": 0.415,
-    "note": "with no sym template in the set, 34 of 82 real sym portraits (41%) were confidently read as ram instead of UNKNOWN"
-   },
-   {
-    "hero": "cass",
-    "readAs": "zarya",
-    "count": 31,
-    "trials": 103,
-    "share": 0.301,
-    "note": "with no cass template in the set, 31 of 103 real cass portraits (30%) were confidently read as zarya instead of UNKNOWN"
-   },
-   {
-    "hero": "tracer",
-    "readAs": "torb",
-    "count": 27,
-    "trials": 98,
-    "share": 0.276,
-    "note": "with no tracer template in the set, 27 of 98 real tracer portraits (28%) were confidently read as torb instead of UNKNOWN"
-   },
-   {
-    "hero": "tracer",
-    "readAs": "jetcat",
-    "count": 24,
-    "trials": 98,
-    "share": 0.245,
-    "note": "with no tracer template in the set, 24 of 98 real tracer portraits (24%) were confidently read as jetcat instead of UNKNOWN"
-   },
-   {
-    "hero": "torb",
-    "readAs": "jetcat",
     "count": 3,
-    "trials": 14,
-    "share": 0.214,
-    "note": "with no torb template in the set, 3 of 14 real torb portraits (21%) were confidently read as jetcat instead of UNKNOWN"
+    "trials": 11,
+    "share": 0.273,
+    "note": "with no pharah template in the set, 3 of 11 real pharah portraits (27%) were confidently read as cass instead of UNKNOWN"
    },
    {
-    "hero": "echo",
+    "hero": "zarya",
     "readAs": "sigma",
-    "count": 2,
-    "trials": 10,
-    "share": 0.2,
-    "note": "with no echo template in the set, 2 of 10 real echo portraits (20%) were confidently read as sigma instead of UNKNOWN"
-   },
-   {
-    "hero": "jetcat",
-    "readAs": "tracer",
-    "count": 10,
-    "trials": 59,
-    "share": 0.169,
-    "note": "with no jetcat template in the set, 10 of 59 real jetcat portraits (17%) were confidently read as tracer instead of UNKNOWN"
-   },
-   {
-    "hero": "cass",
-    "readAs": "bap",
-    "count": 14,
-    "trials": 103,
-    "share": 0.136,
-    "note": "with no cass template in the set, 14 of 103 real cass portraits (14%) were confidently read as bap instead of UNKNOWN"
+    "count": 4,
+    "trials": 38,
+    "share": 0.105,
+    "note": "with no zarya template in the set, 4 of 38 real zarya portraits (11%) were confidently read as sigma instead of UNKNOWN"
    },
    {
     "hero": "winston",
     "readAs": "hog",
-    "count": 2,
+    "count": 1,
     "trials": 16,
-    "share": 0.125,
-    "note": "with no winston template in the set, 2 of 16 real winston portraits (12%) were confidently read as hog instead of UNKNOWN"
+    "share": 0.062,
+    "note": "with no winston template in the set, 1 of 16 real winston portraits (6%) were confidently read as hog instead of UNKNOWN"
    },
    {
-    "hero": "zarya",
-    "readAs": "mei",
-    "count": 7,
-    "trials": 65,
-    "share": 0.108,
-    "note": "with no zarya template in the set, 7 of 65 real zarya portraits (11%) were confidently read as mei instead of UNKNOWN"
-   },
-   {
-    "hero": "zarya",
-    "readAs": "jetcat",
-    "count": 5,
-    "trials": 65,
-    "share": 0.077,
-    "note": "with no zarya template in the set, 5 of 65 real zarya portraits (8%) were confidently read as jetcat instead of UNKNOWN"
-   },
-   {
-    "hero": "ball",
-    "readAs": "bastion",
-    "count": 2,
-    "trials": 29,
-    "share": 0.069,
-    "note": "with no ball template in the set, 2 of 29 real ball portraits (7%) were confidently read as bastion instead of UNKNOWN"
-   },
-   {
-    "hero": "bap",
-    "readAs": "sojourn",
-    "count": 3,
-    "trials": 51,
-    "share": 0.059,
-    "note": "with no bap template in the set, 3 of 51 real bap portraits (6%) were confidently read as sojourn instead of UNKNOWN"
-   },
-   {
-    "hero": "sigma",
-    "readAs": "reaper",
-    "count": 4,
-    "trials": 71,
-    "share": 0.056,
-    "note": "with no sigma template in the set, 4 of 71 real sigma portraits (6%) were confidently read as reaper instead of UNKNOWN"
+    "hero": "mauga",
+    "readAs": "hog",
+    "count": 1,
+    "trials": 19,
+    "share": 0.053,
+    "note": "with no mauga template in the set, 1 of 19 real mauga portraits (5%) were confidently read as hog instead of UNKNOWN"
    },
    {
     "hero": "bap",
     "readAs": "illari",
     "count": 2,
-    "trials": 51,
-    "share": 0.039,
-    "note": "with no bap template in the set, 2 of 51 real bap portraits (4%) were confidently read as illari instead of UNKNOWN"
-   },
-   {
-    "hero": "cass",
-    "readAs": "ball",
-    "count": 4,
-    "trials": 103,
-    "share": 0.039,
-    "note": "with no cass template in the set, 4 of 103 real cass portraits (4%) were confidently read as ball instead of UNKNOWN"
-   },
-   {
-    "hero": "kiriko",
-    "readAs": "dva",
-    "count": 3,
-    "trials": 98,
-    "share": 0.031,
-    "note": "with no kiriko template in the set, 3 of 98 real kiriko portraits (3%) were confidently read as dva instead of UNKNOWN"
-   },
-   {
-    "hero": "sojourn",
-    "readAs": "winston",
-    "count": 2,
-    "trials": 76,
-    "share": 0.026,
-    "note": "with no sojourn template in the set, 2 of 76 real sojourn portraits (3%) were confidently read as winston instead of UNKNOWN"
-   },
-   {
-    "hero": "bap",
-    "readAs": "mizuki",
-    "count": 1,
-    "trials": 51,
-    "share": 0.02,
-    "note": "with no bap template in the set, 1 of 51 real bap portraits (2%) were confidently read as mizuki instead of UNKNOWN"
-   },
-   {
-    "hero": "kiriko",
-    "readAs": "bap",
-    "count": 2,
-    "trials": 98,
-    "share": 0.02,
-    "note": "with no kiriko template in the set, 2 of 98 real kiriko portraits (2%) were confidently read as bap instead of UNKNOWN"
+    "trials": 44,
+    "share": 0.045,
+    "note": "with no bap template in the set, 2 of 44 real bap portraits (5%) were confidently read as illari instead of UNKNOWN"
    },
    {
     "hero": "bastion",
-    "readAs": "dva",
-    "count": 2,
-    "trials": 108,
-    "share": 0.019,
-    "note": "with no bastion template in the set, 2 of 108 real bastion portraits (2%) were confidently read as dva instead of UNKNOWN"
-   },
-   {
-    "hero": "jetcat",
     "readAs": "torb",
-    "count": 1,
-    "trials": 59,
-    "share": 0.017,
-    "note": "with no jetcat template in the set, 1 of 59 real jetcat portraits (2%) were confidently read as torb instead of UNKNOWN"
-   },
-   {
-    "hero": "zarya",
-    "readAs": "echo",
-    "count": 1,
-    "trials": 65,
-    "share": 0.015,
-    "note": "with no zarya template in the set, 1 of 65 real zarya portraits (2%) were confidently read as echo instead of UNKNOWN"
-   },
-   {
-    "hero": "ana",
-    "readAs": "mizuki",
-    "count": 1,
-    "trials": 96,
-    "share": 0.01,
-    "note": "with no ana template in the set, 1 of 96 real ana portraits (1%) were confidently read as mizuki instead of UNKNOWN"
+    "count": 4,
+    "trials": 108,
+    "share": 0.037,
+    "note": "with no bastion template in the set, 4 of 108 real bastion portraits (4%) were confidently read as torb instead of UNKNOWN"
    },
    {
     "hero": "cass",
-    "readAs": "illari",
+    "readAs": "pharah",
     "count": 1,
-    "trials": 103,
-    "share": 0.01,
-    "note": "with no cass template in the set, 1 of 103 real cass portraits (1%) were confidently read as illari instead of UNKNOWN"
+    "trials": 107,
+    "share": 0.009,
+    "note": "with no cass template in the set, 1 of 107 real cass portraits (1%) were confidently read as pharah instead of UNKNOWN"
    },
    {
-    "hero": "mei",
-    "readAs": "ball",
+    "hero": "cass",
+    "readAs": "sojourn",
     "count": 1,
-    "trials": 101,
-    "share": 0.01,
-    "note": "with no mei template in the set, 1 of 101 real mei portraits (1%) were confidently read as ball instead of UNKNOWN"
-   },
-   {
-    "hero": "tracer",
-    "readAs": "ball",
-    "count": 1,
-    "trials": 98,
-    "share": 0.01,
-    "note": "with no tracer template in the set, 1 of 98 real tracer portraits (1%) were confidently read as ball instead of UNKNOWN"
+    "trials": 107,
+    "share": 0.009,
+    "note": "with no cass template in the set, 1 of 107 real cass portraits (1%) were confidently read as sojourn instead of UNKNOWN"
    }
   ]
  },
  "heroes": {
   "ana": {
    "verdict": "VALIDATED",
-   "trials": 96,
+   "trials": 94,
    "correct": 91,
-   "unknown": 5,
+   "unknown": 3,
    "wrong": 0,
-   "accuracy": 0.948,
+   "accuracy": 0.968,
    "confusedWith": {},
    "cards": [
     "c18",
@@ -291,12 +123,12 @@
    ]
   },
   "ball": {
-   "verdict": "WEAK",
-   "trials": 29,
-   "correct": 24,
-   "unknown": 5,
+   "verdict": "VALIDATED",
+   "trials": 12,
+   "correct": 12,
+   "unknown": 0,
    "wrong": 0,
-   "accuracy": 0.828,
+   "accuracy": 1.0,
    "confusedWith": {},
    "cards": [
     "c26",
@@ -304,15 +136,14 @@
    ]
   },
   "bap": {
-   "verdict": "FAILED",
-   "trials": 51,
+   "verdict": "REVIEW",
+   "trials": 44,
    "correct": 36,
-   "unknown": 12,
-   "wrong": 3,
-   "accuracy": 0.706,
+   "unknown": 6,
+   "wrong": 2,
+   "accuracy": 0.818,
    "confusedWith": {
-    "illari": 2,
-    "mizuki": 1
+    "illari": 2
    },
    "cards": [
     "c31",
@@ -323,10 +154,10 @@
   "bastion": {
    "verdict": "VALIDATED",
    "trials": 199,
-   "correct": 182,
-   "unknown": 17,
+   "correct": 180,
+   "unknown": 19,
    "wrong": 0,
-   "accuracy": 0.915,
+   "accuracy": 0.905,
    "confusedWith": {},
    "cards": [
     "c11",
@@ -336,11 +167,11 @@
   },
   "brig": {
    "verdict": "WEAK",
-   "trials": 16,
-   "correct": 4,
-   "unknown": 12,
+   "trials": 8,
+   "correct": 8,
+   "unknown": 0,
    "wrong": 0,
-   "accuracy": 0.25,
+   "accuracy": 1.0,
    "confusedWith": {},
    "cards": [
     "c50",
@@ -348,17 +179,13 @@
    ]
   },
   "cass": {
-   "verdict": "FAILED",
-   "trials": 123,
-   "correct": 56,
-   "unknown": 54,
-   "wrong": 13,
-   "accuracy": 0.455,
-   "confusedWith": {
-    "bap": 10,
-    "illari": 1,
-    "ball": 2
-   },
+   "verdict": "REVIEW",
+   "trials": 127,
+   "correct": 94,
+   "unknown": 33,
+   "wrong": 0,
+   "accuracy": 0.74,
+   "confusedWith": {},
    "cards": [
     "c05",
     "c28",
@@ -381,16 +208,13 @@
    ]
   },
   "dva": {
-   "verdict": "FAILED",
-   "trials": 139,
-   "correct": 79,
-   "unknown": 56,
-   "wrong": 4,
-   "accuracy": 0.568,
-   "confusedWith": {
-    "bastion": 1,
-    "kiriko": 3
-   },
+   "verdict": "VALIDATED",
+   "trials": 138,
+   "correct": 133,
+   "unknown": 5,
+   "wrong": 0,
+   "accuracy": 0.964,
+   "confusedWith": {},
    "cards": [
     "c07",
     "c25",
@@ -399,12 +223,12 @@
    ]
   },
   "echo": {
-   "verdict": "WEAK",
-   "trials": 10,
-   "correct": 8,
-   "unknown": 2,
+   "verdict": "VALIDATED",
+   "trials": 14,
+   "correct": 14,
+   "unknown": 0,
    "wrong": 0,
-   "accuracy": 0.8,
+   "accuracy": 1.0,
    "confusedWith": {},
    "cards": [
     "c29"
@@ -413,22 +237,22 @@
   "emre": {
    "verdict": "WEAK",
    "trials": 3,
-   "correct": 1,
-   "unknown": 2,
+   "correct": 3,
+   "unknown": 0,
    "wrong": 0,
-   "accuracy": 0.333,
+   "accuracy": 1.0,
    "confusedWith": {},
    "cards": [
     "c48"
    ]
   },
   "genji": {
-   "verdict": "WEAK",
+   "verdict": "REVIEW",
    "trials": 31,
-   "correct": 27,
-   "unknown": 4,
+   "correct": 25,
+   "unknown": 6,
    "wrong": 0,
-   "accuracy": 0.871,
+   "accuracy": 0.806,
    "confusedWith": {},
    "cards": [
     "c35",
@@ -448,7 +272,7 @@
    ]
   },
   "illari": {
-   "verdict": "WEAK",
+   "verdict": "REVIEW",
    "trials": 19,
    "correct": 17,
    "unknown": 2,
@@ -461,12 +285,12 @@
    ]
   },
   "jetcat": {
-   "verdict": "WEAK",
+   "verdict": "REVIEW",
    "trials": 59,
-   "correct": 46,
-   "unknown": 13,
+   "correct": 50,
+   "unknown": 9,
    "wrong": 0,
-   "accuracy": 0.78,
+   "accuracy": 0.847,
    "confusedWith": {},
    "cards": [
     "c02"
@@ -475,26 +299,24 @@
   "juno": {
    "verdict": "WEAK",
    "trials": 6,
-   "correct": 6,
-   "unknown": 0,
+   "correct": 0,
+   "unknown": 6,
    "wrong": 0,
-   "accuracy": 1.0,
+   "accuracy": 0.0,
    "confusedWith": {},
    "cards": [
     "c53"
    ]
   },
   "kiriko": {
-   "verdict": "FAILED",
-   "trials": 196,
-   "correct": 161,
-   "unknown": 30,
-   "wrong": 5,
-   "accuracy": 0.821,
+   "verdict": "VALIDATED",
+   "trials": 187,
+   "correct": 169,
+   "unknown": 17,
+   "wrong": 1,
+   "accuracy": 0.904,
    "confusedWith": {
-    "bap": 2,
-    "jetcat": 1,
-    "zarya": 2
+    "jetcat": 1
    },
    "cards": [
     "c00",
@@ -504,11 +326,11 @@
   },
   "lucio": {
    "verdict": "VALIDATED",
-   "trials": 187,
-   "correct": 175,
-   "unknown": 12,
+   "trials": 186,
+   "correct": 171,
+   "unknown": 15,
    "wrong": 0,
-   "accuracy": 0.936,
+   "accuracy": 0.919,
    "confusedWith": {},
    "cards": [
     "c06",
@@ -517,7 +339,7 @@
    ]
   },
   "mauga": {
-   "verdict": "WEAK",
+   "verdict": "REVIEW",
    "trials": 19,
    "correct": 17,
    "unknown": 2,
@@ -532,10 +354,10 @@
   "mei": {
    "verdict": "VALIDATED",
    "trials": 101,
-   "correct": 95,
-   "unknown": 6,
+   "correct": 96,
+   "unknown": 5,
    "wrong": 0,
-   "accuracy": 0.941,
+   "accuracy": 0.95,
    "confusedWith": {},
    "cards": [
     "c13",
@@ -545,10 +367,10 @@
   "mizuki": {
    "verdict": "VALIDATED",
    "trials": 52,
-   "correct": 52,
-   "unknown": 0,
+   "correct": 51,
+   "unknown": 1,
    "wrong": 0,
-   "accuracy": 1.0,
+   "accuracy": 0.981,
    "confusedWith": {},
    "cards": [
     "c22",
@@ -582,12 +404,12 @@
    ]
   },
   "reaper": {
-   "verdict": "WEAK",
-   "trials": 20,
-   "correct": 17,
-   "unknown": 3,
+   "verdict": "REVIEW",
+   "trials": 19,
+   "correct": 6,
+   "unknown": 13,
    "wrong": 0,
-   "accuracy": 0.85,
+   "accuracy": 0.316,
    "confusedWith": {},
    "cards": [
     "c47",
@@ -596,30 +418,26 @@
    ]
   },
   "sigma": {
-   "verdict": "FAILED",
-   "trials": 71,
-   "correct": 28,
-   "unknown": 41,
-   "wrong": 2,
-   "accuracy": 0.394,
-   "confusedWith": {
-    "echo": 2
-   },
+   "verdict": "VALIDATED",
+   "trials": 68,
+   "correct": 66,
+   "unknown": 2,
+   "wrong": 0,
+   "accuracy": 0.971,
+   "confusedWith": {},
    "cards": [
     "c03",
     "c65"
    ]
   },
   "sojourn": {
-   "verdict": "FAILED",
-   "trials": 76,
-   "correct": 68,
-   "unknown": 7,
-   "wrong": 1,
-   "accuracy": 0.895,
-   "confusedWith": {
-    "winston": 1
-   },
+   "verdict": "REVIEW",
+   "trials": 75,
+   "correct": 60,
+   "unknown": 15,
+   "wrong": 0,
+   "accuracy": 0.8,
+   "confusedWith": {},
    "cards": [
     "c21",
     "c24",
@@ -641,29 +459,25 @@
    ]
   },
   "torb": {
-   "verdict": "FAILED",
-   "trials": 14,
+   "verdict": "WEAK",
+   "trials": 3,
    "correct": 2,
-   "unknown": 11,
-   "wrong": 1,
-   "accuracy": 0.143,
-   "confusedWith": {
-    "jetcat": 1
-   },
+   "unknown": 1,
+   "wrong": 0,
+   "accuracy": 0.667,
+   "confusedWith": {},
    "cards": [
     "c32"
    ]
   },
   "tracer": {
-   "verdict": "FAILED",
-   "trials": 130,
-   "correct": 112,
-   "unknown": 17,
-   "wrong": 1,
-   "accuracy": 0.862,
-   "confusedWith": {
-    "jetcat": 1
-   },
+   "verdict": "REVIEW",
+   "trials": 122,
+   "correct": 70,
+   "unknown": 52,
+   "wrong": 0,
+   "accuracy": 0.574,
+   "confusedWith": {},
    "cards": [
     "c01",
     "c04"
@@ -695,15 +509,13 @@
   },
   "zarya": {
    "verdict": "FAILED",
-   "trials": 65,
-   "correct": 32,
-   "unknown": 20,
-   "wrong": 13,
-   "accuracy": 0.492,
+   "trials": 38,
+   "correct": 29,
+   "unknown": 5,
+   "wrong": 4,
+   "accuracy": 0.763,
    "confusedWith": {
-    "mei": 7,
-    "jetcat": 5,
-    "echo": 1
+    "sigma": 4
    },
    "cards": [
     "c09",
@@ -712,40 +524,138 @@
   }
  },
  "promotion": {
-  "promotedHeroes": [],
-  "promoted": [],
-  "superseded": [],
+  "promotedHeroes": [
+   "ana",
+   "ball",
+   "bastion",
+   "dva",
+   "echo",
+   "kiriko",
+   "lucio",
+   "mei",
+   "mizuki",
+   "ram",
+   "sigma",
+   "sym",
+   "winston"
+  ],
+  "promoted": [
+   "ana.png",
+   "ana.v1.png",
+   "ana.v2.png",
+   "ana.v3.png",
+   "ball.png",
+   "ball.v1.png",
+   "ball.v2.png",
+   "ball.v3.png",
+   "bastion.png",
+   "bastion.v1.png",
+   "bastion.v2.png",
+   "bastion.v3.png",
+   "dva.png",
+   "dva.v1.png",
+   "dva.v2.png",
+   "dva.v3.png",
+   "echo.png",
+   "echo.v1.png",
+   "echo.v2.png",
+   "echo.v3.png",
+   "kiriko.png",
+   "kiriko.v1.png",
+   "kiriko.v2.png",
+   "kiriko.v3.png",
+   "lucio.png",
+   "lucio.v1.png",
+   "lucio.v2.png",
+   "lucio.v3.png",
+   "mei.png",
+   "mei.v1.png",
+   "mei.v2.png",
+   "mei.v3.png",
+   "mizuki.png",
+   "mizuki.v1.png",
+   "mizuki.v2.png",
+   "mizuki.v3.png",
+   "ram.png",
+   "ram.v1.png",
+   "ram.v2.png",
+   "ram.v3.png",
+   "sigma.png",
+   "sigma.v1.png",
+   "sigma.v2.png",
+   "sigma.v3.png",
+   "sym.png",
+   "sym.v1.png",
+   "sym.v2.png",
+   "sym.v3.png",
+   "winston.png",
+   "winston.v1.png",
+   "winston.v2.png",
+   "winston.v3.png"
+  ],
+  "superseded": [
+   "ana.png",
+   "ana.v1.png",
+   "ana.v2.png",
+   "ana.v3.png",
+   "ball.a.png",
+   "ball.b.png",
+   "ball.png",
+   "bastion.png",
+   "bastion.v1.png",
+   "bastion.v2.png",
+   "bastion.v3.png",
+   "dva.png",
+   "dva.v1.png",
+   "dva.v2.png",
+   "dva.v3.png",
+   "kiriko.png",
+   "kiriko.v1.png",
+   "kiriko.v2.png",
+   "kiriko.v3.png",
+   "lucio.png",
+   "lucio.v1.png",
+   "lucio.v2.png",
+   "lucio.v3.png",
+   "mei.png",
+   "mei.v1.png",
+   "mei.v2.png",
+   "mei.v3.png",
+   "mizuki.png",
+   "mizuki.v1.png",
+   "mizuki.v2.png",
+   "mizuki.v3.png",
+   "ram.png",
+   "ram.v1.png",
+   "ram.v2.png",
+   "ram.v3.png",
+   "sym.png",
+   "sym.v1.png",
+   "sym.v2.png",
+   "sym.v3.png",
+   "winston.png",
+   "winston.v1.png",
+   "winston.v2.png",
+   "winston.v3.png"
+  ],
   "refused": {
-   "ana": "VALIDATED",
-   "ball": "WEAK",
-   "bap": "FAILED",
-   "bastion": "VALIDATED",
+   "bap": "REVIEW",
    "brig": "WEAK",
-   "cass": "FAILED",
+   "cass": "REVIEW",
    "doomfist": "WEAK",
-   "dva": "FAILED",
-   "echo": "WEAK",
    "emre": "WEAK",
-   "genji": "WEAK",
+   "genji": "REVIEW",
    "hog": "WEAK",
-   "illari": "WEAK",
-   "jetcat": "WEAK",
+   "illari": "REVIEW",
+   "jetcat": "REVIEW",
    "juno": "WEAK",
-   "kiriko": "FAILED",
-   "lucio": "VALIDATED",
-   "mauga": "WEAK",
-   "mei": "VALIDATED",
-   "mizuki": "VALIDATED",
+   "mauga": "REVIEW",
    "pharah": "WEAK",
-   "ram": "VALIDATED",
-   "reaper": "WEAK",
-   "sigma": "FAILED",
-   "sojourn": "FAILED",
-   "sym": "VALIDATED",
-   "torb": "FAILED",
-   "tracer": "FAILED",
+   "reaper": "REVIEW",
+   "sojourn": "REVIEW",
+   "torb": "WEAK",
+   "tracer": "REVIEW",
    "widow": "WEAK",
-   "winston": "VALIDATED",
    "zarya": "FAILED"
   },
   "dryRun": false
@@ -753,591 +663,756 @@
  "cleaning": {
   "threshold": 0.45,
   "dropped": {
-   "c37": 1
+   "c04": 9,
+   "c06": 1,
+   "c08": 13,
+   "c09": 38,
+   "c10": 3,
+   "c18": 2,
+   "c24": 1,
+   "c28": 1,
+   "c29": 3,
+   "c31": 10,
+   "c32": 11,
+   "c33": 1,
+   "c37": 1,
+   "c45": 12,
+   "c50": 1,
+   "c60": 2,
+   "c61": 1,
+   "c65": 1
   },
-  "droppedTotal": 1,
-  "kept": 2390
+  "droppedTotal": 111,
+  "offRole": 111,
+  "kept": 2280
  },
  "tuning": {
   "base": {
    "floor": 0.35,
    "margin": 0.12
   },
-  "chosen": null,
+  "chosen": {
+   "floor": 0.6,
+   "margin": 0.2,
+   "validated": [
+    "ana",
+    "ball",
+    "dva",
+    "echo",
+    "jetcat",
+    "kiriko",
+    "lucio",
+    "mei",
+    "mizuki",
+    "ram",
+    "sigma",
+    "sym",
+    "winston"
+   ],
+   "safe": true,
+   "looRate": 0.0054,
+   "falseMatchRate": 0.0119
+  },
   "tried": [
    {
     "floor": 0.35,
     "margin": 0.12,
     "validated": [
      "ana",
+     "ball",
+     "bastion",
+     "dva",
+     "echo",
+     "illari",
+     "jetcat",
+     "kiriko",
+     "lucio",
+     "mauga",
      "mei",
      "mizuki",
      "ram",
+     "sigma",
      "sojourn",
      "sym",
+     "tracer",
      "winston"
     ],
     "safe": false,
-    "looRate": 0.131,
-    "falseMatchRate": 0.0972
+    "looRate": 0.2577,
+    "falseMatchRate": 0.1753
    },
    {
     "floor": 0.35,
     "margin": 0.15,
     "validated": [
      "ana",
+     "ball",
+     "bastion",
+     "dva",
+     "echo",
+     "jetcat",
+     "kiriko",
+     "lucio",
+     "mauga",
      "mei",
      "mizuki",
      "ram",
+     "sigma",
+     "sojourn",
      "sym",
      "winston"
     ],
     "safe": false,
-    "looRate": 0.1013,
-    "falseMatchRate": 0.0599
+    "looRate": 0.1441,
+    "falseMatchRate": 0.1309
    },
    {
     "floor": 0.35,
     "margin": 0.2,
     "validated": [
+     "ana",
+     "ball",
+     "dva",
+     "echo",
+     "jetcat",
+     "kiriko",
+     "lucio",
      "mei",
      "mizuki",
      "ram",
+     "sigma",
      "sym",
      "winston"
     ],
     "safe": false,
-    "looRate": 0.0653,
-    "falseMatchRate": 0.0288
+    "looRate": 0.0686,
+    "falseMatchRate": 0.0209
    },
    {
     "floor": 0.35,
     "margin": 0.25,
     "validated": [
+     "ana",
+     "ball",
+     "echo",
      "mizuki",
      "ram",
+     "sigma",
+     "sym",
      "winston"
     ],
     "safe": false,
-    "looRate": 0.028,
-    "falseMatchRate": 0.0266
+    "looRate": 0.0206,
+    "falseMatchRate": 0.0149
    },
    {
     "floor": 0.45,
     "margin": 0.12,
     "validated": [
      "ana",
+     "ball",
+     "bastion",
+     "dva",
+     "echo",
+     "illari",
+     "jetcat",
+     "kiriko",
+     "lucio",
+     "mauga",
      "mei",
      "mizuki",
      "ram",
+     "sigma",
      "sojourn",
      "sym",
+     "tracer",
      "winston"
     ],
     "safe": false,
-    "looRate": 0.1184,
-    "falseMatchRate": 0.0946
+    "looRate": 0.1735,
+    "falseMatchRate": 0.1394
    },
    {
     "floor": 0.45,
     "margin": 0.15,
     "validated": [
      "ana",
+     "ball",
+     "bastion",
+     "dva",
+     "echo",
+     "jetcat",
+     "kiriko",
+     "lucio",
+     "mauga",
      "mei",
      "mizuki",
      "ram",
+     "sigma",
+     "sojourn",
      "sym",
      "winston"
     ],
     "safe": false,
-    "looRate": 0.096,
-    "falseMatchRate": 0.0554
+    "looRate": 0.0952,
+    "falseMatchRate": 0.1236
    },
    {
     "floor": 0.45,
     "margin": 0.2,
     "validated": [
+     "ana",
+     "ball",
+     "dva",
+     "echo",
+     "jetcat",
+     "kiriko",
+     "lucio",
      "mei",
      "mizuki",
      "ram",
+     "sigma",
      "sym",
      "winston"
     ],
     "safe": false,
-    "looRate": 0.064,
-    "falseMatchRate": 0.0288
+    "looRate": 0.0498,
+    "falseMatchRate": 0.0149
    },
    {
     "floor": 0.45,
     "margin": 0.25,
     "validated": [
+     "ana",
+     "ball",
+     "echo",
      "mizuki",
      "ram",
+     "sigma",
+     "sym",
      "winston"
     ],
-    "safe": false,
-    "looRate": 0.028,
-    "falseMatchRate": 0.0266
+    "safe": true,
+    "looRate": 0.0077,
+    "falseMatchRate": 0.0149
    },
    {
     "floor": 0.5,
     "margin": 0.12,
     "validated": [
      "ana",
+     "ball",
+     "bastion",
+     "dva",
+     "echo",
+     "illari",
+     "jetcat",
+     "kiriko",
+     "lucio",
+     "mauga",
      "mei",
      "mizuki",
      "ram",
+     "sigma",
+     "sojourn",
+     "sym",
+     "tracer",
+     "winston"
+    ],
+    "safe": false,
+    "looRate": 0.125,
+    "falseMatchRate": 0.1235
+   },
+   {
+    "floor": 0.5,
+    "margin": 0.15,
+    "validated": [
+     "ana",
+     "ball",
+     "bastion",
+     "dva",
+     "echo",
+     "jetcat",
+     "kiriko",
+     "lucio",
+     "mauga",
+     "mei",
+     "mizuki",
+     "ram",
+     "sigma",
      "sojourn",
      "sym",
      "winston"
     ],
     "safe": false,
-    "looRate": 0.102,
-    "falseMatchRate": 0.0946
-   },
-   {
-    "floor": 0.5,
-    "margin": 0.15,
-    "validated": [
-     "ana",
-     "mei",
-     "mizuki",
-     "ram",
-     "sym",
-     "winston"
-    ],
-    "safe": false,
-    "looRate": 0.092,
-    "falseMatchRate": 0.0532
+    "looRate": 0.0721,
+    "falseMatchRate": 0.1091
    },
    {
     "floor": 0.5,
     "margin": 0.2,
     "validated": [
+     "ana",
+     "ball",
+     "dva",
+     "echo",
+     "jetcat",
+     "kiriko",
+     "lucio",
      "mei",
      "mizuki",
      "ram",
+     "sigma",
      "sym",
      "winston"
     ],
     "safe": false,
-    "looRate": 0.064,
-    "falseMatchRate": 0.0288
+    "looRate": 0.035,
+    "falseMatchRate": 0.0149
    },
    {
     "floor": 0.5,
     "margin": 0.25,
     "validated": [
+     "ana",
+     "ball",
+     "echo",
      "mizuki",
      "ram",
+     "sigma",
+     "sym",
      "winston"
     ],
-    "safe": false,
-    "looRate": 0.028,
-    "falseMatchRate": 0.0266
+    "safe": true,
+    "looRate": 0.0077,
+    "falseMatchRate": 0.0149
    },
    {
     "floor": 0.55,
     "margin": 0.12,
     "validated": [
      "ana",
+     "ball",
+     "bastion",
+     "dva",
+     "echo",
+     "illari",
+     "jetcat",
+     "kiriko",
+     "lucio",
+     "mauga",
      "mei",
      "mizuki",
      "ram",
+     "sigma",
+     "sojourn",
+     "sym",
+     "tracer",
+     "winston"
+    ],
+    "safe": false,
+    "looRate": 0.0842,
+    "falseMatchRate": 0.0996
+   },
+   {
+    "floor": 0.55,
+    "margin": 0.15,
+    "validated": [
+     "ana",
+     "ball",
+     "bastion",
+     "dva",
+     "echo",
+     "jetcat",
+     "kiriko",
+     "lucio",
+     "mauga",
+     "mei",
+     "mizuki",
+     "ram",
+     "sigma",
      "sojourn",
      "sym",
      "winston"
     ],
     "safe": false,
-    "looRate": 0.0932,
-    "falseMatchRate": 0.0946
-   },
-   {
-    "floor": 0.55,
-    "margin": 0.15,
-    "validated": [
-     "ana",
-     "mei",
-     "mizuki",
-     "ram",
-     "sym",
-     "winston"
-    ],
-    "safe": false,
-    "looRate": 0.088,
-    "falseMatchRate": 0.0532
+    "looRate": 0.0502,
+    "falseMatchRate": 0.08
    },
    {
     "floor": 0.55,
     "margin": 0.2,
     "validated": [
+     "ana",
+     "ball",
+     "dva",
+     "echo",
+     "jetcat",
+     "kiriko",
+     "lucio",
      "mei",
      "mizuki",
      "ram",
+     "sigma",
      "sym",
      "winston"
     ],
     "safe": false,
-    "looRate": 0.064,
-    "falseMatchRate": 0.0288
+    "looRate": 0.0202,
+    "falseMatchRate": 0.0119
    },
    {
     "floor": 0.55,
     "margin": 0.25,
     "validated": [
+     "ana",
+     "ball",
+     "echo",
      "mizuki",
      "ram",
+     "sigma",
+     "sym",
      "winston"
     ],
-    "safe": false,
-    "looRate": 0.028,
-    "falseMatchRate": 0.0266
+    "safe": true,
+    "looRate": 0.0013,
+    "falseMatchRate": 0.0119
    },
    {
     "floor": 0.6,
     "margin": 0.12,
     "validated": [
      "ana",
+     "ball",
+     "bastion",
+     "dva",
+     "echo",
+     "illari",
+     "jetcat",
+     "kiriko",
+     "lucio",
+     "mauga",
      "mei",
      "mizuki",
      "ram",
+     "sigma",
+     "sojourn",
+     "sym",
+     "tracer",
+     "winston"
+    ],
+    "safe": false,
+    "looRate": 0.0485,
+    "falseMatchRate": 0.0916
+   },
+   {
+    "floor": 0.6,
+    "margin": 0.15,
+    "validated": [
+     "ana",
+     "ball",
+     "bastion",
+     "dva",
+     "echo",
+     "jetcat",
+     "kiriko",
+     "lucio",
+     "mauga",
+     "mei",
+     "mizuki",
+     "ram",
+     "sigma",
      "sojourn",
      "sym",
      "winston"
     ],
     "safe": false,
-    "looRate": 0.0856,
-    "falseMatchRate": 0.0895
+    "looRate": 0.0257,
+    "falseMatchRate": 0.0618
    },
    {
     "floor": 0.6,
+    "margin": 0.2,
+    "validated": [
+     "ana",
+     "ball",
+     "dva",
+     "echo",
+     "jetcat",
+     "kiriko",
+     "lucio",
+     "mei",
+     "mizuki",
+     "ram",
+     "sigma",
+     "sym",
+     "winston"
+    ],
+    "safe": true,
+    "looRate": 0.0054,
+    "falseMatchRate": 0.0119
+   },
+   {
+    "floor": 0.6,
+    "margin": 0.25,
+    "validated": [
+     "ana",
+     "ball",
+     "echo",
+     "mizuki",
+     "ram",
+     "sigma",
+     "sym",
+     "winston"
+    ],
+    "safe": true,
+    "looRate": 0.0,
+    "falseMatchRate": 0.0119
+   },
+   {
+    "floor": 0.65,
+    "margin": 0.12,
+    "validated": [
+     "ana",
+     "ball",
+     "bastion",
+     "dva",
+     "echo",
+     "illari",
+     "jetcat",
+     "kiriko",
+     "lucio",
+     "mauga",
+     "mei",
+     "mizuki",
+     "ram",
+     "sigma",
+     "sym",
+     "tracer",
+     "winston"
+    ],
+    "safe": false,
+    "looRate": 0.0176,
+    "falseMatchRate": 0.0547
+   },
+   {
+    "floor": 0.65,
     "margin": 0.15,
     "validated": [
      "ana",
+     "ball",
+     "bastion",
+     "dva",
+     "echo",
+     "jetcat",
+     "kiriko",
+     "lucio",
+     "mauga",
      "mei",
      "mizuki",
      "ram",
+     "sigma",
      "sym",
      "winston"
     ],
     "safe": false,
-    "looRate": 0.0813,
-    "falseMatchRate": 0.0532
-   },
-   {
-    "floor": 0.6,
-    "margin": 0.2,
-    "validated": [
-     "mei",
-     "mizuki",
-     "ram",
-     "sym",
-     "winston"
-    ],
-    "safe": false,
-    "looRate": 0.0587,
-    "falseMatchRate": 0.0288
-   },
-   {
-    "floor": 0.6,
-    "margin": 0.25,
-    "validated": [
-     "mizuki",
-     "ram",
-     "winston"
-    ],
-    "safe": false,
-    "looRate": 0.024,
-    "falseMatchRate": 0.0266
-   },
-   {
-    "floor": 0.65,
-    "margin": 0.12,
-    "validated": [
-     "mei",
-     "mizuki",
-     "ram",
-     "sym",
-     "winston"
-    ],
-    "safe": false,
-    "looRate": 0.06,
-    "falseMatchRate": 0.0754
-   },
-   {
-    "floor": 0.65,
-    "margin": 0.15,
-    "validated": [
-     "mei",
-     "mizuki",
-     "ram",
-     "sym",
-     "winston"
-    ],
-    "safe": false,
-    "looRate": 0.052,
-    "falseMatchRate": 0.0532
+    "looRate": 0.0095,
+    "falseMatchRate": 0.0418
    },
    {
     "floor": 0.65,
     "margin": 0.2,
     "validated": [
+     "ana",
+     "ball",
+     "dva",
+     "echo",
+     "jetcat",
+     "lucio",
      "mei",
      "mizuki",
      "ram",
+     "sigma",
      "sym",
      "winston"
     ],
-    "safe": false,
-    "looRate": 0.0307,
-    "falseMatchRate": 0.0288
+    "safe": true,
+    "looRate": 0.0013,
+    "falseMatchRate": 0.0119
    },
    {
     "floor": 0.65,
     "margin": 0.25,
     "validated": [
+     "ball",
+     "echo",
      "mizuki",
      "ram",
+     "sigma",
+     "sym",
      "winston"
     ],
-    "safe": false,
-    "looRate": 0.0093,
-    "falseMatchRate": 0.0266
+    "safe": true,
+    "looRate": 0.0,
+    "falseMatchRate": 0.0119
    },
    {
     "floor": 0.7,
     "margin": 0.12,
     "validated": [
+     "ball",
+     "bastion",
+     "dva",
+     "echo",
+     "jetcat",
+     "kiriko",
+     "lucio",
+     "mauga",
      "mei",
      "mizuki",
      "ram",
+     "sigma",
      "sym",
+     "tracer",
      "winston"
     ],
     "safe": false,
-    "looRate": 0.0293,
-    "falseMatchRate": 0.0732
+    "looRate": 0.0028,
+    "falseMatchRate": 0.0448
    },
    {
     "floor": 0.7,
     "margin": 0.15,
     "validated": [
+     "ball",
+     "bastion",
+     "dva",
+     "echo",
+     "jetcat",
+     "mauga",
      "mei",
      "mizuki",
      "ram",
+     "sigma",
      "sym",
      "winston"
     ],
-    "safe": false,
-    "looRate": 0.0227,
-    "falseMatchRate": 0.051
+    "safe": true,
+    "looRate": 0.0027,
+    "falseMatchRate": 0.0179
    },
    {
     "floor": 0.7,
     "margin": 0.2,
     "validated": [
+     "ball",
+     "dva",
+     "echo",
+     "jetcat",
      "mei",
      "mizuki",
      "ram",
+     "sigma",
      "sym",
      "winston"
     ],
-    "safe": false,
-    "looRate": 0.0147,
-    "falseMatchRate": 0.0288
+    "safe": true,
+    "looRate": 0.0,
+    "falseMatchRate": 0.0119
    },
    {
     "floor": 0.7,
     "margin": 0.25,
     "validated": [
+     "ball",
+     "echo",
      "mizuki",
      "ram",
+     "sigma",
+     "sym",
      "winston"
     ],
-    "safe": false,
-    "looRate": 0.0093,
-    "falseMatchRate": 0.0266
+    "safe": true,
+    "looRate": 0.0,
+    "falseMatchRate": 0.0119
    }
   ]
  },
- "forgeVersion": 3,
+ "forgeVersion": 4,
  "promote": true,
  "labelsDigest": "edbae5ac5434ef082f758cd26a42ddcd735eb053d921e11c76e80d6f02fd6c1b",
  "productionSet": {
-  "safe": false,
+  "safe": true,
   "falseMatch": {
-   "trials": 553,
-   "unknown": 499,
-   "matched": 54,
+   "trials": 377,
+   "unknown": 370,
+   "matched": 7,
    "matchedAs": {
-    "shion": 1,
-    "mei": 14,
-    "ram": 1,
-    "jetcat": 12,
-    "winston": 11,
-    "cass": 12,
-    "mizuki": 1,
-    "bastion": 1,
-    "ball": 1
+    "sigma": 4,
+    "kiriko": 3
    },
    "byHero": {
-    "sigma": 85,
-    "zarya": 87,
-    "sojourn": 103,
-    "echo": 30,
-    "bap": 67,
-    "torb": 29,
+    "zarya": 49,
+    "sojourn": 102,
+    "bap": 57,
+    "torb": 18,
     "genji": 32,
     "pharah": 33,
     "illari": 24,
     "hog": 14,
     "emre": 11,
-    "brig": 17,
+    "brig": 16,
     "juno": 8,
     "widow": 7,
     "doomfist": 6
    },
-   "rate": 0.0976,
-   "passed": false,
-   "note": "553 crop(s) of heroes this set has NO template for. Every one should read UNKNOWN; 54 did not (9.8%, ceiling 2.0%)."
+   "rate": 0.0186,
+   "passed": true,
+   "note": "377 crop(s) of heroes this set has NO template for. Every one should read UNKNOWN; 7 did not (1.9%, ceiling 2.0%)."
   },
   "leaveOneOut": {
-   "trials": 1265,
-   "matched": 186,
-   "rate": 0.147,
+   "trials": 1273,
+   "matched": 3,
+   "rate": 0.0024,
    "ceiling": 0.02,
-   "passed": false,
-   "note": "Leave-one-out false-match test over 1265 real crops: 186 (14.70%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
+   "passed": true,
+   "note": "Leave-one-out false-match test over 1273 real crops: 3 (0.24%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
    "confusablePairs": [
     {
-     "hero": "tracer",
-     "readAs": "jetcat",
-     "count": 103,
-     "trials": 120,
-     "share": 0.858,
-     "note": "with no tracer template in the set, 103 of 120 real tracer portraits (86%) were confidently read as jetcat instead of UNKNOWN"
-    },
-    {
-     "hero": "reaper",
-     "readAs": "mei",
-     "count": 7,
-     "trials": 23,
-     "share": 0.304,
-     "note": "with no reaper template in the set, 7 of 23 real reaper portraits (30%) were confidently read as mei instead of UNKNOWN"
-    },
-    {
-     "hero": "ana",
-     "readAs": "mauga",
-     "count": 29,
-     "trials": 96,
-     "share": 0.302,
-     "note": "with no ana template in the set, 29 of 96 real ana portraits (30%) were confidently read as mauga instead of UNKNOWN"
-    },
-    {
-     "hero": "sym",
-     "readAs": "ram",
-     "count": 11,
-     "trials": 82,
-     "share": 0.134,
-     "note": "with no sym template in the set, 11 of 82 real sym portraits (13%) were confidently read as ram instead of UNKNOWN"
-    },
-    {
-     "hero": "jetcat",
-     "readAs": "tracer",
-     "count": 7,
-     "trials": 80,
-     "share": 0.087,
-     "note": "with no jetcat template in the set, 7 of 80 real jetcat portraits (9%) were confidently read as tracer instead of UNKNOWN"
-    },
-    {
-     "hero": "dva",
-     "readAs": "jetcat",
-     "count": 9,
-     "trials": 120,
-     "share": 0.075,
-     "note": "with no dva template in the set, 9 of 120 real dva portraits (8%) were confidently read as jetcat instead of UNKNOWN"
-    },
-    {
-     "hero": "ball",
-     "readAs": "bastion",
-     "count": 3,
-     "trials": 45,
-     "share": 0.067,
-     "note": "with no ball template in the set, 3 of 45 real ball portraits (7%) were confidently read as bastion instead of UNKNOWN"
-    },
-    {
-     "hero": "bastion",
-     "readAs": "shion",
-     "count": 5,
-     "trials": 108,
-     "share": 0.046,
-     "note": "with no bastion template in the set, 5 of 108 real bastion portraits (5%) were confidently read as shion instead of UNKNOWN"
-    },
-    {
      "hero": "kiriko",
-     "readAs": "cass",
-     "count": 4,
-     "trials": 120,
-     "share": 0.033,
-     "note": "with no kiriko template in the set, 4 of 120 real kiriko portraits (3%) were confidently read as cass instead of UNKNOWN"
-    },
-    {
-     "hero": "kiriko",
-     "readAs": "dva",
-     "count": 4,
-     "trials": 120,
-     "share": 0.033,
-     "note": "with no kiriko template in the set, 4 of 120 real kiriko portraits (3%) were confidently read as dva instead of UNKNOWN"
-    },
-    {
-     "hero": "ball",
-     "readAs": "cass",
-     "count": 1,
-     "trials": 45,
-     "share": 0.022,
-     "note": "with no ball template in the set, 1 of 45 real ball portraits (2%) were confidently read as cass instead of UNKNOWN"
-    },
-    {
-     "hero": "ram",
-     "readAs": "sym",
-     "count": 1,
-     "trials": 52,
-     "share": 0.019,
-     "note": "with no ram template in the set, 1 of 52 real ram portraits (2%) were confidently read as sym instead of UNKNOWN"
+     "readAs": "ana",
+     "count": 2,
+     "trials": 101,
+     "share": 0.02,
+     "note": "with no kiriko template in the set, 2 of 101 real kiriko portraits (2%) were confidently read as ana instead of UNKNOWN"
     },
     {
      "hero": "ana",
      "readAs": "mizuki",
      "count": 1,
-     "trials": 96,
-     "share": 0.01,
-     "note": "with no ana template in the set, 1 of 96 real ana portraits (1%) were confidently read as mizuki instead of UNKNOWN"
-    },
-    {
-     "hero": "dva",
-     "readAs": "shion",
-     "count": 1,
-     "trials": 120,
-     "share": 0.008,
-     "note": "with no dva template in the set, 1 of 120 real dva portraits (1%) were confidently read as shion instead of UNKNOWN"
+     "trials": 94,
+     "share": 0.011,
+     "note": "with no ana template in the set, 1 of 94 real ana portraits (1%) were confidently read as mizuki instead of UNKNOWN"
     }
    ]
   },
   "verdicts": {
-   "ana": "FAILED",
-   "ball": "UNVERIFIABLE",
+   "ana": "VALIDATED",
+   "ball": "VALIDATED",
    "bastion": "VALIDATED",
    "cass": "UNVERIFIABLE",
-   "dva": "FAILED",
+   "dva": "VALIDATED",
+   "echo": "VALIDATED",
    "jetcat": "UNVERIFIABLE",
-   "kiriko": "FAILED",
+   "kiriko": "VALIDATED",
    "lucio": "VALIDATED",
    "mauga": "VALIDATED",
    "mei": "VALIDATED",
    "mizuki": "VALIDATED",
    "ram": "VALIDATED",
-   "reaper": "WEAK",
+   "reaper": "VALIDATED",
    "shion": "UNVERIFIABLE",
+   "sigma": "VALIDATED",
    "sym": "VALIDATED",
    "tracer": "UNVERIFIABLE",
    "winston": "VALIDATED"

@@ -9,10 +9,10 @@
    "size": 23
   },
   "ball": {
-   "file": "templates/owcs_8c105lnzlam/ball.b.png",
+   "file": "templates/owcs_8c105lnzlam/ball.v1.png",
    "source": "owcs_8c105lnzlam",
-   "score": 6.6471,
-   "size": 24
+   "score": 6.6062,
+   "size": 23
   },
   "bastion": {
    "file": "templates/owcs_8c105lnzlam/bastion.v3.png",
@@ -32,11 +32,17 @@
    "score": 7.0924,
    "size": 23
   },
-  "jetcat": {
-   "file": "templates/owcs_8c105lnzlam/jetcat.b.png",
+  "echo": {
+   "file": "templates/owcs_8c105lnzlam/echo.v3.png",
    "source": "owcs_8c105lnzlam",
-   "score": 6.3886,
-   "size": 24
+   "score": 6.3772,
+   "size": 23
+  },
+  "jetcat": {
+   "file": "templates/owcs_8c105lnzlam/jetcat.v1.png",
+   "source": "owcs_8c105lnzlam",
+   "score": 6.8584,
+   "size": 23
   },
   "juno": {
    "file": "templates/owcs_jksix_qwc/juno.png",
@@ -45,15 +51,15 @@
    "size": 22
   },
   "kiriko": {
-   "file": "templates/owcs_8c105lnzlam/kiriko.png",
+   "file": "templates/owcs_8c105lnzlam/kiriko.v2.png",
    "source": "owcs_8c105lnzlam",
-   "score": 7.2966,
+   "score": 7.3132,
    "size": 23
   },
   "lucio": {
-   "file": "templates/owcs_8c105lnzlam/lucio.v3.png",
+   "file": "templates/owcs_8c105lnzlam/lucio.png",
    "source": "owcs_8c105lnzlam",
-   "score": 6.6298,
+   "score": 6.7443,
    "size": 23
   },
   "mauga": {
@@ -75,9 +81,9 @@
    "size": 23
   },
   "ram": {
-   "file": "templates/owcs_8c105lnzlam/ram.v1.png",
+   "file": "templates/owcs_8c105lnzlam/ram.v2.png",
    "source": "owcs_8c105lnzlam",
-   "score": 7.2441,
+   "score": 6.6756,
    "size": 23
   },
   "reaper": {
@@ -90,6 +96,12 @@
    "file": "templates/owcs_8c105lnzlam/shion.png",
    "source": "owcs_8c105lnzlam",
    "score": 6.7494,
+   "size": 23
+  },
+  "sigma": {
+   "file": "templates/owcs_8c105lnzlam/sigma.v2.png",
+   "source": "owcs_8c105lnzlam",
+   "score": 6.6509,
    "size": 23
   },
   "sojourn": {
@@ -105,10 +117,10 @@
    "size": 23
   },
   "tracer": {
-   "file": "templates/owcs_8c105lnzlam/tracer.png",
+   "file": "templates/owcs_8c105lnzlam/tracer.v3.png",
    "source": "owcs_8c105lnzlam",
-   "score": 6.8257,
-   "size": 24
+   "score": 7.0004,
+   "size": 23
   },
   "winston": {
    "file": "templates/owcs_8c105lnzlam/winston.v2.png",

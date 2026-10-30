@@ -7232,38 +7232,39 @@ window.OWCS_LABELLING = {
     "zarya"
    ],
    "state": "forged",
-   "promoted": [],
-   "refused": [
+   "promoted": [
     "ana",
     "ball",
-    "bap",
     "bastion",
+    "dva",
+    "echo",
+    "kiriko",
+    "lucio",
+    "mei",
+    "mizuki",
+    "ram",
+    "sigma",
+    "sym",
+    "winston"
+   ],
+   "refused": [
+    "bap",
     "brig",
     "cass",
     "doomfist",
-    "dva",
-    "echo",
     "emre",
     "genji",
     "hog",
     "illari",
     "jetcat",
     "juno",
-    "kiriko",
-    "lucio",
     "mauga",
-    "mei",
-    "mizuki",
     "pharah",
-    "ram",
     "reaper",
-    "sigma",
     "sojourn",
-    "sym",
     "torb",
     "tracer",
     "widow",
-    "winston",
     "zarya"
    ],
    "labels": {
@@ -7337,38 +7338,155 @@ window.OWCS_LABELLING = {
    "labelledBy": "cvv",
    "verdicts": {
     "ana": "VALIDATED",
-    "ball": "WEAK",
-    "bap": "FAILED",
+    "ball": "VALIDATED",
+    "bap": "REVIEW",
     "bastion": "VALIDATED",
     "brig": "WEAK",
-    "cass": "FAILED",
+    "cass": "REVIEW",
     "doomfist": "WEAK",
-    "dva": "FAILED",
-    "echo": "WEAK",
+    "dva": "VALIDATED",
+    "echo": "VALIDATED",
     "emre": "WEAK",
-    "genji": "WEAK",
+    "genji": "REVIEW",
     "hog": "WEAK",
-    "illari": "WEAK",
-    "jetcat": "WEAK",
+    "illari": "REVIEW",
+    "jetcat": "REVIEW",
     "juno": "WEAK",
-    "kiriko": "FAILED",
+    "kiriko": "VALIDATED",
     "lucio": "VALIDATED",
-    "mauga": "WEAK",
+    "mauga": "REVIEW",
     "mei": "VALIDATED",
     "mizuki": "VALIDATED",
     "pharah": "WEAK",
     "ram": "VALIDATED",
-    "reaper": "WEAK",
-    "sigma": "FAILED",
-    "sojourn": "FAILED",
+    "reaper": "REVIEW",
+    "sigma": "VALIDATED",
+    "sojourn": "REVIEW",
     "sym": "VALIDATED",
-    "torb": "FAILED",
-    "tracer": "FAILED",
+    "torb": "WEAK",
+    "tracer": "REVIEW",
     "widow": "WEAK",
     "winston": "VALIDATED",
     "zarya": "FAILED"
    },
-   "review": {},
+   "review": {
+    "bap": {
+     "trials": 44,
+     "correct": 36,
+     "unknown": 6,
+     "wrong": 2,
+     "accuracy": 0.818,
+     "confusedWith": {
+      "illari": 2
+     },
+     "cards": [
+      "c31",
+      "c36",
+      "c40"
+     ]
+    },
+    "cass": {
+     "trials": 127,
+     "correct": 94,
+     "unknown": 33,
+     "wrong": 0,
+     "accuracy": 0.74,
+     "confusedWith": {},
+     "cards": [
+      "c05",
+      "c28",
+      "c49",
+      "c52",
+      "c59",
+      "c61"
+     ]
+    },
+    "genji": {
+     "trials": 31,
+     "correct": 25,
+     "unknown": 6,
+     "wrong": 0,
+     "accuracy": 0.806,
+     "confusedWith": {},
+     "cards": [
+      "c35",
+      "c54"
+     ]
+    },
+    "illari": {
+     "trials": 19,
+     "correct": 17,
+     "unknown": 2,
+     "wrong": 0,
+     "accuracy": 0.895,
+     "confusedWith": {},
+     "cards": [
+      "c41",
+      "c55"
+     ]
+    },
+    "jetcat": {
+     "trials": 59,
+     "correct": 50,
+     "unknown": 9,
+     "wrong": 0,
+     "accuracy": 0.847,
+     "confusedWith": {},
+     "cards": [
+      "c02"
+     ]
+    },
+    "mauga": {
+     "trials": 19,
+     "correct": 17,
+     "unknown": 2,
+     "wrong": 0,
+     "accuracy": 0.895,
+     "confusedWith": {},
+     "cards": [
+      "c39",
+      "c46"
+     ]
+    },
+    "reaper": {
+     "trials": 19,
+     "correct": 6,
+     "unknown": 13,
+     "wrong": 0,
+     "accuracy": 0.316,
+     "confusedWith": {},
+     "cards": [
+      "c47",
+      "c60",
+      "c63"
+     ]
+    },
+    "sojourn": {
+     "trials": 75,
+     "correct": 60,
+     "unknown": 15,
+     "wrong": 0,
+     "accuracy": 0.8,
+     "confusedWith": {},
+     "cards": [
+      "c21",
+      "c24",
+      "c51"
+     ]
+    },
+    "tracer": {
+     "trials": 122,
+     "correct": 70,
+     "unknown": 52,
+     "wrong": 0,
+     "accuracy": 0.574,
+     "confusedWith": {},
+     "cards": [
+      "c01",
+      "c04"
+     ]
+    }
+   },
    "approved": [],
    "rejected": [],
    "slotRoles": [
@@ -7379,260 +7497,92 @@ window.OWCS_LABELLING = {
     "support"
    ],
    "leaveOneOut": {
-    "trials": 1517,
-    "matched": 319,
-    "rate": 0.2103,
+    "trials": 1450,
+    "matched": 58,
+    "rate": 0.04,
     "ceiling": 0.02,
     "passed": false,
-    "note": "Leave-one-out false-match test over 1517 real crops: 319 (21.03%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
+    "note": "Leave-one-out false-match test over 1450 real crops: 58 (4.00%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
     "confusablePairs": [
      {
-      "hero": "emre",
-      "readAs": "ball",
-      "count": 3,
+      "hero": "tracer",
+      "readAs": "torb",
+      "count": 40,
+      "trials": 97,
+      "share": 0.412,
+      "note": "with no tracer template in the set, 40 of 97 real tracer portraits (41%) were confidently read as torb instead of UNKNOWN"
+     },
+     {
+      "hero": "torb",
+      "readAs": "bastion",
+      "count": 1,
       "trials": 3,
-      "share": 1.0,
-      "note": "with no emre template in the set, 3 of 3 real emre portraits (100%) were confidently read as ball instead of UNKNOWN"
-     },
-     {
-      "hero": "sigma",
-      "readAs": "echo",
-      "count": 62,
-      "trials": 71,
-      "share": 0.873,
-      "note": "with no sigma template in the set, 62 of 71 real sigma portraits (87%) were confidently read as echo instead of UNKNOWN"
-     },
-     {
-      "hero": "dva",
-      "readAs": "kiriko",
-      "count": 59,
-      "trials": 102,
-      "share": 0.578,
-      "note": "with no dva template in the set, 59 of 102 real dva portraits (58%) were confidently read as kiriko instead of UNKNOWN"
+      "share": 0.333,
+      "note": "with no torb template in the set, 1 of 3 real torb portraits (33%) were confidently read as bastion instead of UNKNOWN"
      },
      {
       "hero": "pharah",
       "readAs": "cass",
-      "count": 5,
-      "trials": 11,
-      "share": 0.455,
-      "note": "with no pharah template in the set, 5 of 11 real pharah portraits (45%) were confidently read as cass instead of UNKNOWN"
-     },
-     {
-      "hero": "sym",
-      "readAs": "ram",
-      "count": 34,
-      "trials": 82,
-      "share": 0.415,
-      "note": "with no sym template in the set, 34 of 82 real sym portraits (41%) were confidently read as ram instead of UNKNOWN"
-     },
-     {
-      "hero": "cass",
-      "readAs": "zarya",
-      "count": 31,
-      "trials": 103,
-      "share": 0.301,
-      "note": "with no cass template in the set, 31 of 103 real cass portraits (30%) were confidently read as zarya instead of UNKNOWN"
-     },
-     {
-      "hero": "tracer",
-      "readAs": "torb",
-      "count": 27,
-      "trials": 98,
-      "share": 0.276,
-      "note": "with no tracer template in the set, 27 of 98 real tracer portraits (28%) were confidently read as torb instead of UNKNOWN"
-     },
-     {
-      "hero": "tracer",
-      "readAs": "jetcat",
-      "count": 24,
-      "trials": 98,
-      "share": 0.245,
-      "note": "with no tracer template in the set, 24 of 98 real tracer portraits (24%) were confidently read as jetcat instead of UNKNOWN"
-     },
-     {
-      "hero": "torb",
-      "readAs": "jetcat",
       "count": 3,
-      "trials": 14,
-      "share": 0.214,
-      "note": "with no torb template in the set, 3 of 14 real torb portraits (21%) were confidently read as jetcat instead of UNKNOWN"
+      "trials": 11,
+      "share": 0.273,
+      "note": "with no pharah template in the set, 3 of 11 real pharah portraits (27%) were confidently read as cass instead of UNKNOWN"
      },
      {
-      "hero": "echo",
+      "hero": "zarya",
       "readAs": "sigma",
-      "count": 2,
-      "trials": 10,
-      "share": 0.2,
-      "note": "with no echo template in the set, 2 of 10 real echo portraits (20%) were confidently read as sigma instead of UNKNOWN"
-     },
-     {
-      "hero": "jetcat",
-      "readAs": "tracer",
-      "count": 10,
-      "trials": 59,
-      "share": 0.169,
-      "note": "with no jetcat template in the set, 10 of 59 real jetcat portraits (17%) were confidently read as tracer instead of UNKNOWN"
-     },
-     {
-      "hero": "cass",
-      "readAs": "bap",
-      "count": 14,
-      "trials": 103,
-      "share": 0.136,
-      "note": "with no cass template in the set, 14 of 103 real cass portraits (14%) were confidently read as bap instead of UNKNOWN"
+      "count": 4,
+      "trials": 38,
+      "share": 0.105,
+      "note": "with no zarya template in the set, 4 of 38 real zarya portraits (11%) were confidently read as sigma instead of UNKNOWN"
      },
      {
       "hero": "winston",
       "readAs": "hog",
-      "count": 2,
+      "count": 1,
       "trials": 16,
-      "share": 0.125,
-      "note": "with no winston template in the set, 2 of 16 real winston portraits (12%) were confidently read as hog instead of UNKNOWN"
+      "share": 0.062,
+      "note": "with no winston template in the set, 1 of 16 real winston portraits (6%) were confidently read as hog instead of UNKNOWN"
      },
      {
-      "hero": "zarya",
-      "readAs": "mei",
-      "count": 7,
-      "trials": 65,
-      "share": 0.108,
-      "note": "with no zarya template in the set, 7 of 65 real zarya portraits (11%) were confidently read as mei instead of UNKNOWN"
-     },
-     {
-      "hero": "zarya",
-      "readAs": "jetcat",
-      "count": 5,
-      "trials": 65,
-      "share": 0.077,
-      "note": "with no zarya template in the set, 5 of 65 real zarya portraits (8%) were confidently read as jetcat instead of UNKNOWN"
-     },
-     {
-      "hero": "ball",
-      "readAs": "bastion",
-      "count": 2,
-      "trials": 29,
-      "share": 0.069,
-      "note": "with no ball template in the set, 2 of 29 real ball portraits (7%) were confidently read as bastion instead of UNKNOWN"
-     },
-     {
-      "hero": "bap",
-      "readAs": "sojourn",
-      "count": 3,
-      "trials": 51,
-      "share": 0.059,
-      "note": "with no bap template in the set, 3 of 51 real bap portraits (6%) were confidently read as sojourn instead of UNKNOWN"
-     },
-     {
-      "hero": "sigma",
-      "readAs": "reaper",
-      "count": 4,
-      "trials": 71,
-      "share": 0.056,
-      "note": "with no sigma template in the set, 4 of 71 real sigma portraits (6%) were confidently read as reaper instead of UNKNOWN"
+      "hero": "mauga",
+      "readAs": "hog",
+      "count": 1,
+      "trials": 19,
+      "share": 0.053,
+      "note": "with no mauga template in the set, 1 of 19 real mauga portraits (5%) were confidently read as hog instead of UNKNOWN"
      },
      {
       "hero": "bap",
       "readAs": "illari",
       "count": 2,
-      "trials": 51,
-      "share": 0.039,
-      "note": "with no bap template in the set, 2 of 51 real bap portraits (4%) were confidently read as illari instead of UNKNOWN"
-     },
-     {
-      "hero": "cass",
-      "readAs": "ball",
-      "count": 4,
-      "trials": 103,
-      "share": 0.039,
-      "note": "with no cass template in the set, 4 of 103 real cass portraits (4%) were confidently read as ball instead of UNKNOWN"
-     },
-     {
-      "hero": "kiriko",
-      "readAs": "dva",
-      "count": 3,
-      "trials": 98,
-      "share": 0.031,
-      "note": "with no kiriko template in the set, 3 of 98 real kiriko portraits (3%) were confidently read as dva instead of UNKNOWN"
-     },
-     {
-      "hero": "sojourn",
-      "readAs": "winston",
-      "count": 2,
-      "trials": 76,
-      "share": 0.026,
-      "note": "with no sojourn template in the set, 2 of 76 real sojourn portraits (3%) were confidently read as winston instead of UNKNOWN"
-     },
-     {
-      "hero": "bap",
-      "readAs": "mizuki",
-      "count": 1,
-      "trials": 51,
-      "share": 0.02,
-      "note": "with no bap template in the set, 1 of 51 real bap portraits (2%) were confidently read as mizuki instead of UNKNOWN"
-     },
-     {
-      "hero": "kiriko",
-      "readAs": "bap",
-      "count": 2,
-      "trials": 98,
-      "share": 0.02,
-      "note": "with no kiriko template in the set, 2 of 98 real kiriko portraits (2%) were confidently read as bap instead of UNKNOWN"
+      "trials": 44,
+      "share": 0.045,
+      "note": "with no bap template in the set, 2 of 44 real bap portraits (5%) were confidently read as illari instead of UNKNOWN"
      },
      {
       "hero": "bastion",
-      "readAs": "dva",
-      "count": 2,
-      "trials": 108,
-      "share": 0.019,
-      "note": "with no bastion template in the set, 2 of 108 real bastion portraits (2%) were confidently read as dva instead of UNKNOWN"
-     },
-     {
-      "hero": "jetcat",
       "readAs": "torb",
-      "count": 1,
-      "trials": 59,
-      "share": 0.017,
-      "note": "with no jetcat template in the set, 1 of 59 real jetcat portraits (2%) were confidently read as torb instead of UNKNOWN"
-     },
-     {
-      "hero": "zarya",
-      "readAs": "echo",
-      "count": 1,
-      "trials": 65,
-      "share": 0.015,
-      "note": "with no zarya template in the set, 1 of 65 real zarya portraits (2%) were confidently read as echo instead of UNKNOWN"
-     },
-     {
-      "hero": "ana",
-      "readAs": "mizuki",
-      "count": 1,
-      "trials": 96,
-      "share": 0.01,
-      "note": "with no ana template in the set, 1 of 96 real ana portraits (1%) were confidently read as mizuki instead of UNKNOWN"
+      "count": 4,
+      "trials": 108,
+      "share": 0.037,
+      "note": "with no bastion template in the set, 4 of 108 real bastion portraits (4%) were confidently read as torb instead of UNKNOWN"
      },
      {
       "hero": "cass",
-      "readAs": "illari",
+      "readAs": "pharah",
       "count": 1,
-      "trials": 103,
-      "share": 0.01,
-      "note": "with no cass template in the set, 1 of 103 real cass portraits (1%) were confidently read as illari instead of UNKNOWN"
+      "trials": 107,
+      "share": 0.009,
+      "note": "with no cass template in the set, 1 of 107 real cass portraits (1%) were confidently read as pharah instead of UNKNOWN"
      },
      {
-      "hero": "mei",
-      "readAs": "ball",
+      "hero": "cass",
+      "readAs": "sojourn",
       "count": 1,
-      "trials": 101,
-      "share": 0.01,
-      "note": "with no mei template in the set, 1 of 101 real mei portraits (1%) were confidently read as ball instead of UNKNOWN"
-     },
-     {
-      "hero": "tracer",
-      "readAs": "ball",
-      "count": 1,
-      "trials": 98,
-      "share": 0.01,
-      "note": "with no tracer template in the set, 1 of 98 real tracer portraits (1%) were confidently read as ball instead of UNKNOWN"
+      "trials": 107,
+      "share": 0.009,
+      "note": "with no cass template in the set, 1 of 107 real cass portraits (1%) were confidently read as sojourn instead of UNKNOWN"
      }
     ]
    },
@@ -10397,27 +10347,28 @@ window.OWCS_LABELLING = {
     "vendetta"
    ],
    "state": "forged",
-   "promoted": [],
+   "promoted": [
+    "dva",
+    "jetcat",
+    "lucio",
+    "mauga",
+    "ram",
+    "shion",
+    "tracer"
+   ],
    "refused": [
     "ana",
     "ball",
     "bastion",
     "cass",
-    "dva",
     "emre",
     "freja",
     "hazard",
-    "jetcat",
     "kiriko",
-    "lucio",
-    "mauga",
     "orisa",
-    "ram",
     "reaper",
-    "shion",
     "sojourn",
     "sym",
-    "tracer",
     "vendetta"
    ],
    "labels": {
@@ -10470,28 +10421,134 @@ window.OWCS_LABELLING = {
    },
    "labelledBy": "CV",
    "verdicts": {
-    "ana": "FAILED",
+    "ana": "REVIEW",
     "ball": "WEAK",
-    "bastion": "VALIDATED",
+    "bastion": "REVIEW",
     "cass": "WEAK",
     "dva": "VALIDATED",
-    "emre": "WEAK",
+    "emre": "REVIEW",
     "freja": "WEAK",
     "hazard": "WEAK",
-    "jetcat": "FAILED",
-    "kiriko": "VALIDATED",
+    "jetcat": "VALIDATED",
+    "kiriko": "REVIEW",
     "lucio": "VALIDATED",
     "mauga": "VALIDATED",
     "orisa": "WEAK",
     "ram": "VALIDATED",
-    "reaper": "VALIDATED",
+    "reaper": "REVIEW",
     "shion": "VALIDATED",
-    "sojourn": "FAILED",
-    "sym": "FAILED",
-    "tracer": "FAILED",
-    "vendetta": "FAILED"
+    "sojourn": "REVIEW",
+    "sym": "REVIEW",
+    "tracer": "VALIDATED",
+    "vendetta": "REVIEW"
    },
-   "review": {},
+   "review": {
+    "ana": {
+     "trials": 37,
+     "correct": 32,
+     "unknown": 5,
+     "wrong": 0,
+     "accuracy": 0.865,
+     "confusedWith": {},
+     "cards": [
+      "c13",
+      "c20"
+     ]
+    },
+    "bastion": {
+     "trials": 23,
+     "correct": 15,
+     "unknown": 8,
+     "wrong": 0,
+     "accuracy": 0.652,
+     "confusedWith": {},
+     "cards": [
+      "c27",
+      "c28"
+     ]
+    },
+    "emre": {
+     "trials": 28,
+     "correct": 18,
+     "unknown": 10,
+     "wrong": 0,
+     "accuracy": 0.643,
+     "confusedWith": {},
+     "cards": [
+      "c24",
+      "c25"
+     ]
+    },
+    "kiriko": {
+     "trials": 125,
+     "correct": 112,
+     "unknown": 13,
+     "wrong": 0,
+     "accuracy": 0.896,
+     "confusedWith": {},
+     "cards": [
+      "c00",
+      "c07"
+     ]
+    },
+    "reaper": {
+     "trials": 48,
+     "correct": 43,
+     "unknown": 5,
+     "wrong": 0,
+     "accuracy": 0.896,
+     "confusedWith": {},
+     "cards": [
+      "c11",
+      "c45"
+     ]
+    },
+    "sojourn": {
+     "trials": 134,
+     "correct": 38,
+     "unknown": 94,
+     "wrong": 2,
+     "accuracy": 0.284,
+     "confusedWith": {
+      "vendetta": 2
+     },
+     "cards": [
+      "c03",
+      "c18",
+      "c37",
+      "c38",
+      "c39",
+      "c42",
+      "c44"
+     ]
+    },
+    "sym": {
+     "trials": 81,
+     "correct": 63,
+     "unknown": 17,
+     "wrong": 1,
+     "accuracy": 0.778,
+     "confusedWith": {
+      "vendetta": 1
+     },
+     "cards": [
+      "c08",
+      "c19"
+     ]
+    },
+    "vendetta": {
+     "trials": 50,
+     "correct": 35,
+     "unknown": 15,
+     "wrong": 0,
+     "accuracy": 0.7,
+     "confusedWith": {},
+     "cards": [
+      "c09",
+      "c23"
+     ]
+    }
+   },
    "approved": [],
    "rejected": [],
    "slotRoles": [
@@ -10502,124 +10559,36 @@ window.OWCS_LABELLING = {
     "support"
    ],
    "leaveOneOut": {
-    "trials": 989,
-    "matched": 200,
-    "rate": 0.2022,
+    "trials": 985,
+    "matched": 17,
+    "rate": 0.0173,
     "ceiling": 0.02,
-    "passed": false,
-    "note": "Leave-one-out false-match test over 989 real crops: 200 (20.22%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
+    "passed": true,
+    "note": "Leave-one-out false-match test over 985 real crops: 17 (1.73%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
     "confusablePairs": [
      {
-      "hero": "vendetta",
-      "readAs": "ram",
-      "count": 39,
-      "trials": 50,
-      "share": 0.78,
-      "note": "with no vendetta template in the set, 39 of 50 real vendetta portraits (78%) were confidently read as ram instead of UNKNOWN"
-     },
-     {
-      "hero": "jetcat",
-      "readAs": "freja",
-      "count": 42,
-      "trials": 66,
-      "share": 0.636,
-      "note": "with no jetcat template in the set, 42 of 66 real jetcat portraits (64%) were confidently read as freja instead of UNKNOWN"
-     },
-     {
       "hero": "sojourn",
       "readAs": "vendetta",
-      "count": 48,
+      "count": 15,
       "trials": 108,
-      "share": 0.444,
-      "note": "with no sojourn template in the set, 48 of 108 real sojourn portraits (44%) were confidently read as vendetta instead of UNKNOWN"
-     },
-     {
-      "hero": "tracer",
-      "readAs": "jetcat",
-      "count": 29,
-      "trials": 99,
-      "share": 0.293,
-      "note": "with no tracer template in the set, 29 of 99 real tracer portraits (29%) were confidently read as jetcat instead of UNKNOWN"
-     },
-     {
-      "hero": "freja",
-      "readAs": "jetcat",
-      "count": 2,
-      "trials": 10,
-      "share": 0.2,
-      "note": "with no freja template in the set, 2 of 10 real freja portraits (20%) were confidently read as jetcat instead of UNKNOWN"
-     },
-     {
-      "hero": "sojourn",
-      "readAs": "sym",
-      "count": 21,
-      "trials": 108,
-      "share": 0.194,
-      "note": "with no sojourn template in the set, 21 of 108 real sojourn portraits (19%) were confidently read as sym instead of UNKNOWN"
-     },
-     {
-      "hero": "tracer",
-      "readAs": "freja",
-      "count": 9,
-      "trials": 99,
-      "share": 0.091,
-      "note": "with no tracer template in the set, 9 of 99 real tracer portraits (9%) were confidently read as freja instead of UNKNOWN"
-     },
-     {
-      "hero": "jetcat",
-      "readAs": "tracer",
-      "count": 3,
-      "trials": 66,
-      "share": 0.045,
-      "note": "with no jetcat template in the set, 3 of 66 real jetcat portraits (5%) were confidently read as tracer instead of UNKNOWN"
-     },
-     {
-      "hero": "emre",
-      "readAs": "shion",
-      "count": 1,
-      "trials": 28,
-      "share": 0.036,
-      "note": "with no emre template in the set, 1 of 28 real emre portraits (4%) were confidently read as shion instead of UNKNOWN"
-     },
-     {
-      "hero": "ana",
-      "readAs": "mauga",
-      "count": 1,
-      "trials": 38,
-      "share": 0.026,
-      "note": "with no ana template in the set, 1 of 38 real ana portraits (3%) were confidently read as mauga instead of UNKNOWN"
-     },
-     {
-      "hero": "ram",
-      "readAs": "vendetta",
-      "count": 2,
-      "trials": 83,
-      "share": 0.024,
-      "note": "with no ram template in the set, 2 of 83 real ram portraits (2%) were confidently read as vendetta instead of UNKNOWN"
-     },
-     {
-      "hero": "sym",
-      "readAs": "cass",
-      "count": 1,
-      "trials": 66,
-      "share": 0.015,
-      "note": "with no sym template in the set, 1 of 66 real sym portraits (2%) were confidently read as cass instead of UNKNOWN"
+      "share": 0.139,
+      "note": "with no sojourn template in the set, 15 of 108 real sojourn portraits (14%) were confidently read as vendetta instead of UNKNOWN"
      },
      {
       "hero": "sym",
       "readAs": "vendetta",
       "count": 1,
-      "trials": 66,
-      "share": 0.015,
-      "note": "with no sym template in the set, 1 of 66 real sym portraits (2%) were confidently read as vendetta instead of UNKNOWN"
+      "trials": 81,
+      "share": 0.012,
+      "note": "with no sym template in the set, 1 of 81 real sym portraits (1%) were confidently read as vendetta instead of UNKNOWN"
      },
      {
-      "hero": "lucio",
-      "readAs": "mauga",
+      "hero": "kiriko",
+      "readAs": "jetcat",
       "count": 1,
-      "trials": 99,
+      "trials": 102,
       "share": 0.01,
-      "note": "with no lucio template in the set, 1 of 99 real lucio portraits (1%) were confidently read as mauga instead of UNKNOWN"
+      "note": "with no kiriko template in the set, 1 of 102 real kiriko portraits (1%) were confidently read as jetcat instead of UNKNOWN"
      }
     ]
    },

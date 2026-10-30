@@ -1,4 +1,7 @@
 {
+  "detector_tuning": {"measuredOn": "labelling/2831815423-owcs_8c105lnzlam", "from": {"floor": 0.6, "margin": 0.2}, "rule": "raised only, never lowered", "leaveOneOutRate": 0.0011, "validatedHeroes": ["ana", "dva", "jetcat", "kiriko", "lucio", "mauga", "ram", "shion", "tracer"]},
+  "min_margin": 0.25,
+  "unknown_floor": 0.6,
   "_comments": [
     "CALIBRATION layout for OWCS VOD youtube 8C105lNzLAM (Crazy Raccoon vs",
     "ZETA DIVISION, Champions Clash 2026 Upper Final). Calibrated against",

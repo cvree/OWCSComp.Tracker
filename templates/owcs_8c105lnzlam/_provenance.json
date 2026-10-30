@@ -28,8 +28,8 @@
      4368.0
     ]
    ],
-   "holdoutStarts": 8016.0,
-   "recordedAt": "2026-10-30T08:16:00+00:00"
+   "holdoutStarts": 10260.0,
+   "recordedAt": "2026-10-30T17:53:57+00:00"
   },
   {
    "file": "ana.v1.png",
@@ -59,8 +59,8 @@
      4368.0
     ]
    ],
-   "holdoutStarts": 8016.0,
-   "recordedAt": "2026-10-30T08:16:00+00:00"
+   "holdoutStarts": 10260.0,
+   "recordedAt": "2026-10-30T17:53:57+00:00"
   },
   {
    "file": "ana.v2.png",
@@ -90,8 +90,8 @@
      4368.0
     ]
    ],
-   "holdoutStarts": 8016.0,
-   "recordedAt": "2026-10-30T08:16:00+00:00"
+   "holdoutStarts": 10260.0,
+   "recordedAt": "2026-10-30T17:53:57+00:00"
   },
   {
    "file": "ana.v3.png",
@@ -121,8 +121,132 @@
      4368.0
     ]
    ],
-   "holdoutStarts": 8016.0,
-   "recordedAt": "2026-10-30T08:16:00+00:00"
+   "holdoutStarts": 10260.0,
+   "recordedAt": "2026-10-30T17:53:57+00:00"
+  },
+  {
+   "file": "ball.png",
+   "heroId": "ball",
+   "sourceVideo": "https://www.twitch.tv/videos/2778637313",
+   "sourceReport": "labelling/2778637313-owcs_8c105lnzlam",
+   "sourceCrop": "t0003096.0_a3.png",
+   "offset": 3096.0,
+   "slot": "a3",
+   "state": "gameplay",
+   "labelSource": "human-cluster",
+   "stintId": null,
+   "quality": {
+    "width": 36,
+    "height": 36,
+    "sharpness": 2687.57,
+    "contrast": 66.57,
+    "flatFraction": 0.232,
+    "obstruction": 0.167,
+    "nearestOtherHero": "ana.v1.png",
+    "nearestOtherScore": 0.4176,
+    "nearestSameScore": null
+   },
+   "buildWindows": [
+    [
+     2760.0,
+     3120.0
+    ]
+   ],
+   "holdoutStarts": 8268.0,
+   "recordedAt": "2026-10-30T17:53:57+00:00"
+  },
+  {
+   "file": "ball.v1.png",
+   "heroId": "ball",
+   "sourceVideo": "https://www.twitch.tv/videos/2778637313",
+   "sourceReport": "labelling/2778637313-owcs_8c105lnzlam",
+   "sourceCrop": "t0003060.0_a3.png",
+   "offset": 3060.0,
+   "slot": "a3",
+   "state": "gameplay",
+   "labelSource": "human-cluster",
+   "stintId": null,
+   "quality": {
+    "width": 36,
+    "height": 36,
+    "sharpness": 1156.74,
+    "contrast": 40.15,
+    "flatFraction": 0.318,
+    "obstruction": 0.0,
+    "nearestOtherHero": "ana.png",
+    "nearestOtherScore": 0.2813,
+    "nearestSameScore": 0.19
+   },
+   "buildWindows": [
+    [
+     2760.0,
+     3120.0
+    ]
+   ],
+   "holdoutStarts": 8268.0,
+   "recordedAt": "2026-10-30T17:53:57+00:00"
+  },
+  {
+   "file": "ball.v2.png",
+   "heroId": "ball",
+   "sourceVideo": "https://www.twitch.tv/videos/2778637313",
+   "sourceReport": "labelling/2778637313-owcs_8c105lnzlam",
+   "sourceCrop": "t0002796.0_a3.png",
+   "offset": 2796.0,
+   "slot": "a3",
+   "state": "gameplay",
+   "labelSource": "human-cluster",
+   "stintId": null,
+   "quality": {
+    "width": 36,
+    "height": 36,
+    "sharpness": 2663.23,
+    "contrast": 49.11,
+    "flatFraction": 0.135,
+    "obstruction": 0.0,
+    "nearestOtherHero": "ana.v1.png",
+    "nearestOtherScore": 0.0232,
+    "nearestSameScore": 0.709
+   },
+   "buildWindows": [
+    [
+     2760.0,
+     3120.0
+    ]
+   ],
+   "holdoutStarts": 8268.0,
+   "recordedAt": "2026-10-30T17:53:57+00:00"
+  },
+  {
+   "file": "ball.v3.png",
+   "heroId": "ball",
+   "sourceVideo": "https://www.twitch.tv/videos/2778637313",
+   "sourceReport": "labelling/2778637313-owcs_8c105lnzlam",
+   "sourceCrop": "t0003012.0_a3.png",
+   "offset": 3012.0,
+   "slot": "a3",
+   "state": "gameplay",
+   "labelSource": "human-cluster",
+   "stintId": null,
+   "quality": {
+    "width": 36,
+    "height": 36,
+    "sharpness": 2536.49,
+    "contrast": 49.97,
+    "flatFraction": 0.129,
+    "obstruction": 0.028,
+    "nearestOtherHero": "ana.png",
+    "nearestOtherScore": 0.1409,
+    "nearestSameScore": 0.7809
+   },
+   "buildWindows": [
+    [
+     2760.0,
+     3120.0
+    ]
+   ],
+   "holdoutStarts": 8268.0,
+   "recordedAt": "2026-10-30T17:53:57+00:00"
   },
   {
    "file": "bastion.png",
@@ -143,7 +267,7 @@
     "flatFraction": 0.226,
     "obstruction": 0.111,
     "nearestOtherHero": "bap.png",
-    "nearestOtherScore": 0.611,
+    "nearestOtherScore": 0.542,
     "nearestSameScore": null
    },
    "buildWindows": [
@@ -153,7 +277,7 @@
     ]
    ],
    "holdoutStarts": 10260.0,
-   "recordedAt": "2026-10-30T08:16:00+00:00"
+   "recordedAt": "2026-10-30T17:53:57+00:00"
   },
   {
    "file": "bastion.v1.png",
@@ -184,7 +308,7 @@
     ]
    ],
    "holdoutStarts": 10260.0,
-   "recordedAt": "2026-10-30T08:16:00+00:00"
+   "recordedAt": "2026-10-30T17:53:57+00:00"
   },
   {
    "file": "bastion.v2.png",
@@ -204,8 +328,8 @@
     "contrast": 34.7,
     "flatFraction": 0.162,
     "obstruction": 0.0,
-    "nearestOtherHero": "ball.v3.png",
-    "nearestOtherScore": 0.3627,
+    "nearestOtherHero": "ball.v1.png",
+    "nearestOtherScore": 0.4144,
     "nearestSameScore": 0.4831
    },
    "buildWindows": [
@@ -215,7 +339,7 @@
     ]
    ],
    "holdoutStarts": 10260.0,
-   "recordedAt": "2026-10-30T08:16:00+00:00"
+   "recordedAt": "2026-10-30T17:53:57+00:00"
   },
   {
    "file": "bastion.v3.png",
@@ -235,8 +359,8 @@
     "contrast": 43.43,
     "flatFraction": 0.154,
     "obstruction": 0.0,
-    "nearestOtherHero": "ball.v2.png",
-    "nearestOtherScore": 0.316,
+    "nearestOtherHero": "ball.v1.png",
+    "nearestOtherScore": 0.3283,
     "nearestSameScore": 0.5752
    },
    "buildWindows": [
@@ -246,7 +370,7 @@
     ]
    ],
    "holdoutStarts": 10260.0,
-   "recordedAt": "2026-10-30T08:16:00+00:00"
+   "recordedAt": "2026-10-30T17:53:57+00:00"
   },
   {
    "file": "dva.png",
@@ -277,7 +401,7 @@
     ]
    ],
    "holdoutStarts": 17148.0,
-   "recordedAt": "2026-10-30T02:01:24+00:00"
+   "recordedAt": "2026-10-30T17:54:11+00:00"
   },
   {
    "file": "dva.v1.png",
@@ -308,7 +432,7 @@
     ]
    ],
    "holdoutStarts": 17148.0,
-   "recordedAt": "2026-10-30T02:01:24+00:00"
+   "recordedAt": "2026-10-30T17:54:11+00:00"
   },
   {
    "file": "dva.v2.png",
@@ -339,7 +463,7 @@
     ]
    ],
    "holdoutStarts": 17148.0,
-   "recordedAt": "2026-10-30T02:01:24+00:00"
+   "recordedAt": "2026-10-30T17:54:11+00:00"
   },
   {
    "file": "dva.v3.png",
@@ -370,15 +494,263 @@
     ]
    ],
    "holdoutStarts": 17148.0,
-   "recordedAt": "2026-10-30T02:01:24+00:00"
+   "recordedAt": "2026-10-30T17:54:11+00:00"
+  },
+  {
+   "file": "echo.png",
+   "heroId": "echo",
+   "sourceVideo": "https://www.twitch.tv/videos/2778637313",
+   "sourceReport": "labelling/2778637313-owcs_8c105lnzlam",
+   "sourceCrop": "t0011880.0_a2.png",
+   "offset": 11880.0,
+   "slot": "a2",
+   "state": "gameplay",
+   "labelSource": "human-cluster",
+   "stintId": null,
+   "quality": {
+    "width": 36,
+    "height": 36,
+    "sharpness": 2241.66,
+    "contrast": 64.11,
+    "flatFraction": 0.181,
+    "obstruction": 0.083,
+    "nearestOtherHero": "dva.v1.png",
+    "nearestOtherScore": 0.6076,
+    "nearestSameScore": null
+   },
+   "buildWindows": [
+    [
+     11784.0,
+     11892.0
+    ]
+   ],
+   "holdoutStarts": 11952.0,
+   "recordedAt": "2026-10-30T17:53:57+00:00"
+  },
+  {
+   "file": "echo.v1.png",
+   "heroId": "echo",
+   "sourceVideo": "https://www.twitch.tv/videos/2778637313",
+   "sourceReport": "labelling/2778637313-owcs_8c105lnzlam",
+   "sourceCrop": "t0011784.0_a2.png",
+   "offset": 11784.0,
+   "slot": "a2",
+   "state": "gameplay",
+   "labelSource": "human-cluster",
+   "stintId": null,
+   "quality": {
+    "width": 36,
+    "height": 36,
+    "sharpness": 1318.73,
+    "contrast": 37.05,
+    "flatFraction": 0.208,
+    "obstruction": 0.0,
+    "nearestOtherHero": "brig.v1.png",
+    "nearestOtherScore": 0.4273,
+    "nearestSameScore": 0.8503
+   },
+   "buildWindows": [
+    [
+     11784.0,
+     11892.0
+    ]
+   ],
+   "holdoutStarts": 11952.0,
+   "recordedAt": "2026-10-30T17:53:57+00:00"
+  },
+  {
+   "file": "echo.v2.png",
+   "heroId": "echo",
+   "sourceVideo": "https://www.twitch.tv/videos/2778637313",
+   "sourceReport": "labelling/2778637313-owcs_8c105lnzlam",
+   "sourceCrop": "t0011892.0_a2.png",
+   "offset": 11892.0,
+   "slot": "a2",
+   "state": "gameplay",
+   "labelSource": "human-cluster",
+   "stintId": null,
+   "quality": {
+    "width": 36,
+    "height": 36,
+    "sharpness": 2020.5,
+    "contrast": 54.73,
+    "flatFraction": 0.113,
+    "obstruction": 0.0,
+    "nearestOtherHero": "ball.png",
+    "nearestOtherScore": 0.5127,
+    "nearestSameScore": 0.952
+   },
+   "buildWindows": [
+    [
+     11784.0,
+     11892.0
+    ]
+   ],
+   "holdoutStarts": 11952.0,
+   "recordedAt": "2026-10-30T17:53:57+00:00"
+  },
+  {
+   "file": "echo.v3.png",
+   "heroId": "echo",
+   "sourceVideo": "https://www.twitch.tv/videos/2778637313",
+   "sourceReport": "labelling/2778637313-owcs_8c105lnzlam",
+   "sourceCrop": "t0011844.0_a2.png",
+   "offset": 11844.0,
+   "slot": "a2",
+   "state": "gameplay",
+   "labelSource": "human-cluster",
+   "stintId": null,
+   "quality": {
+    "width": 36,
+    "height": 36,
+    "sharpness": 1979.85,
+    "contrast": 59.47,
+    "flatFraction": 0.059,
+    "obstruction": 0.0,
+    "nearestOtherHero": "dva.v1.png",
+    "nearestOtherScore": 0.5739,
+    "nearestSameScore": 0.9695
+   },
+   "buildWindows": [
+    [
+     11784.0,
+     11892.0
+    ]
+   ],
+   "holdoutStarts": 11952.0,
+   "recordedAt": "2026-10-30T17:53:57+00:00"
+  },
+  {
+   "file": "jetcat.png",
+   "heroId": "jetcat",
+   "sourceVideo": "https://www.twitch.tv/videos/2831815423",
+   "sourceReport": "labelling/2831815423-owcs_8c105lnzlam",
+   "sourceCrop": "t0004284.0_b4.png",
+   "offset": 4284.0,
+   "slot": "b4",
+   "state": "gameplay",
+   "labelSource": "human-cluster",
+   "stintId": null,
+   "quality": {
+    "width": 36,
+    "height": 36,
+    "sharpness": 3209.55,
+    "contrast": 52.8,
+    "flatFraction": 0.337,
+    "obstruction": 0.194,
+    "nearestOtherHero": "dva.png",
+    "nearestOtherScore": 0.6029,
+    "nearestSameScore": null
+   },
+   "buildWindows": [
+    [
+     3852.0,
+     8508.0
+    ]
+   ],
+   "holdoutStarts": 13992.0,
+   "recordedAt": "2026-10-30T17:54:11+00:00"
+  },
+  {
+   "file": "jetcat.v1.png",
+   "heroId": "jetcat",
+   "sourceVideo": "https://www.twitch.tv/videos/2831815423",
+   "sourceReport": "labelling/2831815423-owcs_8c105lnzlam",
+   "sourceCrop": "t0003912.0_a5.png",
+   "offset": 3912.0,
+   "slot": "a5",
+   "state": "gameplay",
+   "labelSource": "human-cluster",
+   "stintId": null,
+   "quality": {
+    "width": 36,
+    "height": 36,
+    "sharpness": 2714.04,
+    "contrast": 58.43,
+    "flatFraction": 0.319,
+    "obstruction": 0.056,
+    "nearestOtherHero": "ball.png",
+    "nearestOtherScore": 0.687,
+    "nearestSameScore": 0.0246
+   },
+   "buildWindows": [
+    [
+     3852.0,
+     8508.0
+    ]
+   ],
+   "holdoutStarts": 13992.0,
+   "recordedAt": "2026-10-30T17:54:11+00:00"
+  },
+  {
+   "file": "jetcat.v2.png",
+   "heroId": "jetcat",
+   "sourceVideo": "https://www.twitch.tv/videos/2831815423",
+   "sourceReport": "labelling/2831815423-owcs_8c105lnzlam",
+   "sourceCrop": "t0003996.0_a5.png",
+   "offset": 3996.0,
+   "slot": "a5",
+   "state": "gameplay",
+   "labelSource": "human-cluster",
+   "stintId": null,
+   "quality": {
+    "width": 36,
+    "height": 36,
+    "sharpness": 1371.03,
+    "contrast": 32.74,
+    "flatFraction": 0.338,
+    "obstruction": 0.194,
+    "nearestOtherHero": "freja.v3.png",
+    "nearestOtherScore": 0.3722,
+    "nearestSameScore": 0.5942
+   },
+   "buildWindows": [
+    [
+     3852.0,
+     8508.0
+    ]
+   ],
+   "holdoutStarts": 13992.0,
+   "recordedAt": "2026-10-30T17:54:11+00:00"
+  },
+  {
+   "file": "jetcat.v3.png",
+   "heroId": "jetcat",
+   "sourceVideo": "https://www.twitch.tv/videos/2831815423",
+   "sourceReport": "labelling/2831815423-owcs_8c105lnzlam",
+   "sourceCrop": "t0008508.0_b5.png",
+   "offset": 8508.0,
+   "slot": "b5",
+   "state": "gameplay",
+   "labelSource": "human-cluster",
+   "stintId": null,
+   "quality": {
+    "width": 36,
+    "height": 36,
+    "sharpness": 2859.19,
+    "contrast": 58.54,
+    "flatFraction": 0.308,
+    "obstruction": 0.194,
+    "nearestOtherHero": "freja.png",
+    "nearestOtherScore": 0.5801,
+    "nearestSameScore": 0.6118
+   },
+   "buildWindows": [
+    [
+     3852.0,
+     8508.0
+    ]
+   ],
+   "holdoutStarts": 13992.0,
+   "recordedAt": "2026-10-30T17:54:11+00:00"
   },
   {
    "file": "kiriko.png",
    "heroId": "kiriko",
-   "sourceVideo": "https://www.twitch.tv/videos/2831815423",
-   "sourceReport": "labelling/2831815423-owcs_8c105lnzlam",
-   "sourceCrop": "t0007500.0_b4.png",
-   "offset": 7500.0,
+   "sourceVideo": "https://www.twitch.tv/videos/2778637313",
+   "sourceReport": "labelling/2778637313-owcs_8c105lnzlam",
+   "sourceCrop": "t0003072.0_b4.png",
+   "offset": 3072.0,
    "slot": "b4",
    "state": "gameplay",
    "labelSource": "human-cluster",
@@ -386,92 +758,61 @@
    "quality": {
     "width": 36,
     "height": 36,
-    "sharpness": 2672.02,
-    "contrast": 53.8,
-    "flatFraction": 0.29,
-    "obstruction": 0.194,
-    "nearestOtherHero": "freja.png",
-    "nearestOtherScore": 0.5873,
+    "sharpness": 2999.09,
+    "contrast": 72.42,
+    "flatFraction": 0.2,
+    "obstruction": 0.167,
+    "nearestOtherHero": "cass.png",
+    "nearestOtherScore": 0.7256,
     "nearestSameScore": null
    },
    "buildWindows": [
     [
-     4152.0,
-     9396.0
+     2760.0,
+     9120.0
     ]
    ],
-   "holdoutStarts": 12492.0,
-   "recordedAt": "2026-10-30T02:01:24+00:00"
+   "holdoutStarts": 11760.0,
+   "recordedAt": "2026-10-30T17:53:57+00:00"
   },
   {
    "file": "kiriko.v1.png",
    "heroId": "kiriko",
-   "sourceVideo": "https://www.twitch.tv/videos/2831815423",
-   "sourceReport": "labelling/2831815423-owcs_8c105lnzlam",
-   "sourceCrop": "t0004272.0_a4.png",
-   "offset": 4272.0,
-   "slot": "a4",
+   "sourceVideo": "https://www.twitch.tv/videos/2778637313",
+   "sourceReport": "labelling/2778637313-owcs_8c105lnzlam",
+   "sourceCrop": "t0008100.0_a5.png",
+   "offset": 8100.0,
+   "slot": "a5",
    "state": "gameplay",
    "labelSource": "human-cluster",
    "stintId": null,
    "quality": {
     "width": 36,
     "height": 36,
-    "sharpness": 2192.4,
-    "contrast": 73.68,
-    "flatFraction": 0.239,
-    "obstruction": 0.194,
-    "nearestOtherHero": "cass.png",
-    "nearestOtherScore": 0.6986,
-    "nearestSameScore": -0.0396
+    "sharpness": 865.35,
+    "contrast": 42.73,
+    "flatFraction": 0.23,
+    "obstruction": 0.083,
+    "nearestOtherHero": "dva.v1.png",
+    "nearestOtherScore": 0.704,
+    "nearestSameScore": -0.2388
    },
    "buildWindows": [
     [
-     4152.0,
-     9396.0
+     2760.0,
+     9120.0
     ]
    ],
-   "holdoutStarts": 12492.0,
-   "recordedAt": "2026-10-30T02:01:24+00:00"
+   "holdoutStarts": 11760.0,
+   "recordedAt": "2026-10-30T17:53:57+00:00"
   },
   {
    "file": "kiriko.v2.png",
    "heroId": "kiriko",
-   "sourceVideo": "https://www.twitch.tv/videos/2831815423",
-   "sourceReport": "labelling/2831815423-owcs_8c105lnzlam",
-   "sourceCrop": "t0008760.0_a4.png",
-   "offset": 8760.0,
-   "slot": "a4",
-   "state": "gameplay",
-   "labelSource": "human-cluster",
-   "stintId": null,
-   "quality": {
-    "width": 36,
-    "height": 36,
-    "sharpness": 2175.61,
-    "contrast": 48.53,
-    "flatFraction": 0.22,
-    "obstruction": 0.0,
-    "nearestOtherHero": "jetcat.v2.png",
-    "nearestOtherScore": 0.3162,
-    "nearestSameScore": 0.5373
-   },
-   "buildWindows": [
-    [
-     4152.0,
-     9396.0
-    ]
-   ],
-   "holdoutStarts": 12492.0,
-   "recordedAt": "2026-10-30T02:01:24+00:00"
-  },
-  {
-   "file": "kiriko.v3.png",
-   "heroId": "kiriko",
-   "sourceVideo": "https://www.twitch.tv/videos/2831815423",
-   "sourceReport": "labelling/2831815423-owcs_8c105lnzlam",
-   "sourceCrop": "t0008904.0_b5.png",
-   "offset": 8904.0,
+   "sourceVideo": "https://www.twitch.tv/videos/2778637313",
+   "sourceReport": "labelling/2778637313-owcs_8c105lnzlam",
+   "sourceCrop": "t0009000.0_b5.png",
+   "offset": 9000.0,
    "slot": "b5",
    "state": "gameplay",
    "labelSource": "human-cluster",
@@ -479,30 +820,30 @@
    "quality": {
     "width": 36,
     "height": 36,
-    "sharpness": 675.13,
-    "contrast": 30.27,
-    "flatFraction": 0.282,
+    "sharpness": 1437.8,
+    "contrast": 49.16,
+    "flatFraction": 0.193,
     "obstruction": 0.0,
-    "nearestOtherHero": "jetcat.v2.png",
-    "nearestOtherScore": 0.5478,
-    "nearestSameScore": 0.6058
+    "nearestOtherHero": "dva.png",
+    "nearestOtherScore": 0.412,
+    "nearestSameScore": 0.4809
    },
    "buildWindows": [
     [
-     4152.0,
-     9396.0
+     2760.0,
+     9120.0
     ]
    ],
-   "holdoutStarts": 12492.0,
-   "recordedAt": "2026-10-30T02:01:24+00:00"
+   "holdoutStarts": 11760.0,
+   "recordedAt": "2026-10-30T17:53:57+00:00"
   },
   {
-   "file": "lucio.png",
-   "heroId": "lucio",
+   "file": "kiriko.v3.png",
+   "heroId": "kiriko",
    "sourceVideo": "https://www.twitch.tv/videos/2778637313",
    "sourceReport": "labelling/2778637313-owcs_8c105lnzlam",
-   "sourceCrop": "t0008928.0_b4.png",
-   "offset": 8928.0,
+   "sourceCrop": "t0004296.0_b4.png",
+   "offset": 4296.0,
    "slot": "b4",
    "state": "gameplay",
    "labelSource": "human-cluster",
@@ -510,115 +851,146 @@
    "quality": {
     "width": 36,
     "height": 36,
-    "sharpness": 2439.7,
-    "contrast": 43.81,
-    "flatFraction": 0.109,
+    "sharpness": 1120.83,
+    "contrast": 31.65,
+    "flatFraction": 0.235,
     "obstruction": 0.0,
-    "nearestOtherHero": "cass.v1.png",
-    "nearestOtherScore": 0.426,
+    "nearestOtherHero": "ball.v1.png",
+    "nearestOtherScore": 0.5121,
+    "nearestSameScore": 0.5284
+   },
+   "buildWindows": [
+    [
+     2760.0,
+     9120.0
+    ]
+   ],
+   "holdoutStarts": 11760.0,
+   "recordedAt": "2026-10-30T17:53:57+00:00"
+  },
+  {
+   "file": "lucio.png",
+   "heroId": "lucio",
+   "sourceVideo": "https://www.twitch.tv/videos/2831815423",
+   "sourceReport": "labelling/2831815423-owcs_8c105lnzlam",
+   "sourceCrop": "t0007260.0_a4.png",
+   "offset": 7260.0,
+   "slot": "a4",
+   "state": "gameplay",
+   "labelSource": "human-cluster",
+   "stintId": null,
+   "quality": {
+    "width": 36,
+    "height": 36,
+    "sharpness": 2434.62,
+    "contrast": 49.09,
+    "flatFraction": 0.268,
+    "obstruction": 0.194,
+    "nearestOtherHero": "ball.png",
+    "nearestOtherScore": 0.4841,
     "nearestSameScore": null
    },
    "buildWindows": [
     [
-     4260.0,
-     10620.0
+     7260.0,
+     9396.0
     ]
    ],
-   "holdoutStarts": 11760.0,
-   "recordedAt": "2026-10-30T08:16:00+00:00"
+   "holdoutStarts": 12480.0,
+   "recordedAt": "2026-10-30T17:54:11+00:00"
   },
   {
    "file": "lucio.v1.png",
    "heroId": "lucio",
-   "sourceVideo": "https://www.twitch.tv/videos/2778637313",
-   "sourceReport": "labelling/2778637313-owcs_8c105lnzlam",
-   "sourceCrop": "t0008820.0_a4.png",
-   "offset": 8820.0,
-   "slot": "a4",
+   "sourceVideo": "https://www.twitch.tv/videos/2831815423",
+   "sourceReport": "labelling/2831815423-owcs_8c105lnzlam",
+   "sourceCrop": "t0009012.0_a5.png",
+   "offset": 9012.0,
+   "slot": "a5",
    "state": "gameplay",
    "labelSource": "human-cluster",
    "stintId": null,
    "quality": {
     "width": 36,
     "height": 36,
-    "sharpness": 2064.74,
-    "contrast": 48.59,
-    "flatFraction": 0.255,
+    "sharpness": 2121.39,
+    "contrast": 68.66,
+    "flatFraction": 0.309,
     "obstruction": 0.194,
-    "nearestOtherHero": "echo.png",
-    "nearestOtherScore": 0.5904,
-    "nearestSameScore": 0.1958
+    "nearestOtherHero": "ana.png",
+    "nearestOtherScore": 0.7264,
+    "nearestSameScore": -0.1999
    },
    "buildWindows": [
     [
-     4260.0,
-     10620.0
+     7260.0,
+     9396.0
     ]
    ],
-   "holdoutStarts": 11760.0,
-   "recordedAt": "2026-10-30T08:16:00+00:00"
+   "holdoutStarts": 12480.0,
+   "recordedAt": "2026-10-30T17:54:11+00:00"
   },
   {
    "file": "lucio.v2.png",
    "heroId": "lucio",
-   "sourceVideo": "https://www.twitch.tv/videos/2778637313",
-   "sourceReport": "labelling/2778637313-owcs_8c105lnzlam",
-   "sourceCrop": "t0004416.0_b5.png",
-   "offset": 4416.0,
-   "slot": "b5",
+   "sourceVideo": "https://www.twitch.tv/videos/2831815423",
+   "sourceReport": "labelling/2831815423-owcs_8c105lnzlam",
+   "sourceCrop": "t0009396.0_b4.png",
+   "offset": 9396.0,
+   "slot": "b4",
    "state": "gameplay",
    "labelSource": "human-cluster",
    "stintId": null,
    "quality": {
     "width": 36,
     "height": 36,
-    "sharpness": 2359.26,
-    "contrast": 56.0,
-    "flatFraction": 0.11,
+    "sharpness": 1909.28,
+    "contrast": 37.39,
+    "flatFraction": 0.177,
     "obstruction": 0.0,
-    "nearestOtherHero": "ana.png",
-    "nearestOtherScore": 0.4844,
-    "nearestSameScore": 0.4778
+    "nearestOtherHero": "bastion.v1.png",
+    "nearestOtherScore": 0.2324,
+    "nearestSameScore": 0.4436
    },
    "buildWindows": [
     [
-     4260.0,
-     10620.0
+     7260.0,
+     9396.0
     ]
    ],
-   "holdoutStarts": 11760.0,
-   "recordedAt": "2026-10-30T08:16:00+00:00"
+   "holdoutStarts": 12480.0,
+   "recordedAt": "2026-10-30T17:54:11+00:00"
   },
   {
    "file": "lucio.v3.png",
    "heroId": "lucio",
-   "sourceVideo": "https://www.twitch.tv/videos/2778637313",
-   "sourceReport": "labelling/2778637313-owcs_8c105lnzlam",
-   "sourceCrop": "t0008928.0_a4.png",
-   "offset": 8928.0,
-   "slot": "a4",
+   "sourceVideo": "https://www.twitch.tv/videos/2831815423",
+   "sourceReport": "labelling/2831815423-owcs_8c105lnzlam",
+   "sourceCrop": "t0009036.0_a5.png",
+   "offset": 9036.0,
+   "slot": "a5",
    "state": "gameplay",
    "labelSource": "human-cluster",
    "stintId": null,
    "quality": {
     "width": 36,
     "height": 36,
-    "sharpness": 2270.72,
-    "contrast": 40.17,
-    "flatFraction": 0.16,
+    "sharpness": 704.41,
+    "contrast": 33.39,
+    "flatFraction": 0.235,
     "obstruction": 0.0,
-    "nearestOtherHero": "illari.png",
-    "nearestOtherScore": 0.1052,
-    "nearestSameScore": 0.5831
+    "nearestOtherHero": "bastion.v2.png",
+    "nearestOtherScore": 0.3697,
+    "nearestSameScore": 0.5074
    },
    "buildWindows": [
     [
-     4260.0,
-     10620.0
+     7260.0,
+     9396.0
     ]
    ],
-   "holdoutStarts": 11760.0,
-   "recordedAt": "2026-10-30T08:16:00+00:00"
+   "holdoutStarts": 12480.0,
+   "recordedAt": "2026-10-30T17:54:11+00:00"
   },
   {
    "file": "mauga.png",
@@ -649,7 +1021,7 @@
     ]
    ],
    "holdoutStarts": 13980.0,
-   "recordedAt": "2026-10-30T02:01:24+00:00"
+   "recordedAt": "2026-10-30T17:54:11+00:00"
   },
   {
    "file": "mauga.v1.png",
@@ -669,8 +1041,8 @@
     "contrast": 33.1,
     "flatFraction": 0.285,
     "obstruction": 0.139,
-    "nearestOtherHero": "freja.png",
-    "nearestOtherScore": 0.5071,
+    "nearestOtherHero": "freja.v1.png",
+    "nearestOtherScore": 0.5237,
     "nearestSameScore": -0.1398
    },
    "buildWindows": [
@@ -680,7 +1052,7 @@
     ]
    ],
    "holdoutStarts": 13980.0,
-   "recordedAt": "2026-10-30T02:01:24+00:00"
+   "recordedAt": "2026-10-30T17:54:11+00:00"
   },
   {
    "file": "mauga.v2.png",
@@ -700,8 +1072,8 @@
     "contrast": 45.14,
     "flatFraction": 0.157,
     "obstruction": 0.0,
-    "nearestOtherHero": "ana.v1.png",
-    "nearestOtherScore": 0.2436,
+    "nearestOtherHero": "ana.v3.png",
+    "nearestOtherScore": 0.3834,
     "nearestSameScore": 0.5692
    },
    "buildWindows": [
@@ -711,7 +1083,7 @@
     ]
    ],
    "holdoutStarts": 13980.0,
-   "recordedAt": "2026-10-30T02:01:24+00:00"
+   "recordedAt": "2026-10-30T17:54:11+00:00"
   },
   {
    "file": "mauga.v3.png",
@@ -742,7 +1114,7 @@
     ]
    ],
    "holdoutStarts": 13980.0,
-   "recordedAt": "2026-10-30T02:01:24+00:00"
+   "recordedAt": "2026-10-30T17:54:11+00:00"
   },
   {
    "file": "mei.png",
@@ -762,8 +1134,8 @@
     "contrast": 68.91,
     "flatFraction": 0.141,
     "obstruction": 0.028,
-    "nearestOtherHero": "ball.v3.png",
-    "nearestOtherScore": 0.5171,
+    "nearestOtherHero": "kiriko.png",
+    "nearestOtherScore": 0.5811,
     "nearestSameScore": null
    },
    "buildWindows": [
@@ -773,7 +1145,7 @@
     ]
    ],
    "holdoutStarts": 10260.0,
-   "recordedAt": "2026-10-30T08:16:00+00:00"
+   "recordedAt": "2026-10-30T17:53:57+00:00"
   },
   {
    "file": "mei.v1.png",
@@ -804,7 +1176,7 @@
     ]
    ],
    "holdoutStarts": 10260.0,
-   "recordedAt": "2026-10-30T08:16:00+00:00"
+   "recordedAt": "2026-10-30T17:53:57+00:00"
   },
   {
    "file": "mei.v2.png",
@@ -824,8 +1196,8 @@
     "contrast": 34.77,
     "flatFraction": 0.149,
     "obstruction": 0.056,
-    "nearestOtherHero": "ball.v3.png",
-    "nearestOtherScore": 0.6124,
+    "nearestOtherHero": "illari.v2.png",
+    "nearestOtherScore": 0.4861,
     "nearestSameScore": 0.6824
    },
    "buildWindows": [
@@ -835,7 +1207,7 @@
     ]
    ],
    "holdoutStarts": 10260.0,
-   "recordedAt": "2026-10-30T08:16:00+00:00"
+   "recordedAt": "2026-10-30T17:53:57+00:00"
   },
   {
    "file": "mei.v3.png",
@@ -855,8 +1227,8 @@
     "contrast": 57.31,
     "flatFraction": 0.154,
     "obstruction": 0.0,
-    "nearestOtherHero": "ball.v3.png",
-    "nearestOtherScore": 0.3628,
+    "nearestOtherHero": "brig.v2.png",
+    "nearestOtherScore": 0.3596,
     "nearestSameScore": 0.784
    },
    "buildWindows": [
@@ -866,7 +1238,7 @@
     ]
    ],
    "holdoutStarts": 10260.0,
-   "recordedAt": "2026-10-30T08:16:00+00:00"
+   "recordedAt": "2026-10-30T17:53:57+00:00"
   },
   {
    "file": "mizuki.png",
@@ -897,7 +1269,7 @@
     ]
    ],
    "holdoutStarts": 11760.0,
-   "recordedAt": "2026-10-30T08:16:00+00:00"
+   "recordedAt": "2026-10-30T17:53:57+00:00"
   },
   {
    "file": "mizuki.v1.png",
@@ -917,8 +1289,8 @@
     "contrast": 41.09,
     "flatFraction": 0.199,
     "obstruction": 0.0,
-    "nearestOtherHero": "echo.png",
-    "nearestOtherScore": 0.5561,
+    "nearestOtherHero": "lucio.v1.png",
+    "nearestOtherScore": 0.5536,
     "nearestSameScore": -0.0463
    },
    "buildWindows": [
@@ -928,7 +1300,7 @@
     ]
    ],
    "holdoutStarts": 11760.0,
-   "recordedAt": "2026-10-30T08:16:00+00:00"
+   "recordedAt": "2026-10-30T17:53:57+00:00"
   },
   {
    "file": "mizuki.v2.png",
@@ -959,7 +1331,7 @@
     ]
    ],
    "holdoutStarts": 11760.0,
-   "recordedAt": "2026-10-30T08:16:00+00:00"
+   "recordedAt": "2026-10-30T17:53:57+00:00"
   },
   {
    "file": "mizuki.v3.png",
@@ -990,15 +1362,15 @@
     ]
    ],
    "holdoutStarts": 11760.0,
-   "recordedAt": "2026-10-30T08:16:00+00:00"
+   "recordedAt": "2026-10-30T17:53:57+00:00"
   },
   {
    "file": "ram.png",
    "heroId": "ram",
-   "sourceVideo": "https://www.twitch.tv/videos/2778637313",
-   "sourceReport": "labelling/2778637313-owcs_8c105lnzlam",
-   "sourceCrop": "t0004416.0_b3.png",
-   "offset": 4416.0,
+   "sourceVideo": "https://www.twitch.tv/videos/2831815423",
+   "sourceReport": "labelling/2831815423-owcs_8c105lnzlam",
+   "sourceCrop": "t0007524.0_b3.png",
+   "offset": 7524.0,
    "slot": "b3",
    "state": "gameplay",
    "labelSource": "human-cluster",
@@ -1006,61 +1378,61 @@
    "quality": {
     "width": 36,
     "height": 36,
-    "sharpness": 3814.56,
-    "contrast": 73.93,
-    "flatFraction": 0.103,
-    "obstruction": 0.0,
-    "nearestOtherHero": "hog.png",
-    "nearestOtherScore": 0.4535,
+    "sharpness": 3644.44,
+    "contrast": 74.56,
+    "flatFraction": 0.221,
+    "obstruction": 0.194,
+    "nearestOtherHero": "freja.png",
+    "nearestOtherScore": 0.527,
     "nearestSameScore": null
    },
    "buildWindows": [
     [
-     4416.0,
-     9120.0
+     7260.0,
+     9396.0
     ]
    ],
-   "holdoutStarts": 17760.0,
-   "recordedAt": "2026-10-30T08:16:00+00:00"
+   "holdoutStarts": 12492.0,
+   "recordedAt": "2026-10-30T17:54:11+00:00"
   },
   {
    "file": "ram.v1.png",
    "heroId": "ram",
-   "sourceVideo": "https://www.twitch.tv/videos/2778637313",
-   "sourceReport": "labelling/2778637313-owcs_8c105lnzlam",
-   "sourceCrop": "t0008952.0_a3.png",
-   "offset": 8952.0,
-   "slot": "a3",
+   "sourceVideo": "https://www.twitch.tv/videos/2831815423",
+   "sourceReport": "labelling/2831815423-owcs_8c105lnzlam",
+   "sourceCrop": "t0009024.0_b3.png",
+   "offset": 9024.0,
+   "slot": "b3",
    "state": "gameplay",
    "labelSource": "human-cluster",
    "stintId": null,
    "quality": {
     "width": 36,
     "height": 36,
-    "sharpness": 657.81,
-    "contrast": 47.39,
-    "flatFraction": 0.173,
-    "obstruction": 0.0,
-    "nearestOtherHero": "echo.v2.png",
-    "nearestOtherScore": 0.657,
-    "nearestSameScore": 0.2227
+    "sharpness": 796.83,
+    "contrast": 48.06,
+    "flatFraction": 0.295,
+    "obstruction": 0.222,
+    "nearestOtherHero": "orisa.png",
+    "nearestOtherScore": 0.6855,
+    "nearestSameScore": 0.0545
    },
    "buildWindows": [
     [
-     4416.0,
-     9120.0
+     7260.0,
+     9396.0
     ]
    ],
-   "holdoutStarts": 17760.0,
-   "recordedAt": "2026-10-30T08:16:00+00:00"
+   "holdoutStarts": 12492.0,
+   "recordedAt": "2026-10-30T17:54:11+00:00"
   },
   {
    "file": "ram.v2.png",
    "heroId": "ram",
-   "sourceVideo": "https://www.twitch.tv/videos/2778637313",
-   "sourceReport": "labelling/2778637313-owcs_8c105lnzlam",
-   "sourceCrop": "t0008928.0_a3.png",
-   "offset": 8928.0,
+   "sourceVideo": "https://www.twitch.tv/videos/2831815423",
+   "sourceReport": "labelling/2831815423-owcs_8c105lnzlam",
+   "sourceCrop": "t0009276.0_a3.png",
+   "offset": 9276.0,
    "slot": "a3",
    "state": "gameplay",
    "labelSource": "human-cluster",
@@ -1068,53 +1440,53 @@
    "quality": {
     "width": 36,
     "height": 36,
-    "sharpness": 2777.18,
-    "contrast": 63.59,
-    "flatFraction": 0.117,
+    "sharpness": 2265.1,
+    "contrast": 61.71,
+    "flatFraction": 0.225,
     "obstruction": 0.0,
-    "nearestOtherHero": "brig.png",
-    "nearestOtherScore": 0.2925,
-    "nearestSameScore": 0.6615
+    "nearestOtherHero": "orisa.v1.png",
+    "nearestOtherScore": 0.2265,
+    "nearestSameScore": 0.5763
    },
    "buildWindows": [
     [
-     4416.0,
-     9120.0
+     7260.0,
+     9396.0
     ]
    ],
-   "holdoutStarts": 17760.0,
-   "recordedAt": "2026-10-30T08:16:00+00:00"
+   "holdoutStarts": 12492.0,
+   "recordedAt": "2026-10-30T17:54:11+00:00"
   },
   {
    "file": "ram.v3.png",
    "heroId": "ram",
-   "sourceVideo": "https://www.twitch.tv/videos/2778637313",
-   "sourceReport": "labelling/2778637313-owcs_8c105lnzlam",
-   "sourceCrop": "t0009108.0_a3.png",
-   "offset": 9108.0,
-   "slot": "a3",
+   "sourceVideo": "https://www.twitch.tv/videos/2831815423",
+   "sourceReport": "labelling/2831815423-owcs_8c105lnzlam",
+   "sourceCrop": "t0008988.0_b3.png",
+   "offset": 8988.0,
+   "slot": "b3",
    "state": "gameplay",
    "labelSource": "human-cluster",
    "stintId": null,
    "quality": {
     "width": 36,
     "height": 36,
-    "sharpness": 2583.99,
-    "contrast": 65.0,
-    "flatFraction": 0.165,
-    "obstruction": 0.028,
-    "nearestOtherHero": "mei.png",
-    "nearestOtherScore": 0.3998,
-    "nearestSameScore": 0.7198
+    "sharpness": 3152.98,
+    "contrast": 66.98,
+    "flatFraction": 0.41,
+    "obstruction": 0.194,
+    "nearestOtherHero": "orisa.png",
+    "nearestOtherScore": 0.3712,
+    "nearestSameScore": 0.6241
    },
    "buildWindows": [
     [
-     4416.0,
-     9120.0
+     7260.0,
+     9396.0
     ]
    ],
-   "holdoutStarts": 17760.0,
-   "recordedAt": "2026-10-30T08:16:00+00:00"
+   "holdoutStarts": 12492.0,
+   "recordedAt": "2026-10-30T17:54:11+00:00"
   },
   {
    "file": "reaper.png",
@@ -1269,7 +1641,7 @@
     ]
    ],
    "holdoutStarts": 14148.0,
-   "recordedAt": "2026-10-30T02:01:24+00:00"
+   "recordedAt": "2026-10-30T17:54:11+00:00"
   },
   {
    "file": "shion.v1.png",
@@ -1300,7 +1672,7 @@
     ]
    ],
    "holdoutStarts": 14148.0,
-   "recordedAt": "2026-10-30T02:01:24+00:00"
+   "recordedAt": "2026-10-30T17:54:11+00:00"
   },
   {
    "file": "shion.v2.png",
@@ -1331,7 +1703,7 @@
     ]
    ],
    "holdoutStarts": 14148.0,
-   "recordedAt": "2026-10-30T02:01:24+00:00"
+   "recordedAt": "2026-10-30T17:54:11+00:00"
   },
   {
    "file": "shion.v3.png",
@@ -1362,7 +1734,131 @@
     ]
    ],
    "holdoutStarts": 14148.0,
-   "recordedAt": "2026-10-30T02:01:24+00:00"
+   "recordedAt": "2026-10-30T17:54:11+00:00"
+  },
+  {
+   "file": "sigma.png",
+   "heroId": "sigma",
+   "sourceVideo": "https://www.twitch.tv/videos/2778637313",
+   "sourceReport": "labelling/2778637313-owcs_8c105lnzlam",
+   "sourceCrop": "t0005100.0_a3.png",
+   "offset": 5100.0,
+   "slot": "a3",
+   "state": "gameplay",
+   "labelSource": "human-cluster",
+   "stintId": null,
+   "quality": {
+    "width": 36,
+    "height": 36,
+    "sharpness": 2984.21,
+    "contrast": 52.93,
+    "flatFraction": 0.249,
+    "obstruction": 0.194,
+    "nearestOtherHero": "echo.png",
+    "nearestOtherScore": 0.771,
+    "nearestSameScore": null
+   },
+   "buildWindows": [
+    [
+     4260.0,
+     9108.0
+    ]
+   ],
+   "holdoutStarts": 11760.0,
+   "recordedAt": "2026-10-30T17:53:57+00:00"
+  },
+  {
+   "file": "sigma.v1.png",
+   "heroId": "sigma",
+   "sourceVideo": "https://www.twitch.tv/videos/2778637313",
+   "sourceReport": "labelling/2778637313-owcs_8c105lnzlam",
+   "sourceCrop": "t0004380.0_a3.png",
+   "offset": 4380.0,
+   "slot": "a3",
+   "state": "gameplay",
+   "labelSource": "human-cluster",
+   "stintId": null,
+   "quality": {
+    "width": 36,
+    "height": 36,
+    "sharpness": 2264.23,
+    "contrast": 41.22,
+    "flatFraction": 0.177,
+    "obstruction": 0.0,
+    "nearestOtherHero": "cass.v3.png",
+    "nearestOtherScore": 0.4551,
+    "nearestSameScore": 0.3887
+   },
+   "buildWindows": [
+    [
+     4260.0,
+     9108.0
+    ]
+   ],
+   "holdoutStarts": 11760.0,
+   "recordedAt": "2026-10-30T17:53:57+00:00"
+  },
+  {
+   "file": "sigma.v2.png",
+   "heroId": "sigma",
+   "sourceVideo": "https://www.twitch.tv/videos/2778637313",
+   "sourceReport": "labelling/2778637313-owcs_8c105lnzlam",
+   "sourceCrop": "t0004308.0_a3.png",
+   "offset": 4308.0,
+   "slot": "a3",
+   "state": "gameplay",
+   "labelSource": "human-cluster",
+   "stintId": null,
+   "quality": {
+    "width": 36,
+    "height": 36,
+    "sharpness": 2295.01,
+    "contrast": 42.73,
+    "flatFraction": 0.132,
+    "obstruction": 0.0,
+    "nearestOtherHero": "mauga.v1.png",
+    "nearestOtherScore": 0.4021,
+    "nearestSameScore": 0.6014
+   },
+   "buildWindows": [
+    [
+     4260.0,
+     9108.0
+    ]
+   ],
+   "holdoutStarts": 11760.0,
+   "recordedAt": "2026-10-30T17:53:57+00:00"
+  },
+  {
+   "file": "sigma.v3.png",
+   "heroId": "sigma",
+   "sourceVideo": "https://www.twitch.tv/videos/2778637313",
+   "sourceReport": "labelling/2778637313-owcs_8c105lnzlam",
+   "sourceCrop": "t0008916.0_b3.png",
+   "offset": 8916.0,
+   "slot": "b3",
+   "state": "gameplay",
+   "labelSource": "human-cluster",
+   "stintId": null,
+   "quality": {
+    "width": 36,
+    "height": 36,
+    "sharpness": 2765.78,
+    "contrast": 42.16,
+    "flatFraction": 0.129,
+    "obstruction": 0.056,
+    "nearestOtherHero": "echo.v1.png",
+    "nearestOtherScore": 0.4911,
+    "nearestSameScore": 0.6636
+   },
+   "buildWindows": [
+    [
+     4260.0,
+     9108.0
+    ]
+   ],
+   "holdoutStarts": 11760.0,
+   "recordedAt": "2026-10-30T17:53:57+00:00"
   },
   {
    "file": "sym.png",
@@ -1393,7 +1889,7 @@
     ]
    ],
    "holdoutStarts": 7992.0,
-   "recordedAt": "2026-10-30T08:16:00+00:00"
+   "recordedAt": "2026-10-30T17:53:57+00:00"
   },
   {
    "file": "sym.v1.png",
@@ -1424,7 +1920,7 @@
     ]
    ],
    "holdoutStarts": 7992.0,
-   "recordedAt": "2026-10-30T08:16:00+00:00"
+   "recordedAt": "2026-10-30T17:53:57+00:00"
   },
   {
    "file": "sym.v2.png",
@@ -1455,7 +1951,7 @@
     ]
    ],
    "holdoutStarts": 7992.0,
-   "recordedAt": "2026-10-30T08:16:00+00:00"
+   "recordedAt": "2026-10-30T17:53:57+00:00"
   },
   {
    "file": "sym.v3.png",
@@ -1486,7 +1982,131 @@
     ]
    ],
    "holdoutStarts": 7992.0,
-   "recordedAt": "2026-10-30T08:16:00+00:00"
+   "recordedAt": "2026-10-30T17:53:57+00:00"
+  },
+  {
+   "file": "tracer.png",
+   "heroId": "tracer",
+   "sourceVideo": "https://www.twitch.tv/videos/2831815423",
+   "sourceReport": "labelling/2831815423-owcs_8c105lnzlam",
+   "sourceCrop": "t0008520.0_b1.png",
+   "offset": 8520.0,
+   "slot": "b1",
+   "state": "gameplay",
+   "labelSource": "human-cluster",
+   "stintId": null,
+   "quality": {
+    "width": 36,
+    "height": 36,
+    "sharpness": 3646.41,
+    "contrast": 75.21,
+    "flatFraction": 0.188,
+    "obstruction": 0.083,
+    "nearestOtherHero": "ball.png",
+    "nearestOtherScore": 0.6634,
+    "nearestSameScore": null
+   },
+   "buildWindows": [
+    [
+     3864.0,
+     8520.0
+    ]
+   ],
+   "holdoutStarts": 17184.0,
+   "recordedAt": "2026-10-30T17:54:11+00:00"
+  },
+  {
+   "file": "tracer.v1.png",
+   "heroId": "tracer",
+   "sourceVideo": "https://www.twitch.tv/videos/2831815423",
+   "sourceReport": "labelling/2831815423-owcs_8c105lnzlam",
+   "sourceCrop": "t0004284.0_b2.png",
+   "offset": 4284.0,
+   "slot": "b2",
+   "state": "gameplay",
+   "labelSource": "human-cluster",
+   "stintId": null,
+   "quality": {
+    "width": 36,
+    "height": 36,
+    "sharpness": 2633.67,
+    "contrast": 72.23,
+    "flatFraction": 0.265,
+    "obstruction": 0.194,
+    "nearestOtherHero": "jetcat.png",
+    "nearestOtherScore": 0.7457,
+    "nearestSameScore": -0.3407
+   },
+   "buildWindows": [
+    [
+     3864.0,
+     8520.0
+    ]
+   ],
+   "holdoutStarts": 17184.0,
+   "recordedAt": "2026-10-30T17:54:11+00:00"
+  },
+  {
+   "file": "tracer.v2.png",
+   "heroId": "tracer",
+   "sourceVideo": "https://www.twitch.tv/videos/2831815423",
+   "sourceReport": "labelling/2831815423-owcs_8c105lnzlam",
+   "sourceCrop": "t0007296.0_b1.png",
+   "offset": 7296.0,
+   "slot": "b1",
+   "state": "gameplay",
+   "labelSource": "human-cluster",
+   "stintId": null,
+   "quality": {
+    "width": 36,
+    "height": 36,
+    "sharpness": 558.92,
+    "contrast": 28.13,
+    "flatFraction": 0.353,
+    "obstruction": 0.222,
+    "nearestOtherHero": "jetcat.v2.png",
+    "nearestOtherScore": 0.6418,
+    "nearestSameScore": 0.3094
+   },
+   "buildWindows": [
+    [
+     3864.0,
+     8520.0
+    ]
+   ],
+   "holdoutStarts": 17184.0,
+   "recordedAt": "2026-10-30T17:54:11+00:00"
+  },
+  {
+   "file": "tracer.v3.png",
+   "heroId": "tracer",
+   "sourceVideo": "https://www.twitch.tv/videos/2831815423",
+   "sourceReport": "labelling/2831815423-owcs_8c105lnzlam",
+   "sourceCrop": "t0003876.0_a2.png",
+   "offset": 3876.0,
+   "slot": "a2",
+   "state": "gameplay",
+   "labelSource": "human-cluster",
+   "stintId": null,
+   "quality": {
+    "width": 36,
+    "height": 36,
+    "sharpness": 1502.69,
+    "contrast": 50.16,
+    "flatFraction": 0.251,
+    "obstruction": 0.0,
+    "nearestOtherHero": "jetcat.v1.png",
+    "nearestOtherScore": 0.6477,
+    "nearestSameScore": 0.5758
+   },
+   "buildWindows": [
+    [
+     3864.0,
+     8520.0
+    ]
+   ],
+   "holdoutStarts": 17184.0,
+   "recordedAt": "2026-10-30T17:54:11+00:00"
   },
   {
    "file": "winston.png",
@@ -1517,7 +2137,7 @@
     ]
    ],
    "holdoutStarts": 16440.0,
-   "recordedAt": "2026-10-30T08:16:00+00:00"
+   "recordedAt": "2026-10-30T17:53:57+00:00"
   },
   {
    "file": "winston.v1.png",
@@ -1548,7 +2168,7 @@
     ]
    ],
    "holdoutStarts": 16440.0,
-   "recordedAt": "2026-10-30T08:16:00+00:00"
+   "recordedAt": "2026-10-30T17:53:57+00:00"
   },
   {
    "file": "winston.v2.png",
@@ -1579,7 +2199,7 @@
     ]
    ],
    "holdoutStarts": 16440.0,
-   "recordedAt": "2026-10-30T08:16:00+00:00"
+   "recordedAt": "2026-10-30T17:53:57+00:00"
   },
   {
    "file": "winston.v3.png",
@@ -1610,7 +2230,7 @@
     ]
    ],
    "holdoutStarts": 16440.0,
-   "recordedAt": "2026-10-30T08:16:00+00:00"
+   "recordedAt": "2026-10-30T17:53:57+00:00"
   }
  ],
  "harvests": [
@@ -1629,6 +2249,22 @@
    "labeledBy": "template_forge --promote (held-out validated)",
    "layoutId": "owcs_8c105lnzlam",
    "files": 32
+  },
+  {
+   "at": "2026-10-30T17:53:57+00:00",
+   "sourceVideo": "https://www.twitch.tv/videos/2778637313",
+   "sourceClip": "labelling/2778637313-owcs_8c105lnzlam",
+   "labeledBy": "template_forge --promote (held-out validated)",
+   "layoutId": "owcs_8c105lnzlam",
+   "files": 52
+  },
+  {
+   "at": "2026-10-30T17:54:11+00:00",
+   "sourceVideo": "https://www.twitch.tv/videos/2831815423",
+   "sourceClip": "labelling/2831815423-owcs_8c105lnzlam",
+   "labeledBy": "template_forge --promote (held-out validated)",
+   "layoutId": "owcs_8c105lnzlam",
+   "files": 28
   }
  ],
  "note": "Provenance for this broadcast package's hero templates. Every entry traces one template PNG back to the real gameplay frame it was cut from. Official hero art is NEVER a template source \u2014 it is only used to help a human label a cluster (see template_bootstrap.py)."
