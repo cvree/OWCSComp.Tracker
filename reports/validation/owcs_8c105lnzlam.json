@@ -1,10 +1,10 @@
 {
- "generatedAt": "2026-10-30T17:54:10+00:00",
- "templatesDir": "work/label-forge/_2831815423-owcs_8c105lnzlam/final",
+ "generatedAt": "2026-10-30T19:42:30+00:00",
+ "templatesDir": "work/label-forge/_2812835664-owcs_8c105lnzlam/final",
  "evidence": {
-  "sourceReport": "labelling/2831815423-owcs_8c105lnzlam",
+  "sourceReport": "labelling/2812835664-owcs_8c105lnzlam",
   "layoutId": "owcs_8c105lnzlam",
-  "labeledCrops": 1487,
+  "labeledCrops": 1953,
   "labelMethod": "a person named each card on label.html"
  },
  "thresholds": {
@@ -29,138 +29,21 @@
    ],
    "separationProvable": true,
    "separationNote": "",
-   "trials": 71,
-   "correct": 44,
-   "unknown": 27,
+   "trials": 0,
+   "correct": 0,
+   "unknown": 0,
    "wrong": 0,
    "contaminated": 0,
    "confusedWith": {},
-   "byState": {
-    "gameplay": {
-     "trials": 71,
-     "correct": 44,
-     "accuracy": 0.62
-    }
-   },
-   "byLabelSource": {
-    "human-cluster": 71
-   },
-   "examples": [
-    {
-     "file": "t0003864.0_b5.png",
-     "outcome": "unknown",
-     "score": 0.923,
-     "margin": 0.157,
-     "reject": "ambiguous: ana@0.92 vs lucio@0.77 (margin 0.157 < 0.25)",
-     "t": 3864.0,
-     "slot": "b5"
-    },
-    {
-     "file": "t0003876.0_b5.png",
-     "outcome": "unknown",
-     "score": 0.93,
-     "margin": 0.176,
-     "reject": "ambiguous: ana@0.93 vs lucio@0.75 (margin 0.176 < 0.25)",
-     "t": 3876.0,
-     "slot": "b5"
-    },
-    {
-     "file": "t0003888.0_a4.png",
-     "outcome": "unknown",
-     "score": 0.828,
-     "margin": 0.153,
-     "reject": "ambiguous: ana@0.83 vs lucio@0.67 (margin 0.153 < 0.25)",
-     "t": 3888.0,
-     "slot": "a4"
-    },
-    {
-     "file": "t0003912.0_b5.png",
-     "outcome": "unknown",
-     "score": 0.883,
-     "margin": 0.241,
-     "reject": "ambiguous: ana@0.88 vs lucio@0.64 (margin 0.241 < 0.25)",
-     "t": 3912.0,
-     "slot": "b5"
-    },
-    {
-     "file": "t0003936.0_b5.png",
-     "outcome": "unknown",
-     "score": 0.885,
-     "margin": 0.233,
-     "reject": "ambiguous: ana@0.89 vs lucio@0.65 (margin 0.233 < 0.25)",
-     "t": 3936.0,
-     "slot": "b5"
-    },
-    {
-     "file": "t0003972.0_b5.png",
-     "outcome": "unknown",
-     "score": 0.908,
-     "margin": 0.206,
-     "reject": "ambiguous: ana@0.91 vs lucio@0.70 (margin 0.206 < 0.25)",
-     "t": 3972.0,
-     "slot": "b5"
-    },
-    {
-     "file": "t0003984.0_b5.png",
-     "outcome": "unknown",
-     "score": 0.918,
-     "margin": 0.191,
-     "reject": "ambiguous: ana@0.92 vs lucio@0.73 (margin 0.191 < 0.25)",
-     "t": 3984.0,
-     "slot": "b5"
-    },
-    {
-     "file": "t0004032.0_b5.png",
-     "outcome": "unknown",
-     "score": 0.908,
-     "margin": 0.214,
-     "reject": "ambiguous: ana@0.91 vs lucio@0.69 (margin 0.214 < 0.25)",
-     "t": 4032.0,
-     "slot": "b5"
-    },
-    {
-     "file": "t0004044.0_a4.png",
-     "outcome": "unknown",
-     "score": 0.873,
-     "margin": 0.112,
-     "reject": "ambiguous: ana@0.87 vs lucio@0.76 (margin 0.112 < 0.25)",
-     "t": 4044.0,
-     "slot": "a4"
-    },
-    {
-     "file": "t0004044.0_b5.png",
-     "outcome": "unknown",
-     "score": 0.817,
-     "margin": 0.241,
-     "reject": "ambiguous: ana@0.82 vs lucio@0.58 (margin 0.241 < 0.25)",
-     "t": 4044.0,
-     "slot": "b5"
-    },
-    {
-     "file": "t0004092.0_b5.png",
-     "outcome": "unknown",
-     "score": 0.764,
-     "margin": 0.242,
-     "reject": "ambiguous: ana@0.76 vs lucio@0.52 (margin 0.242 < 0.25)",
-     "t": 4092.0,
-     "slot": "b5"
-    },
-    {
-     "file": "t0004104.0_b5.png",
-     "outcome": "unknown",
-     "score": 0.844,
-     "margin": 0.232,
-     "reject": "ambiguous: ana@0.84 vs lucio@0.61 (margin 0.232 < 0.25)",
-     "t": 4104.0,
-     "slot": "b5"
-    }
-   ],
-   "accuracy": 0.6197,
-   "meanScore": 0.7982,
-   "minScore": 0.557,
-   "minMargin": 0.082,
-   "verdict": "REVIEW",
-   "why": "44/71 correct (62%), 27 UNKNOWN, 0 wrong \u2014 at or below 90% or over 2% wrong: a person double-checks"
+   "byState": {},
+   "byLabelSource": {},
+   "examples": [],
+   "accuracy": 0.0,
+   "meanScore": null,
+   "minScore": null,
+   "minMargin": null,
+   "verdict": "UNVERIFIABLE",
+   "why": "no held-out evidence for this hero in this manifest"
   },
   "ball": {
    "heroId": "ball",
@@ -172,29 +55,29 @@
    ],
    "separationProvable": true,
    "separationNote": "",
-   "trials": 12,
-   "correct": 12,
+   "trials": 19,
+   "correct": 19,
    "unknown": 0,
    "wrong": 0,
-   "contaminated": 0,
+   "contaminated": 8,
    "confusedWith": {},
    "byState": {
     "gameplay": {
-     "trials": 12,
-     "correct": 12,
+     "trials": 19,
+     "correct": 19,
      "accuracy": 1.0
     }
    },
    "byLabelSource": {
-    "human-cluster": 12
+    "human-cluster": 19
    },
    "examples": [],
    "accuracy": 1.0,
-   "meanScore": 0.968,
-   "minScore": 0.928,
-   "minMargin": 0.397,
+   "meanScore": 0.9315,
+   "minScore": 0.845,
+   "minMargin": 0.441,
    "verdict": "VALIDATED",
-   "why": "12/12 held-out frame(s) correct, 0 wrong, min margin 0.397"
+   "why": "19/19 held-out frame(s) correct, 0 wrong, min margin 0.441"
   },
   "bastion": {
    "heroId": "bastion",
@@ -206,93 +89,138 @@
    ],
    "separationProvable": true,
    "separationNote": "",
-   "trials": 39,
-   "correct": 32,
-   "unknown": 7,
+   "trials": 150,
+   "correct": 43,
+   "unknown": 107,
    "wrong": 0,
    "contaminated": 0,
    "confusedWith": {},
    "byState": {
     "gameplay": {
-     "trials": 39,
-     "correct": 32,
-     "accuracy": 0.821
+     "trials": 150,
+     "correct": 43,
+     "accuracy": 0.287
     }
    },
    "byLabelSource": {
-    "human-cluster": 39
+    "human-cluster": 150
    },
    "examples": [
     {
-     "file": "t0023856.0_a1.png",
+     "file": "t0003480.0_b2.png",
      "outcome": "unknown",
-     "score": 0.83,
-     "margin": 0.159,
-     "reject": "ambiguous: bastion@0.83 vs shion@0.67 (margin 0.159 < 0.25)",
-     "t": 23856.0,
-     "slot": "a1"
+     "score": 0.604,
+     "margin": 0.054,
+     "reject": "ambiguous: echo@0.60 vs bastion@0.55 (margin 0.054 < 0.25)",
+     "t": 3480.0,
+     "slot": "b2"
     },
     {
-     "file": "t0023868.0_a1.png",
+     "file": "t0003492.0_b2.png",
      "outcome": "unknown",
-     "score": 0.866,
-     "margin": 0.191,
-     "reject": "ambiguous: bastion@0.87 vs shion@0.68 (margin 0.191 < 0.25)",
-     "t": 23868.0,
-     "slot": "a1"
+     "score": 0.621,
+     "margin": 0.068,
+     "reject": "ambiguous: echo@0.62 vs bastion@0.55 (margin 0.068 < 0.25)",
+     "t": 3492.0,
+     "slot": "b2"
     },
     {
-     "file": "t0023880.0_a1.png",
+     "file": "t0003504.0_b2.png",
      "outcome": "unknown",
-     "score": 0.874,
-     "margin": 0.227,
-     "reject": "ambiguous: bastion@0.87 vs tracer@0.65 (margin 0.227 < 0.25)",
-     "t": 23880.0,
-     "slot": "a1"
+     "score": 0.613,
+     "margin": 0.076,
+     "reject": "ambiguous: echo@0.61 vs bastion@0.54 (margin 0.076 < 0.25)",
+     "t": 3504.0,
+     "slot": "b2"
     },
     {
-     "file": "t0023904.0_a1.png",
+     "file": "t0003516.0_b2.png",
      "outcome": "unknown",
-     "score": 0.856,
-     "margin": 0.221,
-     "reject": "ambiguous: bastion@0.86 vs shion@0.64 (margin 0.221 < 0.25)",
-     "t": 23904.0,
-     "slot": "a1"
+     "score": 0.553,
+     "margin": 0.025,
+     "reject": "no-match: best echo@0.55 below floor 0.6",
+     "t": 3516.0,
+     "slot": "b2"
     },
     {
-     "file": "t0023928.0_a1.png",
+     "file": "t0003528.0_b2.png",
      "outcome": "unknown",
-     "score": 0.855,
-     "margin": 0.219,
-     "reject": "ambiguous: bastion@0.85 vs shion@0.64 (margin 0.219 < 0.25)",
-     "t": 23928.0,
-     "slot": "a1"
+     "score": 0.499,
+     "margin": 0.01,
+     "reject": "no-match: best echo@0.50 below floor 0.6",
+     "t": 3528.0,
+     "slot": "b2"
     },
     {
-     "file": "t0023964.0_a1.png",
+     "file": "t0003540.0_b2.png",
      "outcome": "unknown",
-     "score": 0.836,
-     "margin": 0.249,
-     "reject": "ambiguous: bastion@0.84 vs shion@0.59 (margin 0.249 < 0.25)",
-     "t": 23964.0,
-     "slot": "a1"
+     "score": 0.619,
+     "margin": 0.045,
+     "reject": "ambiguous: echo@0.62 vs bastion@0.57 (margin 0.045 < 0.25)",
+     "t": 3540.0,
+     "slot": "b2"
     },
     {
-     "file": "t0023988.0_a1.png",
+     "file": "t0003552.0_b2.png",
      "outcome": "unknown",
-     "score": 0.873,
-     "margin": 0.193,
-     "reject": "ambiguous: bastion@0.87 vs shion@0.68 (margin 0.193 < 0.25)",
-     "t": 23988.0,
-     "slot": "a1"
+     "score": 0.582,
+     "margin": 0.058,
+     "reject": "no-match: best echo@0.58 below floor 0.6",
+     "t": 3552.0,
+     "slot": "b2"
+    },
+    {
+     "file": "t0003564.0_b2.png",
+     "outcome": "unknown",
+     "score": 0.574,
+     "margin": 0.032,
+     "reject": "no-match: best echo@0.57 below floor 0.6",
+     "t": 3564.0,
+     "slot": "b2"
+    },
+    {
+     "file": "t0003576.0_b2.png",
+     "outcome": "unknown",
+     "score": 0.529,
+     "margin": 0.058,
+     "reject": "no-match: best echo@0.53 below floor 0.6",
+     "t": 3576.0,
+     "slot": "b2"
+    },
+    {
+     "file": "t0003600.0_b2.png",
+     "outcome": "unknown",
+     "score": 0.504,
+     "margin": 0.022,
+     "reject": "no-match: best echo@0.50 below floor 0.6",
+     "t": 3600.0,
+     "slot": "b2"
+    },
+    {
+     "file": "t0003612.0_b2.png",
+     "outcome": "unknown",
+     "score": 0.568,
+     "margin": 0.029,
+     "reject": "no-match: best echo@0.57 below floor 0.6",
+     "t": 3612.0,
+     "slot": "b2"
+    },
+    {
+     "file": "t0003624.0_b2.png",
+     "outcome": "unknown",
+     "score": 0.528,
+     "margin": 0.02,
+     "reject": "no-match: best echo@0.53 below floor 0.6",
+     "t": 3624.0,
+     "slot": "b2"
     }
    ],
-   "accuracy": 0.8205,
-   "meanScore": 0.9055,
-   "minScore": 0.749,
-   "minMargin": 0.159,
+   "accuracy": 0.2867,
+   "meanScore": 0.6223,
+   "minScore": 0.396,
+   "minMargin": 0.001,
    "verdict": "REVIEW",
-   "why": "32/39 correct (82%), 7 UNKNOWN, 0 wrong \u2014 at or below 90% or over 2% wrong: a person double-checks"
+   "why": "43/150 correct (29%), 107 UNKNOWN, 0 wrong \u2014 at or below 90% or over 2% wrong: a person double-checks"
   },
   "cass": {
    "heroId": "cass",
@@ -303,37 +231,136 @@
    ],
    "separationProvable": false,
    "separationNote": "no provenance recorded for any cass template \u2014 separation from the frames they were cut from cannot be proven",
-   "trials": 20,
-   "correct": 19,
-   "unknown": 1,
+   "trials": 144,
+   "correct": 15,
+   "unknown": 129,
    "wrong": 0,
    "contaminated": 0,
    "confusedWith": {},
    "byState": {
     "gameplay": {
-     "trials": 20,
-     "correct": 19,
-     "accuracy": 0.95
+     "trials": 144,
+     "correct": 15,
+     "accuracy": 0.104
     }
    },
    "byLabelSource": {
-    "human-cluster": 20
+    "human-cluster": 144
    },
    "examples": [
     {
-     "file": "t0007476.0_b2.png",
+     "file": "t0002772.0_a1.png",
      "outcome": "unknown",
-     "score": 0.915,
-     "margin": 0.22,
-     "reject": "ambiguous: cass@0.92 vs sym@0.69 (margin 0.220 < 0.25)",
-     "t": 7476.0,
-     "slot": "b2"
+     "score": 0.703,
+     "margin": 0.213,
+     "reject": "ambiguous: cass@0.70 vs sym@0.49 (margin 0.213 < 0.25)",
+     "t": 2772.0,
+     "slot": "a1"
+    },
+    {
+     "file": "t0002796.0_a1.png",
+     "outcome": "unknown",
+     "score": 0.644,
+     "margin": 0.198,
+     "reject": "ambiguous: cass@0.64 vs sym@0.45 (margin 0.198 < 0.25)",
+     "t": 2796.0,
+     "slot": "a1"
+    },
+    {
+     "file": "t0002808.0_a1.png",
+     "outcome": "unknown",
+     "score": 0.567,
+     "margin": 0.342,
+     "reject": "no-match: best cass@0.57 below floor 0.6",
+     "t": 2808.0,
+     "slot": "a1"
+    },
+    {
+     "file": "t0002820.0_a1.png",
+     "outcome": "unknown",
+     "score": 0.717,
+     "margin": 0.211,
+     "reject": "ambiguous: cass@0.72 vs sym@0.51 (margin 0.211 < 0.25)",
+     "t": 2820.0,
+     "slot": "a1"
+    },
+    {
+     "file": "t0002844.0_a1.png",
+     "outcome": "unknown",
+     "score": 0.752,
+     "margin": 0.185,
+     "reject": "ambiguous: cass@0.75 vs sym@0.57 (margin 0.185 < 0.25)",
+     "t": 2844.0,
+     "slot": "a1"
+    },
+    {
+     "file": "t0002892.0_a1.png",
+     "outcome": "unknown",
+     "score": 0.518,
+     "margin": 0.376,
+     "reject": "no-match: best cass@0.52 below floor 0.6",
+     "t": 2892.0,
+     "slot": "a1"
+    },
+    {
+     "file": "t0002940.0_a1.png",
+     "outcome": "unknown",
+     "score": 0.494,
+     "margin": 0.451,
+     "reject": "no-match: best cass@0.49 below floor 0.6",
+     "t": 2940.0,
+     "slot": "a1"
+    },
+    {
+     "file": "t0002952.0_a1.png",
+     "outcome": "unknown",
+     "score": 0.749,
+     "margin": 0.138,
+     "reject": "ambiguous: cass@0.75 vs sym@0.61 (margin 0.138 < 0.25)",
+     "t": 2952.0,
+     "slot": "a1"
+    },
+    {
+     "file": "t0002964.0_a1.png",
+     "outcome": "unknown",
+     "score": 0.547,
+     "margin": 0.358,
+     "reject": "no-match: best cass@0.55 below floor 0.6",
+     "t": 2964.0,
+     "slot": "a1"
+    },
+    {
+     "file": "t0004476.0_a1.png",
+     "outcome": "unknown",
+     "score": 0.421,
+     "margin": 0.346,
+     "reject": "no-match: best cass@0.42 below floor 0.6",
+     "t": 4476.0,
+     "slot": "a1"
+    },
+    {
+     "file": "t0004512.0_a1.png",
+     "outcome": "unknown",
+     "score": 0.749,
+     "margin": 0.232,
+     "reject": "ambiguous: cass@0.75 vs sym@0.52 (margin 0.232 < 0.25)",
+     "t": 4512.0,
+     "slot": "a1"
+    },
+    {
+     "file": "t0004524.0_a1.png",
+     "outcome": "unknown",
+     "score": 0.748,
+     "margin": 0.181,
+     "reject": "ambiguous: cass@0.75 vs sym@0.57 (margin 0.181 < 0.25)",
+     "t": 4524.0,
+     "slot": "a1"
     }
    ],
-   "accuracy": 0.95,
-   "meanScore": 0.8455,
-   "minScore": 0.757,
-   "minMargin": 0.22,
+   "accuracy": 0.1042,
+   "meanScore": 0.5307,
+   "minScore": 0.274,
+   "minMargin": 0.003,
    "verdict": "UNVERIFIABLE",
    "why": "no provenance recorded for any cass template \u2014 separation from the frames they were cut from cannot be proven"
   },
@@ -347,29 +374,129 @@
    ],
    "separationProvable": true,
    "separationNote": "",
-   "trials": 44,
-   "correct": 44,
-   "unknown": 0,
+   "trials": 19,
+   "correct": 8,
+   "unknown": 11,
    "wrong": 0,
-   "contaminated": 36,
+   "contaminated": 0,
    "confusedWith": {},
    "byState": {
     "gameplay": {
-     "trials": 44,
-     "correct": 44,
-     "accuracy": 1.0
+     "trials": 19,
+     "correct": 8,
+     "accuracy": 0.421
     }
    },
    "byLabelSource": {
-    "human-cluster": 44
+    "human-cluster": 19
    },
-   "examples": [],
-   "accuracy": 1.0,
-   "meanScore": 0.8678,
-   "minScore": 0.738,
-   "minMargin": 0.295,
-   "verdict": "VALIDATED",
-   "why": "44/44 held-out frame(s) correct, 0 wrong, min margin 0.295"
+   "examples": [
+    {
+     "file": "t0004572.0_a3.png",
+     "outcome": "unknown",
+     "score": 0.606,
+     "margin": 0.214,
+     "reject": "ambiguous: dva@0.61 vs ball@0.39 (margin 0.214 < 0.25)",
+     "t": 4572.0,
+     "slot": "a3"
+    },
+    {
+     "file": "t0004584.0_a3.png",
+     "outcome": "unknown",
+     "score": 0.605,
+     "margin": 0.245,
+     "reject": "ambiguous: dva@0.60 vs ball@0.36 (margin 0.245 < 0.25)",
+     "t": 4584.0,
+     "slot": "a3"
+    },
+    {
+     "file": "t0004608.0_a3.png",
+     "outcome": "unknown",
+     "score": 0.608,
+     "margin": 0.229,
+     "reject": "ambiguous: dva@0.61 vs ball@0.38 (margin 0.229 < 0.25)",
+     "t": 4608.0,
+     "slot": "a3"
+    },
+    {
+     "file": "t0004620.0_a3.png",
+     "outcome": "unknown",
+     "score": 0.594,
+     "margin": 0.309,
+     "reject": "no-match: best dva@0.59 below floor 0.6",
+     "t": 4620.0,
+     "slot": "a3"
+    },
+    {
+     "file": "t0004980.0_a3.png",
+     "outcome": "unknown",
+     "score": 0.618,
+     "margin": 0.197,
+     "reject": "ambiguous: dva@0.62 vs ball@0.42 (margin 0.197 < 0.25)",
+     "t": 4980.0,
+     "slot": "a3"
+    },
+    {
+     "file": "t0005004.0_a3.png",
+     "outcome": "unknown",
+     "score": 0.611,
+     "margin": 0.218,
+     "reject": "ambiguous: dva@0.61 vs ball@0.39 (margin 0.218 < 0.25)",
+     "t": 5004.0,
+     "slot": "a3"
+    },
+    {
+     "file": "t0005016.0_a3.png",
+     "outcome": "unknown",
+     "score": 0.623,
+     "margin": 0.158,
+     "reject": "ambiguous: dva@0.62 vs ball@0.47 (margin 0.158 < 0.25)",
+     "t": 5016.0,
+     "slot": "a3"
+    },
+    {
+     "file": "t0005112.0_a3.png",
+     "outcome": "unknown",
+     "score": 0.592,
+     "margin": 0.242,
+     "reject": "no-match: best dva@0.59 below floor 0.6",
+     "t": 5112.0,
+     "slot": "a3"
+    },
+    {
+     "file": "t0005256.0_a3.png",
+     "outcome": "unknown",
+     "score": 0.549,
+     "margin": 0.269,
+     "reject": "no-match: best dva@0.55 below floor 0.6",
+     "t": 5256.0,
+     "slot": "a3"
+    },
+    {
+     "file": "t0005028.0_a3.png",
+     "outcome": "unknown",
+     "score": 0.695,
+     "margin": 0.248,
+     "reject": "ambiguous: dva@0.70 vs mauga@0.45 (margin 0.248 < 0.25)",
+     "t": 5028.0,
+     "slot": "a3"
+    },
+    {
+     "file": "t0006600.0_a3.png",
+     "outcome": "unknown",
+     "score": 0.536,
+     "margin": 0.24,
+     "reject": "no-match: best dva@0.54 below floor 0.6",
+     "t": 6600.0,
+     "slot": "a3"
+    }
+   ],
+   "accuracy": 0.4211,
+   "meanScore": 0.6246,
+   "minScore": 0.536,
+   "minMargin": 0.158,
+   "verdict": "REVIEW",
+   "why": "8/19 correct (42%), 11 UNKNOWN, 0 wrong \u2014 at or below 90% or over 2% wrong: a person double-checks"
   },
   "echo": {
    "heroId": "echo",
@@ -381,21 +508,75 @@
    ],
    "separationProvable": true,
    "separationNote": "",
-   "trials": 0,
+   "trials": 5,
    "correct": 0,
-   "unknown": 0,
+   "unknown": 5,
    "wrong": 0,
    "contaminated": 0,
    "confusedWith": {},
-   "byState": {},
-   "byLabelSource": {},
-   "examples": [],
+   "byState": {
+    "gameplay": {
+     "trials": 5,
+     "correct": 0,
+     "accuracy": 0.0
+    }
+   },
+   "byLabelSource": {
+    "human-cluster": 5
+   },
+   "examples": [
+    {
+     "file": "t0022416.0_b2.png",
+     "outcome": "unknown",
+     "score": 0.315,
+     "margin": 0.008,
+     "reject": "no-match: best sym@0.32 below floor 0.6",
+     "t": 22416.0,
+     "slot": "b2"
+    },
+    {
+     "file": "t0022428.0_b2.png",
+     "outcome": "unknown",
+     "score": 0.47,
+     "margin": 0.06,
+     "reject": "no-match: best sym@0.47 below floor 0.6",
+     "t": 22428.0,
+     "slot": "b2"
+    },
+    {
+     "file": "t0022440.0_b2.png",
+     "outcome": "unknown",
+     "score": 0.451,
+     "margin": 0.067,
+     "reject": "no-match: best sym@0.45 below floor 0.6",
+     "t": 22440.0,
+     "slot": "b2"
+    },
+    {
+     "file": "t0022452.0_b2.png",
+     "outcome": "unknown",
+     "score": 0.569,
+     "margin": 0.275,
+     "reject": "no-match: best echo@0.57 below floor 0.6",
+     "t": 22452.0,
+     "slot": "b2"
+    },
+    {
+     "file": "t0022464.0_b2.png",
+     "outcome": "unknown",
+     "score": 0.594,
+     "margin": 0.309,
+     "reject": "no-match: best echo@0.59 below floor 0.6",
+     "t": 22464.0,
+     "slot": "b2"
+    }
+   ],
    "accuracy": 0.0,
-   "meanScore": null,
-   "minScore": null,
-   "minMargin": null,
-   "verdict": "UNVERIFIABLE",
-   "why": "no held-out evidence for this hero in this manifest"
+   "meanScore": 0.4798,
+   "minScore": 0.315,
+   "minMargin": 0.008,
+   "verdict": "WEAK",
+   "why": "only 5 held-out trial(s); 12 are needed before 'it works' means anything"
   },
   "jetcat": {
    "heroId": "jetcat",
@@ -407,75 +588,236 @@
    ],
    "separationProvable": true,
    "separationNote": "",
-   "trials": 65,
-   "correct": 60,
-   "unknown": 5,
+   "trials": 23,
+   "correct": 1,
+   "unknown": 22,
    "wrong": 0,
-   "contaminated": 30,
+   "contaminated": 0,
    "confusedWith": {},
    "byState": {
     "gameplay": {
-     "trials": 65,
-     "correct": 60,
-     "accuracy": 0.923
+     "trials": 23,
+     "correct": 1,
+     "accuracy": 0.043
     }
    },
    "byLabelSource": {
-    "human-cluster": 65
+    "human-cluster": 23
    },
    "examples": [
     {
-     "file": "t0003852.0_b4.png",
+     "file": "t0004476.0_b5.png",
      "outcome": "unknown",
-     "score": 0.855,
-     "margin": 0.246,
-     "reject": "ambiguous: jetcat@0.86 vs kiriko@0.61 (margin 0.246 < 0.25)",
-     "t": 3852.0,
-     "slot": "b4"
-    },
-    {
-     "file": "t0004128.0_a5.png",
-     "outcome": "unknown",
-     "score": 0.886,
-     "margin": 0.239,
-     "reject": "ambiguous: jetcat@0.89 vs kiriko@0.65 (margin 0.239 < 0.25)",
-     "t": 4128.0,
-     "slot": "a5"
-    },
-    {
-     "file": "t0017280.0_b5.png",
-     "outcome": "unknown",
-     "score": 0.807,
-     "margin": 0.238,
-     "reject": "ambiguous: jetcat@0.81 vs kiriko@0.57 (margin 0.238 < 0.25)",
-     "t": 17280.0,
+     "score": 0.552,
+     "margin": 0.179,
+     "reject": "no-match: best jetcat@0.55 below floor 0.6",
+     "t": 4476.0,
      "slot": "b5"
     },
     {
-     "file": "t0023856.0_a4.png",
+     "file": "t0006840.0_b4.png",
      "outcome": "unknown",
-     "score": 0.894,
-     "margin": 0.168,
-     "reject": "ambiguous: jetcat@0.89 vs kiriko@0.73 (margin 0.168 < 0.25)",
-     "t": 23856.0,
-     "slot": "a4"
+     "score": 0.742,
+     "margin": 0.243,
+     "reject": "ambiguous: jetcat@0.74 vs kiriko@0.50 (margin 0.243 < 0.25)",
+     "t": 6840.0,
+     "slot": "b4"
     },
     {
-     "file": "t0023880.0_b4.png",
+     "file": "t0007260.0_b4.png",
      "outcome": "unknown",
-     "score": 0.825,
-     "margin": 0.231,
-     "reject": "ambiguous: jetcat@0.82 vs kiriko@0.59 (margin 0.231 < 0.25)",
-     "t": 23880.0,
+     "score": 0.613,
+     "margin": 0.217,
+     "reject": "ambiguous: jetcat@0.61 vs juno@0.40 (margin 0.217 < 0.25)",
+     "t": 7260.0,
+     "slot": "b4"
+    },
+    {
+     "file": "t0007272.0_b4.png",
+     "outcome": "unknown",
+     "score": 0.764,
+     "margin": 0.2,
+     "reject": "ambiguous: jetcat@0.76 vs kiriko@0.56 (margin 0.200 < 0.25)",
+     "t": 7272.0,
+     "slot": "b4"
+    },
+    {
+     "file": "t0007320.0_b4.png",
+     "outcome": "unknown",
+     "score": 0.824,
+     "margin": 0.188,
+     "reject": "ambiguous: jetcat@0.82 vs kiriko@0.64 (margin 0.188 < 0.25)",
+     "t": 7320.0,
+     "slot": "b4"
+    },
+    {
+     "file": "t0007392.0_b4.png",
+     "outcome": "unknown",
+     "score": 0.737,
+     "margin": 0.182,
+     "reject": "ambiguous: jetcat@0.74 vs kiriko@0.55 (margin 0.182 < 0.25)",
+     "t": 7392.0,
+     "slot": "b4"
+    },
+    {
+     "file": "t0007404.0_b4.png",
+     "outcome": "unknown",
+     "score": 0.851,
+     "margin": 0.164,
+     "reject": "ambiguous: jetcat@0.85 vs kiriko@0.69 (margin 0.164 < 0.25)",
+     "t": 7404.0,
+     "slot": "b4"
+    },
+    {
+     "file": "t0007416.0_b4.png",
+     "outcome": "unknown",
+     "score": 0.804,
+     "margin": 0.17,
+     "reject": "ambiguous: jetcat@0.80 vs kiriko@0.63 (margin 0.170 < 0.25)",
+     "t": 7416.0,
+     "slot": "b4"
+    },
+    {
+     "file": "t0007428.0_b4.png",
+     "outcome": "unknown",
+     "score": 0.836,
+     "margin": 0.177,
+     "reject": "ambiguous: jetcat@0.84 vs kiriko@0.66 (margin 0.177 < 0.25)",
+     "t": 7428.0,
+     "slot": "b4"
+    },
+    {
+     "file": "t0007440.0_b4.png",
+     "outcome": "unknown",
+     "score": 0.657,
+     "margin": 0.224,
+     "reject": "ambiguous: jetcat@0.66 vs juno@0.43 (margin 0.224 < 0.25)",
+     "t": 7440.0,
+     "slot": "b4"
+    },
+    {
+     "file": "t0007452.0_b4.png",
+     "outcome": "unknown",
+     "score": 0.646,
+     "margin": 0.123,
+     "reject": "ambiguous: jetcat@0.65 vs juno@0.52 (margin 0.123 < 0.25)",
+     "t": 7452.0,
+     "slot": "b4"
+    },
+    {
+     "file": "t0007476.0_b4.png",
+     "outcome": "unknown",
+     "score": 0.659,
+     "margin": 0.161,
+     "reject": "ambiguous: jetcat@0.66 vs juno@0.50 (margin 0.161 < 0.25)",
+     "t": 7476.0,
      "slot": "b4"
     }
    ],
-   "accuracy": 0.9231,
-   "meanScore": 0.8735,
-   "minScore": 0.677,
-   "minMargin": 0.168,
-   "verdict": "VALIDATED",
-   "why": "60/65 held-out frame(s) correct, 0 wrong, min margin 0.168"
+   "accuracy": 0.0435,
+   "meanScore": 0.7353,
+   "minScore": 0.552,
+   "minMargin": 0.123,
+   "verdict": "REVIEW",
+   "why": "1/23 correct (4%), 22 UNKNOWN, 0 wrong \u2014 at or below 90% or over 2% wrong: a person double-checks"
+  },
+  "juno": {
+   "heroId": "juno",
+   "templates": [
+    "juno.png",
+    "juno.v1.png",
+    "juno.v2.png",
+    "juno.v3.png"
+   ],
+   "separationProvable": true,
+   "separationNote": "",
+   "trials": 13,
+   "correct": 6,
+   "unknown": 7,
+   "wrong": 0,
+   "contaminated": 4,
+   "confusedWith": {},
+   "byState": {
+    "gameplay": {
+     "trials": 13,
+     "correct": 6,
+     "accuracy": 0.462
+    }
+   },
+   "byLabelSource": {
+    "human-cluster": 13
+   },
+   "examples": [
+    {
+     "file": "t0016404.0_a5.png",
+     "outcome": "unknown",
+     "score": 0.855,
+     "margin": 0.175,
+     "reject": "ambiguous: juno@0.85 vs jetcat@0.68 (margin 0.175 < 0.25)",
+     "t": 16404.0,
+     "slot": "a5"
+    },
+    {
+     "file": "t0022260.0_a5.png",
+     "outcome": "unknown",
+     "score": 0.87,
+     "margin": 0.132,
+     "reject": "ambiguous: juno@0.87 vs jetcat@0.74 (margin 0.132 < 0.25)",
+     "t": 22260.0,
+     "slot": "a5"
+    },
+    {
+     "file": "t0022308.0_a5.png",
+     "outcome": "unknown",
+     "score": 0.9,
+     "margin": 0.169,
+     "reject": "ambiguous: juno@0.90 vs jetcat@0.73 (margin 0.169 < 0.25)",
+     "t": 22308.0,
+     "slot": "a5"
+    },
+    {
+     "file": "t0022320.0_a5.png",
+     "outcome": "unknown",
+     "score": 0.855,
+     "margin": 0.111,
+     "reject": "ambiguous: juno@0.86 vs jetcat@0.74 (margin 0.111 < 0.25)",
+     "t": 22320.0,
+     "slot": "a5"
+    },
+    {
+     "file": "t0022332.0_a5.png",
+     "outcome": "unknown",
+     "score": 0.866,
+     "margin": 0.222,
+     "reject": "ambiguous: juno@0.87 vs jetcat@0.64 (margin 0.222 < 0.25)",
+     "t": 22332.0,
+     "slot": "a5"
+    },
+    {
+     "file": "t0022368.0_a5.png",
+     "outcome": "unknown",
+     "score": 0.865,
+     "margin": 0.104,
+     "reject": "ambiguous: juno@0.86 vs jetcat@0.76 (margin 0.104 < 0.25)",
+     "t": 22368.0,
+     "slot": "a5"
+    },
+    {
+     "file": "t0022440.0_a5.png",
+     "outcome": "unknown",
+     "score": 0.862,
+     "margin": 0.121,
+     "reject": "ambiguous: juno@0.86 vs jetcat@0.74 (margin 0.121 < 0.25)",
+     "t": 22440.0,
+     "slot": "a5"
+    }
+   ],
+   "accuracy": 0.4615,
+   "meanScore": 0.8988,
+   "minScore": 0.855,
+   "minMargin": 0.104,
+   "verdict": "REVIEW",
+   "why": "6/13 correct (46%), 7 UNKNOWN, 0 wrong \u2014 at or below 90% or over 2% wrong: a person double-checks"
   },
   "kiriko": {
    "heroId": "kiriko",
@@ -487,138 +829,138 @@
    ],
    "separationProvable": true,
    "separationNote": "",
-   "trials": 148,
-   "correct": 90,
-   "unknown": 58,
+   "trials": 247,
+   "correct": 77,
+   "unknown": 170,
    "wrong": 0,
    "contaminated": 0,
    "confusedWith": {},
    "byState": {
     "gameplay": {
-     "trials": 148,
-     "correct": 90,
-     "accuracy": 0.608
+     "trials": 247,
+     "correct": 77,
+     "accuracy": 0.312
     }
    },
    "byLabelSource": {
-    "human-cluster": 148
+    "human-cluster": 247
    },
    "examples": [
     {
-     "file": "t0007392.0_b4.png",
+     "file": "t0002760.0_a5.png",
      "outcome": "unknown",
-     "score": 0.761,
+     "score": 0.672,
+     "margin": 0.249,
+     "reject": "ambiguous: kiriko@0.67 vs juno@0.42 (margin 0.249 < 0.25)",
+     "t": 2760.0,
+     "slot": "a5"
+    },
+    {
+     "file": "t0002856.0_a5.png",
+     "outcome": "unknown",
+     "score": 0.666,
+     "margin": 0.234,
+     "reject": "ambiguous: kiriko@0.67 vs juno@0.43 (margin 0.234 < 0.25)",
+     "t": 2856.0,
+     "slot": "a5"
+    },
+    {
+     "file": "t0002940.0_a5.png",
+     "outcome": "unknown",
+     "score": 0.511,
+     "margin": 0.123,
+     "reject": "no-match: best kiriko@0.51 below floor 0.6",
+     "t": 2940.0,
+     "slot": "a5"
+    },
+    {
+     "file": "t0002964.0_a5.png",
+     "outcome": "unknown",
+     "score": 0.666,
+     "margin": 0.174,
+     "reject": "ambiguous: kiriko@0.67 vs juno@0.49 (margin 0.174 < 0.25)",
+     "t": 2964.0,
+     "slot": "a5"
+    },
+    {
+     "file": "t0004488.0_a5.png",
+     "outcome": "unknown",
+     "score": 0.547,
      "margin": 0.22,
-     "reject": "ambiguous: kiriko@0.76 vs jetcat@0.54 (margin 0.220 < 0.25)",
-     "t": 7392.0,
-     "slot": "b4"
+     "reject": "no-match: best kiriko@0.55 below floor 0.6",
+     "t": 4488.0,
+     "slot": "a5"
     },
     {
-     "file": "t0007500.0_b4.png",
+     "file": "t0004512.0_a5.png",
      "outcome": "unknown",
-     "score": 0.779,
-     "margin": 0.2,
-     "reject": "ambiguous: kiriko@0.78 vs jetcat@0.58 (margin 0.200 < 0.25)",
-     "t": 7500.0,
-     "slot": "b4"
-    },
-    {
-     "file": "t0008760.0_a4.png",
-     "outcome": "unknown",
-     "score": 0.587,
-     "margin": 0.272,
+     "score": 0.595,
+     "margin": 0.184,
      "reject": "no-match: best kiriko@0.59 below floor 0.6",
-     "t": 8760.0,
-     "slot": "a4"
+     "t": 4512.0,
+     "slot": "a5"
     },
     {
-     "file": "t0008820.0_b5.png",
+     "file": "t0004548.0_a5.png",
      "outcome": "unknown",
-     "score": 0.703,
-     "margin": 0.216,
-     "reject": "ambiguous: kiriko@0.70 vs jetcat@0.49 (margin 0.216 < 0.25)",
-     "t": 8820.0,
-     "slot": "b5"
+     "score": 0.644,
+     "margin": 0.224,
+     "reject": "ambiguous: kiriko@0.64 vs juno@0.42 (margin 0.224 < 0.25)",
+     "t": 4548.0,
+     "slot": "a5"
     },
     {
-     "file": "t0008868.0_b5.png",
+     "file": "t0004572.0_a5.png",
      "outcome": "unknown",
-     "score": 0.787,
-     "margin": 0.241,
-     "reject": "ambiguous: kiriko@0.79 vs jetcat@0.55 (margin 0.241 < 0.25)",
-     "t": 8868.0,
-     "slot": "b5"
+     "score": 0.669,
+     "margin": 0.142,
+     "reject": "ambiguous: kiriko@0.67 vs jetcat@0.53 (margin 0.142 < 0.25)",
+     "t": 4572.0,
+     "slot": "a5"
     },
     {
-     "file": "t0008976.0_b5.png",
+     "file": "t0005004.0_a5.png",
      "outcome": "unknown",
-     "score": 0.779,
-     "margin": 0.24,
-     "reject": "ambiguous: kiriko@0.78 vs jetcat@0.54 (margin 0.240 < 0.25)",
-     "t": 8976.0,
-     "slot": "b5"
+     "score": 0.646,
+     "margin": 0.154,
+     "reject": "ambiguous: kiriko@0.65 vs jetcat@0.49 (margin 0.154 < 0.25)",
+     "t": 5004.0,
+     "slot": "a5"
     },
     {
-     "file": "t0009036.0_b5.png",
+     "file": "t0005100.0_a5.png",
      "outcome": "unknown",
-     "score": 0.72,
-     "margin": 0.226,
-     "reject": "ambiguous: kiriko@0.72 vs jetcat@0.49 (margin 0.226 < 0.25)",
-     "t": 9036.0,
-     "slot": "b5"
+     "score": 0.569,
+     "margin": 0.198,
+     "reject": "no-match: best kiriko@0.57 below floor 0.6",
+     "t": 5100.0,
+     "slot": "a5"
     },
     {
-     "file": "t0009108.0_b5.png",
+     "file": "t0006636.0_a5.png",
      "outcome": "unknown",
-     "score": 0.796,
-     "margin": 0.233,
-     "reject": "ambiguous: kiriko@0.80 vs jetcat@0.56 (margin 0.233 < 0.25)",
-     "t": 9108.0,
-     "slot": "b5"
+     "score": 0.622,
+     "margin": 0.139,
+     "reject": "ambiguous: kiriko@0.62 vs juno@0.48 (margin 0.139 < 0.25)",
+     "t": 6636.0,
+     "slot": "a5"
     },
     {
-     "file": "t0009156.0_b5.png",
+     "file": "t0006660.0_a5.png",
      "outcome": "unknown",
-     "score": 0.769,
-     "margin": 0.235,
-     "reject": "ambiguous: kiriko@0.77 vs jetcat@0.53 (margin 0.235 < 0.25)",
-     "t": 9156.0,
-     "slot": "b5"
-    },
-    {
-     "file": "t0009180.0_b5.png",
-     "outcome": "unknown",
-     "score": 0.783,
-     "margin": 0.243,
-     "reject": "ambiguous: kiriko@0.78 vs jetcat@0.54 (margin 0.243 < 0.25)",
-     "t": 9180.0,
-     "slot": "b5"
-    },
-    {
-     "file": "t0009276.0_b5.png",
-     "outcome": "unknown",
-     "score": 0.752,
-     "margin": 0.246,
-     "reject": "ambiguous: kiriko@0.75 vs jetcat@0.51 (margin 0.246 < 0.25)",
-     "t": 9276.0,
-     "slot": "b5"
-    },
-    {
-     "file": "t0012792.0_b5.png",
-     "outcome": "unknown",
-     "score": 0.786,
-     "margin": 0.232,
-     "reject": "ambiguous: kiriko@0.79 vs jetcat@0.55 (margin 0.232 < 0.25)",
-     "t": 12792.0,
-     "slot": "b5"
+     "score": 0.634,
+     "margin": 0.199,
+     "reject": "ambiguous: kiriko@0.63 vs juno@0.44 (margin 0.199 < 0.25)",
+     "t": 6660.0,
+     "slot": "a5"
     }
    ],
-   "accuracy": 0.6081,
-   "meanScore": 0.788,
-   "minScore": 0.574,
-   "minMargin": 0.096,
+   "accuracy": 0.3117,
+   "meanScore": 0.6291,
+   "minScore": 0.421,
+   "minMargin": 0.001,
    "verdict": "REVIEW",
-   "why": "90/148 correct (61%), 58 UNKNOWN, 0 wrong \u2014 at or below 90% or over 2% wrong: a person double-checks"
+   "why": "77/247 correct (31%), 170 UNKNOWN, 0 wrong \u2014 at or below 90% or over 2% wrong: a person double-checks"
   },
   "lucio": {
    "heroId": "lucio",
@@ -630,111 +972,138 @@
    ],
    "separationProvable": true,
    "separationNote": "",
-   "trials": 150,
-   "correct": 141,
-   "unknown": 9,
+   "trials": 173,
+   "correct": 5,
+   "unknown": 168,
    "wrong": 0,
-   "contaminated": 32,
+   "contaminated": 0,
    "confusedWith": {},
    "byState": {
     "gameplay": {
-     "trials": 150,
-     "correct": 141,
-     "accuracy": 0.94
+     "trials": 173,
+     "correct": 5,
+     "accuracy": 0.029
     }
    },
    "byLabelSource": {
-    "human-cluster": 150
+    "human-cluster": 173
    },
    "examples": [
     {
-     "file": "t0007416.0_b5.png",
+     "file": "t0002760.0_a4.png",
      "outcome": "unknown",
-     "score": 0.909,
-     "margin": 0.245,
-     "reject": "ambiguous: lucio@0.91 vs ana@0.66 (margin 0.245 < 0.25)",
-     "t": 7416.0,
-     "slot": "b5"
-    },
-    {
-     "file": "t0007524.0_b5.png",
-     "outcome": "unknown",
-     "score": 0.907,
-     "margin": 0.206,
-     "reject": "ambiguous: lucio@0.91 vs ana@0.70 (margin 0.206 < 0.25)",
-     "t": 7524.0,
-     "slot": "b5"
-    },
-    {
-     "file": "t0012528.0_a4.png",
-     "outcome": "unknown",
-     "score": 0.959,
-     "margin": 0.249,
-     "reject": "ambiguous: lucio@0.96 vs ana@0.71 (margin 0.249 < 0.25)",
-     "t": 12528.0,
+     "score": 0.524,
+     "margin": 0.455,
+     "reject": "no-match: best lucio@0.52 below floor 0.6",
+     "t": 2760.0,
      "slot": "a4"
     },
     {
-     "file": "t0012540.0_b4.png",
+     "file": "t0002772.0_a4.png",
      "outcome": "unknown",
-     "score": 0.895,
-     "margin": 0.183,
-     "reject": "ambiguous: lucio@0.90 vs ana@0.71 (margin 0.183 < 0.25)",
-     "t": 12540.0,
-     "slot": "b4"
-    },
-    {
-     "file": "t0012780.0_b4.png",
-     "outcome": "unknown",
-     "score": 0.896,
-     "margin": 0.164,
-     "reject": "ambiguous: lucio@0.90 vs ana@0.73 (margin 0.164 < 0.25)",
-     "t": 12780.0,
-     "slot": "b4"
-    },
-    {
-     "file": "t0012840.0_a4.png",
-     "outcome": "unknown",
-     "score": 0.964,
-     "margin": 0.228,
-     "reject": "ambiguous: lucio@0.96 vs ana@0.74 (margin 0.228 < 0.25)",
-     "t": 12840.0,
+     "score": 0.334,
+     "margin": 0.2,
+     "reject": "no-match: best lucio@0.33 below floor 0.6",
+     "t": 2772.0,
      "slot": "a4"
     },
     {
-     "file": "t0012732.0_a4.png",
+     "file": "t0002784.0_a4.png",
      "outcome": "unknown",
-     "score": 0.435,
-     "margin": 0.116,
-     "reject": "no-match: best lucio@0.43 below floor 0.6",
-     "t": 12732.0,
+     "score": 0.54,
+     "margin": 0.418,
+     "reject": "no-match: best lucio@0.54 below floor 0.6",
+     "t": 2784.0,
      "slot": "a4"
     },
     {
-     "file": "t0014004.0_b4.png",
+     "file": "t0002808.0_a4.png",
      "outcome": "unknown",
-     "score": 0.628,
-     "margin": 0.227,
-     "reject": "ambiguous: lucio@0.63 vs kiriko@0.40 (margin 0.227 < 0.25)",
-     "t": 14004.0,
-     "slot": "b4"
+     "score": 0.493,
+     "margin": 0.323,
+     "reject": "no-match: best lucio@0.49 below floor 0.6",
+     "t": 2808.0,
+     "slot": "a4"
     },
     {
-     "file": "t0009192.0_a5.png",
+     "file": "t0002820.0_a4.png",
      "outcome": "unknown",
-     "score": 0.587,
-     "margin": 0.489,
-     "reject": "no-match: best lucio@0.59 below floor 0.6",
-     "t": 9192.0,
-     "slot": "a5"
+     "score": 0.573,
+     "margin": 0.357,
+     "reject": "no-match: best lucio@0.57 below floor 0.6",
+     "t": 2820.0,
+     "slot": "a4"
+    },
+    {
+     "file": "t0002844.0_a4.png",
+     "outcome": "unknown",
+     "score": 0.581,
+     "margin": 0.19,
+     "reject": "no-match: best lucio@0.58 below floor 0.6",
+     "t": 2844.0,
+     "slot": "a4"
+    },
+    {
+     "file": "t0002856.0_a4.png",
+     "outcome": "unknown",
+     "score": 0.544,
+     "margin": 0.393,
+     "reject": "no-match: best lucio@0.54 below floor 0.6",
+     "t": 2856.0,
+     "slot": "a4"
+    },
+    {
+     "file": "t0002868.0_a4.png",
+     "outcome": "unknown",
+     "score": 0.568,
+     "margin": 0.428,
+     "reject": "no-match: best lucio@0.57 below floor 0.6",
+     "t": 2868.0,
+     "slot": "a4"
+    },
+    {
+     "file": "t0002880.0_a4.png",
+     "outcome": "unknown",
+     "score": 0.48,
+     "margin": 0.142,
+     "reject": "no-match: best lucio@0.48 below floor 0.6",
+     "t": 2880.0,
+     "slot": "a4"
+    },
+    {
+     "file": "t0002892.0_a4.png",
+     "outcome": "unknown",
+     "score": 0.626,
+     "margin": 0.136,
+     "reject": "ambiguous: lucio@0.63 vs ana@0.49 (margin 0.136 < 0.25)",
+     "t": 2892.0,
+     "slot": "a4"
+    },
+    {
+     "file": "t0002928.0_a4.png",
+     "outcome": "unknown",
+     "score": 0.454,
+     "margin": 0.274,
+     "reject": "no-match: best lucio@0.45 below floor 0.6",
+     "t": 2928.0,
+     "slot": "a4"
+    },
+    {
+     "file": "t0002940.0_a4.png",
+     "outcome": "unknown",
+     "score": 0.52,
+     "margin": 0.496,
+     "reject": "no-match: best lucio@0.52 below floor 0.6",
+     "t": 2940.0,
+     "slot": "a4"
     }
    ],
-   "accuracy": 0.94,
-   "meanScore": 0.8185,
-   "minScore": 0.435,
-   "minMargin": 0.116,
-   "verdict": "VALIDATED",
-   "why": "141/150 held-out frame(s) correct, 0 wrong, min margin 0.116"
+   "accuracy": 0.0289,
+   "meanScore": 0.5539,
+   "minScore": 0.31,
+   "minMargin": 0.008,
+   "verdict": "REVIEW",
+   "why": "5/173 correct (3%), 168 UNKNOWN, 0 wrong \u2014 at or below 90% or over 2% wrong: a person double-checks"
   },
   "mauga": {
    "heroId": "mauga",
@@ -746,48 +1115,21 @@
    ],
    "separationProvable": true,
    "separationNote": "",
-   "trials": 65,
-   "correct": 63,
-   "unknown": 2,
+   "trials": 0,
+   "correct": 0,
+   "unknown": 0,
    "wrong": 0,
-   "contaminated": 20,
+   "contaminated": 0,
    "confusedWith": {},
-   "byState": {
-    "gameplay": {
-     "trials": 65,
-     "correct": 63,
-     "accuracy": 0.969
-    }
-   },
-   "byLabelSource": {
-    "human-cluster": 65
-   },
-   "examples": [
-    {
-     "file": "t0014148.0_b3.png",
-     "outcome": "unknown",
-     "score": 0.628,
-     "margin": 0.245,
-     "reject": "ambiguous: mauga@0.63 vs dva@0.38 (margin 0.245 < 0.25)",
-     "t": 14148.0,
-     "slot": "b3"
-    },
-    {
-     "file": "t0014220.0_a3.png",
-     "outcome": "unknown",
-     "score": 0.699,
-     "margin": 0.234,
-     "reject": "ambiguous: mauga@0.70 vs ball@0.47 (margin 0.234 < 0.25)",
-     "t": 14220.0,
-     "slot": "a3"
-    }
-   ],
-   "accuracy": 0.9692,
-   "meanScore": 0.8046,
-   "minScore": 0.628,
-   "minMargin": 0.234,
-   "verdict": "VALIDATED",
-   "why": "63/65 held-out frame(s) correct, 0 wrong, min margin 0.234"
+   "byState": {},
+   "byLabelSource": {},
+   "examples": [],
+   "accuracy": 0.0,
+   "meanScore": null,
+   "minScore": null,
+   "minMargin": null,
+   "verdict": "UNVERIFIABLE",
+   "why": "no held-out evidence for this hero in this manifest"
   },
   "mei": {
    "heroId": "mei",
@@ -799,21 +1141,138 @@
    ],
    "separationProvable": true,
    "separationNote": "",
-   "trials": 0,
-   "correct": 0,
-   "unknown": 0,
+   "trials": 75,
+   "correct": 25,
+   "unknown": 50,
    "wrong": 0,
    "contaminated": 0,
    "confusedWith": {},
-   "byState": {},
-   "byLabelSource": {},
-   "examples": [],
-   "accuracy": 0.0,
-   "meanScore": null,
-   "minScore": null,
-   "minMargin": null,
-   "verdict": "UNVERIFIABLE",
-   "why": "no held-out evidence for this hero in this manifest"
+   "byState": {
+    "gameplay": {
+     "trials": 75,
+     "correct": 25,
+     "accuracy": 0.333
+    }
+   },
+   "byLabelSource": {
+    "human-cluster": 75
+   },
+   "examples": [
+    {
+     "file": "t0004980.0_b2.png",
+     "outcome": "unknown",
+     "score": 0.662,
+     "margin": 0.214,
+     "reject": "ambiguous: mei@0.66 vs reaper@0.45 (margin 0.214 < 0.25)",
+     "t": 4980.0,
+     "slot": "b2"
+    },
+    {
+     "file": "t0004992.0_b2.png",
+     "outcome": "unknown",
+     "score": 0.665,
+     "margin": 0.194,
+     "reject": "ambiguous: mei@0.66 vs reaper@0.47 (margin 0.194 < 0.25)",
+     "t": 4992.0,
+     "slot": "b2"
+    },
+    {
+     "file": "t0005004.0_b2.png",
+     "outcome": "unknown",
+     "score": 0.612,
+     "margin": 0.195,
+     "reject": "ambiguous: mei@0.61 vs reaper@0.42 (margin 0.195 < 0.25)",
+     "t": 5004.0,
+     "slot": "b2"
+    },
+    {
+     "file": "t0005016.0_b2.png",
+     "outcome": "unknown",
+     "score": 0.717,
+     "margin": 0.149,
+     "reject": "ambiguous: mei@0.72 vs reaper@0.57 (margin 0.149 < 0.25)",
+     "t": 5016.0,
+     "slot": "b2"
+    },
+    {
+     "file": "t0005028.0_b2.png",
+     "outcome": "unknown",
+     "score": 0.569,
+     "margin": 0.217,
+     "reject": "no-match: best mei@0.57 below floor 0.6",
+     "t": 5028.0,
+     "slot": "b2"
+    },
+    {
+     "file": "t0005064.0_b2.png",
+     "outcome": "unknown",
+     "score": 0.689,
+     "margin": 0.19,
+     "reject": "ambiguous: mei@0.69 vs reaper@0.50 (margin 0.190 < 0.25)",
+     "t": 5064.0,
+     "slot": "b2"
+    },
+    {
+     "file": "t0006612.0_b2.png",
+     "outcome": "unknown",
+     "score": 0.535,
+     "margin": 0.13,
+     "reject": "no-match: best mei@0.54 below floor 0.6",
+     "t": 6612.0,
+     "slot": "b2"
+    },
+    {
+     "file": "t0015036.0_b1.png",
+     "outcome": "unknown",
+     "score": 0.645,
+     "margin": 0.237,
+     "reject": "ambiguous: mei@0.64 vs tracer@0.41 (margin 0.237 < 0.25)",
+     "t": 15036.0,
+     "slot": "b1"
+    },
+    {
+     "file": "t0016260.0_b1.png",
+     "outcome": "unknown",
+     "score": 0.671,
+     "margin": 0.244,
+     "reject": "ambiguous: mei@0.67 vs reaper@0.43 (margin 0.244 < 0.25)",
+     "t": 16260.0,
+     "slot": "b1"
+    },
+    {
+     "file": "t0016548.0_b1.png",
+     "outcome": "unknown",
+     "score": 0.621,
+     "margin": 0.239,
+     "reject": "ambiguous: mei@0.62 vs tracer@0.38 (margin 0.239 < 0.25)",
+     "t": 16548.0,
+     "slot": "b1"
+    },
+    {
+     "file": "t0014772.0_a1.png",
+     "outcome": "unknown",
+     "score": 0.567,
+     "margin": 0.05,
+     "reject": "no-match: best mei@0.57 below floor 0.6",
+     "t": 14772.0,
+     "slot": "a1"
+    },
+    {
+     "file": "t0014784.0_a1.png",
+     "outcome": "unknown",
+     "score": 0.523,
+     "margin": 0.064,
+     "reject": "no-match: best mei@0.52 below floor 0.6",
+     "t": 14784.0,
+     "slot": "a1"
+    }
+   ],
+   "accuracy": 0.3333,
+   "meanScore": 0.635,
+   "minScore": 0.454,
+   "minMargin": 0.032,
+   "verdict": "REVIEW",
+   "why": "25/75 correct (33%), 50 UNKNOWN, 0 wrong \u2014 at or below 90% or over 2% wrong: a person double-checks"
   },
   "mizuki": {
    "heroId": "mizuki",
@@ -825,21 +1284,138 @@
    ],
    "separationProvable": true,
    "separationNote": "",
-   "trials": 0,
-   "correct": 0,
-   "unknown": 0,
+   "trials": 181,
+   "correct": 31,
+   "unknown": 150,
    "wrong": 0,
    "contaminated": 0,
    "confusedWith": {},
-   "byState": {},
-   "byLabelSource": {},
-   "examples": [],
-   "accuracy": 0.0,
-   "meanScore": null,
-   "minScore": null,
-   "minMargin": null,
-   "verdict": "UNVERIFIABLE",
-   "why": "no held-out evidence for this hero in this manifest"
+   "byState": {
+    "gameplay": {
+     "trials": 181,
+     "correct": 31,
+     "accuracy": 0.171
+    }
+   },
+   "byLabelSource": {
+    "human-cluster": 181
+   },
+   "examples": [
+    {
+     "file": "t0006828.0_a5.png",
+     "outcome": "unknown",
+     "score": 0.545,
+     "margin": 0.284,
+     "reject": "no-match: best mizuki@0.55 below floor 0.6",
+     "t": 6828.0,
+     "slot": "a5"
+    },
+    {
+     "file": "t0007428.0_a5.png",
+     "outcome": "unknown",
+     "score": 0.533,
+     "margin": 0.383,
+     "reject": "no-match: best mizuki@0.53 below floor 0.6",
+     "t": 7428.0,
+     "slot": "a5"
+    },
+    {
+     "file": "t0007440.0_a5.png",
+     "outcome": "unknown",
+     "score": 0.465,
+     "margin": 0.417,
+     "reject": "no-match: best mizuki@0.46 below floor 0.6",
+     "t": 7440.0,
+     "slot": "a5"
+    },
+    {
+     "file": "t0007464.0_a5.png",
+     "outcome": "unknown",
+     "score": 0.618,
+     "margin": 0.237,
+     "reject": "ambiguous: mizuki@0.62 vs lucio@0.38 (margin 0.237 < 0.25)",
+     "t": 7464.0,
+     "slot": "a5"
+    },
+    {
+     "file": "t0007524.0_a5.png",
+     "outcome": "unknown",
+     "score": 0.557,
+     "margin": 0.281,
+     "reject": "no-match: best mizuki@0.56 below floor 0.6",
+     "t": 7524.0,
+     "slot": "a5"
+    },
+    {
+     "file": "t0007548.0_a5.png",
+     "outcome": "unknown",
+     "score": 0.575,
+     "margin": 0.259,
+     "reject": "no-match: best mizuki@0.57 below floor 0.6",
+     "t": 7548.0,
+     "slot": "a5"
+    },
+    {
+     "file": "t0007608.0_a5.png",
+     "outcome": "unknown",
+     "score": 0.562,
+     "margin": 0.231,
+     "reject": "no-match: best mizuki@0.56 below floor 0.6",
+     "t": 7608.0,
+     "slot": "a5"
+    },
+    {
+     "file": "t0011760.0_a5.png",
+     "outcome": "unknown",
+     "score": 0.496,
+     "margin": 0.295,
+     "reject": "no-match: best mizuki@0.50 below floor 0.6",
+     "t": 11760.0,
+     "slot": "a5"
+    },
+    {
+     "file": "t0011772.0_a5.png",
+     "outcome": "unknown",
+     "score": 0.507,
+     "margin": 0.397,
+     "reject": "no-match: best mizuki@0.51 below floor 0.6",
+     "t": 11772.0,
+     "slot": "a5"
+    },
+    {
+     "file": "t0011832.0_a5.png",
+     "outcome": "unknown",
+     "score": 0.485,
+     "margin": 0.404,
+     "reject": "no-match: best mizuki@0.49 below floor 0.6",
+     "t": 11832.0,
+     "slot": "a5"
+    },
+    {
+     "file": "t0011904.0_a5.png",
+     "outcome": "unknown",
+     "score": 0.473,
+     "margin": 0.369,
+     "reject": "no-match: best mizuki@0.47 below floor 0.6",
+     "t": 11904.0,
+     "slot": "a5"
+    },
+    {
+     "file": "t0011928.0_a5.png",
+     "outcome": "unknown",
+     "score": 0.461,
+     "margin": 0.352,
+     "reject": "no-match: best mizuki@0.46 below floor 0.6",
+     "t": 11928.0,
+     "slot": "a5"
+    }
+   ],
+   "accuracy": 0.1713,
+   "meanScore": 0.5898,
+   "minScore": 0.358,
+   "minMargin": 0.001,
+   "verdict": "REVIEW",
+   "why": "31/181 correct (17%), 150 UNKNOWN, 0 wrong \u2014 at or below 90% or over 2% wrong: a person double-checks"
   },
   "ram": {
    "heroId": "ram",
@@ -851,29 +1427,21 @@
    ],
    "separationProvable": true,
    "separationNote": "",
-   "trials": 81,
-   "correct": 81,
+   "trials": 0,
+   "correct": 0,
    "unknown": 0,
    "wrong": 0,
-   "contaminated": 36,
+   "contaminated": 0,
    "confusedWith": {},
-   "byState": {
-    "gameplay": {
-     "trials": 81,
-     "correct": 81,
-     "accuracy": 1.0
-    }
-   },
-   "byLabelSource": {
-    "human-cluster": 81
-   },
+   "byState": {},
+   "byLabelSource": {},
    "examples": [],
-   "accuracy": 1.0,
-   "meanScore": 0.857,
-   "minScore": 0.732,
-   "minMargin": 0.361,
-   "verdict": "VALIDATED",
-   "why": "81/81 held-out frame(s) correct, 0 wrong, min margin 0.361"
+   "accuracy": 0.0,
+   "meanScore": null,
+   "minScore": null,
+   "minMargin": null,
+   "verdict": "UNVERIFIABLE",
+   "why": "no held-out evidence for this hero in this manifest"
   },
   "reaper": {
    "heroId": "reaper",
@@ -882,139 +1450,6 @@
     "reaper.v1.png",
     "reaper.v2.png",
     "reaper.v3.png"
-   ],
-   "separationProvable": true,
-   "separationNote": "",
-   "trials": 48,
-   "correct": 45,
-   "unknown": 3,
-   "wrong": 0,
-   "contaminated": 12,
-   "confusedWith": {},
-   "byState": {
-    "gameplay": {
-     "trials": 48,
-     "correct": 45,
-     "accuracy": 0.938
-    }
-   },
-   "byLabelSource": {
-    "human-cluster": 48
-   },
-   "examples": [
-    {
-     "file": "t0014052.0_b2.png",
-     "outcome": "unknown",
-     "score": 0.785,
-     "margin": 0.232,
-     "reject": "ambiguous: reaper@0.78 vs shion@0.55 (margin 0.232 < 0.25)",
-     "t": 14052.0,
-     "slot": "b2"
-    },
-    {
-     "file": "t0014136.0_b2.png",
-     "outcome": "unknown",
-     "score": 0.741,
-     "margin": 0.198,
-     "reject": "ambiguous: reaper@0.74 vs shion@0.54 (margin 0.198 < 0.25)",
-     "t": 14136.0,
-     "slot": "b2"
-    },
-    {
-     "file": "t0014220.0_a2.png",
-     "outcome": "unknown",
-     "score": 0.769,
-     "margin": 0.215,
-     "reject": "ambiguous: reaper@0.77 vs shion@0.55 (margin 0.215 < 0.25)",
-     "t": 14220.0,
-     "slot": "a2"
-    }
-   ],
-   "accuracy": 0.9375,
-   "meanScore": 0.8972,
-   "minScore": 0.741,
-   "minMargin": 0.198,
-   "verdict": "VALIDATED",
-   "why": "45/48 held-out frame(s) correct, 0 wrong, min margin 0.198"
-  },
-  "shion": {
-   "heroId": "shion",
-   "templates": [
-    "shion.png",
-    "shion.v1.png",
-    "shion.v2.png",
-    "shion.v3.png"
-   ],
-   "separationProvable": true,
-   "separationNote": "",
-   "trials": 33,
-   "correct": 29,
-   "unknown": 4,
-   "wrong": 0,
-   "contaminated": 23,
-   "confusedWith": {},
-   "byState": {
-    "gameplay": {
-     "trials": 33,
-     "correct": 29,
-     "accuracy": 0.879
-    }
-   },
-   "byLabelSource": {
-    "human-cluster": 33
-   },
-   "examples": [
-    {
-     "file": "t0012504.0_a1.png",
-     "outcome": "unknown",
-     "score": 0.857,
-     "margin": 0.242,
-     "reject": "ambiguous: shion@0.86 vs bastion@0.61 (margin 0.242 < 0.25)",
-     "t": 12504.0,
-     "slot": "a1"
-    },
-    {
-     "file": "t0012600.0_a1.png",
-     "outcome": "unknown",
-     "score": 0.947,
-     "margin": 0.249,
-     "reject": "ambiguous: shion@0.95 vs bastion@0.70 (margin 0.249 < 0.25)",
-     "t": 12600.0,
-     "slot": "a1"
-    },
-    {
-     "file": "t0014136.0_a1.png",
-     "outcome": "unknown",
-     "score": 0.932,
-     "margin": 0.23,
-     "reject": "ambiguous: shion@0.93 vs bastion@0.70 (margin 0.230 < 0.25)",
-     "t": 14136.0,
-     "slot": "a1"
-    },
-    {
-     "file": "t0014184.0_a1.png",
-     "outcome": "unknown",
-     "score": 0.913,
-     "margin": 0.194,
-     "reject": "ambiguous: shion@0.91 vs echo@0.72 (margin 0.194 < 0.25)",
-     "t": 14184.0,
-     "slot": "a1"
-    }
-   ],
-   "accuracy": 0.8788,
-   "meanScore": 0.9106,
-   "minScore": 0.652,
-   "minMargin": 0.194,
-   "verdict": "REVIEW",
-   "why": "29/33 correct (88%), 4 UNKNOWN, 0 wrong \u2014 at or below 90% or over 2% wrong: a person double-checks"
-  },
-  "sigma": {
-   "heroId": "sigma",
-   "templates": [
-    "sigma.png",
-    "sigma.v1.png",
-    "sigma.v2.png",
-    "sigma.v3.png"
    ],
    "separationProvable": true,
    "separationNote": "",
@@ -1034,6 +1469,299 @@
    "verdict": "UNVERIFIABLE",
    "why": "no held-out evidence for this hero in this manifest"
   },
+  "rein": {
+   "heroId": "rein",
+   "templates": [
+    "rein.png",
+    "rein.v1.png",
+    "rein.v2.png",
+    "rein.v3.png"
+   ],
+   "separationProvable": true,
+   "separationNote": "",
+   "trials": 42,
+   "correct": 42,
+   "unknown": 0,
+   "wrong": 0,
+   "contaminated": 21,
+   "confusedWith": {},
+   "byState": {
+    "gameplay": {
+     "trials": 42,
+     "correct": 42,
+     "accuracy": 1.0
+    }
+   },
+   "byLabelSource": {
+    "human-cluster": 42
+   },
+   "examples": [],
+   "accuracy": 1.0,
+   "meanScore": 0.9199,
+   "minScore": 0.842,
+   "minMargin": 0.282,
+   "verdict": "VALIDATED",
+   "why": "42/42 held-out frame(s) correct, 0 wrong, min margin 0.282"
+  },
+  "shion": {
+   "heroId": "shion",
+   "templates": [
+    "shion.png",
+    "shion.v1.png",
+    "shion.v2.png",
+    "shion.v3.png"
+   ],
+   "separationProvable": true,
+   "separationNote": "",
+   "trials": 9,
+   "correct": 0,
+   "unknown": 9,
+   "wrong": 0,
+   "contaminated": 0,
+   "confusedWith": {},
+   "byState": {
+    "gameplay": {
+     "trials": 9,
+     "correct": 0,
+     "accuracy": 0.0
+    }
+   },
+   "byLabelSource": {
+    "human-cluster": 9
+   },
+   "examples": [
+    {
+     "file": "t0015060.0_a2.png",
+     "outcome": "unknown",
+     "score": 0.639,
+     "margin": 0.002,
+     "reject": "ambiguous: bastion@0.64 vs shion@0.64 (margin 0.002 < 0.25)",
+     "t": 15060.0,
+     "slot": "a2"
+    },
+    {
+     "file": "t0022260.0_a2.png",
+     "outcome": "unknown",
+     "score": 0.581,
+     "margin": 0.018,
+     "reject": "no-match: best shion@0.58 below floor 0.6",
+     "t": 22260.0,
+     "slot": "a2"
+    },
+    {
+     "file": "t0022272.0_a2.png",
+     "outcome": "unknown",
+     "score": 0.473,
+     "margin": 0.028,
+     "reject": "no-match: best shion@0.47 below floor 0.6",
+     "t": 22272.0,
+     "slot": "a2"
+    },
+    {
+     "file": "t0022284.0_a2.png",
+     "outcome": "unknown",
+     "score": 0.582,
+     "margin": 0.009,
+     "reject": "no-match: best shion@0.58 below floor 0.6",
+     "t": 22284.0,
+     "slot": "a2"
+    },
+    {
+     "file": "t0022296.0_a2.png",
+     "outcome": "unknown",
+     "score": 0.574,
+     "margin": 0.001,
+     "reject": "no-match: best bastion@0.57 below floor 0.6",
+     "t": 22296.0,
+     "slot": "a2"
+    },
+    {
+     "file": "t0022320.0_a2.png",
+     "outcome": "unknown",
+     "score": 0.517,
+     "margin": 0.018,
+     "reject": "no-match: best shion@0.52 below floor 0.6",
+     "t": 22320.0,
+     "slot": "a2"
+    },
+    {
+     "file": "t0022344.0_a2.png",
+     "outcome": "unknown",
+     "score": 0.697,
+     "margin": 0.001,
+     "reject": "ambiguous: bastion@0.70 vs shion@0.70 (margin 0.001 < 0.25)",
+     "t": 22344.0,
+     "slot": "a2"
+    },
+    {
+     "file": "t0022404.0_a2.png",
+     "outcome": "unknown",
+     "score": 0.681,
+     "margin": 0.009,
+     "reject": "ambiguous: bastion@0.68 vs shion@0.67 (margin 0.009 < 0.25)",
+     "t": 22404.0,
+     "slot": "a2"
+    },
+    {
+     "file": "t0022476.0_a2.png",
+     "outcome": "unknown",
+     "score": 0.624,
+     "margin": 0.002,
+     "reject": "ambiguous: shion@0.62 vs bastion@0.62 (margin 0.002 < 0.25)",
+     "t": 22476.0,
+     "slot": "a2"
+    }
+   ],
+   "accuracy": 0.0,
+   "meanScore": 0.5964,
+   "minScore": 0.473,
+   "minMargin": 0.001,
+   "verdict": "WEAK",
+   "why": "only 9 held-out trial(s); 12 are needed before 'it works' means anything"
+  },
+  "sigma": {
+   "heroId": "sigma",
+   "templates": [
+    "sigma.png",
+    "sigma.v1.png",
+    "sigma.v2.png",
+    "sigma.v3.png"
+   ],
+   "separationProvable": true,
+   "separationNote": "",
+   "trials": 263,
+   "correct": 16,
+   "unknown": 247,
+   "wrong": 0,
+   "contaminated": 0,
+   "confusedWith": {},
+   "byState": {
+    "gameplay": {
+     "trials": 263,
+     "correct": 16,
+     "accuracy": 0.061
+    }
+   },
+   "byLabelSource": {
+    "human-cluster": 263
+   },
+   "examples": [
+    {
+     "file": "t0004464.0_a3.png",
+     "outcome": "unknown",
+     "score": 0.604,
+     "margin": 0.057,
+     "reject": "ambiguous: sigma@0.60 vs mauga@0.55 (margin 0.057 < 0.25)",
+     "t": 4464.0,
+     "slot": "a3"
+    },
+    {
+     "file": "t0004488.0_a3.png",
+     "outcome": "unknown",
+     "score": 0.659,
+     "margin": 0.045,
+     "reject": "ambiguous: sigma@0.66 vs rein@0.61 (margin 0.045 < 0.25)",
+     "t": 4488.0,
+     "slot": "a3"
+    },
+    {
+     "file": "t0004500.0_a3.png",
+     "outcome": "unknown",
+     "score": 0.68,
+     "margin": 0.053,
+     "reject": "ambiguous: sigma@0.68 vs mauga@0.63 (margin 0.053 < 0.25)",
+     "t": 4500.0,
+     "slot": "a3"
+    },
+    {
+     "file": "t0004524.0_a3.png",
+     "outcome": "unknown",
+     "score": 0.543,
+     "margin": 0.201,
+     "reject": "no-match: best sigma@0.54 below floor 0.6",
+     "t": 4524.0,
+     "slot": "a3"
+    },
+    {
+     "file": "t0004536.0_a3.png",
+     "outcome": "unknown",
+     "score": 0.555,
+     "margin": 0.155,
+     "reject": "no-match: best sigma@0.56 below floor 0.6",
+     "t": 4536.0,
+     "slot": "a3"
+    },
+    {
+     "file": "t0006480.0_a3.png",
+     "outcome": "unknown",
+     "score": 0.583,
+     "margin": 0.092,
+     "reject": "no-match: best sigma@0.58 below floor 0.6",
+     "t": 6480.0,
+     "slot": "a3"
+    },
+    {
+     "file": "t0006504.0_a3.png",
+     "outcome": "unknown",
+     "score": 0.631,
+     "margin": 0.051,
+     "reject": "ambiguous: sigma@0.63 vs mauga@0.58 (margin 0.051 < 0.25)",
+     "t": 6504.0,
+     "slot": "a3"
+    },
+    {
+     "file": "t0006516.0_a3.png",
+     "outcome": "unknown",
+     "score": 0.502,
+     "margin": 0.122,
+     "reject": "no-match: best sigma@0.50 below floor 0.6",
+     "t": 6516.0,
+     "slot": "a3"
+    },
+    {
+     "file": "t0006648.0_a3.png",
+     "outcome": "unknown",
+     "score": 0.627,
+     "margin": 0.023,
+     "reject": "ambiguous: sigma@0.63 vs mauga@0.60 (margin 0.023 < 0.25)",
+     "t": 6648.0,
+     "slot": "a3"
+    },
+    {
+     "file": "t0006828.0_a3.png",
+     "outcome": "unknown",
+     "score": 0.67,
+     "margin": 0.044,
+     "reject": "ambiguous: sigma@0.67 vs mauga@0.63 (margin 0.044 < 0.25)",
+     "t": 6828.0,
+     "slot": "a3"
+    },
+    {
+     "file": "t0006840.0_a3.png",
+     "outcome": "unknown",
+     "score": 0.589,
+     "margin": 0.068,
+     "reject": "no-match: best sigma@0.59 below floor 0.6",
+     "t": 6840.0,
+     "slot": "a3"
+    },
+    {
+     "file": "t0007272.0_a3.png",
+     "outcome": "unknown",
+     "score": 0.59,
+     "margin": 0.07,
+     "reject": "no-match: best sigma@0.59 below floor 0.6",
+     "t": 7272.0,
+     "slot": "a3"
+    }
+   ],
+   "accuracy": 0.0608,
+   "meanScore": 0.6342,
+   "minScore": 0.397,
+   "minMargin": 0.005,
+   "verdict": "REVIEW",
+   "why": "16/263 correct (6%), 247 UNKNOWN, 0 wrong \u2014 at or below 90% or over 2% wrong: a person double-checks"
+  },
   "sym": {
    "heroId": "sym",
    "templates": [
@@ -1044,173 +1772,190 @@
    ],
    "separationProvable": true,
    "separationNote": "",
-   "trials": 91,
-   "correct": 80,
-   "unknown": 11,
+   "trials": 253,
+   "correct": 73,
+   "unknown": 180,
    "wrong": 0,
    "contaminated": 0,
    "confusedWith": {},
    "byState": {
     "gameplay": {
-     "trials": 91,
-     "correct": 80,
-     "accuracy": 0.879
+     "trials": 253,
+     "correct": 73,
+     "accuracy": 0.289
     }
    },
    "byLabelSource": {
-    "human-cluster": 91
+    "human-cluster": 253
    },
    "examples": [
     {
-     "file": "t0008976.0_b2.png",
+     "file": "t0002760.0_a2.png",
      "outcome": "unknown",
-     "score": 0.731,
-     "margin": 0.215,
-     "reject": "ambiguous: sym@0.73 vs reaper@0.52 (margin 0.215 < 0.25)",
-     "t": 8976.0,
-     "slot": "b2"
-    },
-    {
-     "file": "t0009228.0_b2.png",
-     "outcome": "unknown",
-     "score": 0.811,
-     "margin": 0.223,
-     "reject": "ambiguous: sym@0.81 vs echo@0.59 (margin 0.223 < 0.25)",
-     "t": 9228.0,
-     "slot": "b2"
-    },
-    {
-     "file": "t0012552.0_b2.png",
-     "outcome": "unknown",
-     "score": 0.69,
-     "margin": 0.126,
-     "reject": "ambiguous: sym@0.69 vs reaper@0.56 (margin 0.126 < 0.25)",
-     "t": 12552.0,
-     "slot": "b2"
-    },
-    {
-     "file": "t0004032.0_a1.png",
-     "outcome": "unknown",
-     "score": 0.731,
-     "margin": 0.002,
-     "reject": "ambiguous: sym@0.73 vs tracer@0.73 (margin 0.002 < 0.25)",
-     "t": 4032.0,
-     "slot": "a1"
-    },
-    {
-     "file": "t0007308.0_b2.png",
-     "outcome": "unknown",
-     "score": 0.648,
-     "margin": 0.068,
-     "reject": "ambiguous: cass@0.65 vs sym@0.58 (margin 0.068 < 0.25)",
-     "t": 7308.0,
-     "slot": "b2"
-    },
-    {
-     "file": "t0007404.0_b2.png",
-     "outcome": "unknown",
-     "score": 0.818,
-     "margin": 0.102,
-     "reject": "ambiguous: cass@0.82 vs sym@0.72 (margin 0.102 < 0.25)",
-     "t": 7404.0,
-     "slot": "b2"
-    },
-    {
-     "file": "t0007524.0_b2.png",
-     "outcome": "unknown",
-     "score": 0.878,
-     "margin": 0.146,
-     "reject": "ambiguous: cass@0.88 vs sym@0.73 (margin 0.146 < 0.25)",
-     "t": 7524.0,
-     "slot": "b2"
-    },
-    {
-     "file": "t0008508.0_a1.png",
-     "outcome": "unknown",
-     "score": 0.621,
-     "margin": 0.021,
-     "reject": "ambiguous: cass@0.62 vs sym@0.60 (margin 0.021 < 0.25)",
-     "t": 8508.0,
-     "slot": "a1"
-    },
-    {
-     "file": "t0008856.0_a2.png",
-     "outcome": "unknown",
-     "score": 0.694,
-     "margin": 0.085,
-     "reject": "ambiguous: cass@0.69 vs tracer@0.61 (margin 0.085 < 0.25)",
-     "t": 8856.0,
+     "score": 0.459,
+     "margin": 0.202,
+     "reject": "no-match: best sym@0.46 below floor 0.6",
+     "t": 2760.0,
      "slot": "a2"
     },
     {
-     "file": "t0008856.0_b2.png",
+     "file": "t0002784.0_a2.png",
      "outcome": "unknown",
-     "score": 0.617,
-     "margin": 0.215,
-     "reject": "ambiguous: sym@0.62 vs cass@0.40 (margin 0.215 < 0.25)",
-     "t": 8856.0,
-     "slot": "b2"
+     "score": 0.498,
+     "margin": 0.185,
+     "reject": "no-match: best sym@0.50 below floor 0.6",
+     "t": 2784.0,
+     "slot": "a2"
     },
     {
-     "file": "t0012780.0_b2.png",
+     "file": "t0002796.0_a2.png",
      "outcome": "unknown",
-     "score": 0.856,
-     "margin": 0.105,
-     "reject": "ambiguous: reaper@0.86 vs sym@0.75 (margin 0.105 < 0.25)",
-     "t": 12780.0,
-     "slot": "b2"
+     "score": 0.736,
+     "margin": 0.193,
+     "reject": "ambiguous: sym@0.74 vs cass@0.54 (margin 0.193 < 0.25)",
+     "t": 2796.0,
+     "slot": "a2"
+    },
+    {
+     "file": "t0002820.0_a2.png",
+     "outcome": "unknown",
+     "score": 0.588,
+     "margin": 0.18,
+     "reject": "no-match: best sym@0.59 below floor 0.6",
+     "t": 2820.0,
+     "slot": "a2"
+    },
+    {
+     "file": "t0002844.0_a2.png",
+     "outcome": "unknown",
+     "score": 0.623,
+     "margin": 0.205,
+     "reject": "ambiguous: sym@0.62 vs cass@0.42 (margin 0.205 < 0.25)",
+     "t": 2844.0,
+     "slot": "a2"
+    },
+    {
+     "file": "t0002856.0_a2.png",
+     "outcome": "unknown",
+     "score": 0.466,
+     "margin": 0.23,
+     "reject": "no-match: best sym@0.47 below floor 0.6",
+     "t": 2856.0,
+     "slot": "a2"
+    },
+    {
+     "file": "t0002880.0_a2.png",
+     "outcome": "unknown",
+     "score": 0.504,
+     "margin": 0.113,
+     "reject": "no-match: best sym@0.50 below floor 0.6",
+     "t": 2880.0,
+     "slot": "a2"
+    },
+    {
+     "file": "t0002892.0_a2.png",
+     "outcome": "unknown",
+     "score": 0.719,
+     "margin": 0.196,
+     "reject": "ambiguous: sym@0.72 vs reaper@0.52 (margin 0.196 < 0.25)",
+     "t": 2892.0,
+     "slot": "a2"
+    },
+    {
+     "file": "t0002952.0_a2.png",
+     "outcome": "unknown",
+     "score": 0.731,
+     "margin": 0.175,
+     "reject": "ambiguous: sym@0.73 vs cass@0.56 (margin 0.175 < 0.25)",
+     "t": 2952.0,
+     "slot": "a2"
+    },
+    {
+     "file": "t0003504.0_a2.png",
+     "outcome": "unknown",
+     "score": 0.513,
+     "margin": 0.191,
+     "reject": "no-match: best sym@0.51 below floor 0.6",
+     "t": 3504.0,
+     "slot": "a2"
+    },
+    {
+     "file": "t0003516.0_a2.png",
+     "outcome": "unknown",
+     "score": 0.584,
+     "margin": 0.184,
+     "reject": "no-match: best sym@0.58 below floor 0.6",
+     "t": 3516.0,
+     "slot": "a2"
+    },
+    {
+     "file": "t0003576.0_a2.png",
+     "outcome": "unknown",
+     "score": 0.513,
+     "margin": 0.103,
+     "reject": "no-match: best sym@0.51 below floor 0.6",
+     "t": 3576.0,
+     "slot": "a2"
     }
    ],
-   "accuracy": 0.8791,
-   "meanScore": 0.9024,
-   "minScore": 0.617,
-   "minMargin": 0.002,
+   "accuracy": 0.2885,
+   "meanScore": 0.592,
+   "minScore": 0.364,
+   "minMargin": 0.001,
    "verdict": "REVIEW",
-   "why": "80/91 correct (88%), 11 UNKNOWN, 0 wrong \u2014 at or below 90% or over 2% wrong: a person double-checks"
+   "why": "73/253 correct (29%), 180 UNKNOWN, 0 wrong \u2014 at or below 90% or over 2% wrong: a person double-checks"
   },
   "tracer": {
    "heroId": "tracer",
    "templates": [
     "tracer.png",
     "tracer.v1.png",
-    "tracer.v2.png",
-    "tracer.v3.png"
+    "tracer.v2.png"
    ],
    "separationProvable": true,
    "separationNote": "",
-   "trials": 103,
-   "correct": 102,
-   "unknown": 1,
+   "trials": 21,
+   "correct": 19,
+   "unknown": 2,
    "wrong": 0,
-   "contaminated": 21,
+   "contaminated": 3,
    "confusedWith": {},
    "byState": {
     "gameplay": {
-     "trials": 103,
-     "correct": 102,
-     "accuracy": 0.99
+     "trials": 21,
+     "correct": 19,
+     "accuracy": 0.905
     }
    },
    "byLabelSource": {
-    "human-cluster": 103
+    "human-cluster": 21
    },
    "examples": [
     {
-     "file": "t0007416.0_b1.png",
+     "file": "t0021048.0_b2.png",
      "outcome": "unknown",
-     "score": 0.705,
-     "margin": 0.109,
-     "reject": "ambiguous: tracer@0.70 vs shion@0.60 (margin 0.109 < 0.25)",
-     "t": 7416.0,
-     "slot": "b1"
+     "score": 0.857,
+     "margin": 0.249,
+     "reject": "ambiguous: tracer@0.86 vs mei@0.61 (margin 0.249 < 0.25)",
+     "t": 21048.0,
+     "slot": "b2"
+    },
+    {
+     "file": "t0021108.0_b2.png",
+     "outcome": "unknown",
+     "score": 0.726,
+     "margin": 0.249,
+     "reject": "ambiguous: tracer@0.73 vs mei@0.48 (margin 0.249 < 0.25)",
+     "t": 21108.0,
+     "slot": "b2"
     }
    ],
-   "accuracy": 0.9903,
-   "meanScore": 0.8777,
-   "minScore": 0.631,
-   "minMargin": 0.109,
+   "accuracy": 0.9048,
+   "meanScore": 0.8774,
+   "minScore": 0.726,
+   "minMargin": 0.249,
    "verdict": "VALIDATED",
-   "why": "102/103 held-out frame(s) correct, 0 wrong, min margin 0.109"
+   "why": "19/21 held-out frame(s) correct, 0 wrong, min margin 0.249"
   },
   "winston": {
    "heroId": "winston",
@@ -1240,203 +1985,213 @@
   }
  },
  "counts": {
-  "VALIDATED": 8,
-  "REVIEW": 5,
-  "WEAK": 0,
+  "VALIDATED": 3,
+  "REVIEW": 10,
+  "WEAK": 2,
   "FAILED": 0,
   "UNVERIFIABLE": 6
  },
  "falseMatch": {
-  "trials": 307,
-  "unknown": 307,
-  "matched": 0,
-  "matchedAs": {},
-  "byHero": {
-   "sojourn": 148,
-   "vendetta": 84,
-   "emre": 42,
-   "freja": 18,
-   "orisa": 9,
-   "hazard": 6
+  "trials": 280,
+  "unknown": 279,
+  "matched": 1,
+  "matchedAs": {
+   "jetcat": 1
   },
-  "examples": [],
-  "rate": 0.0,
+  "byHero": {
+   "sojourn": 160,
+   "bap": 54,
+   "pharah": 36,
+   "wuyang": 30
+  },
+  "examples": [
+   {
+    "file": "t0021024.0_b4.png",
+    "trueHero": "wuyang",
+    "readAs": "jetcat",
+    "score": 0.61,
+    "margin": 0.294,
+    "t": 21024.0,
+    "slot": "b4"
+   }
+  ],
+  "rate": 0.0036,
   "passed": true,
-  "note": "307 crop(s) of heroes this set has NO template for. Every one should read UNKNOWN; 0 did not (0.0%, ceiling 2.0%)."
+  "note": "280 crop(s) of heroes this set has NO template for. Every one should read UNKNOWN; 1 did not (0.4%, ceiling 2.0%)."
  },
  "missingCrops": 0,
  "passed": false,
  "leaveOneOut": {
-  "confusablePairs": [
-   {
-    "hero": "kiriko",
-    "readAs": "jetcat",
-    "count": 1,
-    "trials": 120,
-    "share": 0.008,
-    "note": "with no kiriko template in the set, 1 of 120 real kiriko portraits (1%) were confidently read as jetcat instead of UNKNOWN"
-   }
-  ],
-  "generatedAt": "2026-10-30T17:54:11+00:00",
-  "templatesDir": "/home/runner/work/OWCSComp.Tracker/OWCSComp.Tracker/work/label-forge/_2831815423-owcs_8c105lnzlam/final",
+  "confusablePairs": [],
+  "generatedAt": "2026-10-30T19:42:31+00:00",
+  "templatesDir": "/home/runner/work/OWCSComp.Tracker/OWCSComp.Tracker/work/label-forge/_2812835664-owcs_8c105lnzlam/final",
   "heroes": {
-   "ana": {
-    "trials": 71,
-    "unknown": 71,
-    "matched": 0,
-    "rate": 0.0,
-    "matchedAs": {},
-    "examples": [],
-    "passed": true,
-    "note": "with ana removed, 0/71 of its own crops were still confidently named (n/a)"
-   },
    "ball": {
-    "trials": 12,
-    "unknown": 12,
+    "trials": 19,
+    "unknown": 19,
     "matched": 0,
     "rate": 0.0,
     "matchedAs": {},
     "examples": [],
     "passed": true,
-    "note": "with ball removed, 0/12 of its own crops were still confidently named (n/a)"
+    "note": "with ball removed, 0/19 of its own crops were still confidently named (n/a)"
    },
    "bastion": {
-    "trials": 39,
-    "unknown": 39,
+    "trials": 120,
+    "unknown": 120,
     "matched": 0,
     "rate": 0.0,
     "matchedAs": {},
     "examples": [],
     "passed": true,
-    "note": "with bastion removed, 0/39 of its own crops were still confidently named (n/a)"
+    "note": "with bastion removed, 0/120 of its own crops were still confidently named (n/a)"
    },
    "cass": {
-    "trials": 20,
-    "unknown": 20,
+    "trials": 120,
+    "unknown": 120,
     "matched": 0,
     "rate": 0.0,
     "matchedAs": {},
     "examples": [],
     "passed": true,
-    "note": "with cass removed, 0/20 of its own crops were still confidently named (n/a)"
+    "note": "with cass removed, 0/120 of its own crops were still confidently named (n/a)"
    },
    "dva": {
-    "trials": 44,
-    "unknown": 44,
+    "trials": 19,
+    "unknown": 19,
     "matched": 0,
     "rate": 0.0,
     "matchedAs": {},
     "examples": [],
     "passed": true,
-    "note": "with dva removed, 0/44 of its own crops were still confidently named (n/a)"
+    "note": "with dva removed, 0/19 of its own crops were still confidently named (n/a)"
+   },
+   "echo": {
+    "trials": 5,
+    "unknown": 5,
+    "matched": 0,
+    "rate": 0.0,
+    "matchedAs": {},
+    "examples": [],
+    "passed": true,
+    "note": "with echo removed, 0/5 of its own crops were still confidently named (n/a)"
    },
    "jetcat": {
-    "trials": 65,
-    "unknown": 65,
+    "trials": 23,
+    "unknown": 23,
     "matched": 0,
     "rate": 0.0,
     "matchedAs": {},
     "examples": [],
     "passed": true,
-    "note": "with jetcat removed, 0/65 of its own crops were still confidently named (n/a)"
+    "note": "with jetcat removed, 0/23 of its own crops were still confidently named (n/a)"
+   },
+   "juno": {
+    "trials": 13,
+    "unknown": 13,
+    "matched": 0,
+    "rate": 0.0,
+    "matchedAs": {},
+    "examples": [],
+    "passed": true,
+    "note": "with juno removed, 0/13 of its own crops were still confidently named (n/a)"
    },
    "kiriko": {
     "trials": 120,
-    "unknown": 119,
-    "matched": 1,
-    "rate": 0.0083,
-    "matchedAs": {
-     "jetcat": 1
-    },
-    "examples": [
-     {
-      "file": "t0007260.0_a5.png",
-      "readAs": "jetcat",
-      "score": 0.603,
-      "margin": 0.31,
-      "t": 7260.0,
-      "slot": "a5"
-     }
-    ],
+    "unknown": 120,
+    "matched": 0,
+    "rate": 0.0,
+    "matchedAs": {},
+    "examples": [],
     "passed": true,
-    "note": "with kiriko removed, 1/120 of its own crops were still confidently named (jetcat)"
+    "note": "with kiriko removed, 0/120 of its own crops were still confidently named (n/a)"
    },
    "lucio": {
-    "trials": 99,
-    "unknown": 99,
+    "trials": 120,
+    "unknown": 120,
     "matched": 0,
     "rate": 0.0,
     "matchedAs": {},
     "examples": [],
     "passed": true,
-    "note": "with lucio removed, 0/99 of its own crops were still confidently named (n/a)"
+    "note": "with lucio removed, 0/120 of its own crops were still confidently named (n/a)"
    },
-   "mauga": {
-    "trials": 65,
-    "unknown": 65,
+   "mei": {
+    "trials": 75,
+    "unknown": 75,
     "matched": 0,
     "rate": 0.0,
     "matchedAs": {},
     "examples": [],
     "passed": true,
-    "note": "with mauga removed, 0/65 of its own crops were still confidently named (n/a)"
+    "note": "with mei removed, 0/75 of its own crops were still confidently named (n/a)"
    },
-   "ram": {
-    "trials": 81,
-    "unknown": 81,
+   "mizuki": {
+    "trials": 120,
+    "unknown": 120,
     "matched": 0,
     "rate": 0.0,
     "matchedAs": {},
     "examples": [],
     "passed": true,
-    "note": "with ram removed, 0/81 of its own crops were still confidently named (n/a)"
+    "note": "with mizuki removed, 0/120 of its own crops were still confidently named (n/a)"
    },
-   "reaper": {
-    "trials": 48,
-    "unknown": 48,
+   "rein": {
+    "trials": 42,
+    "unknown": 42,
     "matched": 0,
     "rate": 0.0,
     "matchedAs": {},
     "examples": [],
     "passed": true,
-    "note": "with reaper removed, 0/48 of its own crops were still confidently named (n/a)"
+    "note": "with rein removed, 0/42 of its own crops were still confidently named (n/a)"
    },
    "shion": {
-    "trials": 33,
-    "unknown": 33,
+    "trials": 9,
+    "unknown": 9,
     "matched": 0,
     "rate": 0.0,
     "matchedAs": {},
     "examples": [],
     "passed": true,
-    "note": "with shion removed, 0/33 of its own crops were still confidently named (n/a)"
+    "note": "with shion removed, 0/9 of its own crops were still confidently named (n/a)"
+   },
+   "sigma": {
+    "trials": 120,
+    "unknown": 120,
+    "matched": 0,
+    "rate": 0.0,
+    "matchedAs": {},
+    "examples": [],
+    "passed": true,
+    "note": "with sigma removed, 0/120 of its own crops were still confidently named (n/a)"
    },
    "sym": {
-    "trials": 91,
-    "unknown": 91,
+    "trials": 120,
+    "unknown": 120,
     "matched": 0,
     "rate": 0.0,
     "matchedAs": {},
     "examples": [],
     "passed": true,
-    "note": "with sym removed, 0/91 of its own crops were still confidently named (n/a)"
+    "note": "with sym removed, 0/120 of its own crops were still confidently named (n/a)"
    },
    "tracer": {
-    "trials": 99,
-    "unknown": 99,
+    "trials": 21,
+    "unknown": 21,
     "matched": 0,
     "rate": 0.0,
     "matchedAs": {},
     "examples": [],
     "passed": true,
-    "note": "with tracer removed, 0/99 of its own crops were still confidently named (n/a)"
+    "note": "with tracer removed, 0/21 of its own crops were still confidently named (n/a)"
    }
   },
-  "trials": 887,
-  "matched": 1,
-  "rate": 0.0011,
+  "trials": 1066,
+  "matched": 0,
+  "rate": 0.0,
   "ceiling": 0.02,
   "passed": true,
-  "note": "Leave-one-out false-match test over 887 real crops: 1 (0.11%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%."
+  "note": "Leave-one-out false-match test over 1066 real crops: 0 (0.00%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%."
  }
 }

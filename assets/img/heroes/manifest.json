@@ -9,9 +9,9 @@
    "size": 23
   },
   "ball": {
-   "file": "templates/owcs_8c105lnzlam/ball.v1.png",
+   "file": "templates/owcs_8c105lnzlam/ball.v2.png",
    "source": "owcs_8c105lnzlam",
-   "score": 6.6062,
+   "score": 6.6793,
    "size": 23
   },
   "bastion": {
@@ -92,6 +92,12 @@
    "score": 6.1993,
    "size": 23
   },
+  "rein": {
+   "file": "templates/owcs_8c105lnzlam/rein.v3.png",
+   "source": "owcs_8c105lnzlam",
+   "score": 6.6997,
+   "size": 23
+  },
   "shion": {
    "file": "templates/owcs_8c105lnzlam/shion.png",
    "source": "owcs_8c105lnzlam",
@@ -117,9 +123,9 @@
    "size": 23
   },
   "tracer": {
-   "file": "templates/owcs_8c105lnzlam/tracer.v3.png",
+   "file": "templates/owcs_8c105lnzlam/tracer.v1.png",
    "source": "owcs_8c105lnzlam",
-   "score": 7.0004,
+   "score": 6.8516,
    "size": 23
   },
   "winston": {

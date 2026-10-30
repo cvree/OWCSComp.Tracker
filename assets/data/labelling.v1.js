@@ -3281,15 +3281,306 @@ window.OWCS_LABELLING = {
      ]
     }
    ],
-   "labelled": 0,
-   "heroes": [],
-   "state": "needs-labels",
-   "promoted": [],
-   "refused": [],
-   "labels": {},
-   "labelledBy": null,
-   "verdicts": {},
-   "review": {},
+   "labelled": 57,
+   "heroes": [
+    "ball",
+    "bap",
+    "bastion",
+    "cass",
+    "dva",
+    "echo",
+    "jetcat",
+    "juno",
+    "kiriko",
+    "lucio",
+    "mei",
+    "mizuki",
+    "pharah",
+    "rein",
+    "shion",
+    "sigma",
+    "sojourn",
+    "sym",
+    "tracer",
+    "wuyang"
+   ],
+   "state": "forged",
+   "promoted": [
+    "ball",
+    "juno",
+    "rein",
+    "tracer"
+   ],
+   "refused": [
+    "bap",
+    "bastion",
+    "cass",
+    "dva",
+    "jetcat",
+    "kiriko",
+    "lucio",
+    "mei",
+    "mizuki",
+    "pharah",
+    "shion",
+    "sigma",
+    "sojourn",
+    "sym",
+    "wuyang"
+   ],
+   "labels": {
+    "c00": "kiriko",
+    "c01": "sym",
+    "c02": "sigma",
+    "c03": "kiriko",
+    "c04": "sigma",
+    "c05": "sym",
+    "c06": "sigma",
+    "c07": "lucio",
+    "c08": "cass",
+    "c09": "kiriko",
+    "c10": "sojourn",
+    "c11": "bastion",
+    "c12": "rein",
+    "c13": "sym",
+    "c14": "bastion",
+    "c15": "sym",
+    "c16": "mizuki",
+    "c17": "sojourn",
+    "c18": "mizuki",
+    "c19": "lucio",
+    "c20": "lucio",
+    "c21": "mizuki",
+    "c22": "sojourn",
+    "c23": "cass",
+    "c24": "cass",
+    "c25": "mei",
+    "c26": "bap",
+    "c27": "ball",
+    "c28": "bap",
+    "c29": "pharah",
+    "c30": "bastion",
+    "c31": "mizuki",
+    "c32": "skip",
+    "c33": "sigma",
+    "c34": "mei",
+    "c35": "jetcat",
+    "c36": "wuyang",
+    "c37": "juno",
+    "c38": "sojourn",
+    "c39": "tracer",
+    "c40": "mizuki",
+    "c41": "dva",
+    "c42": "tracer",
+    "c43": "cass",
+    "c44": "mei",
+    "c45": "bastion",
+    "c46": "mizuki",
+    "c47": "lucio",
+    "c48": "skip",
+    "c49": "pharah",
+    "c50": "mei",
+    "c51": "wuyang",
+    "c52": "shion",
+    "c53": "lucio",
+    "c54": "dva",
+    "c55": "kiriko",
+    "c56": "rein",
+    "c57": "mizuki",
+    "c58": "echo"
+   },
+   "labelledBy": "cvv",
+   "verdicts": {
+    "ball": "VALIDATED",
+    "bap": "REVIEW",
+    "bastion": "REVIEW",
+    "cass": "REVIEW",
+    "dva": "WEAK",
+    "jetcat": "WEAK",
+    "juno": "VALIDATED",
+    "kiriko": "REVIEW",
+    "lucio": "REVIEW",
+    "mei": "REVIEW",
+    "mizuki": "REVIEW",
+    "pharah": "REVIEW",
+    "rein": "VALIDATED",
+    "shion": "WEAK",
+    "sigma": "REVIEW",
+    "sojourn": "REVIEW",
+    "sym": "REVIEW",
+    "tracer": "VALIDATED",
+    "wuyang": "REVIEW"
+   },
+   "review": {
+    "bap": {
+     "trials": 20,
+     "correct": 18,
+     "unknown": 2,
+     "wrong": 0,
+     "accuracy": 0.9,
+     "confusedWith": {},
+     "cards": [
+      "c26",
+      "c28"
+     ]
+    },
+    "bastion": {
+     "trials": 102,
+     "correct": 89,
+     "unknown": 13,
+     "wrong": 0,
+     "accuracy": 0.873,
+     "confusedWith": {},
+     "cards": [
+      "c11",
+      "c14",
+      "c30",
+      "c45"
+     ]
+    },
+    "cass": {
+     "trials": 126,
+     "correct": 50,
+     "unknown": 76,
+     "wrong": 0,
+     "accuracy": 0.397,
+     "confusedWith": {},
+     "cards": [
+      "c08",
+      "c23",
+      "c24",
+      "c43"
+     ]
+    },
+    "kiriko": {
+     "trials": 221,
+     "correct": 187,
+     "unknown": 34,
+     "wrong": 0,
+     "accuracy": 0.846,
+     "confusedWith": {},
+     "cards": [
+      "c00",
+      "c03",
+      "c09",
+      "c55"
+     ]
+    },
+    "lucio": {
+     "trials": 124,
+     "correct": 102,
+     "unknown": 22,
+     "wrong": 0,
+     "accuracy": 0.823,
+     "confusedWith": {},
+     "cards": [
+      "c07",
+      "c19",
+      "c20",
+      "c47",
+      "c53"
+     ]
+    },
+    "mei": {
+     "trials": 68,
+     "correct": 34,
+     "unknown": 34,
+     "wrong": 0,
+     "accuracy": 0.5,
+     "confusedWith": {},
+     "cards": [
+      "c25",
+      "c34",
+      "c44",
+      "c50"
+     ]
+    },
+    "mizuki": {
+     "trials": 150,
+     "correct": 124,
+     "unknown": 26,
+     "wrong": 0,
+     "accuracy": 0.827,
+     "confusedWith": {},
+     "cards": [
+      "c16",
+      "c18",
+      "c21",
+      "c31",
+      "c40",
+      "c46",
+      "c57"
+     ]
+    },
+    "pharah": {
+     "trials": 20,
+     "correct": 16,
+     "unknown": 4,
+     "wrong": 0,
+     "accuracy": 0.8,
+     "confusedWith": {},
+     "cards": [
+      "c29",
+      "c49"
+     ]
+    },
+    "sigma": {
+     "trials": 230,
+     "correct": 183,
+     "unknown": 47,
+     "wrong": 0,
+     "accuracy": 0.796,
+     "confusedWith": {},
+     "cards": [
+      "c02",
+      "c04",
+      "c06",
+      "c33"
+     ]
+    },
+    "sojourn": {
+     "trials": 149,
+     "correct": 65,
+     "unknown": 83,
+     "wrong": 1,
+     "accuracy": 0.436,
+     "confusedWith": {
+      "pharah": 1
+     },
+     "cards": [
+      "c10",
+      "c17",
+      "c22",
+      "c38"
+     ]
+    },
+    "sym": {
+     "trials": 228,
+     "correct": 126,
+     "unknown": 102,
+     "wrong": 0,
+     "accuracy": 0.553,
+     "confusedWith": {},
+     "cards": [
+      "c01",
+      "c05",
+      "c13",
+      "c15"
+     ]
+    },
+    "wuyang": {
+     "trials": 17,
+     "correct": 15,
+     "unknown": 2,
+     "wrong": 0,
+     "accuracy": 0.882,
+     "confusedWith": {},
+     "cards": [
+      "c36",
+      "c51"
+     ]
+    }
+   },
    "approved": [],
    "rejected": [],
    "slotRoles": [
@@ -3299,7 +3590,64 @@ window.OWCS_LABELLING = {
     "support",
     "support"
    ],
-   "leaveOneOut": null,
+   "leaveOneOut": {
+    "trials": 1041,
+    "matched": 55,
+    "rate": 0.0528,
+    "ceiling": 0.02,
+    "passed": false,
+    "note": "Leave-one-out false-match test over 1041 real crops: 55 (5.28%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
+    "confusablePairs": [
+     {
+      "hero": "sojourn",
+      "readAs": "sym",
+      "count": 23,
+      "trials": 112,
+      "share": 0.205,
+      "note": "with no sojourn template in the set, 23 of 112 real sojourn portraits (21%) were confidently read as sym instead of UNKNOWN"
+     },
+     {
+      "hero": "sym",
+      "readAs": "cass",
+      "count": 14,
+      "trials": 107,
+      "share": 0.131,
+      "note": "with no sym template in the set, 14 of 107 real sym portraits (13%) were confidently read as cass instead of UNKNOWN"
+     },
+     {
+      "hero": "cass",
+      "readAs": "sojourn",
+      "count": 13,
+      "trials": 105,
+      "share": 0.124,
+      "note": "with no cass template in the set, 13 of 105 real cass portraits (12%) were confidently read as sojourn instead of UNKNOWN"
+     },
+     {
+      "hero": "mizuki",
+      "readAs": "lucio",
+      "count": 3,
+      "trials": 99,
+      "share": 0.03,
+      "note": "with no mizuki template in the set, 3 of 99 real mizuki portraits (3%) were confidently read as lucio instead of UNKNOWN"
+     },
+     {
+      "hero": "lucio",
+      "readAs": "mizuki",
+      "count": 1,
+      "trials": 87,
+      "share": 0.011,
+      "note": "with no lucio template in the set, 1 of 87 real lucio portraits (1%) were confidently read as mizuki instead of UNKNOWN"
+     },
+     {
+      "hero": "sojourn",
+      "readAs": "pharah",
+      "count": 1,
+      "trials": 112,
+      "share": 0.009,
+      "note": "with no sojourn template in the set, 1 of 112 real sojourn portraits (1%) were confidently read as pharah instead of UNKNOWN"
+     }
+    ]
+   },
    "counts": {
     "crops": 2470,
     "clusters": 112,
