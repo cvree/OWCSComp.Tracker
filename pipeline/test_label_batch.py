@@ -31,6 +31,11 @@ LAYOUT = os.path.join(db.REPO_ROOT, "layouts", "owcs_jksix_qwc.json")
 FIXED_TIME = "2026-10-29T00:00:00+00:00"
 
 
+def read_text(path: str) -> str:
+    with open(path, encoding="utf-8") as f:
+        return f.read()
+
+
 def answer_key() -> dict[str, str]:
     """{crop file: hero} for crops the detector read with confidence."""
     out = {}
@@ -138,8 +143,8 @@ class TestCards(unittest.TestCase):
                        layout_id="owcs_jksix_qwc", source={"title": "Nepal"},
                        out_dir=out, crops_dir=os.path.join(REPORT, "evidence"),
                        write_crops=False, created_at=FIXED_TIME)
-        a = open(os.path.join(root, "labelling", "nepal", "batch.json"), encoding="utf-8").read()
-        b = open(os.path.join(out, "batch.json"), encoding="utf-8").read()
+        a = read_text(os.path.join(root, "labelling", "nepal", "batch.json"))
+        b = read_text(os.path.join(out, "batch.json"))
         self.assertEqual(a, b)
 
     def test_no_card_carries_a_name(self):
@@ -288,7 +293,74 @@ class TestForge(unittest.TestCase):
         self.assertTrue(all(v == "VALIDATED" for v in verdicts.values()), verdicts)
         self.assertTrue(s["leaveOneOut"]["passed"], s["leaveOneOut"]["note"])
         self.assertTrue(s["promotion"]["dryRun"])
+        self.assertTrue(s["productionSet"]["safe"])
         self.assertTrue(os.path.exists(os.path.join(self.root, "nepal", "forge-report.json")))
+
+    def _labelled_manifest(self):
+        key = answer_key()
+        named = {c["id"]: majority(c, key) for c in self.batch["cards"]
+                 if majority(c, key)}
+        return lf.build_manifest(self.batch, named), named
+
+    def test_a_stray_portrait_in_a_named_card_is_set_aside(self):
+        """Four named cards on the first live batch carried a stray portrait
+        of another hero. A template cut from that stray teaches the wrong
+        face, so it must not reach the forge."""
+        import capture
+        manifest, _named = self._labelled_manifest()
+        kiriko = next(c for c in manifest["crops"] if c["hero"] == "kiriko")
+        stray = next(c for c in manifest["crops"] if c["hero"] == "mauga")
+        planted = dict(stray, hero="kiriko", clusterId=kiriko["clusterId"])
+        manifest["crops"].append(planted)
+        layout = capture.load_layout(LAYOUT)
+        cleaned, report = lf.clean_cards(manifest, layout)
+        self.assertNotIn(planted, cleaned["crops"])
+        self.assertGreaterEqual(report["dropped"].get(kiriko["clusterId"], 0), 1)
+        self.assertGreater(report["kept"], 1000, "clean cards must stay intact")
+
+    def test_tuning_never_lowers_the_bar(self):
+        base_f, base_m = 0.6, 0.12
+        floors = sorted({base_f} | {f for f in lf.FLOOR_GRID if f >= base_f})
+        margins = sorted({base_m} | {m for m in lf.MARGIN_GRID if m >= base_m})
+        self.assertTrue(all(f >= base_f for f in floors))
+        self.assertTrue(all(m >= base_m for m in margins))
+
+    def test_nothing_is_promoted_when_no_bar_is_safe(self):
+        """If no setting keeps the set under the false-name ceiling, the
+        batch is refused outright rather than promoted at the best of a
+        bad lot."""
+        import capture
+        manifest, _named = self._labelled_manifest()
+        layout = dict(capture.load_layout(LAYOUT), unknown_floor=0.0, min_margin=0.0)
+        old = (lf.FLOOR_GRID, lf.MARGIN_GRID)
+        lf.FLOOR_GRID, lf.MARGIN_GRID = (), ()
+        try:
+            import template_forge as tf
+            staging = os.path.join(self.root, "_unsafe")
+            tf.forge(manifest, staging, layout=layout)
+            t = lf.tune_profile(staging, os.path.join(self.root, "_noprod"), manifest,
+                                layout, repo_root=db.REPO_ROOT,
+                                scratch=os.path.join(self.root, "_unsafe_scratch"))
+        finally:
+            lf.FLOOR_GRID, lf.MARGIN_GRID = old
+        self.assertEqual(len(t["tried"]), 1)
+        self.assertFalse(t["tried"][0]["safe"])
+        self.assertIsNone(t["chosen"])
+
+    def test_raising_the_bar_edits_only_those_lines(self):
+        """Layouts are hand-formatted (this one indents with one space).
+        The edit must keep that, parse, and touch nothing else."""
+        path = os.path.join(self.root, "layout.json")
+        shutil.copy(LAYOUT, path)
+        before = read_text(LAYOUT).splitlines()
+        lf.write_layout_profile(path, 0.65, 0.2, {"measuredOn": "test"})
+        after = read_text(path).splitlines()
+        data = json.loads("\n".join(after))
+        self.assertEqual((data["unknown_floor"], data["min_margin"]), (0.65, 0.2))
+        self.assertEqual(data["detector_tuning"], {"measuredOn": "test"})
+        changed = [l for l in after if l not in before]
+        self.assertLessEqual(len(changed), 3, changed)
+        self.assertTrue(all(l.startswith(' "') for l in changed), changed)
 
 
 if __name__ == "__main__":

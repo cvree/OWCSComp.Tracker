@@ -154,6 +154,185 @@ def build_manifest(batch: dict, named: dict[str, str], *,
     }
 
 
+# ------------------------------------------------------------ card cleaning
+# A member must correlate at least this well with its own card's centre to
+# be used. Cards are 99% pure on average, but the 1% is not spread evenly:
+# on the first live Twitch batch four named cards carried a stray portrait
+# of another hero, and a template cut from that stray teaches the wrong face.
+CARD_KEEP = 0.45
+
+
+def clean_cards(manifest: dict, layout: dict, *,
+                repo_root: str = db.REPO_ROOT) -> tuple[dict, dict]:
+    """Drop members that do not look like the card they were named with.
+
+    The centre is the mean of the card's normalised members, so one stray
+    cannot move it far; a member below CARD_KEEP against it is set aside
+    with its card id, never relabelled. Returns (manifest, report)."""
+    import cv2
+
+    by_card: dict[str, list[int]] = {}
+    for i, c in enumerate(manifest["crops"]):
+        by_card.setdefault(c["clusterId"], []).append(i)
+    imgs = {}
+    for i, c in enumerate(manifest["crops"]):
+        img = cv2.imread(os.path.join(repo_root, manifest["cropsDir"], c["file"]),
+                         cv2.IMREAD_COLOR)
+        if img is not None:
+            imgs[i] = img
+    roi = layout.get("portrait_roi")
+    dropped: dict[str, int] = {}
+    keep: set[int] = set()
+    for card, idx in by_card.items():
+        idx = [i for i in idx if i in imgs]
+        if len(idx) < 3:
+            keep.update(idx)
+            continue
+        feats = lb.features([{"img": imgs[i]} for i in idx], roi)
+        centre = feats.mean(axis=0)
+        norm = float((centre ** 2).sum() ** 0.5) or 1.0
+        sims = feats @ (centre / norm)
+        for i, s in zip(idx, sims):
+            if s >= CARD_KEEP:
+                keep.add(i)
+            else:
+                dropped[card] = dropped.get(card, 0) + 1
+    out = dict(manifest)
+    out["crops"] = [c for i, c in enumerate(manifest["crops"]) if i in keep]
+    out["excluded"] = [dict(c, excludedBecause="does not look like the rest of its card")
+                       for i, c in enumerate(manifest["crops"]) if i not in keep]
+    by_hero: dict[str, int] = {}
+    for c in out["crops"]:
+        by_hero[c["hero"]] = by_hero.get(c["hero"], 0) + 1
+    out["counts"] = dict(manifest["counts"], labeled=len(out["crops"]),
+                         excluded=manifest["counts"].get("excluded", 0) + len(out["excluded"]),
+                         heroes=len(by_hero), byHero=dict(sorted(by_hero.items())),
+                         byLabelSource={LABEL_SOURCE: len(out["crops"])})
+    return out, {"threshold": CARD_KEEP, "dropped": dict(sorted(dropped.items())),
+                 "droppedTotal": sum(dropped.values()), "kept": len(out["crops"])}
+
+
+# ------------------------------------------------------------ safety tuning
+# The detector reads a slot as a hero only when its best match clears
+# `unknown_floor` and beats the runner-up by `min_margin`. A layout that
+# never measured its own sets the module defaults (0.35 / 0.12), which on
+# the live Twitch package read 78% of Vendetta portraits as Ramattra. These
+# are the values tried; only ones at least as strict as the layout's
+# current setting are ever considered, so tuning can raise the bar and can
+# never lower it.
+FLOOR_GRID = (0.45, 0.50, 0.55, 0.60, 0.65, 0.70)
+MARGIN_GRID = (0.15, 0.20, 0.25)
+TUNE_SAMPLE = 60        # held-out crops per hero while searching
+
+
+def _profile(layout: dict) -> tuple[float, float]:
+    import detect
+    p = detect.detector_profile(layout)
+    return float(p["floor"]), float(p["minMargin"])
+
+
+def _with_profile(layout: dict, floor: float, margin: float) -> dict:
+    out = dict(layout)
+    out["unknown_floor"], out["min_margin"] = floor, margin
+    out.pop("_gs_cache", None)
+    return out
+
+
+def _candidate_set(staging: str, production: str, validation: dict, tmp: str) -> str:
+    """What production would hold after promoting what `validation` passed:
+    the templates detection would actually run with."""
+    import template_forge as tf
+    shutil.rmtree(tmp, ignore_errors=True)
+    if os.path.isdir(production):
+        shutil.copytree(production, tmp,
+                        ignore=shutil.ignore_patterns("_superseded"))
+    else:
+        os.makedirs(tmp)
+    tf.promote(staging, tmp, validation, dry_run=False)
+    return tmp
+
+
+def _safety(set_dir: str, manifest: dict, layout: dict, *, repo_root: str,
+            sample: int | None) -> dict:
+    """Does this set stay quiet about heroes it cannot name? Both halves:
+    crops of heroes with no template in the set, and leave-one-out."""
+    import template_forge as tf
+    import template_validate as tv
+    val = tv.validate(set_dir, manifest, layout=layout, min_gap=tf.DEFAULT_HOLDOUT_GAP,
+                      repo_root=repo_root, limit_per_hero=sample)
+    loo = tv.leave_one_out(set_dir, manifest, layout=layout,
+                           min_gap=tf.DEFAULT_HOLDOUT_GAP, repo_root=repo_root,
+                           limit_per_hero=sample or 120)
+    fm = val.get("falseMatch") or {}
+    fm_ok = not fm.get("trials") or bool(fm.get("passed"))
+    return {"validation": val, "loo": loo, "falseMatchOk": fm_ok,
+            "safe": fm_ok and bool(loo.get("passed"))}
+
+
+def tune_profile(staging: str, production: str, manifest: dict, layout: dict, *,
+                 repo_root: str, scratch: str) -> dict:
+    """The least strict (floor, margin) — never looser than the layout's own
+    — at which the set detection would run with stays under the false-name
+    ceiling, keeping as many validated heroes as possible.
+
+    Returns {"base", "chosen", "tried": [...]}; `chosen` is None when no
+    setting on the grid is safe, which blocks promotion entirely."""
+    import template_forge as tf
+    import template_validate as tv
+    base_f, base_m = _profile(layout)
+    floors = sorted({base_f} | {f for f in FLOOR_GRID if f >= base_f})
+    margins = sorted({base_m} | {m for m in MARGIN_GRID if m >= base_m})
+    tried = []
+    for f in floors:
+        for m in margins:
+            lay = _with_profile(layout, f, m)
+            val = tv.validate(staging, manifest, layout=lay,
+                              min_gap=tf.DEFAULT_HOLDOUT_GAP, repo_root=repo_root,
+                              limit_per_hero=TUNE_SAMPLE)
+            validated = sorted(h for h, e in val["heroes"].items()
+                               if e["verdict"] == tv.VALIDATED)
+            cand = _candidate_set(staging, production, val, os.path.join(scratch, "cand"))
+            s = _safety(cand, manifest, lay, repo_root=repo_root, sample=TUNE_SAMPLE)
+            tried.append({"floor": f, "margin": m, "validated": validated,
+                          "safe": s["safe"], "looRate": s["loo"].get("rate"),
+                          "falseMatchRate": (s["validation"].get("falseMatch") or {}).get("rate")})
+            log(f"  floor {f:.2f} margin {m:.2f}: {len(validated)} validated, "
+                f"leave-one-out {s['loo'].get('rate')}, "
+                f"{'safe' if s['safe'] else 'NOT safe'}")
+    safe = [t for t in tried if t["safe"]]
+    chosen = max(safe, key=lambda t: (len(t["validated"]), -t["floor"], -t["margin"])) \
+        if safe else None
+    return {"base": {"floor": base_f, "margin": base_m}, "chosen": chosen,
+            "tried": tried}
+
+
+def write_layout_profile(path: str, floor: float, margin: float,
+                         provenance: dict) -> None:
+    """Set unknown_floor / min_margin in a hand-formatted layout file by
+    editing those lines only, so the diff shows exactly what moved."""
+    import re
+    with open(path, encoding="utf-8") as f:
+        text = f.read()
+    # Layouts are hand-formatted with different indents (one space in some,
+    # two in others); take the file's own top-level indent.
+    m = re.search(r'^\{\n([ \t]*)"', text)
+    indent = m.group(1) if m else "  "
+    for key, value in (("unknown_floor", floor), ("min_margin", margin),
+                       ("detector_tuning", provenance)):
+        rendered = json.dumps(value, ensure_ascii=False)
+        pat = re.compile(rf'^({re.escape(indent)}"{re.escape(key)}": ).*?(,?)$', re.M)
+        if pat.search(text):
+            # Replace the value, keep whatever comma the line already had.
+            text = pat.sub(lambda m: m.group(1) + rendered + m.group(2), text, count=1)
+        else:
+            text = text.replace("{\n", "{\n" + f'{indent}"{key}": {rendered},' + "\n", 1)
+    if json.loads(text).get("unknown_floor") != floor:
+        raise RuntimeError(f"could not set unknown_floor in {path}")
+    json.loads(text)        # never write a layout that does not parse
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(text)
+
+
 def summarise(batch: dict, labels: dict, named: dict[str, str],
               report: dict, validation: dict, promotion: dict | None,
               loo: dict | None = None) -> dict:
@@ -213,32 +392,86 @@ def run(batch_id: str, *, promote: bool = False, root: str = lb.LABEL_ROOT,
     log(f"{len(named)} named card(s) → {manifest['counts']['labeled']} crop(s) "
         f"across {manifest['counts']['heroes']} hero(es)")
 
-    layout = capture.load_layout(os.path.join(repo_root, "layouts",
-                                              f"{batch['layoutId']}.json"))
+    layout_path = os.path.join(repo_root, "layouts", f"{batch['layoutId']}.json")
+    layout = capture.load_layout(layout_path)
+    manifest, cleaning = clean_cards(manifest, layout, repo_root=repo_root)
+    if cleaning["droppedTotal"]:
+        log(f"set aside {cleaning['droppedTotal']} crop(s) that do not look like "
+            f"their card: {cleaning['dropped']}")
     staging = os.path.join(staging_root, batch_id)
     # A previous run's staged templates must not be validated as this one's.
     shutil.rmtree(staging, ignore_errors=True)
     report = tf.forge(manifest, staging, layout=layout, repo_root=repo_root)
+    production = os.path.join(repo_root, batch["templatesDir"])
     loo = None
+    tuning = None
+    production_check = None
+    promotion = None
     if not report["templatesWritten"]:
         validation = {"heroes": {}, "passed": False}
-        promotion = None
         log("no template survived the build gate — nothing to validate")
     else:
+        # Tune the detector's bar on the set it would actually run with —
+        # production as it stands plus whatever this batch would promote —
+        # because a hero can only be misread as one that is IN the set.
+        log("tuning the detector's bar against the set it would run with:")
+        tuning = tune_profile(staging, production, manifest, layout,
+                              repo_root=repo_root,
+                              scratch=os.path.join(staging_root, f"_{batch_id}"))
+        chosen = tuning["chosen"]
+        if chosen:
+            layout = _with_profile(layout, chosen["floor"], chosen["margin"])
         validation = tv.validate(staging, manifest, layout=layout,
-                                 min_gap=tf.DEFAULT_HOLDOUT_GAP,
-                                 repo_root=repo_root)
-        # The safety half: with each hero's templates removed, do its own
-        # crops read UNKNOWN? Reported beside the verdicts; it does not
-        # block a hero that validated, but a failing rate is stated.
+                                 min_gap=tf.DEFAULT_HOLDOUT_GAP, repo_root=repo_root)
         loo = tv.leave_one_out(staging, manifest, layout=layout,
-                               min_gap=tf.DEFAULT_HOLDOUT_GAP,
-                               repo_root=repo_root)
-        production = os.path.join(repo_root, batch["templatesDir"])
-        promotion = tf.promote(staging, production, validation,
-                               dry_run=not promote)
-    summary = summarise(batch, labels, named, report, validation, promotion,
-                        loo)
+                               min_gap=tf.DEFAULT_HOLDOUT_GAP, repo_root=repo_root)
+        cand = _candidate_set(staging, production, validation,
+                              os.path.join(staging_root, f"_{batch_id}", "final"))
+        production_check = _safety(cand, manifest, layout, repo_root=repo_root,
+                                   sample=None)
+        safe = bool(chosen) and production_check["safe"]
+        if not safe:
+            log("REFUSED: no detector bar on the grid keeps this set under the "
+                "false-name ceiling — nothing is promoted")
+            promotion = {"promotedHeroes": [], "promoted": [], "superseded": [],
+                         "refused": {h: e["verdict"] for h, e in validation["heroes"].items()},
+                         "dryRun": not promote,
+                         "refusedForSafety": True}
+        else:
+            promotion = tf.promote(staging, production, validation, dry_run=not promote)
+            if promote:
+                base = tuning["base"]
+                if (chosen["floor"], chosen["margin"]) != (base["floor"], base["margin"]):
+                    write_layout_profile(layout_path, chosen["floor"], chosen["margin"], {
+                        "measuredOn": f"labelling/{batch_id}",
+                        "from": base, "rule": "raised only, never lowered",
+                        "leaveOneOutRate": production_check["loo"].get("rate"),
+                        "validatedHeroes": chosen["validated"]})
+                    log(f"raised {batch['layoutId']} to floor {chosen['floor']} "
+                        f"margin {chosen['margin']}")
+                # What hero_coverage and the site read as this package's proof.
+                vpath = os.path.join(repo_root, "reports", "validation",
+                                     f"{batch['layoutId']}.json")
+                os.makedirs(os.path.dirname(vpath), exist_ok=True)
+                proof = dict(production_check["validation"],
+                             leaveOneOut=production_check["loo"])
+                with open(vpath, "w", encoding="utf-8") as f:
+                    json.dump(proof, f, indent=1, default=str)
+                    f.write("\n")
+    summary = summarise(batch, labels, named, report, validation, promotion, loo)
+    summary["cleaning"] = cleaning
+    summary["tuning"] = tuning
+    if production_check:
+        pv = production_check["validation"]
+        summary["productionSet"] = {
+            "safe": production_check["safe"],
+            "falseMatch": {k: v for k, v in (pv.get("falseMatch") or {}).items()
+                           if k != "examples"} or None,
+            "leaveOneOut": {k: production_check["loo"].get(k)
+                            for k in ("trials", "matched", "rate", "ceiling",
+                                      "passed", "note", "confusablePairs")},
+            "verdicts": {h: e.get("verdict") for h, e in (pv.get("heroes") or {}).items()},
+        }
     with open(os.path.join(bdir, "forge-report.json"), "w", encoding="utf-8") as f:
         json.dump(summary, f, indent=1, default=str)
         f.write("\n")

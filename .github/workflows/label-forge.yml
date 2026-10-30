@@ -125,7 +125,10 @@ jobs:
           set -euo pipefail
           git config user.name  "owcs-label-forge[bot]"
           git config user.email "actions@users.noreply.github.com"
-          git add labelling assets/data/labelling.v1.js templates
+          # templates: what was promoted. layouts: a detector bar the forge
+          # raised (never lowered). reports/validation: the proof the
+          # coverage page reads.
+          git add labelling assets/data/labelling.v1.js templates layouts reports/validation
           if git diff --cached --quiet; then
             echo "committed=false" >> "$GITHUB_OUTPUT"; exit 0
           fi
