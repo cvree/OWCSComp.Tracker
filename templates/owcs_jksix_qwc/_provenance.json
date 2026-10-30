@@ -29,7 +29,7 @@
     ]
    ],
    "holdoutStarts": 2150.0,
-   "recordedAt": "2026-10-30T19:44:07+00:00"
+   "recordedAt": "2026-10-30T20:17:44+00:00"
   },
   {
    "file": "dva.v1.png",
@@ -60,7 +60,7 @@
     ]
    ],
    "holdoutStarts": 2150.0,
-   "recordedAt": "2026-10-30T19:44:07+00:00"
+   "recordedAt": "2026-10-30T20:17:44+00:00"
   },
   {
    "file": "dva.v2.png",
@@ -91,7 +91,7 @@
     ]
    ],
    "holdoutStarts": 2150.0,
-   "recordedAt": "2026-10-30T19:44:07+00:00"
+   "recordedAt": "2026-10-30T20:17:44+00:00"
   },
   {
    "file": "dva.v3.png",
@@ -122,7 +122,7 @@
     ]
    ],
    "holdoutStarts": 2150.0,
-   "recordedAt": "2026-10-30T19:44:07+00:00"
+   "recordedAt": "2026-10-30T20:17:44+00:00"
   },
   {
    "file": "juno.png",
@@ -153,7 +153,7 @@
     ]
    ],
    "holdoutStarts": 2140.0,
-   "recordedAt": "2026-10-30T19:44:07+00:00"
+   "recordedAt": "2026-10-30T20:17:44+00:00"
   },
   {
    "file": "juno.v1.png",
@@ -184,7 +184,7 @@
     ]
    ],
    "holdoutStarts": 2140.0,
-   "recordedAt": "2026-10-30T19:44:07+00:00"
+   "recordedAt": "2026-10-30T20:17:44+00:00"
   },
   {
    "file": "juno.v2.png",
@@ -215,7 +215,7 @@
     ]
    ],
    "holdoutStarts": 2140.0,
-   "recordedAt": "2026-10-30T19:44:07+00:00"
+   "recordedAt": "2026-10-30T20:17:44+00:00"
   },
   {
    "file": "juno.v3.png",
@@ -246,7 +246,7 @@
     ]
    ],
    "holdoutStarts": 2140.0,
-   "recordedAt": "2026-10-30T19:44:07+00:00"
+   "recordedAt": "2026-10-30T20:17:44+00:00"
   },
   {
    "file": "kiriko.png",
@@ -277,7 +277,7 @@
     ]
    ],
    "holdoutStarts": 2175.0,
-   "recordedAt": "2026-10-30T19:44:07+00:00"
+   "recordedAt": "2026-10-30T20:17:44+00:00"
   },
   {
    "file": "kiriko.v1.png",
@@ -308,7 +308,7 @@
     ]
    ],
    "holdoutStarts": 2175.0,
-   "recordedAt": "2026-10-30T19:44:07+00:00"
+   "recordedAt": "2026-10-30T20:17:44+00:00"
   },
   {
    "file": "kiriko.v2.png",
@@ -339,7 +339,7 @@
     ]
    ],
    "holdoutStarts": 2175.0,
-   "recordedAt": "2026-10-30T19:44:07+00:00"
+   "recordedAt": "2026-10-30T20:17:44+00:00"
   },
   {
    "file": "kiriko.v3.png",
@@ -370,7 +370,7 @@
     ]
    ],
    "holdoutStarts": 2175.0,
-   "recordedAt": "2026-10-30T19:44:07+00:00"
+   "recordedAt": "2026-10-30T20:17:44+00:00"
   },
   {
    "file": "lucio.png",
@@ -401,7 +401,7 @@
     ]
    ],
    "holdoutStarts": 2140.0,
-   "recordedAt": "2026-10-30T19:44:07+00:00"
+   "recordedAt": "2026-10-30T20:17:44+00:00"
   },
   {
    "file": "lucio.v1.png",
@@ -432,7 +432,7 @@
     ]
    ],
    "holdoutStarts": 2140.0,
-   "recordedAt": "2026-10-30T19:44:07+00:00"
+   "recordedAt": "2026-10-30T20:17:44+00:00"
   },
   {
    "file": "lucio.v2.png",
@@ -463,7 +463,7 @@
     ]
    ],
    "holdoutStarts": 2140.0,
-   "recordedAt": "2026-10-30T19:44:07+00:00"
+   "recordedAt": "2026-10-30T20:17:44+00:00"
   },
   {
    "file": "lucio.v3.png",
@@ -494,7 +494,7 @@
     ]
    ],
    "holdoutStarts": 2140.0,
-   "recordedAt": "2026-10-30T19:44:07+00:00"
+   "recordedAt": "2026-10-30T20:17:44+00:00"
   },
   {
    "file": "mauga.png",
@@ -525,7 +525,7 @@
     ]
    ],
    "holdoutStarts": 2165.0,
-   "recordedAt": "2026-10-30T19:44:07+00:00"
+   "recordedAt": "2026-10-30T20:17:44+00:00"
   },
   {
    "file": "mauga.v1.png",
@@ -556,7 +556,7 @@
     ]
    ],
    "holdoutStarts": 2165.0,
-   "recordedAt": "2026-10-30T19:44:07+00:00"
+   "recordedAt": "2026-10-30T20:17:44+00:00"
   },
   {
    "file": "mauga.v2.png",
@@ -587,7 +587,7 @@
     ]
    ],
    "holdoutStarts": 2165.0,
-   "recordedAt": "2026-10-30T19:44:07+00:00"
+   "recordedAt": "2026-10-30T20:17:44+00:00"
   },
   {
    "file": "mauga.v3.png",
@@ -618,7 +618,7 @@
     ]
    ],
    "holdoutStarts": 2165.0,
-   "recordedAt": "2026-10-30T19:44:07+00:00"
+   "recordedAt": "2026-10-30T20:17:44+00:00"
   },
   {
    "file": "shion.png",
@@ -649,7 +649,7 @@
     ]
    ],
    "holdoutStarts": 2175.0,
-   "recordedAt": "2026-10-30T19:44:07+00:00"
+   "recordedAt": "2026-10-30T20:17:44+00:00"
   },
   {
    "file": "shion.v1.png",
@@ -680,7 +680,7 @@
     ]
    ],
    "holdoutStarts": 2175.0,
-   "recordedAt": "2026-10-30T19:44:07+00:00"
+   "recordedAt": "2026-10-30T20:17:44+00:00"
   },
   {
    "file": "shion.v2.png",
@@ -711,7 +711,7 @@
     ]
    ],
    "holdoutStarts": 2175.0,
-   "recordedAt": "2026-10-30T19:44:07+00:00"
+   "recordedAt": "2026-10-30T20:17:44+00:00"
   },
   {
    "file": "shion.v3.png",
@@ -742,7 +742,7 @@
     ]
    ],
    "holdoutStarts": 2175.0,
-   "recordedAt": "2026-10-30T19:44:07+00:00"
+   "recordedAt": "2026-10-30T20:17:44+00:00"
   },
   {
    "file": "sojourn.png",
@@ -773,7 +773,7 @@
     ]
    ],
    "holdoutStarts": 2140.0,
-   "recordedAt": "2026-10-30T19:44:07+00:00"
+   "recordedAt": "2026-10-30T20:17:44+00:00"
   },
   {
    "file": "sojourn.v1.png",
@@ -804,7 +804,7 @@
     ]
    ],
    "holdoutStarts": 2140.0,
-   "recordedAt": "2026-10-30T19:44:07+00:00"
+   "recordedAt": "2026-10-30T20:17:44+00:00"
   },
   {
    "file": "sojourn.v2.png",
@@ -835,7 +835,7 @@
     ]
    ],
    "holdoutStarts": 2140.0,
-   "recordedAt": "2026-10-30T19:44:07+00:00"
+   "recordedAt": "2026-10-30T20:17:44+00:00"
   },
   {
    "file": "sojourn.v3.png",
@@ -866,7 +866,7 @@
     ]
    ],
    "holdoutStarts": 2140.0,
-   "recordedAt": "2026-10-30T19:44:07+00:00"
+   "recordedAt": "2026-10-30T20:17:44+00:00"
   },
   {
    "file": "sym.png",
@@ -897,7 +897,7 @@
     ]
    ],
    "holdoutStarts": 2140.0,
-   "recordedAt": "2026-10-30T19:44:07+00:00"
+   "recordedAt": "2026-10-30T20:17:44+00:00"
   },
   {
    "file": "sym.v1.png",
@@ -928,7 +928,7 @@
     ]
    ],
    "holdoutStarts": 2140.0,
-   "recordedAt": "2026-10-30T19:44:07+00:00"
+   "recordedAt": "2026-10-30T20:17:44+00:00"
   },
   {
    "file": "sym.v2.png",
@@ -959,7 +959,7 @@
     ]
    ],
    "holdoutStarts": 2140.0,
-   "recordedAt": "2026-10-30T19:44:07+00:00"
+   "recordedAt": "2026-10-30T20:17:44+00:00"
   },
   {
    "file": "sym.v3.png",
@@ -990,7 +990,7 @@
     ]
    ],
    "holdoutStarts": 2140.0,
-   "recordedAt": "2026-10-30T19:44:07+00:00"
+   "recordedAt": "2026-10-30T20:17:44+00:00"
   }
  ],
  "harvests": [
@@ -1012,6 +1012,14 @@
   },
   {
    "at": "2026-10-30T19:44:07+00:00",
+   "sourceVideo": "https://www.youtube.com/watch?v=jkSiX___Qwc",
+   "sourceClip": "labelling/nepal-qad-twis",
+   "labeledBy": "template_forge --promote (held-out validated)",
+   "layoutId": "owcs_jksix_qwc",
+   "files": 32
+  },
+  {
+   "at": "2026-10-30T20:17:44+00:00",
    "sourceVideo": "https://www.youtube.com/watch?v=jkSiX___Qwc",
    "sourceClip": "labelling/nepal-qad-twis",
    "labeledBy": "template_forge --promote (held-out validated)",
