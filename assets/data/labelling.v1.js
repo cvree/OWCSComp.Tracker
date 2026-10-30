@@ -7222,19 +7222,12 @@ window.OWCS_LABELLING = {
     "zarya"
    ],
    "state": "forged",
-   "promoted": [
-    "ana",
-    "bastion",
-    "lucio",
-    "mei",
-    "mizuki",
-    "ram",
-    "sym",
-    "winston"
-   ],
+   "promoted": [],
    "refused": [
+    "ana",
     "ball",
     "bap",
+    "bastion",
     "brig",
     "cass",
     "doomfist",
@@ -7247,14 +7240,20 @@ window.OWCS_LABELLING = {
     "jetcat",
     "juno",
     "kiriko",
+    "lucio",
     "mauga",
+    "mei",
+    "mizuki",
     "pharah",
+    "ram",
     "reaper",
     "sigma",
     "sojourn",
+    "sym",
     "torb",
     "tracer",
     "widow",
+    "winston",
     "zarya"
    ],
    "labels": {
@@ -7361,11 +7360,11 @@ window.OWCS_LABELLING = {
    },
    "leaveOneOut": {
     "trials": 1517,
-    "matched": 320,
-    "rate": 0.2109,
+    "matched": 319,
+    "rate": 0.2103,
     "ceiling": 0.02,
     "passed": false,
-    "note": "Leave-one-out false-match test over 1517 real crops: 320 (21.09%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
+    "note": "Leave-one-out false-match test over 1517 real crops: 319 (21.03%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
     "confusablePairs": [
      {
       "hero": "emre",
@@ -7598,14 +7597,6 @@ window.OWCS_LABELLING = {
       "trials": 103,
       "share": 0.01,
       "note": "with no cass template in the set, 1 of 103 real cass portraits (1%) were confidently read as illari instead of UNKNOWN"
-     },
-     {
-      "hero": "dva",
-      "readAs": "bastion",
-      "count": 1,
-      "trials": 102,
-      "share": 0.01,
-      "note": "with no dva template in the set, 1 of 102 real dva portraits (1%) were confidently read as bastion instead of UNKNOWN"
      },
      {
       "hero": "mei",

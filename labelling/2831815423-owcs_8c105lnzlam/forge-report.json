@@ -476,7 +476,7 @@
      "shion"
     ],
     "safe": false,
-    "looRate": 0.2003,
+    "looRate": 0.1225,
     "falseMatchRate": 0.29
    },
    {
@@ -492,7 +492,7 @@
      "shion"
     ],
     "safe": false,
-    "looRate": 0.1645,
+    "looRate": 0.0855,
     "falseMatchRate": 0.245
    },
    {
@@ -507,7 +507,7 @@
      "shion"
     ],
     "safe": false,
-    "looRate": 0.1258,
+    "looRate": 0.0468,
     "falseMatchRate": 0.235
    },
    {
@@ -520,7 +520,7 @@
      "reaper"
     ],
     "safe": false,
-    "looRate": 0.0855,
+    "looRate": 0.0129,
     "falseMatchRate": 0.23
    },
    {
@@ -537,7 +537,7 @@
      "shion"
     ],
     "safe": false,
-    "looRate": 0.1987,
+    "looRate": 0.1175,
     "falseMatchRate": 0.265
    },
    {
@@ -553,7 +553,7 @@
      "shion"
     ],
     "safe": false,
-    "looRate": 0.1645,
+    "looRate": 0.0839,
     "falseMatchRate": 0.235
    },
    {
@@ -568,7 +568,7 @@
      "shion"
     ],
     "safe": false,
-    "looRate": 0.1258,
+    "looRate": 0.0468,
     "falseMatchRate": 0.235
    },
    {
@@ -581,7 +581,7 @@
      "reaper"
     ],
     "safe": false,
-    "looRate": 0.0855,
+    "looRate": 0.0129,
     "falseMatchRate": 0.23
    },
    {
@@ -598,7 +598,7 @@
      "shion"
     ],
     "safe": false,
-    "looRate": 0.1904,
+    "looRate": 0.106,
     "falseMatchRate": 0.265
    },
    {
@@ -614,7 +614,7 @@
      "shion"
     ],
     "safe": false,
-    "looRate": 0.1613,
+    "looRate": 0.0806,
     "falseMatchRate": 0.235
    },
    {
@@ -629,7 +629,7 @@
      "shion"
     ],
     "safe": false,
-    "looRate": 0.1258,
+    "looRate": 0.0468,
     "falseMatchRate": 0.235
    },
    {
@@ -642,7 +642,7 @@
      "reaper"
     ],
     "safe": false,
-    "looRate": 0.0855,
+    "looRate": 0.0129,
     "falseMatchRate": 0.23
    },
    {
@@ -659,7 +659,7 @@
      "shion"
     ],
     "safe": false,
-    "looRate": 0.1788,
+    "looRate": 0.0944,
     "falseMatchRate": 0.26
    },
    {
@@ -675,7 +675,7 @@
      "shion"
     ],
     "safe": false,
-    "looRate": 0.1548,
+    "looRate": 0.0742,
     "falseMatchRate": 0.235
    },
    {
@@ -690,7 +690,7 @@
      "shion"
     ],
     "safe": false,
-    "looRate": 0.1226,
+    "looRate": 0.0435,
     "falseMatchRate": 0.235
    },
    {
@@ -703,7 +703,7 @@
      "reaper"
     ],
     "safe": false,
-    "looRate": 0.0855,
+    "looRate": 0.0129,
     "falseMatchRate": 0.23
    },
    {
@@ -720,7 +720,7 @@
      "shion"
     ],
     "safe": false,
-    "looRate": 0.154,
+    "looRate": 0.0679,
     "falseMatchRate": 0.255
    },
    {
@@ -736,7 +736,7 @@
      "shion"
     ],
     "safe": false,
-    "looRate": 0.1339,
+    "looRate": 0.0516,
     "falseMatchRate": 0.235
    },
    {
@@ -751,7 +751,7 @@
      "shion"
     ],
     "safe": false,
-    "looRate": 0.1065,
+    "looRate": 0.0274,
     "falseMatchRate": 0.235
    },
    {
@@ -764,7 +764,7 @@
      "reaper"
     ],
     "safe": false,
-    "looRate": 0.079,
+    "looRate": 0.0065,
     "falseMatchRate": 0.23
    },
    {
@@ -781,7 +781,7 @@
      "shion"
     ],
     "safe": false,
-    "looRate": 0.1358,
+    "looRate": 0.0497,
     "falseMatchRate": 0.25
    },
    {
@@ -797,7 +797,7 @@
      "shion"
     ],
     "safe": false,
-    "looRate": 0.121,
+    "looRate": 0.0387,
     "falseMatchRate": 0.23
    },
    {
@@ -812,7 +812,7 @@
      "shion"
     ],
     "safe": false,
-    "looRate": 0.0968,
+    "looRate": 0.0177,
     "falseMatchRate": 0.23
    },
    {
@@ -825,7 +825,7 @@
      "reaper"
     ],
     "safe": false,
-    "looRate": 0.0774,
+    "looRate": 0.0048,
     "falseMatchRate": 0.225
    },
    {
@@ -842,7 +842,7 @@
      "shion"
     ],
     "safe": false,
-    "looRate": 0.1093,
+    "looRate": 0.0248,
     "falseMatchRate": 0.215
    },
    {
@@ -858,7 +858,7 @@
      "shion"
     ],
     "safe": false,
-    "looRate": 0.0984,
+    "looRate": 0.0177,
     "falseMatchRate": 0.205
    },
    {
@@ -872,7 +872,7 @@
      "shion"
     ],
     "safe": false,
-    "looRate": 0.0823,
+    "looRate": 0.0065,
     "falseMatchRate": 0.205
    },
    {
@@ -885,11 +885,14 @@
      "reaper"
     ],
     "safe": false,
-    "looRate": 0.0726,
+    "looRate": 0.0016,
     "falseMatchRate": 0.205
    }
   ]
  },
+ "forgeVersion": 3,
+ "promote": true,
+ "labelsDigest": "07ea96db9fef1c08a5aa3d84620bb7527fad105ddaafd90c330708a415c08a34",
  "productionSet": {
   "safe": false,
   "falseMatch": {
@@ -917,11 +920,11 @@
   },
   "leaveOneOut": {
    "trials": 919,
-   "matched": 213,
-   "rate": 0.2318,
+   "matched": 140,
+   "rate": 0.1523,
    "ceiling": 0.02,
    "passed": false,
-   "note": "Leave-one-out false-match test over 919 real crops: 213 (23.18%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
+   "note": "Leave-one-out false-match test over 919 real crops: 140 (15.23%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
    "confusablePairs": [
     {
      "hero": "tracer",
@@ -930,14 +933,6 @@
      "trials": 120,
      "share": 0.875,
      "note": "with no tracer template in the set, 105 of 120 real tracer portraits (88%) were confidently read as jetcat instead of UNKNOWN"
-    },
-    {
-     "hero": "sym",
-     "readAs": "tracer",
-     "count": 81,
-     "trials": 94,
-     "share": 0.862,
-     "note": "with no sym template in the set, 81 of 94 real sym portraits (86%) were confidently read as tracer instead of UNKNOWN"
     },
     {
      "hero": "jetcat",
@@ -964,20 +959,28 @@
      "note": "with no ana template in the set, 4 of 73 real ana portraits (5%) were confidently read as mauga instead of UNKNOWN"
     },
     {
+     "hero": "sym",
+     "readAs": "ram",
+     "count": 5,
+     "trials": 94,
+     "share": 0.053,
+     "note": "with no sym template in the set, 5 of 94 real sym portraits (5%) were confidently read as ram instead of UNKNOWN"
+    },
+    {
+     "hero": "ram",
+     "readAs": "sym",
+     "count": 4,
+     "trials": 83,
+     "share": 0.048,
+     "note": "with no ram template in the set, 4 of 83 real ram portraits (5%) were confidently read as sym instead of UNKNOWN"
+    },
+    {
      "hero": "mauga",
      "readAs": "ana",
      "count": 1,
      "trials": 65,
      "share": 0.015,
      "note": "with no mauga template in the set, 1 of 65 real mauga portraits (2%) were confidently read as ana instead of UNKNOWN"
-    },
-    {
-     "hero": "ram",
-     "readAs": "sym",
-     "count": 1,
-     "trials": 83,
-     "share": 0.012,
-     "note": "with no ram template in the set, 1 of 83 real ram portraits (1%) were confidently read as sym instead of UNKNOWN"
     },
     {
      "hero": "sym",
@@ -1023,6 +1026,7 @@
    "sym": "FAILED",
    "tracer": "UNVERIFIABLE",
    "winston": "UNVERIFIABLE"
-  }
+  },
+  "suspectTemplates": []
  }
 }
