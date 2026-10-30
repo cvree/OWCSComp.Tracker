@@ -41,14 +41,16 @@ def main() -> int:
               0.0 <= (s["rosterCoverage"] or 0) <= 1.0)
 
     # the CR-ZETA source is the live regression target — it must be present,
-    # probed (hud_probe present), and carry its partial (7-hero) template set
+    # probed (hud_probe present), and carry a partial template set (the forge
+    # grows it as heroes are labelled, so the bound is the roster, not a count)
     cr = next((s for s in st["sources"] if s["id"] == "owcs-8c105lnzlam"), None)
     check("CR-ZETA source is tracked", cr is not None)
     if cr:
         check("CR-ZETA has a hud_probe (else it reads zero frames)",
               cr["hudProbe"] is True)
         check("CR-ZETA template coverage is honestly reported as partial",
-              0 < cr["templates"]["heroes"] < 10)
+              0 < cr["templates"]["heroes"] < st["rosterSize"]
+              and 0 < cr["rosterCoverage"] < 1)
         check("CR-ZETA is not falsely graded ok while coverage is partial",
               cr["status"] in ("warn", "fail"))
 
