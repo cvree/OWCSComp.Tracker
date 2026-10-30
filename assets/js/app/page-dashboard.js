@@ -15,6 +15,7 @@
   document.addEventListener("DOMContentLoaded", () => {
     P.api.mountStatus("mode-status");
     renderShowcase();
+    renderStory();
     renderTiles();
     renderAutofill();
     renderAttention();
@@ -22,6 +23,29 @@
     renderPublished();
     renderHealth();
   });
+
+  /* ------------------------------------------------------------ story
+     The newest published map as a map story (app/mapstory.js): ten lanes
+     of heroes, the swaps, the rounds, and a play button. It is the same
+     component the game page uses, over the same published record. */
+  function renderStory() {
+    const band = document.getElementById("story-band");
+    if (!band || !P.mapStory) return;
+    const latest = G.all().filter((g) => g.state === "published" && (g.maps || []).length)
+      .sort((a, b) => String(b.scheduledAt || "").localeCompare(String(a.scheduledAt || "")))[0];
+    if (!latest) return;
+    const m = latest.maps[latest.maps.length - 1];
+    const html = P.mapStory.html(m, latest);
+    if (!html) return;
+    const info = P.mapInfo(m.map);
+    document.getElementById("story-sub").textContent = latest.title + " · " + info.name +
+      (latest.tournamentName ? " · " + latest.tournamentName : "") + " — drag across the lanes or press play.";
+    document.getElementById("story-link").href = latest.href;
+    document.getElementById("story").innerHTML = html;
+    P.mapStory.wire(document.getElementById("story"), latest);
+    if (P.evidence) P.evidence.wire(document.getElementById("story"));
+    band.hidden = false;
+  }
 
   /* --------------------------------------------------------- showcase
      The headline claims the product turns a broadcast into reviewed data.
@@ -164,7 +188,7 @@
         (errs ? " <b>" + errs + " source error" + (errs === 1 ? "" : "s") +
           "</b> on the last run." : "") +
         " Finding a broadcast is not reading it: nothing here becomes match data until " +
-        "it has been processed and a person has confirmed what the detector saw.</p>" +
+        "it has been processed and the detector has read it off the frames.</p>" +
         (archiveHours
           ? "<p>What it has found so far: <b>" + esc(archiveHours) +
             "</b> of official broadcast across <b>" + esc(s.events || 0) +

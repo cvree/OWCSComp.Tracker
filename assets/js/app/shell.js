@@ -62,6 +62,8 @@
       match: ["tools.html"] },
     { href: "calibrate.html", label: "Calibrate", note: "Teach the tracker a new HUD",
       match: ["calibrate.html"] },
+    { href: "label.html", label: "Name the heroes", note: "Teach the tracker a new hero",
+      match: ["label.html"] },
   ];
 
   /* --------------------------------------------------------- header */
@@ -317,6 +319,7 @@
      ["How it works", "how-it-works.html", "In plain language"],
      ["Tools & diagnostics", "tools.html", "For operators"],
      ["Calibrate a broadcast", "calibrate.html", "Teach the tracker a new HUD"],
+     ["Name the heroes", "label.html", "Teach the tracker a new hero, one card at a time"],
      ["Guides", "guide.html", "Step-by-step walkthroughs for every task"],
      ["Guide: submit a game", "guide.html#submit", "From a pasted link to a queued job"],
      ["Guide: review detections", "guide.html#review", "The human gates, in order"],
@@ -490,10 +493,10 @@
     f.innerHTML =
       '<div class="ftr__in">' +
         "<div><h2>OWCS Comp Tracker</h2>" +
-        "<p>The portal that turns competitive Overwatch broadcasts into reviewed, " +
-        "trustworthy structured data. A composition is published only after a person " +
-        "has confirmed what the detector read, and every published fact links back to " +
-        "the frame it came from.</p>" +
+        "<p>The portal that turns competitive Overwatch broadcasts into trustworthy, " +
+        "structured data. A hero the tracker cannot read stays unknown — never a guess — " +
+        "and every published fact carries the tier it earned and links back to the " +
+        "frame it came from, so anyone can check it.</p>" +
         '<p class="u-mt-3"><a href="how-it-works.html">How it works, in plain language →</a></p></div>' +
         "<div><h2>Product</h2><ul>" +
           '<li><a href="index.html">Dashboard</a></li>' +
@@ -512,6 +515,7 @@
           '<li><a href="guide.html">Guides — every step, walked through</a></li>' +
           '<li><a href="tools.html">Tools &amp; diagnostics</a></li>' +
           '<li><a href="calibrate.html">Calibrate a broadcast</a></li>' +
+          '<li><a href="label.html">Name the heroes</a></li>' +
           '<li><a href="styleguide.html">Design system</a></li>' +
           '<li><a href="how-it-works.html#run-it-yourself">Run your own copy</a></li>' +
         "</ul></div>" +

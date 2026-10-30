@@ -1,0 +1,140 @@
+# =====================================================================
+# OWCS Comp Tracker — repository maintenance (dispatch only)
+# ---------------------------------------------------------------------
+# Two jobs a person starts from the Actions tab, so neither needs a
+# terminal or a personal token:
+#
+#   release         tag `main` as v<version> and start windows-app.yml on
+#                   that tag, which builds the installer, verifies it on a
+#                   clean machine and attaches it to the GitHub Release.
+#                   (A tag pushed with GITHUB_TOKEN does not trigger other
+#                   workflows by itself, so this dispatches the build.)
+#                   The version must equal desktop/owcs_desktop.__version__,
+#                   so the release page, the installer and the in-app
+#                   updater all say the same thing.
+#
+#   prune-branches  delete stale `auto/discovery-*` and `claude/*` branches.
+#                   A claude/* branch whose tip is NOT already in main is
+#                   first kept as an `archive/<name>` tag, so no one's work
+#                   becomes unreachable (the bot's discovery branches are
+#                   superseded by every later scan and are not archived).
+#                   Dry run by default: it lists what it would do and
+#                   changes nothing.
+# =====================================================================
+name: maintenance
+
+on:
+  workflow_dispatch:
+    inputs:
+      task:
+        description: "What to do"
+        required: true
+        type: choice
+        options: [release, prune-branches]
+      version:
+        description: "release: version to tag, e.g. 1.0.0 (must match the app)"
+        required: false
+      dry_run:
+        description: "prune-branches: only list what would be deleted"
+        type: boolean
+        default: true
+      keep:
+        description: "prune-branches: space-separated branch names to keep"
+        required: false
+
+# It writes refs, so it serialises with everything else that writes to
+# this repository rather than racing a data commit.
+concurrency:
+  group: owcs-generated-data
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  release:
+    if: inputs.task == 'release'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Tag main
+        id: tag
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          set -euo pipefail
+          [ -n "$VERSION" ] || { echo "::error::give a version, e.g. 1.0.0"; exit 1; }
+          app=$(python3 -c "import sys; sys.path.insert(0,'desktop'); import owcs_desktop; print(owcs_desktop.__version__)")
+          if [ "$app" != "$VERSION" ]; then
+            echo "::error::the app reports $app; tagging v$VERSION would publish a release that disagrees with its own installer"
+            exit 1
+          fi
+          tag="v$VERSION"
+          if git ls-remote --exit-code --tags origin "refs/tags/$tag" >/dev/null; then
+            echo "::notice::$tag already exists — building it again"
+          else
+            git tag "$tag" HEAD
+            git push origin "refs/tags/$tag"
+            echo "::notice::tagged $(git rev-parse --short HEAD) as $tag"
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+      - name: Build and publish the installer
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.tag.outputs.tag }}
+        run: gh workflow run windows-app.yml --ref "$TAG"
+
+  prune-branches:
+    if: inputs.task == 'prune-branches'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Archive what main lacks, then delete
+        env:
+          DRY_RUN: ${{ inputs.dry_run }}
+          KEEP: ${{ inputs.keep }}
+        run: |
+          set -euo pipefail
+          git fetch --quiet origin '+refs/heads/*:refs/remotes/origin/*'
+          deleted=0; archived=0; kept=0
+          for ref in $(git for-each-ref --format='%(refname:strip=3)' refs/remotes/origin); do
+            case "$ref" in auto/discovery-*|claude/*) ;; *) continue ;; esac
+            if printf ' %s ' "$KEEP" | grep -q " $ref "; then
+              echo "keep    $ref"; kept=$((kept+1)); continue
+            fi
+            sha=$(git rev-parse "refs/remotes/origin/$ref")
+            # auto/discovery-* are the bot's data refreshes: every later
+            # scan supersedes them, so they are deleted without an archive.
+            # A claude/* branch is someone's work; keep its tip if main
+            # does not already contain it.
+            if [ "${ref#claude/}" != "$ref" ] && ! git merge-base --is-ancestor "$sha" origin/main; then
+              tag="archive/${ref#claude/}"
+              echo "archive $ref -> $tag ($(git log -1 --format='%ad %s' --date=short "$sha" | cut -c1-70))"
+              if [ "$DRY_RUN" != "true" ]; then
+                git push --quiet origin "$sha:refs/tags/$tag"
+              fi
+              archived=$((archived+1))
+            fi
+            echo "delete  $ref"
+            if [ "$DRY_RUN" != "true" ]; then
+              git push --quiet origin --delete "$ref"
+            fi
+            deleted=$((deleted+1))
+          done
+          {
+            echo "### Branch prune $([ "$DRY_RUN" = "true" ] && echo '(dry run — nothing changed)')"
+            echo "- deleted: $deleted"
+            echo "- archived as tags first (not in main): $archived"
+            echo "- kept on request: $kept"
+          } >> "$GITHUB_STEP_SUMMARY"

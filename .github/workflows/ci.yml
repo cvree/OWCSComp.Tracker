@@ -14,6 +14,14 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+  # Weekly, because the scheduled data workflows commit with GITHUB_TOKEN,
+  # and those pushes never trigger this workflow: from 2026-08-27 to
+  # 2026-10-29 main took ~200 bot commits and the suite ran zero times.
+  # Rot that arrives from outside — a yt-dlp release, a runner image, a
+  # new dependency version — would otherwise go unnoticed until a human
+  # next pushed.
+  schedule:
+    - cron: "23 7 * * 1"
 
 # One CI run per ref; cancel superseded runs so pushes don't pile up.
 concurrency:
@@ -64,6 +72,11 @@ jobs:
       # always rebuilds byte-identically.
       - name: Discovery layer must match a fresh build (self-fill)
         run: python pipeline/automation/cli.py self-fill --check
+
+      # label.html renders this index; a stale one shows cards that do not
+      # exist or hides ones waiting for a name.
+      - name: Hero-card index must match the committed batches
+        run: python pipeline/label_batch.py --index --check
 
       - name: Offline test suite
         # OpenCV comes from requirements.txt here, so the site suite must run

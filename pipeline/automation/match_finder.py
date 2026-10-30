@@ -386,13 +386,20 @@ def _resort_by_date(ledger: dict) -> None:
     ledger["candidates"] = rows
 
 
-def dateless_candidates(ledger: dict) -> list[dict]:
+def dateless_candidates(ledger: dict, *,
+                        platform: str | None = None) -> list[dict]:
     """Rows that still need an air date and are worth spending one on. A
-    refused Short is not worth a request and never will be."""
+    refused Short is not worth a request and never will be.
+
+    `platform` narrows to one source's ids. A date source only knows its
+    own namespace: the YouTube Data API cannot date a Twitch VOD, and
+    asking it to costs a slot in the batch and returns nothing."""
     return [r for r in (ledger.get("candidates") or [])
             if isinstance(r, dict) and r.get("videoId")
             and not r.get("publishedAt")
-            and not (r.get("likeness") or {}).get("refused")]
+            and not (r.get("likeness") or {}).get("refused")
+            and (platform is None
+                 or (r.get("platform") or li.YOUTUBE) == platform)]
 
 
 def video_fields_from_api(item: dict) -> dict:
@@ -450,8 +457,14 @@ def fill_missing_dates_via_api(ledger: dict, *, client,
 
     `limit` caps VIDEOS (not calls) so a run can still be bounded; 0 means
     the whole dateless archive, which is the sane default here precisely
-    because it is nearly free."""
-    rows = dateless_candidates(ledger)
+    because it is nearly free.
+
+    YouTube rows only. Twitch ids used to be sent too, which the API can
+    never return — so every Twitch broadcast stayed dateless forever and
+    was reported as "deleted, private or region-blocked" on every scan.
+    Those rows belong to `fill_missing_dates(platform=TWITCH)`, whose
+    per-video lookup Twitch serves from a runner."""
+    rows = dateless_candidates(ledger, platform=li.YOUTUBE)
     if limit > 0:
         rows = rows[:limit]
     if not rows:
@@ -505,7 +518,8 @@ def _call_meta(meta: Callable, row: dict):
 
 def fill_missing_dates(ledger: dict, *, limit: int = 0, runner=subprocess,
                        fetch_meta: Callable[[str], tuple[dict | None, str | None]]
-                       | None = None) -> tuple[dict, list[str], int]:
+                       | None = None,
+                       platform: str | None = None) -> tuple[dict, list[str], int]:
     """Give dateless archived broadcasts their real air date, a bounded
     number per scan. Returns (ledger, errors, filled).
 
@@ -528,7 +542,10 @@ def fill_missing_dates(ledger: dict, *, limit: int = 0, runner=subprocess,
     now bot-checks the runner and asks for cookies), the loop walked the
     entire dateless archive. A budget of 40 spent 245 requests and wrote
     245 near-identical errors into the public snapshot, hammering a source
-    hardest at the exact moment it was already refusing us."""
+    hardest at the exact moment it was already refusing us.
+
+    `platform` restricts the walk to one source's rows — how the scan dates
+    Twitch when the YouTube rows already went through the Data API."""
     if limit <= 0:
         return ledger, [], 0
     meta = fetch_meta or (
@@ -550,10 +567,7 @@ def fill_missing_dates(ledger: dict, *, limit: int = 0, runner=subprocess,
         # report the class once, with how many rows are still waiting on
         # it, so the site can state the actual blocker.
         if consecutive_failures >= SYSTEMIC_REFUSALS:
-            remaining = sum(
-                1 for r in (ledger.get("candidates") or [])
-                if isinstance(r, dict) and not r.get("publishedAt")
-                and not (r.get("likeness") or {}).get("refused"))
+            remaining = len(dateless_candidates(ledger, platform=platform))
             errors.append(
                 f"date-backfill: stopped after {consecutive_failures} "
                 f"consecutive refusals from the source — {remaining} "
@@ -562,6 +576,8 @@ def fill_missing_dates(ledger: dict, *, limit: int = 0, runner=subprocess,
                 "the scan reads carries no date of its own.")
             break
         if not isinstance(row, dict) or row.get("publishedAt"):
+            continue
+        if platform is not None and (row.get("platform") or li.YOUTUBE) != platform:
             continue
         # Nothing to place on a calendar: a refused Short is not worth a
         # request, and never will be.
@@ -582,10 +598,11 @@ def fill_missing_dates(ledger: dict, *, limit: int = 0, runner=subprocess,
 
 
 # ------------------------------------------------------- unattended queue
-def fetchable_queue(ledger: dict, *, platform: str = li.TWITCH) -> list[dict]:
+def fetchable_queue(ledger: dict, *, platform: str = li.TWITCH,
+                    prefer_families: tuple[str, ...] = ("owcs",)) -> list[dict]:
     """The broadcasts an unattended run may pick up, best first.
 
-    Narrow on purpose. Three filters, each for its own reason:
+    Narrow on purpose. Four filters, each for its own reason:
 
     * **Platform.** A GitHub-hosted runner is bot-checked by YouTube on
       every player client and cannot fetch a YouTube VOD (measured — see
@@ -598,20 +615,60 @@ def fetchable_queue(ledger: dict, *, platform: str = li.TWITCH) -> list[dict]:
       as a promo/guide/short and said so with reasons. A human can override
       that by pasting the link; an unattended run has no business doing so.
 
-    Order is oldest-first, so the archive completes in the order it aired
-    rather than whichever way a scan happened to sort. A dateless row sorts
-    LAST rather than first: `None` would otherwise compare as the earliest
-    possible date and let every undated row jump the queue.
+    * **Still listed.** Twitch deletes past broadcasts after a retention
+      window, and the ledger keeps every row it ever saw. A row the
+      channel's latest listing no longer carries is gone; queueing it makes
+      a job that fails at acquisition — and, because the oldest row sorts
+      first, the same dead row would head the queue on every run. See
+      `_delisted`.
+
+    Order: a title that positively names a `prefer_families` event first,
+    because the committed layouts describe that production's overlay and a
+    Collegiate or Calling All Heroes broadcast may not carry it; an original
+    airing before its rebroadcast, which is the same footage again; then
+    oldest-first, so the archive completes in the order it aired. A
+    dateless row sorts LAST within its group: `None` would otherwise compare
+    as the earliest possible date and let every undated row jump the queue.
     """
+    gone = _delisted(ledger, platform=platform)
     rows = [r for r in (ledger.get("candidates") or [])
             if isinstance(r, dict) and r.get("url")
             and (r.get("platform") or li.YOUTUBE) == platform
             and not (r.get("likeness") or {}).get("refused")
-            and (r.get("likeness") or {}).get("confidence") == "likely"]
-    rows.sort(key=lambda r: (r.get("publishedAt") is None,
+            and (r.get("likeness") or {}).get("confidence") == "likely"
+            and str(r.get("videoId")) not in gone]
+    rows.sort(key=lambda r: (li.event_family(r.get("title")) not in prefer_families,
+                             "rebroadcast" in str(r.get("title") or "").lower(),
+                             r.get("publishedAt") is None,
                              str(r.get("publishedAt") or ""),
                              str(r.get("videoId") or "")))
     return rows
+
+
+def _delisted(ledger: dict, *, platform: str) -> set[str]:
+    """Video ids of `platform` rows that the latest listing of their own
+    channel no longer carried.
+
+    "Latest listing" is the newest `lastSeenAt` among that channel's rows,
+    not the ledger's `generatedAt`: a scan that failed to read a channel
+    leaves its rows on the previous listing, and that must not read as
+    every one of them having vanished. A row with no `lastSeenAt` is never
+    called delisted — unknown is not gone.
+
+    Twitch only. A YouTube archive broadcast does not expire, it merely
+    scrolls past the scan's `--limit`, so a stale `lastSeenAt` there says
+    nothing about whether it can still be fetched."""
+    if platform != li.TWITCH:
+        return set()
+    rows = [r for r in (ledger.get("candidates") or [])
+            if isinstance(r, dict) and r.get("videoId") and r.get("lastSeenAt")
+            and (r.get("platform") or li.YOUTUBE) == platform]
+    latest: dict[str, str] = {}
+    for r in rows:
+        key = str(r.get("channelId") or "")
+        latest[key] = max(latest.get(key, ""), str(r["lastSeenAt"]))
+    return {str(r["videoId"]) for r in rows
+            if str(r["lastSeenAt"]) < latest[str(r.get("channelId") or "")]}
 
 
 def next_fetchable(ledger: dict, *, platform: str = li.TWITCH,

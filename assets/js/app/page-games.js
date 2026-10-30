@@ -302,6 +302,7 @@
           "found by itself on verified official channels. Nothing has been read from " +
           "them yet — the title is all we know, and the title is all this list claims. " +
           "Opening one shows the evidence and the single step that starts processing.</p>" +
+          (P.archiveCalendar ? '<div class="u-mt-4">' + P.archiveCalendar() + "</div>" : "") +
           archiveScale() + dateNote() +
           grouped(found)
         : "");

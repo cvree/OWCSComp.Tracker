@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Name the heroes — OWCS Comp Tracker</title>
+<meta name="description" content="Teach the tracker new heroes: every card is one portrait it saw again and again on a broadcast. Name it once, and the tracker learns to read that hero by itself.">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/archivo-var-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/saira-condensed-700-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/fonts.css">
+<link rel="stylesheet" href="assets/css/owcs.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<main id="main" class="shell shell--wide">
+
+  <div class="page-head page-head--tight">
+    <p class="eyebrow eyebrow--amber">Teach the tracker</p>
+    <h1>Name the heroes</h1>
+    <p class="lede">The tracker can only read a hero it has been shown. Each card below is one
+      portrait it saw again and again on a real broadcast — the same hero, in the same look.
+      Name it once and the tracker learns to read that hero by itself.</p>
+    <p class="dim small" style="max-width:74ch">Nothing you name is trusted on your word alone:
+      the tracker builds reference images from the card, then tests them on parts of the
+      broadcast it never learned from. Only heroes it then reads correctly are kept.</p>
+  </div>
+
+  <div id="label-app" aria-live="polite"></div>
+
+</main>
+
+<!-- hero picker, opened over a card -->
+<div class="lightbox" id="picker-modal" hidden>
+  <div data-close style="position:absolute;inset:0"></div>
+  <div class="lightbox__box" role="dialog" aria-modal="true" aria-labelledby="picker-title"
+       style="width:min(94vw,720px)">
+    <div class="u-flex u-between u-center u-gap-3">
+      <h2 id="picker-title" style="font-size:1.05rem">Who is this?</h2>
+      <button class="btn btn--sm btn--quiet" data-close aria-label="Close">Esc</button>
+    </div>
+    <div class="u-flex u-gap-3 u-center u-mt-3" id="picker-context"></div>
+    <div class="picker u-mt-4">
+      <div class="picker__search">
+        <label class="visually-hidden" for="picker-q">Search heroes</label>
+        <input class="input" id="picker-q" type="search" autocomplete="off"
+               placeholder="Type a hero name — Enter picks the first match">
+      </div>
+      <div class="picker__grid" id="picker-grid" role="listbox" aria-label="Heroes"></div>
+    </div>
+  </div>
+</div>
+
+<script src="assets/vendor/fuse.basic.min.js" defer></script>
+<script src="assets/vendor/lenis.min.js" defer></script>
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="assets/js/app/motion.js" defer></script>
+<script src="assets/data/hero_art.v1.js"></script>
+<script src="assets/data/public_data.v1.js"></script>
+<script src="assets/data/discovered.v1.js"></script>
+<script src="assets/data/labelling.v1.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app/core.js"></script>
+<script src="assets/js/app/games.js"></script>
+<script src="assets/js/app/hovercard.js" defer></script>
+<script src="assets/js/app/shell.js"></script>
+<script src="assets/js/app/page-label.js"></script>
+</body>
+</html>

@@ -40,7 +40,7 @@ const ROOT = path.dirname(__dirname);
 const PAGES = [
   "index.html", "games.html", "game.html", "submit.html", "review.html",
   "stats.html", "teams.html", "team.html", "hero.html", "tools.html",
-  "how-it-works.html", "guide.html", "styleguide.html",
+  "how-it-works.html", "guide.html", "styleguide.html", "label.html",
 ];
 /* 404.html is deliberately standalone — it must render with no data and
    no shell, because the thing that failed may be the shell. */

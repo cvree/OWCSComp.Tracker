@@ -1549,12 +1549,24 @@ def cmd_find_matches(args: argparse.Namespace) -> int:
     if args.fill_dates and not args.dry_run:
         pending = len(mf.dateless_candidates(ledger))
         if os.environ.get("YOUTUBE_API_KEY"):
+            # The API only knows YouTube ids. Twitch rows take the bounded
+            # per-video lookup, which Twitch serves from a runner.
             client = _build_youtube_client(args)
-            print(f"[match-finder] dating {pending} broadcast(s) via the "
-                  f"YouTube Data API ({-(-pending // 50)} call(s), "
-                  f"{-(-pending // 50)} quota unit(s))")
+            yt_pending = len(mf.dateless_candidates(ledger, platform=li.YOUTUBE))
+            print(f"[match-finder] dating {yt_pending} YouTube broadcast(s) "
+                  f"via the YouTube Data API ({-(-yt_pending // 50)} call(s), "
+                  f"{-(-yt_pending // 50)} quota unit(s))")
             ledger, date_errors, filled = mf.fill_missing_dates_via_api(
                 ledger, client=client)
+            tw_pending = len(mf.dateless_candidates(ledger, platform=li.TWITCH))
+            if tw_pending:
+                print(f"[match-finder] dating Twitch broadcasts by per-video "
+                      f"lookup ({args.fill_dates} request(s) of {tw_pending} "
+                      "pending)")
+                ledger, tw_errors, tw_filled = mf.fill_missing_dates(
+                    ledger, limit=args.fill_dates, platform=li.TWITCH)
+                date_errors += tw_errors
+                filled += tw_filled
         else:
             print("[match-finder] no YOUTUBE_API_KEY — falling back to the "
                   f"bounded per-video lookup ({args.fill_dates} request(s) "
