@@ -78,6 +78,9 @@ jobs:
       - name: Hero-card index must match the committed batches
         run: python pipeline/label_batch.py --index --check
 
+      - name: The map index matches its committed broadcasts
+        run: python pipeline/broadcast_maps.py --index --check
+
       - name: Offline test suite
         # OpenCV comes from requirements.txt here, so the site suite must run
         # its report-builder checks rather than skipping them the way the

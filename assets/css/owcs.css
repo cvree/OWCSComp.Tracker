@@ -2193,6 +2193,53 @@ html.motion-on .rv-in { opacity: 1; transform: none; transition: opacity var(--t
   .skeleton { animation: none; background: var(--s2); }
 }
 
+/* =====================================================================
+   19f. Map index — every map of a broadcast, one click from playing
+   ===================================================================== */
+.mode-line { margin: 0; }
+.mi { display: grid; gap: var(--s-4); }
+.mi-series { border: 1px solid var(--line); border-radius: var(--r-4); background: var(--s1); overflow: hidden; }
+.mi-series__head { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2) var(--s-3);
+  padding: var(--s-3) var(--s-4); border-bottom: 1px solid var(--line); background: var(--s2); }
+.mi-series__head > .small:last-child { margin-left: auto; }
+.mi-maps { list-style: none; margin: 0; padding: 0; }
+.mi-map { display: grid; align-items: center; gap: var(--s-2) var(--s-4);
+  grid-template-columns: 2.5rem minmax(9rem, 1.1fr) minmax(0, 2fr) auto auto auto;
+  padding: var(--s-2) var(--s-4); border-top: 1px solid var(--line); }
+.mi-map:first-child { border-top: 0; }
+.mi-map:hover { background: var(--s2); }
+.mi-map__game { color: var(--gold); font-weight: 700; }
+.mi-map__name { font: 700 1.05rem/1.2 var(--f-display); letter-spacing: .01em; color: var(--tx); }
+.mi-map__mode { margin-left: var(--s-2); font: 500 .75rem/1 var(--f-body, inherit); color: var(--tx-3);
+  text-transform: uppercase; letter-spacing: .06em; }
+.mi-map__vs { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-1) var(--s-2); min-width: 0; }
+.mi-team { display: inline-flex; align-items: center; gap: var(--s-1); color: var(--tx); text-decoration: none; min-width: 0; }
+a.mi-team:hover .mi-team__name { text-decoration: underline; }
+.mi-team__logo { display: inline-flex; width: 20px; height: 20px; flex: none; }
+.mi-team__logo img, .mi-team__logo svg { width: 20px; height: 20px; object-fit: contain; }
+.mi-team__name { font: 600 .82rem/1.2 var(--f-display); letter-spacing: .03em; text-transform: uppercase;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mi-team--lg .mi-team__name { font-size: 1.05rem; }
+.mi-team--lg .mi-team__logo, .mi-team--lg .mi-team__logo img, .mi-team--lg .mi-team__logo svg { width: 26px; height: 26px; }
+.mi-team__q { display: inline-grid; place-items: center; width: 15px; height: 15px; border-radius: 50%;
+  font: 700 10px/1 var(--f-display); color: var(--amber); border: 1px solid rgba(232, 163, 61, .55); cursor: help; }
+.mi-team--none { color: var(--tx-3); font-style: italic; }
+.mi-check { padding: 2px 7px; border-radius: var(--r-pill); font: 600 .7rem/1.4 var(--f-display);
+  letter-spacing: .05em; text-transform: uppercase; color: var(--amber); background: var(--wash-amber);
+  border: 1px solid rgba(232, 163, 61, .4); cursor: help; }
+.mi-map__watch { white-space: nowrap; }
+.mi-more { margin: 0; }
+@media (max-width: 760px) {
+  .mi-map { grid-template-columns: 2rem 1fr auto; grid-template-areas:
+    "g name watch" "g vs vs" "g when check"; row-gap: var(--s-1); padding: var(--s-3); }
+  .mi-map__game { grid-area: g; align-self: start; }
+  .mi-map__name { grid-area: name; }
+  .mi-map__vs { grid-area: vs; }
+  .mi-map__when { grid-area: when; }
+  .mi-check, .mi-map > span:empty { grid-area: check; justify-self: start; }
+  .mi-map__watch { grid-area: watch; }
+}
+
 @media print {
   body::before, #atmosphere, .hdr, .dataline, .ftr, .scroll-progress, .toasts,
   .nav, .nav-toggle, .more { display: none !important; }

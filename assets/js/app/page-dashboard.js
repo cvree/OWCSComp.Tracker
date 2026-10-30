@@ -13,8 +13,9 @@
   const esc = P.esc;
 
   document.addEventListener("DOMContentLoaded", () => {
-    P.api.mountStatus("mode-status");
+    P.api.mountStatus("mode-status", { compact: true });
     renderShowcase();
+    renderWatch();
     renderStory();
     renderTiles();
     renderAutofill();
@@ -23,6 +24,28 @@
     renderPublished();
     renderHealth();
   });
+
+  /* ------------------------------------------------------------ watch
+     The newest broadcast with a map index (app/mapindex.js): who played
+     which map, and a link straight to the second it starts. It needs no
+     hero data, so it is the first thing a visitor can use. */
+  function renderWatch() {
+    const band = document.getElementById("watch-band");
+    if (!band || !P.mapIndex) return;
+    const vids = P.mapIndex.ids();
+    if (!vids.length) return;
+    const byVid = {};
+    P.discovered().forEach((b) => { byVid[b.videoId] = b; });
+    const newest = vids.slice().sort((a, b) =>
+      String((byVid[b] || {}).publishedAt || "").localeCompare(String((byVid[a] || {}).publishedAt || "")))[0];
+    const b = byVid[newest] || {};
+    document.getElementById("watch-sub").textContent =
+      ((b.parsed && b.parsed.cleanTitle) || b.title || "Latest broadcast") + " · " +
+      P.mapIndex.summary(newest) + " — read off the broadcast, nobody involved.";
+    document.getElementById("watch-link").href = "game.html?video=" + encodeURIComponent(newest) + "#maps";
+    document.getElementById("watch").innerHTML = P.mapIndex.html(newest, { limit: 3 });
+    band.hidden = false;
+  }
 
   /* ------------------------------------------------------------ story
      The newest published map as a map story (app/mapstory.js): ten lanes

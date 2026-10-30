@@ -503,6 +503,8 @@
     const label = G.foundLabel(g);
     const b = g.broadcast || {};
     const runtime = P.fmtRuntime ? P.fmtRuntime(b.durationSeconds) : null;
+    /* A broadcast whose maps are indexed opens straight onto them. */
+    const indexed = P.mapIndex && b.videoId && P.mapIndex.entry(b.videoId);
     return "<tr>" +
       '<td><span class="u-trunc">' + P.esc(label.text) + "</span>" +
       (label.placed
@@ -514,8 +516,10 @@
           : '<span class="dim" title="The source did not report a length.">—</span>') +
       "</td>" +
       '<td class="dim small">' + G.airedCell(g) + "</td>" +
-      '<td class="u-nowrap"><a class="btn btn--sm" href="' + P.esc(g.href) +
-        '">Open</a></td>' +
+      '<td class="u-nowrap">' + (indexed
+        ? '<a class="btn btn--sm btn--primary" href="' + P.esc(g.href) + '#maps" title="' +
+          P.esc(P.mapIndex.summary(b.videoId)) + '">▶ ' + P.mapIndex.entry(b.videoId).maps.length + " maps</a>"
+        : '<a class="btn btn--sm" href="' + P.esc(g.href) + '">Open</a>') + "</td>" +
       "</tr>";
   };
 

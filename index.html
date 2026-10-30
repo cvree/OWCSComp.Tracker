@@ -41,6 +41,15 @@
 
   <!-- The newest published map, replayable. The product's whole claim in
        one interactive picture: hides itself when nothing is published. -->
+  <section class="shell shell--wide band" id="watch-band" hidden aria-labelledby="h-watch">
+    <div class="sec-head">
+      <h2 id="h-watch">Watch any map</h2>
+      <a class="sec-link" id="watch-link" href="games.html">Every map of this broadcast →</a>
+    </div>
+    <p class="dim small" id="watch-sub"></p>
+    <div id="watch"></div>
+  </section>
+
   <section class="shell shell--wide band" id="story-band" hidden aria-labelledby="h-story">
     <div class="sec-head">
       <h2 id="h-story">Replay the latest map</h2>
@@ -112,9 +121,11 @@
 <script src="assets/data/hero_art.v1.js"></script>
 <script src="assets/data/public_data.v1.js"></script>
 <script src="assets/data/discovered.v1.js"></script>
+<script src="assets/data/broadcast_maps.v1.js"></script>
 <script src="assets/js/data.js"></script>
 <script src="assets/js/app/core.js"></script>
 <script src="assets/js/app/games.js"></script>
+<script src="assets/js/app/mapindex.js"></script>
 <script src="assets/js/app/api.js"></script>
 <script src="assets/vendor/panzoom.min.js"></script>
 <script src="assets/js/app/evidence.js"></script>
