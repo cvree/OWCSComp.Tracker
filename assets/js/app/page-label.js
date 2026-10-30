@@ -117,6 +117,8 @@
   const approved = new Set(draft.approved || batch.approved || []);
   const rejected = new Set(draft.rejected || batch.rejected || []);
   const review = batch.review || {};
+  /* Labels already committed for this batch: updating means editing that file. */
+  const committed = Object.keys(batch.labels || {}).length > 0;
   const cards = batch.cards || [];
   const byId = {};
   cards.forEach((c, i) => { byId[c.id] = c; c.n = i + 1; });
@@ -336,10 +338,15 @@
         '<div class="u-flex u-gap-2 u-wrap u-center">' +
           '<label class="visually-hidden" for="signed-as">Your name</label>' +
           '<input class="input lb-bar__who" id="signed-as" type="text" autocomplete="name" placeholder="your name" value="' + esc(signedAs) + '">' +
-          '<a class="btn btn--primary" id="commit" target="_blank" rel="noopener">Commit on GitHub ↗</a>' +
+          '<a class="btn btn--primary" id="commit" target="_blank" rel="noopener">' +
+            (committed ? "Copy &amp; update on GitHub ↗" : "Commit on GitHub ↗") + "</a>" +
           '<button type="button" class="btn btn--ghost" id="download">Download</button>' +
           '<button type="button" class="btn btn--quiet" id="copy">Copy</button>' +
-        "</div></div>" +
+        "</div>" +
+        (committed ? '<p class="dim small lb-bar__how">This batch’s labels are already on GitHub, so the button ' +
+          "copies yours and opens that file to edit. There: click in the text, press <kbd>Ctrl</kbd>+<kbd>A</kbd>, " +
+          "then <kbd>Ctrl</kbd>+<kbd>V</kbd>, then <b>Commit changes</b>.</p>" : "") +
+        "</div>" +
       verdictsHtml() +
       reviewHtml() +
       renderLineup() +
@@ -354,6 +361,14 @@
     const a = $("commit");
     if (!a) return;
     const path = "labelling/" + batch.batchId + "/labels.json";
+    /* GitHub will not create a file that already exists, so a batch whose
+       labels were committed before (every one with a Double-check) is
+       updated through the edit page — the labels go on the clipboard. */
+    if (committed) {
+      a.href = "https://github.com/" + repoSlug() + "/edit/main/" + path;
+      a.title = "Copies your labels and opens " + path + " on GitHub — select all, paste, Commit changes.";
+      return;
+    }
     a.href = "https://github.com/" + repoSlug() + "/new/main?filename=" +
       encodeURIComponent(path) + "&value=" + encodeURIComponent(labelsJson());
     a.title = "Opens GitHub with " + path + " filled in — press “Commit changes” there.";
@@ -441,8 +456,13 @@
 
   function wire() {
     $("label-app").addEventListener("click", (e) => {
-      const t = e.target.closest("[data-name],[data-skip],[data-accept],[data-approve],[data-reject],[data-card],#download,#copy");
+      const t = e.target.closest("[data-name],[data-skip],[data-accept],[data-approve],[data-reject],[data-card],#download,#copy,#commit");
       if (!t) return;
+      if (t.id === "commit") {
+        /* the link still opens; on an existing file the labels must travel by clipboard */
+        if (committed) P.copy(labelsJson(), "Labels copied — paste them over the file on GitHub");
+        return;
+      }
       if (t.dataset.approve || t.dataset.reject) {
         const id = t.dataset.approve || t.dataset.reject;
         const into = t.dataset.approve ? approved : rejected;
