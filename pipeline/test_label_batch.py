@@ -25,10 +25,12 @@ sys.path.insert(0, HERE)
 import db  # noqa: E402
 import label_batch as lb  # noqa: E402
 import label_forge as lf  # noqa: E402
+import capture  # noqa: E402
 
 REPORT = os.path.join(db.REPO_ROOT, "reports", "ingest", "qad-twis-nepal")
 LAYOUT = os.path.join(db.REPO_ROOT, "layouts", "owcs_jksix_qwc.json")
 FIXED_TIME = "2026-10-29T00:00:00+00:00"
+ROOT = db.REPO_ROOT
 
 
 def read_text(path: str) -> str:
@@ -361,6 +363,59 @@ class TestForge(unittest.TestCase):
         changed = [l for l in after if l not in before]
         self.assertLessEqual(len(changed), 3, changed)
         self.assertTrue(all(l.startswith(' "') for l in changed), changed)
+
+    def test_a_template_of_another_hero_is_caught(self):
+        """The starter set carried two Symmetra portraits as tracer.a/.b; every
+        Symmetra crop then read as Tracer. A copy of one hero's template under
+        another hero's name must be flagged; the committed sets must be clean."""
+        lay = capture.load_layout(os.path.join(ROOT, "layouts", "owcs_8c105lnzlam.json"))
+        src = os.path.join(ROOT, lay["templates_dir"])
+        d = os.path.join(self.root, "set")
+        shutil.copytree(src, d, ignore=shutil.ignore_patterns("_superseded"))
+        self.assertEqual(lf.suspect_templates(d, lay), [])
+        shutil.copy(os.path.join(d, "sym.png"), os.path.join(d, "tracer.x.png"))
+        sus = lf.suspect_templates(d, lay)
+        self.assertIn(("tracer.x.png", "sym"),
+                      [(x["file"], x["looksLike"]) for x in sus], sus)
+
+    def test_no_committed_template_set_holds_another_heros_portrait(self):
+        for fn in sorted(os.listdir(os.path.join(ROOT, "layouts"))):
+            if not fn.endswith(".json"):
+                continue
+            lay = capture.load_layout(os.path.join(ROOT, "layouts", fn))
+            tdir = lay.get("templates_dir")
+            if not tdir or not os.path.isdir(os.path.join(ROOT, tdir)):
+                continue
+            with self.subTest(layout=fn):
+                self.assertEqual(lf.suspect_templates(os.path.join(ROOT, tdir), lay), [])
+
+    def test_a_batch_is_forged_until_its_labels_are_promoted_as_they_stand(self):
+        """A run that only forges what the last commit touched loses a batch
+        whenever a queued run is replaced; stale_batches is what every run
+        reads instead."""
+        bdir = os.path.join(self.root, "nepal")
+        self.assertEqual(lf.stale_batches(self.root), [], "no labels yet")
+        with open(os.path.join(bdir, "labels.json"), "w", encoding="utf-8") as f:
+            json.dump({"labels": {"c00": "kiriko"}}, f)
+        self.assertEqual(lf.stale_batches(self.root), ["nepal"], "never forged")
+
+        def report(**kw):
+            rep = {"forgeVersion": lf.FORGE_VERSION, "promote": True,
+                   "labelsDigest": lf.labels_digest(os.path.join(bdir, "labels.json"))}
+            rep.update(kw)
+            with open(os.path.join(bdir, "forge-report.json"), "w", encoding="utf-8") as f:
+                json.dump(rep, f)
+
+        report()
+        self.assertEqual(lf.stale_batches(self.root), [], "promoted as it stands")
+        report(promote=False)
+        self.assertEqual(lf.stale_batches(self.root), ["nepal"], "a dry run is not a promotion")
+        report(forgeVersion=lf.FORGE_VERSION - 1)
+        self.assertEqual(lf.stale_batches(self.root), ["nepal"], "an older forge's verdict")
+        report()
+        with open(os.path.join(bdir, "labels.json"), "w", encoding="utf-8") as f:
+            json.dump({"labels": {"c00": "kiriko", "c01": "lucio"}}, f)
+        self.assertEqual(lf.stale_batches(self.root), ["nepal"], "labels changed since")
 
 
 if __name__ == "__main__":

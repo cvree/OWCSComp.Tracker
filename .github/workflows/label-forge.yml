@@ -24,11 +24,16 @@ on:
   push:
     paths:
       - "labelling/*/labels.json"
+  # A run replaced in the queue, or a push this workflow never saw, leaves a
+  # batch unforged; the daily pass picks up whatever is stale.
+  schedule:
+    - cron: "41 5 * * *"
   workflow_dispatch:
     inputs:
       batch:
-        description: "Batch id (labelling/<batch>)"
-        required: true
+        description: "Batch id (labelling/<batch>); empty = every stale batch"
+        required: false
+        default: ""
       promote:
         description: "Promote heroes that validate"
         type: boolean
@@ -69,8 +74,9 @@ jobs:
           if [ -n "$INPUT_BATCH" ]; then
             batches="$INPUT_BATCH"
           else
-            batches=$(git diff --name-only HEAD~1 HEAD -- 'labelling/*/labels.json' \
-                      | cut -d/ -f2 | sort -u | tr '\n' ' ')
+            # every batch whose labels this forge has not promoted as they
+            # stand — not just the last commit's, which lost batches
+            batches=$(python pipeline/label_forge.py --stale)
           fi
           echo "batches=$batches" >> "$GITHUB_OUTPUT"
           echo "batches: ${batches:-none}"
@@ -101,12 +107,20 @@ jobs:
         if: steps.which.outputs.batches != ''
         env:
           BATCHES: ${{ steps.which.outputs.batches }}
-          PROMOTE: ${{ github.event_name == 'push' || inputs.promote }}
+          PROMOTE: ${{ github.event_name != 'workflow_dispatch' || inputs.promote }}
         run: |
           set -o pipefail
           flag=""; [ "$PROMOTE" = "true" ] && flag="--promote"
           for b in $BATCHES; do
-            python pipeline/label_forge.py --batch "$b" $flag 2>&1 | tee -a forge.log
+            # exit 2 is a refusal (e.g. its crops artifact expired): say so and
+            # forge the rest; anything else is a crash and stops the run
+            rc=0
+            python pipeline/label_forge.py --batch "$b" $flag 2>&1 | tee -a forge.log || rc=$?
+            if [ "$rc" = 2 ]; then
+              echo "::warning::$b was refused — see forge.log"
+            elif [ "$rc" != 0 ]; then
+              exit "$rc"
+            fi
           done
           # a promotion moves old crops into _superseded/; the site's hero
           # portraits are cut from the live crops, so recut them every time

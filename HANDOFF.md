@@ -42,7 +42,20 @@ failed its own leave-one-out safety test at 4.64% against a 2% ceiling.
   longest still-listed original that names OWCS, finds live play with the
   calibration ladder, samples ±180 s around each gameplay frame, commits
   the cards, keeps member crops as a 90-day artifact. `label-forge.yml`
-  fires when a `labels.json` is committed.
+  fires when a `labels.json` is committed. After a promotion it recuts the
+  site's hero portraits from the live crops (a promotion moves old crops to
+  `_superseded/`) and re-exports the public data when they changed.
+  Every run (push, daily, or dispatch with no batch) forges each batch whose
+  labels this forge version has not promoted as they stand
+  (`label_forge.py --stale`), so a run replaced in the queue loses nothing.
+* **Two templates were another hero.** The hand-made 8c105 starter set
+  carried two Symmetra portraits as `tracer.a/.b` (0.91 against Sym, 0.55
+  against Tracer), so leave-one-out read 86% of Symmetra crops as Tracer and
+  the safe forge refused every promotion. They are in `_superseded/` as
+  `tracer.*.legacy-is-sym.png`. The forge now refuses any set holding a
+  template that matches another hero ≥0.80 and ≥0.15 above its own
+  (`suspect_templates`), and CI checks every committed set. No published
+  comp came from them (the only Tracer reads in the DB are sample rows).
 * Proven on real footage, on a free runner, against **OWCS 2026 Midseason
   Championship Day 1** (Twitch 2831815423, 11.4 h). Run 1 worked end to end
   but found only 5 cards — the ladder's dozen isolated gameplay frames formed
