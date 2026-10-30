@@ -237,6 +237,60 @@ def harmonise_names(maps: list[dict]) -> list[dict]:
     return maps
 
 
+def series(maps: list[dict]) -> list[list[dict]]:
+    """Runs of adjacent maps that are one series: each shares a team with
+    the one before it and its game number goes up."""
+    out: list[list[dict]] = []
+    for m in maps:
+        i = m.get("identity") or {}
+        teams = {(i.get(s) or {}).get("value") for s in ("team_a", "team_b")} - {None}
+        game = (i.get("game") or {}).get("value")
+        if out:
+            p = out[-1][-1].get("identity") or {}
+            pteams = {(p.get(s) or {}).get("value") for s in ("team_a", "team_b")} - {None}
+            pgame = (p.get("game") or {}).get("value")
+            if teams & pteams and game and pgame and game > pgame:
+                out[-1].append(m)
+                continue
+        out.append([m])
+    return out
+
+
+def harmonise_series(maps: list[dict]) -> list[dict]:
+    """Within a series the opponent of a team is the same team on every map.
+
+    A short name defeats spelling similarity ("T1" read as "N1" on one map
+    of three); the series' vote-weighted majority for that slot corrects it."""
+    for run in series(maps):
+        if len(run) < 2:
+            continue
+        anchor = collections.Counter()
+        for m in run:
+            for side in ("team_a", "team_b"):
+                t = m["identity"].get(side) or {}
+                if t.get("value"):
+                    anchor[t["value"]] += 1
+        # the team on every map of the run is the anchor; its opponent varies
+        fixed = {name for name, n in anchor.items() if n == len(run)}
+        opp = collections.Counter()
+        for m in run:
+            for side in ("team_a", "team_b"):
+                t = m["identity"].get(side) or {}
+                if t.get("value") and t["value"] not in fixed and not t.get("known"):
+                    opp[t["value"]] += t.get("votes", 1)
+        if len(fixed) != 1 or not opp:
+            continue
+        best = opp.most_common(1)[0][0]
+        for m in run:
+            for side in ("team_a", "team_b"):
+                t = m["identity"].get(side) or {}
+                if t.get("value") and t["value"] not in fixed and not t.get("known") \
+                        and t["value"] != best:
+                    t["seriesCorrected"] = t["value"]
+                    t["value"] = best
+    return maps
+
+
 def attach(maps: list[dict], samples: list[dict], layout: dict, *,
            known_maps: list[dict], known_teams: list[dict], ocr=None,
            per_map: int = 24) -> list[dict]:
@@ -255,4 +309,4 @@ def attach(maps: list[dict], samples: list[dict], layout: dict, *,
         frames = [f for f in (cv2.imread(p) for p in inside) if f is not None]
         m["identity"] = identify(frames, layout, known_maps=known_maps,
                                  known_teams=known_teams, ocr=ocr)
-    return harmonise_names(merge_split_maps(maps))
+    return harmonise_series(harmonise_names(merge_split_maps(maps)))

@@ -57,7 +57,7 @@ class FakeRunner:
         return FakePopen(lines, rc)
 
 
-def api(port: int, path: str, body: dict | None = None):
+def api(port: int, path: str, body: dict | None = None, *, timeout: float = 5):
     url = f"http://127.0.0.1:{port}{path}"
     if body is None:
         req = urllib.request.Request(url)
@@ -66,7 +66,7 @@ def api(port: int, path: str, body: dict | None = None):
             url, data=json.dumps(body).encode(),
             headers={"Content-Type": "application/json"}, method="POST")
     try:
-        with urllib.request.urlopen(req, timeout=5) as r:
+        with urllib.request.urlopen(req, timeout=timeout) as r:
             return r.status, json.loads(r.read())
     except urllib.error.HTTPError as e:
         return e.code, json.loads(e.read())
@@ -241,7 +241,10 @@ def main() -> int:
     print("intake endpoints (paste-a-link prototype):")
     reset_state()
     serve.AUTOMATION_DB = os.path.join(TMP, "automation.sqlite")
-    code, j = api(port, "/api/intake")
+    # The first /api/intake call imports the automation package, and with it
+    # OpenCV; on a cold Windows runner that load alone has taken over 5 s.
+    # This checks the report's shape, not how fast a cold import is.
+    code, j = api(port, "/api/intake", timeout=60)
     check("live intake report has the intake.v1 shape (fresh DB, no jobs)",
           code == 200 and j.get("schema") == "intake.v1"
           and j.get("jobs") == [])

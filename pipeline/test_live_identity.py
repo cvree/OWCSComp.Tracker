@@ -136,6 +136,22 @@ class TestBroadcast(unittest.TestCase):
             window(1800, 2400, "aatlis", 3, "TEAM LIQUID", "WEIBO GAMING", votes=9)])
         self.assertEqual({m["identity"]["team_b"]["value"] for m in maps}, {"WEIBO GAMING"})
 
+    def test_a_short_name_misread_on_one_map_of_a_series_is_corrected(self):
+        """The real run read T1 as N1 on game 2 of T1 vs Twisted Minds."""
+        maps = lid.harmonise_series([
+            window(22470, 23340, "nepal", 1, "T1", "twis", votes=12, known_b=True),
+            window(24990, 25650, "aatlis", 2, "N1", "twis", votes=8, known_b=True),
+            window(25950, 27060, "route66", 3, "T1", "twis", votes=14, known_b=True),
+            window(29220, 29820, "nepal", 1, "TEAM LIQUID", "WEIBO GAMING")])
+        self.assertEqual([m["identity"]["team_a"]["value"] for m in maps],
+                         ["T1", "T1", "T1", "TEAM LIQUID"])
+        self.assertEqual(maps[1]["identity"]["team_a"]["seriesCorrected"], "N1")
+
+    def test_series_follow_the_game_numbers(self):
+        runs = lid.series([window(0, 1, "a", 1, "A", "B"), window(2, 3, "b", 2, "B", "A"),
+                           window(4, 5, "c", 1, "B", "C")])
+        self.assertEqual([len(r) for r in runs], [2, 1])
+
     def test_a_known_team_is_never_respelled(self):
         maps = lid.harmonise_names([window(0, 600, "nepal", 1, "ZETAA", "zeta", known_b=True),
                                     window(900, 1500, "nepal", 2, "ZETAA", "zeta", known_b=True)])
