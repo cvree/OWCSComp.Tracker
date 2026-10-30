@@ -78,8 +78,19 @@
     request(path, { method: "POST", body: JSON.stringify(payload || {}) });
 
   /* ---------------------------------------------------------- probing */
+  /* The published copy on GitHub Pages (or a page opened from disk) has no
+     tracker behind it by construction: asking would only put a 404 in every
+     visitor's console. The desktop app serves from localhost and is asked. */
+  const NO_TRACKER_HERE = /\.github\.io$/i.test(location.hostname || "") ||
+    location.protocol === "file:";
+
   A.probe = function () {
     if (probing) return probing;
+    if (NO_TRACKER_HERE) {
+      setMode("readonly");
+      probing = Promise.resolve(mode);
+      return probing;
+    }
     probing = request("/api/ping", { timeout: 3500 }).then((r) => {
       setMode(r && r.ok ? "connected" : "readonly");
       return mode;
@@ -168,6 +179,13 @@
         el.innerHTML = P.note("ok", "Connected to your tracker",
           "<p>Submitting a game here really downloads and processes it, and review " +
           "decisions are written to the record straight away.</p>");
+        return;
+      }
+      /* Where browsing is the point (the dashboard), the read-only state is
+         a fact worth one quiet line, not a box above the data. */
+      if (opts.compact) {
+        el.innerHTML = '<p class="dim small mode-line">Published copy — read-only. ' +
+          '<a href="how-it-works.html#run-it-yourself">Run your own tracker →</a></p>';
         return;
       }
       el.innerHTML = P.note("info", opts.readonlyTitle || "You are on the published copy",

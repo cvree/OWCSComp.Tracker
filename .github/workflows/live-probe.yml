@@ -1,5 +1,5 @@
 # =====================================================================
-# OWCS Comp Tracker — where are the maps? (live-probe, dispatch only)
+# OWCS Comp Tracker — every map, ready to watch (live-probe)
 # ---------------------------------------------------------------------
 # Runs pipeline/live_ingest.py against one broadcast on a free runner:
 # samples the whole broadcast remotely, classifies every sample with the
@@ -7,42 +7,54 @@
 # each window's map, game number and teams from the HUD text
 # (live_identity.py) — without downloading the broadcast.
 #
-# It writes nothing to main. The timeline, plus four full frames from each
-# map window (what a person or a later step needs to read the teams and the
-# map name off the HUD), go to a scratch branch `probe/<video id>` so they
-# can be inspected anywhere git reaches; delete it with the maintenance
-# workflow's prune or by hand when done.
+# The result is published: data/broadcast_maps/<video id>.json plus the
+# site's assets/data/broadcast_maps.v1.js, so every game page carries
+# "▶ Watch" links that open the VOD at the second each map starts.
+#
+# Daily, with no input, it indexes the newest broadcast that has none yet
+# (pipeline/broadcast_maps.py --next: Twitch originals of events whose HUD
+# has measured identity zones). Dispatch it with a URL to index one by hand;
+# tick keep_frames to also push four frames per map to a scratch branch
+# `probe/<video id>` for inspection.
 # =====================================================================
 name: live-probe
 
 on:
+  schedule:
+    - cron: "17 9 * * *"
   workflow_dispatch:
     inputs:
       url:
-        description: "Broadcast URL (Twitch)"
-        required: true
+        description: "Broadcast URL (Twitch); empty = the next unindexed one"
+        required: false
+        default: ""
       layout:
-        description: "Layout id"
+        description: "Layout id (ignored when the URL is picked automatically)"
         required: false
         default: "owcs_8c105lnzlam"
       step:
         description: "Seconds between timeline samples"
         required: false
         default: "30"
+      keep_frames:
+        description: "Also push four frames per map to probe/<video id>"
+        type: boolean
+        default: false
 
-# It pushes (to a scratch branch), so it queues with every other
-# repo-writing workflow rather than racing one.
+# It pushes, so it queues with every other repo-writing workflow rather
+# than racing one.
 concurrency:
   group: owcs-generated-data
   cancel-in-progress: false
 
 permissions:
   contents: write
+  actions: write   # dispatch pages.yml after publishing
 
 jobs:
   probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 150
     steps:
       - uses: actions/checkout@v6
 
@@ -51,26 +63,75 @@ jobs:
           python-version: "3.12"
           cache: pip
 
+      - name: Which broadcast
+        id: which
+        env:
+          URL: ${{ inputs.url }}
+          LAYOUT: ${{ inputs.layout || 'owcs_8c105lnzlam' }}
+        run: |
+          if [ -n "$URL" ]; then
+            echo "url=$URL" >> "$GITHUB_OUTPUT"; echo "layout=$LAYOUT" >> "$GITHUB_OUTPUT"
+          else
+            read -r url layout < <(python3 pipeline/broadcast_maps.py --next || true)
+            echo "url=${url:-}" >> "$GITHUB_OUTPUT"; echo "layout=${layout:-}" >> "$GITHUB_OUTPUT"
+          fi
+          echo "broadcast: ${URL:-${url:-none left to index}}"
+
       - name: Install dependencies
+        if: steps.which.outputs.url != ''
         run: |
           # tesseract reads the map, game and team names off the HUD strip
           sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg tesseract-ocr
           python -m pip install --upgrade pip --quiet
           pip install --quiet -r requirements.txt pytesseract
 
-      - name: Find the maps
+      - name: Find and name the maps
+        if: steps.which.outputs.url != ''
         env:
-          URL: ${{ inputs.url }}
-          LAYOUT: ${{ inputs.layout || 'owcs_8c105lnzlam' }}
+          URL: ${{ steps.which.outputs.url }}
+          LAYOUT: ${{ steps.which.outputs.layout }}
           STEP: ${{ inputs.step || '30' }}
         run: |
           set -o pipefail
           python pipeline/live_ingest.py --url "$URL" --layout "layouts/$LAYOUT.json" \
             --out probe --step "$STEP" 2>&1 | tee probe.log
 
-      - name: Keep four frames from each map
+      - name: Publish the map index
+        id: publish
+        if: steps.which.outputs.url != ''
+        shell: bash
+        run: |
+          set -euo pipefail
+          python pipeline/broadcast_maps.py --from-timeline probe/timeline.json --index
+          python pipeline/broadcast_maps.py --index --check
+          python pipeline/test_live_identity.py
+          git config user.name  "owcs-live-probe[bot]"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/broadcast_maps assets/data/broadcast_maps.v1.js
+          if git diff --cached --quiet; then
+            echo "committed=false" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          vid=$(python3 -c "import json; print(json.load(open('probe/timeline.json'))['url'].rstrip('/').split('/')[-1])")
+          git commit -m "broadcast maps: index $vid"
+          pushed=false
+          for attempt in 1 2 3; do
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
+            if git push origin "HEAD:${GITHUB_REF_NAME}"; then pushed=true; break; fi
+            sleep $((attempt * 5))
+          done
+          [ "$pushed" = "true" ] || { echo "::error::could not push"; exit 1; }
+          echo "committed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Redeploy the site
+        if: steps.publish.outputs.committed == 'true'
         env:
-          URL: ${{ inputs.url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run pages.yml --ref "${GITHUB_REF_NAME}"
+
+      - name: Keep four frames from each map
+        if: steps.which.outputs.url != '' && inputs.keep_frames
+        env:
+          URL: ${{ steps.which.outputs.url }}
         run: |
           python - <<'PY'
           import json, os, shutil, sys
@@ -89,15 +150,14 @@ jobs:
           print(len(os.listdir("probe/frames")), "frames kept")
           PY
 
-      - name: Push to a scratch branch
+      - name: Push frames to a scratch branch
+        if: steps.which.outputs.url != '' && inputs.keep_frames
         env:
-          URL: ${{ inputs.url }}
+          URL: ${{ steps.which.outputs.url }}
         run: |
           set -euo pipefail
           vid=$(python3 -c "import os,sys; sys.path.insert(0,'pipeline'); from automation import link_intake as li; print(li.parse_link(os.environ['URL'])['videoId'])")
           cp probe.log probe/
-          git config user.name  "owcs-live-probe[bot]"
-          git config user.email "actions@users.noreply.github.com"
           git checkout --orphan "probe/$vid"
           git rm -rq --cached . >/dev/null
           git add -f probe
@@ -111,6 +171,6 @@ jobs:
           {
             echo "### Map windows"
             echo '```'
-            grep -E "map window|^\[live-ingest\] #" probe.log 2>/dev/null || echo "(no probe ran)"
+            grep -E "map window|^\[live-ingest\] #" probe.log 2>/dev/null || echo "(no broadcast probed)"
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"

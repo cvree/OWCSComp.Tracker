@@ -136,6 +136,10 @@
        leads with where it has got to. */
     const published = game.state === "published" || game.compCount;
     if (game.blockers.length) parts.push(blockerSection());
+    /* Every map of the broadcast, one click from playing: the most useful
+       thing on a broadcast page, and it needs no hero data at all. */
+    const vid = game.broadcast && game.broadcast.videoId;
+    if (vid && P.mapIndex && P.mapIndex.entry(vid)) parts.push(mapIndexSection(vid));
     if (game.broadcast) parts.push(discoverySection());
     if (published && game.state === "published") parts.push(publishedSection());
     parts.push(flowSection());
@@ -151,6 +155,14 @@
       const c = e.target.closest("[data-copy]");
       if (c) P.copy(c.dataset.copy, "Copied — paste it in a terminal");
     });
+  }
+
+  /* --------------------------------------------------------- map index */
+  function mapIndexSection(vid) {
+    return '<section class="band" id="maps" aria-labelledby="h-maps">' +
+      '<div class="sec-head"><h2 id="h-maps">Every map, ready to watch</h2>' +
+      '<span class="dim small">' + esc(P.mapIndex.summary(vid)) + " · read off the broadcast, nobody involved</span></div>" +
+      P.mapIndex.html(vid) + "</section>";
   }
 
   /* ---------------------------------------------------------- blockers */
