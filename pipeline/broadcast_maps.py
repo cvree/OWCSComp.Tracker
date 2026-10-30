@@ -147,6 +147,21 @@ def save(record: dict, data_dir: str = DATA_DIR) -> str:
     return path
 
 
+def assign_series(rows: list[dict]) -> list[dict]:
+    """Series numbers for committed rows, by today's grouping rule — so a
+    better rule regroups every broadcast already indexed, not just new ones."""
+    import live_identity as lid
+
+    def ident(r):
+        t = lambda x: {"value": (x or {}).get("id") or (x or {}).get("name")} if x else {}
+        return {"identity": {"team_a": t(r.get("team_a")), "team_b": t(r.get("team_b")),
+                             "game": {"value": r.get("game")}}, "row": r}
+    out = []
+    for n, run in enumerate(lid.series([ident(r) for r in rows]), 1):
+        out.extend(dict(x["row"], series=n) for x in run)
+    return out
+
+
 def build_index(data_dir: str = DATA_DIR) -> dict:
     """A pure function of the committed records — no clock — so --check can
     gate it byte for byte."""
@@ -160,6 +175,7 @@ def build_index(data_dir: str = DATA_DIR) -> dict:
             if rec.get("schema") == SCHEMA and rec.get("videoId"):
                 broadcasts[rec["videoId"]] = {k: rec[k] for k in
                                               ("url", "durationSeconds", "maps")}
+                broadcasts[rec["videoId"]]["maps"] = assign_series(rec["maps"])
     return {"schema": SCHEMA, "broadcasts": broadcasts}
 
 

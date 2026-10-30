@@ -158,6 +158,16 @@ class TestBroadcast(unittest.TestCase):
                          ["T1", "T1", "T1", "TEAM LIQUID"])
         self.assertEqual(maps[1]["identity"]["team_a"]["seriesCorrected"], "N1")
 
+    def test_an_unread_game_number_stays_in_its_series(self):
+        """Midseason Day 5: game 5 of Twisted Minds vs Weibo, number unread."""
+        runs = lid.series([window(0, 1, "a", 3, "TM", "WB"), window(2, 3, "b", 4, "WB", "TM"),
+                           window(4, 5, "c", None, "TM", "WB"), window(6, 7, "d", 1, "T1", "WB")])
+        self.assertEqual([len(r) for r in runs], [3, 1])
+
+    def test_the_same_teams_starting_over_are_a_new_series(self):
+        runs = lid.series([window(0, 1, "a", 2, "A", "B"), window(2, 3, "b", 1, "A", "B")])
+        self.assertEqual([len(r) for r in runs], [1, 1])
+
     def test_series_follow_the_game_numbers(self):
         runs = lid.series([window(0, 1, "a", 1, "A", "B"), window(2, 3, "b", 2, "B", "A"),
                            window(4, 5, "c", 1, "B", "C")])

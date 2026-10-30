@@ -479,7 +479,7 @@ window.OWCS_BROADCAST_MAPS = {
      "game": null,
      "index": 8,
      "map": "colosseo",
-     "series": 3,
+     "series": 2,
      "start": 13170,
      "team_a": {
       "id": "twis",
@@ -496,7 +496,7 @@ window.OWCS_BROADCAST_MAPS = {
      "game": 1,
      "index": 9,
      "map": "nepal",
-     "series": 4,
+     "series": 3,
      "start": 16230,
      "team_a": {
       "id": null,
@@ -515,7 +515,7 @@ window.OWCS_BROADCAST_MAPS = {
      "game": 2,
      "index": 10,
      "map": "neonjunction",
-     "series": 4,
+     "series": 3,
      "start": 17310,
      "team_a": {
       "id": null,
@@ -534,7 +534,7 @@ window.OWCS_BROADCAST_MAPS = {
      "game": 3,
      "index": 11,
      "map": "aatlis",
-     "series": 4,
+     "series": 3,
      "start": 19260,
      "team_a": {
       "id": null,
@@ -551,7 +551,7 @@ window.OWCS_BROADCAST_MAPS = {
      "game": 1,
      "index": 12,
      "map": "busan",
-     "series": 5,
+     "series": 4,
      "start": 23190,
      "team_a": {
       "id": "twis",
@@ -568,7 +568,7 @@ window.OWCS_BROADCAST_MAPS = {
      "game": 2,
      "index": 13,
      "map": "neonjunction",
-     "series": 5,
+     "series": 4,
      "start": 24360,
      "team_a": {
       "id": "zeta",
@@ -585,7 +585,7 @@ window.OWCS_BROADCAST_MAPS = {
      "game": 3,
      "index": 14,
      "map": "colosseo",
-     "series": 5,
+     "series": 4,
      "start": 25710,
      "team_a": {
       "id": "twis",
@@ -602,7 +602,7 @@ window.OWCS_BROADCAST_MAPS = {
      "game": 4,
      "index": 15,
      "map": "suravasa",
-     "series": 5,
+     "series": 4,
      "start": 26850,
      "team_a": {
       "id": "zeta",
@@ -619,7 +619,7 @@ window.OWCS_BROADCAST_MAPS = {
      "game": null,
      "index": 16,
      "map": "route66",
-     "series": 6,
+     "series": 4,
      "start": 27960,
      "team_a": {
       "id": "twis",
@@ -636,7 +636,7 @@ window.OWCS_BROADCAST_MAPS = {
      "game": 6,
      "index": 17,
      "map": "eich",
-     "series": 7,
+     "series": 4,
      "start": 29730,
      "team_a": {
       "id": "zeta",
