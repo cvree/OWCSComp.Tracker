@@ -1,5 +1,27 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
+## UPDATE (2026-10-30, sixteenth pass) — find the maps, name them
+
+* **Where the maps are, without the download.** `live_ingest.py` +
+  `live-probe.yml` sampled all 11.4 h of Midseason Day 1 (Twitch 2831815423)
+  remotely at 30 s and found **20 map windows**.
+* **Who played which map.** `live_identity.py` reads the HUD strip (map,
+  GAME N, both team names) from those same frames. On the probe's 80 frames,
+  19/20 windows were fully named and all correct; unknown teams keep the
+  printed name with `known: false`. Zones: `identity_zones` +
+  `map_aliases` in `layouts/owcs_8c105lnzlam.json`.
+* **Templates.** Two Symmetra portraits named `tracer.a/.b` were retired;
+  the forge now refuses look-alike sets and never loses a batch (see below).
+  The re-forge of both labelled batches still refuses to promote: (a) the
+  verdict rule fails a hero on ONE wrong read in any number of trials
+  (Tracer 112/130 right, 1 wrong → FAILED), and (b) ~20% of crops of
+  heroes with no template (Sojourn, Vendetta, Emre, Freja) read as
+  Ramattra at every bar on the grid. (a) is a policy choice for the owner;
+  (b) shrinks as those heroes are named and validated.
+* **Next, in order:** run `ingest_map --remote-url` per identified window
+  (comps per map); attach each map to a match by teams + date (new teams
+  need one confirmation); publish through the existing export + auto-merge.
+
 ## CURRENT STATUS (authoritative — 2026-10-29, fifteenth pass) — teach it heroes, show the story
 
 > Read `docs/ROADMAP-TO-READY.md` first: the audit this pass started from,
