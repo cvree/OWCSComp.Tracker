@@ -1,0 +1,540 @@
+{
+ "schema": "label-forge-report.v1",
+ "batchId": "2812835664-owcs_8c105lnzlam",
+ "layoutId": "owcs_8c105lnzlam",
+ "templatesDir": "templates/owcs_8c105lnzlam",
+ "labelledBy": "cvv",
+ "labelledAt": "2026-10-30T19:40:57Z",
+ "cardsNamed": 57,
+ "templatesWritten": 72,
+ "passed": false,
+ "falseMatch": {
+  "trials": 5,
+  "unknown": 5,
+  "matched": 0,
+  "matchedAs": {},
+  "byHero": {
+   "echo": 5
+  },
+  "rate": 0.0,
+  "passed": true,
+  "note": "5 crop(s) of heroes this set has NO template for. Every one should read UNKNOWN; 0 did not (0.0%, ceiling 2.0%)."
+ },
+ "leaveOneOut": {
+  "trials": 1041,
+  "matched": 55,
+  "rate": 0.0528,
+  "ceiling": 0.02,
+  "passed": false,
+  "note": "Leave-one-out false-match test over 1041 real crops: 55 (5.28%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
+  "confusablePairs": [
+   {
+    "hero": "sojourn",
+    "readAs": "sym",
+    "count": 23,
+    "trials": 112,
+    "share": 0.205,
+    "note": "with no sojourn template in the set, 23 of 112 real sojourn portraits (21%) were confidently read as sym instead of UNKNOWN"
+   },
+   {
+    "hero": "sym",
+    "readAs": "cass",
+    "count": 14,
+    "trials": 107,
+    "share": 0.131,
+    "note": "with no sym template in the set, 14 of 107 real sym portraits (13%) were confidently read as cass instead of UNKNOWN"
+   },
+   {
+    "hero": "cass",
+    "readAs": "sojourn",
+    "count": 13,
+    "trials": 105,
+    "share": 0.124,
+    "note": "with no cass template in the set, 13 of 105 real cass portraits (12%) were confidently read as sojourn instead of UNKNOWN"
+   },
+   {
+    "hero": "mizuki",
+    "readAs": "lucio",
+    "count": 3,
+    "trials": 99,
+    "share": 0.03,
+    "note": "with no mizuki template in the set, 3 of 99 real mizuki portraits (3%) were confidently read as lucio instead of UNKNOWN"
+   },
+   {
+    "hero": "lucio",
+    "readAs": "mizuki",
+    "count": 1,
+    "trials": 87,
+    "share": 0.011,
+    "note": "with no lucio template in the set, 1 of 87 real lucio portraits (1%) were confidently read as mizuki instead of UNKNOWN"
+   },
+   {
+    "hero": "sojourn",
+    "readAs": "pharah",
+    "count": 1,
+    "trials": 112,
+    "share": 0.009,
+    "note": "with no sojourn template in the set, 1 of 112 real sojourn portraits (1%) were confidently read as pharah instead of UNKNOWN"
+   }
+  ]
+ },
+ "heroes": {
+  "ball": {
+   "verdict": "VALIDATED",
+   "trials": 19,
+   "correct": 19,
+   "unknown": 0,
+   "wrong": 0,
+   "accuracy": 1.0,
+   "confusedWith": {},
+   "cards": [
+    "c27"
+   ]
+  },
+  "bap": {
+   "verdict": "REVIEW",
+   "trials": 20,
+   "correct": 18,
+   "unknown": 2,
+   "wrong": 0,
+   "accuracy": 0.9,
+   "confusedWith": {},
+   "cards": [
+    "c26",
+    "c28"
+   ]
+  },
+  "bastion": {
+   "verdict": "REVIEW",
+   "trials": 102,
+   "correct": 89,
+   "unknown": 13,
+   "wrong": 0,
+   "accuracy": 0.873,
+   "confusedWith": {},
+   "cards": [
+    "c11",
+    "c14",
+    "c30",
+    "c45"
+   ]
+  },
+  "cass": {
+   "verdict": "REVIEW",
+   "trials": 126,
+   "correct": 50,
+   "unknown": 76,
+   "wrong": 0,
+   "accuracy": 0.397,
+   "confusedWith": {},
+   "cards": [
+    "c08",
+    "c23",
+    "c24",
+    "c43"
+   ]
+  },
+  "dva": {
+   "verdict": "WEAK",
+   "trials": 2,
+   "correct": 2,
+   "unknown": 0,
+   "wrong": 0,
+   "accuracy": 1.0,
+   "confusedWith": {},
+   "cards": [
+    "c41",
+    "c54"
+   ]
+  },
+  "jetcat": {
+   "verdict": "WEAK",
+   "trials": 9,
+   "correct": 9,
+   "unknown": 0,
+   "wrong": 0,
+   "accuracy": 1.0,
+   "confusedWith": {},
+   "cards": [
+    "c35"
+   ]
+  },
+  "juno": {
+   "verdict": "VALIDATED",
+   "trials": 13,
+   "correct": 13,
+   "unknown": 0,
+   "wrong": 0,
+   "accuracy": 1.0,
+   "confusedWith": {},
+   "cards": [
+    "c37"
+   ]
+  },
+  "kiriko": {
+   "verdict": "REVIEW",
+   "trials": 221,
+   "correct": 187,
+   "unknown": 34,
+   "wrong": 0,
+   "accuracy": 0.846,
+   "confusedWith": {},
+   "cards": [
+    "c00",
+    "c03",
+    "c09",
+    "c55"
+   ]
+  },
+  "lucio": {
+   "verdict": "REVIEW",
+   "trials": 124,
+   "correct": 102,
+   "unknown": 22,
+   "wrong": 0,
+   "accuracy": 0.823,
+   "confusedWith": {},
+   "cards": [
+    "c07",
+    "c19",
+    "c20",
+    "c47",
+    "c53"
+   ]
+  },
+  "mei": {
+   "verdict": "REVIEW",
+   "trials": 68,
+   "correct": 34,
+   "unknown": 34,
+   "wrong": 0,
+   "accuracy": 0.5,
+   "confusedWith": {},
+   "cards": [
+    "c25",
+    "c34",
+    "c44",
+    "c50"
+   ]
+  },
+  "mizuki": {
+   "verdict": "REVIEW",
+   "trials": 150,
+   "correct": 124,
+   "unknown": 26,
+   "wrong": 0,
+   "accuracy": 0.827,
+   "confusedWith": {},
+   "cards": [
+    "c16",
+    "c18",
+    "c21",
+    "c31",
+    "c40",
+    "c46",
+    "c57"
+   ]
+  },
+  "pharah": {
+   "verdict": "REVIEW",
+   "trials": 20,
+   "correct": 16,
+   "unknown": 4,
+   "wrong": 0,
+   "accuracy": 0.8,
+   "confusedWith": {},
+   "cards": [
+    "c29",
+    "c49"
+   ]
+  },
+  "rein": {
+   "verdict": "VALIDATED",
+   "trials": 42,
+   "correct": 42,
+   "unknown": 0,
+   "wrong": 0,
+   "accuracy": 1.0,
+   "confusedWith": {},
+   "cards": [
+    "c12",
+    "c56"
+   ]
+  },
+  "shion": {
+   "verdict": "WEAK",
+   "trials": 8,
+   "correct": 8,
+   "unknown": 0,
+   "wrong": 0,
+   "accuracy": 1.0,
+   "confusedWith": {},
+   "cards": [
+    "c52"
+   ]
+  },
+  "sigma": {
+   "verdict": "REVIEW",
+   "trials": 230,
+   "correct": 183,
+   "unknown": 47,
+   "wrong": 0,
+   "accuracy": 0.796,
+   "confusedWith": {},
+   "cards": [
+    "c02",
+    "c04",
+    "c06",
+    "c33"
+   ]
+  },
+  "sojourn": {
+   "verdict": "REVIEW",
+   "trials": 149,
+   "correct": 65,
+   "unknown": 83,
+   "wrong": 1,
+   "accuracy": 0.436,
+   "confusedWith": {
+    "pharah": 1
+   },
+   "cards": [
+    "c10",
+    "c17",
+    "c22",
+    "c38"
+   ]
+  },
+  "sym": {
+   "verdict": "REVIEW",
+   "trials": 228,
+   "correct": 126,
+   "unknown": 102,
+   "wrong": 0,
+   "accuracy": 0.553,
+   "confusedWith": {},
+   "cards": [
+    "c01",
+    "c05",
+    "c13",
+    "c15"
+   ]
+  },
+  "tracer": {
+   "verdict": "VALIDATED",
+   "trials": 21,
+   "correct": 21,
+   "unknown": 0,
+   "wrong": 0,
+   "accuracy": 1.0,
+   "confusedWith": {},
+   "cards": [
+    "c39",
+    "c42"
+   ]
+  },
+  "wuyang": {
+   "verdict": "REVIEW",
+   "trials": 17,
+   "correct": 15,
+   "unknown": 2,
+   "wrong": 0,
+   "accuracy": 0.882,
+   "confusedWith": {},
+   "cards": [
+    "c36",
+    "c51"
+   ]
+  }
+ },
+ "promotion": {
+  "promotedHeroes": [
+   "ball",
+   "juno",
+   "rein",
+   "tracer"
+  ],
+  "promoted": [
+   "ball.png",
+   "ball.v1.png",
+   "ball.v2.png",
+   "ball.v3.png",
+   "juno.png",
+   "juno.v1.png",
+   "juno.v2.png",
+   "juno.v3.png",
+   "rein.png",
+   "rein.v1.png",
+   "rein.v2.png",
+   "rein.v3.png",
+   "tracer.png",
+   "tracer.v1.png",
+   "tracer.v2.png"
+  ],
+  "superseded": [
+   "ball.png",
+   "ball.v1.png",
+   "ball.v2.png",
+   "ball.v3.png",
+   "tracer.png",
+   "tracer.v1.png",
+   "tracer.v2.png",
+   "tracer.v3.png"
+  ],
+  "refused": {
+   "bap": "REVIEW",
+   "bastion": "REVIEW",
+   "cass": "REVIEW",
+   "dva": "WEAK",
+   "jetcat": "WEAK",
+   "kiriko": "REVIEW",
+   "lucio": "REVIEW",
+   "mei": "REVIEW",
+   "mizuki": "REVIEW",
+   "pharah": "REVIEW",
+   "shion": "WEAK",
+   "sigma": "REVIEW",
+   "sojourn": "REVIEW",
+   "sym": "REVIEW",
+   "wuyang": "REVIEW"
+  },
+  "dryRun": false
+ },
+ "cleaning": {
+  "threshold": 0.45,
+  "dropped": {
+   "c06": 1,
+   "c08": 4,
+   "c10": 9,
+   "c11": 2,
+   "c13": 12,
+   "c14": 1,
+   "c39": 4,
+   "c43": 3,
+   "c54": 3,
+   "c56": 1
+  },
+  "droppedTotal": 40,
+  "offRole": 40,
+  "kept": 1953
+ },
+ "tuning": {
+  "base": {
+   "floor": 0.6,
+   "margin": 0.25
+  },
+  "chosen": {
+   "floor": 0.6,
+   "margin": 0.25,
+   "validated": [
+    "ball",
+    "bastion",
+    "juno",
+    "rein",
+    "tracer"
+   ],
+   "safe": true,
+   "looRate": 0.0,
+   "falseMatchRate": 0.0056
+  },
+  "tried": [
+   {
+    "floor": 0.6,
+    "margin": 0.25,
+    "validated": [
+     "ball",
+     "bastion",
+     "juno",
+     "rein",
+     "tracer"
+    ],
+    "safe": true,
+    "looRate": 0.0,
+    "falseMatchRate": 0.0056
+   },
+   {
+    "floor": 0.65,
+    "margin": 0.25,
+    "validated": [
+     "ball",
+     "bastion",
+     "juno",
+     "rein",
+     "tracer"
+    ],
+    "safe": true,
+    "looRate": 0.0,
+    "falseMatchRate": 0.0
+   },
+   {
+    "floor": 0.7,
+    "margin": 0.25,
+    "validated": [
+     "ball",
+     "juno",
+     "rein",
+     "tracer"
+    ],
+    "safe": true,
+    "looRate": 0.0,
+    "falseMatchRate": 0.0
+   }
+  ]
+ },
+ "forgeVersion": 4,
+ "promote": true,
+ "labelsDigest": "f73b403c58b2c0b744ba9c897fb9447736d1b194ddf5c500d87f26b290b80e02",
+ "productionSet": {
+  "safe": true,
+  "falseMatch": {
+   "trials": 280,
+   "unknown": 279,
+   "matched": 1,
+   "matchedAs": {
+    "jetcat": 1
+   },
+   "byHero": {
+    "sojourn": 160,
+    "bap": 54,
+    "pharah": 36,
+    "wuyang": 30
+   },
+   "rate": 0.0036,
+   "passed": true,
+   "note": "280 crop(s) of heroes this set has NO template for. Every one should read UNKNOWN; 1 did not (0.4%, ceiling 2.0%)."
+  },
+  "leaveOneOut": {
+   "trials": 1066,
+   "matched": 0,
+   "rate": 0.0,
+   "ceiling": 0.02,
+   "passed": true,
+   "note": "Leave-one-out false-match test over 1066 real crops: 0 (0.00%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
+   "confusablePairs": []
+  },
+  "verdicts": {
+   "ana": "UNVERIFIABLE",
+   "ball": "VALIDATED",
+   "bastion": "REVIEW",
+   "cass": "UNVERIFIABLE",
+   "dva": "REVIEW",
+   "echo": "WEAK",
+   "jetcat": "REVIEW",
+   "juno": "REVIEW",
+   "kiriko": "REVIEW",
+   "lucio": "REVIEW",
+   "mauga": "UNVERIFIABLE",
+   "mei": "REVIEW",
+   "mizuki": "REVIEW",
+   "ram": "UNVERIFIABLE",
+   "reaper": "UNVERIFIABLE",
+   "rein": "VALIDATED",
+   "shion": "WEAK",
+   "sigma": "REVIEW",
+   "sym": "REVIEW",
+   "tracer": "VALIDATED",
+   "winston": "UNVERIFIABLE"
+  },
+  "suspectTemplates": []
+ }
+}
