@@ -1,0 +1,7767 @@
+{
+ "url": "https://www.twitch.tv/videos/2831815423",
+ "layout": "owcs_8c105lnzlam.json",
+ "durationSeconds": 41156.0,
+ "step": 30.0,
+ "states": {
+  "no-hud": 877,
+  "partial-hud": 32,
+  "gameplay": 463
+ },
+ "maps": [
+  {
+   "start": 3840.0,
+   "end": 4320.0,
+   "runs": [
+    [
+     3840.0,
+     4320.0
+    ]
+   ],
+   "gameplaySamples": 15,
+   "index": 1,
+   "seconds": 480.0,
+   "identity": {
+    "map": {
+     "value": "busan",
+     "votes": 14,
+     "of": 15,
+     "reason": null
+    },
+    "game": {
+     "value": 1,
+     "votes": 13,
+     "of": 15,
+     "reason": null
+    },
+    "team_a": {
+     "value": "VARREL",
+     "votes": 14,
+     "of": 15,
+     "reason": null,
+     "printed": "VARREL",
+     "known": false
+    },
+    "team_b": {
+     "value": "zeta",
+     "votes": 14,
+     "of": 15,
+     "reason": null,
+     "printed": "ZETA DIVISION",
+     "known": true
+    },
+    "frames": 15,
+    "complete": true
+   }
+  },
+  {
+   "start": 4680.0,
+   "end": 5370.0,
+   "runs": [
+    [
+     4680.0,
+     5040.0
+    ],
+    [
+     5100.0,
+     5370.0
+    ]
+   ],
+   "gameplaySamples": 21,
+   "index": 2,
+   "seconds": 690.0,
+   "identity": {
+    "map": {
+     "value": "shambali",
+     "votes": 21,
+     "of": 21,
+     "reason": null
+    },
+    "game": {
+     "value": 2,
+     "votes": 21,
+     "of": 21,
+     "reason": null
+    },
+    "team_a": {
+     "value": "VARREL",
+     "votes": 21,
+     "of": 21,
+     "reason": null,
+     "printed": "VARREL",
+     "known": false
+    },
+    "team_b": {
+     "value": "zeta",
+     "votes": 21,
+     "of": 21,
+     "reason": null,
+     "printed": "ZETA DIVISION",
+     "known": true
+    },
+    "frames": 21,
+    "complete": true
+   }
+  },
+  {
+   "start": 7140.0,
+   "end": 7560.0,
+   "runs": [
+    [
+     7140.0,
+     7560.0
+    ]
+   ],
+   "gameplaySamples": 13,
+   "index": 3,
+   "seconds": 420.0,
+   "identity": {
+    "map": {
+     "value": "nepal",
+     "votes": 12,
+     "of": 13,
+     "reason": null
+    },
+    "game": {
+     "value": 1,
+     "votes": 12,
+     "of": 13,
+     "reason": null
+    },
+    "team_a": {
+     "value": "cr",
+     "votes": 12,
+     "of": 13,
+     "reason": null,
+     "printed": "CRAZY RACCOON",
+     "known": true
+    },
+    "team_b": {
+     "value": "TEAM SECRET",
+     "votes": 12,
+     "of": 13,
+     "reason": null,
+     "printed": "TEAM SECRET",
+     "known": false
+    },
+    "frames": 13,
+    "complete": true
+   }
+  },
+  {
+   "start": 8760.0,
+   "end": 9990.0,
+   "runs": [
+    [
+     8760.0,
+     9420.0
+    ],
+    [
+     9720.0,
+     9990.0
+    ]
+   ],
+   "gameplaySamples": 31,
+   "index": 4,
+   "seconds": 1230.0,
+   "identity": {
+    "map": {
+     "value": "njc",
+     "votes": 21,
+     "of": 22,
+     "reason": null
+    },
+    "game": {
+     "value": 2,
+     "votes": 21,
+     "of": 22,
+     "reason": null
+    },
+    "team_a": {
+     "value": "TEAM SECRET",
+     "votes": 21,
+     "of": 22,
+     "reason": null,
+     "printed": "TEAM SECRET",
+     "known": false
+    },
+    "team_b": {
+     "value": "cr",
+     "votes": 21,
+     "of": 22,
+     "reason": null,
+     "printed": "CRAZY RACCOON",
+     "known": true
+    },
+    "frames": 22,
+    "complete": true
+   },
+   "mergedPause": true
+  },
+  {
+   "start": 12480.0,
+   "end": 13110.0,
+   "runs": [
+    [
+     12480.0,
+     13110.0
+    ]
+   ],
+   "gameplaySamples": 20,
+   "index": 5,
+   "seconds": 630.0,
+   "identity": {
+    "map": {
+     "value": "samoa",
+     "votes": 19,
+     "of": 20,
+     "reason": null
+    },
+    "game": {
+     "value": 1,
+     "votes": 19,
+     "of": 20,
+     "reason": null
+    },
+    "team_a": {
+     "value": "AG.AL",
+     "votes": 19,
+     "of": 20,
+     "reason": null,
+     "printed": "AG.AL",
+     "known": false
+    },
+    "team_b": {
+     "value": "GEEKAY ESPORTS",
+     "votes": 19,
+     "of": 20,
+     "reason": null,
+     "printed": "GEEKAY ESPORTS",
+     "known": false
+    },
+    "frames": 20,
+    "complete": true
+   }
+  },
+  {
+   "start": 13530.0,
+   "end": 14280.0,
+   "runs": [
+    [
+     13530.0,
+     14280.0
+    ]
+   ],
+   "gameplaySamples": 25,
+   "index": 6,
+   "seconds": 750.0,
+   "identity": {
+    "map": {
+     "value": "aatlis",
+     "votes": 21,
+     "of": 24,
+     "reason": null
+    },
+    "game": {
+     "value": 2,
+     "votes": 24,
+     "of": 24,
+     "reason": null
+    },
+    "team_a": {
+     "value": "AG.AL",
+     "votes": 24,
+     "of": 24,
+     "reason": null,
+     "printed": "AG.AL",
+     "known": false
+    },
+    "team_b": {
+     "value": "GEEKAY ESPORTS",
+     "votes": 24,
+     "of": 24,
+     "reason": null,
+     "printed": "GEEKAY ESPORTS",
+     "known": false
+    },
+    "frames": 24,
+    "complete": true
+   }
+  },
+  {
+   "start": 17160.0,
+   "end": 18120.0,
+   "runs": [
+    [
+     17160.0,
+     18120.0
+    ]
+   ],
+   "gameplaySamples": 30,
+   "index": 7,
+   "seconds": 960.0,
+   "identity": {
+    "map": {
+     "value": "samoa",
+     "votes": 23,
+     "of": 24,
+     "reason": null
+    },
+    "game": {
+     "value": 1,
+     "votes": 20,
+     "of": 24,
+     "reason": null
+    },
+    "team_a": {
+     "value": "ssg",
+     "votes": 23,
+     "of": 24,
+     "reason": null,
+     "printed": "SPACESTATION GAMING",
+     "known": true
+    },
+    "team_b": {
+     "value": "JD GAMING",
+     "votes": 23,
+     "of": 24,
+     "reason": null,
+     "printed": "JD GAMING",
+     "known": false
+    },
+    "frames": 24,
+    "complete": true
+   }
+  },
+  {
+   "start": 18810.0,
+   "end": 19950.0,
+   "runs": [
+    [
+     18810.0,
+     19950.0
+    ]
+   ],
+   "gameplaySamples": 35,
+   "index": 8,
+   "seconds": 1140.0,
+   "identity": {
+    "map": {
+     "value": "route66",
+     "votes": 23,
+     "of": 24,
+     "reason": null
+    },
+    "game": {
+     "value": 2,
+     "votes": 23,
+     "of": 24,
+     "reason": null
+    },
+    "team_a": {
+     "value": "JD GAMING",
+     "votes": 23,
+     "of": 24,
+     "reason": null,
+     "printed": "JD GAMING",
+     "known": false
+    },
+    "team_b": {
+     "value": "ssg",
+     "votes": 23,
+     "of": 24,
+     "reason": null,
+     "printed": "SPACESTATION GAMING",
+     "known": true
+    },
+    "frames": 24,
+    "complete": true
+   }
+  },
+  {
+   "start": 20370.0,
+   "end": 20850.0,
+   "runs": [
+    [
+     20370.0,
+     20850.0
+    ]
+   ],
+   "gameplaySamples": 16,
+   "index": 9,
+   "seconds": 480.0,
+   "identity": {
+    "map": {
+     "value": "aatlis",
+     "votes": 15,
+     "of": 16,
+     "reason": null
+    },
+    "game": {
+     "value": 3,
+     "votes": 16,
+     "of": 16,
+     "reason": null
+    },
+    "team_a": {
+     "value": "ssg",
+     "votes": 16,
+     "of": 16,
+     "reason": null,
+     "printed": "SPACESTATION GAMING",
+     "known": true
+    },
+    "team_b": {
+     "value": "JD GAMING",
+     "votes": 16,
+     "of": 16,
+     "reason": null,
+     "printed": "JD GAMING",
+     "known": false
+    },
+    "frames": 16,
+    "complete": true
+   }
+  },
+  {
+   "start": 22470.0,
+   "end": 23340.0,
+   "runs": [
+    [
+     22470.0,
+     22770.0
+    ],
+    [
+     22830.0,
+     23160.0
+    ],
+    [
+     23310.0,
+     23340.0
+    ]
+   ],
+   "gameplaySamples": 22,
+   "index": 10,
+   "seconds": 870.0,
+   "identity": {
+    "map": {
+     "value": "nepal",
+     "votes": 21,
+     "of": 22,
+     "reason": null
+    },
+    "game": {
+     "value": 1,
+     "votes": 21,
+     "of": 22,
+     "reason": null
+    },
+    "team_a": {
+     "value": "T1",
+     "votes": 19,
+     "of": 22,
+     "reason": null,
+     "printed": "T1",
+     "known": false
+    },
+    "team_b": {
+     "value": "twis",
+     "votes": 21,
+     "of": 22,
+     "reason": null,
+     "printed": "TWISTED MINDS",
+     "known": true
+    },
+    "frames": 22,
+    "complete": true
+   }
+  },
+  {
+   "start": 24990.0,
+   "end": 25650.0,
+   "runs": [
+    [
+     24990.0,
+     25650.0
+    ]
+   ],
+   "gameplaySamples": 21,
+   "index": 11,
+   "seconds": 660.0,
+   "identity": {
+    "map": {
+     "value": "aatlis",
+     "votes": 19,
+     "of": 21,
+     "reason": null
+    },
+    "game": {
+     "value": 2,
+     "votes": 20,
+     "of": 21,
+     "reason": null
+    },
+    "team_a": {
+     "value": "N1",
+     "votes": 18,
+     "of": 21,
+     "reason": null,
+     "printed": "N1",
+     "known": false
+    },
+    "team_b": {
+     "value": "twis",
+     "votes": 20,
+     "of": 21,
+     "reason": null,
+     "printed": "TWISTED MINDS",
+     "known": true
+    },
+    "frames": 21,
+    "complete": true
+   }
+  },
+  {
+   "start": 25950.0,
+   "end": 27060.0,
+   "runs": [
+    [
+     25950.0,
+     27060.0
+    ]
+   ],
+   "gameplaySamples": 36,
+   "index": 12,
+   "seconds": 1110.0,
+   "identity": {
+    "map": {
+     "value": "route66",
+     "votes": 23,
+     "of": 24,
+     "reason": null
+    },
+    "game": {
+     "value": 3,
+     "votes": 23,
+     "of": 24,
+     "reason": null
+    },
+    "team_a": {
+     "value": "T1",
+     "votes": 22,
+     "of": 24,
+     "reason": null,
+     "printed": "T1",
+     "known": false
+    },
+    "team_b": {
+     "value": "twis",
+     "votes": 23,
+     "of": 24,
+     "reason": null,
+     "printed": "TWISTED MINDS",
+     "known": true
+    },
+    "frames": 24,
+    "complete": true
+   }
+  },
+  {
+   "start": 29220.0,
+   "end": 29820.0,
+   "runs": [
+    [
+     29220.0,
+     29820.0
+    ]
+   ],
+   "gameplaySamples": 20,
+   "index": 13,
+   "seconds": 600.0,
+   "identity": {
+    "map": {
+     "value": "nepal",
+     "votes": 19,
+     "of": 20,
+     "reason": null
+    },
+    "game": {
+     "value": 1,
+     "votes": 18,
+     "of": 20,
+     "reason": null
+    },
+    "team_a": {
+     "value": "TEAM LIQUID",
+     "votes": 19,
+     "of": 20,
+     "reason": null,
+     "printed": "TEAM LIQUID",
+     "known": false
+    },
+    "team_b": {
+     "value": "WEIBO GAMING",
+     "votes": 19,
+     "of": 20,
+     "reason": null,
+     "printed": "WEIBO GAMING",
+     "known": false
+    },
+    "frames": 20,
+    "complete": true
+   }
+  },
+  {
+   "start": 30510.0,
+   "end": 31440.0,
+   "runs": [
+    [
+     30510.0,
+     30870.0
+    ],
+    [
+     30930.0,
+     31440.0
+    ]
+   ],
+   "gameplaySamples": 29,
+   "index": 14,
+   "seconds": 930.0,
+   "identity": {
+    "map": {
+     "value": "neonjunction",
+     "votes": 24,
+     "of": 24,
+     "reason": null
+    },
+    "game": {
+     "value": 2,
+     "votes": 24,
+     "of": 24,
+     "reason": null
+    },
+    "team_a": {
+     "value": "TEAM LIQUID",
+     "votes": 24,
+     "of": 24,
+     "reason": null,
+     "printed": "TEAM LIQUID",
+     "known": false
+    },
+    "team_b": {
+     "value": "WEIBO GAMING",
+     "votes": 24,
+     "of": 24,
+     "reason": null,
+     "printed": "WHIBO GAMING",
+     "known": false
+    },
+    "frames": 24,
+    "complete": true
+   }
+  },
+  {
+   "start": 32010.0,
+   "end": 32820.0,
+   "runs": [
+    [
+     32010.0,
+     32220.0
+    ],
+    [
+     32280.0,
+     32820.0
+    ]
+   ],
+   "gameplaySamples": 25,
+   "index": 15,
+   "seconds": 810.0,
+   "identity": {
+    "map": {
+     "value": "aatlis",
+     "votes": 21,
+     "of": 24,
+     "reason": null
+    },
+    "game": {
+     "value": 3,
+     "votes": 24,
+     "of": 24,
+     "reason": null
+    },
+    "team_a": {
+     "value": "TEAM LIQUID",
+     "votes": 24,
+     "of": 24,
+     "reason": null,
+     "printed": "TEAM LIQUID",
+     "known": false
+    },
+    "team_b": {
+     "value": "WEIBO GAMING",
+     "votes": 24,
+     "of": 24,
+     "reason": null,
+     "printed": "WEIBO GAMING",
+     "known": false
+    },
+    "frames": 24,
+    "complete": true
+   }
+  },
+  {
+   "start": 34620.0,
+   "end": 35130.0,
+   "runs": [
+    [
+     34620.0,
+     34740.0
+    ],
+    [
+     34830.0,
+     34890.0
+    ],
+    [
+     34950.0,
+     35130.0
+    ]
+   ],
+   "gameplaySamples": 12,
+   "index": 16,
+   "seconds": 510.0,
+   "identity": {
+    "map": {
+     "value": "nepal",
+     "votes": 12,
+     "of": 12,
+     "reason": null
+    },
+    "game": {
+     "value": 1,
+     "votes": 12,
+     "of": 12,
+     "reason": null
+    },
+    "team_a": {
+     "value": "VIRTUS PRO",
+     "votes": 12,
+     "of": 12,
+     "reason": null,
+     "printed": "VIRTUS.PRO",
+     "known": false
+    },
+    "team_b": {
+     "value": "GLOBANT",
+     "votes": 12,
+     "of": 12,
+     "reason": null,
+     "printed": "GLOBANT",
+     "known": false
+    },
+    "frames": 12,
+    "complete": true
+   }
+  },
+  {
+   "start": 35400.0,
+   "end": 36150.0,
+   "runs": [
+    [
+     35400.0,
+     36150.0
+    ]
+   ],
+   "gameplaySamples": 25,
+   "index": 17,
+   "seconds": 750.0,
+   "identity": {
+    "map": {
+     "value": "njc",
+     "votes": 24,
+     "of": 24,
+     "reason": null
+    },
+    "game": {
+     "value": 2,
+     "votes": 24,
+     "of": 24,
+     "reason": null
+    },
+    "team_a": {
+     "value": "VIRTUS PRO",
+     "votes": 24,
+     "of": 24,
+     "reason": null,
+     "printed": "VIRTUS PRO",
+     "known": false
+    },
+    "team_b": {
+     "value": "GLOBANT",
+     "votes": 24,
+     "of": 24,
+     "reason": null,
+     "printed": "GLOBANT",
+     "known": false
+    },
+    "frames": 24,
+    "complete": true
+   }
+  },
+  {
+   "start": 37980.0,
+   "end": 38910.0,
+   "runs": [
+    [
+     37980.0,
+     38910.0
+    ]
+   ],
+   "gameplaySamples": 29,
+   "index": 18,
+   "seconds": 930.0,
+   "identity": {
+    "map": {
+     "value": "samoa",
+     "votes": 23,
+     "of": 24,
+     "reason": null
+    },
+    "game": {
+     "value": 1,
+     "votes": 23,
+     "of": 24,
+     "reason": null
+    },
+    "team_a": {
+     "value": "DALLAS FUEL",
+     "votes": 23,
+     "of": 24,
+     "reason": null,
+     "printed": "DALLAS FUEL",
+     "known": false
+    },
+    "team_b": {
+     "value": "falcons",
+     "votes": 23,
+     "of": 24,
+     "reason": null,
+     "printed": "TEAM FALCONS",
+     "known": true
+    },
+    "frames": 24,
+    "complete": true
+   }
+  },
+  {
+   "start": 39780.0,
+   "end": 40290.0,
+   "runs": [
+    [
+     39780.0,
+     40080.0
+    ],
+    [
+     40140.0,
+     40290.0
+    ]
+   ],
+   "gameplaySamples": 15,
+   "index": 19,
+   "seconds": 510.0,
+   "identity": {
+    "map": {
+     "value": "neonjunction",
+     "votes": 15,
+     "of": 15,
+     "reason": null
+    },
+    "game": {
+     "value": 2,
+     "votes": 15,
+     "of": 15,
+     "reason": null
+    },
+    "team_a": {
+     "value": "falcons",
+     "votes": 15,
+     "of": 15,
+     "reason": null,
+     "printed": "TEAM FALCONS",
+     "known": true
+    },
+    "team_b": {
+     "value": "DALLAS FUEL",
+     "votes": 15,
+     "of": 15,
+     "reason": null,
+     "printed": "DALLAS FUEL",
+     "known": false
+    },
+    "frames": 15,
+    "complete": true
+   }
+  }
+ ],
+ "samples": [
+  {
+   "offset": 0.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:11"
+  },
+  {
+   "offset": 30.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:56"
+  },
+  {
+   "offset": 60.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:262"
+  },
+  {
+   "offset": 90.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:134"
+  },
+  {
+   "offset": 120.0,
+   "state": "partial-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:546"
+  },
+  {
+   "offset": 150.0,
+   "state": "partial-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:509"
+  },
+  {
+   "offset": 180.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:48"
+  },
+  {
+   "offset": 210.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:82"
+  },
+  {
+   "offset": 240.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:37"
+  },
+  {
+   "offset": 270.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:219"
+  },
+  {
+   "offset": 300.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:235"
+  },
+  {
+   "offset": 330.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:332"
+  },
+  {
+   "offset": 360.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:199"
+  },
+  {
+   "offset": 390.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:13"
+  },
+  {
+   "offset": 420.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:143"
+  },
+  {
+   "offset": 450.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:26"
+  },
+  {
+   "offset": 480.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:7"
+  },
+  {
+   "offset": 510.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:319"
+  },
+  {
+   "offset": 540.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:135"
+  },
+  {
+   "offset": 570.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:118"
+  },
+  {
+   "offset": 600.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:215"
+  },
+  {
+   "offset": 630.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:179"
+  },
+  {
+   "offset": 660.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:81"
+  },
+  {
+   "offset": 690.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:79"
+  },
+  {
+   "offset": 720.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:281"
+  },
+  {
+   "offset": 750.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:227"
+  },
+  {
+   "offset": 780.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:188"
+  },
+  {
+   "offset": 810.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:304"
+  },
+  {
+   "offset": 840.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:284"
+  },
+  {
+   "offset": 870.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:267"
+  },
+  {
+   "offset": 900.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:214"
+  },
+  {
+   "offset": 930.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:204"
+  },
+  {
+   "offset": 960.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:5"
+  },
+  {
+   "offset": 990.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:59"
+  },
+  {
+   "offset": 1020.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:484"
+  },
+  {
+   "offset": 1050.0,
+   "state": "partial-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:519"
+  },
+  {
+   "offset": 1080.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:187"
+  },
+  {
+   "offset": 1110.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:6"
+  },
+  {
+   "offset": 1140.0,
+   "state": "partial-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:503"
+  },
+  {
+   "offset": 1170.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:67"
+  },
+  {
+   "offset": 1200.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:4 b:138"
+  },
+  {
+   "offset": 1230.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:265"
+  },
+  {
+   "offset": 1260.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:36"
+  },
+  {
+   "offset": 1290.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:88"
+  },
+  {
+   "offset": 1320.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:74"
+  },
+  {
+   "offset": 1350.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:259"
+  },
+  {
+   "offset": 1380.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:65"
+  },
+  {
+   "offset": 1410.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:476"
+  },
+  {
+   "offset": 1440.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:326"
+  },
+  {
+   "offset": 1470.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:271"
+  },
+  {
+   "offset": 1500.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:2/5 tex a:3 b:1"
+  },
+  {
+   "offset": 1530.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:3/5 tex a:38 b:3"
+  },
+  {
+   "offset": 1560.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:2"
+  },
+  {
+   "offset": 1590.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:5"
+  },
+  {
+   "offset": 1620.0,
+   "state": "partial-hud",
+   "reason": "chips a:0/5 b:3/5 tex a:482 b:1258"
+  },
+  {
+   "offset": 1650.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:0/5 tex a:69 b:1087"
+  },
+  {
+   "offset": 1680.0,
+   "state": "partial-hud",
+   "reason": "chips a:0/5 b:3/5 tex a:458 b:1261"
+  },
+  {
+   "offset": 1710.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:19 b:1082"
+  },
+  {
+   "offset": 1740.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:1"
+  },
+  {
+   "offset": 1770.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:2/5 tex a:469 b:1200"
+  },
+  {
+   "offset": 1800.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:0/5 tex a:17 b:381"
+  },
+  {
+   "offset": 1830.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:14 b:873"
+  },
+  {
+   "offset": 1860.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 1890.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 1920.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:20 b:692"
+  },
+  {
+   "offset": 1950.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:438 b:1128"
+  },
+  {
+   "offset": 1980.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:2"
+  },
+  {
+   "offset": 2010.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:442 b:289"
+  },
+  {
+   "offset": 2040.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:522 b:398"
+  },
+  {
+   "offset": 2070.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:475 b:362"
+  },
+  {
+   "offset": 2100.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:534 b:393"
+  },
+  {
+   "offset": 2130.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:8 b:5"
+  },
+  {
+   "offset": 2160.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:3"
+  },
+  {
+   "offset": 2190.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:2"
+  },
+  {
+   "offset": 2220.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:1"
+  },
+  {
+   "offset": 2250.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:796 b:546"
+  },
+  {
+   "offset": 2280.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:57 b:1"
+  },
+  {
+   "offset": 2310.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 2340.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:93 b:343"
+  },
+  {
+   "offset": 2370.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:101 b:10"
+  },
+  {
+   "offset": 2400.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:476 b:67"
+  },
+  {
+   "offset": 2430.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:843 b:61"
+  },
+  {
+   "offset": 2460.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:33 b:461"
+  },
+  {
+   "offset": 2490.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:214 b:232"
+  },
+  {
+   "offset": 2520.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:136 b:41"
+  },
+  {
+   "offset": 2550.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:48 b:1248"
+  },
+  {
+   "offset": 2580.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:80 b:1306"
+  },
+  {
+   "offset": 2610.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:2 b:7"
+  },
+  {
+   "offset": 2640.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:10 b:7"
+  },
+  {
+   "offset": 2670.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:2 b:22"
+  },
+  {
+   "offset": 2700.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:228 b:741"
+  },
+  {
+   "offset": 2730.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 2760.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:0"
+  },
+  {
+   "offset": 2790.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:62 b:23"
+  },
+  {
+   "offset": 2820.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:1/5 tex a:19 b:1"
+  },
+  {
+   "offset": 2850.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:0/5 tex a:7 b:1"
+  },
+  {
+   "offset": 2880.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:3/5 tex a:4 b:11"
+  },
+  {
+   "offset": 2910.0,
+   "state": "no-hud",
+   "reason": "chips a:3/5 b:4/5 tex a:209 b:1"
+  },
+  {
+   "offset": 2940.0,
+   "state": "no-hud",
+   "reason": "chips a:3/5 b:4/5 tex a:55 b:8"
+  },
+  {
+   "offset": 2970.0,
+   "state": "no-hud",
+   "reason": "chips a:3/5 b:3/5 tex a:2 b:3"
+  },
+  {
+   "offset": 3000.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1214 b:534"
+  },
+  {
+   "offset": 3030.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:57"
+  },
+  {
+   "offset": 3060.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 3090.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:5/5 tex a:9 b:2"
+  },
+  {
+   "offset": 3120.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:135 b:2"
+  },
+  {
+   "offset": 3150.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:3 b:27"
+  },
+  {
+   "offset": 3180.0,
+   "state": "partial-hud",
+   "reason": "chips a:0/5 b:3/5 tex a:715 b:1"
+  },
+  {
+   "offset": 3210.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:26 b:1"
+  },
+  {
+   "offset": 3240.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:1/5 tex a:3 b:3"
+  },
+  {
+   "offset": 3270.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:215"
+  },
+  {
+   "offset": 3300.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:122 b:87"
+  },
+  {
+   "offset": 3330.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:0/5 tex a:5 b:3"
+  },
+  {
+   "offset": 3360.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:0"
+  },
+  {
+   "offset": 3390.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:104"
+  },
+  {
+   "offset": 3420.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:31 b:1"
+  },
+  {
+   "offset": 3450.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:4/5 tex a:1 b:2"
+  },
+  {
+   "offset": 3480.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:2 b:4"
+  },
+  {
+   "offset": 3510.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:14"
+  },
+  {
+   "offset": 3540.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:3 b:101"
+  },
+  {
+   "offset": 3570.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:3/5 tex a:2 b:1"
+  },
+  {
+   "offset": 3600.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:3/5 tex a:3 b:5"
+  },
+  {
+   "offset": 3630.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:5/5 tex a:11 b:1"
+  },
+  {
+   "offset": 3660.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:7 b:17"
+  },
+  {
+   "offset": 3690.0,
+   "state": "no-hud",
+   "reason": "chips a:4/5 b:5/5 tex a:4 b:3"
+  },
+  {
+   "offset": 3720.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:3 b:41"
+  },
+  {
+   "offset": 3750.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:3/5 tex a:4 b:58"
+  },
+  {
+   "offset": 3780.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:2/5 tex a:3 b:19"
+  },
+  {
+   "offset": 3810.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:5/5 tex a:4 b:1"
+  },
+  {
+   "offset": 3840.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2446 b:2493"
+  },
+  {
+   "offset": 3870.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2271 b:2988"
+  },
+  {
+   "offset": 3900.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1805 b:2395"
+  },
+  {
+   "offset": 3930.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2144 b:2209"
+  },
+  {
+   "offset": 3960.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:858 b:2397"
+  },
+  {
+   "offset": 3990.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2153 b:2888"
+  },
+  {
+   "offset": 4020.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2246 b:2135"
+  },
+  {
+   "offset": 4050.0,
+   "state": "gameplay",
+   "reason": "chips a:3/5 b:5/5 tex a:1127 b:2929"
+  },
+  {
+   "offset": 4080.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:0/5 tex a:10 b:17"
+  },
+  {
+   "offset": 4110.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2247 b:2211"
+  },
+  {
+   "offset": 4140.0,
+   "state": "gameplay",
+   "reason": "chips a:4/5 b:5/5 tex a:1302 b:1834"
+  },
+  {
+   "offset": 4170.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1855 b:1723"
+  },
+  {
+   "offset": 4200.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:4/5 tex a:2750 b:1698"
+  },
+  {
+   "offset": 4230.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2627 b:2496"
+  },
+  {
+   "offset": 4260.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2322 b:1988"
+  },
+  {
+   "offset": 4290.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2565 b:2945"
+  },
+  {
+   "offset": 4320.0,
+   "state": "no-hud",
+   "reason": "chips a:3/5 b:0/5 tex a:164 b:3"
+  },
+  {
+   "offset": 4350.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:3 b:24"
+  },
+  {
+   "offset": 4380.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:1 b:2"
+  },
+  {
+   "offset": 4410.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:4/5 tex a:1 b:42"
+  },
+  {
+   "offset": 4440.0,
+   "state": "no-hud",
+   "reason": "chips a:4/5 b:4/5 tex a:4 b:27"
+  },
+  {
+   "offset": 4470.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:5/5 tex a:4 b:13"
+  },
+  {
+   "offset": 4500.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:3 b:3"
+  },
+  {
+   "offset": 4530.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:6 b:14"
+  },
+  {
+   "offset": 4560.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:23"
+  },
+  {
+   "offset": 4590.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:1"
+  },
+  {
+   "offset": 4620.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:91 b:0"
+  },
+  {
+   "offset": 4650.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:1"
+  },
+  {
+   "offset": 4680.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2834 b:2190"
+  },
+  {
+   "offset": 4710.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2634 b:2043"
+  },
+  {
+   "offset": 4740.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2690 b:2323"
+  },
+  {
+   "offset": 4770.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2760 b:2441"
+  },
+  {
+   "offset": 4800.0,
+   "state": "gameplay",
+   "reason": "chips a:4/5 b:5/5 tex a:2360 b:1776"
+  },
+  {
+   "offset": 4830.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2725 b:2276"
+  },
+  {
+   "offset": 4860.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2121 b:2171"
+  },
+  {
+   "offset": 4890.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2583 b:2592"
+  },
+  {
+   "offset": 4920.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2212 b:2283"
+  },
+  {
+   "offset": 4950.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2225 b:1920"
+  },
+  {
+   "offset": 4980.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:4/5 tex a:1133 b:1702"
+  },
+  {
+   "offset": 5010.0,
+   "state": "gameplay",
+   "reason": "chips a:4/5 b:5/5 tex a:1017 b:1570"
+  },
+  {
+   "offset": 5040.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:6 b:4"
+  },
+  {
+   "offset": 5070.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:54 b:79"
+  },
+  {
+   "offset": 5100.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2591 b:3168"
+  },
+  {
+   "offset": 5130.0,
+   "state": "gameplay",
+   "reason": "chips a:4/5 b:5/5 tex a:2100 b:2614"
+  },
+  {
+   "offset": 5160.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2398 b:2596"
+  },
+  {
+   "offset": 5190.0,
+   "state": "gameplay",
+   "reason": "chips a:4/5 b:5/5 tex a:1917 b:2391"
+  },
+  {
+   "offset": 5220.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2223 b:2373"
+  },
+  {
+   "offset": 5250.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1845 b:2094"
+  },
+  {
+   "offset": 5280.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1909 b:2329"
+  },
+  {
+   "offset": 5310.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2184 b:2555"
+  },
+  {
+   "offset": 5340.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1606 b:2209"
+  },
+  {
+   "offset": 5370.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:47"
+  },
+  {
+   "offset": 5400.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:8"
+  },
+  {
+   "offset": 5430.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:0"
+  },
+  {
+   "offset": 5460.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:440 b:429"
+  },
+  {
+   "offset": 5490.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:5 b:1"
+  },
+  {
+   "offset": 5520.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:351 b:219"
+  },
+  {
+   "offset": 5550.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:177 b:856"
+  },
+  {
+   "offset": 5580.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:432 b:207"
+  },
+  {
+   "offset": 5610.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:1"
+  },
+  {
+   "offset": 5640.0,
+   "state": "no-hud",
+   "reason": "chips a:3/5 b:0/5 tex a:0 b:1"
+  },
+  {
+   "offset": 5670.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:0/5 tex a:0 b:58"
+  },
+  {
+   "offset": 5700.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:15 b:90"
+  },
+  {
+   "offset": 5730.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:0"
+  },
+  {
+   "offset": 5760.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:17 b:3"
+  },
+  {
+   "offset": 5790.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:3 b:942"
+  },
+  {
+   "offset": 5820.0,
+   "state": "gameplay",
+   "reason": "chips a:4/5 b:5/5 tex a:1532 b:2093"
+  },
+  {
+   "offset": 5850.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1429 b:1164"
+  },
+  {
+   "offset": 5880.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:27 b:32"
+  },
+  {
+   "offset": 5910.0,
+   "state": "partial-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:0 b:518"
+  },
+  {
+   "offset": 5940.0,
+   "state": "partial-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:522"
+  },
+  {
+   "offset": 5970.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:4"
+  },
+  {
+   "offset": 6000.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:3/5 tex a:4 b:3"
+  },
+  {
+   "offset": 6030.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:3/5 tex a:491 b:1"
+  },
+  {
+   "offset": 6060.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:472 b:4"
+  },
+  {
+   "offset": 6090.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:775 b:0"
+  },
+  {
+   "offset": 6120.0,
+   "state": "no-hud",
+   "reason": "chips a:3/5 b:5/5 tex a:5 b:1"
+  },
+  {
+   "offset": 6150.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:2/5 tex a:136 b:2"
+  },
+  {
+   "offset": 6180.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:45 b:0"
+  },
+  {
+   "offset": 6210.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:353 b:1102"
+  },
+  {
+   "offset": 6240.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 6270.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:25 b:14"
+  },
+  {
+   "offset": 6300.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:3"
+  },
+  {
+   "offset": 6330.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:21 b:23"
+  },
+  {
+   "offset": 6360.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:25 b:25"
+  },
+  {
+   "offset": 6390.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:421 b:1038"
+  },
+  {
+   "offset": 6420.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:1"
+  },
+  {
+   "offset": 6450.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:18 b:0"
+  },
+  {
+   "offset": 6480.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:3 b:17"
+  },
+  {
+   "offset": 6510.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:4 b:3"
+  },
+  {
+   "offset": 6540.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:13 b:0"
+  },
+  {
+   "offset": 6570.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:371 b:1155"
+  },
+  {
+   "offset": 6600.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:14 b:0"
+  },
+  {
+   "offset": 6630.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:22 b:11"
+  },
+  {
+   "offset": 6660.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:0"
+  },
+  {
+   "offset": 6690.0,
+   "state": "no-hud",
+   "reason": "chips a:4/5 b:3/5 tex a:1 b:90"
+  },
+  {
+   "offset": 6720.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:107 b:12"
+  },
+  {
+   "offset": 6750.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:378 b:34"
+  },
+  {
+   "offset": 6780.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:340 b:2"
+  },
+  {
+   "offset": 6810.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:66 b:1"
+  },
+  {
+   "offset": 6840.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:2"
+  },
+  {
+   "offset": 6870.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:3 b:48"
+  },
+  {
+   "offset": 6900.0,
+   "state": "no-hud",
+   "reason": "chips a:3/5 b:2/5 tex a:1 b:209"
+  },
+  {
+   "offset": 6930.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:1/5 tex a:66 b:9"
+  },
+  {
+   "offset": 6960.0,
+   "state": "no-hud",
+   "reason": "chips a:4/5 b:5/5 tex a:3 b:3"
+  },
+  {
+   "offset": 6990.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:5 b:0"
+  },
+  {
+   "offset": 7020.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:0/5 tex a:2 b:17"
+  },
+  {
+   "offset": 7050.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:22"
+  },
+  {
+   "offset": 7080.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 7110.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:4"
+  },
+  {
+   "offset": 7140.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1981 b:2299"
+  },
+  {
+   "offset": 7170.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1590 b:1984"
+  },
+  {
+   "offset": 7200.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1625 b:2105"
+  },
+  {
+   "offset": 7230.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:4/5 tex a:1485 b:2284"
+  },
+  {
+   "offset": 7260.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1694 b:2673"
+  },
+  {
+   "offset": 7290.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1798 b:2081"
+  },
+  {
+   "offset": 7320.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1704 b:1919"
+  },
+  {
+   "offset": 7350.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:7 b:3"
+  },
+  {
+   "offset": 7380.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1393 b:1818"
+  },
+  {
+   "offset": 7410.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1784 b:2327"
+  },
+  {
+   "offset": 7440.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2231 b:2264"
+  },
+  {
+   "offset": 7470.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:4/5 tex a:1701 b:1895"
+  },
+  {
+   "offset": 7500.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2374 b:2224"
+  },
+  {
+   "offset": 7530.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1817 b:2345"
+  },
+  {
+   "offset": 7560.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:17 b:449"
+  },
+  {
+   "offset": 7590.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:2"
+  },
+  {
+   "offset": 7620.0,
+   "state": "no-hud",
+   "reason": "chips a:4/5 b:5/5 tex a:2 b:1"
+  },
+  {
+   "offset": 7650.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:0/5 tex a:39 b:1"
+  },
+  {
+   "offset": 7680.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:5/5 tex a:129 b:3"
+  },
+  {
+   "offset": 7710.0,
+   "state": "no-hud",
+   "reason": "chips a:3/5 b:5/5 tex a:5 b:0"
+  },
+  {
+   "offset": 7740.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:2 b:1"
+  },
+  {
+   "offset": 7770.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:26 b:2"
+  },
+  {
+   "offset": 7800.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:3 b:24"
+  },
+  {
+   "offset": 7830.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:3/5 tex a:2 b:20"
+  },
+  {
+   "offset": 7860.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:7 b:2"
+  },
+  {
+   "offset": 7890.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:4/5 tex a:2 b:1"
+  },
+  {
+   "offset": 7920.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:0"
+  },
+  {
+   "offset": 7950.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:18 b:7"
+  },
+  {
+   "offset": 7980.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:2 b:66"
+  },
+  {
+   "offset": 8010.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:17 b:204"
+  },
+  {
+   "offset": 8040.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:1"
+  },
+  {
+   "offset": 8070.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:4/5 tex a:454 b:2"
+  },
+  {
+   "offset": 8100.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:57 b:1"
+  },
+  {
+   "offset": 8130.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:3 b:19"
+  },
+  {
+   "offset": 8160.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:6"
+  },
+  {
+   "offset": 8190.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:3 b:16"
+  },
+  {
+   "offset": 8220.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:23 b:2"
+  },
+  {
+   "offset": 8250.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:13 b:167"
+  },
+  {
+   "offset": 8280.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 8310.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:16"
+  },
+  {
+   "offset": 8340.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:0 b:9"
+  },
+  {
+   "offset": 8370.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:3"
+  },
+  {
+   "offset": 8400.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:15"
+  },
+  {
+   "offset": 8430.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:343 b:1"
+  },
+  {
+   "offset": 8460.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:15 b:10"
+  },
+  {
+   "offset": 8490.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:2"
+  },
+  {
+   "offset": 8520.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2291 b:2915"
+  },
+  {
+   "offset": 8550.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:2759"
+  },
+  {
+   "offset": 8580.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:29 b:2738"
+  },
+  {
+   "offset": 8610.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:392 b:2"
+  },
+  {
+   "offset": 8640.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:92 b:2688"
+  },
+  {
+   "offset": 8670.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:2729"
+  },
+  {
+   "offset": 8700.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:5 b:2746"
+  },
+  {
+   "offset": 8730.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:2797"
+  },
+  {
+   "offset": 8760.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2433 b:2292"
+  },
+  {
+   "offset": 8790.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2107 b:1742"
+  },
+  {
+   "offset": 8820.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1967 b:1838"
+  },
+  {
+   "offset": 8850.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2266 b:2048"
+  },
+  {
+   "offset": 8880.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1873 b:2214"
+  },
+  {
+   "offset": 8910.0,
+   "state": "gameplay",
+   "reason": "chips a:4/5 b:5/5 tex a:2128 b:1040"
+  },
+  {
+   "offset": 8940.0,
+   "state": "gameplay",
+   "reason": "chips a:4/5 b:5/5 tex a:906 b:1756"
+  },
+  {
+   "offset": 8970.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1871 b:2042"
+  },
+  {
+   "offset": 9000.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2360 b:2233"
+  },
+  {
+   "offset": 9030.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2280 b:1589"
+  },
+  {
+   "offset": 9060.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1973 b:1898"
+  },
+  {
+   "offset": 9090.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2093 b:1023"
+  },
+  {
+   "offset": 9120.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:4/5 tex a:2263 b:2299"
+  },
+  {
+   "offset": 9150.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2214 b:2294"
+  },
+  {
+   "offset": 9180.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1476 b:1875"
+  },
+  {
+   "offset": 9210.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2158 b:1942"
+  },
+  {
+   "offset": 9240.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1720 b:916"
+  },
+  {
+   "offset": 9270.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2001 b:2059"
+  },
+  {
+   "offset": 9300.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2275 b:2202"
+  },
+  {
+   "offset": 9330.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2036 b:2204"
+  },
+  {
+   "offset": 9360.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2241 b:2163"
+  },
+  {
+   "offset": 9390.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2268 b:2212"
+  },
+  {
+   "offset": 9420.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:2/5 tex a:37 b:6"
+  },
+  {
+   "offset": 9450.0,
+   "state": "no-hud",
+   "reason": "chips a:3/5 b:0/5 tex a:48 b:0"
+  },
+  {
+   "offset": 9480.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:0/5 tex a:4 b:5"
+  },
+  {
+   "offset": 9510.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:38 b:2759"
+  },
+  {
+   "offset": 9540.0,
+   "state": "partial-hud",
+   "reason": "chips a:5/5 b:0/5 tex a:1 b:2784"
+  },
+  {
+   "offset": 9570.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:8 b:2756"
+  },
+  {
+   "offset": 9600.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:2803"
+  },
+  {
+   "offset": 9630.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:2746"
+  },
+  {
+   "offset": 9660.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:2773"
+  },
+  {
+   "offset": 9690.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:4"
+  },
+  {
+   "offset": 9720.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1986 b:1725"
+  },
+  {
+   "offset": 9750.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2170 b:1988"
+  },
+  {
+   "offset": 9780.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:4/5 tex a:2115 b:1335"
+  },
+  {
+   "offset": 9810.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2171 b:2247"
+  },
+  {
+   "offset": 9840.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1782 b:2251"
+  },
+  {
+   "offset": 9870.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2090 b:2106"
+  },
+  {
+   "offset": 9900.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2252 b:2347"
+  },
+  {
+   "offset": 9930.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2243 b:2253"
+  },
+  {
+   "offset": 9960.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1100 b:1897"
+  },
+  {
+   "offset": 9990.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:4 b:1068"
+  },
+  {
+   "offset": 10020.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:2/5 tex a:1 b:12"
+  },
+  {
+   "offset": 10050.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:0/5 tex a:50 b:368"
+  },
+  {
+   "offset": 10080.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:6 b:1101"
+  },
+  {
+   "offset": 10110.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:0/5 tex a:262 b:619"
+  },
+  {
+   "offset": 10140.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1274 b:979"
+  },
+  {
+   "offset": 10170.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:6 b:2388"
+  },
+  {
+   "offset": 10200.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:2 b:8"
+  },
+  {
+   "offset": 10230.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:3 b:398"
+  },
+  {
+   "offset": 10260.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1057 b:1837"
+  },
+  {
+   "offset": 10290.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:50 b:36"
+  },
+  {
+   "offset": 10320.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:320 b:824"
+  },
+  {
+   "offset": 10350.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:17 b:399"
+  },
+  {
+   "offset": 10380.0,
+   "state": "gameplay",
+   "reason": "chips a:4/5 b:5/5 tex a:810 b:1796"
+  },
+  {
+   "offset": 10410.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1567 b:1357"
+  },
+  {
+   "offset": 10440.0,
+   "state": "partial-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:510"
+  },
+  {
+   "offset": 10470.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:331 b:875"
+  },
+  {
+   "offset": 10500.0,
+   "state": "partial-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:538"
+  },
+  {
+   "offset": 10530.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:40 b:3"
+  },
+  {
+   "offset": 10560.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:11 b:91"
+  },
+  {
+   "offset": 10590.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:2/5 tex a:2 b:2"
+  },
+  {
+   "offset": 10620.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:154 b:108"
+  },
+  {
+   "offset": 10650.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:22 b:16"
+  },
+  {
+   "offset": 10680.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:8 b:12"
+  },
+  {
+   "offset": 10710.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:86 b:7"
+  },
+  {
+   "offset": 10740.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:0/5 tex a:22 b:189"
+  },
+  {
+   "offset": 10770.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:545 b:1"
+  },
+  {
+   "offset": 10800.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:539 b:1"
+  },
+  {
+   "offset": 10830.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:533 b:1"
+  },
+  {
+   "offset": 10860.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:521 b:1"
+  },
+  {
+   "offset": 10890.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:1 b:1"
+  },
+  {
+   "offset": 10920.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:529 b:1"
+  },
+  {
+   "offset": 10950.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:514 b:1"
+  },
+  {
+   "offset": 10980.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:1 b:1"
+  },
+  {
+   "offset": 11010.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:531 b:1"
+  },
+  {
+   "offset": 11040.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:5/5 tex a:186 b:138"
+  },
+  {
+   "offset": 11070.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:1"
+  },
+  {
+   "offset": 11100.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:36 b:0"
+  },
+  {
+   "offset": 11130.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:348 b:930"
+  },
+  {
+   "offset": 11160.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:3/5 tex a:16 b:11"
+  },
+  {
+   "offset": 11190.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 11220.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:2"
+  },
+  {
+   "offset": 11250.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 11280.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 11310.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:133"
+  },
+  {
+   "offset": 11340.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:283 b:715"
+  },
+  {
+   "offset": 11370.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:10 b:4"
+  },
+  {
+   "offset": 11400.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 11430.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:3/5 tex a:19 b:332"
+  },
+  {
+   "offset": 11460.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:5 b:0"
+  },
+  {
+   "offset": 11490.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:8 b:6"
+  },
+  {
+   "offset": 11520.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:343 b:727"
+  },
+  {
+   "offset": 11550.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:3 b:2"
+  },
+  {
+   "offset": 11580.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:6 b:15"
+  },
+  {
+   "offset": 11610.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:16 b:10"
+  },
+  {
+   "offset": 11640.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:5/5 tex a:344 b:35"
+  },
+  {
+   "offset": 11670.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:286 b:1"
+  },
+  {
+   "offset": 11700.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 11730.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:90 b:69"
+  },
+  {
+   "offset": 11760.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:5 b:0"
+  },
+  {
+   "offset": 11790.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:4"
+  },
+  {
+   "offset": 11820.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:66 b:96"
+  },
+  {
+   "offset": 11850.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:3 b:42"
+  },
+  {
+   "offset": 11880.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 11910.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 11940.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:2/5 tex a:10 b:25"
+  },
+  {
+   "offset": 11970.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:3/5 tex a:2 b:90"
+  },
+  {
+   "offset": 12000.0,
+   "state": "no-hud",
+   "reason": "chips a:3/5 b:0/5 tex a:84 b:1"
+  },
+  {
+   "offset": 12030.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:1/5 tex a:1 b:14"
+  },
+  {
+   "offset": 12060.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:21 b:3"
+  },
+  {
+   "offset": 12090.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:147"
+  },
+  {
+   "offset": 12120.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:3 b:281"
+  },
+  {
+   "offset": 12150.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:4 b:1"
+  },
+  {
+   "offset": 12180.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:368 b:1"
+  },
+  {
+   "offset": 12210.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:4/5 tex a:4 b:4"
+  },
+  {
+   "offset": 12240.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:10 b:4"
+  },
+  {
+   "offset": 12270.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:2 b:107"
+  },
+  {
+   "offset": 12300.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:7 b:1"
+  },
+  {
+   "offset": 12330.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:3"
+  },
+  {
+   "offset": 12360.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:1"
+  },
+  {
+   "offset": 12390.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:60 b:62"
+  },
+  {
+   "offset": 12420.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:3 b:6"
+  },
+  {
+   "offset": 12450.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 12480.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2934 b:2641"
+  },
+  {
+   "offset": 12510.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1971 b:1861"
+  },
+  {
+   "offset": 12540.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2874 b:2096"
+  },
+  {
+   "offset": 12570.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2254 b:2245"
+  },
+  {
+   "offset": 12600.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2252 b:1755"
+  },
+  {
+   "offset": 12630.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2361 b:2288"
+  },
+  {
+   "offset": 12660.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1659 b:1855"
+  },
+  {
+   "offset": 12690.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2253 b:2043"
+  },
+  {
+   "offset": 12720.0,
+   "state": "gameplay",
+   "reason": "chips a:4/5 b:5/5 tex a:1581 b:1563"
+  },
+  {
+   "offset": 12750.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:212 b:37"
+  },
+  {
+   "offset": 12780.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2585 b:2390"
+  },
+  {
+   "offset": 12810.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1572 b:1428"
+  },
+  {
+   "offset": 12840.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2226 b:2132"
+  },
+  {
+   "offset": 12870.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2183 b:2297"
+  },
+  {
+   "offset": 12900.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2346 b:2339"
+  },
+  {
+   "offset": 12930.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:4/5 tex a:2212 b:865"
+  },
+  {
+   "offset": 12960.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1686 b:2033"
+  },
+  {
+   "offset": 12990.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:3/5 tex a:1608 b:1499"
+  },
+  {
+   "offset": 13020.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2209 b:2287"
+  },
+  {
+   "offset": 13050.0,
+   "state": "gameplay",
+   "reason": "chips a:3/5 b:5/5 tex a:1435 b:1984"
+  },
+  {
+   "offset": 13080.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1794 b:1833"
+  },
+  {
+   "offset": 13110.0,
+   "state": "no-hud",
+   "reason": "chips a:3/5 b:0/5 tex a:1 b:0"
+  },
+  {
+   "offset": 13140.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:20 b:95"
+  },
+  {
+   "offset": 13170.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:9 b:0"
+  },
+  {
+   "offset": 13200.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:3/5 tex a:2 b:112"
+  },
+  {
+   "offset": 13230.0,
+   "state": "no-hud",
+   "reason": "chips a:3/5 b:0/5 tex a:3 b:4"
+  },
+  {
+   "offset": 13260.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:8 b:38"
+  },
+  {
+   "offset": 13290.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 13320.0,
+   "state": "no-hud",
+   "reason": "chips a:4/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 13350.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:15 b:8"
+  },
+  {
+   "offset": 13380.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:6 b:1"
+  },
+  {
+   "offset": 13410.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:33 b:0"
+  },
+  {
+   "offset": 13440.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:298 b:1"
+  },
+  {
+   "offset": 13470.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:0"
+  },
+  {
+   "offset": 13500.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:405 b:185"
+  },
+  {
+   "offset": 13530.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2868 b:2281"
+  },
+  {
+   "offset": 13560.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:4/5 tex a:2817 b:1229"
+  },
+  {
+   "offset": 13590.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2216 b:1926"
+  },
+  {
+   "offset": 13620.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2519 b:2553"
+  },
+  {
+   "offset": 13650.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:3/5 tex a:2572 b:895"
+  },
+  {
+   "offset": 13680.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2703 b:2089"
+  },
+  {
+   "offset": 13710.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:3097 b:2289"
+  },
+  {
+   "offset": 13740.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:4/5 tex a:2423 b:2460"
+  },
+  {
+   "offset": 13770.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:3000 b:2376"
+  },
+  {
+   "offset": 13800.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:3144 b:2089"
+  },
+  {
+   "offset": 13830.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2782 b:2408"
+  },
+  {
+   "offset": 13860.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2558 b:2180"
+  },
+  {
+   "offset": 13890.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2972 b:893"
+  },
+  {
+   "offset": 13920.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2212 b:2205"
+  },
+  {
+   "offset": 13950.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2888 b:2140"
+  },
+  {
+   "offset": 13980.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2557 b:2021"
+  },
+  {
+   "offset": 14010.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2838 b:1382"
+  },
+  {
+   "offset": 14040.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2636 b:2112"
+  },
+  {
+   "offset": 14070.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:3009 b:2210"
+  },
+  {
+   "offset": 14100.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2365 b:829"
+  },
+  {
+   "offset": 14130.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2875 b:2354"
+  },
+  {
+   "offset": 14160.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2924 b:2354"
+  },
+  {
+   "offset": 14190.0,
+   "state": "gameplay",
+   "reason": "chips a:4/5 b:5/5 tex a:1235 b:2295"
+  },
+  {
+   "offset": 14220.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2244 b:2287"
+  },
+  {
+   "offset": 14250.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2243 b:2321"
+  },
+  {
+   "offset": 14280.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:51"
+  },
+  {
+   "offset": 14310.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:111 b:78"
+  },
+  {
+   "offset": 14340.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:1"
+  },
+  {
+   "offset": 14370.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:385 b:1067"
+  },
+  {
+   "offset": 14400.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:0/5 tex a:1 b:494"
+  },
+  {
+   "offset": 14430.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:4"
+  },
+  {
+   "offset": 14460.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:0/5 tex a:0 b:374"
+  },
+  {
+   "offset": 14490.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:4 b:897"
+  },
+  {
+   "offset": 14520.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:5/5 tex a:3 b:1"
+  },
+  {
+   "offset": 14550.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:254 b:734"
+  },
+  {
+   "offset": 14580.0,
+   "state": "gameplay",
+   "reason": "chips a:4/5 b:5/5 tex a:1433 b:1667"
+  },
+  {
+   "offset": 14610.0,
+   "state": "partial-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1515 b:461"
+  },
+  {
+   "offset": 14640.0,
+   "state": "partial-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:0 b:516"
+  },
+  {
+   "offset": 14670.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:5 b:0"
+  },
+  {
+   "offset": 14700.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:3 b:25"
+  },
+  {
+   "offset": 14730.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:8"
+  },
+  {
+   "offset": 14760.0,
+   "state": "partial-hud",
+   "reason": "chips a:4/5 b:4/5 tex a:1376 b:261"
+  },
+  {
+   "offset": 14790.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:15"
+  },
+  {
+   "offset": 14820.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:2"
+  },
+  {
+   "offset": 14850.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:2"
+  },
+  {
+   "offset": 14880.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:2/5 tex a:2 b:1"
+  },
+  {
+   "offset": 14910.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:86 b:17"
+  },
+  {
+   "offset": 14940.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:5 b:6"
+  },
+  {
+   "offset": 14970.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:105 b:7"
+  },
+  {
+   "offset": 15000.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:94 b:306"
+  },
+  {
+   "offset": 15030.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:148 b:222"
+  },
+  {
+   "offset": 15060.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:2/5 tex a:3150 b:2"
+  },
+  {
+   "offset": 15090.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:60"
+  },
+  {
+   "offset": 15120.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:273 b:953"
+  },
+  {
+   "offset": 15150.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:0"
+  },
+  {
+   "offset": 15180.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:3/5 tex a:5 b:6"
+  },
+  {
+   "offset": 15210.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:11 b:3"
+  },
+  {
+   "offset": 15240.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:5 b:0"
+  },
+  {
+   "offset": 15270.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:0"
+  },
+  {
+   "offset": 15300.0,
+   "state": "partial-hud",
+   "reason": "chips a:0/5 b:4/5 tex a:557 b:25"
+  },
+  {
+   "offset": 15330.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:9 b:0"
+  },
+  {
+   "offset": 15360.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:247 b:864"
+  },
+  {
+   "offset": 15390.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:11 b:3"
+  },
+  {
+   "offset": 15420.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:247 b:690"
+  },
+  {
+   "offset": 15450.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:5 b:0"
+  },
+  {
+   "offset": 15480.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:7"
+  },
+  {
+   "offset": 15510.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:2 b:3"
+  },
+  {
+   "offset": 15540.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:2/5 tex a:2 b:1"
+  },
+  {
+   "offset": 15570.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:14 b:7"
+  },
+  {
+   "offset": 15600.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:2"
+  },
+  {
+   "offset": 15630.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:162 b:5"
+  },
+  {
+   "offset": 15660.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:34 b:6"
+  },
+  {
+   "offset": 15690.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:4 b:17"
+  },
+  {
+   "offset": 15720.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:2"
+  },
+  {
+   "offset": 15750.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:4 b:12"
+  },
+  {
+   "offset": 15780.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:11 b:53"
+  },
+  {
+   "offset": 15810.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:14 b:8"
+  },
+  {
+   "offset": 15840.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:2/5 tex a:6 b:0"
+  },
+  {
+   "offset": 15870.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:2/5 tex a:17 b:112"
+  },
+  {
+   "offset": 15900.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:6 b:20"
+  },
+  {
+   "offset": 15930.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:36"
+  },
+  {
+   "offset": 15960.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:18 b:11"
+  },
+  {
+   "offset": 15990.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:3 b:1"
+  },
+  {
+   "offset": 16020.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:4/5 tex a:1 b:1"
+  },
+  {
+   "offset": 16050.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:14 b:3"
+  },
+  {
+   "offset": 16080.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:3 b:5"
+  },
+  {
+   "offset": 16110.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:15"
+  },
+  {
+   "offset": 16140.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 16170.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:4"
+  },
+  {
+   "offset": 16200.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:284"
+  },
+  {
+   "offset": 16230.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:2"
+  },
+  {
+   "offset": 16260.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 16290.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:386 b:1031"
+  },
+  {
+   "offset": 16320.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:397 b:382"
+  },
+  {
+   "offset": 16350.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:339 b:2041"
+  },
+  {
+   "offset": 16380.0,
+   "state": "partial-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:539"
+  },
+  {
+   "offset": 16410.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:312 b:2158"
+  },
+  {
+   "offset": 16440.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:194 b:2037"
+  },
+  {
+   "offset": 16470.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:3 b:5"
+  },
+  {
+   "offset": 16500.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:334 b:2136"
+  },
+  {
+   "offset": 16530.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:3 b:1"
+  },
+  {
+   "offset": 16560.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:6 b:2"
+  },
+  {
+   "offset": 16590.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:0 b:2"
+  },
+  {
+   "offset": 16620.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:3/5 tex a:113 b:6"
+  },
+  {
+   "offset": 16650.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:264 b:73"
+  },
+  {
+   "offset": 16680.0,
+   "state": "no-hud",
+   "reason": "chips a:4/5 b:5/5 tex a:142 b:66"
+  },
+  {
+   "offset": 16710.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:3 b:60"
+  },
+  {
+   "offset": 16740.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:3/5 tex a:1 b:1"
+  },
+  {
+   "offset": 16770.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:130 b:15"
+  },
+  {
+   "offset": 16800.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:1"
+  },
+  {
+   "offset": 16830.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:31 b:7"
+  },
+  {
+   "offset": 16860.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:4/5 tex a:11 b:33"
+  },
+  {
+   "offset": 16890.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:505 b:1"
+  },
+  {
+   "offset": 16920.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 16950.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:5 b:16"
+  },
+  {
+   "offset": 16980.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:681 b:46"
+  },
+  {
+   "offset": 17010.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:42 b:14"
+  },
+  {
+   "offset": 17040.0,
+   "state": "partial-hud",
+   "reason": "chips a:1/5 b:3/5 tex a:219 b:896"
+  },
+  {
+   "offset": 17070.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:13"
+  },
+  {
+   "offset": 17100.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:0"
+  },
+  {
+   "offset": 17130.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:1"
+  },
+  {
+   "offset": 17160.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2395 b:2307"
+  },
+  {
+   "offset": 17190.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2551 b:2480"
+  },
+  {
+   "offset": 17220.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2409 b:2329"
+  },
+  {
+   "offset": 17250.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2244 b:2115"
+  },
+  {
+   "offset": 17280.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2510 b:1757"
+  },
+  {
+   "offset": 17310.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1668 b:1249"
+  },
+  {
+   "offset": 17340.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2189 b:1832"
+  },
+  {
+   "offset": 17370.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2858 b:1418"
+  },
+  {
+   "offset": 17400.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2462 b:2372"
+  },
+  {
+   "offset": 17430.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2470 b:2207"
+  },
+  {
+   "offset": 17460.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:4/5 tex a:2279 b:2363"
+  },
+  {
+   "offset": 17490.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2347 b:2148"
+  },
+  {
+   "offset": 17520.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:56 b:9"
+  },
+  {
+   "offset": 17550.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2034 b:2053"
+  },
+  {
+   "offset": 17580.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2641 b:2291"
+  },
+  {
+   "offset": 17610.0,
+   "state": "gameplay",
+   "reason": "chips a:4/5 b:5/5 tex a:1871 b:2054"
+  },
+  {
+   "offset": 17640.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2447 b:2294"
+  },
+  {
+   "offset": 17670.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2129 b:1817"
+  },
+  {
+   "offset": 17700.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2517 b:1478"
+  },
+  {
+   "offset": 17730.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2547 b:2258"
+  },
+  {
+   "offset": 17760.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2567 b:2423"
+  },
+  {
+   "offset": 17790.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:11"
+  },
+  {
+   "offset": 17820.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:3/5 tex a:2401 b:849"
+  },
+  {
+   "offset": 17850.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2701 b:2561"
+  },
+  {
+   "offset": 17880.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2343 b:2681"
+  },
+  {
+   "offset": 17910.0,
+   "state": "gameplay",
+   "reason": "chips a:4/5 b:5/5 tex a:2322 b:2261"
+  },
+  {
+   "offset": 17940.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2278 b:2466"
+  },
+  {
+   "offset": 17970.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2509 b:2925"
+  },
+  {
+   "offset": 18000.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1786 b:2562"
+  },
+  {
+   "offset": 18030.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2266 b:2560"
+  },
+  {
+   "offset": 18060.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2699 b:2831"
+  },
+  {
+   "offset": 18090.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2893 b:2863"
+  },
+  {
+   "offset": 18120.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:9"
+  },
+  {
+   "offset": 18150.0,
+   "state": "no-hud",
+   "reason": "chips a:4/5 b:5/5 tex a:7 b:3"
+  },
+  {
+   "offset": 18180.0,
+   "state": "no-hud",
+   "reason": "chips a:4/5 b:5/5 tex a:1 b:3"
+  },
+  {
+   "offset": 18210.0,
+   "state": "no-hud",
+   "reason": "chips a:4/5 b:5/5 tex a:1 b:3"
+  },
+  {
+   "offset": 18240.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:4/5 tex a:1 b:163"
+  },
+  {
+   "offset": 18270.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:2 b:53"
+  },
+  {
+   "offset": 18300.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:1/5 tex a:1 b:31"
+  },
+  {
+   "offset": 18330.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:3"
+  },
+  {
+   "offset": 18360.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:3/5 tex a:1 b:138"
+  },
+  {
+   "offset": 18390.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:4/5 tex a:1 b:1"
+  },
+  {
+   "offset": 18420.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:4 b:17"
+  },
+  {
+   "offset": 18450.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:269 b:54"
+  },
+  {
+   "offset": 18480.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:35 b:1"
+  },
+  {
+   "offset": 18510.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 18540.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:49"
+  },
+  {
+   "offset": 18570.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:13 b:0"
+  },
+  {
+   "offset": 18600.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:3 b:1"
+  },
+  {
+   "offset": 18630.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:5 b:4"
+  },
+  {
+   "offset": 18660.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 18690.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:341 b:25"
+  },
+  {
+   "offset": 18720.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:399 b:2"
+  },
+  {
+   "offset": 18750.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:6"
+  },
+  {
+   "offset": 18780.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:125 b:41"
+  },
+  {
+   "offset": 18810.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2096 b:2712"
+  },
+  {
+   "offset": 18840.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2243 b:2527"
+  },
+  {
+   "offset": 18870.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2036 b:2185"
+  },
+  {
+   "offset": 18900.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2048 b:1836"
+  },
+  {
+   "offset": 18930.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2004 b:1874"
+  },
+  {
+   "offset": 18960.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1393 b:1580"
+  },
+  {
+   "offset": 18990.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2139 b:2072"
+  },
+  {
+   "offset": 19020.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1081 b:2080"
+  },
+  {
+   "offset": 19050.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1503 b:1801"
+  },
+  {
+   "offset": 19080.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2101 b:2168"
+  },
+  {
+   "offset": 19110.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2047 b:1904"
+  },
+  {
+   "offset": 19140.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2168 b:2054"
+  },
+  {
+   "offset": 19170.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1790 b:1963"
+  },
+  {
+   "offset": 19200.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2217 b:2528"
+  },
+  {
+   "offset": 19230.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1733 b:1152"
+  },
+  {
+   "offset": 19260.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1831 b:2157"
+  },
+  {
+   "offset": 19290.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1798 b:2233"
+  },
+  {
+   "offset": 19320.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:4 b:3"
+  },
+  {
+   "offset": 19350.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:3/5 tex a:2038 b:814"
+  },
+  {
+   "offset": 19380.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:68 b:67"
+  },
+  {
+   "offset": 19410.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2024 b:2515"
+  },
+  {
+   "offset": 19440.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1766 b:2326"
+  },
+  {
+   "offset": 19470.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2547 b:2257"
+  },
+  {
+   "offset": 19500.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2474 b:2138"
+  },
+  {
+   "offset": 19530.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2238 b:2307"
+  },
+  {
+   "offset": 19560.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1686 b:2453"
+  },
+  {
+   "offset": 19590.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2433 b:2426"
+  },
+  {
+   "offset": 19620.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2267 b:2040"
+  },
+  {
+   "offset": 19650.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2502 b:2312"
+  },
+  {
+   "offset": 19680.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2004 b:2305"
+  },
+  {
+   "offset": 19710.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2665 b:2519"
+  },
+  {
+   "offset": 19740.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1738 b:2290"
+  },
+  {
+   "offset": 19770.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2725 b:2573"
+  },
+  {
+   "offset": 19800.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2471 b:2540"
+  },
+  {
+   "offset": 19830.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2187 b:2336"
+  },
+  {
+   "offset": 19860.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2571 b:2109"
+  },
+  {
+   "offset": 19890.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:282 b:522"
+  },
+  {
+   "offset": 19920.0,
+   "state": "gameplay",
+   "reason": "chips a:4/5 b:5/5 tex a:1612 b:2323"
+  },
+  {
+   "offset": 19950.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:4 b:3"
+  },
+  {
+   "offset": 19980.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:3/5 tex a:0 b:61"
+  },
+  {
+   "offset": 20010.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:153 b:62"
+  },
+  {
+   "offset": 20040.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:72 b:87"
+  },
+  {
+   "offset": 20070.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:1/5 tex a:5 b:33"
+  },
+  {
+   "offset": 20100.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:0/5 tex a:9 b:3"
+  },
+  {
+   "offset": 20130.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:5/5 tex a:0 b:4"
+  },
+  {
+   "offset": 20160.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:5"
+  },
+  {
+   "offset": 20190.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:304 b:4"
+  },
+  {
+   "offset": 20220.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:37 b:1"
+  },
+  {
+   "offset": 20250.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:291 b:5"
+  },
+  {
+   "offset": 20280.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:12 b:7"
+  },
+  {
+   "offset": 20310.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:5/5 tex a:64 b:3"
+  },
+  {
+   "offset": 20340.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 20370.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2746 b:2674"
+  },
+  {
+   "offset": 20400.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:3078 b:2685"
+  },
+  {
+   "offset": 20430.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:3/5 tex a:3409 b:1939"
+  },
+  {
+   "offset": 20460.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2843 b:2362"
+  },
+  {
+   "offset": 20490.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2342 b:2602"
+  },
+  {
+   "offset": 20520.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:3131 b:2493"
+  },
+  {
+   "offset": 20550.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:3006 b:2235"
+  },
+  {
+   "offset": 20580.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2218 b:1825"
+  },
+  {
+   "offset": 20610.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2618 b:973"
+  },
+  {
+   "offset": 20640.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2022 b:1680"
+  },
+  {
+   "offset": 20670.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2070 b:1953"
+  },
+  {
+   "offset": 20700.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2767 b:2373"
+  },
+  {
+   "offset": 20730.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2748 b:1081"
+  },
+  {
+   "offset": 20760.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1804 b:1479"
+  },
+  {
+   "offset": 20790.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2675 b:1985"
+  },
+  {
+   "offset": 20820.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2524 b:830"
+  },
+  {
+   "offset": 20850.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:2/5 tex a:2 b:72"
+  },
+  {
+   "offset": 20880.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:1"
+  },
+  {
+   "offset": 20910.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:825 b:7"
+  },
+  {
+   "offset": 20940.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:216 b:912"
+  },
+  {
+   "offset": 20970.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:759 b:388"
+  },
+  {
+   "offset": 21000.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:675 b:148"
+  },
+  {
+   "offset": 21030.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 21060.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:15 b:7"
+  },
+  {
+   "offset": 21090.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:4/5 tex a:2349 b:847"
+  },
+  {
+   "offset": 21120.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:4/5 tex a:2264 b:848"
+  },
+  {
+   "offset": 21150.0,
+   "state": "gameplay",
+   "reason": "chips a:3/5 b:5/5 tex a:577 b:2073"
+  },
+  {
+   "offset": 21180.0,
+   "state": "partial-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:526"
+  },
+  {
+   "offset": 21210.0,
+   "state": "partial-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:538"
+  },
+  {
+   "offset": 21240.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:498 b:3252"
+  },
+  {
+   "offset": 21270.0,
+   "state": "partial-hud",
+   "reason": "chips a:4/5 b:5/5 tex a:1205 b:168"
+  },
+  {
+   "offset": 21300.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:2/5 tex a:18 b:413"
+  },
+  {
+   "offset": 21330.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:4 b:52"
+  },
+  {
+   "offset": 21360.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:3/5 tex a:25 b:3"
+  },
+  {
+   "offset": 21390.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 21420.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:5 b:0"
+  },
+  {
+   "offset": 21450.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:0"
+  },
+  {
+   "offset": 21480.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:0 b:0"
+  },
+  {
+   "offset": 21510.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:90 b:307"
+  },
+  {
+   "offset": 21540.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:150 b:0"
+  },
+  {
+   "offset": 21570.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:4 b:11"
+  },
+  {
+   "offset": 21600.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:34 b:1"
+  },
+  {
+   "offset": 21630.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:901 b:2982"
+  },
+  {
+   "offset": 21660.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:5 b:24"
+  },
+  {
+   "offset": 21690.0,
+   "state": "partial-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:0 b:517"
+  },
+  {
+   "offset": 21720.0,
+   "state": "partial-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:523"
+  },
+  {
+   "offset": 21750.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:7 b:10"
+  },
+  {
+   "offset": 21780.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:5 b:11"
+  },
+  {
+   "offset": 21810.0,
+   "state": "partial-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:554"
+  },
+  {
+   "offset": 21840.0,
+   "state": "partial-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:543"
+  },
+  {
+   "offset": 21870.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:40 b:1"
+  },
+  {
+   "offset": 21900.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:3/5 tex a:1 b:326"
+  },
+  {
+   "offset": 21930.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:7 b:0"
+  },
+  {
+   "offset": 21960.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:3/5 tex a:1 b:347"
+  },
+  {
+   "offset": 21990.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:3"
+  },
+  {
+   "offset": 22020.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:1"
+  },
+  {
+   "offset": 22050.0,
+   "state": "no-hud",
+   "reason": "chips a:4/5 b:1/5 tex a:61 b:42"
+  },
+  {
+   "offset": 22080.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:4/5 tex a:4 b:1"
+  },
+  {
+   "offset": 22110.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:1"
+  },
+  {
+   "offset": 22140.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:180 b:144"
+  },
+  {
+   "offset": 22170.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:0"
+  },
+  {
+   "offset": 22200.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:5/5 tex a:213 b:1"
+  },
+  {
+   "offset": 22230.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:3 b:54"
+  },
+  {
+   "offset": 22260.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:2/5 tex a:5 b:110"
+  },
+  {
+   "offset": 22290.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:2/5 tex a:7 b:13"
+  },
+  {
+   "offset": 22320.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:4 b:6"
+  },
+  {
+   "offset": 22350.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:120 b:29"
+  },
+  {
+   "offset": 22380.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 22410.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:101 b:2"
+  },
+  {
+   "offset": 22440.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:59"
+  },
+  {
+   "offset": 22470.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:3229 b:2425"
+  },
+  {
+   "offset": 22500.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2494 b:2346"
+  },
+  {
+   "offset": 22530.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:4/5 tex a:1981 b:758"
+  },
+  {
+   "offset": 22560.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2424 b:2003"
+  },
+  {
+   "offset": 22590.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2291 b:2178"
+  },
+  {
+   "offset": 22620.0,
+   "state": "gameplay",
+   "reason": "chips a:4/5 b:4/5 tex a:1437 b:885"
+  },
+  {
+   "offset": 22650.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2200 b:1947"
+  },
+  {
+   "offset": 22680.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2497 b:2405"
+  },
+  {
+   "offset": 22710.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:4/5 tex a:1783 b:1581"
+  },
+  {
+   "offset": 22740.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2371 b:2249"
+  },
+  {
+   "offset": 22770.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:54"
+  },
+  {
+   "offset": 22800.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:9"
+  },
+  {
+   "offset": 22830.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2155 b:2140"
+  },
+  {
+   "offset": 22860.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2171 b:2282"
+  },
+  {
+   "offset": 22890.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2443 b:2562"
+  },
+  {
+   "offset": 22920.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1984 b:2349"
+  },
+  {
+   "offset": 22950.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2251 b:2387"
+  },
+  {
+   "offset": 22980.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2321 b:2077"
+  },
+  {
+   "offset": 23010.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:947 b:2155"
+  },
+  {
+   "offset": 23040.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2185 b:2174"
+  },
+  {
+   "offset": 23070.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:3/5 tex a:2396 b:1210"
+  },
+  {
+   "offset": 23100.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1835 b:1960"
+  },
+  {
+   "offset": 23130.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2658 b:2038"
+  },
+  {
+   "offset": 23160.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:2700"
+  },
+  {
+   "offset": 23190.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:32 b:2714"
+  },
+  {
+   "offset": 23220.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:4 b:2749"
+  },
+  {
+   "offset": 23250.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:138 b:2807"
+  },
+  {
+   "offset": 23280.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:14 b:2888"
+  },
+  {
+   "offset": 23310.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2047 b:1879"
+  },
+  {
+   "offset": 23340.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:4/5 tex a:6 b:16"
+  },
+  {
+   "offset": 23370.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:6 b:2765"
+  },
+  {
+   "offset": 23400.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:2731"
+  },
+  {
+   "offset": 23430.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:0/5 tex a:47 b:2790"
+  },
+  {
+   "offset": 23460.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:2783"
+  },
+  {
+   "offset": 23490.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:30 b:2766"
+  },
+  {
+   "offset": 23520.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:251 b:2755"
+  },
+  {
+   "offset": 23550.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:2842"
+  },
+  {
+   "offset": 23580.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:2751"
+  },
+  {
+   "offset": 23610.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:4 b:2730"
+  },
+  {
+   "offset": 23640.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:5 b:2820"
+  },
+  {
+   "offset": 23670.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:0/5 tex a:736 b:2797"
+  },
+  {
+   "offset": 23700.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:10 b:2788"
+  },
+  {
+   "offset": 23730.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:2730"
+  },
+  {
+   "offset": 23760.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:2/5 tex a:1 b:178"
+  },
+  {
+   "offset": 23790.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:99 b:61"
+  },
+  {
+   "offset": 23820.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:166 b:78"
+  },
+  {
+   "offset": 23850.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:1 b:374"
+  },
+  {
+   "offset": 23880.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2646 b:2517"
+  },
+  {
+   "offset": 23910.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2410 b:2305"
+  },
+  {
+   "offset": 23940.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1987 b:2257"
+  },
+  {
+   "offset": 23970.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2515 b:2285"
+  },
+  {
+   "offset": 24000.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:3/5 tex a:3 b:5"
+  },
+  {
+   "offset": 24030.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:53 b:3"
+  },
+  {
+   "offset": 24060.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:41 b:2761"
+  },
+  {
+   "offset": 24090.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:2776"
+  },
+  {
+   "offset": 24120.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:2603"
+  },
+  {
+   "offset": 24150.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:2740"
+  },
+  {
+   "offset": 24180.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:33 b:2714"
+  },
+  {
+   "offset": 24210.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:35 b:2760"
+  },
+  {
+   "offset": 24240.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:3 b:2705"
+  },
+  {
+   "offset": 24270.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:199 b:2791"
+  },
+  {
+   "offset": 24300.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:0/5 tex a:64 b:2760"
+  },
+  {
+   "offset": 24330.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:2732"
+  },
+  {
+   "offset": 24360.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:2767"
+  },
+  {
+   "offset": 24390.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:61 b:2824"
+  },
+  {
+   "offset": 24420.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1911 b:2071"
+  },
+  {
+   "offset": 24450.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2266 b:2539"
+  },
+  {
+   "offset": 24480.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:3/5 tex a:1 b:9"
+  },
+  {
+   "offset": 24510.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2152 b:2194"
+  },
+  {
+   "offset": 24540.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:20 b:51"
+  },
+  {
+   "offset": 24570.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:61 b:56"
+  },
+  {
+   "offset": 24600.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:15"
+  },
+  {
+   "offset": 24630.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:1"
+  },
+  {
+   "offset": 24660.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:5/5 tex a:4 b:36"
+  },
+  {
+   "offset": 24690.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 24720.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:6 b:0"
+  },
+  {
+   "offset": 24750.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:0"
+  },
+  {
+   "offset": 24780.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:3/5 tex a:26 b:3"
+  },
+  {
+   "offset": 24810.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:5/5 tex a:1 b:1"
+  },
+  {
+   "offset": 24840.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:4"
+  },
+  {
+   "offset": 24870.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:1"
+  },
+  {
+   "offset": 24900.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:7"
+  },
+  {
+   "offset": 24930.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:176 b:128"
+  },
+  {
+   "offset": 24960.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:6 b:9"
+  },
+  {
+   "offset": 24990.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1550 b:1550"
+  },
+  {
+   "offset": 25020.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2099 b:1280"
+  },
+  {
+   "offset": 25050.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2488 b:1568"
+  },
+  {
+   "offset": 25080.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1055 b:585"
+  },
+  {
+   "offset": 25110.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2170 b:1031"
+  },
+  {
+   "offset": 25140.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2393 b:875"
+  },
+  {
+   "offset": 25170.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1456 b:1110"
+  },
+  {
+   "offset": 25200.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:4/5 tex a:2126 b:1067"
+  },
+  {
+   "offset": 25230.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2727 b:1455"
+  },
+  {
+   "offset": 25260.0,
+   "state": "gameplay",
+   "reason": "chips a:4/5 b:5/5 tex a:794 b:969"
+  },
+  {
+   "offset": 25290.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1560 b:1562"
+  },
+  {
+   "offset": 25320.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2856 b:1308"
+  },
+  {
+   "offset": 25350.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:4/5 tex a:1120 b:1096"
+  },
+  {
+   "offset": 25380.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2696 b:1307"
+  },
+  {
+   "offset": 25410.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1841 b:940"
+  },
+  {
+   "offset": 25440.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2145 b:1026"
+  },
+  {
+   "offset": 25470.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2341 b:1523"
+  },
+  {
+   "offset": 25500.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2446 b:1979"
+  },
+  {
+   "offset": 25530.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2415 b:1579"
+  },
+  {
+   "offset": 25560.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2144 b:1442"
+  },
+  {
+   "offset": 25590.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:2/5 tex a:0 b:1"
+  },
+  {
+   "offset": 25620.0,
+   "state": "gameplay",
+   "reason": "chips a:4/5 b:4/5 tex a:2541 b:673"
+  },
+  {
+   "offset": 25650.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:3 b:1"
+  },
+  {
+   "offset": 25680.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:202 b:79"
+  },
+  {
+   "offset": 25710.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:305 b:1"
+  },
+  {
+   "offset": 25740.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1005 b:2"
+  },
+  {
+   "offset": 25770.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:0"
+  },
+  {
+   "offset": 25800.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:0/5 tex a:64 b:290"
+  },
+  {
+   "offset": 25830.0,
+   "state": "no-hud",
+   "reason": "chips a:3/5 b:3/5 tex a:118 b:1"
+  },
+  {
+   "offset": 25860.0,
+   "state": "no-hud",
+   "reason": "chips a:4/5 b:5/5 tex a:1 b:1"
+  },
+  {
+   "offset": 25890.0,
+   "state": "no-hud",
+   "reason": "chips a:4/5 b:5/5 tex a:7 b:1"
+  },
+  {
+   "offset": 25920.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 25950.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2345 b:2162"
+  },
+  {
+   "offset": 25980.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2351 b:2394"
+  },
+  {
+   "offset": 26010.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2065 b:2430"
+  },
+  {
+   "offset": 26040.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1868 b:2091"
+  },
+  {
+   "offset": 26070.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1485 b:2116"
+  },
+  {
+   "offset": 26100.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1665 b:1648"
+  },
+  {
+   "offset": 26130.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:958 b:2579"
+  },
+  {
+   "offset": 26160.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1314 b:1868"
+  },
+  {
+   "offset": 26190.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2359 b:2177"
+  },
+  {
+   "offset": 26220.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1898 b:930"
+  },
+  {
+   "offset": 26250.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2373 b:2175"
+  },
+  {
+   "offset": 26280.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:4/5 tex a:1831 b:1111"
+  },
+  {
+   "offset": 26310.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2302 b:2137"
+  },
+  {
+   "offset": 26340.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1976 b:1934"
+  },
+  {
+   "offset": 26370.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1182 b:2182"
+  },
+  {
+   "offset": 26400.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1064 b:903"
+  },
+  {
+   "offset": 26430.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1949 b:2058"
+  },
+  {
+   "offset": 26460.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1955 b:2200"
+  },
+  {
+   "offset": 26490.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:3/5 tex a:1343 b:1143"
+  },
+  {
+   "offset": 26520.0,
+   "state": "gameplay",
+   "reason": "chips a:3/5 b:5/5 tex a:1812 b:1740"
+  },
+  {
+   "offset": 26550.0,
+   "state": "no-hud",
+   "reason": "chips a:3/5 b:5/5 tex a:120 b:2"
+  },
+  {
+   "offset": 26580.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1900 b:2201"
+  },
+  {
+   "offset": 26610.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1466 b:1937"
+  },
+  {
+   "offset": 26640.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1740 b:2020"
+  },
+  {
+   "offset": 26670.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1457 b:2098"
+  },
+  {
+   "offset": 26700.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1315 b:2263"
+  },
+  {
+   "offset": 26730.0,
+   "state": "gameplay",
+   "reason": "chips a:4/5 b:5/5 tex a:1381 b:1768"
+  },
+  {
+   "offset": 26760.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1822 b:2026"
+  },
+  {
+   "offset": 26790.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1925 b:1346"
+  },
+  {
+   "offset": 26820.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1499 b:1806"
+  },
+  {
+   "offset": 26850.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1468 b:824"
+  },
+  {
+   "offset": 26880.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1655 b:2247"
+  },
+  {
+   "offset": 26910.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1748 b:959"
+  },
+  {
+   "offset": 26940.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1718 b:2302"
+  },
+  {
+   "offset": 26970.0,
+   "state": "gameplay",
+   "reason": "chips a:3/5 b:4/5 tex a:1083 b:1953"
+  },
+  {
+   "offset": 27000.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1236 b:1372"
+  },
+  {
+   "offset": 27030.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1809 b:2334"
+  },
+  {
+   "offset": 27060.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:0/5 tex a:323 b:2"
+  },
+  {
+   "offset": 27090.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 27120.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 27150.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:31 b:88"
+  },
+  {
+   "offset": 27180.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:669 b:1"
+  },
+  {
+   "offset": 27210.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:591 b:293"
+  },
+  {
+   "offset": 27240.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1042 b:715"
+  },
+  {
+   "offset": 27270.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:4/5 tex a:1053 b:2276"
+  },
+  {
+   "offset": 27300.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:692 b:2"
+  },
+  {
+   "offset": 27330.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:17 b:1121"
+  },
+  {
+   "offset": 27360.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:259 b:1170"
+  },
+  {
+   "offset": 27390.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1291 b:949"
+  },
+  {
+   "offset": 27420.0,
+   "state": "gameplay",
+   "reason": "chips a:4/5 b:4/5 tex a:1877 b:995"
+  },
+  {
+   "offset": 27450.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:48 b:0"
+  },
+  {
+   "offset": 27480.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:52 b:185"
+  },
+  {
+   "offset": 27510.0,
+   "state": "partial-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:532"
+  },
+  {
+   "offset": 27540.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:37 b:1397"
+  },
+  {
+   "offset": 27570.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:16 b:1274"
+  },
+  {
+   "offset": 27600.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:36 b:0"
+  },
+  {
+   "offset": 27630.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:0"
+  },
+  {
+   "offset": 27660.0,
+   "state": "no-hud",
+   "reason": "chips a:4/5 b:5/5 tex a:1 b:1"
+  },
+  {
+   "offset": 27690.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:16 b:6"
+  },
+  {
+   "offset": 27720.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:0/5 tex a:132 b:119"
+  },
+  {
+   "offset": 27750.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:3/5 tex a:5 b:2"
+  },
+  {
+   "offset": 27780.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:41 b:7"
+  },
+  {
+   "offset": 27810.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:54 b:8"
+  },
+  {
+   "offset": 27840.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:2/5 tex a:27 b:3"
+  },
+  {
+   "offset": 27870.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:2 b:3"
+  },
+  {
+   "offset": 27900.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:13"
+  },
+  {
+   "offset": 27930.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:3/5 tex a:1 b:362"
+  },
+  {
+   "offset": 27960.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:7 b:1"
+  },
+  {
+   "offset": 27990.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:3/5 tex a:3 b:323"
+  },
+  {
+   "offset": 28020.0,
+   "state": "partial-hud",
+   "reason": "chips a:0/5 b:3/5 tex a:767 b:4"
+  },
+  {
+   "offset": 28050.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:265 b:620"
+  },
+  {
+   "offset": 28080.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:17 b:9"
+  },
+  {
+   "offset": 28110.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:13 b:4"
+  },
+  {
+   "offset": 28140.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:257 b:512"
+  },
+  {
+   "offset": 28170.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:2"
+  },
+  {
+   "offset": 28200.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:104 b:1"
+  },
+  {
+   "offset": 28230.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:17 b:20"
+  },
+  {
+   "offset": 28260.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:3 b:0"
+  },
+  {
+   "offset": 28290.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:123 b:4"
+  },
+  {
+   "offset": 28320.0,
+   "state": "no-hud",
+   "reason": "chips a:4/5 b:5/5 tex a:31 b:6"
+  },
+  {
+   "offset": 28350.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:6 b:144"
+  },
+  {
+   "offset": 28380.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:13 b:3"
+  },
+  {
+   "offset": 28410.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:1/5 tex a:1 b:1"
+  },
+  {
+   "offset": 28440.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:4/5 tex a:1 b:1"
+  },
+  {
+   "offset": 28470.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:4/5 tex a:35 b:216"
+  },
+  {
+   "offset": 28500.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:27 b:58"
+  },
+  {
+   "offset": 28530.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:3245 b:1426"
+  },
+  {
+   "offset": 28560.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:5 b:297"
+  },
+  {
+   "offset": 28590.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1707 b:1"
+  },
+  {
+   "offset": 28620.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:651 b:38"
+  },
+  {
+   "offset": 28650.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 28680.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:175 b:123"
+  },
+  {
+   "offset": 28710.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:13 b:62"
+  },
+  {
+   "offset": 28740.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1201 b:2"
+  },
+  {
+   "offset": 28770.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:23 b:0"
+  },
+  {
+   "offset": 28800.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:0/5 tex a:129 b:1"
+  },
+  {
+   "offset": 28830.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:0/5 tex a:50 b:2"
+  },
+  {
+   "offset": 28860.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:13 b:0"
+  },
+  {
+   "offset": 28890.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:1"
+  },
+  {
+   "offset": 28920.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:2802"
+  },
+  {
+   "offset": 28950.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:28 b:2682"
+  },
+  {
+   "offset": 28980.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:2734"
+  },
+  {
+   "offset": 29010.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:330 b:2782"
+  },
+  {
+   "offset": 29040.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:345 b:2746"
+  },
+  {
+   "offset": 29070.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:2809"
+  },
+  {
+   "offset": 29100.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:2736"
+  },
+  {
+   "offset": 29130.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:2776"
+  },
+  {
+   "offset": 29160.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:614 b:2711"
+  },
+  {
+   "offset": 29190.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:0"
+  },
+  {
+   "offset": 29220.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2168 b:2225"
+  },
+  {
+   "offset": 29250.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2407 b:2383"
+  },
+  {
+   "offset": 29280.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:4/5 tex a:1536 b:1415"
+  },
+  {
+   "offset": 29310.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2019 b:2551"
+  },
+  {
+   "offset": 29340.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1725 b:2418"
+  },
+  {
+   "offset": 29370.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1600 b:2111"
+  },
+  {
+   "offset": 29400.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:4/5 tex a:1975 b:2446"
+  },
+  {
+   "offset": 29430.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1925 b:2169"
+  },
+  {
+   "offset": 29460.0,
+   "state": "gameplay",
+   "reason": "chips a:4/5 b:5/5 tex a:908 b:2080"
+  },
+  {
+   "offset": 29490.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2180 b:2563"
+  },
+  {
+   "offset": 29520.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2609 b:2376"
+  },
+  {
+   "offset": 29550.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2054 b:2036"
+  },
+  {
+   "offset": 29580.0,
+   "state": "gameplay",
+   "reason": "chips a:4/5 b:5/5 tex a:1820 b:3114"
+  },
+  {
+   "offset": 29610.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1992 b:2488"
+  },
+  {
+   "offset": 29640.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1723 b:2207"
+  },
+  {
+   "offset": 29670.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1960 b:2111"
+  },
+  {
+   "offset": 29700.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1866 b:2127"
+  },
+  {
+   "offset": 29730.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1966 b:2093"
+  },
+  {
+   "offset": 29760.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2355 b:2895"
+  },
+  {
+   "offset": 29790.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1574 b:1700"
+  },
+  {
+   "offset": 29820.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:243 b:0"
+  },
+  {
+   "offset": 29850.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:3 b:170"
+  },
+  {
+   "offset": 29880.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:3 b:44"
+  },
+  {
+   "offset": 29910.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:55 b:47"
+  },
+  {
+   "offset": 29940.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:125 b:83"
+  },
+  {
+   "offset": 29970.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:159 b:154"
+  },
+  {
+   "offset": 30000.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:67 b:165"
+  },
+  {
+   "offset": 30030.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:5/5 tex a:120 b:0"
+  },
+  {
+   "offset": 30060.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:42 b:80"
+  },
+  {
+   "offset": 30090.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:49 b:165"
+  },
+  {
+   "offset": 30120.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:37 b:2"
+  },
+  {
+   "offset": 30150.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:4/5 tex a:2 b:19"
+  },
+  {
+   "offset": 30180.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:4/5 tex a:9 b:12"
+  },
+  {
+   "offset": 30210.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:2/5 tex a:8 b:122"
+  },
+  {
+   "offset": 30240.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:32 b:1"
+  },
+  {
+   "offset": 30270.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:2/5 tex a:624 b:98"
+  },
+  {
+   "offset": 30300.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:30"
+  },
+  {
+   "offset": 30330.0,
+   "state": "no-hud",
+   "reason": "chips a:4/5 b:0/5 tex a:210 b:477"
+  },
+  {
+   "offset": 30360.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:179 b:176"
+  },
+  {
+   "offset": 30390.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:0"
+  },
+  {
+   "offset": 30420.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:9"
+  },
+  {
+   "offset": 30450.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:2/5 tex a:103 b:2"
+  },
+  {
+   "offset": 30480.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:4/5 tex a:2 b:18"
+  },
+  {
+   "offset": 30510.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2073 b:2598"
+  },
+  {
+   "offset": 30540.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2033 b:2701"
+  },
+  {
+   "offset": 30570.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1072 b:2286"
+  },
+  {
+   "offset": 30600.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2314 b:2989"
+  },
+  {
+   "offset": 30630.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2544 b:3158"
+  },
+  {
+   "offset": 30660.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1955 b:2533"
+  },
+  {
+   "offset": 30690.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1891 b:1101"
+  },
+  {
+   "offset": 30720.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2378 b:2896"
+  },
+  {
+   "offset": 30750.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2388 b:2898"
+  },
+  {
+   "offset": 30780.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2507 b:2665"
+  },
+  {
+   "offset": 30810.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1813 b:2515"
+  },
+  {
+   "offset": 30840.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1456 b:1828"
+  },
+  {
+   "offset": 30870.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:4 b:1"
+  },
+  {
+   "offset": 30900.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:83 b:81"
+  },
+  {
+   "offset": 30930.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2177 b:2482"
+  },
+  {
+   "offset": 30960.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2124 b:2169"
+  },
+  {
+   "offset": 30990.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:4/5 tex a:1823 b:1019"
+  },
+  {
+   "offset": 31020.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2293 b:2558"
+  },
+  {
+   "offset": 31050.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2096 b:2583"
+  },
+  {
+   "offset": 31080.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2369 b:2905"
+  },
+  {
+   "offset": 31110.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2350 b:2822"
+  },
+  {
+   "offset": 31140.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2281 b:2540"
+  },
+  {
+   "offset": 31170.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2576 b:1639"
+  },
+  {
+   "offset": 31200.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2462 b:2380"
+  },
+  {
+   "offset": 31230.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2429 b:1058"
+  },
+  {
+   "offset": 31260.0,
+   "state": "gameplay",
+   "reason": "chips a:4/5 b:5/5 tex a:1044 b:2258"
+  },
+  {
+   "offset": 31290.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2502 b:2575"
+  },
+  {
+   "offset": 31320.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2332 b:2506"
+  },
+  {
+   "offset": 31350.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2206 b:2659"
+  },
+  {
+   "offset": 31380.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2072 b:2737"
+  },
+  {
+   "offset": 31410.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1046 b:2414"
+  },
+  {
+   "offset": 31440.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:4/5 tex a:19 b:3"
+  },
+  {
+   "offset": 31470.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:77 b:34"
+  },
+  {
+   "offset": 31500.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 31530.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:5/5 tex a:12 b:1"
+  },
+  {
+   "offset": 31560.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:0 b:0"
+  },
+  {
+   "offset": 31590.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:47 b:41"
+  },
+  {
+   "offset": 31620.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:0/5 tex a:1 b:35"
+  },
+  {
+   "offset": 31650.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:0"
+  },
+  {
+   "offset": 31680.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:5 b:61"
+  },
+  {
+   "offset": 31710.0,
+   "state": "no-hud",
+   "reason": "chips a:4/5 b:5/5 tex a:7 b:4"
+  },
+  {
+   "offset": 31740.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:5/5 tex a:3 b:2"
+  },
+  {
+   "offset": 31770.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:39 b:1"
+  },
+  {
+   "offset": 31800.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:4 b:109"
+  },
+  {
+   "offset": 31830.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:2"
+  },
+  {
+   "offset": 31860.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:26"
+  },
+  {
+   "offset": 31890.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:31 b:2"
+  },
+  {
+   "offset": 31920.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:3/5 tex a:1 b:183"
+  },
+  {
+   "offset": 31950.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:240 b:2"
+  },
+  {
+   "offset": 31980.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:0/5 tex a:4 b:3"
+  },
+  {
+   "offset": 32010.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2235 b:1725"
+  },
+  {
+   "offset": 32040.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2227 b:2449"
+  },
+  {
+   "offset": 32070.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1031 b:1928"
+  },
+  {
+   "offset": 32100.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1631 b:1852"
+  },
+  {
+   "offset": 32130.0,
+   "state": "gameplay",
+   "reason": "chips a:4/5 b:4/5 tex a:1837 b:2214"
+  },
+  {
+   "offset": 32160.0,
+   "state": "gameplay",
+   "reason": "chips a:4/5 b:5/5 tex a:1707 b:1915"
+  },
+  {
+   "offset": 32190.0,
+   "state": "gameplay",
+   "reason": "chips a:4/5 b:5/5 tex a:979 b:1637"
+  },
+  {
+   "offset": 32220.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:0 b:2"
+  },
+  {
+   "offset": 32250.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:87 b:1"
+  },
+  {
+   "offset": 32280.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1456 b:2187"
+  },
+  {
+   "offset": 32310.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1919 b:2498"
+  },
+  {
+   "offset": 32340.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1768 b:1456"
+  },
+  {
+   "offset": 32370.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1586 b:1840"
+  },
+  {
+   "offset": 32400.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1364 b:2019"
+  },
+  {
+   "offset": 32430.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:4/5 tex a:1404 b:2262"
+  },
+  {
+   "offset": 32460.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1532 b:1702"
+  },
+  {
+   "offset": 32490.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1657 b:2512"
+  },
+  {
+   "offset": 32520.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1592 b:1355"
+  },
+  {
+   "offset": 32550.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:4/5 tex a:1627 b:1303"
+  },
+  {
+   "offset": 32580.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2519 b:2346"
+  },
+  {
+   "offset": 32610.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1895 b:2098"
+  },
+  {
+   "offset": 32640.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2439 b:2454"
+  },
+  {
+   "offset": 32670.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2194 b:2143"
+  },
+  {
+   "offset": 32700.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1628 b:1616"
+  },
+  {
+   "offset": 32730.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1940 b:1102"
+  },
+  {
+   "offset": 32760.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1709 b:1611"
+  },
+  {
+   "offset": 32790.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1912 b:1932"
+  },
+  {
+   "offset": 32820.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:0"
+  },
+  {
+   "offset": 32850.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:698 b:810"
+  },
+  {
+   "offset": 32880.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:398 b:287"
+  },
+  {
+   "offset": 32910.0,
+   "state": "no-hud",
+   "reason": "chips a:4/5 b:1/5 tex a:55 b:3"
+  },
+  {
+   "offset": 32940.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:2 b:877"
+  },
+  {
+   "offset": 32970.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:0"
+  },
+  {
+   "offset": 33000.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:883 b:1649"
+  },
+  {
+   "offset": 33030.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:4"
+  },
+  {
+   "offset": 33060.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:212 b:942"
+  },
+  {
+   "offset": 33090.0,
+   "state": "no-hud",
+   "reason": "chips a:4/5 b:0/5 tex a:115 b:2"
+  },
+  {
+   "offset": 33120.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:6 b:1"
+  },
+  {
+   "offset": 33150.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:4"
+  },
+  {
+   "offset": 33180.0,
+   "state": "no-hud",
+   "reason": "chips a:3/5 b:2/5 tex a:21 b:4"
+  },
+  {
+   "offset": 33210.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:837 b:151"
+  },
+  {
+   "offset": 33240.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:401 b:2848"
+  },
+  {
+   "offset": 33270.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:1"
+  },
+  {
+   "offset": 33300.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:119 b:1"
+  },
+  {
+   "offset": 33330.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:667 b:1"
+  },
+  {
+   "offset": 33360.0,
+   "state": "partial-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:521"
+  },
+  {
+   "offset": 33390.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:22 b:2"
+  },
+  {
+   "offset": 33420.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:449 b:2826"
+  },
+  {
+   "offset": 33450.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:35 b:1"
+  },
+  {
+   "offset": 33480.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1013 b:71"
+  },
+  {
+   "offset": 33510.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:3"
+  },
+  {
+   "offset": 33540.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:10 b:5"
+  },
+  {
+   "offset": 33570.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:4"
+  },
+  {
+   "offset": 33600.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2715 b:3"
+  },
+  {
+   "offset": 33630.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:2/5 tex a:21 b:433"
+  },
+  {
+   "offset": 33660.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:2"
+  },
+  {
+   "offset": 33690.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:11"
+  },
+  {
+   "offset": 33720.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:84"
+  },
+  {
+   "offset": 33750.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:21"
+  },
+  {
+   "offset": 33780.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:9"
+  },
+  {
+   "offset": 33810.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:248"
+  },
+  {
+   "offset": 33840.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:131"
+  },
+  {
+   "offset": 33870.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:18 b:12"
+  },
+  {
+   "offset": 33900.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:3/5 tex a:1 b:2"
+  },
+  {
+   "offset": 33930.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:8"
+  },
+  {
+   "offset": 33960.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:516 b:3325"
+  },
+  {
+   "offset": 33990.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:2 b:2"
+  },
+  {
+   "offset": 34020.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:3/5 tex a:1 b:321"
+  },
+  {
+   "offset": 34050.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:468 b:2828"
+  },
+  {
+   "offset": 34080.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:8 b:1"
+  },
+  {
+   "offset": 34110.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:19 b:7"
+  },
+  {
+   "offset": 34140.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:5 b:1"
+  },
+  {
+   "offset": 34170.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:67"
+  },
+  {
+   "offset": 34200.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:2 b:0"
+  },
+  {
+   "offset": 34230.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:7 b:5"
+  },
+  {
+   "offset": 34260.0,
+   "state": "partial-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:538"
+  },
+  {
+   "offset": 34290.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:448 b:2914"
+  },
+  {
+   "offset": 34320.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:0"
+  },
+  {
+   "offset": 34350.0,
+   "state": "no-hud",
+   "reason": "chips a:4/5 b:4/5 tex a:67 b:7"
+  },
+  {
+   "offset": 34380.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:55 b:50"
+  },
+  {
+   "offset": 34410.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:4"
+  },
+  {
+   "offset": 34440.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:21 b:158"
+  },
+  {
+   "offset": 34470.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:1"
+  },
+  {
+   "offset": 34500.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:13 b:50"
+  },
+  {
+   "offset": 34530.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:3/5 tex a:2 b:114"
+  },
+  {
+   "offset": 34560.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:13 b:1"
+  },
+  {
+   "offset": 34590.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:7"
+  },
+  {
+   "offset": 34620.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2530 b:1872"
+  },
+  {
+   "offset": 34650.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2092 b:1775"
+  },
+  {
+   "offset": 34680.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2231 b:1764"
+  },
+  {
+   "offset": 34710.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1572 b:905"
+  },
+  {
+   "offset": 34740.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:4 b:67"
+  },
+  {
+   "offset": 34770.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:4/5 tex a:3 b:3"
+  },
+  {
+   "offset": 34800.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:5/5 tex a:2 b:1"
+  },
+  {
+   "offset": 34830.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2369 b:1630"
+  },
+  {
+   "offset": 34860.0,
+   "state": "gameplay",
+   "reason": "chips a:4/5 b:5/5 tex a:1705 b:1096"
+  },
+  {
+   "offset": 34890.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:5/5 tex a:65 b:0"
+  },
+  {
+   "offset": 34920.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:66 b:71"
+  },
+  {
+   "offset": 34950.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1983 b:2538"
+  },
+  {
+   "offset": 34980.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1750 b:2173"
+  },
+  {
+   "offset": 35010.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1862 b:1994"
+  },
+  {
+   "offset": 35040.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2340 b:992"
+  },
+  {
+   "offset": 35070.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2313 b:2498"
+  },
+  {
+   "offset": 35100.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2191 b:2555"
+  },
+  {
+   "offset": 35130.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:3 b:260"
+  },
+  {
+   "offset": 35160.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:5/5 tex a:2 b:1"
+  },
+  {
+   "offset": 35190.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:49 b:15"
+  },
+  {
+   "offset": 35220.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:48 b:11"
+  },
+  {
+   "offset": 35250.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:1"
+  },
+  {
+   "offset": 35280.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:4 b:2"
+  },
+  {
+   "offset": 35310.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:2/5 tex a:235 b:1"
+  },
+  {
+   "offset": 35340.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:39 b:1"
+  },
+  {
+   "offset": 35370.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:5/5 tex a:82 b:3"
+  },
+  {
+   "offset": 35400.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2659 b:2301"
+  },
+  {
+   "offset": 35430.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1716 b:1782"
+  },
+  {
+   "offset": 35460.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2315 b:1503"
+  },
+  {
+   "offset": 35490.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2087 b:1684"
+  },
+  {
+   "offset": 35520.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1696 b:1156"
+  },
+  {
+   "offset": 35550.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2212 b:2239"
+  },
+  {
+   "offset": 35580.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:4/5 tex a:2324 b:1378"
+  },
+  {
+   "offset": 35610.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2239 b:1934"
+  },
+  {
+   "offset": 35640.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2234 b:1787"
+  },
+  {
+   "offset": 35670.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2260 b:1204"
+  },
+  {
+   "offset": 35700.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2163 b:1909"
+  },
+  {
+   "offset": 35730.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2274 b:1680"
+  },
+  {
+   "offset": 35760.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1553 b:932"
+  },
+  {
+   "offset": 35790.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1560 b:1569"
+  },
+  {
+   "offset": 35820.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1560 b:1724"
+  },
+  {
+   "offset": 35850.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:893 b:1796"
+  },
+  {
+   "offset": 35880.0,
+   "state": "gameplay",
+   "reason": "chips a:4/5 b:5/5 tex a:859 b:1642"
+  },
+  {
+   "offset": 35910.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2741 b:2303"
+  },
+  {
+   "offset": 35940.0,
+   "state": "gameplay",
+   "reason": "chips a:4/5 b:4/5 tex a:2117 b:1579"
+  },
+  {
+   "offset": 35970.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2200 b:1741"
+  },
+  {
+   "offset": 36000.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2079 b:2046"
+  },
+  {
+   "offset": 36030.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2402 b:2342"
+  },
+  {
+   "offset": 36060.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2148 b:1749"
+  },
+  {
+   "offset": 36090.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2290 b:1926"
+  },
+  {
+   "offset": 36120.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2138 b:2148"
+  },
+  {
+   "offset": 36150.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:5 b:0"
+  },
+  {
+   "offset": 36180.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:0/5 tex a:3 b:1"
+  },
+  {
+   "offset": 36210.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:169 b:19"
+  },
+  {
+   "offset": 36240.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:769 b:731"
+  },
+  {
+   "offset": 36270.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:177"
+  },
+  {
+   "offset": 36300.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:739 b:791"
+  },
+  {
+   "offset": 36330.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:2 b:689"
+  },
+  {
+   "offset": 36360.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:851 b:3"
+  },
+  {
+   "offset": 36390.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:0"
+  },
+  {
+   "offset": 36420.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:7 b:5"
+  },
+  {
+   "offset": 36450.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:260 b:128"
+  },
+  {
+   "offset": 36480.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:308 b:93"
+  },
+  {
+   "offset": 36510.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:27 b:0"
+  },
+  {
+   "offset": 36540.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:23 b:0"
+  },
+  {
+   "offset": 36570.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:9 b:5"
+  },
+  {
+   "offset": 36600.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:323 b:102"
+  },
+  {
+   "offset": 36630.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:13 b:0"
+  },
+  {
+   "offset": 36660.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:314 b:84"
+  },
+  {
+   "offset": 36690.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:12 b:0"
+  },
+  {
+   "offset": 36720.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:3"
+  },
+  {
+   "offset": 36750.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2362 b:2123"
+  },
+  {
+   "offset": 36780.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2044 b:1698"
+  },
+  {
+   "offset": 36810.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:35 b:0"
+  },
+  {
+   "offset": 36840.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:36 b:0"
+  },
+  {
+   "offset": 36870.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:40 b:0"
+  },
+  {
+   "offset": 36900.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:47 b:10"
+  },
+  {
+   "offset": 36930.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:4/5 tex a:138 b:2"
+  },
+  {
+   "offset": 36960.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:3/5 tex a:5 b:3"
+  },
+  {
+   "offset": 36990.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:330 b:68"
+  },
+  {
+   "offset": 37020.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:45 b:11"
+  },
+  {
+   "offset": 37050.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:2/5 tex a:19 b:392"
+  },
+  {
+   "offset": 37080.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:3/5 tex a:51 b:1"
+  },
+  {
+   "offset": 37110.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:5 b:77"
+  },
+  {
+   "offset": 37140.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 37170.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:2/5 tex a:8 b:2"
+  },
+  {
+   "offset": 37200.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:0/5 tex a:84 b:164"
+  },
+  {
+   "offset": 37230.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:808 b:499"
+  },
+  {
+   "offset": 37260.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:74 b:2"
+  },
+  {
+   "offset": 37290.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 37320.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:590 b:304"
+  },
+  {
+   "offset": 37350.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:2/5 tex a:6 b:1"
+  },
+  {
+   "offset": 37380.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:53 b:5"
+  },
+  {
+   "offset": 37410.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:223"
+  },
+  {
+   "offset": 37440.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 37470.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 37500.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 37530.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:2/5 tex a:9 b:24"
+  },
+  {
+   "offset": 37560.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:3/5 tex a:0 b:356"
+  },
+  {
+   "offset": 37590.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:507 b:265"
+  },
+  {
+   "offset": 37620.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:2/5 tex a:5 b:1"
+  },
+  {
+   "offset": 37650.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:5 b:5"
+  },
+  {
+   "offset": 37680.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:3/5 tex a:5 b:3"
+  },
+  {
+   "offset": 37710.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:3/5 tex a:5 b:3"
+  },
+  {
+   "offset": 37740.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:6"
+  },
+  {
+   "offset": 37770.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:4/5 tex a:1 b:63"
+  },
+  {
+   "offset": 37800.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:2"
+  },
+  {
+   "offset": 37830.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:1"
+  },
+  {
+   "offset": 37860.0,
+   "state": "no-hud",
+   "reason": "chips a:4/5 b:0/5 tex a:136 b:18"
+  },
+  {
+   "offset": 37890.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:39 b:4"
+  },
+  {
+   "offset": 37920.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 37950.0,
+   "state": "no-hud",
+   "reason": "chips a:3/5 b:0/5 tex a:9 b:0"
+  },
+  {
+   "offset": 37980.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2523 b:2413"
+  },
+  {
+   "offset": 38010.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1991 b:2640"
+  },
+  {
+   "offset": 38040.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1852 b:2371"
+  },
+  {
+   "offset": 38070.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1443 b:2042"
+  },
+  {
+   "offset": 38100.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1902 b:2144"
+  },
+  {
+   "offset": 38130.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:4/5 tex a:2494 b:2047"
+  },
+  {
+   "offset": 38160.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1812 b:2435"
+  },
+  {
+   "offset": 38190.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1300 b:1849"
+  },
+  {
+   "offset": 38220.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1999 b:2024"
+  },
+  {
+   "offset": 38250.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1994 b:2181"
+  },
+  {
+   "offset": 38280.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:4/5 tex a:2361 b:2003"
+  },
+  {
+   "offset": 38310.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:4/5 tex a:2237 b:1258"
+  },
+  {
+   "offset": 38340.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:4/5 tex a:2249 b:974"
+  },
+  {
+   "offset": 38370.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2500 b:2256"
+  },
+  {
+   "offset": 38400.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2920 b:2697"
+  },
+  {
+   "offset": 38430.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2530 b:2389"
+  },
+  {
+   "offset": 38460.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2159 b:2288"
+  },
+  {
+   "offset": 38490.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1881 b:1930"
+  },
+  {
+   "offset": 38520.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2250 b:2094"
+  },
+  {
+   "offset": 38550.0,
+   "state": "gameplay",
+   "reason": "chips a:4/5 b:5/5 tex a:2098 b:2744"
+  },
+  {
+   "offset": 38580.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1189 b:2307"
+  },
+  {
+   "offset": 38610.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 38640.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2166 b:2093"
+  },
+  {
+   "offset": 38670.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2037 b:2154"
+  },
+  {
+   "offset": 38700.0,
+   "state": "gameplay",
+   "reason": "chips a:4/5 b:5/5 tex a:1805 b:2375"
+  },
+  {
+   "offset": 38730.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:1892 b:1882"
+  },
+  {
+   "offset": 38760.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2222 b:2269"
+  },
+  {
+   "offset": 38790.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:4/5 tex a:2356 b:1804"
+  },
+  {
+   "offset": 38820.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2085 b:2442"
+  },
+  {
+   "offset": 38850.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:3 b:2"
+  },
+  {
+   "offset": 38880.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:4/5 tex a:2077 b:1509"
+  },
+  {
+   "offset": 38910.0,
+   "state": "no-hud",
+   "reason": "chips a:1/5 b:0/5 tex a:3 b:1"
+  },
+  {
+   "offset": 38940.0,
+   "state": "no-hud",
+   "reason": "chips a:3/5 b:0/5 tex a:3 b:12"
+  },
+  {
+   "offset": 38970.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:65 b:2"
+  },
+  {
+   "offset": 39000.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:32 b:1"
+  },
+  {
+   "offset": 39030.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:3/5 tex a:1 b:178"
+  },
+  {
+   "offset": 39060.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:0 b:4"
+  },
+  {
+   "offset": 39090.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:3/5 tex a:2 b:231"
+  },
+  {
+   "offset": 39120.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:3/5 tex a:1 b:60"
+  },
+  {
+   "offset": 39150.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:2 b:86"
+  },
+  {
+   "offset": 39180.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:3/5 tex a:14 b:3"
+  },
+  {
+   "offset": 39210.0,
+   "state": "no-hud",
+   "reason": "chips a:4/5 b:5/5 tex a:4 b:33"
+  },
+  {
+   "offset": 39240.0,
+   "state": "no-hud",
+   "reason": "chips a:3/5 b:5/5 tex a:90 b:11"
+  },
+  {
+   "offset": 39270.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:1/5 tex a:1 b:10"
+  },
+  {
+   "offset": 39300.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:0/5 tex a:52 b:5"
+  },
+  {
+   "offset": 39330.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:4 b:2"
+  },
+  {
+   "offset": 39360.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:6 b:3"
+  },
+  {
+   "offset": 39390.0,
+   "state": "no-hud",
+   "reason": "chips a:4/5 b:4/5 tex a:3 b:2"
+  },
+  {
+   "offset": 39420.0,
+   "state": "no-hud",
+   "reason": "chips a:3/5 b:1/5 tex a:2 b:6"
+  },
+  {
+   "offset": 39450.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:2/5 tex a:5 b:10"
+  },
+  {
+   "offset": 39480.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:2 b:1"
+  },
+  {
+   "offset": 39510.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:0/5 tex a:23 b:56"
+  },
+  {
+   "offset": 39540.0,
+   "state": "no-hud",
+   "reason": "chips a:3/5 b:3/5 tex a:5 b:6"
+  },
+  {
+   "offset": 39570.0,
+   "state": "no-hud",
+   "reason": "chips a:4/5 b:5/5 tex a:157 b:38"
+  },
+  {
+   "offset": 39600.0,
+   "state": "no-hud",
+   "reason": "chips a:4/5 b:5/5 tex a:8 b:4"
+  },
+  {
+   "offset": 39630.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:24"
+  },
+  {
+   "offset": 39660.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:3"
+  },
+  {
+   "offset": 39690.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:658 b:578"
+  },
+  {
+   "offset": 39720.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:1"
+  },
+  {
+   "offset": 39750.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:2 b:56"
+  },
+  {
+   "offset": 39780.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2614 b:3406"
+  },
+  {
+   "offset": 39810.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2517 b:2886"
+  },
+  {
+   "offset": 39840.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2038 b:2418"
+  },
+  {
+   "offset": 39870.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2103 b:2161"
+  },
+  {
+   "offset": 39900.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2261 b:2482"
+  },
+  {
+   "offset": 39930.0,
+   "state": "gameplay",
+   "reason": "chips a:4/5 b:5/5 tex a:1719 b:2510"
+  },
+  {
+   "offset": 39960.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2546 b:2316"
+  },
+  {
+   "offset": 39990.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2350 b:2655"
+  },
+  {
+   "offset": 40020.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2815 b:2352"
+  },
+  {
+   "offset": 40050.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:4/5 tex a:2206 b:1897"
+  },
+  {
+   "offset": 40080.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:2/5 tex a:81 b:9"
+  },
+  {
+   "offset": 40110.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:92 b:68"
+  },
+  {
+   "offset": 40140.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2691 b:2472"
+  },
+  {
+   "offset": 40170.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2181 b:2199"
+  },
+  {
+   "offset": 40200.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2279 b:2062"
+  },
+  {
+   "offset": 40230.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:4/5 tex a:2243 b:1961"
+  },
+  {
+   "offset": 40260.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2424 b:2018"
+  },
+  {
+   "offset": 40290.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1737 b:2"
+  },
+  {
+   "offset": 40320.0,
+   "state": "no-hud",
+   "reason": "chips a:3/5 b:0/5 tex a:0 b:489"
+  },
+  {
+   "offset": 40350.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:0/5 tex a:12 b:1"
+  },
+  {
+   "offset": 40380.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:46 b:130"
+  },
+  {
+   "offset": 40410.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:231 b:206"
+  },
+  {
+   "offset": 40440.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:595 b:131"
+  },
+  {
+   "offset": 40470.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:0 b:132"
+  },
+  {
+   "offset": 40500.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:702 b:400"
+  },
+  {
+   "offset": 40530.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:1/5 tex a:645 b:1"
+  },
+  {
+   "offset": 40560.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:56"
+  },
+  {
+   "offset": 40590.0,
+   "state": "partial-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:518"
+  },
+  {
+   "offset": 40620.0,
+   "state": "partial-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:504"
+  },
+  {
+   "offset": 40650.0,
+   "state": "partial-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:522"
+  },
+  {
+   "offset": 40680.0,
+   "state": "gameplay",
+   "reason": "chips a:5/5 b:5/5 tex a:2299 b:1793"
+  },
+  {
+   "offset": 40710.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:606 b:438"
+  },
+  {
+   "offset": 40740.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:4 b:9"
+  },
+  {
+   "offset": 40770.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:2 b:19"
+  },
+  {
+   "offset": 40800.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:2/5 tex a:1948 b:10"
+  },
+  {
+   "offset": 40830.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:2/5 tex a:1 b:2"
+  },
+  {
+   "offset": 40860.0,
+   "state": "no-hud",
+   "reason": "chips a:2/5 b:4/5 tex a:100 b:12"
+  },
+  {
+   "offset": 40890.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:0/5 tex a:13 b:180"
+  },
+  {
+   "offset": 40920.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:4"
+  },
+  {
+   "offset": 40950.0,
+   "state": "no-hud",
+   "reason": "chips a:0/5 b:0/5 tex a:1 b:0"
+  },
+  {
+   "offset": 40980.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:2"
+  },
+  {
+   "offset": 41010.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:15"
+  },
+  {
+   "offset": 41040.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:25"
+  },
+  {
+   "offset": 41070.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:0 b:209"
+  },
+  {
+   "offset": 41100.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:122"
+  },
+  {
+   "offset": 41130.0,
+   "state": "no-hud",
+   "reason": "chips a:5/5 b:5/5 tex a:1 b:88"
+  }
+ ]
+}
