@@ -37,6 +37,15 @@
     ["Needs review", "Waiting for a person. Never published."],
     ["Calibration", "Teaching the tracker where a particular production puts the hero " +
       "portraits on screen. Done once per broadcast."],
+    ["VOD verified", "Read off the broadcast by the tracker: timed, with evidence frames."],
+    ["Spreadsheet imported", "Documented by the editors of a community spreadsheet and imported " +
+      "as-is: no timing, no evidence frames, original text kept beside every value."],
+    ["Time-weighted", "Measured in seconds of live play from VOD timelines, divided by the seconds " +
+      "actually read. Never applied to spreadsheet data."],
+    ["Coverage", "Of all the player-seconds in a map's live play, the share the tracker read. " +
+      "Unread seconds are reported, never filled in."],
+    ["Spreadsheet observation", "A count from the spreadsheet — an appearance, a ban, a pick. " +
+      "Not a duration."],
   ];
 
   document.addEventListener("DOMContentLoaded", () => {
@@ -54,6 +63,25 @@
     document.getElementById("glossary").innerHTML = GLOSSARY.map((g) =>
       "<dt style=\"font:600 13px/1.5 var(--f-body);color:var(--gold-hi)\">" + esc(g[0]) + "</dt>" +
       '<dd style="margin:0;color:var(--tx-2);font-size:14px">' + esc(g[1]) + "</dd>").join("");
+
+    /* Credit, from the import itself: when it ran, its hash, and any
+       credit text the workbook carries (quoted with its cell). */
+    const live = document.getElementById("credit-live");
+    const X = P.ext;
+    if (live && X) {
+      const snap = X.snapshot;
+      const found = (X.source && X.source.creditsFound) || [];
+      const view = X.source && X.source.viewUrl;
+      live.innerHTML = (view ? '<p><a class="btn btn--sm btn--ghost" href="' + esc(view) +
+        '" target="_blank" rel="noopener">Open the original spreadsheet</a></p>' : "") +
+        (X.source && X.source.maintainer
+        ? "<p>Maintained by <b>" + esc(X.source.maintainer) + "</b>.</p>" : "") +
+        (found.length ? '<p class="small">Credit as written in the workbook: ' + found.map((c) =>
+          "“" + esc(c.text) + "” <span class=\"dim\">(" + esc(c.sheet + "!" + c.cell) + ")</span>").join("; ") + "</p>" : "") +
+        '<p class="dim small">' + (snap ? "Last imported " + esc(P.fmtDate(snap.importedAt)) + " · snapshot " +
+          esc(String(snap.sha256).slice(0, 12)) + " · " + snap.sheetNames.length + " tabs"
+          : "Not imported yet — the first sync will fill this in.") + "</p>";
+    }
 
     document.addEventListener("click", (e) => {
       const c = e.target.closest("[data-copy]");

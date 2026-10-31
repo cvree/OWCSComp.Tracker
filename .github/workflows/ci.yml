@@ -75,6 +75,12 @@ jobs:
 
       # label.html renders this index; a stale one shows cards that do not
       # exist or hides ones waiting for a name.
+      # The imported community spreadsheet: the committed normalized layer
+      # and its public export must be exactly what the committed raw cell
+      # layer + configs + decisions + the published VOD dataset produce.
+      - name: External spreadsheet layer must match a fresh rebuild
+        run: python pipeline/sheet_sync.py check
+
       - name: Hero-card index must match the committed batches
         run: python pipeline/label_batch.py --index --check
 

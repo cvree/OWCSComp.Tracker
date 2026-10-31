@@ -183,7 +183,9 @@
         (m.check && m.check.length
           ? '<span class="mi-check" title="Some of this was read with less than 90% agreement">check</span>' : "") +
         '<span class="spacer"></span>' +
-        (m.matchId ? '<a class="btn btn--sm btn--quiet" href="game.html?id=' +
+        (m.matchId ? '<a class="btn btn--sm btn--quiet" href="map.html?id=' +
+          encodeURIComponent(m.key) + '" title="Time on every hero, both sources, side by side">Scout</a>' +
+          '<a class="btn btn--sm btn--quiet" href="game.html?id=' +
           encodeURIComponent(m.matchId) + '">Details</a>' : "") +
         (m.url && m.start != null
           ? '<a class="btn btn--sm btn--primary" href="' + esc(vodAt(m.url, m.start)) +

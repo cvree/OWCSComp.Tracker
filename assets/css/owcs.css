@@ -2365,3 +2365,65 @@ a.mf-team:hover .mf-team__name { text-decoration: underline; }
   /* On a phone a map with nothing read stays two short lines, not four. */
   .mf-comp:has(> .mf-nocomp:only-child) { display: none; }
 }
+
+/* =====================================================================
+   External sources (map.html, meta.html, sheet-sync.html, team scouting)
+   Provenance is never carried by colour alone: every badge has its words.
+   ===================================================================== */
+.src-badge { white-space: nowrap; }
+.src-badge[data-src="sheet"]::before { content: "▤"; }
+.src-badge[data-src="vod"]::before { content: "▶"; }
+.src-badge[data-src="both"]::before { content: "="; }
+.src-badge[data-src="conflict"]::before { content: "≠"; }
+.unmapped-mark { color: var(--amber); font-weight: 500; }
+.unresolved { text-decoration: line-through; text-decoration-color: var(--amber); }
+.ext-line { display: flex; flex-wrap: wrap; gap: var(--s-2); align-items: center; }
+.sample { font: 500 11.5px/1.4 var(--f-mono); color: var(--tx-3); white-space: nowrap; }
+.sample--small { color: var(--tx-2); }
+.sample--tiny { color: #f5c07a; }
+.sample--none { color: var(--tx-3); font-style: italic; }
+
+/* one map, scouted */
+.map-hd__teams { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-4); margin-top: var(--s-5); }
+.map-hd__team { display: flex; align-items: center; gap: var(--s-3); padding: var(--s-3) var(--s-4);
+  border: var(--bd); border-radius: var(--r-3); background: var(--s1); }
+.map-hd__team.is-win { border-color: var(--gold); }
+.map-hd__vs { font: 700 14px/1 var(--f-display); color: var(--tx-3); letter-spacing: .08em; }
+.fact { display: flex; flex-wrap: wrap; gap: var(--s-2); align-items: center; padding: 2px 0; }
+.tbl--facts th[scope="row"] { width: 9.5rem; color: var(--tx-2); font-weight: 600; }
+.tbl--compact th, .tbl--compact td { padding: var(--s-2) var(--s-3); }
+.ban-row { display: grid; gap: var(--s-2); }
+.ban-row__team { display: flex; flex-wrap: wrap; gap: var(--s-2); align-items: center; }
+.dur { display: block; min-width: 60px; height: 8px; border-radius: var(--r-pill); background: var(--well); overflow: hidden; }
+.dur__fill { display: block; height: 100%; background: var(--gold); border-radius: inherit; }
+.slotbar { display: grid; grid-template-columns: 2.2rem 1fr; gap: var(--s-2); align-items: center; margin-top: 6px; }
+.slotbar__track { display: flex; min-width: 0; height: 22px; border-radius: var(--r-1); overflow: hidden; background: var(--well); }
+.slotbar__seg { min-width: 2px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+  font: 600 11px/22px var(--f-body); padding: 0 6px; color: var(--ink); background: var(--grey);
+  border-right: 1px solid var(--bg); }
+.slotbar__seg[data-role="Tank"] { background: var(--role-tank); }
+.slotbar__seg[data-role="Damage"] { background: var(--role-damage); }
+.slotbar__seg[data-role="Support"] { background: var(--role-support); }
+.slotbar__seg--unknown { background: repeating-linear-gradient(45deg, var(--s2) 0 4px, var(--s3) 4px 8px);
+  color: var(--tx-3); text-align: center; }
+.lu { display: flex; flex-wrap: wrap; gap: var(--s-3); align-items: center; padding: var(--s-2) 0;
+  border-top: 1px solid var(--line); }
+.lu:first-of-type { border-top: 0; }
+
+/* the meta explorer */
+.mx-filters { padding: var(--s-5); }
+.lu-card { padding: var(--s-4) var(--s-5); }
+.mx-grid { display: grid; gap: var(--s-3) var(--s-4); grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+.mx-label { font: 600 12px/1.3 var(--f-body); color: var(--tx-3); letter-spacing: .02em; }
+.mx-grid .input { width: 100%; min-width: 0; max-width: 100%; }
+.scout-chip { display: inline-flex; align-items: center; gap: 4px; padding-right: var(--s-2);
+  border: var(--bd); border-radius: var(--r-pill); background: var(--s1); }
+.scout-grid { display: grid; gap: var(--s-4); grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); }
+.matrix td, .matrix th { text-align: center; }
+.matrix th[scope="row"] { text-align: left; }
+@media (max-width: 640px) {
+  .map-hd__teams { gap: var(--s-2); }
+  .map-hd__team { padding: var(--s-2) var(--s-3); }
+  .mx-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tbl--facts th[scope="row"] { width: auto; }
+}

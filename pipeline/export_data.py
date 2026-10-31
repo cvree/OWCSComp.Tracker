@@ -25,6 +25,7 @@ from typing import Any
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import db  # noqa: E402
 import site_paths  # noqa: E402  (cross-drive-safe relative paths)
+import time_weighting  # noqa: E402  (VOD hero player-seconds)
 
 OUT_PATH = os.path.join(db.REPO_ROOT, "assets", "js", "data.js")
 SOURCES_PATH = os.path.join(db.REPO_ROOT, "data", "sources",
@@ -1779,6 +1780,12 @@ def build_public_payload(con) -> dict:
     team_pools = build_team_hero_pools(snaps_out, matches_out)
     team_map_records = build_team_map_records(matches_out)
     map_stats, mode_stats = build_map_mode_stats(matches_out, maps_catalog)
+    # Time-weighted VOD analytics: hero player-seconds inside live round
+    # windows, from the SAME published stints the map story draws. Built
+    # from the post-withholding rows, like every aggregate above.
+    time_weighted = time_weighting.build({
+        "heroes": heroes, "matches": matches_out,
+        "heroStints": hero_stints_out, "heroSwaps": swaps_out})
 
     return {
         "meta": {
@@ -1850,6 +1857,10 @@ def build_public_payload(con) -> dict:
         "teamMapRecords": team_map_records,
         "mapStats": map_stats,
         "modeStats": mode_stats,
+        # VOD-verified, time-weighted. Appearance counts above answer "how
+        # often"; this answers "for how long", and only where a published
+        # timeline exists. See pipeline/time_weighting.py for every rule.
+        "timeWeighting": time_weighted,
     }
 
 
@@ -1966,7 +1977,29 @@ def write_public(con) -> str:
     print(f"Wrote {PUBLIC_OUT_PATH}: {len(payload['matches'])} matches, "
           f"{len(payload['compSnapshots'])} comp snapshots, "
           f"{len(payload['captureRuns'])} capture runs.")
+    refresh_external_sheet()
     return PUBLIC_OUT_PATH
+
+
+def refresh_external_sheet() -> None:
+    """The imported spreadsheet is reconciled against the published VOD
+    maps, so a new public export can change it. Re-reconcile the committed
+    external layer (no download, no re-parse) and rewrite its export only
+    when it actually changed. Never blocks the VOD export."""
+    if os.path.abspath(PUBLIC_OUT_PATH) != os.path.join(
+            db.REPO_ROOT, "assets", "data", "public_data.v1.js"):
+        return
+    try:
+        from external_sheet.store import Paths as _SheetPaths
+        from external_sheet.sync import refresh_export
+        changed = refresh_export(_SheetPaths(root=db.REPO_ROOT))
+    except Exception as exc:  # the VOD export must never fail on this
+        print(f"[export] external spreadsheet export NOT refreshed: {exc} — "
+              "run: python3 pipeline/sheet_sync.py rebuild", file=sys.stderr)
+        return
+    if changed:
+        print(f"[export] refreshed {site_paths.site_relpath(changed, db.REPO_ROOT)} "
+              "(reconciliation against the new VOD maps)")
 
 
 def main() -> int:

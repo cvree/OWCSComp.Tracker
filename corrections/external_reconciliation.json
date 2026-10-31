@@ -1,0 +1,22 @@
+{
+  "_readme": [
+    "Human decisions about the imported community spreadsheet — version-controlled,",
+    "so git is the audit trail (same model as corrections/corrections.json).",
+    "The Source health page (sheet-sync.html) builds these entries for you; paste",
+    "them here and commit. Every decision is carried into the export's provenance.",
+    "",
+    "decisions[]       one per spreadsheet map:",
+    "  {externalMapId, action: 'link' | 'reject' | 'ignore', vodMapId?, by, at, note}",
+    "    link   — the spreadsheet map IS this VOD map (overrides the matcher)",
+    "    reject — it is NOT the candidate the matcher proposed (vodMapId)",
+    "    ignore — not an OWCS map / junk row; kept in the raw layer, never shown",
+    "aliasApprovals[]  a reviewed spelling for a value the importer could not map:",
+    "  {kind: 'team'|'player'|'hero'|'map'|'mode'|'region'|'stage', raw, to, by, at, note}",
+    "",
+    "Neither list ever edits VOD-derived data: a link only says two records describe",
+    "the same map; both are kept and compared field by field."
+  ],
+  "version": 1,
+  "decisions": [],
+  "aliasApprovals": []
+}

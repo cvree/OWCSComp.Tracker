@@ -1,5 +1,46 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
+## UPDATE (2026-10-31, seventeenth pass) — the community spreadsheet, as a labelled second source
+
+**What landed.** The public community OWCS Google Sheet
+(`1OaU5O7lVDZbked5FZAvgfR9MnJIdGhTdnIdu4DsL9PQ`) is imported as a separate
+external layer, and VOD data gained real time weighting. Contract, diagram,
+runbook and limits: `docs/EXTERNAL-SHEET.md`.
+
+* `pipeline/time_weighting.py` → `public_data.v1.js` `timeWeighting`:
+  player-seconds inside round windows only, unknown time reported and
+  excluded from shares, coverage, line-up durations, archetypes. Nepal:
+  631 live s, 99.8% coverage, 10 unknown player-seconds, QAD Juno 410 s /
+  Lúcio 221 s.
+* `pipeline/external_sheet/` + `pipeline/sheet_sync.py`: header-driven
+  import of every tab (raw cell layer committed), alias layer
+  (`config/external/aliases.json`), layout config
+  (`config/external/gsheet_layout.json`), normalised External* records
+  with field provenance, conservative reconciliation, snapshot manifest,
+  failure reports that keep the last good import.
+* Pages: `map.html`, `meta.html` (public, reached from Maps/Comps — nav
+  unchanged), team scouting report, `sheet-sync.html` (admin rail),
+  methodology + credit at `how-it-works.html#sources`.
+* Automation: `sheet-sync.yml` daily → review PR on `auto/sheet-sync`
+  (never auto-merged). `ci.yml` runs `sheet_sync.py check`.
+  `export_data.py --public` refreshes the external export (reconciliation
+  depends on published VOD maps); the five workflows that run it now stage
+  `assets/data/external_sheet.v1.js` too.
+* Tests: `test_external_sheet.py` (45, socket-guarded offline),
+  `test_time_weighting.py`, `test_meta_stats_js.py` (Node parity with the
+  Python numbers); `render_check.js` covers the three new pages.
+
+**State right now: never synced.** This pass ran in an environment whose
+network policy blocked docs.google.com, so the committed
+`external_sheet.v1.js` is the honest `never-synced` state and every page
+says so. **Next step:** run the `sheet-sync` workflow (Actions → sheet-sync
+→ Run workflow) or `python3 pipeline/sheet_sync.py sync` from a machine that
+can reach Google; review the PR's inventory. If the real layout is not
+recognised the run fails with the headers it saw — add them to
+`gsheet_layout.json` and re-run. Then work the review queue on
+`sheet-sync.html` and set `maintainer` in `gsheet_source.json` once
+confirmed.
+
 ## UPDATE (2026-10-30, sixteenth pass) — find the maps, name them
 
 * **Where the maps are, without the download.** `live_ingest.py` +

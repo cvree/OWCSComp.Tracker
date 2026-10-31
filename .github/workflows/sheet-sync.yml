@@ -1,0 +1,167 @@
+# =====================================================================
+# OWCS Comp Tracker — community spreadsheet sync (external source)
+# ---------------------------------------------------------------------
+# Daily (and on demand) it downloads the PUBLIC xlsx export of the
+# community-maintained OWCS spreadsheet — no Google API key, no secrets —
+# and imports it as the separate external layer (pipeline/sheet_sync.py,
+# docs/EXTERNAL-SHEET.md):
+#
+#   1. download the workbook and SHA-256 it;
+#   2. identical to the last good import? stop — nothing is committed;
+#   3. parse every tab, validate (a changed layout FAILS loudly), build the
+#      source inventory and reconciliation reports;
+#   4. run the exporter gates and the relevant offline test suites;
+#   5. push the changes to ONE review branch (auto/sheet-sync) and open or
+#      update a pull request. It is never merged automatically: external
+#      data reaches the site only after a person merges it.
+#
+# On failure (download refused, not an xlsx, layout changed) nothing is
+# committed — the last good import stays live — and the failure report is
+# put in the job summary and uploaded as an artifact.
+#
+# The pull request is opened with BOT_PAT when that secret exists (so
+# ci.yml runs on it, as for the discovery PRs), else with GITHUB_TOKEN.
+# =====================================================================
+name: sheet-sync
+
+on:
+  schedule:
+    # Daily at 10:41 UTC — OWCS regions play across every time zone, so
+    # there is no quiet hour; this avoids the top-of-hour runner crush.
+    - cron: "41 10 * * *"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Re-import even if the workbook hash is unchanged"
+        type: boolean
+        default: false
+      accept_structure_change:
+        description: "Accept a reviewed tab rename/removal (otherwise it fails)"
+        type: boolean
+        default: false
+
+# Every workflow that commits generated data shares ONE group so they
+# serialise (test_release_reproducibility / test_discovery_workflow).
+concurrency:
+  group: owcs-generated-data
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install --quiet -r requirements.txt
+
+      - name: Download, compare hash, import, reconcile
+        id: sync
+        run: |
+          args=""
+          if [ "${{ github.event.inputs.force }}" = "true" ]; then args="$args --force"; fi
+          if [ "${{ github.event.inputs.accept_structure_change }}" = "true" ]; then
+            args="$args --accept-structure-change"; fi
+          set +e
+          python pipeline/sheet_sync.py sync $args 2>&1 | tee sync.log
+          code=${PIPESTATUS[0]}
+          set -e
+          echo "exit=$code" >> "$GITHUB_OUTPUT"
+          if [ "$code" != "0" ]; then
+            {
+              echo "## Spreadsheet sync FAILED — the last good import is still live"
+              echo
+              cat reports/external/gsheet/last_failure.md 2>/dev/null || cat sync.log
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          if git status --porcelain -- data/external reports/external assets/data/external_sheet.v1.js | grep -q .; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Workbook unchanged since the last import — nothing to commit." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Keep the failure report and the downloaded workbook
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sheet-sync-${{ github.run_id }}
+          path: |
+            sync.log
+            reports/external/gsheet/
+            work/gsheet/*.xlsx
+          if-no-files-found: ignore
+          retention-days: 30
+
+      - name: Fail the run when the sync failed
+        if: steps.sync.outputs.exit != '0'
+        run: |
+          echo "::error::Spreadsheet sync failed; nothing was committed. See the job summary."
+          exit 1
+
+      - name: Gates and offline tests
+        if: steps.sync.outputs.changed == 'true'
+        run: |
+          python pipeline/sheet_sync.py check
+          python pipeline/export_data.py --check --public
+          python pipeline/test_external_sheet.py
+          python pipeline/test_time_weighting.py
+          python pipeline/test_meta_stats_js.py
+          python pipeline/test_public_export_contracts.py
+          python pipeline/test_site.py
+
+      - name: Open or update the review pull request
+        if: steps.sync.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.BOT_PAT || secrets.GITHUB_TOKEN }}
+        run: |
+          BR="auto/sheet-sync"
+          git config user.name  "owcs-sheet-sync[bot]"
+          git config user.email "actions@users.noreply.github.com"
+          git checkout -B "$BR"
+          git add data/external reports/external assets/data/external_sheet.v1.js
+          SHA=$(python -c "import json;print(json.load(open('data/external/gsheet/manifest.json'))['lastGood'][:12])")
+          git commit -m "data: community spreadsheet import (workbook $SHA)"
+          git push --force origin "$BR"
+
+          {
+            echo "Automated import of the community OWCS spreadsheet (workbook \`$SHA\`)."
+            echo
+            echo "Spreadsheet observations stay a separate, labelled source — nothing here changes"
+            echo "VOD-verified data. Review the inventory and reconciliation below, then merge."
+            echo
+            sed -n '1,40p' reports/external/gsheet/inventory.md
+            echo
+            sed -n '1,60p' reports/external/gsheet/reconciliation.md
+            echo
+            echo "_Generated by the sheet-sync workflow._"
+          } > pr-body.md
+
+          if gh pr view "$BR" --json state --jq '.state' 2>/dev/null | grep -q OPEN; then
+            gh pr edit "$BR" --body-file pr-body.md --title "Spreadsheet import: workbook $SHA"
+            echo "Updated the open review PR for $BR."
+          elif gh pr create --base "${GITHUB_REF_NAME}" --head "$BR" \
+              --title "Spreadsheet import: workbook $SHA" --body-file pr-body.md; then
+            echo "Opened a review PR for $BR."
+          else
+            echo "::error::Could not open a pull request for $BR — the branch was pushed; open it by hand."
+            exit 1
+          fi
+          {
+            echo "## Spreadsheet import ready for review"
+            echo
+            sed -n '1,14p' reports/external/gsheet/inventory.md
+          } >> "$GITHUB_STEP_SUMMARY"

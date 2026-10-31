@@ -41,13 +41,14 @@ const PAGES = [
   "index.html", "admin.html", "games.html", "game.html", "submit.html", "review.html",
   "stats.html", "teams.html", "team.html", "hero.html", "tools.html",
   "how-it-works.html", "guide.html", "styleguide.html", "label.html",
+  "map.html", "meta.html", "sheet-sync.html",
 ];
 /* 404.html is deliberately standalone — it must render with no data and
    no shell, because the thing that failed may be the shell. */
 const NO_SHELL = new Set(["404.html"]);
 /* Pages that carry the admin chrome (mirrors P.ADMIN_PAGES in core.js). */
 const ADMIN = new Set(["admin.html", "games.html", "submit.html", "review.html", "label.html",
-  "tools.html", "guide.html", "styleguide.html"]);
+  "tools.html", "guide.html", "styleguide.html", "sheet-sync.html"]);
 
 let fails = 0;
 const check = (name, ok, detail) => {

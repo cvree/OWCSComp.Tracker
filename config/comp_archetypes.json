@@ -1,0 +1,22 @@
+{
+  "_readme": [
+    "Editorial composition archetypes for the time-weighted VOD analytics",
+    "(pipeline/time_weighting.py). This is a LABEL layered on top of",
+    "evidence, never a detection: the pipeline measures which heroes were on",
+    "the field and for how long; this file only names groups of line-ups so",
+    "seconds can be summed per archetype. A line-up no rule matches is",
+    "'unclassified' — it is never forced into the nearest bucket.",
+    "Rules are tried in order; the first rule whose 'tanks' list contains the",
+    "line-up's tank hero (and whose optional 'requiresAny' is satisfied)",
+    "wins. Edit freely; bump 'version' so exports record which rules applied."
+  ],
+  "version": 1,
+  "rules": [
+    {"id": "dive", "label": "Dive",
+     "tanks": ["winston", "dva", "ball", "doomfist"]},
+    {"id": "brawl", "label": "Brawl / rush",
+     "tanks": ["rein", "jq", "mauga", "ram", "zarya", "hazard"]},
+    {"id": "poke", "label": "Poke / spam",
+     "tanks": ["sigma", "orisa", "hog"]}
+  ]
+}
