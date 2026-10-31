@@ -1,6 +1,6 @@
 {
  "window_days": 30,
- "generated_at": "2026-10-30T22:58:16+00:00",
+ "generated_at": "2026-10-31T09:38:30+00:00",
  "teams": [
   {
    "id": "ag-al",
@@ -64,6 +64,26 @@
   {
    "id": "dallas-fuel",
    "name": "Dallas Fuel",
+   "region": "Unknown",
+   "status": "active",
+   "states": [
+    "identity-verified",
+    "logo-verified",
+    "schedule-discovered"
+   ],
+   "matches": 0,
+   "broadcastsLocated": 0,
+   "capturedMaps": 0,
+   "blockingIssue": "no matches for this team inside the current window",
+   "hasFaceitId": false,
+   "logoState": "logo-verified",
+   "hasRoster": false,
+   "needsReview": false,
+   "reviewReason": null
+  },
+  {
+   "id": "feamrisk",
+   "name": "Feamrisk",
    "region": "Unknown",
    "status": "active",
    "states": [
@@ -179,6 +199,26 @@
    "reviewReason": null
   },
   {
+   "id": "phekafe",
+   "name": "Phekafe",
+   "region": "Unknown",
+   "status": "active",
+   "states": [
+    "identity-verified",
+    "logo-verified",
+    "schedule-discovered"
+   ],
+   "matches": 0,
+   "broadcastsLocated": 0,
+   "capturedMaps": 0,
+   "blockingIssue": "no matches for this team inside the current window",
+   "hasFaceitId": false,
+   "logoState": "logo-verified",
+   "hasRoster": false,
+   "needsReview": false,
+   "reviewReason": null
+  },
+  {
    "id": "quick",
    "name": "Quick Esports",
    "region": "EMEA",
@@ -236,6 +276,46 @@
    "reviewReason": null
   },
   {
+   "id": "the-kafi",
+   "name": "THE Kafi",
+   "region": "Unknown",
+   "status": "active",
+   "states": [
+    "identity-verified",
+    "logo-verified",
+    "schedule-discovered"
+   ],
+   "matches": 0,
+   "broadcastsLocated": 0,
+   "capturedMaps": 0,
+   "blockingIssue": "no matches for this team inside the current window",
+   "hasFaceitId": false,
+   "logoState": "logo-verified",
+   "hasRoster": false,
+   "needsReview": false,
+   "reviewReason": null
+  },
+  {
+   "id": "team",
+   "name": "Team",
+   "region": "Unknown",
+   "status": "active",
+   "states": [
+    "identity-verified",
+    "logo-verified",
+    "schedule-discovered"
+   ],
+   "matches": 0,
+   "broadcastsLocated": 0,
+   "capturedMaps": 0,
+   "blockingIssue": "no matches for this team inside the current window",
+   "hasFaceitId": false,
+   "logoState": "logo-verified",
+   "hasRoster": false,
+   "needsReview": false,
+   "reviewReason": null
+  },
+  {
    "id": "falcons",
    "name": "Team Falcons",
    "region": "Asia",
@@ -257,6 +337,26 @@
   {
    "id": "team-liquid",
    "name": "Team Liquid",
+   "region": "Unknown",
+   "status": "active",
+   "states": [
+    "identity-verified",
+    "logo-verified",
+    "schedule-discovered"
+   ],
+   "matches": 0,
+   "broadcastsLocated": 0,
+   "capturedMaps": 0,
+   "blockingIssue": "no matches for this team inside the current window",
+   "hasFaceitId": false,
+   "logoState": "logo-verified",
+   "hasRoster": false,
+   "needsReview": false,
+   "reviewReason": null
+  },
+  {
+   "id": "team-peps",
+   "name": "Team Peps",
    "region": "Unknown",
    "status": "active",
    "states": [
@@ -395,11 +495,11 @@
   }
  ],
  "counts": {
-  "schedule_discovered": 20,
-  "identity_verified": 11,
+  "schedule_discovered": 25,
+  "identity_verified": 16,
   "roster_verified": 0,
   "logo_candidate": 2,
-  "logo_verified": 16,
+  "logo_verified": 21,
   "broadcast_located": 0,
   "composition_captured": 2,
   "needs_review": 0,
