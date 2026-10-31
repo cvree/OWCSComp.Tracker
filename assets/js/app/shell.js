@@ -28,48 +28,57 @@
      built the header, nav, search or footer. See P.media in core.js. */
   const reduced = P.media("(prefers-reduced-motion: reduce)");
 
+  /* Two audiences, two navigations.
+
+     NAV is the public site, and it is what nearly everyone sees: every
+     map with its comps, the overall comps, and the teams. Nothing on it
+     asks a fan to submit, review or label anything.
+
+         Maps · Comps · Teams
+
+     ADMIN_NAV is the pipeline, in the order an admin works it. It is
+     shown only on the admin pages themselves (P.ADMIN_PAGES), and the
+     public chrome links to it only when this browser is in admin mode.
+
+         Dashboard · Games · Submit · Review · Stats
+
+     RAIL is the admin overflow menu — the remaining operator tools —
+     and is never a second public navigation. */
   const NAV = [
-    { href: "index.html", label: "Dashboard", match: ["index.html", ""] },
-    { href: "games.html", label: "Games", match: ["games.html", "game.html"] },
-    { href: "submit.html", label: "Submit", match: ["submit.html"] },
-    { href: "review.html", label: "Review", match: ["review.html"], pip: "review" },
-    { href: "stats.html", label: "Stats",
-      match: ["stats.html", "hero.html", "team.html", "teams.html"] },
+    { href: "index.html", label: "Maps", match: ["index.html", "", "game.html"] },
+    { href: "stats.html", label: "Comps", match: ["stats.html", "hero.html"] },
+    { href: "teams.html", label: "Teams", match: ["teams.html", "team.html"] },
   ];
 
-  /* The five-item nav is the product's answer to "what is this for" and
-     it stays five. RAIL is NOT a second nav and must never become one:
-     hero, map and composition data are TABS on the stats page, not
-     destinations, and putting them here would rebuild exactly the
-     page-per-dataset architecture the redesign removed (test_site.py
-     enforces that, deliberately).
+  const ADMIN_NAV = [
+    { href: "admin.html", label: "Dashboard", match: ["admin.html"] },
+    { href: "games.html", label: "Games", match: ["games.html"] },
+    { href: "submit.html", label: "Submit", match: ["submit.html"] },
+    { href: "review.html", label: "Review", match: ["review.html"], pip: "review" },
+    { href: "stats.html", label: "Stats", match: ["stats.html"] },
+  ];
 
-     What RAIL carries is the set of real destinations that existed only
-     in the footer — which is "reachable" in the sense that a basement is
-     reachable. It used to occupy a permanent second row under the
-     header; that row cost every page a strip of chrome before any
-     content and made the product look like a directory. It now lives in
-     an overflow menu at the end of the primary nav, and is appended to
-     the mobile sheet where there is no room for a second control. */
   const RAIL = [
-    { href: "teams.html", label: "Teams", note: "Every org in the dataset",
-      match: ["teams.html", "team.html"] },
-    { href: "guide.html", label: "Guides", note: "Every task, walked through",
-      match: ["guide.html"] },
-    { href: "how-it-works.html", label: "How it works", note: "In plain language",
-      match: ["how-it-works.html"] },
+    { href: "index.html", label: "Public site", note: "Maps and comps, as fans see them",
+      match: [] },
+    { href: "label.html", label: "Name the heroes", note: "Teach the tracker a new hero",
+      match: ["label.html"] },
     { href: "tools.html", label: "Tools & diagnostics", note: "For operators",
       match: ["tools.html"] },
     { href: "calibrate.html", label: "Calibrate", note: "Teach the tracker a new HUD",
       match: ["calibrate.html"] },
-    { href: "label.html", label: "Name the heroes", note: "Teach the tracker a new hero",
-      match: ["label.html"] },
+    { href: "guide.html", label: "Guides", note: "Every task, walked through",
+      match: ["guide.html"] },
+    { href: "how-it-works.html", label: "How it works", note: "In plain language",
+      match: ["how-it-works.html"] },
   ];
 
   /* --------------------------------------------------------- header */
   function buildHeader() {
     const here = location.pathname.split("/").pop() || "index.html";
     const counts = P.games ? P.games.counts() : { review: 0 };
+    const adminPage = P.isAdminPage();
+    const items = adminPage ? ADMIN_NAV : NAV;
 
     const link = (n) => {
       const cur = n.match.indexOf(here) >= 0;
@@ -81,44 +90,50 @@
         esc(n.label) + pip + "</a>";
     };
 
+    const rail = adminPage
+      ? '<p class="nav__sep" aria-hidden="true">More</p>' +
+        RAIL.map((r) =>
+          '<a class="nav--secondary" href="' + r.href + '"' +
+          (r.match.indexOf(here) >= 0 ? ' aria-current="page"' : "") + ">" +
+          esc(r.label) + "</a>").join("")
+      : P.isAdmin()
+        ? '<a class="nav--admin" href="admin.html">Admin</a>'
+        : "";
+    const moreMenu = adminPage
+      ? '<details class="more" id="more-menu">' +
+          '<summary aria-label="More destinations">More</summary>' +
+          '<div class="more__panel">' +
+            RAIL.map((r) =>
+              '<a href="' + r.href + '"' +
+              (r.match.indexOf(here) >= 0 ? ' aria-current="page"' : "") + ">" +
+              esc(r.label) + "<small>" + esc(r.note) + "</small></a>").join("") +
+            '<span class="more__sep" aria-hidden="true"></span>' +
+            '<a href="styleguide.html">Design system<small>Every component, in one place</small></a>' +
+          "</div>" +
+        "</details>"
+      : "";
+
     const hdr = document.createElement("header");
     hdr.className = "hdr";
     hdr.innerHTML =
       '<div class="hdr__in">' +
-        '<a class="brand" href="index.html">' +
+        '<a class="brand" href="' + (adminPage ? "admin.html" : "index.html") + '">' +
           '<span class="brand__mark" aria-hidden="true">CT</span>' +
           '<span class="brand__name">OWCS Comp Tracker' +
-            "<small>reviewed match data</small></span>" +
+            "<small>" + (adminPage ? "admin" : "every map · every comp") + "</small></span>" +
         "</a>" +
-        '<nav class="nav" id="nav" aria-label="Primary">' + NAV.map(link).join("") +
-          /* The overflow destinations, appended to the same sheet on a
-             phone. Hidden at desktop widths by CSS, where the <details>
-             menu in hdr__tools carries them instead — one list of links
-             in the DOM per breakpoint, never two competing ones. */
-          '<p class="nav__sep" aria-hidden="true">More</p>' +
-          RAIL.map((r) =>
-            '<a class="nav--secondary" href="' + r.href + '"' +
-            (r.match.indexOf(here) >= 0 ? ' aria-current="page"' : "") + ">" +
-            esc(r.label) + "</a>").join("") +
+        /* On a phone the overflow destinations join the same sheet;
+           at desktop widths CSS hides them and the <details> menu in
+           hdr__tools carries them — one list per breakpoint, never two. */
+        '<nav class="nav" id="nav" aria-label="Primary">' + items.map(link).join("") + rail +
         "</nav>" +
-        '<div class="hdr__tools">' +
-          '<details class="more" id="more-menu">' +
-            '<summary aria-label="More destinations">More</summary>' +
-            '<div class="more__panel">' +
-              RAIL.map((r) =>
-                '<a href="' + r.href + '"' +
-                (r.match.indexOf(here) >= 0 ? ' aria-current="page"' : "") + ">" +
-                esc(r.label) + "<small>" + esc(r.note) + "</small></a>").join("") +
-              '<span class="more__sep" aria-hidden="true"></span>' +
-              '<a href="styleguide.html">Design system<small>Every component, in one place</small></a>' +
-            "</div>" +
-          "</details>" +
+        '<div class="hdr__tools">' + moreMenu +
           /* An inline SVG, not the "⌕" character: that glyph is missing
              from a lot of families and falls back to a smudge at 12px,
              which is what the icon-only phone header would have shown. */
           '<button class="btn btn--ghost btn--sm" id="search-btn" aria-haspopup="dialog" ' +
-            'aria-label="Search games, teams and heroes" ' +
-            'title="Search games, teams and heroes (press /)">' +
+            'aria-label="Search maps, teams and heroes" ' +
+            'title="Search maps, teams and heroes (press /)">' +
             '<svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true" fill="none" ' +
             'stroke="currentColor" stroke-width="2" stroke-linecap="round">' +
             '<circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 4.5 4.5"/></svg>' +
@@ -230,10 +245,23 @@
     if (patches[0]) push("Patch " + (patches[0].name || patches[0].id), { dot: false });
 
     const comps = P.publishedComps();
-    push(comps.length + " published composition" + (comps.length === 1 ? "" : "s"),
-      { dot: false });
+    if (!P.isAdminPage()) {
+      /* The public line counts what a fan can use: maps and comps. The
+         pipeline's queue (review, processing) is admin business. */
+      if (P.mapFeed) {
+        const maps = P.mapFeed.maps();
+        push(maps.length + " map" + (maps.length === 1 ? "" : "s") + " indexed", { dot: false });
+        const read = maps.filter(P.mapFeed.hasComp).length;
+        push(read + " with comps", { dot: false });
+      } else {
+        push(comps.length + " published line-up" + (comps.length === 1 ? "" : "s"), { dot: false });
+      }
+    } else {
+      push(comps.length + " published composition" + (comps.length === 1 ? "" : "s"),
+        { dot: false });
+    }
 
-    if (P.games) {
+    if (P.games && P.isAdminPage()) {
       const c = P.games.counts();
       /* The TOTAL is only honest on a page that loaded the working record
          (assets/js/data.js). Pages that do not — teams, stats — cannot see
@@ -277,15 +305,16 @@
     const items = [];
     const add = (it) => items.push(it);
 
+    const adminPage = P.isAdminPage();
     if (P.games) {
-      P.games.all().forEach((g) => {
+      P.games.all().filter((g) => adminPage || g.state === "published").forEach((g) => {
         const a = P.team(g.teamA), b = P.team(g.teamB);
         const st = P.STATE_WORDS[g.state] || { label: g.state };
         add({
           type: "game", label: g.title, sub: g.tournamentName || "",
           href: g.href, state: g.state, badge: st.label,
           mark: (a || b)
-            ? '<span class="palette__vs">' + P.teamCrest(a) + P.teamCrest(b) + "</span>"
+            ? '<span class="palette__vs">' + P.teamMark(a) + P.teamMark(b) + "</span>"
             : "",
           terms: [g.title, a && a.name, a && a.code, b && b.name, b && b.code,
             g.tournamentName].filter(Boolean).join(" "),
@@ -295,7 +324,7 @@
     P.teams().forEach((t) => add({
       type: "team", label: t.name, sub: P.regionName(t.region),
       href: "team.html?id=" + encodeURIComponent(t.id),
-      mark: '<span class="palette__mark">' + P.teamCrest(t) + "</span>",
+      mark: '<span class="palette__mark">' + P.teamMark(t) + "</span>",
       terms: [t.name, t.code, (t.aliases || []).join(" ")].join(" "),
     }));
     P.heroes().forEach((h) => add({
@@ -306,27 +335,33 @@
     }));
     (P.maps ? P.maps() : []).forEach((m) => add({
       type: "map", label: m.name, sub: m.mode || "",
-      href: "stats.html?tab=maps",
+      href: "index.html?map=" + encodeURIComponent(m.id),
       terms: [m.name, m.mode, m.id].filter(Boolean).join(" "),
     }));
 
-    [["Dashboard", "index.html", "Where everything stands"],
-     ["Games", "games.html", "Every game, whatever state it is in"],
-     ["Submit a game", "submit.html", "Paste a broadcast link"],
-     ["Review", "review.html", "Confirm or correct detections"],
-     ["Stats", "stats.html", "Hero, map and composition data"],
-     ["Teams", "teams.html", "Team directory"],
-     ["How it works", "how-it-works.html", "In plain language"],
-     ["Tools & diagnostics", "tools.html", "For operators"],
-     ["Calibrate a broadcast", "calibrate.html", "Teach the tracker a new HUD"],
-     ["Name the heroes", "label.html", "Teach the tracker a new hero, one card at a time"],
-     ["Guides", "guide.html", "Step-by-step walkthroughs for every task"],
-     ["Guide: submit a game", "guide.html#submit", "From a pasted link to a queued job"],
-     ["Guide: review detections", "guide.html#review", "The human gates, in order"],
-     ["Guide: publish", "guide.html#publish", "Promote reviewed detections and export"],
-     ["Guide: when something is blocked", "guide.html#troubleshoot", "Each blocked state and the next command"],
-     ["Design system", "styleguide.html", "Every component, chip and evidence state"],
-    ].forEach((r) => add({ type: "page", label: r[0], sub: r[2], href: r[1],
+    const PUBLIC_PAGES = [
+      ["Maps", "index.html", "Every map, map by map, with both comps"],
+      ["Comps", "stats.html", "Most-run comps and hero picks"],
+      ["Heroes", "stats.html?tab=heroes", "Pick rates by hero"],
+      ["Teams", "teams.html", "Every org, with its mark"],
+      ["How it works", "how-it-works.html", "In plain language"],
+    ];
+    const ADMIN_PAGES = [
+      ["Admin dashboard", "admin.html", "Where the pipeline stands"],
+      ["Games", "games.html", "Every game, whatever state it is in"],
+      ["Submit a game", "submit.html", "Paste a broadcast link"],
+      ["Review", "review.html", "Confirm or correct detections"],
+      ["Name the heroes", "label.html", "Teach the tracker a new hero, one card at a time"],
+      ["Tools & diagnostics", "tools.html", "For operators"],
+      ["Calibrate a broadcast", "calibrate.html", "Teach the tracker a new HUD"],
+      ["Guides", "guide.html", "Step-by-step walkthroughs for every task"],
+      ["Guide: submit a game", "guide.html#submit", "From a pasted link to a queued job"],
+      ["Guide: review detections", "guide.html#review", "The human gates, in order"],
+      ["Guide: publish", "guide.html#publish", "Promote reviewed detections and export"],
+      ["Guide: when something is blocked", "guide.html#troubleshoot", "Each blocked state and the next command"],
+      ["Design system", "styleguide.html", "Every component, chip and evidence state"],
+    ];
+    PUBLIC_PAGES.concat(P.isAdmin() ? ADMIN_PAGES : []).forEach((r) => add({ type: "page", label: r[0], sub: r[2], href: r[1],
       terms: r[0] + " " + r[2] }));
 
     /* Weights encode what people actually search by: the name of the thing
@@ -385,7 +420,7 @@
       if (!query) {
         /* An empty palette is a launcher, not an empty state: the places
            worth going, plus whatever is actually waiting on a person. */
-        const attention = P.games
+        const attention = P.games && adminPage
           ? P.games.all().filter((g) => g.state === "review" || g.state === "blocked").slice(0, 4)
           : [];
         const quick = items.filter((it) => it.type === "page").slice(0, 8);
@@ -405,7 +440,7 @@
       cursor = 0;
       if (!shown.length) {
         list.innerHTML = '<li class="palette__empty">Nothing matches “' + esc(q) +
-          "”. Only games that have been submitted or found appear here.</li>";
+          "”. Try a team, a hero or a map.</li>";
         return;
       }
       let lastKind = null;
@@ -493,32 +528,36 @@
     f.innerHTML =
       '<div class="ftr__in">' +
         "<div><h2>OWCS Comp Tracker</h2>" +
-        "<p>The portal that turns competitive Overwatch broadcasts into trustworthy, " +
-        "structured data. A hero the tracker cannot read stays unknown — never a guess — " +
-        "and every published fact carries the tier it earned and links back to the " +
-        "frame it came from, so anyone can check it.</p>" +
+        "<p>Every OWCS map, map by map, with the comp each team ran — read off the " +
+        "broadcast itself. A hero the tracker cannot read stays unknown, never a guess, " +
+        "and every comp links back to the frame it came from.</p>" +
         '<p class="u-mt-3"><a href="how-it-works.html">How it works, in plain language →</a></p></div>' +
-        "<div><h2>Product</h2><ul>" +
-          '<li><a href="index.html">Dashboard</a></li>' +
-          '<li><a href="games.html">Games</a></li>' +
-          '<li><a href="submit.html">Submit a game</a></li>' +
-          '<li><a href="review.html">Review</a></li>' +
-          '<li><a href="stats.html">Stats</a></li>' +
-        "</ul></div>" +
         "<div><h2>Explore</h2><ul>" +
-          '<li><a href="teams.html">Teams</a></li>' +
+          '<li><a href="index.html">Every map</a></li>' +
+          '<li><a href="stats.html">Comps</a></li>' +
           '<li><a href="stats.html?tab=heroes">Heroes</a></li>' +
-          '<li><a href="stats.html?tab=maps">Maps</a></li>' +
-          '<li><a href="stats.html?tab=comps">Compositions</a></li>' +
+          '<li><a href="teams.html">Teams</a></li>' +
         "</ul></div>" +
-        "<div><h2>Operators</h2><ul>" +
-          '<li><a href="guide.html">Guides — every step, walked through</a></li>' +
-          '<li><a href="tools.html">Tools &amp; diagnostics</a></li>' +
-          '<li><a href="calibrate.html">Calibrate a broadcast</a></li>' +
-          '<li><a href="label.html">Name the heroes</a></li>' +
-          '<li><a href="styleguide.html">Design system</a></li>' +
-          '<li><a href="how-it-works.html#run-it-yourself">Run your own copy</a></li>' +
-        "</ul></div>" +
+        (P.isAdmin()
+          ? "<div><h2>Admin</h2><ul>" +
+              '<li><a href="admin.html">Dashboard</a></li>' +
+              '<li><a href="games.html">Games</a></li>' +
+              '<li><a href="submit.html">Submit a game</a></li>' +
+              '<li><a href="review.html">Review</a></li>' +
+              '<li><a href="label.html">Name the heroes</a></li>' +
+            "</ul></div>" +
+            "<div><h2>Operators</h2><ul>" +
+              '<li><a href="guide.html">Guides — every step, walked through</a></li>' +
+              '<li><a href="tools.html">Tools &amp; diagnostics</a></li>' +
+              '<li><a href="calibrate.html">Calibrate a broadcast</a></li>' +
+              '<li><a href="styleguide.html">Design system</a></li>' +
+              '<li><a href="how-it-works.html#run-it-yourself">Run your own copy</a></li>' +
+              '<li><a href="index.html?admin=0">Leave admin mode</a></li>' +
+            "</ul></div>"
+          : "<div><h2>About</h2><ul>" +
+              '<li><a href="how-it-works.html">How it works</a></li>' +
+              '<li><a href="admin.html" rel="nofollow">Admin</a></li>' +
+            "</ul></div>") +
       "</div>" +
       '<div class="ftr__in ftr__meta">' +
         "<span>Data generated " + esc(gen ? P.fmtDateTime(gen) : "—") + "</span>" +

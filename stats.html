@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Stats — OWCS Comp Tracker</title>
-<meta name="description" content="Hero pick rates, map records, full compositions and confirmed mid-map swaps — every number counted only from line-ups a person has approved.">
+<title>Comps — OWCS Comp Tracker</title>
+<meta name="description" content="The most-run OWCS comps, every comp map by map, hero pick rates, map and team records and mid-map swaps — counted from line-ups read off the broadcast.">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/archivo-var-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/saira-condensed-700-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -17,26 +17,27 @@
 <main id="main" class="shell shell--wide">
 
   <div class="page-head page-head--tight">
-    <p class="eyebrow eyebrow--emerald">Approved data only</p>
-    <h1>Stats</h1>
-    <p class="lede">Everything on this page is counted from compositions a person has
-      confirmed against the broadcast frame. Detections still waiting for review are not
-      in these numbers — which is why the sample is small and honest rather than large
-      and guessed.</p>
+    <p class="eyebrow eyebrow--gold">Overall</p>
+    <h1>Comps</h1>
+    <p class="lede">What OWCS teams are running: the most-played five-hero comps, every comp
+      map by map, and hero pick rates — counted from line-ups read off the broadcast, each
+      one linked to the frame it came from.</p>
   </div>
 
   <div id="coverage" class="u-mt-5"></div>
 
-  <div role="tablist" aria-label="Stats views" class="u-mt-6">
+  <div role="tablist" aria-label="Comp views" class="u-mt-6">
+    <button role="tab" data-tab="comps" aria-controls="p-comps" id="t-comps">Comps</button>
+    <button role="tab" data-tab="bymap" aria-controls="p-bymap" id="t-bymap">By map</button>
     <button role="tab" data-tab="heroes" aria-controls="p-heroes" id="t-heroes">Heroes</button>
-    <button role="tab" data-tab="comps" aria-controls="p-comps" id="t-comps">Compositions</button>
     <button role="tab" data-tab="maps" aria-controls="p-maps" id="t-maps">Maps</button>
     <button role="tab" data-tab="teams" aria-controls="p-teams" id="t-teams">Teams</button>
     <button role="tab" data-tab="swaps" aria-controls="p-swaps" id="t-swaps">Swaps</button>
   </div>
 
-  <div id="p-heroes" role="tabpanel" aria-labelledby="t-heroes" tabindex="0"></div>
-  <div id="p-comps" role="tabpanel" aria-labelledby="t-comps" tabindex="0" hidden></div>
+  <div id="p-comps" role="tabpanel" aria-labelledby="t-comps" tabindex="0"></div>
+  <div id="p-bymap" role="tabpanel" aria-labelledby="t-bymap" tabindex="0" hidden></div>
+  <div id="p-heroes" role="tabpanel" aria-labelledby="t-heroes" tabindex="0" hidden></div>
   <div id="p-maps" role="tabpanel" aria-labelledby="t-maps" tabindex="0" hidden></div>
   <div id="p-teams" role="tabpanel" aria-labelledby="t-teams" tabindex="0" hidden></div>
   <div id="p-swaps" role="tabpanel" aria-labelledby="t-swaps" tabindex="0" hidden></div>
@@ -52,8 +53,11 @@
 <script src="assets/data/hero_art.v1.js"></script>
 <script src="assets/data/public_data.v1.js"></script>
 <script src="assets/data/discovered.v1.js"></script>
+<script src="assets/data/broadcast_maps.v1.js"></script>
 <script src="assets/js/app/core.js"></script>
 <script src="assets/js/app/games.js"></script>
+<script src="assets/js/app/mapindex.js"></script>
+<script src="assets/js/app/mapfeed.js"></script>
 <script src="assets/js/app/api.js"></script>
 <script src="assets/vendor/panzoom.min.js"></script>
 <script src="assets/js/app/evidence.js"></script>

@@ -60,9 +60,7 @@
     if (!teams.length) return;
     document.getElementById("field").innerHTML = teams.map(({ t, n }) =>
       '<a class="field__team" href="team.html?id=' + encodeURIComponent(t.id) + '">' +
-        '<span class="field__logo">' + (t.logoUrl
-          ? '<img src="' + esc(t.logoUrl) + '" alt="" width="48" height="48" loading="lazy">'
-          : P.teamCrest(t)) + "</span>" +
+        '<span class="field__logo">' + P.teamMark(t, 48) + "</span>" +
         '<span class="field__name">' + esc(t.name) + "</span>" +
         '<span class="field__n">' + (n ? "▶ " + n + " map" + (n === 1 ? "" : "s") : "&nbsp;") + "</span></a>"
     ).join("");

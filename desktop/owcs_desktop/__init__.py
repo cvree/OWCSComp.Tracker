@@ -30,6 +30,6 @@ __all__ = ["__version__", "APP_NAME"]
 
 #: The application version. The installer, the update check and the About box
 #: all read this one value.
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 APP_NAME = "OWCS Comp Tracker"

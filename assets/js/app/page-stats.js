@@ -1,8 +1,9 @@
 /* =====================================================================
    OWCS Comp Tracker — app/page-stats.js
-   Five views of one approved dataset. The old site gave heroes, comps,
-   maps, teams and swaps a top-level page each; they are five questions
-   about the same rows, so they are five tabs.
+   The Comps page: six views of one published dataset. Comps lead,
+   because that is what people open it for; "By map" answers "what do
+   teams run on Busan?"; heroes, maps, teams and swaps follow. They are
+   six questions about the same rows, so they are six tabs.
 
    Every table states its sample size. A pick rate computed from one map
    is not wrong, it is just small — saying so is the difference between
@@ -20,6 +21,7 @@
     renderCoverage();
     renderHeroes();
     renderComps();
+    renderByMap();
     renderMaps();
     renderTeams();
     renderSwaps();
@@ -34,12 +36,14 @@
     const teams = new Set(comps.map((c) => c.teamId));
     const el = document.getElementById("coverage");
     if (!comps.length) {
-      el.innerHTML = P.note("info", "Nothing has been approved yet",
-        "<p>These pages count only compositions a person has confirmed. None have been " +
-        "yet, so every table below is empty — deliberately. It will fill as games are " +
-        "submitted and reviewed.</p>",
-        '<a class="btn btn--sm btn--primary" href="submit.html">Submit a game</a>' +
-        '<a class="btn btn--sm btn--ghost" href="review.html">Open the review queue</a>');
+      el.innerHTML = P.note("info", "No comps read yet",
+        "<p>Every table below counts line-ups read off the broadcast. None have been read " +
+        "yet, so they are empty — deliberately. The maps themselves are already on the " +
+        '<a href="index.html">home page</a>, ready to watch.</p>',
+        P.isAdmin()
+          ? '<a class="btn btn--sm btn--primary" href="submit.html">Submit a game</a>' +
+            '<a class="btn btn--sm btn--ghost" href="review.html">Open the review queue</a>'
+          : "");
       return;
     }
     const tile = (k, v, note) =>
@@ -47,10 +51,10 @@
       '<span class="stat__v">' + v + "</span>" +
       '<span class="stat__note">' + esc(note) + "</span></div>";
     el.innerHTML = '<div class="grid grid--4">' +
-      tile("Approved line-ups", comps.length, "each one confirmed against a frame") +
-      tile("Maps covered", maps.size, "with at least one approved line-up") +
-      tile("Games covered", games.size, "series with published data") +
-      tile("Teams seen", teams.size, "appearing in approved line-ups") +
+      tile("Line-ups read", comps.length, "each one linked to its frame") +
+      tile("Maps with comps", maps.size, "both teams read hero by hero") +
+      tile("Series", games.size, "with at least one map read") +
+      tile("Teams", teams.size, "seen in a read line-up") +
       "</div>";
   }
 
@@ -60,8 +64,8 @@
       .sort((a, b) => b.picks - a.picks || b.pickRate - a.pickRate);
     const host = document.getElementById("p-heroes");
     if (!rows.length) {
-      host.innerHTML = P.empty("◇", "No hero has been seen in an approved line-up yet",
-        "Hero numbers appear the moment the first game is reviewed.");
+      host.innerHTML = P.empty("◇", "No hero has been read in a line-up yet",
+        "Hero numbers appear the moment the first map is read.");
       return;
     }
     /* The table below carries every column; the chart answers the one
@@ -135,13 +139,13 @@
     ((D && D.compWinRate) || []).forEach((c) => { winRates[c.id] = c; });
     const host = document.getElementById("p-comps");
     if (!freq.length) {
-      host.innerHTML = P.empty("◇", "No full composition has been approved yet",
-        "A composition is five confirmed heroes on one team on one map.");
+      host.innerHTML = P.empty("◇", "No full comp has been read yet",
+        "A comp is five heroes on one team on one map, read off the broadcast.");
       return;
     }
     host.innerHTML =
-      '<p class="dim small u-mt-5">Every distinct five-hero line-up that has been ' +
-      "confirmed, most-played first.</p>" +
+      '<p class="dim small u-mt-5">Every distinct five-hero comp that has been read, ' +
+      'most-played first. <a href="?tab=bymap">See them map by map →</a></p>' +
       '<div class="stack u-mt-4">' + freq.slice()
         .sort((a, b) => b.appearances - a.appearances).map((c) => {
           const w = winRates[c.id];
@@ -154,10 +158,46 @@
               '"><span class="dot"></span>' + pct(w.winRate) + " on " + w.decidedMaps +
               " decided map" + (w.decidedMaps === 1 ? "" : "s") + "</span>" : "") +
             "</div></div>" +
-            '<p class="dim small u-mt-4">Played by ' +
-            c.teamIds.map((t) => esc((P.team(t) || {}).name || t)).join(", ") + ".</p>" +
+            '<div class="row u-mt-4"><span class="dim small">Played by</span>' +
+            c.teamIds.map((t) => P.teamPlate(t, { size: "sm", link: true })).join("") + "</div>" +
             evidenceLine(c.evidence) + "</div>";
         }).join("") + "</div>";
+  }
+
+  /* ----------------------------------------------------------- by map
+     Every map in the pool that has comps, and what each team ran on it —
+     the question "what do teams play on Busan?" answered directly. */
+  function renderByMap() {
+    const host = document.getElementById("p-bymap");
+    const F = P.mapFeed;
+    const read = F ? F.maps().filter(F.hasComp) : [];
+    if (!read.length) {
+      host.innerHTML = P.empty("◇", "No map has comps yet",
+        'Every indexed map is on the <a href="index.html">home page</a>; comps appear ' +
+        "beside each one as it is read.");
+      return;
+    }
+    const byMap = new Map();
+    read.forEach((m) => {
+      if (!byMap.has(m.map)) byMap.set(m.map, []);
+      byMap.get(m.map).push(m);
+    });
+    const order = Array.from(byMap.keys())
+      .sort((a, b) => byMap.get(b).length - byMap.get(a).length ||
+        P.mapInfo(a).name.localeCompare(P.mapInfo(b).name));
+    host.innerHTML =
+      '<p class="dim small u-mt-5">Each map in the pool that has been read, with every ' +
+      "comp run on it. The home page has the same maps in broadcast order.</p>" +
+      '<div class="stack u-mt-4">' + order.map((id) => {
+        const info = P.mapInfo(id);
+        const rows = byMap.get(id);
+        return '<section class="card rv"><div class="sec-head" style="margin:0">' +
+          '<h2 style="font-size:1.2rem">' + esc(info.name) +
+          (info.mode ? ' <span class="dim small">' + esc(info.mode) + "</span>" : "") + "</h2>" +
+          '<a class="sec-link" href="index.html?map=' + encodeURIComponent(id) + '">' +
+          rows.length + " map" + (rows.length === 1 ? "" : "s") + " →</a></div>" +
+          '<div class="mf-maps u-mt-4">' + rows.map(F.mapCard).join("") + "</div></section>";
+      }).join("") + "</div>";
   }
 
   function evidenceLine(evidence) {
@@ -223,7 +263,7 @@
     ((D && D.teamMapRecords) || []).forEach((r) => { records[r.teamId] = r; });
     const host = document.getElementById("p-teams");
     if (!pools.length) {
-      host.innerHTML = P.empty("◇", "No team has approved data yet",
+      host.innerHTML = P.empty("◇", "No team has comps read yet",
         'The <a href="teams.html">team directory</a> lists everyone the tracker knows about.');
       return;
     }
@@ -252,7 +292,7 @@
     const host = document.getElementById("p-swaps");
     if (!confirmed.length && !rejected.length) {
       host.innerHTML = P.empty("◇", "No swap evidence yet",
-        "Mid-map hero swaps appear here once a game has been reviewed.");
+        "Mid-map hero swaps appear here once a map has been read.");
       return;
     }
     const row = (s, ok) =>

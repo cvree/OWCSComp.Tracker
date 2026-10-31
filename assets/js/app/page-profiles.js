@@ -30,11 +30,11 @@
   /* -------------------------------------------------------- directory */
   function renderDirectory() {
     document.title = "Teams — OWCS Comp Tracker";
-    set("crumbs", P.breadcrumbs([{ label: "Stats", href: "stats.html" }, { label: "Teams" }]));
+    set("crumbs", P.breadcrumbs([{ label: "Maps", href: "index.html" }, { label: "Teams" }]));
     set("head",
       '<div class="page-head page-head--tight"><p class="eyebrow">Directory</p>' +
-      "<h1>Teams</h1><p class=\"lede\">Every team the tracker has a record of. A team with " +
-      "no approved data yet is still listed — absence of coverage is information too.</p></div>");
+      "<h1>Teams</h1><p class=\"lede\">Every org seen on an OWCS broadcast, with its mark, " +
+      "how many maps of it there are to watch, and the heroes it has been seen playing.</p></div>");
 
     const teams = P.teams().slice().sort((a, b) => a.name.localeCompare(b.name));
     if (!teams.length) {
@@ -46,22 +46,37 @@
     ((D && D.teamHeroPools) || []).forEach((p) => { pools[p.teamId] = p; });
 
     const known = (r) => r && !/^(unknown|all)$/i.test(r);
-    set("body", '<div class="grid grid--3">' + teams.map((t) => {
+    /* Orgs with maps to show lead, most maps first. An org the dataset
+       knows of but has no map for yet is listed once, collapsed — it is
+       on record, it just has nothing to watch. */
+    const mapsOf = (t) => (P.mapFeed ? P.mapFeed.maps().filter((m) => P.mapFeed.plays(m, t.id)) : []);
+    const rows = teams.map((t) => ({ t: t, maps: mapsOf(t) }))
+      .sort((a, b) => b.maps.length - a.maps.length || a.t.name.localeCompare(b.t.name));
+    const active = rows.filter((r) => r.maps.length);
+    const quiet = rows.filter((r) => !r.maps.length);
+    const card = (r) => {
+      const t = r.t;
       const pool = pools[t.id];
-      const seen = P.mapIndex ? P.mapIndex.forTeam(t.id) : [];
+      const read = r.maps.filter(P.mapFeed.hasComp).length;
       return '<a class="card card--hoverable rv" href="team.html?id=' + encodeURIComponent(t.id) +
         '" style="text-decoration:none;color:inherit">' +
         P.teamPlate(t.id, { size: "lg" }) +
         '<p class="dim small u-mt-4">' + [known(t.region) ? esc(P.regionName(t.region)) : "",
-          t.roster && t.roster.length ? t.roster.length + " players on record" : "",
-          seen.length ? "▶ " + seen.length + " map" + (seen.length === 1 ? "" : "s") + " to watch" : ""]
+          r.maps.length ? "▶ " + r.maps.length + " map" + (r.maps.length === 1 ? "" : "s") : "",
+          read ? read + " with comps" : ""]
           .filter(Boolean).join(" · ") + "</p>" +
         (pool
           ? '<div class="comp comp--tight u-mt-4">' +
             pool.heroes.slice(0, 8).map((h) => P.heroTile(h.hero, { size: "xs" })).join("") + "</div>"
-          : seen.length ? "" : '<p class="dim small u-mt-3">No approved composition data yet.</p>') +
+          : "") +
         "</a>";
-    }).join("") + "</div>");
+    };
+    set("body", '<div class="grid grid--3">' + active.map(card).join("") + "</div>" +
+      (quiet.length
+        ? '<div class="u-mt-6">' + P.diag("Also on record, no maps yet (" + quiet.length + ")",
+          '<div class="row">' + quiet.map((r) =>
+            P.teamPlate(r.t.id, { link: true, size: "sm" })).join("") + "</div>") + "</div>"
+        : ""));
   }
 
   /* ------------------------------------------------------------- team */
@@ -73,7 +88,7 @@
     }
     document.title = t.name + " — OWCS Comp Tracker";
     set("crumbs", P.breadcrumbs([
-      { label: "Stats", href: "stats.html" },
+      { label: "Maps", href: "index.html" },
       { label: "Teams", href: "teams.html" },
       { label: t.name }]));
 
@@ -86,10 +101,7 @@
       '<div class="page-head page-head--tight">' +
       '<div class="u-flex u-center u-gap-4 u-wrap">' +
       '<span class="team team--lg"><span class="team__logo">' +
-      (t.logoUrl
-        ? '<img src="' + esc(t.logoUrl) + '" alt="" loading="lazy" data-fallback="' +
-          esc(t.code || "?") + '">'
-        : P.teamCrest(t)) +
+      P.teamMark(t) +
       '</span><h1 style="font-size:clamp(1.7rem,3.4vw,2.6rem)">' + esc(t.name) + "</h1></span>" +
       (t.region && !/^(unknown|all)$/i.test(t.region)
         ? '<span class="chip chip--outline">' + esc(P.regionName(t.region)) + "</span>" : "") +
@@ -98,15 +110,21 @@
       '<p class="lede u-mt-4">' +
       (pool
         ? "Seen playing " + pool.poolSize + " different hero(es) across " + pool.appearances +
-          " approved map(s)."
+          " map(s) with comps read."
         : seen.length
           ? "On " + seen.length + " indexed map" + (seen.length === 1 ? "" : "s") +
             " — every one a click from playing. Compositions follow once the tracker reads them."
-          : "No approved composition data for this team yet — nothing it has played has been " +
-            "through review.") + "</p></div>");
+          : "No map of this team has been indexed or read yet.") + "</p></div>");
 
     const parts = [];
-    if (seen.length) {
+    const feed = P.mapFeed ? P.mapFeed.filter((m) => P.mapFeed.plays(m, t.id)) : [];
+    if (feed.length) {
+      const n = feed.reduce((a, g) => a + g.maps.length, 0);
+      parts.push('<section class="band" id="maps"><div class="sec-head"><h2>Map by map</h2>' +
+        '<span class="dim small">' + n + " map" + (n === 1 ? "" : "s") +
+        " · both comps where read · ▶ opens the VOD at the map</span></div>" +
+        P.mapFeed.html(feed) + "</section>");
+    } else if (seen.length) {
       parts.push('<section class="band" id="maps"><div class="sec-head"><h2>Every map, ready to watch</h2>' +
         '<span class="dim small">read off the broadcast, nobody involved</span></div>' +
         P.mapIndex.teamHtml(t.id) + "</section>");
@@ -144,11 +162,16 @@
         ).join("") + "</div></section>");
     }
 
-    parts.push('<section class="band"><div class="sec-head"><h2>Games</h2></div>' +
-      (games.length
-        ? '<div class="grid grid--2">' + games.map((g) => P.games.card(g)).join("") + "</div>"
-        : P.empty("◇", "No games on record for this team",
-          '<a href="submit.html">Submit one</a> and it will appear here.')));
+    if (P.isAdmin()) {
+      parts.push('<section class="band"><div class="sec-head"><h2>Games</h2></div>' +
+        (games.length
+          ? '<div class="grid grid--2">' + games.map((g) => P.games.card(g)).join("") + "</div>"
+          : P.empty("◇", "No games on record for this team",
+            '<a href="submit.html">Submit one</a> and it will appear here.')));
+    } else if (!parts.length) {
+      parts.push(P.empty("◇", "Nothing indexed for this team yet",
+        "Its maps appear here as soon as a broadcast it played on is indexed."));
+    }
 
     set("body", parts.join(""));
   }
@@ -163,7 +186,7 @@
     }
     document.title = h.name + " — OWCS Comp Tracker";
     set("crumbs", P.breadcrumbs([
-      { label: "Stats", href: "stats.html" },
+      { label: "Comps", href: "stats.html" },
       { label: "Heroes", href: "stats.html?tab=heroes" },
       { label: h.name }]));
 
@@ -250,7 +273,6 @@
       "featuring it has been submitted and reviewed yet. Everything on this site comes " +
       "from games somebody put through the pipeline, so coverage is deliberately narrow.</p>" +
       '<div class="row u-mt-5"><a class="btn btn--primary" href="' + esc(href) + '">' +
-      esc(label) + '</a><a class="btn btn--ghost" href="submit.html">Submit a game</a>' +
-      '<a class="btn btn--ghost" href="index.html">Dashboard</a></div></div>';
+      esc(label) + '</a><a class="btn btn--ghost" href="index.html">Every map</a></div></div>';
   }
 })();
