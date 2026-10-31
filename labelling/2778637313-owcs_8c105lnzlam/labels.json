@@ -2,7 +2,7 @@
  "schema": "label-labels.v1",
  "batchId": "2778637313-owcs_8c105lnzlam",
  "labelledBy": "[DROPS] 2026 OWCS Champions Clash | Day 2",
- "labelledAt": "2026-10-30T19:37:34Z",
+ "labelledAt": "2026-10-31T02:24:12Z",
  "labels": {
   "c00": "kiriko",
   "c01": "tracer",
@@ -72,12 +72,18 @@
   "c65": "sigma"
  },
  "approved": [
+  "ana",
   "bap",
+  "bastion",
   "cass",
+  "dva",
   "genji",
   "illari",
   "jetcat",
+  "kiriko",
+  "lucio",
   "mauga",
+  "mei",
   "reaper",
   "sojourn",
   "tracer"

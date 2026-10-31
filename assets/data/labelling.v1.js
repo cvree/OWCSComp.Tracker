@@ -3569,7 +3569,19 @@ window.OWCS_LABELLING = {
      ]
     }
    },
-   "approved": [],
+   "approved": [
+    "bap",
+    "bastion",
+    "cass",
+    "kiriko",
+    "lucio",
+    "mei",
+    "mizuki",
+    "sigma",
+    "sojourn",
+    "sym",
+    "wuyang"
+   ],
    "rejected": [],
    "slotRoles": [
     "damage",
@@ -7778,12 +7790,18 @@ window.OWCS_LABELLING = {
     }
    },
    "approved": [
+    "ana",
     "bap",
+    "bastion",
     "cass",
+    "dva",
     "genji",
     "illari",
     "jetcat",
+    "kiriko",
+    "lucio",
     "mauga",
+    "mei",
     "reaper",
     "sojourn",
     "tracer"

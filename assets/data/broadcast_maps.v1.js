@@ -649,6 +649,210 @@ window.OWCS_BROADCAST_MAPS = {
     }
    ],
    "url": "https://www.twitch.tv/videos/2835176280"
+  },
+  "2914925695": {
+   "durationSeconds": 20860.0,
+   "maps": [
+    {
+     "check": [],
+     "end": 2310,
+     "game": null,
+     "index": 1,
+     "map": null,
+     "series": 1,
+     "start": 1440,
+     "team_a": {
+      "id": "feamrisk",
+      "name": "FEAMRISK"
+     },
+     "team_b": {
+      "id": "twis",
+      "name": "TWISTED MINDS"
+     }
+    },
+    {
+     "check": [
+      "team_a"
+     ],
+     "end": 3600,
+     "game": null,
+     "index": 2,
+     "map": null,
+     "series": 2,
+     "start": 2700,
+     "team_a": {
+      "id": "twis",
+      "name": "WISTED MINDS"
+     },
+     "team_b": {
+      "id": "team",
+      "name": "TEAM"
+     }
+    },
+    {
+     "check": [],
+     "end": 4650,
+     "game": null,
+     "index": 3,
+     "map": null,
+     "series": 3,
+     "start": 3900,
+     "team_a": {
+      "id": "twis",
+      "name": "WISTED MINDS"
+     },
+     "team_b": null
+    },
+    {
+     "check": [
+      "team_b"
+     ],
+     "end": 6420,
+     "game": null,
+     "index": 4,
+     "map": null,
+     "series": 4,
+     "start": 5790,
+     "team_a": null,
+     "team_b": {
+      "id": "team-peps",
+      "name": "TEAM PEPS"
+     }
+    },
+    {
+     "check": [
+      "team_b"
+     ],
+     "end": 8310,
+     "game": null,
+     "index": 5,
+     "map": null,
+     "series": 5,
+     "start": 6690,
+     "team_a": {
+      "id": "team-peps",
+      "name": "TEAM PEPS"
+     },
+     "team_b": {
+      "id": "team",
+      "name": "TEAM"
+     }
+    },
+    {
+     "check": [],
+     "end": 9660,
+     "game": null,
+     "index": 6,
+     "map": null,
+     "series": 6,
+     "start": 8610,
+     "team_a": null,
+     "team_b": {
+      "id": "team-peps",
+      "name": "TEAM PEPS"
+     }
+    },
+    {
+     "check": [],
+     "end": 13710,
+     "game": null,
+     "index": 7,
+     "map": null,
+     "series": 7,
+     "start": 11580,
+     "team_a": {
+      "id": "team-liquid",
+      "name": "EAM LIQUID"
+     },
+     "team_b": {
+      "id": "the-kafi",
+      "name": "THE KAFI"
+     }
+    },
+    {
+     "check": [],
+     "end": 14910,
+     "game": null,
+     "index": 8,
+     "map": null,
+     "series": 8,
+     "start": 14040,
+     "team_a": null,
+     "team_b": {
+      "id": "team-liquid",
+      "name": "TEAM LIQUIL"
+     }
+    },
+    {
+     "check": [],
+     "end": 15990,
+     "game": null,
+     "index": 9,
+     "map": null,
+     "series": 9,
+     "start": 15150,
+     "team_a": {
+      "id": "phekafe",
+      "name": "PHEKAFE"
+     },
+     "team_b": {
+      "id": "team-liquid",
+      "name": "TEAM LIQUIE"
+     }
+    },
+    {
+     "check": [],
+     "end": 17760,
+     "game": null,
+     "index": 10,
+     "map": null,
+     "series": 10,
+     "start": 17130,
+     "team_a": {
+      "id": "dallas-fuel",
+      "name": "DALLAS FUEL"
+     },
+     "team_b": {
+      "id": "ssg",
+      "name": "SPACESTATION GAMING"
+     }
+    },
+    {
+     "check": [],
+     "end": 18960,
+     "game": null,
+     "index": 11,
+     "map": null,
+     "series": 10,
+     "start": 17940,
+     "team_a": {
+      "id": "dallas-fuel",
+      "name": "DALLAS FUEL"
+     },
+     "team_b": {
+      "id": "ssg",
+      "name": "SPACESTATION GAMING"
+     }
+    },
+    {
+     "check": [],
+     "end": 20190,
+     "game": null,
+     "index": 12,
+     "map": null,
+     "series": 10,
+     "start": 19200,
+     "team_a": {
+      "id": "dallas-fuel",
+      "name": "DALLAS FUEL"
+     },
+     "team_b": {
+      "id": "ssg",
+      "name": "SPACESTATION GAMING"
+     }
+    }
+   ],
+   "url": "https://www.twitch.tv/videos/2914925695"
   }
  },
  "schema": "broadcast-maps.v1"
