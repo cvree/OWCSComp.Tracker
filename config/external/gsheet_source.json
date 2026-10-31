@@ -1,0 +1,24 @@
+{
+  "_readme": [
+    "The external community spreadsheet this tracker imports (see",
+    "docs/EXTERNAL-SHEET.md). It is imported by the pipeline / GitHub Actions",
+    "only — no page ever contacts Google. Everything it says is published as",
+    "'spreadsheet imported': an external record of what its editors",
+    "documented, never as VOD-verified fact.",
+    "",
+    "`maintainer` is credited on the methodology page. Leave it null until a",
+    "human has confirmed who maintains the sheet: the importer also records",
+    "any credit text it finds INSIDE the workbook (cells that say 'made by',",
+    "'maintained by', 'credits', ...), and the site quotes that text with its",
+    "cell reference rather than guessing a name."
+  ],
+  "id": "owcs-community-sheet",
+  "label": "OWCS community match spreadsheet",
+  "spreadsheetId": "1OaU5O7lVDZbked5FZAvgfR9MnJIdGhTdnIdu4DsL9PQ",
+  "viewUrl": "https://docs.google.com/spreadsheets/d/1OaU5O7lVDZbked5FZAvgfR9MnJIdGhTdnIdu4DsL9PQ/edit?usp=sharing",
+  "exportUrl": "https://docs.google.com/spreadsheets/d/1OaU5O7lVDZbked5FZAvgfR9MnJIdGhTdnIdu4DsL9PQ/export?format=xlsx",
+  "maintainer": null,
+  "creditNote": "Match, map, ban and hero-appearance records are imported from a public, community-maintained Google Sheet. All credit for collecting them belongs to its editors; errors introduced by this tracker's import are ours.",
+  "maxDownloadBytes": 52428800,
+  "timeoutSeconds": 60
+}

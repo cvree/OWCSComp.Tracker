@@ -1,0 +1,116 @@
+{
+  "_readme": [
+    "How the spreadsheet importer reads a worksheet (pipeline/external_sheet/layout.py).",
+    "",
+    "The importer never hard-codes a tab name or a column letter. For EVERY",
+    "worksheet it finds the header row (the row in the first `headerScanRows`",
+    "whose cells match the most known header names below), maps each column to",
+    "a canonical field, and decides the tab's purpose from which fields are",
+    "present. Two-row headers are supported: a merged group label above",
+    "('Team 1') is prefixed to the sub-header below ('Ban 1' -> 'team 1 ban 1').",
+    "",
+    "Header text is normalised before matching: lower-cased, accents removed,",
+    "punctuation turned into spaces, whitespace collapsed. 'Team 1 — Ban #2'",
+    "becomes 'team 1 ban 2'.",
+    "",
+    "`fields` are single columns (exact match after normalisation).",
+    "`groups` are repeated column families matched by regular expression;",
+    "`{a}` / `{b}` / `{side}` expand to `sideTokens`. Named groups: side, p",
+    "(player position), n (list position), role.",
+    "",
+    "When the real workbook changes shape, add the new header spelling here,",
+    "bump `version`, and run `python3 pipeline/sheet_sync.py rebuild` — the",
+    "committed raw cell layer is re-parsed without downloading anything."
+  ],
+  "version": 1,
+  "headerScanRows": 40,
+  "minHeaderFields": 3,
+  "maxIgnoredRowShare": 0.5,
+  "listSeparators": ["/", ",", ";", "|", "\n", "+", "&", " and ", " > ", " -> ", "→"],
+  "sideTokens": {
+    "a": ["team 1", "team a", "team1", "teama", "t1", "home", "blue", "left", "side a", "side 1", "a"],
+    "b": ["team 2", "team b", "team2", "teamb", "t2", "away", "red", "right", "side b", "side 2", "b"]
+  },
+  "fields": {
+    "date": ["date", "day", "match date", "played", "played on", "date played", "date utc"],
+    "event": ["event", "tournament", "competition", "event name", "tournament name", "league", "series"],
+    "stage": ["stage", "phase", "round", "bracket", "week", "split", "stage phase"],
+    "region": ["region", "reg"],
+    "patch": ["patch", "version", "game version", "season patch"],
+    "match_id": ["match", "match id", "match no", "match number", "match #", "series id"],
+    "team_a": ["team 1", "team a", "team1", "t1", "home", "home team", "blue team", "team left"],
+    "team_b": ["team 2", "team b", "team2", "t2", "away", "away team", "red team", "team right", "opponent", "vs", "versus"],
+    "team": ["team", "team name", "org"],
+    "series_score": ["series score", "match score", "final score", "series result"],
+    "score_a": ["team 1 score", "score 1", "t1 score", "score a", "team a score"],
+    "score_b": ["team 2 score", "score 2", "t2 score", "score b", "team b score"],
+    "map_order": ["map number", "map no", "map order", "map #", "game", "game number", "game #", "map n", "m", "g"],
+    "map": ["map", "map name", "map played"],
+    "mode": ["mode", "game mode", "map mode", "map type", "type"],
+    "map_score": ["map score", "score", "result score"],
+    "winner": ["winner", "map winner", "won by", "map won by", "w", "victor", "winning team"],
+    "loser": ["loser", "map loser", "lost by"],
+    "picked_by": ["pick", "picked by", "map pick", "map picker", "picker", "chosen by", "map chosen by", "pick by"],
+    "vod": ["vod", "vod link", "link", "video", "timestamp", "vod timestamp"],
+    "player": ["player", "player name", "name", "ign", "handle"],
+    "role": ["role", "position"],
+    "hero": ["hero", "heroes", "hero played", "heroes played", "hero 1", "picks"],
+    "banned_hero": ["banned hero", "hero ban", "ban", "bans", "banned"],
+    "notes": ["notes", "note", "comments", "comment"]
+  },
+  "groups": [
+    {"kind": "ban", "patterns": [
+      "^{side} ?(?:hero )?bans?(?: ?(?P<n>\\d))?$",
+      "^(?:hero )?bans? ?{side}(?: ?(?P<n>\\d))?$",
+      "^{side} ?banned(?: hero)?(?: ?(?P<n>\\d))?$"
+    ]},
+    {"kind": "ban_noside", "patterns": [
+      "^(?:hero )?ban ?(?P<n>\\d)$",
+      "^banned hero ?(?P<n>\\d)$"
+    ]},
+    {"kind": "comp", "patterns": [
+      "^{side} ?comp(?:osition)?$",
+      "^{side} ?heroes$",
+      "^{side} ?lineup$",
+      "^comp(?:osition)? ?{side}$"
+    ]},
+    {"kind": "player_name", "patterns": [
+      "^{side} ?p(?:layer)? ?(?P<p>\\d)(?: name)?$",
+      "^{side} ?(?P<role>tank|dps|damage|support|sup|supp|healer|flex|hitscan|projectile|main support|flex support)(?: ?(?P<p>\\d))? ?(?:player|name)$"
+    ]},
+    {"kind": "player_hero", "patterns": [
+      "^{side} ?p(?:layer)? ?(?P<p>\\d) ?heroe?s?(?: ?(?P<n>\\d))?$",
+      "^{side} ?(?P<role>tank|dps|damage|support|sup|supp|healer|flex|hitscan|projectile|main support|flex support)(?: ?(?P<p>\\d))?(?: ?heroe?s?)?(?: ?(?P<n>\\d))?$"
+    ]},
+    {"kind": "long_hero", "patterns": [
+      "^heroe?s? ?(?P<n>[1-3])$",
+      "^(?P<n>[1-3])(?:st|nd|rd) hero$"
+    ]}
+  ],
+  "purposes": {
+    "map_rows": {
+      "label": "One row per map (teams, map, result, bans, hero columns)",
+      "requiresAll": ["map"],
+      "requiresAny": [["team_a", "team_b"], ["team", "team_b"]]
+    },
+    "player_rows": {
+      "label": "One row per player per map (listed heroes)",
+      "requiresAll": ["player"],
+      "requiresAny": [["hero"], ["long_hero"]]
+    },
+    "ban_rows": {
+      "label": "One row per hero ban",
+      "requiresAll": ["banned_hero"],
+      "requiresAny": [["team", "map"], ["team", "map_order"], ["team_a", "team_b"], ["team", "date"]],
+      "excludes": ["winner", "hero_columns", "player", "mode", "map_score"]
+    },
+    "match_rows": {
+      "label": "One row per series (teams and series score, no map)",
+      "requiresAll": ["team_a", "team_b"],
+      "requiresAny": [["series_score"], ["score_a", "score_b"], ["winner"], ["date"]]
+    }
+  },
+  "_forwardFill": "Fields a block of rows may state once (a date over its maps). Team names are deliberately NOT forward-filled: a row with a blank team is reported, never attached to the previous row's team. Merged cells are expanded separately and always apply.",
+  "forwardFill": ["date", "event", "stage", "region", "patch"],
+  "creditPatterns": ["made by", "maintained by", "created by", "compiled by", "credits?", "curated by", "by @", "contact", "data by", "tracked by"]
+}

@@ -123,6 +123,11 @@ reports/calibration/*
 # lets a clean checkout show the same readiness the machine that ran the
 # validation saw.
 !reports/validation/
+# The imported community spreadsheet's source inventory, reconciliation
+# report and last-failure report (pipeline/sheet_sync.py). Small text that
+# reviewers read in the sync PR, so it is committed beside the data it
+# describes.
+!reports/external/
 
 # Operator runtime snapshot for intake.html. Regenerated on every
 # `intake-export --save` / `convert-link` run and specific to whoever is

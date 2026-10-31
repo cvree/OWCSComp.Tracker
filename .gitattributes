@@ -26,6 +26,8 @@
 # rewritten on a Windows checkout, silently corrupting the image.
 *.webp binary
 *.gif binary
+# Spreadsheet fixtures (pipeline/fixtures/gsheet/) are zip archives.
+*.xlsx binary
 *.ico binary
 *.svg text eol=lf
 *.sqlite binary
