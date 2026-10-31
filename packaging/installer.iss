@@ -25,11 +25,11 @@
 ;   uninstall page — deleting someone's processed results because they
 ;   uninstalled an app is not a decision to make silently.
 ;
-; Build:  iscc packaging\installer.iss /DAppVersion=1.0.0
+; Build:  iscc packaging\installer.iss /DAppVersion=1.0.1
 ; =====================================================================
 
 #ifndef AppVersion
-  #define AppVersion "1.0.0"
+  #define AppVersion "1.0.1"
 #endif
 
 #define AppName        "OWCS Comp Tracker"

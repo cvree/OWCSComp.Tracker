@@ -10,8 +10,8 @@
 # pipeline/test_windows_packaging.py asserts they match.
 VSVersionInfo(
   ffi=FixedFileInfo(
-    filevers=(1, 0, 0, 0),
-    prodvers=(1, 0, 0, 0),
+    filevers=(1, 0, 1, 0),
+    prodvers=(1, 0, 1, 0),
     mask=0x3f,
     flags=0x0,
     OS=0x40004,
@@ -25,14 +25,14 @@ VSVersionInfo(
         '040904B0',
         [StringStruct('CompanyName', 'OWCS Comp Tracker'),
          StringStruct('FileDescription', 'OWCS Comp Tracker'),
-         StringStruct('FileVersion', '1.0.0.0'),
+         StringStruct('FileVersion', '1.0.1.0'),
          StringStruct('InternalName', 'OWCSCompTracker'),
          StringStruct('LegalCopyright',
                       'Independent fan project. Not affiliated with or '
                       'endorsed by Blizzard, Overwatch, OWCS or FACEIT.'),
          StringStruct('OriginalFilename', 'OWCSCompTracker.exe'),
          StringStruct('ProductName', 'OWCS Comp Tracker'),
-         StringStruct('ProductVersion', '1.0.0.0')])
+         StringStruct('ProductVersion', '1.0.1.0')])
     ]),
     VarFileInfo([VarStruct('Translation', [1033, 1200])])
   ]
