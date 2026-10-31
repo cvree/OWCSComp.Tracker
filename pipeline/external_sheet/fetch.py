@@ -28,7 +28,7 @@ def sha256(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
-def download(url: str, *, timeout: float = 60, max_bytes: int = 50 * 1024 * 1024,
+def download(url: str, *, timeout: float = 300, max_bytes: int = 300 * 1024 * 1024,
              opener=None) -> bytes:
     """The workbook bytes, or FetchFailed. `opener` is injectable so tests
     run with no network at all."""
@@ -51,7 +51,8 @@ def download(url: str, *, timeout: float = 60, max_bytes: int = 50 * 1024 * 1024
     except (TimeoutError, OSError) as exc:
         raise FetchFailed(f"download failed: {exc}") from exc
     if len(data) > max_bytes:
-        raise FetchFailed(f"the workbook is larger than {max_bytes} bytes — refusing it")
+        raise FetchFailed(f"the workbook is larger than {max_bytes // 2**20} MB "
+                          "(maxDownloadBytes in config/external/gsheet_source.json) — refusing it")
     if not data:
         raise FetchFailed("the export URL returned an empty body")
     if data[:2] != b"PK":

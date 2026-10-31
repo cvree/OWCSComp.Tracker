@@ -5,60 +5,7 @@
    timed, never VOD-verified unless a reconciliation record says both
    sources agree. Contract: docs/EXTERNAL-SHEET.md
    ===================================================================== */
-window.OWCS_EXTERNAL = {
- "decisions": {
-  "aliasApprovals": [],
-  "decisions": [],
-  "version": 1
- },
- "health": {
-  "aliasesVersion": null,
-  "counts": {},
-  "dataTabs": 0,
-  "errors": [],
-  "issues": [],
-  "layoutVersion": null,
-  "sourceRowCount": 0,
-  "tabCount": 0,
-  "tabs": [],
-  "unmapped": {}
- },
- "history": [],
- "lastAttempt": null,
- "maps": [],
- "mapsExtra": {},
- "matches": [],
- "meta": {
-  "fixture": false,
-  "fixtureNote": null,
-  "note": "Spreadsheet observations imported from a community-maintained Google Sheet. They record what its editors documented — map picks, results, bans and the heroes listed for each player — with no timing and no evidence frames. Nothing here is VOD-verified unless its reconciliation record says both sources agree.",
-  "parserVersion": "gsheet-parser-1",
-  "provenanceLabels": {
-   "both": "Both sources agree",
-   "conflict": "Conflicting sources",
-   "sheet": "Spreadsheet imported",
-   "vod": "VOD verified"
-  },
-  "schema": "external.v1",
-  "status": "never-synced"
- },
- "reconciliation": {
-  "records": [],
-  "rules": {},
-  "summary": {},
-  "vodOnlyMaps": []
- },
- "snapshot": null,
- "source": {
-  "creditNote": "Match, map, ban and hero-appearance records are imported from a public, community-maintained Google Sheet. All credit for collecting them belongs to its editors; errors introduced by this tracker's import are ours.",
-  "creditsFound": [],
-  "exportUrl": "https://docs.google.com/spreadsheets/d/1OaU5O7lVDZbked5FZAvgfR9MnJIdGhTdnIdu4DsL9PQ/export?format=xlsx",
-  "id": "owcs-community-sheet",
-  "label": "OWCS community match spreadsheet",
-  "maintainer": null,
-  "spreadsheetId": "1OaU5O7lVDZbked5FZAvgfR9MnJIdGhTdnIdu4DsL9PQ",
-  "viewUrl": "https://docs.google.com/spreadsheets/d/1OaU5O7lVDZbked5FZAvgfR9MnJIdGhTdnIdu4DsL9PQ/edit?usp=sharing"
- },
- "teams": {},
- "tournaments": []
-};
+window.OWCS_EXTERNAL = {"decisions":{"aliasApprovals":[],"decisions":[],"version":1},"detailShards":[],"health":{"aliasesVersion":null,"counts":{},"dataTabs":0,"errors":[],"issues":[],"layoutVersion":null,"package":null,"sourceRowCount":0,"tabCount":0,"tabs":[],"unmapped":{}},"history":[],"lastAttempt":null,"mapsExtra":{},"matches":[],"meta":{"fixture":false,"fixtureNote":null,"note":"Spreadsheet observations imported from a community-maintained Google Sheet. They record what its editors documented — map picks, results, bans and the heroes listed for each player — with no timing and no evidence frames. Nothing here is VOD-verified unless its reconciliation record says both sources agree.","parserVersion":"gsheet-parser-1","provenanceLabels":{"both":"Both sources agree","conflict":"Conflicting sources","sheet":"Spreadsheet imported","vod":"VOD verified"},"schema":"external.v1","status":"never-synced"},"reconciliation":{"records":[],"rules":{},"summary":{},"vodOnlyMaps":[]},"snapshot":null,"source":{"creditNote":"Match, map, ban and hero-appearance records are imported from a public, community-maintained Google Sheet. All credit for collecting them belongs to its editors; errors introduced by this tracker's import are ours.","creditsFound":[],"exportUrl":"https://docs.google.com/spreadsheets/d/1OaU5O7lVDZbked5FZAvgfR9MnJIdGhTdnIdu4DsL9PQ/export?format=xlsx","id":"owcs-community-sheet","label":"OWCS community match spreadsheet","maintainer":null,"spreadsheetId":"1OaU5O7lVDZbked5FZAvgfR9MnJIdGhTdnIdu4DsL9PQ","viewUrl":"https://docs.google.com/spreadsheets/d/1OaU5O7lVDZbked5FZAvgfR9MnJIdGhTdnIdu4DsL9PQ/edit?usp=sharing"},"teams":{},"tournaments":[],
+"maps":[
+
+]};

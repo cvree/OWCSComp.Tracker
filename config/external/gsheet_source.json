@@ -19,6 +19,7 @@
   "exportUrl": "https://docs.google.com/spreadsheets/d/1OaU5O7lVDZbked5FZAvgfR9MnJIdGhTdnIdu4DsL9PQ/export?format=xlsx",
   "maintainer": null,
   "creditNote": "Match, map, ban and hero-appearance records are imported from a public, community-maintained Google Sheet. All credit for collecting them belongs to its editors; errors introduced by this tracker's import are ours.",
-  "maxDownloadBytes": 52428800,
-  "timeoutSeconds": 60
+  "_limits": "The real workbook is over 50 MB (first sync, 2026-10-31). The cap is a safety stop against runaway downloads, not a size expectation; the raw layer is stored as one gzip file per tab so large workbooks still commit.",
+  "maxDownloadBytes": 314572800,
+  "timeoutSeconds": 300
 }

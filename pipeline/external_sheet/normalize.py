@@ -91,6 +91,26 @@ class Ctx:
     duplicates: list = field(default_factory=list)
     map_keys: dict = field(default_factory=dict)
     current_inv: dict | None = None
+    # Per-map / per-match indexes so no row ever rescans the whole workbook
+    # (a 100k-row sheet went from minutes to seconds).
+    bans_by_map: dict = field(default_factory=dict)
+    apps_by_map: dict = field(default_factory=dict)
+    maps_by_match: dict = field(default_factory=dict)
+
+    def add_ban(self, b: dict) -> None:
+        if b["id"] not in self.bans:
+            self.bans_by_map.setdefault(b["mapId"], []).append(b)
+        self.bans[b["id"]] = b
+
+    def add_app(self, a: dict) -> None:
+        if a["id"] not in self.appearances:
+            self.apps_by_map.setdefault(a["mapId"], []).append(a)
+        self.appearances[a["id"]] = a
+
+    def add_map(self, m: dict) -> None:
+        if m["id"] not in self.maps:
+            self.maps_by_match.setdefault(m["matchId"], []).append(m)
+        self.maps[m["id"]] = m
 
     # ------------------------------------------------------------ helpers
     def prov(self, record: str, fld: str, sheet: str, cell: str | None,
@@ -662,11 +682,11 @@ def _store_map(ctx: Ctx, rec: dict, bans: list, apps: list, comps: list, inv: di
         diffs = [k for k in ("map", "winner", "pickedBy", "mode", "scoreA", "scoreB")
                  if rec.get(k) is not None and existing.get(k) is not None
                  and rec.get(k) != existing.get(k)]
-        old_bans = sorted(b["hero"] or b["heroRaw"] for b in ctx.bans.values() if b["mapId"] == rec["id"])
+        old_bans = sorted(b["hero"] or b["heroRaw"] for b in ctx.bans_by_map.get(rec["id"], []))
         new_bans = sorted(b["hero"] or b["heroRaw"] for b in bans)
         if old_bans and new_bans and old_bans != new_bans:
             diffs.append("bans")
-        old_h = sorted({a["hero"] or a["heroRaw"] for a in ctx.appearances.values() if a["mapId"] == rec["id"]})
+        old_h = sorted({a["hero"] or a["heroRaw"] for a in ctx.apps_by_map.get(rec["id"], [])})
         new_h = sorted({a["hero"] or a["heroRaw"] for a in apps})
         if old_h and new_h and old_h != new_h:
             diffs.append("heroes")
@@ -689,13 +709,13 @@ def _store_map(ctx: Ctx, rec: dict, bans: list, apps: list, comps: list, inv: di
                                            f"({existing['src']['sheet']} row {existing['src']['row']}) "
                                            "is kept and the second is shown as a within-sheet conflict")})
         return
-    ctx.maps[rec["id"]] = rec
+    ctx.add_map(rec)
     if rec["id"] not in match["mapIds"]:
         match["mapIds"].append(rec["id"])
     for b in bans:
-        ctx.bans[b["id"]] = b
+        ctx.add_ban(b)
     for a in apps:
-        ctx.appearances[a["id"]] = a
+        ctx.add_app(a)
     for c in comps:
         ctx.compositions[c["id"]] = c
     inv["parsed"]["maps"] += 1
@@ -733,7 +753,7 @@ def _find_map(ctx: Ctx, row: Row, filled: dict, tab: dict, *, create: bool):
     order = _int(order_v)
     map_v, map_cell, _ = row.get("map")
     mres = ctx.aliases.map(map_v) if map_v else None
-    cand = [m for m in ctx.maps.values() if m["matchId"] == mid and
+    cand = [m for m in ctx.maps_by_match.get(mid, []) if
             ((order is not None and m["order"] == order) or
              (order is None and mres is not None and mres.id and m["map"] == mres.id))]
     if len(cand) == 1:
@@ -767,7 +787,7 @@ def _find_map(ctx: Ctx, row: Row, filled: dict, tab: dict, *, create: bool):
         ([] if mres and mres.resolved else ["map-unmapped"]),
         "src": {"sheet": sheet, "row": row.r + 1, "cells": {"map": map_cell}}, "alsoListedAt": [],
     }
-    ctx.maps[rec["id"]] = rec
+    ctx.add_map(rec)
     m["mapIds"].append(rec["id"])
     inv_counter = ctx.current_inv
     if inv_counter is not None:
@@ -807,7 +827,7 @@ def _player_row(ctx: Ctx, row: Row, filled: dict, tab: dict, inv: dict) -> str |
         heroes.extend((res, cell) for res in _heroes_from(ctx, v, sheet, cell))
     if not heroes:
         return "no hero listed for the player"
-    existing = [a for a in ctx.appearances.values() if a["mapId"] == m["id"] and a["side"] == side]
+    existing = [a for a in ctx.apps_by_map.get(m["id"], []) if a["side"] == side]
     by_player = {a["player"]: a["position"] for a in existing}
     position = by_player.get(pres.id) or (max([a["position"] for a in existing] + [0]) + 1)
     role_v, _, _ = row.get("role")
@@ -815,16 +835,16 @@ def _player_row(ctx: Ctx, row: Row, filled: dict, tab: dict, inv: dict) -> str |
         aid = f"xpa-{m['id'][5:]}-{side}-{position}-{n}"
         if aid in ctx.appearances:
             continue
-        ctx.appearances[aid] = {
+        ctx.add_app({
             "id": aid, "mapId": m["id"], "matchId": m["matchId"], "side": side,
             "teamId": team.id, "position": position, "player": pres.id,
             "playerRaw": pres.raw, "playerMethod": pres.method, "listOrder": n,
             "hero": res.id, "heroRaw": res.raw, "heroMethod": res.method,
             "role": ctx.aliases.role_of(res.id) or (str(role_v) if role_v else None),
-            "src": {"sheet": sheet, "cell": cell}}
+            "src": {"sheet": sheet, "cell": cell}})
         inv["parsed"]["appearances"] += 1
     # rebuild derived comps for this map side
-    apps = [a for a in ctx.appearances.values() if a["mapId"] == m["id"]]
+    apps = ctx.apps_by_map.get(m["id"], [])
     for c in _derived_comps(m["id"], m["matchId"], apps, {"a": m["teamA"], "b": m["teamB"]}):
         ctx.compositions[c["id"]] = c
     return None
@@ -841,12 +861,12 @@ def _ban_row(ctx: Ctx, row: Row, filled: dict, tab: dict, inv: dict) -> str | No
     if not heroes:
         return "no banned hero on the row"
     for res in heroes:
-        n = 1 + sum(1 for b in ctx.bans.values() if b["mapId"] == m["id"] and b["side"] == side)
+        n = 1 + sum(1 for b in ctx.bans_by_map.get(m["id"], []) if b["side"] == side)
         bid = f"xban-{m['id'][5:]}-{side}-{n}"
-        ctx.bans[bid] = {"id": bid, "mapId": m["id"], "matchId": m["matchId"], "side": side,
-                         "teamId": team.id, "hero": res.id, "heroRaw": res.raw,
-                         "heroMethod": res.method, "order": n,
-                         "src": {"sheet": sheet, "cell": cell}}
+        ctx.add_ban({"id": bid, "mapId": m["id"], "matchId": m["matchId"], "side": side,
+                     "teamId": team.id, "hero": res.id, "heroRaw": res.raw,
+                     "heroMethod": res.method, "order": n,
+                     "src": {"sheet": sheet, "cell": cell}})
         inv["parsed"]["bans"] += 1
     return None
 
@@ -929,6 +949,7 @@ def _inventory(ctx: Ctx, raw: dict, sheets: list, credits: list) -> dict:
         "unmapped": unmapped,
         "duplicates": ctx.duplicates[:200],
         "credits": credits,
+        "package": raw.get("package"),
         "issues": ctx.issues,
         "errors": [],
     }

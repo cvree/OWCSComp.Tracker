@@ -155,13 +155,11 @@
   const vodOk = (e, f) => !!e.vod && !(f && f.minCoverage && (e.vod.coverage || 0) < f.minCoverage);
 
   /* ------------------------------------------------------ hero usage */
+  /* The export's per-map summary carries, per side, every hero the sheet
+     lists (`heroes`) and its complete five-hero listing (`comp`). */
   function sheetHeroesFor(e, side) {
     const t = e.sheet && e.sheet.teams && e.sheet.teams[side];
-    if (!t) return [];
-    const set = new Set();
-    (t.players || []).forEach((p) => (p.heroes || []).forEach((h) => { if (h.hero) set.add(h.hero); }));
-    (t.comps || []).forEach((c) => (c.heroes || []).forEach((h) => set.add(h)));
-    return Array.from(set);
+    return t && t.heroes ? t.heroes.slice() : [];
   }
 
   function heroUsage(entries, f, roles, opt) {
@@ -267,10 +265,7 @@
      they ran for N seconds". Only complete five-hero listings count. */
   function sheetCompOf(e, side) {
     const t = e.sheet && e.sheet.teams && e.sheet.teams[side];
-    if (!t) return null;
-    const c = (t.comps || []).filter((x) => x.kind === "listed-comp" && x.complete)[0] ||
-      (t.comps || []).filter((x) => x.kind === "first-listed" && x.complete)[0];
-    return c ? c.heroes.slice().sort() : null;
+    return t && t.comp ? t.comp.slice().sort() : null;
   }
 
   function sheetComps(entries, f) {

@@ -55,7 +55,9 @@
       "</div>" + P.dl([
         ["Last successful sync", snap ? P.fmtDateTime(snap.importedAt) : "never"],
         ["Workbook SHA-256", snap ? snap.sha256 : "—"],
-        ["Workbook size", snap ? Math.round(snap.bytes / 1024) + " KB" : "—"],
+        ["Workbook size", snap ? (snap.bytes / 1048576).toFixed(1) + " MB" +
+          (H.package ? " · " + H.package.mediaFiles + " embedded media files (" +
+            (H.package.mediaBytes / 1048576).toFixed(1) + " MB)" : "") : "—"],
         ["Tabs", snap ? snap.sheetNames.length + " (" + snap.sheetNames.join(", ") + ")" : "—"],
         ["Source rows", snap ? snap.sourceRowCount : "—"],
         ["Parser / layout / aliases", [snap && snap.parserVersion, "layout v" + (H.layoutVersion || "?"),
@@ -67,7 +69,7 @@
       '<p class="small u-mt-4">Reports: <a href="reports/external/gsheet/inventory.md">source inventory</a> · ' +
       '<a href="reports/external/gsheet/reconciliation.md">reconciliation</a> · ' +
       (att && att.status === "failed" ? '<a href="reports/external/gsheet/last_failure.md">last failure</a> · ' : "") +
-      '<a href="data/external/gsheet/raw/cells.json">raw cell snapshot</a> · ' +
+      '<a href="data/external/gsheet/raw/index.json">raw cell snapshot (index; one gzip file per tab)</a> · ' +
       '<a href="data/external/gsheet/manifest.json">snapshot manifest</a></p>' +
       P.cmd("python3 pipeline/sheet_sync.py sync", "Run a sync locally (the scheduled sheet-sync workflow does this daily and opens a PR)") +
       "</div>");
