@@ -1977,7 +1977,29 @@ def write_public(con) -> str:
     print(f"Wrote {PUBLIC_OUT_PATH}: {len(payload['matches'])} matches, "
           f"{len(payload['compSnapshots'])} comp snapshots, "
           f"{len(payload['captureRuns'])} capture runs.")
+    refresh_external_sheet()
     return PUBLIC_OUT_PATH
+
+
+def refresh_external_sheet() -> None:
+    """The imported spreadsheet is reconciled against the published VOD
+    maps, so a new public export can change it. Re-reconcile the committed
+    external layer (no download, no re-parse) and rewrite its export only
+    when it actually changed. Never blocks the VOD export."""
+    if os.path.abspath(PUBLIC_OUT_PATH) != os.path.join(
+            db.REPO_ROOT, "assets", "data", "public_data.v1.js"):
+        return
+    try:
+        from external_sheet.store import Paths as _SheetPaths
+        from external_sheet.sync import refresh_export
+        changed = refresh_export(_SheetPaths(root=db.REPO_ROOT))
+    except Exception as exc:  # the VOD export must never fail on this
+        print(f"[export] external spreadsheet export NOT refreshed: {exc} — "
+              "run: python3 pipeline/sheet_sync.py rebuild", file=sys.stderr)
+        return
+    if changed:
+        print(f"[export] refreshed {site_paths.site_relpath(changed, db.REPO_ROOT)} "
+              "(reconciliation against the new VOD maps)")
 
 
 def main() -> int:

@@ -456,7 +456,9 @@
       '<div class="u-flex u-between u-center u-gap-4 u-wrap">' +
         "<div><h3>" + esc(info.name) + '</h3><p class="dim small u-mt-3">' +
         esc(info.mode || m.mode || "Mode not recorded") +
-        (m.roundCount ? " · " + m.roundCount + " rounds" : "") + "</p></div>" +
+        (m.roundCount ? " · " + m.roundCount + " rounds" : "") +
+        ' · <a href="map.html?id=' + encodeURIComponent(m.id) + '">Scout this map — time on every hero, ' +
+        "and the spreadsheet’s record beside it →</a></p></div>" +
         P.scorePlate(m.scoreA, m.scoreB,
           m.winner === game.teamA ? "a" : m.winner === game.teamB ? "b" : null) +
       "</div>" +

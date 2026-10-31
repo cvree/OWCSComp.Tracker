@@ -349,6 +349,10 @@ def build(payload: dict, archetypes: dict | None = None) -> dict:
             "note": METHOD_NOTE,
             "archetypesVersion": archetypes.get("version"),
             "archetypesSource": "config/comp_archetypes.json (editorial labels, not detections)",
+            "archetypes": [{"id": r.get("id"), "label": r.get("label") or r.get("id"),
+                            "tanks": list(r.get("tanks") or []),
+                            "requiresAny": list(r.get("requiresAny") or [])}
+                           for r in archetypes.get("rules") or []],
             "denominators": {
                 "shareOfTeamKnownSeconds": "hero seconds ÷ the team's known player-seconds on that map",
                 "shareOfRoleKnownSeconds": "hero seconds ÷ the team's known player-seconds on heroes of the same role",

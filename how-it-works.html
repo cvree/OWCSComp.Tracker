@@ -62,8 +62,69 @@
             pages, or manual entry.</li>
         </ul>
         <p class="dim small u-mt-4">Keeping them apart is why a score being wrong can never
-          make a composition wrong, and vice versa.</p>
+          make a composition wrong, and vice versa. A third, imported source — a community
+          spreadsheet — is explained <a href="#sources">below</a>; it never becomes a
+          VOD reading either.</p>
       </div>
+    </div>
+  </section>
+
+  <section class="band" id="sources" aria-labelledby="h-sources">
+    <div class="sec-head"><h2 id="h-sources">Two kinds of record: VOD timelines and spreadsheet observations</h2></div>
+    <div class="grid grid--2">
+      <div class="card">
+        <h3><span class="trust src-badge" data-src="vod" data-trust="production">VOD verified</span></h3>
+        <p class="u-mt-3">The tracker watched the broadcast and read every hero portrait on the HUD,
+          second by second. It knows <b>when</b> each hero was on the field and <b>for how long</b>,
+          when a player swapped, and it keeps the frames it read as evidence.</p>
+        <ul class="stack u-mt-3" style="padding-left:1.1em;color:var(--tx-2)">
+          <li><b>Time on a hero</b> counts only live play — the round windows — never setup,
+            replays or the gaps between rounds.</li>
+          <li>A moment where a portrait could not be read is <b>unknown</b>. It is reported, and it is
+            left out of every percentage: a share is “seconds on this hero ÷ seconds we actually
+            know”, and the <b>coverage</b> beside it tells you how much of the map that is.</li>
+          <li>Swaps are only counted when hundreds of frames agree; rejected ones are shown as rejected.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3><span class="trust src-badge" data-src="sheet" data-trust="detected">Spreadsheet imported</span></h3>
+        <p class="u-mt-3">A public, community-maintained Google Sheet documents OWCS series by hand: map
+          picks, map results, hero bans and the heroes listed for each player. It covers far more
+          matches than the tracker has read, and we import <b>all of it</b> — every tab.</p>
+        <ul class="stack u-mt-3" style="padding-left:1.1em;color:var(--tx-2)">
+          <li>It records <b>what</b> was played, not <b>when</b> or <b>for how long</b>. A player listed
+            on “Juno / Lúcio” played both at some point; the sheet does not say which first or for how long,
+            and nothing on this site pretends it does.</li>
+          <li>So spreadsheet numbers are <b>counts</b> — appearances, appearance rates, bans, picks —
+            labelled “Spreadsheet observation”, and never called time-weighted.</li>
+          <li>Values the importer cannot recognise (a typo’d hero, an unknown team) are kept with their
+            original text and never guessed.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card u-mt-5">
+      <h3>When both sources describe the same map</h3>
+      <p class="dim u-mt-3">The pipeline links a spreadsheet map to a VOD map only when it is safe to (same
+        two teams, matching date, map and map number — ambiguous cases wait for a person). Both records are
+        kept, and every field is compared:</p>
+      <div class="row u-mt-3">
+        <span class="trust src-badge" data-src="both" data-trust="reviewed">Both sources agree</span>
+        <span class="trust src-badge" data-src="partial" data-trust="partial">Partly matched</span>
+        <span class="trust src-badge" data-src="conflict" data-trust="failed">Conflicting sources</span>
+      </div>
+      <p class="dim small u-mt-3">“Partly matched” means nothing disagrees but some field is recorded by only
+        one source. “Conflicting” means they disagree — both claims are shown and the site never picks one;
+        a map whose winner is disputed is left out of every win count. Win shares everywhere are
+        <b>observational</b> (“observed map-win share”, “usage among eventual map winners”): they describe
+        what happened, not what causes wins.</p>
+    </div>
+    <div class="card u-mt-5" id="credit">
+      <h3>Credit</h3>
+      <p class="u-mt-3">Spreadsheet records come from a public, community-maintained Google Sheet
+        (spreadsheet id <code>1OaU5O7lVDZbked5FZAvgfR9MnJIdGhTdnIdu4DsL9PQ</code>; the link to the
+        original is below). All credit for collecting them belongs to its editors; any error introduced by our import is ours. The site never contacts Google — the
+        sheet is imported by the pipeline and the import is committed, with its hash and date.</p>
+      <div id="credit-live" class="u-mt-3"></div>
     </div>
   </section>
 
@@ -133,9 +194,11 @@
 <script src="assets/data/hero_art.v1.js"></script>
 <script src="assets/data/public_data.v1.js"></script>
 <script src="assets/data/discovered.v1.js"></script>
+<script src="assets/data/external_sheet.v1.js"></script>
 <script src="assets/js/app/core.js"></script>
 <script src="assets/js/app/games.js"></script>
 <script src="assets/js/app/api.js"></script>
+<script src="assets/js/app/sources.js"></script>
 <script src="assets/js/app/hovercard.js" defer></script>
 <script src="assets/js/app/shell.js"></script>
 <script src="assets/js/app/page-how.js"></script>

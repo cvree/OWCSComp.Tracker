@@ -105,6 +105,10 @@ def grid(sheet: dict) -> tuple[list[list[Any]], dict[tuple[int, int], tuple[int,
     rows = sheet.get("rows") or []
     if not rows:
         return [], {}
+    if openpyxl is None and sheet.get("merged"):
+        # Without openpyxl merged ranges cannot be expanded, and silently
+        # skipping them would change what the sheet says.
+        raise WorkbookError("openpyxl is required to read merged cells — pip install -r requirements.txt")
     height = max(r for r, _ in rows)
     width = max([len(v) for _, v in rows] + [0])
     for rng in sheet.get("merged") or []:

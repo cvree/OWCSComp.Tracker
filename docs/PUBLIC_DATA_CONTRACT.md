@@ -124,3 +124,27 @@ multiply-count). Win rate only counts maps with a decided winner. Every row
 carries `evidence: [{matchId, mapId, snapshotIds}]`. Ban stats come from
 `heroBans` and are labeled as match facts. Filters: `region`, `teamId`,
 `tournamentId`, `mapId` (all default `"all"`).
+
+### timeWeighting — VOD-verified hero seconds (`pipeline/time_weighting.py`)
+`{method{version, note, denominators, archetypes[], archetypesVersion},
+maps[], heroes[], lineups[]}`. Built from the published `heroStints` and
+`maps[].rounds` only, after withheld matches are removed.
+
+* `maps[]`: `{mapId, matchId, map, mode, winner, teamSize, liveWindowSource
+  ("rounds" | "stint-span"), liveWindows[[start,end]], liveSeconds,
+  availablePlayerSeconds, knownPlayerSeconds, unknownPlayerSeconds, coverage,
+  confirmedSwaps, teams[{teamId, side, result, knownPlayerSeconds,
+  unknownPlayerSeconds, coverage, roleKnownSeconds, fullLineupSeconds,
+  heroes[{hero, role, seconds, auditedSeconds, shareOfTeamKnownSeconds,
+  shareOfRoleKnownSeconds, presenceShare}], slots[], lineups[{key, heroes,
+  seconds, share, firstAt, archetype}], archetypes[], confirmedSwaps}]}`
+* Seconds count only inside live round windows; unknown seconds are never
+  redistributed; every share divides by KNOWN seconds.
+
+## The imported spreadsheet (`window.OWCS_EXTERNAL`, `external.v1`)
+
+A FOURTH dataset, `assets/data/external_sheet.v1.js`, loaded only by pages
+that show it (map, meta, team, how-it-works, sheet-sync). It is never merged
+into `OWCS_PUBLIC`; `assets/js/app/metastats.js` joins the two per map
+through reconciliation records and keeps every number in its own lane.
+Full contract: [`docs/EXTERNAL-SHEET.md`](EXTERNAL-SHEET.md#data-contract--windowowcs_external-externalv1).

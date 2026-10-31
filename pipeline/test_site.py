@@ -59,6 +59,15 @@ PRODUCT_PAGES = {
     # own component helpers, so it cannot drift from what ships.
     "guide.html": "Guides",
     "styleguide.html": "Design system",
+    # The external-source integration (pipeline/sheet_sync.py). map.html is
+    # the per-map scouting page (VOD lane + spreadsheet lane + the
+    # reconciliation panel); meta.html the filterable meta explorer; both
+    # public and reached from Maps / Comps, never from a new nav slot.
+    # sheet-sync.html is the admin Source health page. (Not "sources.html":
+    # that name belonged to a deleted page and must not come back.)
+    "map.html": "One map, scouted from both sources",
+    "meta.html": "Meta explorer",
+    "sheet-sync.html": "Source health (admin)",
 }
 #: Reachable, but not part of the product shell: the calibration wizard
 #: (its own self-contained tool), the packaged desktop app's two screens,

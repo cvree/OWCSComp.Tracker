@@ -474,6 +474,19 @@ class Sync(unittest.TestCase):
         self.assertEqual(out["payload"]["maps"], [])
         self.assertFalse(out["payload"]["meta"]["fixture"])
 
+    def test_refresh_after_a_new_vod_export_relinks_without_reparsing(self):
+        p = temp_repo(self)
+        S.sync(p, data=fixture_bytes(), at="2026-10-31T00:00:00+00:00")
+        pub = read_public(p.public)
+        pub["matches"][0]["maps"] = []           # the VOD map is withdrawn
+        with open(p.public, "w", encoding="utf-8") as f:
+            f.write("window.OWCS_PUBLIC = " + json.dumps(pub) + ";\n")
+        self.assertTrue(S.check(p))              # export now stale vs. the VOD data
+        self.assertEqual(S.refresh_export(p), p.export)
+        self.assertEqual(read_public(p.export)["reconciliation"]["summary"]["linked"], 0)
+        self.assertEqual(S.check(p), [])
+        self.assertIsNone(S.refresh_export(p))   # unchanged -> no write
+
     def test_check_detects_drift(self):
         p = temp_repo(self)
         S.sync(p, data=fixture_bytes(), at="2026-10-31T00:00:00+00:00")

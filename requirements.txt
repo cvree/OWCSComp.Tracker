@@ -7,6 +7,12 @@ numpy>=1.26
 # not imported). ffmpeg must also be on PATH (system package, not pip).
 yt-dlp>=2024.1
 
+# Reads the community spreadsheet's xlsx export (pipeline/sheet_sync.py,
+# pipeline/external_sheet/). Pure Python, no network of its own — the
+# download is stdlib urllib. Without it the importer reports exactly that and
+# every other command still works.
+openpyxl>=3.1
+
 # Workflow/test tooling — NOT required by the pipeline itself. Only used by
 # pipeline/test_discovery_workflow.py to parse and validate
 # .github/workflows/discovery.yml. The pipeline's own config loader

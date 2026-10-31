@@ -156,7 +156,7 @@ jobs:
           # raised (never lowered). reports/validation: the proof the
           # coverage page reads. assets/img/heroes: portraits recut from them.
           git add labelling assets/data/labelling.v1.js templates layouts reports/validation \
-            assets/img/heroes assets/js/data.js assets/data/public_data.v1.js
+            assets/img/heroes assets/js/data.js assets/data/public_data.v1.js assets/data/external_sheet.v1.js
           if git diff --cached --quiet; then
             echo "committed=false" >> "$GITHUB_OUTPUT"; exit 0
           fi

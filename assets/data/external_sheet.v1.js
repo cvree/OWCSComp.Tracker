@@ -26,6 +26,7 @@ window.OWCS_EXTERNAL = {
  "history": [],
  "lastAttempt": null,
  "maps": [],
+ "mapsExtra": {},
  "matches": [],
  "meta": {
   "fixture": false,

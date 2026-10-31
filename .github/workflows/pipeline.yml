@@ -154,7 +154,7 @@ jobs:
             echo "committed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          git add data/owcs.sqlite assets/js/data.js assets/data/public_data.v1.js
+          git add data/owcs.sqlite assets/js/data.js assets/data/public_data.v1.js assets/data/external_sheet.v1.js
           if git diff --cached --quiet; then
             echo "No data changes this run."
             echo "committed=false" >> "$GITHUB_OUTPUT"

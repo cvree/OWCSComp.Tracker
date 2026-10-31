@@ -88,7 +88,7 @@ jobs:
             echo "committed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          for f in assets/js/data.js assets/data/public_data.v1.js data/owcs.sqlite; do
+          for f in assets/js/data.js assets/data/public_data.v1.js data/owcs.sqlite assets/data/external_sheet.v1.js; do
             if [ -e "$f" ]; then git add "$f"; fi
           done
           if git diff --cached --quiet; then

@@ -406,7 +406,10 @@ jobs:
           # any single path was absent — one missing optional export silently
           # dropped a real calendar update, and the step then reported
           # "nothing to publish".
-          for f in $GENERATED_FILES; do
+          # The imported-spreadsheet export reconciles against the published
+          # VOD maps, so export_data.py --public refreshes it too; stage it
+          # with the export it follows from.
+          for f in $GENERATED_FILES assets/data/external_sheet.v1.js; do
             if [ -e "$f" ]; then git add "$f"; fi
           done
           if git diff --cached --quiet; then

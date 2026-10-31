@@ -72,9 +72,13 @@ def normalize_raw(raw_doc: dict, bundle: Bundle, previous_tabs: dict | None = No
 
 def payload_for(normalized: dict | None, manifest: dict, bundle: Bundle, fixture: bool = False):
     recon = reconcile(normalized, bundle.public, bundle.decisions) if normalized else None
+    catalog = {m["id"] for m in bundle.public.get("mapsCatalog") or []}
+    extra = {e["id"]: {"id": e["id"], "name": e.get("name") or e["id"], "mode": e.get("mode") or ""}
+             for e in bundle.aliases_cfg.get("extraMaps") or [] if e.get("id") not in catalog}
     payload = build_payload(normalized=normalized, recon=recon, manifest=manifest,
                             source=bundle.source, decisions=bundle.decisions,
-                            hero_names=hero_names_from(bundle.public), fixture=fixture)
+                            hero_names=hero_names_from(bundle.public), fixture=fixture,
+                            extra_maps=extra)
     return recon, payload
 
 
@@ -212,6 +216,27 @@ def rebuild(paths: Paths, write: bool = True) -> dict:
             _write_reports(paths, normalized, recon, manifest, bundle.source)
         write_text(paths.export, render(payload))
     return {"normalized": normalized, "recon": recon, "payload": payload, "manifest": manifest}
+
+
+def refresh_export(paths: Paths) -> str | None:
+    """Re-reconcile the COMMITTED normalized layer against the current
+    published VOD dataset and rewrite only the public export. No workbook
+    parsing, so it needs no openpyxl: export_data.py --public calls it
+    after writing public_data.v1.js, because reconciliation (and so the
+    external export) depends on which VOD maps are published."""
+    bundle = Bundle.load(paths)
+    manifest = read_json(paths.manifest) or empty_manifest(bundle.source)
+    normalized = read_json(paths.normalized)
+    _, payload = payload_for(normalized, manifest, bundle)
+    body = render(payload)
+    try:
+        with open(paths.export, encoding="utf-8") as f:
+            if f.read() == body:
+                return None
+    except OSError:
+        pass
+    write_text(paths.export, body)
+    return paths.export
 
 
 def check(paths: Paths) -> list[str]:

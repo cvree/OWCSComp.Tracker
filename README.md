@@ -64,6 +64,9 @@ own published image (`team-logos.yml` → `pipeline/team_logos.py`).
 
 | page | what it is for |
 |---|---|
+| `map.html` | **One map, scouted** (public) — result, pick, bans, VOD-verified timeline and seconds per hero, the spreadsheet's listed heroes, and the field-by-field comparison of the two sources. |
+| `meta.html` | **Meta explorer** (public) — filterable time-weighted VOD usage beside spreadsheet history, comps, bans, map picks/records, matchups and team scouting, every number labelled with its source and sample. |
+| `sheet-sync.html` | **Source health** (admin) — spreadsheet sync status, hash, per-tab inventory, unmapped values, changes, reconciliation and the review queue. |
 | `index.html` | **Maps** (public home) — overall comps and hero picks, then every map map by map with team/map/mode filters (`app/mapfeed.js` joins the broadcast map index with the published comps). |
 | `stats.html` | **Comps** (public) — most-run comps, comps **by map**, heroes, maps, teams and swaps as tabs. |
 | `admin.html` | **Admin dashboard** — one obvious "Submit a game", what the unattended scan filled in since anyone last looked, what needs a person, what is processing, what is blocked, what was recently published, and a small honest system-health strip. |
@@ -77,7 +80,7 @@ own published image (`team-logos.yml` → `pipeline/team_logos.py`).
 | `calibrate.html` | the in-browser calibration wizard — the one operator tool that works fully on the published copy. |
 | `404.html` | the legacy-URL map. Every page the redesign removed names where it went, and goes there. |
 
-Three datasets, never merged: `assets/data/public_data.v1.js` is the
+Four datasets, never merged (the fourth, `assets/data/external_sheet.v1.js`, is the imported community spreadsheet — see below): `assets/data/public_data.v1.js` is the
 **published** record (approved, evidence-backed, safe to state as fact),
 `assets/js/data.js` is the **working** record (runs, sources, what is
 happening), and `assets/data/discovered.v1.js` is the **discovery** record
@@ -273,6 +276,45 @@ python3 pipeline/label_forge.py --batch <batch> --promote     # after naming
 * **Broadcast calendar** (`assets/js/app/archive.js`) — every official
   broadcast the scan found, 2024–2026, as a day grid: indigo = found,
   gold = published.
+
+## Two sources, never blended: VOD timelines + the community spreadsheet
+
+The tracker's own data is **VOD verified**: stints read off the HUD, timed
+to the second, with evidence frames. A public, community-maintained Google
+Sheet records a far longer OWCS history — map picks, results, hero bans and
+the heroes listed per player — and is imported in full as a separate,
+labelled **external layer** (`pipeline/sheet_sync.py` →
+`assets/data/external_sheet.v1.js`). Full contract and runbook:
+[`docs/EXTERNAL-SHEET.md`](docs/EXTERNAL-SHEET.md).
+
+* **Time-weighted analytics** (`pipeline/time_weighting.py` →
+  `public_data.v1.js` `timeWeighting`): hero player-seconds counted only
+  inside detected round windows, unknown seconds reported and excluded from
+  every share, coverage published beside each number, line-ups by verified
+  duration. Built from the same published stints the map story draws.
+* **Spreadsheet observations** are counts (appearances, bans, picks,
+  listed composition snapshots) — never seconds. "Juno / Lúcio" is two
+  listed heroes, not a timeline.
+* **Reconciliation** links a sheet map to a VOD map only when it is
+  unambiguous (same teams, date, map, map number); both records are kept and
+  compared field by field: *matched · partial · conflict · unmatched ·
+  needs_review*. Every public number says **VOD verified**, **Spreadsheet
+  imported**, **Both sources agree** or **Conflicting sources**.
+* **Pages:** `map.html` (one map scouted: VOD lane, spreadsheet lane, sources
+  compared), `meta.html` (filters by event/stage/region/date/patch/map/mode/
+  team/opponent/hero/role/source/coverage/sample, recency weighting,
+  scouting), a scouting report on every team page, and the admin
+  `sheet-sync.html` (Source health + review queue).
+* **Automation:** `.github/workflows/sheet-sync.yml` runs daily, skips an
+  unchanged workbook by SHA-256, fails loudly on a layout change while
+  keeping the last good import, and opens a review PR — it never publishes
+  external data on its own.
+
+```bash
+python3 pipeline/sheet_sync.py sync      # download + import + reconcile + export
+python3 pipeline/sheet_sync.py rebuild   # re-parse the committed raw layer, no download
+python3 pipeline/sheet_sync.py check     # CI gate
+```
 
 ## The pipeline (source → site)
 

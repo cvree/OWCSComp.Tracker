@@ -45,8 +45,8 @@
      RAIL is the admin overflow menu — the remaining operator tools —
      and is never a second public navigation. */
   const NAV = [
-    { href: "index.html", label: "Maps", match: ["index.html", "", "game.html"] },
-    { href: "stats.html", label: "Comps", match: ["stats.html", "hero.html"] },
+    { href: "index.html", label: "Maps", match: ["index.html", "", "game.html", "map.html"] },
+    { href: "stats.html", label: "Comps", match: ["stats.html", "hero.html", "meta.html"] },
     { href: "teams.html", label: "Teams", match: ["teams.html", "team.html"] },
   ];
 
@@ -65,6 +65,8 @@
       match: ["label.html"] },
     { href: "tools.html", label: "Tools & diagnostics", note: "For operators",
       match: ["tools.html"] },
+    { href: "sheet-sync.html", label: "Source health", note: "The spreadsheet import and its review queue",
+      match: ["sheet-sync.html"] },
     { href: "calibrate.html", label: "Calibrate", note: "Teach the tracker a new HUD",
       match: ["calibrate.html"] },
     { href: "guide.html", label: "Guides", note: "Every task, walked through",
@@ -343,6 +345,8 @@
       ["Maps", "index.html", "Every map, map by map, with both comps"],
       ["Comps", "stats.html", "Most-run comps and hero picks"],
       ["Heroes", "stats.html?tab=heroes", "Pick rates by hero"],
+      ["Meta explorer", "meta.html", "Filter time-weighted VOD usage and spreadsheet history"],
+      ["Scout a team", "meta.html?tab=scout", "Last 5 or 10 maps: comfort, bans, heroes, comps"],
       ["Teams", "teams.html", "Every org, with its mark"],
       ["How it works", "how-it-works.html", "In plain language"],
     ];
@@ -353,6 +357,7 @@
       ["Review", "review.html", "Confirm or correct detections"],
       ["Name the heroes", "label.html", "Teach the tracker a new hero, one card at a time"],
       ["Tools & diagnostics", "tools.html", "For operators"],
+      ["Source health", "sheet-sync.html", "Spreadsheet import, reconciliation, review queue"],
       ["Calibrate a broadcast", "calibrate.html", "Teach the tracker a new HUD"],
       ["Guides", "guide.html", "Step-by-step walkthroughs for every task"],
       ["Guide: submit a game", "guide.html#submit", "From a pasted link to a queued job"],
@@ -536,6 +541,7 @@
           '<li><a href="index.html">Every map</a></li>' +
           '<li><a href="stats.html">Comps</a></li>' +
           '<li><a href="stats.html?tab=heroes">Heroes</a></li>' +
+          '<li><a href="meta.html">Meta explorer</a></li>' +
           '<li><a href="teams.html">Teams</a></li>' +
         "</ul></div>" +
         (P.isAdmin()
@@ -549,6 +555,7 @@
             "<div><h2>Operators</h2><ul>" +
               '<li><a href="guide.html">Guides — every step, walked through</a></li>' +
               '<li><a href="tools.html">Tools &amp; diagnostics</a></li>' +
+              '<li><a href="sheet-sync.html">Source health</a></li>' +
               '<li><a href="calibrate.html">Calibrate a broadcast</a></li>' +
               '<li><a href="styleguide.html">Design system</a></li>' +
               '<li><a href="how-it-works.html#run-it-yourself">Run your own copy</a></li>' +
@@ -556,6 +563,7 @@
             "</ul></div>"
           : "<div><h2>About</h2><ul>" +
               '<li><a href="how-it-works.html">How it works</a></li>' +
+              '<li><a href="how-it-works.html#sources">Data sources &amp; credit</a></li>' +
               '<li><a href="admin.html" rel="nofollow">Admin</a></li>' +
             "</ul></div>") +
       "</div>" +

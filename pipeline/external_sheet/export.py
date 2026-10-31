@@ -122,7 +122,8 @@ def _team_names(normalized: dict) -> dict:
 
 
 def build_payload(*, normalized: dict | None, recon: dict | None, manifest: dict,
-                  source: dict, decisions: dict, hero_names: dict, fixture: bool = False) -> dict:
+                  source: dict, decisions: dict, hero_names: dict, fixture: bool = False,
+                  extra_maps: dict | None = None) -> dict:
     snapshot = None
     good = None
     if manifest.get("lastGood"):
@@ -186,6 +187,10 @@ def build_payload(*, normalized: dict | None, recon: dict | None, manifest: dict
         "history": [{k: s.get(k) for k in ("sha256", "importedAt", "status", "counts", "changes")}
                     for s in (manifest.get("snapshots") or [])[-10:]],
         "teams": _team_names(normalized),
+        # Maps the sheet uses that the published catalog does not list
+        # (config/external/aliases.json extraMaps), so pages can name them.
+        "mapsExtra": {mid: v for mid, v in sorted((extra_maps or {}).items())
+                      if any(m.get("map") == mid for m in normalized.get("maps") or [])},
         "tournaments": normalized.get("tournaments") or [],
         "matches": [{k: v for k, v in m.items()} for m in normalized.get("matches") or []],
         "maps": maps,

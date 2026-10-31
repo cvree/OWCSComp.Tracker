@@ -306,7 +306,7 @@
      them (or ?admin=1) switches this browser into admin mode, which adds
      the admin links back; ?admin=0 leaves it. */
   P.ADMIN_PAGES = ["admin.html", "games.html", "submit.html", "review.html", "label.html",
-    "tools.html", "guide.html", "styleguide.html", "calibrate.html"];
+    "tools.html", "guide.html", "styleguide.html", "calibrate.html", "sheet-sync.html"];
   P.pageName = () => location.pathname.split("/").pop() || "index.html";
   P.isAdminPage = () => P.ADMIN_PAGES.indexOf(P.pageName()) >= 0;
   P.isAdmin = (() => {
