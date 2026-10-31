@@ -43,6 +43,10 @@ on:
         description: "Only print what the workbook contains (tabs, first rows, images) to the log — imports nothing"
         type: boolean
         default: false
+      probe_dump:
+        description: "With probe: ranges to print cell by cell, e.g. Japan - Stage 1!A1:CR27"
+        type: string
+        default: ""
 
 # Every workflow that commits generated data shares ONE group so they
 # serialise (test_release_reproducibility / test_discovery_workflow).
@@ -75,7 +79,14 @@ jobs:
 
       - name: Probe the workbook (read-only, prints to this log)
         if: github.event.inputs.probe == 'true'
-        run: python pipeline/sheet_sync.py probe --download --rows 40
+        env:
+          PROBE_DUMP: ${{ github.event.inputs.probe_dump }}
+        run: |
+          if [ -n "$PROBE_DUMP" ]; then
+            python pipeline/sheet_sync.py probe --download --dump "$PROBE_DUMP"
+          else
+            python pipeline/sheet_sync.py probe --download --rows 40
+          fi
 
       - name: Download, compare hash, import, reconcile
         if: github.event.inputs.probe != 'true'

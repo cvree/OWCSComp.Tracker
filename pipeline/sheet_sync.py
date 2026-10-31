@@ -174,6 +174,11 @@ def cmd_probe(args, paths: Paths) -> int:
     else:
         with open(args.xlsx, "rb") as f:
             data = f.read()
+    if args.dump:
+        from external_sheet.probe import dump
+        for spec in [x.strip() for x in args.dump.split(";") if x.strip()]:
+            sys.stdout.write(dump(data, spec))
+        return 0
     sys.stdout.write(probe(data, rows_per_tab=args.rows))
     return 0
 
@@ -230,6 +235,7 @@ def main(argv=None) -> int:
     g.add_argument("--xlsx")
     g.add_argument("--download", action="store_true", help="download the configured sheet first")
     p.add_argument("--rows", type=int, default=30)
+    p.add_argument("--dump", default="", help="'Tab!A1:CR27; Other!A1:Z20' — every cell, images in place")
     p = sub.add_parser("fixture", help="preview build from the synthetic workbook")
     p.add_argument("--out", default=os.path.join(os.path.dirname(HERE), "work", "gsheet-fixture"))
     p.add_argument("--xlsx", default=None)

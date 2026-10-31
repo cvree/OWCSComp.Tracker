@@ -113,3 +113,54 @@ def probe(data: bytes, rows_per_tab: int = 30, cols: int = 40, width: int = 28) 
         if sheet["merged"]:
             lines.append(f"  MERGED (first 15): {', '.join(sheet['merged'][:15])}")
     return "\n".join(lines) + "\n"
+
+
+def dump(data: bytes, spec: str, hero_names: dict | None = None) -> str:
+    """Every cell of one range, images shown in place: 'Tab!A1:CR27'.
+    Each picture is printed as IMG:<hash>, or as <name> when the Hero Index
+    tab maps it (picture above, name below)."""
+    from openpyxl.utils import range_boundaries
+    tab, rng = spec.rsplit("!", 1)
+    raw = read_xlsx(data)
+    anchors = image_anchors(data)
+    names = hero_names if hero_names is not None else hero_index(raw, anchors)
+    sheet = next(s for s in raw["sheets"] if s["name"] == tab)
+    g, origin = grid(sheet)
+    c1, r1, c2, r2 = range_boundaries(rng)
+    imgs: dict[str, list[str]] = {}
+    for i in anchors.get(tab) or []:
+        imgs.setdefault(i["cell"], []).append(i["hash"])
+    out = [f"DUMP {spec}"]
+    for r in range(r1 - 1, min(r2, len(g))):
+        cells = []
+        for c in range(c1 - 1, c2):
+            ref = a1(r, c)
+            v = g[r][c] if c < len(g[r]) else None
+            bits = []
+            if v not in (None, "") and (r, c) not in origin:
+                bits.append(cell_text(v)[:30])
+            for h in imgs.get(ref, []):
+                bits.append("IMG:" + (names.get(h) or h))
+            if bits:
+                cells.append(f"{ref}={'/'.join(bits)}")
+        if cells:
+            out.append("  " + " | ".join(cells))
+    return "\n".join(out) + "\n"
+
+
+def hero_index(raw: dict, anchors: dict) -> dict[str, str]:
+    """{picture hash: name} from a 'Hero Index'-style tab: a picture in one
+    row, its name in the cell directly below."""
+    out: dict[str, str] = {}
+    for sheet in raw["sheets"]:
+        if "index" not in sheet["name"].lower():
+            continue
+        g, _ = grid(sheet)
+        from openpyxl.utils.cell import coordinate_from_string, column_index_from_string
+        for i in anchors.get(sheet["name"]) or []:
+            col_l, row = coordinate_from_string(i["cell"])
+            c, r = column_index_from_string(col_l) - 1, row - 1
+            below = g[r + 1][c] if r + 1 < len(g) and c < len(g[r + 1]) else None
+            if isinstance(below, str) and below.strip() and i["hash"] not in out:
+                out[i["hash"]] = below.strip()
+    return out
