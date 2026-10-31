@@ -39,6 +39,10 @@ on:
         description: "Accept a reviewed tab rename/removal (otherwise it fails)"
         type: boolean
         default: false
+      probe:
+        description: "Only print what the workbook contains (tabs, first rows, images) to the log — imports nothing"
+        type: boolean
+        default: false
 
 # Every workflow that commits generated data shares ONE group so they
 # serialise (test_release_reproducibility / test_discovery_workflow).
@@ -69,7 +73,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install --quiet -r requirements.txt
 
+      - name: Probe the workbook (read-only, prints to this log)
+        if: github.event.inputs.probe == 'true'
+        run: python pipeline/sheet_sync.py probe --download --rows 40
+
       - name: Download, compare hash, import, reconcile
+        if: github.event.inputs.probe != 'true'
         id: sync
         run: |
           args=""
@@ -97,7 +106,7 @@ jobs:
           fi
 
       - name: Keep the failure report and the downloaded workbook
-        if: always()
+        if: always() && github.event.inputs.probe != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: sheet-sync-${{ github.run_id }}
@@ -110,7 +119,7 @@ jobs:
           retention-days: 30
 
       - name: Fail the run when the sync failed
-        if: steps.sync.outputs.exit != '0'
+        if: github.event.inputs.probe != 'true' && steps.sync.outputs.exit != '0'
         run: |
           echo "::error::Spreadsheet sync failed; nothing was committed. See the job summary."
           exit 1
