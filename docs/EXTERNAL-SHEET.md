@@ -235,6 +235,45 @@ A candidate VOD map must have **the same two resolved teams**. Then:
 * **Fallback.** A map with no detected rounds falls back to its stint span and
   is labelled `stint-span`, because that includes non-live time.
 
+## First-time setup (in order)
+
+1. **Merge the code into `main`.** GitHub only lists a workflow once it is on
+   the default branch. Open the PR:
+   <https://github.com/cvree/OWCSComp.Tracker/compare/main...claude/charming-hamilton-hc7xxu>
+   → *Create pull request* → wait for the `ci` check → *Merge*.
+2. **Let workflows open pull requests.**
+   <https://github.com/cvree/OWCSComp.Tracker/settings/actions> → *Workflow
+   permissions* → *Read and write permissions* + tick *Allow GitHub Actions to
+   create and approve pull requests* → *Save*.
+3. **Run the first sync.**
+   <https://github.com/cvree/OWCSComp.Tracker/actions/workflows/sheet-sync.yml>
+   → *Run workflow* → branch `main` → *Run workflow*. Click the run when it
+   finishes (a few minutes).
+4. **Green run → review the import.**
+   <https://github.com/cvree/OWCSComp.Tracker/pulls?q=is%3Apr+head%3Aauto%2Fsheet-sync>
+   → open *Spreadsheet import: workbook …* → read the tab table and the
+   reconciliation summary in the description → *Merge*. The site redeploys
+   on its own.
+5. **Red run → teach the importer the new headers.** On the run page, the
+   *Summary* shows every tab and the headers it saw; the
+   `sheet-sync-<id>` artifact at the bottom has the downloaded workbook.
+   Add the spellings to
+   <https://github.com/cvree/OWCSComp.Tracker/edit/main/config/external/gsheet_layout.json>
+   (`fields` / `groups`, bump `version`), commit, and repeat step 3.
+6. **Work the review queue.** <https://cvree.github.io/OWCSComp.Tracker/sheet-sync.html>
+   → type your name → approve aliases / link or reject candidates →
+   *Download the merged corrections/external_reconciliation.json* → upload it
+   over <https://github.com/cvree/OWCSComp.Tracker/blob/main/corrections/external_reconciliation.json>
+   → then run `python3 pipeline/sheet_sync.py rebuild` and commit (or just
+   re-run step 3 with *force* ticked).
+7. **Credit the maintainer** once confirmed: set `"maintainer"` in
+   <https://github.com/cvree/OWCSComp.Tracker/edit/main/config/external/gsheet_source.json>.
+8. **Check it live:** <https://cvree.github.io/OWCSComp.Tracker/meta.html>,
+   any map's *Scout* button on <https://cvree.github.io/OWCSComp.Tracker/>,
+   and <https://cvree.github.io/OWCSComp.Tracker/how-it-works.html#sources>.
+
+After that it runs daily on its own; you only merge the PR it opens.
+
 ## Operator runbook
 
 * **Daily:** `sheet-sync.yml` runs at 10:41 UTC. It does nothing if the
