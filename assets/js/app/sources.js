@@ -125,6 +125,30 @@
       'no hero name matches it, so it is never counted">“' + esc((h && h.raw) || "?") + "”</span>";
   };
 
+  /* Per-map spreadsheet detail (players, listed heroes, cell references)
+     is sharded into assets/data/external_sheet/detail-<xx>.js by two hex
+     characters of the map id — the same rule as export.detail_bucket in
+     the pipeline. Same origin, loaded on demand, never from Google. */
+  P.extDetailBucket = (id) => (/^xmap-/.test(id || "") ? id.slice(5, 7) : "00").toLowerCase();
+  const detailLoads = {};
+  P.loadExtDetail = (id) => {
+    const bucket = P.extDetailBucket(id);
+    const have = () => ((window.OWCS_EXTERNAL_DETAIL || {})[id]) || null;
+    if (have()) return Promise.resolve(have());
+    if (!detailLoads[bucket]) {
+      detailLoads[bucket] = new Promise((resolve) => {
+        const known = (X && X.detailShards) || [];
+        if (known.indexOf(bucket) < 0) { resolve(); return; }
+        const el = document.createElement("script");
+        el.src = "assets/data/external_sheet/detail-" + bucket + ".js";
+        el.onload = () => resolve();
+        el.onerror = () => resolve();
+        document.head.appendChild(el);
+      });
+    }
+    return detailLoads[bucket].then(have);
+  };
+
   /* The scouting page for one map entry (metastats.buildEntries). */
   P.mapPageHref = (e) => e.vodId ? "map.html?id=" + encodeURIComponent(e.vodId)
     : "map.html?ext=" + encodeURIComponent(e.extId);

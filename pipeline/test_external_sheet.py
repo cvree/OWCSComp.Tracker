@@ -53,7 +53,9 @@ from external_sheet.export import render  # noqa: E402
 from external_sheet.fetch import FetchFailed, download, sha256  # noqa: E402
 from external_sheet.layout import Layout  # noqa: E402
 from external_sheet.normalize import ImportFailed, import_workbook  # noqa: E402
-from external_sheet.store import Paths, read_json, read_public  # noqa: E402
+from external_sheet import store as ST  # noqa: E402
+from external_sheet.store import (Paths, read_json, read_normalized, read_public,  # noqa: E402
+                                  read_raw)
 from external_sheet.workbook import read_xlsx  # noqa: E402
 
 FIXTURE = os.path.join(HERE, "fixtures", "gsheet", "owcs_sheet_fixture.xlsx")
@@ -402,9 +404,14 @@ class Sync(unittest.TestCase):
         for k in ("sha256", "importedAt", "sourceUrl", "sheetNames", "parserVersion", "sourceRowCount"):
             self.assertIn(k, snap)
         self.assertEqual(snap["changes"]["new"], 7)
-        raw = read_json(p.raw)
+        raw = read_raw(p)
         self.assertEqual(raw["sha256"], sha256(data))
         self.assertIn("Scratch", [s["name"] for s in raw["workbook"]["sheets"]])  # preserved
+        index = read_json(p.raw)
+        self.assertEqual(index["format"], "gsheet-raw.v2")
+        for entry in index["sheets"]:                       # one gzip per tab
+            self.assertTrue(os.path.exists(os.path.join(p.raw_dir, entry["file"])))
+        self.assertEqual(raw["workbook"]["sheets"], read_xlsx(data)["sheets"])  # lossless
         before = {f: os.path.getmtime(f) for f in (p.raw, p.normalized, p.manifest, p.export)}
         again = S.sync(p, data=data, at="2026-11-01T00:00:00+00:00")
         self.assertEqual(again["status"], "unchanged")
@@ -413,17 +420,67 @@ class Sync(unittest.TestCase):
         self.assertTrue(os.path.exists(os.path.join(p.reports, "inventory.md")))
         self.assertTrue(os.path.exists(os.path.join(p.reports, "reconciliation.json")))
 
+    def test_raw_shards_are_deterministic_and_drop_removed_tabs(self):
+        p = temp_repo(self)
+        S.sync(p, data=fixture_bytes(), at="2026-10-31T00:00:00+00:00")
+        idx = read_json(p.raw)
+        blobs = {e["file"]: open(os.path.join(p.raw_dir, e["file"]), "rb").read() for e in idx["sheets"]}
+        again, shards = ST.raw_shards(read_raw(p))
+        self.assertEqual(shards, blobs)                     # same cells -> same bytes
+        S.sync(p, data=xlsx({"NA": simple_rows()}), at="2026-11-01T00:00:00+00:00",
+               accept_structure_change=True)
+        left = os.listdir(os.path.join(p.raw_dir, "sheets"))
+        self.assertEqual(len(left), 1)                      # old tabs' shards removed
+        self.assertEqual(S.check(p), [])
+
+    def test_package_profile_explains_size(self):
+        n = parse(fixture_bytes())
+        pkg = n["inventory"]["package"]
+        self.assertEqual(pkg["bytes"], len(fixture_bytes()))
+        self.assertEqual(pkg["mediaFiles"], 0)
+        self.assertTrue(any(w["path"].startswith("xl/worksheets/") for w in pkg["worksheetXml"]))
+
+    def test_a_file_github_would_reject_fails_the_sync_and_keeps_last_good(self):
+        p = temp_repo(self)
+        S.sync(p, data=fixture_bytes(), at="2026-10-31T00:00:00+00:00")
+        before = read_normalized(p)
+        old = ST.MAX_COMMITTED_FILE_BYTES
+        ST.MAX_COMMITTED_FILE_BYTES = 200
+        try:
+            res = S.sync(p, data=xlsx({"NA": simple_rows()}), at="2026-11-01T00:00:00+00:00",
+                         accept_structure_change=True)
+        finally:
+            ST.MAX_COMMITTED_FILE_BYTES = old
+        self.assertEqual((res["status"], res["stage"]), ("failed", "store"))
+        self.assertEqual(read_normalized(p), before)
+        md = slurp(os.path.join(p.reports, "last_failure.md"))
+        self.assertIn("Workbook package", md)
+
+    def test_size_cap_message_names_the_setting(self):
+        class Resp(io.BytesIO):
+            status = 200
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *a):
+                return False
+        with self.assertRaises(FetchFailed) as cm:
+            download("https://example.invalid/x", max_bytes=10,
+                     opener=lambda *a, **k: Resp(fixture_bytes()))
+        self.assertIn("maxDownloadBytes", str(cm.exception))
+
     def test_download_failure_keeps_last_good(self):
         p = temp_repo(self)
         S.sync(p, data=fixture_bytes(), at="2026-10-31T00:00:00+00:00")
-        normalized_before = slurp(p.normalized)
+        normalized_before = read_normalized(p)
 
         def broken(*_a, **_k):
             raise OSError("connection refused (simulated)")
         res = S.sync(p, opener=broken, at="2026-11-01T00:00:00+00:00")
         self.assertEqual(res["status"], "failed")
         self.assertEqual(res["stage"], "download")
-        self.assertEqual(slurp(p.normalized), normalized_before)
+        self.assertEqual(read_normalized(p), normalized_before)
         fail = read_json(os.path.join(p.reports, "last_failure.json"))
         self.assertIn("simulated", fail["reason"])
         exp = read_public(p.export)
@@ -438,7 +495,7 @@ class Sync(unittest.TestCase):
         rows[0] = ["When", "What", "Side One", "Side Two", "Number", "Arena", "Result", "x", "y"]
         res = S.sync(p, data=xlsx({"NA": rows}), at="2026-11-01T00:00:00+00:00")
         self.assertEqual((res["status"], res["stage"]), ("failed", "validate"))
-        self.assertEqual(len(read_json(p.normalized)["maps"]), 6)
+        self.assertEqual(len(read_normalized(p)["maps"]), 6)
         md = slurp(os.path.join(p.reports, "last_failure.md"))
         self.assertIn("STRUCTURE_CHANGED", md)
 
@@ -498,7 +555,7 @@ class Sync(unittest.TestCase):
         self.assertEqual(len(problems), 2)
         S.rebuild(p)
         self.assertEqual(S.check(p), [])
-        n = read_json(p.normalized)
+        n = read_normalized(p)
         self.assertNotIn("hero", n["inventory"]["unmapped"])     # typo now mapped
 
 
@@ -612,6 +669,29 @@ class PublicExport(unittest.TestCase):
         for forbidden in ('"seconds"', '"start"', '"end"', '"duration"', '"offset"'):
             self.assertNotIn(forbidden, text)
         self.assertTrue(render(exp).startswith("/* ="))
+
+    def test_detail_shards_hold_every_map_and_stay_out_of_the_summary(self):
+        p = temp_repo(self)
+        S.sync(p, data=fixture_bytes(), at="2026-10-31T00:00:00+00:00")
+        exp = read_public(p.export)
+        from external_sheet.export import detail_bucket
+        for m in exp["maps"]:
+            self.assertNotIn("src", m)                       # cell refs live in the detail
+            self.assertIn("heroes", m["teams"]["a"])
+            shard = os.path.join(p.export_detail_dir, f"detail-{detail_bucket(m['id'])}.js")
+            body = slurp(shard)
+            self.assertIn(json.dumps(m["id"]), body)
+            self.assertIn(detail_bucket(m["id"]), exp["detailShards"])
+        nepal = next(m for m in exp["maps"] if m["map"] == "nepal")
+        self.assertEqual(nepal["teams"]["a"]["comp"], sorted(["mauga", "shion", "sym", "kiriko", "juno"]))
+        # a stale shard is removed, and check() notices a missing one
+        stray = os.path.join(p.export_detail_dir, "detail-zz.js")
+        with open(stray, "w", encoding="utf-8") as f:
+            f.write("x")
+        self.assertTrue(S.check(p))
+        S.rebuild(p)
+        self.assertFalse(os.path.exists(stray))
+        self.assertEqual(S.check(p), [])
 
     def test_committed_export_contacts_no_one(self):
         with open(CFG.export, encoding="utf-8") as f:

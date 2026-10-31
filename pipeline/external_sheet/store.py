@@ -6,8 +6,10 @@ store.py — where the external layer lives on disk, and the snapshot ledger.
     config/external/aliases.json             canonical spellings
     corrections/external_reconciliation.json human decisions (links, aliases)
 
-    data/external/gsheet/raw/cells.json      RAW layer: every tab, every cell
-    data/external/gsheet/normalized.json     External* records + provenance
+    data/external/gsheet/raw/index.json      RAW layer index (hash, date, tabs, package)
+    data/external/gsheet/raw/sheets/*.json.gz  RAW layer: every cell of one tab per
+                                             file, gzip with a fixed mtime (deterministic)
+    data/external/gsheet/normalized.json.gz  External* records + provenance (deterministic gzip)
     data/external/gsheet/manifest.json       snapshot ledger (hash, date, versions)
     reports/external/gsheet/*.json|md        inventory, reconciliation, last failure
     assets/data/external_sheet.v1.js         what the public site renders
@@ -18,9 +20,16 @@ compare (`sheet_sync.py check`).
 """
 from __future__ import annotations
 
+import gzip
+import hashlib
 import json
 import os
+import re
 from dataclasses import dataclass
+
+#: GitHub rejects files over 100 MB; stay clear of it with every file we
+#: commit, and fail the import (keeping the last good data) instead.
+MAX_COMMITTED_FILE_BYTES = 95 * 1024 * 1024
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.dirname(os.path.dirname(HERE))
@@ -42,15 +51,23 @@ class Paths:
     @property
     def decisions(self) -> str: return self.p("corrections", "external_reconciliation.json")
     @property
-    def raw(self) -> str: return self.p("data", "external", "gsheet", "raw", "cells.json")
+    def raw_dir(self) -> str: return self.p("data", "external", "gsheet", "raw")
     @property
-    def normalized(self) -> str: return self.p("data", "external", "gsheet", "normalized.json")
+    def raw(self) -> str: return os.path.join(self.raw_dir, "index.json")
+    @property
+    def raw_legacy(self) -> str: return os.path.join(self.raw_dir, "cells.json")
+    @property
+    def normalized(self) -> str: return self.p("data", "external", "gsheet", "normalized.json.gz")
+    @property
+    def normalized_legacy(self) -> str: return self.p("data", "external", "gsheet", "normalized.json")
     @property
     def manifest(self) -> str: return self.p("data", "external", "gsheet", "manifest.json")
     @property
     def reports(self) -> str: return self.p("reports", "external", "gsheet")
     @property
     def export(self) -> str: return self.p("assets", "data", "external_sheet.v1.js")
+    @property
+    def export_detail_dir(self) -> str: return self.p("assets", "data", "external_sheet")
     @property
     def public(self) -> str: return self.p("assets", "data", "public_data.v1.js")
     @property
@@ -105,3 +122,118 @@ def empty_manifest(source: dict) -> dict:
 def last_good(manifest: dict) -> dict | None:
     sha = manifest.get("lastGood")
     return next((s for s in manifest.get("snapshots") or [] if s.get("sha256") == sha), None)
+
+
+# ------------------------------------------------------------ raw layer
+class StoreTooLarge(RuntimeError):
+    """A file the import would commit is larger than GitHub accepts."""
+
+
+def _mb(n: int) -> str:
+    return f"{n / 2**20:.1f} MB" if n >= 2**20 else f"{n / 1024:.0f} KB"
+
+
+def _shard_name(index: int, name: str) -> str:
+    slug = re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")[:40] or "sheet"
+    return f"sheets/{index:03d}-{slug}.json.gz"
+
+
+def raw_shards(raw_doc: dict) -> tuple[dict, dict[str, bytes]]:
+    """Pure: the raw document -> (index document, {relative path: gzip bytes}).
+
+    One gzip file per worksheet keeps every committed file small even for
+    a very large workbook, and means a sync that changes one tab adds one
+    new blob to git rather than the whole workbook again. gzip is written
+    with mtime=0 so the same cells always give the same bytes (the CI
+    drift gate depends on that)."""
+    wb = raw_doc.get("workbook") or {}
+    shards: dict[str, bytes] = {}
+    sheets_index = []
+    for sheet in wb.get("sheets") or []:
+        rel = _shard_name(sheet["index"], sheet["name"])
+        body = json.dumps(sheet, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+        blob = gzip.compress(body, compresslevel=9, mtime=0)
+        if len(blob) > MAX_COMMITTED_FILE_BYTES:
+            raise StoreTooLarge(f"tab '{sheet['name']}' compresses to {_mb(len(blob))} (limit {_mb(MAX_COMMITTED_FILE_BYTES)}), "
+                                "over GitHub's file limit — it cannot be committed")
+        shards[rel] = blob
+        sheets_index.append({"index": sheet["index"], "name": sheet["name"],
+                             "state": sheet.get("state"), "rows": len(sheet.get("rows") or []),
+                             "file": rel, "sha256": hashlib.sha256(body).hexdigest(),
+                             "bytes": len(blob)})
+    index = {k: v for k, v in raw_doc.items() if k != "workbook"}
+    index["format"] = "gsheet-raw.v2"
+    index["workbookFormat"] = wb.get("format")
+    index["package"] = wb.get("package")
+    index["sheets"] = sheets_index
+    return index, shards
+
+
+def write_raw(paths: "Paths", raw_doc: dict, prepared: tuple | None = None) -> None:
+    index, shards = prepared or raw_shards(raw_doc)
+    for rel, blob in shards.items():
+        target = os.path.join(paths.raw_dir, rel)
+        os.makedirs(os.path.dirname(target), exist_ok=True)
+        with open(target, "wb") as f:
+            f.write(blob)
+    shard_dir = os.path.join(paths.raw_dir, "sheets")
+    keep = {os.path.basename(r) for r in shards}
+    if os.path.isdir(shard_dir):
+        for fn in os.listdir(shard_dir):
+            if fn.endswith(".json.gz") and fn not in keep:
+                os.remove(os.path.join(shard_dir, fn))      # a tab that no longer exists
+    write_json(paths.raw, index)
+    if os.path.exists(paths.raw_legacy):
+        os.remove(paths.raw_legacy)
+
+
+def read_raw(paths: "Paths") -> dict | None:
+    """The committed raw document in its in-memory shape
+    ({..., "workbook": {"sheets": [...]}}), or None when never synced."""
+    index = read_json(paths.raw)
+    if index is None:
+        return read_json(paths.raw_legacy)      # pre-shard layout
+    sheets = []
+    for entry in index.get("sheets") or []:
+        with open(os.path.join(paths.raw_dir, entry["file"]), "rb") as f:
+            sheets.append(json.loads(gzip.decompress(f.read()).decode("utf-8")))
+    doc = {k: v for k, v in index.items() if k not in ("sheets", "workbookFormat", "package")}
+    doc["workbook"] = {"format": index.get("workbookFormat"), "package": index.get("package"),
+                       "sheets": sheets}
+    return doc
+
+
+def check_size(label: str, text: str) -> None:
+    size = len(text.encode("utf-8"))
+    if size > MAX_COMMITTED_FILE_BYTES:
+        raise StoreTooLarge(f"{label} would be {_mb(size)} (limit {_mb(MAX_COMMITTED_FILE_BYTES)}), over GitHub's file limit")
+
+
+# ------------------------------------------------------- normalized layer
+def normalized_bytes(doc: dict) -> bytes:
+    """Deterministic gzip of the normalized layer. A full community sheet
+    expands to many tens of MB of JSON (every listed hero is a record with
+    its cell reference); compressed it stays far under GitHub's limit."""
+    body = json.dumps(doc, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    blob = gzip.compress(body, compresslevel=9, mtime=0)
+    if len(blob) > MAX_COMMITTED_FILE_BYTES:
+        raise StoreTooLarge(f"normalized.json.gz would be {_mb(len(blob))} (limit {_mb(MAX_COMMITTED_FILE_BYTES)}), over GitHub's file limit")
+    return blob
+
+
+def write_normalized(paths: "Paths", doc: dict, blob: bytes | None = None) -> None:
+    os.makedirs(os.path.dirname(paths.normalized), exist_ok=True)
+    with open(paths.normalized, "wb") as f:
+        f.write(blob if blob is not None else normalized_bytes(doc))
+    if os.path.exists(paths.normalized_legacy):
+        os.remove(paths.normalized_legacy)
+
+
+def read_normalized(paths: "Paths") -> dict | None:
+    try:
+        with open(paths.normalized, "rb") as f:
+            return json.loads(gzip.decompress(f.read()).decode("utf-8"))
+    except FileNotFoundError:
+        return read_json(paths.normalized_legacy)
+    except (OSError, ValueError):
+        return None

@@ -108,6 +108,42 @@ def _compact_map(mp: dict, bans: list, apps: list, comps: list, hero_names: dict
     return out
 
 
+def detail_bucket(map_id: str) -> str:
+    """Which detail shard holds a map: two hex characters of its content
+    hash, so 256 small files however large the sheet is. Mirrored by
+    P.extDetailBucket in assets/js/app/sources.js."""
+    return (map_id[5:7] if map_id.startswith("xmap-") else "00").lower()
+
+
+def _summary_map(d: dict) -> dict:
+    """What every analytic needs about one map, and nothing heavier: the
+    per-player listings, cell references and raw text stay in the detail
+    shard that map.html loads for that one map."""
+    out = {k: d.get(k) for k in ("id", "slug", "matchId", "date", "order", "map", "mode",
+                                  "teamA", "teamB", "winner", "winnerSide", "pickedBy",
+                                  "pickNote", "scoreRaw", "vodUrl", "flags")}
+    if not d.get("map"):
+        out["mapRaw"] = d.get("mapRaw")
+    if d.get("duplicateConflicts"):
+        out["duplicateConflicts"] = len(d["duplicateConflicts"])
+    out["bans"] = [{k: v for k, v in (("side", b["side"]), ("teamId", b["teamId"]), ("hero", b["hero"]),
+                                       ("raw", None if b["hero"] else b["raw"])) if v is not None}
+                   for b in d["bans"]]
+    teams = {}
+    for side, t in d["teams"].items():
+        heroes = sorted({h["hero"] for p in t["players"] for h in p["heroes"] if h.get("hero")} |
+                        {h for c in t["comps"] for h in c["heroes"]})
+        comp = next((c for c in t["comps"] if c["kind"] == "listed-comp" and c["complete"]), None) or \
+            next((c for c in t["comps"] if c["kind"] == "first-listed" and c["complete"]), None)
+        teams[side] = {"heroes": heroes,
+                       "comp": sorted(comp["heroes"]) if comp else None,
+                       "compKind": comp["kind"] if comp else None,
+                       "listed": sum(len(p["heroes"]) for p in t["players"]),
+                       "unresolved": sum(1 for p in t["players"] for h in p["heroes"] if not h.get("hero"))}
+    out["teams"] = teams
+    return out
+
+
 def _team_names(normalized: dict) -> dict:
     """Display names for teams no registry knows (slug ids), from the
     sheet's own spelling — shown with an 'unmapped' marker, never as a
@@ -123,7 +159,8 @@ def _team_names(normalized: dict) -> dict:
 
 def build_payload(*, normalized: dict | None, recon: dict | None, manifest: dict,
                   source: dict, decisions: dict, hero_names: dict, fixture: bool = False,
-                  extra_maps: dict | None = None) -> dict:
+                  extra_maps: dict | None = None) -> tuple[dict, dict]:
+    """(main payload, {bucket: {map id: detail}})."""
     snapshot = None
     good = None
     if manifest.get("lastGood"):
@@ -151,10 +188,19 @@ def build_payload(*, normalized: dict | None, recon: dict | None, manifest: dict
     for c in normalized.get("compositions") or []:
         comps.setdefault(c["mapId"], []).append(c)
     ignored = {r["externalMapId"] for r in (recon or {}).get("records") or [] if r.get("ignored")}
-    maps = [_compact_map(m, bans.get(m["id"], []), apps.get(m["id"], []), comps.get(m["id"], []),
-                         hero_names)
-            for m in normalized.get("maps") or [] if m["id"] not in ignored]
+    detail_maps = [_compact_map(m, bans.get(m["id"], []), apps.get(m["id"], []), comps.get(m["id"], []),
+                                hero_names)
+                   for m in normalized.get("maps") or [] if m["id"] not in ignored]
+    maps = [_summary_map(d) for d in detail_maps]
+    details: dict[str, dict] = {}
+    for d in detail_maps:
+        details.setdefault(detail_bucket(d["id"]), {})[d["id"]] = d
     recon = recon or {"records": [], "summary": {}, "vodOnlyMaps": [], "rules": {}}
+    # A record with no candidate, no link and no decision says only
+    # "unmatched", which the summary already counts — leave it out.
+    records = [r for r in recon.get("records") or []
+               if r.get("vodMapId") or r.get("candidates") or r.get("decisions") or r.get("ignored")
+               or r.get("status") != "unmatched"]
     tabs = []
     for t in inv.get("tabs") or []:
         tabs.append(dict(t, ignoredRows=t.get("ignoredRows", [])[:10]))
@@ -194,11 +240,12 @@ def build_payload(*, normalized: dict | None, recon: dict | None, manifest: dict
         "tournaments": normalized.get("tournaments") or [],
         "matches": [{k: v for k, v in m.items()} for m in normalized.get("matches") or []],
         "maps": maps,
+        "detailShards": sorted(details),
         "reconciliation": {
             "summary": recon.get("summary") or {},
             "rules": recon.get("rules") or {},
             "vodOnlyMaps": recon.get("vodOnlyMaps") or [],
-            "records": recon.get("records") or [],
+            "records": records,
         },
         "decisions": {"decisions": decisions.get("decisions") or [],
                       "aliasApprovals": decisions.get("aliasApprovals") or [],
@@ -211,18 +258,57 @@ def build_payload(*, normalized: dict | None, recon: dict | None, manifest: dict
             "layoutVersion": inv.get("layoutVersion"),
             "aliasesVersion": inv.get("aliasesVersion"),
             "tabs": tabs,
+            "package": inv.get("package"),
             "unmapped": unmapped,
             "issues": (inv.get("issues") or [])[:100],
             "errors": inv.get("errors") or [],
         },
-    }
+    }, details
+
+
+def _compact_json(obj) -> str:
+    # One map per line keeps a sync PR's diff readable; no indentation
+    # keeps a large sheet's export small.
+    return json.dumps(obj, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
 
 
 def render(payload: dict) -> str:
-    return HEADER + json.dumps(payload, indent=1, ensure_ascii=False, sort_keys=True) + ";\n"
+    body = dict(payload)
+    maps = body.pop("maps", [])
+    head = _compact_json(body)
+    lines = ",\n".join(_compact_json(m) for m in maps)
+    return HEADER + head[:-1] + ',\n"maps":[\n' + lines + "\n]};\n"
+
+
+DETAIL_HEADER = """/* OWCS Comp Tracker — external_sheet/detail-{bucket}.js
+   GENERATED by pipeline/sheet_sync.py — do not hand-edit. Per-player
+   spreadsheet listings for the maps whose id hashes to '{bucket}'; loaded
+   by map.html only. Spreadsheet observations: untimed. */
+"""
+
+
+def render_detail(bucket: str, maps: dict) -> str:
+    lines = ",\n".join(f"{json.dumps(k)}:{_compact_json(v)}" for k, v in sorted(maps.items()))
+    return (DETAIL_HEADER.format(bucket=bucket) +
+            "Object.assign((window.OWCS_EXTERNAL_DETAIL = window.OWCS_EXTERNAL_DETAIL || {}), {\n" +
+            lines + "\n});\n")
 
 
 # ----------------------------------------------------------------- reports
+def package_lines(pkg: dict | None) -> list[str]:
+    """Why the workbook is the size it is."""
+    if not pkg:
+        return []
+    mb = lambda n: f"{(n or 0) / 2**20:.1f} MB"  # noqa: E731
+    out = [f"- Workbook package: {mb(pkg.get('bytes'))} zipped, {mb(pkg.get('uncompressedBytes'))} "
+           f"unzipped, {pkg.get('members')} parts; embedded media: {pkg.get('mediaFiles')} files, "
+           f"{mb(pkg.get('mediaBytes'))}"]
+    big = pkg.get("largestMembers") or []
+    if big:
+        out.append("- Largest parts: " + ", ".join(f"`{m['path']}` {mb(m['bytes'])}" for m in big[:6]))
+    return out
+
+
 def inventory_markdown(inv: dict, snapshot: dict | None, source: dict) -> str:
     c = inv.get("counts") or {}
     lines = [
@@ -236,6 +322,7 @@ def inventory_markdown(inv: dict, snapshot: dict | None, source: dict) -> str:
         f"aliases v{inv.get('aliasesVersion')}",
         f"- Tabs: {inv.get('tabCount', 0)} ({inv.get('dataTabs', 0)} recognised as data) · "
         f"source rows: {inv.get('sourceRowCount', 0)}",
+        *package_lines(inv.get("package")),
         "",
         f"**Imported:** {c.get('matches', 0)} matches · {c.get('maps', 0)} maps · "
         f"{c.get('bans', 0)} hero bans · {c.get('appearances', 0)} player-hero appearances · "
@@ -305,6 +392,8 @@ def failure_markdown(failure: dict) -> str:
              f"- Last good snapshot: `{failure.get('lastGood') or 'none'}`",
              "", "Nothing under data/external/ or assets/data/external_sheet.v1.js was replaced."]
     inv = failure.get("inventory") or {}
+    if inv.get("package"):
+        lines += [""] + package_lines(inv["package"])
     if inv.get("tabs"):
         lines += ["", "Tabs seen in the failed download:"]
         for t in inv["tabs"]:

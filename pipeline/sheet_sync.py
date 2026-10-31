@@ -45,7 +45,7 @@ sys.path.insert(0, HERE)
 
 from external_sheet import sync as S  # noqa: E402
 from external_sheet.normalize import ImportFailed  # noqa: E402
-from external_sheet.store import Paths, read_json  # noqa: E402
+from external_sheet.store import Paths, read_json, read_normalized  # noqa: E402
 from external_sheet.workbook import WorkbookError, read_xlsx  # noqa: E402
 
 FIXTURE_XLSX = os.path.join(HERE, "fixtures", "gsheet", "owcs_sheet_fixture.xlsx")
@@ -178,11 +178,9 @@ def cmd_fixture(args, paths: Paths) -> int:
     if res["status"] == "imported":
         # mark it as a fixture so no page can mistake it for the real sheet
         bundle = S.Bundle.load(target)
-        _, payload = S.payload_for(read_json(target.normalized), read_json(target.manifest),
-                                   bundle, fixture=True)
-        from external_sheet.export import render
-        from external_sheet.store import write_text
-        write_text(target.export, render(payload))
+        _, payload, details = S.payload_for(read_normalized(target), read_json(target.manifest),
+                                            bundle, fixture=True)
+        S.write_export(target, payload, details)
         print(f"[sheet-sync] fixture build written under {out}")
     return _print_result(res)
 

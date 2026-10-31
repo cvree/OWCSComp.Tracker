@@ -24,14 +24,15 @@ from dataclasses import dataclass
 from . import PARSER_VERSION
 from .aliases import AliasBook
 from .export import (build_payload, changes, failure_markdown, hero_names_from,
-                     inventory_markdown, reconciliation_markdown, render)
+                     inventory_markdown, reconciliation_markdown, render, render_detail)
 from .fetch import FetchFailed, download, save_snapshot, sha256
 from .layout import Layout
 from .normalize import ImportFailed, import_workbook
 from .reconcile import reconcile
-from .store import (Paths, dumps, empty_manifest, last_good, read_json, read_public,
-                    write_json, write_text)
-from .workbook import WorkbookError, read_xlsx, source_row_count
+from .store import (Paths, StoreTooLarge, check_size, empty_manifest, last_good,
+                    normalized_bytes, raw_shards, read_json, read_normalized, read_public,
+                    read_raw, write_json, write_normalized, write_raw, write_text)
+from .workbook import WorkbookError, package_profile, read_xlsx, source_row_count
 
 
 @dataclass
@@ -75,11 +76,45 @@ def payload_for(normalized: dict | None, manifest: dict, bundle: Bundle, fixture
     catalog = {m["id"] for m in bundle.public.get("mapsCatalog") or []}
     extra = {e["id"]: {"id": e["id"], "name": e.get("name") or e["id"], "mode": e.get("mode") or ""}
              for e in bundle.aliases_cfg.get("extraMaps") or [] if e.get("id") not in catalog}
-    payload = build_payload(normalized=normalized, recon=recon, manifest=manifest,
-                            source=bundle.source, decisions=bundle.decisions,
-                            hero_names=hero_names_from(bundle.public), fixture=fixture,
-                            extra_maps=extra)
-    return recon, payload
+    payload, details = build_payload(normalized=normalized, recon=recon, manifest=manifest,
+                                     source=bundle.source, decisions=bundle.decisions,
+                                     hero_names=hero_names_from(bundle.public), fixture=fixture,
+                                     extra_maps=extra)
+    return recon, payload, details
+
+
+def export_files(paths: Paths, payload: dict, details: dict) -> dict[str, str]:
+    """{absolute path: exact text} for the public export and its shards."""
+    files = {paths.export: render(payload)}
+    for bucket, maps in details.items():
+        files[os.path.join(paths.export_detail_dir, f"detail-{bucket}.js")] = render_detail(bucket, maps)
+    for path, text in files.items():
+        check_size(os.path.relpath(path, paths.root), text)
+    return files
+
+
+def write_export(paths: Paths, payload: dict, details: dict) -> bool:
+    """Write the export + shards, drop shards no map uses any more.
+    Returns True when any file changed."""
+    files = export_files(paths, payload, details)
+    changed = False
+    for path, text in files.items():
+        try:
+            with open(path, encoding="utf-8") as f:
+                if f.read() == text:
+                    continue
+        except OSError:
+            pass
+        write_text(path, text)
+        changed = True
+    d = paths.export_detail_dir
+    if os.path.isdir(d):
+        for fn in os.listdir(d):
+            full = os.path.join(d, fn)
+            if fn.startswith("detail-") and fn.endswith(".js") and full not in files:
+                os.remove(full)
+                changed = True
+    return changed
 
 
 def run_import(data: bytes, *, bundle: Bundle, manifest: dict, previous_normalized: dict | None,
@@ -97,6 +132,8 @@ def run_import(data: bytes, *, bundle: Bundle, manifest: dict, previous_normaliz
     entry = {
         "sha256": digest, "importedAt": at, "bytes": len(data), "sourceUrl": source_url,
         "sheetNames": [s["name"] for s in raw["sheets"]],
+        "package": {k: (raw.get("package") or {}).get(k) for k in
+                    ("bytes", "uncompressedBytes", "mediaFiles", "mediaBytes")},
         "parserVersion": PARSER_VERSION, "layoutVersion": inv.get("layoutVersion"),
         "aliasesVersion": inv.get("aliasesVersion"), "sourceRowCount": source_row_count(raw),
         "counts": inv.get("counts"), "changes": changes(previous_normalized, normalized),
@@ -111,19 +148,25 @@ def run_import(data: bytes, *, bundle: Bundle, manifest: dict, previous_normaliz
     raw_doc = {"format": "gsheet-raw.v1", "sha256": digest, "importedAt": at,
                "sourceUrl": source_url, "spreadsheetId": bundle.source.get("spreadsheetId"),
                "parserVersion": PARSER_VERSION, "workbook": raw}
-    recon, payload = payload_for(normalized, manifest, bundle)
-    return {"raw": raw_doc, "normalized": normalized, "manifest": manifest,
-            "recon": recon, "payload": payload, "sha256": digest}
+    recon, payload, details = payload_for(normalized, manifest, bundle)
+    # Size every file before anything is written: one that GitHub would
+    # reject fails the import here, with the last good data untouched.
+    shards = raw_shards(raw_doc)
+    norm_blob = normalized_bytes(normalized)
+    export_files(Paths(), payload, details)          # size check only
+    return {"raw": raw_doc, "rawShards": shards, "normalizedBlob": norm_blob,
+            "normalized": normalized, "manifest": manifest,
+            "recon": recon, "payload": payload, "details": details, "sha256": digest}
 
 
 # --------------------------------------------------------------- wrappers
 def _write_outputs(paths: Paths, docs: dict) -> None:
-    write_json(paths.raw, docs["raw"])
-    write_json(paths.normalized, docs["normalized"])
+    write_raw(paths, docs["raw"], docs.get("rawShards"))
+    write_normalized(paths, docs["normalized"], docs.get("normalizedBlob"))
     write_json(paths.manifest, docs["manifest"])
     _write_reports(paths, docs["normalized"], docs["recon"], docs["manifest"],
                    docs.get("source") or {})
-    write_text(paths.export, render(docs["payload"]))
+    write_export(paths, docs["payload"], docs.get("details") or {})
     lf = os.path.join(paths.reports, "last_failure.json")
     if os.path.exists(lf):
         os.remove(lf)
@@ -155,9 +198,12 @@ def _fail(paths: Paths, bundle: Bundle, manifest: dict, stage: str, reason: str,
     write_json(paths.manifest, manifest)
     # Re-render the export from the LAST GOOD normalized data, so the site
     # says the latest sync failed — without replacing any imported record.
-    normalized = read_json(paths.normalized)
-    _, payload = payload_for(normalized, manifest, bundle)
-    write_text(paths.export, render(payload))
+    normalized = read_normalized(paths)
+    try:
+        _, payload, details = payload_for(normalized, manifest, bundle)
+        write_export(paths, payload, details)
+    except StoreTooLarge:
+        pass        # the committed export (from the last good import) stays as it is
     return {"status": "failed", "stage": stage, "reason": reason, "sha256": digest}
 
 
@@ -172,8 +218,8 @@ def sync(paths: Paths, *, data: bytes | None = None, source_url: str | None = No
     url = source_url or bundle.source.get("exportUrl")
     if data is None:
         try:
-            data = download(url, timeout=float(bundle.source.get("timeoutSeconds") or 60),
-                            max_bytes=int(bundle.source.get("maxDownloadBytes") or 50 * 2**20),
+            data = download(url, timeout=float(bundle.source.get("timeoutSeconds") or 300),
+                            max_bytes=int(bundle.source.get("maxDownloadBytes") or 300 * 2**20),
                             opener=opener)
         except FetchFailed as exc:
             return _fail(paths, bundle, manifest, "download", str(exc), at)
@@ -185,15 +231,21 @@ def sync(paths: Paths, *, data: bytes | None = None, source_url: str | None = No
         snap = os.path.basename(save_snapshot(data, paths.cache, at[:10]))
     except OSError:
         snap = None
-    previous = read_json(paths.normalized)
+    previous = read_normalized(paths)
     try:
         docs = run_import(data, bundle=bundle, manifest=manifest, previous_normalized=previous,
                           source_url=url, at=at, accept_structure_change=accept_structure_change,
                           snapshot_file=snap)
     except WorkbookError as exc:
-        return _fail(paths, bundle, manifest, "read-workbook", str(exc), at, digest)
+        return _fail(paths, bundle, manifest, "read-workbook", str(exc), at, digest,
+                     {"package": package_profile(data)})
     except ImportFailed as exc:
-        return _fail(paths, bundle, manifest, "validate", str(exc), at, digest, exc.inventory)
+        inv = dict(exc.inventory or {})
+        inv["package"] = package_profile(data)
+        return _fail(paths, bundle, manifest, "validate", str(exc), at, digest, inv)
+    except StoreTooLarge as exc:
+        return _fail(paths, bundle, manifest, "store", str(exc), at, digest,
+                     {"package": package_profile(data)})
     docs["source"] = bundle.source
     _write_outputs(paths, docs)
     c = docs["normalized"]["inventory"]["counts"]
@@ -207,15 +259,23 @@ def rebuild(paths: Paths, write: bool = True) -> dict:
     and decisions — no download. Returns the documents (and writes them)."""
     bundle = Bundle.load(paths)
     manifest = read_json(paths.manifest) or empty_manifest(bundle.source)
-    raw_doc = read_json(paths.raw)
-    normalized = normalize_raw(raw_doc, bundle) if raw_doc else None
-    recon, payload = payload_for(normalized, manifest, bundle)
+    raw_doc = read_raw(paths)
+    # Re-read the last good snapshot against the snapshot it was compared
+    # with at import time, so structure changes an operator accepted then
+    # are recorded identically now (they were accepted, hence accept=True).
+    snaps = manifest.get("snapshots") or []
+    pos = next((i for i, x in enumerate(snaps) if x.get("sha256") == manifest.get("lastGood")), None)
+    before = snaps[pos - 1].get("tabs") if pos else None
+    normalized = (normalize_raw(raw_doc, bundle, previous_tabs=before, accept_structure_change=True)
+                  if raw_doc else None)
+    recon, payload, details = payload_for(normalized, manifest, bundle)
     if write:
         if normalized is not None:
-            write_json(paths.normalized, normalized)
+            write_normalized(paths, normalized)
             _write_reports(paths, normalized, recon, manifest, bundle.source)
-        write_text(paths.export, render(payload))
-    return {"normalized": normalized, "recon": recon, "payload": payload, "manifest": manifest}
+        write_export(paths, payload, details)
+    return {"normalized": normalized, "recon": recon, "payload": payload, "details": details,
+            "manifest": manifest}
 
 
 def refresh_export(paths: Paths) -> str | None:
@@ -226,17 +286,9 @@ def refresh_export(paths: Paths) -> str | None:
     external export) depends on which VOD maps are published."""
     bundle = Bundle.load(paths)
     manifest = read_json(paths.manifest) or empty_manifest(bundle.source)
-    normalized = read_json(paths.normalized)
-    _, payload = payload_for(normalized, manifest, bundle)
-    body = render(payload)
-    try:
-        with open(paths.export, encoding="utf-8") as f:
-            if f.read() == body:
-                return None
-    except OSError:
-        pass
-    write_text(paths.export, body)
-    return paths.export
+    normalized = read_normalized(paths)
+    _, payload, details = payload_for(normalized, manifest, bundle)
+    return paths.export if write_export(paths, payload, details) else None
 
 
 def check(paths: Paths) -> list[str]:
@@ -246,20 +298,29 @@ def check(paths: Paths) -> list[str]:
     problems = []
     if fresh["normalized"] is not None:
         try:
-            with open(paths.normalized, encoding="utf-8") as f:
+            with open(paths.normalized, "rb") as f:
                 committed = f.read()
         except OSError:
             committed = None
-        if committed != dumps(fresh["normalized"]):
-            problems.append("data/external/gsheet/normalized.json is not what the committed raw "
+        if committed != normalized_bytes(fresh["normalized"]):
+            problems.append("data/external/gsheet/normalized.json.gz is not what the committed raw "
                             "layer + configs produce — run: python3 pipeline/sheet_sync.py rebuild")
-    try:
-        with open(paths.export, encoding="utf-8") as f:
-            committed_js = f.read()
-    except OSError:
-        committed_js = None
-    if committed_js != render(fresh["payload"]):
-        problems.append("assets/data/external_sheet.v1.js is out of date (raw layer, configs, "
-                        "decisions or the published VOD dataset changed) — run: "
-                        "python3 pipeline/sheet_sync.py rebuild")
+    expected = export_files(paths, fresh["payload"], fresh["details"])
+    stale = []
+    for path, text in expected.items():
+        try:
+            with open(path, encoding="utf-8") as f:
+                if f.read() == text:
+                    continue
+        except OSError:
+            pass
+        stale.append(os.path.relpath(path, paths.root))
+    d = paths.export_detail_dir
+    if os.path.isdir(d):
+        stale += [os.path.relpath(os.path.join(d, fn), paths.root) for fn in sorted(os.listdir(d))
+                  if fn.startswith("detail-") and os.path.join(d, fn) not in expected]
+    if stale:
+        problems.append(f"the public spreadsheet export is out of date ({', '.join(stale[:5])}"
+                        f"{' …' if len(stale) > 5 else ''}) — the raw layer, configs, decisions or "
+                        "the published VOD dataset changed. Run: python3 pipeline/sheet_sync.py rebuild")
     return problems

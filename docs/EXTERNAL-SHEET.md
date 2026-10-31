@@ -44,7 +44,7 @@ field by field, and labelled on every page.
                 │ no
                 ▼
    workbook.py  every tab, every cell, merged ranges, hyperlinks
-                ─────────────────► data/external/gsheet/raw/cells.json      (RAW layer)
+                ─────────────────► data/external/gsheet/raw/  index.json + sheets/*.json.gz (RAW layer)
                 ▼
    layout.py    per tab: header row (incl. two-row headers) → columns → purpose
    aliases.py   teams (+history windows) · players · heroes (renames) · maps · modes
@@ -53,7 +53,7 @@ field by field, and labelled on every page.
    normalize.py raw → External* records + SourceFieldProvenance
                 validation gate: unrecognised layout / mostly-unparseable tab /
                 removed or re-purposed tab ⇒ FAIL, keep last good import
-                ─────────────────► data/external/gsheet/normalized.json
+                ─────────────────► data/external/gsheet/normalized.json.gz
                 ▼
    reconcile.py scored matching vs published VOD maps (assets/data/public_data.v1.js)
                 auto-link only when unambiguous; otherwise review queue
@@ -104,14 +104,15 @@ VOD maps are published changes the links.
 | `config/external/aliases.json` | canonical spellings for every entity, date formats | hand, versioned |
 | `config/comp_archetypes.json` | editorial archetype labels (tank-based) | hand, versioned |
 | `corrections/external_reconciliation.json` | link/reject/ignore decisions, alias approvals | the Source health page builds entries; commit them |
-| `data/external/gsheet/raw/cells.json` | raw layer: every tab and cell of the last good workbook | `sync` |
-| `data/external/gsheet/normalized.json` | External* records + field provenance + inventory | `sync`, `rebuild` |
+| `data/external/gsheet/raw/index.json` + `raw/sheets/NNN-<tab>.json.gz` | raw layer: every tab and cell of the last good workbook, one deterministic gzip per tab (keeps every file far under GitHub's 100 MB limit; a sync that changes one tab adds one new blob) | `sync` |
+| `data/external/gsheet/normalized.json.gz` | External* records + field provenance + inventory (deterministic gzip: a full sheet is tens of MB of JSON) | `sync`, `rebuild` |
 | `data/external/gsheet/manifest.json` | every snapshot: sha256, date, bytes, tabs, versions, counts, changes; `lastGood`, `lastAttempt` | `sync` |
 | `reports/external/gsheet/*` | source inventory, reconciliation, last failure (md + json) | `sync`, `rebuild` |
-| `assets/data/external_sheet.v1.js` | the public external dataset | `sync`, `rebuild`, `export_data.py --public` |
+| `assets/data/external_sheet.v1.js` | the public external dataset: compact, one line per map | `sync`, `rebuild`, `export_data.py --public` |
+| `assets/data/external_sheet/detail-<xx>.js` | per-map player listings, loaded only by `map.html` | `sync`, `rebuild` |
 | `work/gsheet/owcs-sheet_<date>_<sha12>.xlsx` | the original bytes (git-ignored; also a workflow artifact for 30 days) | `sync` |
 
-Old snapshots stay recoverable from git history (`raw/cells.json` at any commit)
+Old snapshots stay recoverable from git history (`raw/` at any commit)
 and are listed by hash in the manifest. A parser improvement is just `rebuild`.
 Nothing needs downloading again.
 
@@ -162,16 +163,17 @@ good snapshot is gone or now reads as something else. Pass
 | `teams` | `{id: {id, name, mapped}}`: the sheet's own spelling for teams no registry knows (ids `x-<slug>`) |
 | `tournaments[]` | **ExternalTournament** `{id: "xt-<slug>", slug, name, nameMethod, regions[], stages[], year}` |
 | `matches[]` | **ExternalMatch** `{id: "xm-<hash>", slug, tournamentId, event, stage, stageRaw, region, regionRaw, date, dateRaw, dateMethod, dateAmbiguous, patch, teamA/teamARaw/teamAMethod, teamB…, seriesScoreA/B, seriesScoreRaw, seriesScoreMethod ("sheet" or "derived-from-map-winners"), winner, winnerMethod, mapIds[], flags[], src}` |
-| `maps[]` | **ExternalMap** `{id: "xmap-<hash>", slug, matchId, date, order, orderMethod, map, mapRaw, mode, modeMethod, teamA, teamB, winner, winnerSide, winnerRaw, winnerMethod, pickedBy, pickedBySide, pickedByRaw, pickNote, scoreA, scoreB, scoreRaw, vodUrl, notes, flags[], src{sheet,row,cells}, alsoListedAt[], duplicateConflicts?[], bans[], teams{a,b}}` |
-| `maps[].bans[]` | **ExternalHeroBan** `{side, teamId, hero, raw, order, cell}`. `hero: null` means unmapped and never counted |
-| `maps[].teams.<side>.players[]` | **ExternalPlayerHeroAppearance**, nested: `{position, player, playerRaw, playerMapped, role, heroes[{hero, n, raw?}]}`. `n` is the sheet's list order, **not** play order. There are no time fields anywhere |
-| `maps[].teams.<side>.comps[]` | **ExternalCompositionObservation** `{kind: "listed-comp" or "first-listed" or "hero-pool", heroes[], unresolved[], complete}` |
+| `maps[]` | **ExternalMap summary**, one line per map: `{id: "xmap-<hash>", slug, matchId, date, order, map, mapRaw (only when unmapped), mode, teamA, teamB, winner, winnerSide, pickedBy, pickNote, scoreRaw, vodUrl, flags[], duplicateConflicts? (count), bans[], teams{a,b}}` |
+| `maps[].bans[]` | **ExternalHeroBan** `{side, teamId, hero, raw?}`. `hero` missing means unmapped and never counted; `raw` keeps the sheet's text |
+| `maps[].teams.<side>` | `{heroes[] (every resolved hero the sheet lists for that team), comp[5] or null (its complete five-hero listing), compKind ("listed-comp" or "first-listed"), listed, unresolved}`. Counts and sets only: **there are no time fields anywhere** |
+| `detailShards[]` | buckets that exist under `assets/data/external_sheet/` |
+| `assets/data/external_sheet/detail-<xx>.js` | `window.OWCS_EXTERNAL_DETAIL[mapId]`: the full map, including `src{sheet,row,cells}`, `alsoListedAt[]`, `duplicateConflicts[]`, bans with `cell`, and `teams.<side>.players[]` (**ExternalPlayerHeroAppearance**: `{position, player, playerRaw, playerMapped, role, heroes[{hero, n, raw?}]}`, where `n` is the sheet's list order, **not** play order) plus `comps[]` (**ExternalCompositionObservation**: `{kind, heroes[], unresolved[], complete}`). `xx` is characters 6–7 of the map id, so there are at most 256 small files however big the sheet is. Only `map.html` loads them, for one map at a time |
 | `reconciliation` | `{summary, rules, vodOnlyMaps[], records[]}` |
-| `reconciliation.records[]` | **ReconciliationRecord** `{id, externalMapId, vodMapId, status, method ("auto" or "manual"), score, candidates[{vodMapId, score, reasons[], mapDisagrees}], fields{date, map, order, mode, winner, pickedBy, bans, heroes:<team>{sheet, vod, agree, note, sheetOnly[], vodOnly[], vodOnlyBrief[]}}, decisions[], ignored, reason}`. `agree` is `true`, `false`, or `null` (only one source recorded it) |
+| `reconciliation.records[]` | Every record with a link, a candidate, a decision or a non-`unmatched` status. Plain "no candidate" records are counted in `summary` only. **ReconciliationRecord** `{id, externalMapId, vodMapId, status, method ("auto" or "manual"), score, candidates[{vodMapId, score, reasons[], mapDisagrees}], fields{date, map, order, mode, winner, pickedBy, bans, heroes:<team>{sheet, vod, agree, note, sheetOnly[], vodOnly[], vodOnlyBrief[]}}, decisions[], ignored, reason}`. `agree` is `true`, `false`, or `null` (only one source recorded it) |
 | `decisions` | every committed manual decision and alias approval, carried into export provenance |
 | `health` | `{counts, tabCount, dataTabs, sourceRowCount, layoutVersion, aliasesVersion, tabs[], unmapped{kind:[{raw,count,refs}]}, issues[], errors[]}` |
 
-`normalized.json` holds the same records flat and un-nested, the original text
+`normalized.json.gz` holds the same records flat and un-nested, the original text
 for every value, and `fieldProvenance[]` (**SourceFieldProvenance**:
 `{record, field, sheet, cell, method, raw, value}`, where `method` is one of
 `direct`, `alias`, `catalog`, `approved`, `history`, `slug`, `forward-fill`,
@@ -319,6 +321,13 @@ After that it runs daily on its own; you only merge the PR it opens.
   show VOD data only.
 
 ## Limits
+
+* **Size.** The real workbook is over 50 MB. Downloads are capped at
+  `maxDownloadBytes` (300 MB) in `gsheet_source.json` as a runaway guard.
+  Every file the import would commit is size-checked first (95 MB, under
+  GitHub's 100 MB limit). An oversize file fails the sync at stage `store`
+  and keeps the last good data. The inventory's *Workbook package* line
+  shows what makes the file large (embedded images versus very large tabs).
 
 * The real workbook's layout could not be inspected while this was built,
   because the build environment's network policy blocked `docs.google.com`.

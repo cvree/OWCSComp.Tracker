@@ -1,5 +1,26 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
+## UPDATE (2026-10-31, seventeenth pass, follow-up) — the real workbook is over 50 MB
+
+The first real `sheet-sync` run (2026-10-31 18:39 UTC) downloaded the sheet
+fine but refused it at the 50 MB cap. Fixed for large workbooks:
+
+* cap raised to 300 MB, timeout 300 s, workflow budget 45 min;
+* xlsx read in openpyxl's streaming mode (memory flat); merged ranges,
+  hyperlinks and hidden state read from the sheet XML directly. Output is
+  byte-identical to the old reader (tested);
+* raw layer = `raw/index.json` + one deterministic gzip per tab;
+  `normalized.json.gz`; public export = compact one-line-per-map summary,
+  plus 256 detail shards (`assets/data/external_sheet/detail-xx.js`)
+  that `map.html` loads for one map;
+* every committed file is size-checked (95 MB) before anything is
+  written. Too big means the sync fails at stage `store` and keeps the last
+  good data;
+* the inventory's "Workbook package" line says what makes the file large
+  (embedded media versus big tabs);
+* normaliser lookups are indexed per map (a 100k-row stress test went from
+  310 s to about 90 s).
+
 ## UPDATE (2026-10-31, seventeenth pass) — the community spreadsheet, as a labelled second source
 
 **What landed.** The public community OWCS Google Sheet

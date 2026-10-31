@@ -40,6 +40,7 @@
       return;
     }
     render();
+    loadSheetDetail();
     if (P.evidence) P.evidence.wire(document);
     const match = entry.vodId ? P.match(entry.vodId.replace(/-m\d+$/, "")) : null;
     if (P.mapStory && match) P.mapStory.wire(document.getElementById("body"), match);
@@ -196,8 +197,39 @@
   }
 
   /* ------------------------------------------------ spreadsheet lane */
+  /* The per-player listing lives in a small detail shard (one of 256),
+     loaded for this map only; the summary already on the page carries
+     everything the analytics need. */
   function sheetSection() {
     const s = entry.sheet;
+    if (s) {
+      return '<div id="sheet-lane"><section class="band"><div class="sec-head"><h2>Spreadsheet record</h2>' +
+        P.srcBadge("sheet") + '</div><p class="dim small" role="status">Loading the spreadsheet’s ' +
+        "per-player listing…</p></section></div>";
+    }
+    return sheetDetailSection(null);
+  }
+
+  function loadSheetDetail() {
+    if (!entry || !entry.sheet || !P.loadExtDetail) return;
+    P.loadExtDetail(entry.sheet.id).then((d) => {
+      const host = document.getElementById("sheet-lane");
+      if (host) host.innerHTML = sheetDetailSection(d);
+    });
+  }
+
+  function sheetDetailSection(detail) {
+    const s = detail || entry.sheet;
+    if (s && !detail) {
+      const t = (side) => (s.teams || {})[side] || {};
+      return '<section class="band"><div class="sec-head"><h2>Spreadsheet record</h2>' + P.srcBadge("sheet") +
+        "</div>" + P.note("warn", "The per-player listing could not be loaded",
+          "<p>Heroes the sheet lists for each team are shown without player detail.</p>") +
+        '<div class="grid grid--2 u-mt-4">' + ["a", "b"].map((side) => '<div class="card">' +
+          P.anyTeamPlate(side === "a" ? s.teamA : s.teamB, { size: "sm" }) +
+          '<div class="row u-mt-4">' + P.compStrip(t(side).heroes || [], { size: "xs", tight: true }) + "</div></div>").join("") +
+        "</div></section>";
+    }
     if (!s) {
       return P.extMaps().length ? '<section class="band"><div class="sec-head"><h2>Spreadsheet record</h2>' +
         P.srcBadge("sheet") + "</div>" + P.note("info", "Not in the spreadsheet",
@@ -260,7 +292,11 @@
 
   function reconSection() {
     const rec = entry.extId ? P.recForExt(entry.extId) : null;
-    if (!rec) return "";
+    if (!rec) {
+      return '<section class="band" id="recon"><div class="sec-head"><h2>Sources compared</h2>' +
+        P.reconBadge("unmatched") + '</div><p class="dim small">No VOD map the tracker has read has ' +
+        "these two teams on a nearby date, so this map is spreadsheet-only: no timing, no evidence frames.</p></section>";
+    }
     const verdict = (a) => a === true ? P.srcBadge("both", "agree") : a === false ? P.srcBadge("conflict", "disagree")
       : P.srcBadge("partial", "one source only");
     const fields = rec.fields || {};

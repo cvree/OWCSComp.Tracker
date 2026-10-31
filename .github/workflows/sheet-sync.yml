@@ -53,7 +53,9 @@ permissions:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    # A large workbook (the real one is over 50 MB) takes minutes to export
+    # on Google's side and to parse here.
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v6
 
@@ -87,7 +89,7 @@ jobs:
             } >> "$GITHUB_STEP_SUMMARY"
             exit 0
           fi
-          if git status --porcelain -- data/external reports/external assets/data/external_sheet.v1.js | grep -q .; then
+          if git status --porcelain -- data/external reports/external assets/data/external_sheet.v1.js assets/data/external_sheet | grep -q .; then
             echo "changed=true" >> "$GITHUB_OUTPUT"
           else
             echo "changed=false" >> "$GITHUB_OUTPUT"
@@ -103,6 +105,7 @@ jobs:
             sync.log
             reports/external/gsheet/
             work/gsheet/*.xlsx
+            reports/external/gsheet/last_failure.*
           if-no-files-found: ignore
           retention-days: 30
 
@@ -132,7 +135,9 @@ jobs:
           git config user.name  "owcs-sheet-sync[bot]"
           git config user.email "actions@users.noreply.github.com"
           git checkout -B "$BR"
-          git add data/external reports/external assets/data/external_sheet.v1.js
+          # -A also stages deletions (a tab or detail shard that no longer exists).
+          git add -A data/external reports/external assets/data/external_sheet.v1.js
+          if [ -d assets/data/external_sheet ]; then git add -A assets/data/external_sheet; fi
           SHA=$(python -c "import json;print(json.load(open('data/external/gsheet/manifest.json'))['lastGood'][:12])")
           git commit -m "data: community spreadsheet import (workbook $SHA)"
           git push --force origin "$BR"
