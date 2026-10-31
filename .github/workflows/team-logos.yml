@@ -1,0 +1,95 @@
+# =====================================================================
+# OWCS Comp Tracker — give every org its mark (team-logos)
+# ---------------------------------------------------------------------
+# Most teams get their logo automatically: live-probe.yml cuts it from the
+# broadcast HUD the first time a broadcast they played on is indexed. A
+# team known from somewhere else (an earlier stage, a FACEIT room) can
+# still be drawn as its crest. This fills those in from the org's own
+# published image (pipeline/team_logos.py), re-exports the public data,
+# commits, and redeploys the site.
+#
+# Dispatch with no input to fetch every candidate already on record in
+# assets/data/team_asset_sources.json. To add a team the record has no
+# source for, paste its official image URL:
+#
+#     logos:  gen=https://<official site>/logo.png,quick=https://<...>/logo.png
+#
+# $0, no secrets beyond the default GITHUB_TOKEN.
+# =====================================================================
+name: team-logos
+
+on:
+  workflow_dispatch:
+    inputs:
+      logos:
+        description: "Optional team=url pairs, comma-separated (official org images only)"
+        required: false
+        default: ""
+
+concurrency:
+  group: owcs-generated-data
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  actions: write   # dispatch pages.yml after publishing
+
+jobs:
+  logos:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install --quiet -r requirements.txt
+
+      - name: Fetch missing logos
+        env:
+          LOGOS: ${{ inputs.logos }}
+        run: |
+          set -euo pipefail
+          python pipeline/team_logos.py --report
+          if [ -n "$LOGOS" ]; then
+            python pipeline/team_logos.py --set "$LOGOS"
+          else
+            python pipeline/team_logos.py
+          fi
+
+      - name: Publish
+        id: publish
+        run: |
+          set -euo pipefail
+          if [ -z "$(git status --porcelain data/owcs.sqlite assets/img/teams)" ]; then
+            echo "Nothing new."; echo "committed=false" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          python pipeline/export_data.py --public
+          python pipeline/export_data.py --check --public
+          python pipeline/build_asset_manifest.py
+          python pipeline/test_assets.py
+          git config user.name  "owcs-team-logos[bot]"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/owcs.sqlite assets/img/teams assets/data/public_data.v1.js \
+            assets/js/data.js assets/data/asset_manifest.json assets/data/team_asset_sources.json
+          git commit -m "team logos: $(python pipeline/team_logos.py --report | head -1)"
+          pushed=false
+          for attempt in 1 2 3; do
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
+            if git push origin "HEAD:${GITHUB_REF_NAME}"; then pushed=true; break; fi
+            sleep $((attempt * 5))
+          done
+          [ "$pushed" = "true" ] || { echo "::error::could not push"; exit 1; }
+          echo "committed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Redeploy the site
+        if: steps.publish.outputs.committed == 'true' && github.ref_name == 'main'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run pages.yml --ref "${GITHUB_REF_NAME}"

@@ -48,7 +48,7 @@ FAILS = 0
 
 #: Pages that build the shared app shell (header + dataset line + footer).
 SHELL_PAGES = [
-    "index.html", "submit.html", "review.html", "games.html", "game.html",
+    "index.html", "admin.html", "submit.html", "review.html", "games.html", "game.html",
     "stats.html", "teams.html", "team.html", "hero.html", "tools.html",
     "how-it-works.html", "guide.html", "styleguide.html",
 ]
@@ -169,9 +169,11 @@ def main() -> None:
 
     # ------------------------------------------------------------------
     print("shell — one navigation row, everything else behind it:")
-    check("primary nav is still the five things a person does here",
+    check("the admin nav is still the five things an admin does here",
           all(f'label: "{n}"' in shell for n in
               ["Dashboard", "Games", "Submit", "Review", "Stats"]))
+    check("the public nav is maps, comps and teams",
+          all(f'label: "{n}"' in shell for n in ["Maps", "Comps", "Teams"]))
     check("secondary destinations live in an overflow menu, not a second row",
           "RAIL" in shell and "more__panel" in shell and "subnav" not in shell)
     check("the overflow menu closes on Escape and on an outside click",

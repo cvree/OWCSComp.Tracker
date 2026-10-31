@@ -278,6 +278,52 @@
       ' font-size="' + fs + '" fill="hsl(' + hue + ' 70% 78%)">' + esc(code) + "</text></svg>";
   };
 
+  /* Every org gets an icon, everywhere. The verified logo when there is
+     one; otherwise the team's crest, which is drawn from its own code and
+     hue so it is stable and recognisable, never a blank square. Accepts a
+     team row, a team id, or the raw {id, name} a broadcast printed for a
+     team the dataset does not know yet. */
+  P.teamCode = (name) => {
+    const words = String(name || "?").replace(/[^A-Za-z0-9. ]/g, " ").trim().split(/\s+/);
+    return (words.length > 1 ? words.map((w) => w[0]).join("") : words[0]).slice(0, 4).toUpperCase();
+  };
+  P.teamMark = (teamOrId, px) => {
+    let t = typeof teamOrId === "string" ? P.team(teamOrId) : teamOrId;
+    if (t && !t.logoUrl && t.id && P.team(t.id)) t = P.team(t.id);
+    if (t && !t.code) t = { id: t.id || t.name, name: t.name, code: P.teamCode(t.name) };
+    if (t && t.logoUrl) {
+      const size = px ? ' width="' + px + '" height="' + px + '"' : "";
+      return '<img src="' + esc(t.logoUrl) + '" alt=""' + size + ' loading="lazy" decoding="async"' +
+        ' data-fallback="' + esc(t.code || "?") + '">';
+    }
+    return P.teamCrest(t);
+  };
+
+  /* ------------------------------------------------------------ audience
+     Two audiences, one site. Fans read maps and comps; a handful of
+     admins submit, review and name heroes. The admin pages stay reachable
+     by URL and are never linked from the public chrome. Opening any of
+     them (or ?admin=1) switches this browser into admin mode, which adds
+     the admin links back; ?admin=0 leaves it. */
+  P.ADMIN_PAGES = ["admin.html", "games.html", "submit.html", "review.html", "label.html",
+    "tools.html", "guide.html", "styleguide.html", "calibrate.html"];
+  P.pageName = () => location.pathname.split("/").pop() || "index.html";
+  P.isAdminPage = () => P.ADMIN_PAGES.indexOf(P.pageName()) >= 0;
+  P.isAdmin = (() => {
+    let on = false;
+    try {
+      const flag = new URL(location.href).searchParams.get("admin");
+      if (flag === "0") localStorage.removeItem("owcs.admin");
+      else if (flag === "1" || P.ADMIN_PAGES.indexOf(location.pathname.split("/").pop()) >= 0) {
+        localStorage.setItem("owcs.admin", "1");
+      }
+      on = localStorage.getItem("owcs.admin") === "1";
+    } catch (err) {
+      on = P.ADMIN_PAGES.indexOf(location.pathname.split("/").pop()) >= 0;
+    }
+    return () => on;
+  })();
+
   /* --------------------------------------------------------- components */
   P.teamPlate = (teamOrId, opt) => {
     opt = opt || {};
@@ -289,10 +335,7 @@
         P.teamCrest(null) + '</span><span class="team__name">' +
         esc(opt.tbd || "Not identified") + "</span></span>";
     }
-    const mark = t.logoUrl
-      ? '<img src="' + esc(t.logoUrl) + '" alt="" loading="lazy" decoding="async"' +
-        ' data-fallback="' + esc(t.code || "?") + '">'
-      : P.teamCrest(t);
+    const mark = P.teamMark(t);
     const inner = '<span class="team__logo">' + mark + "</span>" +
       '<span class="team__name">' + esc(opt.short ? (t.code || t.name) : t.name) + "</span>";
     if (opt.link) {

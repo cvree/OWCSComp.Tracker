@@ -38,13 +38,16 @@ try {
 
 const ROOT = path.dirname(__dirname);
 const PAGES = [
-  "index.html", "games.html", "game.html", "submit.html", "review.html",
+  "index.html", "admin.html", "games.html", "game.html", "submit.html", "review.html",
   "stats.html", "teams.html", "team.html", "hero.html", "tools.html",
   "how-it-works.html", "guide.html", "styleguide.html", "label.html",
 ];
 /* 404.html is deliberately standalone — it must render with no data and
    no shell, because the thing that failed may be the shell. */
 const NO_SHELL = new Set(["404.html"]);
+/* Pages that carry the admin chrome (mirrors P.ADMIN_PAGES in core.js). */
+const ADMIN = new Set(["admin.html", "games.html", "submit.html", "review.html", "label.html",
+  "tools.html", "guide.html", "styleguide.html"]);
 
 let fails = 0;
 const check = (name, ok, detail) => {
@@ -135,9 +138,17 @@ async function renderPage(page) {
       check("exactly one primary navigation row",
         doc.querySelectorAll("header.hdr nav.nav").length === 1 &&
         doc.querySelectorAll(".subnav").length === 0);
-      check("secondary destinations are reachable without a second row",
-        !!doc.querySelector(".more__panel a[href='tools.html']") ||
-        !!doc.querySelector(".nav a[href='tools.html']"));
+      if (ADMIN.has(page)) {
+        check("admin tools are reachable without a second row",
+          !!doc.querySelector(".more__panel a[href='tools.html']") ||
+          !!doc.querySelector(".nav a[href='tools.html']"));
+      } else {
+        check("the public header asks nothing of a fan (no submit/review/label/tools)",
+          !doc.querySelector("header.hdr a[href='submit.html'], header.hdr a[href='review.html']," +
+            " header.hdr a[href='label.html'], header.hdr a[href='tools.html']"));
+        check("admins can still find their way in from the footer",
+          !!doc.querySelector("footer.ftr a[href='admin.html']"));
+      }
     }
     check("no scrolling ticker anywhere on the page",
       doc.querySelectorAll(".ticker, .ticker__track").length === 0);

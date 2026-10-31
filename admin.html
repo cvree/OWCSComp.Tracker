@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin dashboard — OWCS Comp Tracker</title>
+<meta name="description" content="Admin only: submit broadcasts, see what is processing or blocked, and what is waiting on review.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/archivo-var-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/saira-condensed-700-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/fonts.css">
+<link rel="stylesheet" href="assets/css/owcs.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<main id="main">
+
+  <!-- What this is, in one screen — and compact, because the people who
+       use this daily want the dashboard, not the pitch. The right-hand
+       column is not decoration: it is the most recent thing the product
+       actually produced, so the claim on the left is evidenced beside it.
+       It removes itself when there is nothing published to show. -->
+  <section class="shell shell--wide">
+    <div class="opener">
+      <div class="page-head page-head--tight">
+        <p class="eyebrow eyebrow--gold">Admin</p>
+        <h1>Admin dashboard</h1>
+        <p class="lede">Where the pipeline stands: what was found, what is processing, what is
+          blocked and what is waiting on a person. Fans never see this page — the public
+          site is <a href="index.html">map by map</a> and <a href="stats.html">comps</a>.</p>
+        <div class="row u-mt-4">
+          <a class="btn btn--primary" href="submit.html">Submit a broadcast</a>
+          <a class="btn btn--ghost" href="review.html">Review queue</a>
+          <a class="btn btn--quiet" href="label.html">Name the heroes</a>
+        </div>
+        <div id="mode-status" class="u-mt-4" style="max-width:70ch"></div>
+      </div>
+      <div id="showcase" class="opener__showcase"></div>
+    </div>
+  </section>
+
+  <!-- The newest published map, replayable. The product's whole claim in
+       one interactive picture: hides itself when nothing is published. -->
+  <section class="shell shell--wide band" id="watch-band" hidden aria-labelledby="h-watch">
+    <div class="sec-head">
+      <h2 id="h-watch">Watch any map</h2>
+      <a class="sec-link" id="watch-link" href="games.html">Every map of this broadcast →</a>
+    </div>
+    <p class="dim small" id="watch-sub"></p>
+    <div id="watch"></div>
+  </section>
+
+  <!-- Every team on record, by how much of them there is to watch. -->
+  <section class="shell shell--wide band" id="field-band" hidden aria-labelledby="h-field">
+    <div class="sec-head">
+      <h2 id="h-field">The field</h2>
+      <a class="sec-link" href="teams.html">Every team →</a>
+    </div>
+    <div class="field" id="field"></div>
+  </section>
+
+
+  <section class="shell shell--wide band" id="story-band" hidden aria-labelledby="h-story">
+    <div class="sec-head">
+      <h2 id="h-story">Replay the latest map</h2>
+      <a class="sec-link" id="story-link" href="games.html">The whole game →</a>
+    </div>
+    <p class="dim small" id="story-sub"></p>
+    <div id="story"></div>
+  </section>
+
+  <!-- Where everything stands right now. -->
+  <section class="shell shell--wide band" aria-labelledby="h-now">
+    <div class="sec-head">
+      <h2 id="h-now">Where everything stands</h2>
+      <a class="sec-link" href="games.html">All games →</a>
+    </div>
+    <div class="grid grid--4" id="tiles"></div>
+  </section>
+
+  <!-- What the tracker did on its own since anyone last looked. Hides
+       itself when no automatic scan has ever run. -->
+  <section class="shell shell--wide band" id="autofill-band" hidden aria-labelledby="h-auto">
+    <div class="sec-head">
+      <h2 id="h-auto">Filling itself</h2>
+      <a class="sec-link" href="games.html?state=found">Everything found →</a>
+    </div>
+    <div id="autofill"></div>
+  </section>
+
+  <!-- Only what needs a person. This block hides itself when it is empty. -->
+  <section class="shell shell--wide band" id="attention-band" hidden aria-labelledby="h-attn">
+    <div class="sec-head">
+      <h2 id="h-attn">Waiting on you</h2>
+      <a class="sec-link" href="review.html">Open the review queue →</a>
+    </div>
+    <div class="stack" id="attention"></div>
+  </section>
+
+  <section class="shell shell--wide band" aria-labelledby="h-recent">
+    <div class="sec-head">
+      <h2 id="h-recent">Recent games</h2>
+      <a class="sec-link" href="games.html">All games →</a>
+    </div>
+    <div class="grid grid--2" id="recent"></div>
+  </section>
+
+  <section class="shell shell--wide band" aria-labelledby="h-published">
+    <div class="sec-head">
+      <h2 id="h-published">Recently published</h2>
+      <a class="sec-link" href="stats.html">Explore the data →</a>
+    </div>
+    <div id="published"></div>
+  </section>
+
+  <section class="shell shell--wide band" aria-labelledby="h-health">
+    <div class="sec-head">
+      <h2 id="h-health">System health</h2>
+      <a class="sec-link" href="tools.html">Tools &amp; diagnostics →</a>
+    </div>
+    <div id="health"></div>
+  </section>
+
+</main>
+
+<script src="assets/vendor/fuse.basic.min.js" defer></script>
+<script src="assets/vendor/lenis.min.js" defer></script>
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="assets/js/app/motion.js" defer></script>
+<script src="assets/data/hero_art.v1.js"></script>
+<script src="assets/data/public_data.v1.js"></script>
+<script src="assets/data/discovered.v1.js"></script>
+<script src="assets/data/broadcast_maps.v1.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app/core.js"></script>
+<script src="assets/js/app/games.js"></script>
+<script src="assets/js/app/mapindex.js"></script>
+<script src="assets/js/app/api.js"></script>
+<script src="assets/vendor/panzoom.min.js"></script>
+<script src="assets/js/app/evidence.js"></script>
+<script src="assets/js/app/mapstory.js"></script>
+<script src="assets/js/app/hovercard.js" defer></script>
+<script src="assets/js/app/shell.js"></script>
+<script src="assets/js/app/page-dashboard.js"></script>
+</body>
+</html>

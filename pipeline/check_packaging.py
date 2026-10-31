@@ -375,7 +375,7 @@ def check_fixture(root: str) -> None:
 #: Pages that render published data and therefore MUST load the
 #: production export. Operator-only surfaces are not listed: they are
 #: allowed to exist without it.
-DATA_PAGES = ("index.html", "games.html", "game.html", "stats.html",
+DATA_PAGES = ("index.html", "admin.html", "games.html", "game.html", "stats.html",
               "review.html", "team.html", "teams.html", "hero.html",
               "submit.html", "tools.html", "how-it-works.html")
 

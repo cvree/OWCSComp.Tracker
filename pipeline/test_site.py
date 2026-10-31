@@ -15,8 +15,10 @@ What it guards, in order of how much it would hurt to lose:
      manual and never from FACEIT; a manual correction never deletes the
      detection it corrects; every published claim resolves to an evidence
      file that exists on disk.
-  2. THE INFORMATION ARCHITECTURE. Five nav entries, one page per job, no
-     dead links, no orphan pages, no page reintroducing a deleted one.
+  2. THE INFORMATION ARCHITECTURE. Two audiences: a three-entry public
+     nav (Maps · Comps · Teams) that never asks a fan to submit or review,
+     and the five-entry admin nav on the admin pages only. One page per
+     job, no dead links, no orphan pages, no deleted page coming back.
   3. NO DEMO DATA CAN REACH A PAGE. The fixture is a test asset now.
   4. THE BASICS THAT ROT SILENTLY. Skip links, lang, focus styles,
      reduced motion, empty states, self-hosted assets only.
@@ -37,7 +39,8 @@ FAILS = 0
 
 #: The whole product. Every page a person can reach, and what it is for.
 PRODUCT_PAGES = {
-    "index.html": "Dashboard",
+    "index.html": "Maps — every map, map by map, with both comps",
+    "admin.html": "Admin dashboard",
     "games.html": "Games",
     "submit.html": "Submit",
     "review.html": "Review",
@@ -66,7 +69,7 @@ STANDALONE_PAGES = {"calibrate.html", "control-room.html", "setup.html", "404.ht
 #: is how an information architecture rots back into a page-per-dataset.
 DELETED_PAGES = {
     "matches.html", "match.html", "runs.html", "sources.html", "portal.html",
-    "run.html", "admin.html", "fact-admin.html", "calibration.html",
+    "run.html", "fact-admin.html", "calibration.html",
     "heroes.html", "maps.html", "comps.html", "swaps.html", "calendar.html",
     "tournaments.html", "tournament.html", "prep.html", "team-prep.html",
     "team-coverage.html", "beta-ops.html", "intake.html",
@@ -104,25 +107,43 @@ def test_pages_exist() -> None:
 
 
 def test_navigation() -> None:
-    print("navigation: five entries, in workflow order:")
+    print("navigation: a public nav for fans, an admin nav for admins:")
     shell = read("assets/js/app/shell.js")
+    core = read("assets/js/app/core.js")
     nav = re.search(r"const NAV = \[(.*?)\n  \];", shell, re.S)
-    check("the nav is declared in one place", nav is not None)
-    if not nav:
+    admin = re.search(r"const ADMIN_NAV = \[(.*?)\n  \];", shell, re.S)
+    check("each nav is declared in one place", nav is not None and admin is not None)
+    if not nav or not admin:
         return
     labels = re.findall(r'label: "([^"]+)"', nav.group(1))
-    check(f"exactly five entries ({labels})", len(labels) == 5)
-    check("in workflow order: Dashboard, Games, Submit, Review, Stats",
-          labels == ["Dashboard", "Games", "Submit", "Review", "Stats"])
-    for gone in ("Tournaments", "Heroes", "Maps", "Calendar", "Portal",
-                 "Vision Lab", "Admin", "Sources"):
+    check(f"the public nav is maps and comps first ({labels})",
+          labels == ["Maps", "Comps", "Teams"])
+    hrefs = re.findall(r'href: "([^"]+)"', nav.group(1))
+    check("nothing on the public nav asks a fan to submit, review or label",
+          not set(hrefs) & {"submit.html", "review.html", "label.html", "games.html",
+                            "tools.html", "admin.html"})
+    alabels = re.findall(r'label: "([^"]+)"', admin.group(1))
+    check(f"the admin nav is the workflow, in order ({alabels})",
+          alabels == ["Dashboard", "Games", "Submit", "Review", "Stats"])
+    check("the admin nav renders only on admin pages",
+          "adminPage ? ADMIN_NAV : NAV" in shell and "P.isAdminPage" in core)
+    for page in ("submit.html", "review.html", "label.html", "games.html", "tools.html",
+                 "admin.html"):
+        check(f"{page} is an admin page", f'"{page}"' in core.split("P.ADMIN_PAGES = [")[1]
+              .split("];")[0])
+    for page in ("index.html", "stats.html", "teams.html", "team.html", "game.html", "hero.html"):
+        check(f"{page} is public", f'"{page}"' not in core.split("P.ADMIN_PAGES = [")[1]
+              .split("];")[0])
+    for gone in ("Tournaments", "Calendar", "Portal", "Vision Lab", "Sources"):
         check(f"“{gone}” is not a top-level destination",
               f'label: "{gone}"' not in shell)
     check("Review shows a count when work is waiting",
           'pip: "review"' in shell and "counts.review" in shell)
-    check("secondary surfaces stay reachable from the shared footer",
-          all(p in shell for p in ("teams.html", "tools.html",
-                                   "calibrate.html", "how-it-works.html")))
+    check("admin surfaces stay reachable for admins",
+          all(p in shell for p in ("tools.html", "calibrate.html", "label.html",
+                                   "how-it-works.html", "admin.html")))
+    check("every org renders an icon: one helper, logo or crest",
+          "P.teamMark = " in core and "P.teamCrest(t)" in core)
 
 
 def test_shared_shell() -> None:
@@ -158,12 +179,12 @@ def test_no_demo_data_reaches_a_page() -> None:
           load_public()["meta"]["demo"] is False)
     check("exporter still never writes the fixture",
           "public_fixture" not in read("pipeline/export_data.py"))
-    for page, marker in (("index.html", "recent"), ("games.html", "games"),
-                         ("stats.html", "coverage")):
+    for page, marker in (("index.html", "feed"), ("admin.html", "recent"),
+                         ("games.html", "games"), ("stats.html", "coverage")):
         check(f"{page} has an empty state to fall back to",
               "P.empty" in read("assets/js/app/page-" +
-                                {"index.html": "dashboard", "games.html": "games",
-                                 "stats.html": "stats"}[page] + ".js"))
+                                {"index.html": "maps", "admin.html": "dashboard",
+                                 "games.html": "games", "stats.html": "stats"}[page] + ".js"))
         del marker
 
 

@@ -41,8 +41,9 @@
         '<div class="page-head"><h1>That game is not here</h1>' +
         '<p class="lede">The link points at a game this copy of the tracker has no record ' +
         "of. It may not have been published yet, or the address may be wrong.</p>" +
-        '<div class="row u-mt-5"><a class="btn btn--primary" href="games.html">See all games</a>' +
-        '<a class="btn btn--ghost" href="submit.html">Submit a game</a></div></div>';
+        '<div class="row u-mt-5"><a class="btn btn--primary" href="index.html">See every map</a>' +
+        (P.isAdmin() ? '<a class="btn btn--ghost" href="submit.html">Submit a game</a>' : "") +
+        "</div></div>";
       return;
     }
 
@@ -58,7 +59,7 @@
   /* ------------------------------------------------------------ header */
   function renderCrumbs() {
     document.getElementById("crumbs").innerHTML = P.breadcrumbs([
-      { label: "Games", href: "games.html" },
+      P.isAdmin() ? { label: "Games", href: "games.html" } : { label: "Maps", href: "index.html" },
       { label: game.title },
     ]);
   }
@@ -80,6 +81,9 @@
         "submit.html?url=" + encodeURIComponent(game.sourceUrl || ""), "btn--primary"],
       ignored: ["See all games", "games.html", "btn--ghost"],
     }[game.state] || ["See all games", "games.html", "btn--ghost"];
+    /* A fan's next step is never the pipeline's. */
+    const fan = !P.isAdmin();
+    const next = fan ? ["Every map", "index.html", "btn--ghost"] : primary;
 
     /* The fixture, not a sentence. Where the record names two teams the
        header is a scoreboard — marks, names and the score — because that
@@ -111,15 +115,15 @@
             ? esc((a ? a.name : "Team A")) + " vs " + esc((b ? b.name : "Team B"))
             : esc(game.title)) + "</h1>" +
         fixture +
-        '<div class="row u-mt-4">' + P.stateChip(game.state) +
+        '<div class="row u-mt-4">' + (fan ? "" : P.stateChip(game.state)) +
         (game.state === "published" && game.compCount
           ? '<span class="chip" data-state="evidence"><span class="dot"></span>' +
             game.compCount + " verified line-up" + (game.compCount === 1 ? "" : "s") + "</span>"
           : "") + "</div>" +
-        '<p class="lede u-mt-4">' + esc(P.STATE_WORDS[game.state].say) +
-        (game.summary ? " " + esc(game.summary) : "") + "</p>" +
+        '<p class="lede u-mt-4">' + (fan ? "" : esc(P.STATE_WORDS[game.state].say) + " ") +
+        (game.summary ? esc(game.summary) : "") + "</p>" +
         '<div class="row u-mt-4">' +
-          '<a class="btn ' + primary[2] + '" href="' + esc(primary[1]) + '">' + esc(primary[0]) + "</a>" +
+          '<a class="btn ' + next[2] + '" href="' + esc(next[1]) + '">' + esc(next[0]) + "</a>" +
           (game.sourceUrl
             ? '<a class="btn btn--ghost" href="' + esc(game.sourceUrl) +
               '" target="_blank" rel="noopener">Open the broadcast ↗</a>' : "") +
@@ -135,6 +139,22 @@
        the progression that produced them follows. Anything still moving
        leads with where it has got to. */
     const published = game.state === "published" || game.compCount;
+    /* Fans get the maps and the line-ups. How the pipeline got there —
+       blockers, discovery, the six steps, live output, the review call,
+       diagnostics — is admin business. */
+    if (!P.isAdmin()) {
+      if (published) parts.push(publishedSection());
+      const v = game.broadcast && game.broadcast.videoId;
+      if (v && P.mapIndex && P.mapIndex.entry(v)) parts.push(mapIndexSection(v));
+      if (!parts.length) {
+        parts.push(P.empty("◇", "No comps read for this broadcast yet",
+          "Its maps appear on the home page as soon as they are indexed, and both line-ups " +
+          "beside each map once the heroes are read."));
+      }
+      document.getElementById("body").innerHTML = parts.join("");
+      if (P.mapStory) P.mapStory.wire(document.getElementById("body"), game);
+      return;
+    }
     if (game.blockers.length) parts.push(blockerSection());
     /* Every map of the broadcast, one click from playing: the most useful
        thing on a broadcast page, and it needs no hero data at all. */

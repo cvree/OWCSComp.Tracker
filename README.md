@@ -40,23 +40,37 @@ and `review.html` (every confirmed/rejected change point with crops).
 
 ## The product
 
-There is one product and one workflow, and every page belongs to a step of
-it:
+Two audiences, one site.
 
-**Submit a game → Automatic processing → Review what was detected →
-Approve or correct → Published match stats**
+**Fans** — nearly everyone — get three pages: **Maps · Comps · Teams**.
+The home page is every OWCS map, map by map (newest broadcast first), with
+both teams' logos, the comp each team ran where it has been read, and a
+▶ Watch link that opens the VOD at the second the map starts; above it,
+the most-run comps and most-picked heroes by role. Nothing on the public
+chrome asks a visitor to submit, review or label anything.
 
-The navigation has five entries, in that order. Everything else is reached
-from the screen it belongs to.
+**Admins** run the pipeline: **Submit a game → Automatic processing →
+Review what was detected → Approve or correct → Published match stats**.
+The admin pages (`P.ADMIN_PAGES` in `core.js`) carry their own five-entry
+nav and are linked from the public site only by a quiet "Admin" footer
+link. Opening any admin page (or `?admin=1`) puts that browser in admin
+mode, which adds an "Admin" link to the public header and the admin
+sections to the game and team pages; `?admin=0` leaves it.
+
+Every org renders an icon everywhere (`P.teamMark`): its logo when one is
+on record, otherwise its crest. Logos come from the broadcast HUD
+automatically (`live-probe.yml` → `broadcast_teams.py`) or from the org's
+own published image (`team-logos.yml` → `pipeline/team_logos.py`).
 
 | page | what it is for |
 |---|---|
-| `index.html` | **Dashboard** — one obvious "Submit a game", what the unattended scan filled in since anyone last looked, what needs a person, what is processing, what is blocked, what was recently published, and a small honest system-health strip. |
+| `index.html` | **Maps** (public home) — overall comps and hero picks, then every map map by map with team/map/mode filters (`app/mapfeed.js` joins the broadcast map index with the published comps). |
+| `stats.html` | **Comps** (public) — most-run comps, comps **by map**, heroes, maps, teams and swaps as tabs. |
+| `admin.html` | **Admin dashboard** — one obvious "Submit a game", what the unattended scan filled in since anyone last looked, what needs a person, what is processing, what is blocked, what was recently published, and a small honest system-health strip. |
 | `games.html` | **Games** — one row per game whatever state it is in, including every broadcast the scheduled scan found on its own (grouped separately and labelled as found, not read). This replaced the separate matches / runs / sources / tournaments lists, which were four views of the same thing. Also carries the official season schedule, collapsed, with how many broadcasts have already been found for each event. |
 | `submit.html` | **Submit** — one required field. The link is classified as you type (offline; a connected tracker's own classifier takes over when there is one), known broadcasts autofill the rest, advanced options stay shut, and there is exactly one final button. |
 | `review.html` | **Audit** — the human audit, and the best screen in the product. Publication does not wait on it: every detection the detector accepted is already published, and this is where a person checks it against the frame it was read from — confidence as a bar, the tier each reading earned, a fast hero picker, whole-map and whole-line-up confirmation, swap and map-boundary checks, and a full keyboard (`j`/`k` move, `a` approve, `c` correct, `f` flag, `⇧A` approve every clean read). A correction leaves as `corrections/corrections.json`, so git is the audit trail. |
 | `game.html` | **One game**, in whatever state it is in — including `?video=<id>`, a broadcast the scan found that nobody has submitted, which shows exactly what is known and what is not: the six-step progression with live output while it runs, the blocker and its exact fix when it is stuck, and the published maps and line-ups once it is approved. |
-| `stats.html` | **Stats** — heroes, compositions, maps, teams and swaps as five tabs over the same approved dataset. |
 | `teams.html` · `team.html` · `hero.html` | nested profiles, reached from a game or a stats table. |
 | `how-it-works.html` | the explainer, in plain language, rendering the product's own step definitions so it cannot drift. |
 | `tools.html` | everything technical, off the main path: automatic-discovery health (when the scan last ran, what it found, every source error), broadcast sources, processing history, calibration health, download authentication, storage, publishing, the evidence archive. |

@@ -40,13 +40,12 @@
     const known = t.id && P.team(t.id);
     if (known) {
       return '<a class="mi-team ' + (cls || "") + '" href="team.html?id=' + encodeURIComponent(t.id) + '">' +
-        '<span class="mi-team__logo">' + (known.logoUrl
-          ? '<img src="' + esc(known.logoUrl) + '" alt="" width="20" height="20" loading="lazy">'
-          : P.teamCrest(known)) + "</span>" +
+        '<span class="mi-team__logo">' + P.teamMark(known, 20) + "</span>" +
         '<span class="mi-team__name">' + esc(known.name) + "</span></a>";
     }
     return '<span class="mi-team mi-team--new ' + (cls || "") + '" title="Read from the broadcast. ' +
       'This team is not in the dataset yet, so a person confirms the name once.">' +
+      '<span class="mi-team__logo">' + P.teamMark(t, 20) + "</span>" +
       '<span class="mi-team__name">' + esc(t.name) + '</span><span class="mi-team__q" aria-label="not confirmed">?</span></span>';
   }
 
