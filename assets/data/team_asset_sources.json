@@ -308,6 +308,36 @@
    "sourceKind": "official-owcs-broadcast",
    "attribution": "Weibo Gaming mark as drawn by the official OWCS broadcast HUD (team plate), cut from the indexed broadcast and redrawn white.",
    "retrievedAt": "2026-10-30T20:01:40+00:00"
+  },
+  "feamrisk": {
+   "sourceUrl": "https://www.twitch.tv/videos/2914925695",
+   "sourceKind": "official-owcs-broadcast",
+   "attribution": "Feamrisk mark as drawn by the official OWCS broadcast HUD (team plate), cut from the indexed broadcast and redrawn white.",
+   "retrievedAt": "2026-10-31T02:46:45+00:00"
+  },
+  "phekafe": {
+   "sourceUrl": "https://www.twitch.tv/videos/2914925695",
+   "sourceKind": "official-owcs-broadcast",
+   "attribution": "Phekafe mark as drawn by the official OWCS broadcast HUD (team plate), cut from the indexed broadcast and redrawn white.",
+   "retrievedAt": "2026-10-31T02:46:45+00:00"
+  },
+  "team": {
+   "sourceUrl": "https://www.twitch.tv/videos/2914925695",
+   "sourceKind": "official-owcs-broadcast",
+   "attribution": "Team mark as drawn by the official OWCS broadcast HUD (team plate), cut from the indexed broadcast and redrawn white.",
+   "retrievedAt": "2026-10-31T02:46:45+00:00"
+  },
+  "team-peps": {
+   "sourceUrl": "https://www.twitch.tv/videos/2914925695",
+   "sourceKind": "official-owcs-broadcast",
+   "attribution": "Team Peps mark as drawn by the official OWCS broadcast HUD (team plate), cut from the indexed broadcast and redrawn white.",
+   "retrievedAt": "2026-10-31T02:46:45+00:00"
+  },
+  "the-kafi": {
+   "sourceUrl": "https://www.twitch.tv/videos/2914925695",
+   "sourceKind": "official-owcs-broadcast",
+   "attribution": "THE Kafi mark as drawn by the official OWCS broadcast HUD (team plate), cut from the indexed broadcast and redrawn white.",
+   "retrievedAt": "2026-10-31T02:46:45+00:00"
   }
  }
 }
