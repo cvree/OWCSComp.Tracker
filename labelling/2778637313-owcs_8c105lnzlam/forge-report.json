@@ -4,7 +4,7 @@
  "layoutId": "owcs_8c105lnzlam",
  "templatesDir": "templates/owcs_8c105lnzlam",
  "labelledBy": "[DROPS] 2026 OWCS Champions Clash | Day 2",
- "labelledAt": "2026-10-30T19:37:34Z",
+ "labelledAt": "2026-10-31T02:24:12Z",
  "cardsNamed": 66,
  "templatesWritten": 114,
  "passed": false,
@@ -70,7 +70,7 @@
  },
  "heroes": {
   "ana": {
-   "verdict": "REVIEW",
+   "verdict": "VALIDATED",
    "trials": 94,
    "correct": 83,
    "unknown": 11,
@@ -112,7 +112,7 @@
    ]
   },
   "bastion": {
-   "verdict": "REVIEW",
+   "verdict": "VALIDATED",
    "trials": 199,
    "correct": 163,
    "unknown": 36,
@@ -168,7 +168,7 @@
    ]
   },
   "dva": {
-   "verdict": "REVIEW",
+   "verdict": "VALIDATED",
    "trials": 138,
    "correct": 114,
    "unknown": 24,
@@ -269,7 +269,7 @@
    ]
   },
   "kiriko": {
-   "verdict": "REVIEW",
+   "verdict": "VALIDATED",
    "trials": 187,
    "correct": 130,
    "unknown": 56,
@@ -285,7 +285,7 @@
    ]
   },
   "lucio": {
-   "verdict": "REVIEW",
+   "verdict": "VALIDATED",
    "trials": 186,
    "correct": 167,
    "unknown": 19,
@@ -312,7 +312,7 @@
    ]
   },
   "mei": {
-   "verdict": "REVIEW",
+   "verdict": "VALIDATED",
    "trials": 101,
    "correct": 86,
    "unknown": 15,
@@ -488,14 +488,14 @@
   "promoted": [],
   "superseded": [],
   "refused": {
-   "ana": "REVIEW",
+   "ana": "VALIDATED",
    "ball": "VALIDATED",
    "bap": "VALIDATED",
-   "bastion": "REVIEW",
+   "bastion": "VALIDATED",
    "brig": "WEAK",
    "cass": "VALIDATED",
    "doomfist": "WEAK",
-   "dva": "REVIEW",
+   "dva": "VALIDATED",
    "echo": "VALIDATED",
    "emre": "WEAK",
    "genji": "VALIDATED",
@@ -503,10 +503,10 @@
    "illari": "VALIDATED",
    "jetcat": "VALIDATED",
    "juno": "WEAK",
-   "kiriko": "REVIEW",
-   "lucio": "REVIEW",
+   "kiriko": "VALIDATED",
+   "lucio": "VALIDATED",
    "mauga": "VALIDATED",
-   "mei": "REVIEW",
+   "mei": "VALIDATED",
    "mizuki": "VALIDATED",
    "pharah": "WEAK",
    "ram": "VALIDATED",
@@ -627,7 +627,7 @@
  },
  "forgeVersion": 5,
  "promote": true,
- "labelsDigest": "12d3d5f564e12380f529bd955f6cea24ac36e7f5bae9db6e62f0b59a151ffdd6",
+ "labelsDigest": "cfdfd5443195beab9b07ed18523e4e6240aece4e941b5901814145a05c02a323",
  "productionSet": {
   "safe": false,
   "falseMatch": {
@@ -652,12 +652,12 @@
    "note": "154 crop(s) of heroes this set has NO template for. Every one should read UNKNOWN; 4 did not (2.6%, ceiling 2.0%)."
   },
   "leaveOneOut": {
-   "trials": 1420,
+   "trials": 1383,
    "matched": 4,
-   "rate": 0.0028,
+   "rate": 0.0029,
    "ceiling": 0.02,
    "passed": true,
-   "note": "Leave-one-out false-match test over 1420 real crops: 4 (0.28%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
+   "note": "Leave-one-out false-match test over 1383 real crops: 4 (0.29%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
    "confusablePairs": [
     {
      "hero": "bap",
@@ -683,7 +683,7 @@
    "bap": "REVIEW",
    "bastion": "REVIEW",
    "cass": "REVIEW",
-   "dva": "VALIDATED",
+   "dva": "REVIEW",
    "echo": "VALIDATED",
    "genji": "REVIEW",
    "illari": "REVIEW",

@@ -4,7 +4,7 @@
  "layoutId": "owcs_8c105lnzlam",
  "templatesDir": "templates/owcs_8c105lnzlam",
  "labelledBy": "cvv",
- "labelledAt": "2026-10-30T19:40:57Z",
+ "labelledAt": "2026-10-31T02:23:18Z",
  "cardsNamed": 57,
  "templatesWritten": 72,
  "passed": false,
@@ -84,7 +84,7 @@
    ]
   },
   "bap": {
-   "verdict": "REVIEW",
+   "verdict": "VALIDATED",
    "trials": 20,
    "correct": 18,
    "unknown": 2,
@@ -97,7 +97,7 @@
    ]
   },
   "bastion": {
-   "verdict": "REVIEW",
+   "verdict": "VALIDATED",
    "trials": 101,
    "correct": 88,
    "unknown": 13,
@@ -112,7 +112,7 @@
    ]
   },
   "cass": {
-   "verdict": "REVIEW",
+   "verdict": "VALIDATED",
    "trials": 126,
    "correct": 50,
    "unknown": 76,
@@ -164,7 +164,7 @@
    ]
   },
   "kiriko": {
-   "verdict": "REVIEW",
+   "verdict": "VALIDATED",
    "trials": 221,
    "correct": 187,
    "unknown": 34,
@@ -179,7 +179,7 @@
    ]
   },
   "lucio": {
-   "verdict": "REVIEW",
+   "verdict": "VALIDATED",
    "trials": 116,
    "correct": 96,
    "unknown": 20,
@@ -195,7 +195,7 @@
    ]
   },
   "mei": {
-   "verdict": "REVIEW",
+   "verdict": "VALIDATED",
    "trials": 58,
    "correct": 34,
    "unknown": 24,
@@ -210,7 +210,7 @@
    ]
   },
   "mizuki": {
-   "verdict": "REVIEW",
+   "verdict": "VALIDATED",
    "trials": 132,
    "correct": 75,
    "unknown": 57,
@@ -266,7 +266,7 @@
    ]
   },
   "sigma": {
-   "verdict": "REVIEW",
+   "verdict": "VALIDATED",
    "trials": 230,
    "correct": 183,
    "unknown": 47,
@@ -281,7 +281,7 @@
    ]
   },
   "sojourn": {
-   "verdict": "REVIEW",
+   "verdict": "VALIDATED",
    "trials": 149,
    "correct": 65,
    "unknown": 83,
@@ -298,7 +298,7 @@
    ]
   },
   "sym": {
-   "verdict": "REVIEW",
+   "verdict": "VALIDATED",
    "trials": 228,
    "correct": 123,
    "unknown": 105,
@@ -326,7 +326,7 @@
    ]
   },
   "wuyang": {
-   "verdict": "REVIEW",
+   "verdict": "VALIDATED",
    "trials": 17,
    "correct": 15,
    "unknown": 2,
@@ -340,62 +340,29 @@
   }
  },
  "promotion": {
-  "promotedHeroes": [
-   "ball",
-   "juno",
-   "rein",
-   "tracer"
-  ],
-  "promoted": [
-   "ball.png",
-   "ball.v1.png",
-   "ball.v2.png",
-   "ball.v3.png",
-   "juno.png",
-   "juno.v1.png",
-   "juno.v2.png",
-   "juno.v3.png",
-   "rein.png",
-   "rein.v1.png",
-   "rein.v2.png",
-   "rein.v3.png",
-   "tracer.png",
-   "tracer.v1.png",
-   "tracer.v2.png"
-  ],
-  "superseded": [
-   "ball.png",
-   "ball.v1.png",
-   "ball.v2.png",
-   "ball.v3.png",
-   "juno.png",
-   "juno.v1.png",
-   "juno.v2.png",
-   "juno.v3.png",
-   "rein.png",
-   "rein.v1.png",
-   "rein.v2.png",
-   "rein.v3.png",
-   "tracer.png",
-   "tracer.v1.png",
-   "tracer.v2.png"
-  ],
+  "promotedHeroes": [],
+  "promoted": [],
+  "superseded": [],
   "refused": {
-   "bap": "REVIEW",
-   "bastion": "REVIEW",
-   "cass": "REVIEW",
+   "ball": "VALIDATED",
+   "bap": "VALIDATED",
+   "bastion": "VALIDATED",
+   "cass": "VALIDATED",
    "dva": "WEAK",
    "jetcat": "WEAK",
-   "kiriko": "REVIEW",
-   "lucio": "REVIEW",
-   "mei": "REVIEW",
-   "mizuki": "REVIEW",
+   "juno": "VALIDATED",
+   "kiriko": "VALIDATED",
+   "lucio": "VALIDATED",
+   "mei": "VALIDATED",
+   "mizuki": "VALIDATED",
    "pharah": "WEAK",
+   "rein": "VALIDATED",
    "shion": "WEAK",
-   "sigma": "REVIEW",
-   "sojourn": "REVIEW",
-   "sym": "REVIEW",
-   "wuyang": "REVIEW"
+   "sigma": "VALIDATED",
+   "sojourn": "VALIDATED",
+   "sym": "VALIDATED",
+   "tracer": "VALIDATED",
+   "wuyang": "VALIDATED"
   },
   "dryRun": false
  },
@@ -495,40 +462,69 @@
  },
  "forgeVersion": 5,
  "promote": true,
- "labelsDigest": "f73b403c58b2c0b744ba9c897fb9447736d1b194ddf5c500d87f26b290b80e02",
+ "labelsDigest": "579676ee4898a22657d93230d64f1ab0f38a4937d3d1cff07872ba64641c344e",
  "productionSet": {
-  "safe": true,
+  "safe": false,
   "falseMatch": {
-   "trials": 270,
-   "unknown": 269,
-   "matched": 1,
-   "matchedAs": {
-    "jetcat": 1
-   },
+   "trials": 26,
+   "unknown": 26,
+   "matched": 0,
+   "matchedAs": {},
    "byHero": {
-    "sojourn": 160,
-    "bap": 54,
-    "pharah": 26,
-    "wuyang": 30
+    "pharah": 26
    },
-   "rate": 0.0037,
+   "rate": 0.0,
    "passed": true,
-   "note": "270 crop(s) of heroes this set has NO template for. Every one should read UNKNOWN; 1 did not (0.4%, ceiling 2.0%)."
+   "note": "26 crop(s) of heroes this set has NO template for. Every one should read UNKNOWN; 0 did not (0.0%, ceiling 2.0%)."
   },
   "leaveOneOut": {
-   "trials": 1056,
-   "matched": 0,
-   "rate": 0.0,
+   "trials": 1059,
+   "matched": 64,
+   "rate": 0.0604,
    "ceiling": 0.02,
-   "passed": true,
-   "note": "Leave-one-out false-match test over 1056 real crops: 0 (0.00%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
-   "confusablePairs": []
+   "passed": false,
+   "note": "Leave-one-out false-match test over 1059 real crops: 64 (6.04%) were given a confident hero name by a set that had no template for them. Ceiling 2.0%.",
+   "confusablePairs": [
+    {
+     "hero": "sojourn",
+     "readAs": "sym",
+     "count": 36,
+     "trials": 112,
+     "share": 0.321,
+     "note": "with no sojourn template in the set, 36 of 112 real sojourn portraits (32%) were confidently read as sym instead of UNKNOWN"
+    },
+    {
+     "hero": "sym",
+     "readAs": "cass",
+     "count": 14,
+     "trials": 107,
+     "share": 0.131,
+     "note": "with no sym template in the set, 14 of 107 real sym portraits (13%) were confidently read as cass instead of UNKNOWN"
+    },
+    {
+     "hero": "cass",
+     "readAs": "sojourn",
+     "count": 13,
+     "trials": 105,
+     "share": 0.124,
+     "note": "with no cass template in the set, 13 of 105 real cass portraits (12%) were confidently read as sojourn instead of UNKNOWN"
+    },
+    {
+     "hero": "wuyang",
+     "readAs": "jetcat",
+     "count": 1,
+     "trials": 17,
+     "share": 0.059,
+     "note": "with no wuyang template in the set, 1 of 17 real wuyang portraits (6%) were confidently read as jetcat instead of UNKNOWN"
+    }
+   ]
   },
   "verdicts": {
    "ana": "UNVERIFIABLE",
    "ball": "VALIDATED",
+   "bap": "REVIEW",
    "bastion": "REVIEW",
-   "cass": "UNVERIFIABLE",
+   "cass": "REVIEW",
    "dva": "REVIEW",
    "echo": "WEAK",
    "jetcat": "REVIEW",
@@ -543,10 +539,27 @@
    "rein": "VALIDATED",
    "shion": "WEAK",
    "sigma": "REVIEW",
+   "sojourn": "REVIEW",
    "sym": "REVIEW",
    "tracer": "VALIDATED",
-   "winston": "UNVERIFIABLE"
+   "winston": "UNVERIFIABLE",
+   "wuyang": "REVIEW"
   },
-  "suspectTemplates": []
+  "suspectTemplates": [
+   {
+    "file": "cass.png",
+    "hero": "cass",
+    "looksLike": "sym",
+    "score": 0.824,
+    "ownScore": 0.456
+   },
+   {
+    "file": "sym.v2.png",
+    "hero": "sym",
+    "looksLike": "cass",
+    "score": 0.824,
+    "ownScore": 0.216
+   }
+  ]
  }
 }
