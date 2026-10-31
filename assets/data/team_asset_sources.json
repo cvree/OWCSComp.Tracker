@@ -338,6 +338,12 @@
    "sourceKind": "official-owcs-broadcast",
    "attribution": "THE Kafi mark as drawn by the official OWCS broadcast HUD (team plate), cut from the indexed broadcast and redrawn white.",
    "retrievedAt": "2026-10-31T02:46:45+00:00"
+  },
+  "who-gaming": {
+   "sourceUrl": "https://www.twitch.tv/videos/2834312836",
+   "sourceKind": "official-owcs-broadcast",
+   "attribution": "WHO Gaming mark as drawn by the official OWCS broadcast HUD (team plate), cut from the indexed broadcast and redrawn white.",
+   "retrievedAt": "2026-10-31T15:49:39+00:00"
   }
  }
 }

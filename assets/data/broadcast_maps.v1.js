@@ -347,6 +347,254 @@ window.OWCS_BROADCAST_MAPS = {
    ],
    "url": "https://www.twitch.tv/videos/2831815423"
   },
+  "2834312836": {
+   "durationSeconds": 25187.0,
+   "maps": [
+    {
+     "check": [
+      "team_b"
+     ],
+     "end": 3840,
+     "game": 1,
+     "index": 1,
+     "map": "nepal",
+     "series": 1,
+     "start": 3210,
+     "team_a": {
+      "id": "cr",
+      "name": "CRAZY RACCOON"
+     },
+     "team_b": {
+      "id": "t1",
+      "name": "T1"
+     }
+    },
+    {
+     "check": [],
+     "end": 5250,
+     "game": 2,
+     "index": 2,
+     "map": "neonjunction",
+     "series": 1,
+     "start": 4350,
+     "team_a": {
+      "id": "t1",
+      "name": "T1"
+     },
+     "team_b": {
+      "id": "cr",
+      "name": "CRAZY RACCOON"
+     }
+    },
+    {
+     "check": [
+      "team_b"
+     ],
+     "end": 6540,
+     "game": 3,
+     "index": 3,
+     "map": "suravasa",
+     "series": 1,
+     "start": 5760,
+     "team_a": {
+      "id": "cr",
+      "name": "CRAZY RACCOON"
+     },
+     "team_b": {
+      "id": "t1",
+      "name": "T1"
+     }
+    },
+    {
+     "check": [],
+     "end": 9390,
+     "game": 1,
+     "index": 4,
+     "map": "nepal",
+     "series": 2,
+     "start": 8850,
+     "team_a": {
+      "id": "dallas-fuel",
+      "name": "DALLAS FUEL"
+     },
+     "team_b": {
+      "id": "zeta",
+      "name": "ZETA DIVISION"
+     }
+    },
+    {
+     "check": [],
+     "end": 10470,
+     "game": 2,
+     "index": 5,
+     "map": "neonjunction",
+     "series": 2,
+     "start": 9780,
+     "team_a": {
+      "id": "zeta",
+      "name": "ZETA DIVISION"
+     },
+     "team_b": {
+      "id": "dallas-fuel",
+      "name": "DALLAS FUEL"
+     }
+    },
+    {
+     "check": [],
+     "end": 11370,
+     "game": 3,
+     "index": 6,
+     "map": "suravasa",
+     "series": 2,
+     "start": 10770,
+     "team_a": {
+      "id": "dallas-fuel",
+      "name": "DALLAS FUEL"
+     },
+     "team_b": {
+      "id": "zeta",
+      "name": "ZETA DIVISION"
+     }
+    },
+    {
+     "check": [],
+     "end": 14130,
+     "game": 1,
+     "index": 7,
+     "map": "nepal",
+     "series": 3,
+     "start": 13470,
+     "team_a": {
+      "id": "ssg",
+      "name": "SPACESTATION GAMING"
+     },
+     "team_b": {
+      "id": "who-gaming",
+      "name": "WHO GAMING"
+     }
+    },
+    {
+     "check": [],
+     "end": 15750,
+     "game": 2,
+     "index": 8,
+     "map": "neonjunction",
+     "series": 3,
+     "start": 14850,
+     "team_a": {
+      "id": "ssg",
+      "name": "SPACESTATION GAMING"
+     },
+     "team_b": {
+      "id": "weibo-gaming",
+      "name": "WHIBO GAMING"
+     }
+    },
+    {
+     "check": [],
+     "end": 16830,
+     "game": 3,
+     "index": 9,
+     "map": "shambali",
+     "series": 3,
+     "start": 16050,
+     "team_a": {
+      "id": "weibo-gaming",
+      "name": "WEIBO GAMING"
+     },
+     "team_b": {
+      "id": "ssg",
+      "name": "SPACESTATIONGAMING"
+     }
+    },
+    {
+     "check": [],
+     "end": 18030,
+     "game": 4,
+     "index": 10,
+     "map": "njc",
+     "series": 3,
+     "start": 17460,
+     "team_a": {
+      "id": "ssg",
+      "name": "SPACESTATION GAMING"
+     },
+     "team_b": {
+      "id": "weibo-gaming",
+      "name": "WEIBO GAMING"
+     }
+    },
+    {
+     "check": [],
+     "end": 20430,
+     "game": 1,
+     "index": 11,
+     "map": "nepal",
+     "series": 4,
+     "start": 19950,
+     "team_a": {
+      "id": "geekay-esports",
+      "name": "GEEKAY ESPORTS"
+     },
+     "team_b": {
+      "id": "twis",
+      "name": "TWISTED MINDS"
+     }
+    },
+    {
+     "check": [],
+     "end": 21300,
+     "game": 2,
+     "index": 12,
+     "map": "neonjunction",
+     "series": 4,
+     "start": 20700,
+     "team_a": {
+      "id": "twis",
+      "name": "TWISTED MINDS"
+     },
+     "team_b": {
+      "id": "geekay-esports",
+      "name": "GEEKAY ESPORTS"
+     }
+    },
+    {
+     "check": [],
+     "end": 22350,
+     "game": 3,
+     "index": 13,
+     "map": "njc",
+     "series": 4,
+     "start": 21660,
+     "team_a": {
+      "id": "twis",
+      "name": "TWISTED MINDS"
+     },
+     "team_b": {
+      "id": "geekay-esports",
+      "name": "GEEKAY ESPORTS"
+     }
+    },
+    {
+     "check": [],
+     "end": 24060,
+     "game": 4,
+     "index": 14,
+     "map": "route66",
+     "series": 4,
+     "start": 22650,
+     "team_a": {
+      "id": "geekay-esports",
+      "name": "GEEKAY ESPORTS"
+     },
+     "team_b": {
+      "id": "twis",
+      "name": "TWISTED MINDS"
+     }
+    }
+   ],
+   "url": "https://www.twitch.tv/videos/2834312836"
+  },
   "2835176280": {
    "durationSeconds": 32045.0,
    "maps": [
