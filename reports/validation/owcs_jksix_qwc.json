@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-30T20:17:44+00:00",
+ "generatedAt": "2026-10-31T11:11:12+00:00",
  "templatesDir": "work/label-forge/_nepal-qad-twis/final",
  "evidence": {
   "sourceReport": "labelling/nepal-qad-twis",
@@ -322,7 +322,7 @@
  "passed": true,
  "leaveOneOut": {
   "confusablePairs": [],
-  "generatedAt": "2026-10-30T20:17:44+00:00",
+  "generatedAt": "2026-10-31T11:11:13+00:00",
   "templatesDir": "/home/runner/work/OWCSComp.Tracker/OWCSComp.Tracker/work/label-forge/_nepal-qad-twis/final",
   "heroes": {
    "dva": {

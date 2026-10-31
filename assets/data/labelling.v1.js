@@ -3305,27 +3305,26 @@ window.OWCS_LABELLING = {
     "wuyang"
    ],
    "state": "forged",
-   "promoted": [
-    "ball",
-    "juno",
-    "rein",
-    "tracer"
-   ],
+   "promoted": [],
    "refused": [
+    "ball",
     "bap",
     "bastion",
     "cass",
     "dva",
     "jetcat",
+    "juno",
     "kiriko",
     "lucio",
     "mei",
     "mizuki",
     "pharah",
+    "rein",
     "shion",
     "sigma",
     "sojourn",
     "sym",
+    "tracer",
     "wuyang"
    ],
    "labels": {
@@ -3392,183 +3391,26 @@ window.OWCS_LABELLING = {
    "labelledBy": "cvv",
    "verdicts": {
     "ball": "VALIDATED",
-    "bap": "REVIEW",
-    "bastion": "REVIEW",
-    "cass": "REVIEW",
+    "bap": "VALIDATED",
+    "bastion": "VALIDATED",
+    "cass": "VALIDATED",
     "dva": "WEAK",
     "jetcat": "WEAK",
     "juno": "VALIDATED",
-    "kiriko": "REVIEW",
-    "lucio": "REVIEW",
-    "mei": "REVIEW",
-    "mizuki": "REVIEW",
+    "kiriko": "VALIDATED",
+    "lucio": "VALIDATED",
+    "mei": "VALIDATED",
+    "mizuki": "VALIDATED",
     "pharah": "WEAK",
     "rein": "VALIDATED",
     "shion": "WEAK",
-    "sigma": "REVIEW",
-    "sojourn": "REVIEW",
-    "sym": "REVIEW",
+    "sigma": "VALIDATED",
+    "sojourn": "VALIDATED",
+    "sym": "VALIDATED",
     "tracer": "VALIDATED",
-    "wuyang": "REVIEW"
+    "wuyang": "VALIDATED"
    },
-   "review": {
-    "bap": {
-     "trials": 20,
-     "correct": 18,
-     "unknown": 2,
-     "wrong": 0,
-     "accuracy": 0.9,
-     "confusedWith": {},
-     "cards": [
-      "c26",
-      "c28"
-     ]
-    },
-    "bastion": {
-     "trials": 101,
-     "correct": 88,
-     "unknown": 13,
-     "wrong": 0,
-     "accuracy": 0.871,
-     "confusedWith": {},
-     "cards": [
-      "c11",
-      "c14",
-      "c30",
-      "c45"
-     ]
-    },
-    "cass": {
-     "trials": 126,
-     "correct": 50,
-     "unknown": 76,
-     "wrong": 0,
-     "accuracy": 0.397,
-     "confusedWith": {},
-     "cards": [
-      "c08",
-      "c23",
-      "c24",
-      "c43"
-     ]
-    },
-    "kiriko": {
-     "trials": 221,
-     "correct": 187,
-     "unknown": 34,
-     "wrong": 0,
-     "accuracy": 0.846,
-     "confusedWith": {},
-     "cards": [
-      "c00",
-      "c03",
-      "c09",
-      "c55"
-     ]
-    },
-    "lucio": {
-     "trials": 116,
-     "correct": 96,
-     "unknown": 20,
-     "wrong": 0,
-     "accuracy": 0.828,
-     "confusedWith": {},
-     "cards": [
-      "c07",
-      "c19",
-      "c20",
-      "c47",
-      "c53"
-     ]
-    },
-    "mei": {
-     "trials": 58,
-     "correct": 34,
-     "unknown": 24,
-     "wrong": 0,
-     "accuracy": 0.586,
-     "confusedWith": {},
-     "cards": [
-      "c25",
-      "c34",
-      "c44",
-      "c50"
-     ]
-    },
-    "mizuki": {
-     "trials": 132,
-     "correct": 75,
-     "unknown": 57,
-     "wrong": 0,
-     "accuracy": 0.568,
-     "confusedWith": {},
-     "cards": [
-      "c16",
-      "c18",
-      "c21",
-      "c31",
-      "c40",
-      "c46",
-      "c57"
-     ]
-    },
-    "sigma": {
-     "trials": 230,
-     "correct": 183,
-     "unknown": 47,
-     "wrong": 0,
-     "accuracy": 0.796,
-     "confusedWith": {},
-     "cards": [
-      "c02",
-      "c04",
-      "c06",
-      "c33"
-     ]
-    },
-    "sojourn": {
-     "trials": 149,
-     "correct": 65,
-     "unknown": 83,
-     "wrong": 1,
-     "accuracy": 0.436,
-     "confusedWith": {
-      "pharah": 1
-     },
-     "cards": [
-      "c10",
-      "c17",
-      "c22",
-      "c38"
-     ]
-    },
-    "sym": {
-     "trials": 228,
-     "correct": 123,
-     "unknown": 105,
-     "wrong": 0,
-     "accuracy": 0.539,
-     "confusedWith": {},
-     "cards": [
-      "c01",
-      "c05",
-      "c13",
-      "c15"
-     ]
-    },
-    "wuyang": {
-     "trials": 17,
-     "correct": 15,
-     "unknown": 2,
-     "wrong": 0,
-     "accuracy": 0.882,
-     "confusedWith": {},
-     "cards": [
-      "c36",
-      "c51"
-     ]
-    }
-   },
+   "review": {},
    "approved": [
     "bap",
     "bastion",
@@ -7676,14 +7518,14 @@ window.OWCS_LABELLING = {
    },
    "labelledBy": "[DROPS] 2026 OWCS Champions Clash | Day 2",
    "verdicts": {
-    "ana": "REVIEW",
+    "ana": "VALIDATED",
     "ball": "VALIDATED",
     "bap": "VALIDATED",
-    "bastion": "REVIEW",
+    "bastion": "VALIDATED",
     "brig": "WEAK",
     "cass": "VALIDATED",
     "doomfist": "WEAK",
-    "dva": "REVIEW",
+    "dva": "VALIDATED",
     "echo": "VALIDATED",
     "emre": "WEAK",
     "genji": "VALIDATED",
@@ -7691,10 +7533,10 @@ window.OWCS_LABELLING = {
     "illari": "VALIDATED",
     "jetcat": "VALIDATED",
     "juno": "WEAK",
-    "kiriko": "REVIEW",
-    "lucio": "REVIEW",
+    "kiriko": "VALIDATED",
+    "lucio": "VALIDATED",
     "mauga": "VALIDATED",
-    "mei": "REVIEW",
+    "mei": "VALIDATED",
     "mizuki": "VALIDATED",
     "pharah": "WEAK",
     "ram": "VALIDATED",
@@ -7708,87 +7550,7 @@ window.OWCS_LABELLING = {
     "winston": "VALIDATED",
     "zarya": "FAILED"
    },
-   "review": {
-    "ana": {
-     "trials": 94,
-     "correct": 83,
-     "unknown": 11,
-     "wrong": 0,
-     "accuracy": 0.883,
-     "confusedWith": {},
-     "cards": [
-      "c18",
-      "c20"
-     ]
-    },
-    "bastion": {
-     "trials": 199,
-     "correct": 163,
-     "unknown": 36,
-     "wrong": 0,
-     "accuracy": 0.819,
-     "confusedWith": {},
-     "cards": [
-      "c11",
-      "c12",
-      "c16"
-     ]
-    },
-    "dva": {
-     "trials": 138,
-     "correct": 114,
-     "unknown": 24,
-     "wrong": 0,
-     "accuracy": 0.826,
-     "confusedWith": {},
-     "cards": [
-      "c07",
-      "c25",
-      "c33",
-      "c37"
-     ]
-    },
-    "kiriko": {
-     "trials": 187,
-     "correct": 130,
-     "unknown": 56,
-     "wrong": 1,
-     "accuracy": 0.695,
-     "confusedWith": {
-      "jetcat": 1
-     },
-     "cards": [
-      "c00",
-      "c08",
-      "c10"
-     ]
-    },
-    "lucio": {
-     "trials": 186,
-     "correct": 167,
-     "unknown": 19,
-     "wrong": 0,
-     "accuracy": 0.898,
-     "confusedWith": {},
-     "cards": [
-      "c06",
-      "c14",
-      "c15"
-     ]
-    },
-    "mei": {
-     "trials": 101,
-     "correct": 86,
-     "unknown": 15,
-     "wrong": 0,
-     "accuracy": 0.851,
-     "confusedWith": {},
-     "cards": [
-      "c13",
-      "c23"
-     ]
-    }
-   },
+   "review": {},
    "approved": [
     "ana",
     "bap",

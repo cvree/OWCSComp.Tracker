@@ -4,7 +4,7 @@
  "layoutId": "owcs_jksix_qwc",
  "templatesDir": "templates/owcs_jksix_qwc",
  "labelledBy": "cv",
- "labelledAt": "2026-10-30T19:42:06Z",
+ "labelledAt": "2026-10-31T02:25:06Z",
  "cardsNamed": 18,
  "templatesWritten": 32,
  "passed": true,
@@ -457,7 +457,7 @@
  },
  "forgeVersion": 5,
  "promote": true,
- "labelsDigest": "29d542ee2c2b3d70687e65c4e93ec758e4fa33a7ac63a88a0a6891d63449cb81",
+ "labelsDigest": "e33172357ce5635e2236056e4bac572e912eb38a87dc34cbda9a7e1e2a076a84",
  "productionSet": {
   "safe": true,
   "falseMatch": {
