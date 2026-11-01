@@ -15,6 +15,7 @@ yields byte-identical JSON.
 from __future__ import annotations
 
 import datetime as dt
+import hashlib
 import io
 import posixpath
 import zipfile
@@ -135,6 +136,59 @@ def _sheet_extras(data: bytes) -> dict[str, dict]:
     return out
 
 
+XDR = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing"
+EMBED = "{%s}embed" % _NS["r"]
+A = "http://schemas.openxmlformats.org/drawingml/2006/main"
+
+
+def _resolve(base_dir: str, target: str) -> str:
+    """A relationship target, relative ('../media/x.png') or absolute ('/xl/media/x.png')."""
+    if target.startswith("/"):
+        return target.lstrip("/")
+    return posixpath.normpath(posixpath.join(base_dir, target))
+
+
+def image_anchors(data: bytes) -> dict[str, list[dict]]:
+    """{sheet name: [{cell, media, hash}]} for every picture anchored in a
+    worksheet drawing."""
+    out: dict[str, list[dict]] = {}
+    with zipfile.ZipFile(io.BytesIO(data)) as z:
+        names = set(z.namelist())
+        wb = ET.fromstring(z.read("xl/workbook.xml"))
+        wb_rels = _rels(z, "xl/_rels/workbook.xml.rels")
+        hashes: dict[str, str] = {}
+        for sh in wb.findall("m:sheets/m:sheet", _NS):
+            target = (wb_rels.get(sh.get(_RID)) or {}).get("target") or ""
+            path = _resolve("xl", target)
+            rels = _rels(z, posixpath.join(posixpath.dirname(path), "_rels", posixpath.basename(path) + ".rels"))
+            found = []
+            for rel in rels.values():
+                t = rel.get("target") or ""
+                if "drawings/" not in t:
+                    continue
+                dpath = _resolve(posixpath.dirname(path), t)
+                if dpath not in names:
+                    continue
+                drels = _rels(z, posixpath.join(posixpath.dirname(dpath), "_rels", posixpath.basename(dpath) + ".rels"))
+                root = ET.fromstring(z.read(dpath))
+                for anchor in list(root):
+                    frm = anchor.find(f"{{{XDR}}}from")
+                    blip = anchor.find(f".//{{{A}}}blip")
+                    if frm is None or blip is None:
+                        continue
+                    col = int(frm.find(f"{{{XDR}}}col").text)
+                    row = int(frm.find(f"{{{XDR}}}row").text)
+                    emb = blip.get(EMBED)
+                    mt = (drels.get(emb) or {}).get("target") or ""
+                    mpath = _resolve(posixpath.dirname(dpath), mt)
+                    if mpath in names and mpath not in hashes:
+                        hashes[mpath] = hashlib.sha1(z.read(mpath)).hexdigest()[:10]
+                    found.append({"cell": a1(row, col), "media": posixpath.basename(mpath),
+                                  "hash": hashes.get(mpath)})
+            out[sh.get("name")] = found
+    return out
+
+
 def read_xlsx(data: bytes) -> dict:
     """xlsx bytes -> raw cell document {sheets: [...]}.
 
@@ -151,6 +205,7 @@ def read_xlsx(data: bytes) -> dict:
         raise WorkbookError("the download is not an xlsx file" + hint)
     try:
         extras = _sheet_extras(data)
+        anchors = image_anchors(data)
         wb = openpyxl.load_workbook(io.BytesIO(data), data_only=True, read_only=True)
     except Exception as exc:  # openpyxl / zipfile / xml raise many types
         raise WorkbookError(f"could not open the workbook: {exc}") from exc
@@ -173,6 +228,7 @@ def read_xlsx(data: bytes) -> dict:
                 rows.append([r, values])
                 max_col = max(max_col, len(values))
             ex = extras.get(ws.title) or {"state": "visible", "merged": [], "links": {}}
+            imgs = sorted([i["cell"], i["hash"]] for i in anchors.get(ws.title) or [] if i.get("hash"))
             sheets.append({
                 "name": ws.title,
                 "index": index,
@@ -182,6 +238,9 @@ def read_xlsx(data: bytes) -> dict:
                 "rows": rows,
                 "merged": ex["merged"],
                 "links": dict(sorted(ex["links"].items())),
+                # Pictures anchored in the tab: [cell, content hash]. A sheet
+                # that shows heroes as icons stores them here, not in cells.
+                "images": imgs,
             })
     finally:
         wb.close()

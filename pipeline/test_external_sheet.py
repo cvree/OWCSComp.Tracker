@@ -412,6 +412,7 @@ class Sync(unittest.TestCase):
         for entry in index["sheets"]:                       # one gzip per tab
             self.assertTrue(os.path.exists(os.path.join(p.raw_dir, entry["file"])))
         self.assertEqual(raw["workbook"]["sheets"], read_xlsx(data)["sheets"])  # lossless
+        self.assertTrue(all("images" in s for s in raw["workbook"]["sheets"]))
         before = {f: os.path.getmtime(f) for f in (p.raw, p.normalized, p.manifest, p.export)}
         again = S.sync(p, data=data, at="2026-11-01T00:00:00+00:00")
         self.assertEqual(again["status"], "unchanged")

@@ -11,66 +11,7 @@ picture). Used when a real sheet does not match the configured layout:
 """
 from __future__ import annotations
 
-import hashlib
-import io
-import posixpath
-import zipfile
-from xml.etree import ElementTree as ET
-
-from .workbook import _NS, _RID, _rels, a1, grid, read_xlsx
-
-XDR = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing"
-EMBED = "{%s}embed" % _NS["r"]
-A = "http://schemas.openxmlformats.org/drawingml/2006/main"
-
-
-def _resolve(base_dir: str, target: str) -> str:
-    """A relationship target, relative ('../media/x.png') or absolute ('/xl/media/x.png')."""
-    if target.startswith("/"):
-        return target.lstrip("/")
-    return posixpath.normpath(posixpath.join(base_dir, target))
-
-
-def image_anchors(data: bytes) -> dict[str, list[dict]]:
-    """{sheet name: [{cell, media, hash}]} for every picture anchored in a
-    worksheet drawing."""
-    out: dict[str, list[dict]] = {}
-    with zipfile.ZipFile(io.BytesIO(data)) as z:
-        names = set(z.namelist())
-        wb = ET.fromstring(z.read("xl/workbook.xml"))
-        wb_rels = _rels(z, "xl/_rels/workbook.xml.rels")
-        hashes: dict[str, str] = {}
-        for sh in wb.findall("m:sheets/m:sheet", _NS):
-            target = (wb_rels.get(sh.get(_RID)) or {}).get("target") or ""
-            path = _resolve("xl", target)
-            rels = _rels(z, posixpath.join(posixpath.dirname(path), "_rels", posixpath.basename(path) + ".rels"))
-            found = []
-            for rel in rels.values():
-                t = rel.get("target") or ""
-                if "drawings/" not in t:
-                    continue
-                dpath = _resolve(posixpath.dirname(path), t)
-                if dpath not in names:
-                    continue
-                drels = _rels(z, posixpath.join(posixpath.dirname(dpath), "_rels", posixpath.basename(dpath) + ".rels"))
-                root = ET.fromstring(z.read(dpath))
-                for anchor in list(root):
-                    frm = anchor.find(f"{{{XDR}}}from")
-                    blip = anchor.find(f".//{{{A}}}blip")
-                    if frm is None or blip is None:
-                        continue
-                    col = int(frm.find(f"{{{XDR}}}col").text)
-                    row = int(frm.find(f"{{{XDR}}}row").text)
-                    emb = blip.get(EMBED)
-                    mt = (drels.get(emb) or {}).get("target") or ""
-                    mpath = _resolve(posixpath.dirname(dpath), mt)
-                    if mpath in names and mpath not in hashes:
-                        hashes[mpath] = hashlib.sha1(z.read(mpath)).hexdigest()[:10]
-                    found.append({"cell": a1(row, col), "media": posixpath.basename(mpath),
-                                  "hash": hashes.get(mpath)})
-            out[sh.get("name")] = found
-    return out
-
+from .workbook import a1, grid, image_anchors, read_xlsx
 
 def cell_text(v) -> str:
     if isinstance(v, dict):
