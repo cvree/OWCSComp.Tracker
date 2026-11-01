@@ -29,6 +29,7 @@ from .fetch import FetchFailed, download, save_snapshot, sha256
 from .layout import Layout
 from .normalize import ImportFailed, import_workbook
 from .reconcile import reconcile
+from .summary import build_series, build_summary, render_series, render_summary
 from .store import (Paths, StoreTooLarge, check_size, empty_manifest, last_good,
                     normalized_bytes, raw_shards, read_json, read_normalized, read_public,
                     read_raw, write_json, write_normalized, write_raw, write_text)
@@ -84,8 +85,11 @@ def payload_for(normalized: dict | None, manifest: dict, bundle: Bundle, fixture
 
 
 def export_files(paths: Paths, payload: dict, details: dict) -> dict[str, str]:
-    """{absolute path: exact text} for the public export and its shards."""
-    files = {paths.export: render(payload)}
+    """{absolute path: exact text} for the public export, its shards and
+    the two small derived files (summary + series index, summary.py)."""
+    files = {paths.export: render(payload),
+             paths.export_summary: render_summary(build_summary(payload)),
+             paths.export_series: render_series(build_series(payload))}
     for bucket, maps in details.items():
         files[os.path.join(paths.export_detail_dir, f"detail-{bucket}.js")] = render_detail(bucket, maps)
     for path, text in files.items():

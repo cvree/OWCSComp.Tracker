@@ -45,7 +45,7 @@
      RAIL is the admin overflow menu — the remaining operator tools —
      and is never a second public navigation. */
   const NAV = [
-    { href: "index.html", label: "Maps", match: ["index.html", "", "game.html", "map.html"] },
+    { href: "index.html", label: "Maps", match: ["index.html", "", "game.html", "map.html", "series.html"] },
     { href: "stats.html", label: "Comps", match: ["stats.html", "hero.html", "meta.html"] },
     { href: "teams.html", label: "Teams", match: ["teams.html", "team.html"] },
   ];
@@ -348,6 +348,7 @@
       ["Meta explorer", "meta.html", "Filter time-weighted VOD usage and spreadsheet history"],
       ["Scout a team", "meta.html?tab=scout", "Last 5 or 10 maps: comfort, bans, heroes, comps"],
       ["Teams", "teams.html", "Every org, with its mark"],
+      ["Series", "series.html", "Every series the community spreadsheet documents"],
       ["How it works", "how-it-works.html", "In plain language"],
     ];
     const ADMIN_PAGES = [
@@ -543,6 +544,7 @@
           '<li><a href="stats.html?tab=heroes">Heroes</a></li>' +
           '<li><a href="meta.html">Meta explorer</a></li>' +
           '<li><a href="teams.html">Teams</a></li>' +
+          '<li><a href="series.html">Series (spreadsheet)</a></li>' +
         "</ul></div>" +
         (P.isAdmin()
           ? "<div><h2>Admin</h2><ul>" +

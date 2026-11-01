@@ -30,6 +30,26 @@
 
   const DAY = 86400000;
 
+  /* The season's stages in the order they are played — mirrors
+     STAGE_ORDER in pipeline/external_sheet/summary.py and
+     assets/js/app/extstats.js (a test keeps the three equal). The sheet
+     records no dates, so a spreadsheet map's place in time is ONLY this:
+     stage, week, day, game, map number. It is never turned into a date. */
+  const STAGE_ORDER = ["pre-season", "stage-1", "champions-clash", "stage-2", "midseason-championship", "stage-3", "world-finals"];
+  const stageRank = (s) => {
+    const i = STAGE_ORDER.indexOf(s);
+    return i >= 0 ? i : STAGE_ORDER.length;
+  };
+  const n0 = (v) => (typeof v === "number" ? v : 0);
+  /* [year, stage, week, day, game, map number] from the sheet's card. */
+  const sheetSeq = (sm, m) => (sm && (sm.week != null || sm.stageKey || sm.stage)
+    ? [n0(sm.year), stageRank(sm.stageKey || sm.stage), n0(sm.week), n0(sm.day), n0(sm.game), n0(m && m.order)]
+    : null);
+  const seqCmp = (a, b) => {
+    for (let i = 0; i < 6; i += 1) { if (a[i] !== b[i]) return a[i] - b[i]; }
+    return 0;
+  };
+
   /* --------------------------------------------------------- entries */
   function buildEntries(pub, ext) {
     pub = pub || {};
@@ -61,6 +81,7 @@
           event: tour.name || sm.event || null,
           tournamentId: match.tournamentId || null,
           stage: ((tour.stages || [])[0] || {}).name || sm.stageRaw || null,
+          label: sm.gameLabel || null, seq: sheet ? sheetSeq(sm, sheet) : null,
           region: tour.region && tour.region !== "all" ? tour.region : (sm.region || null),
           patch: sm.patch || null,
           map: mp.map, mode: mp.mode || (sheet && sheet.mode) || null,
@@ -80,6 +101,7 @@
       out.push({
         id: m.id, vodId: null, extId: m.id, status: rec ? rec.status : "unmatched",
         date: m.date || sm.date || null, event: sm.event || null,
+        label: sm.gameLabel || null, seq: sheetSeq(sm, m),
         tournamentId: sm.tournamentId || null, stage: sm.stageRaw || sm.stage || null,
         region: sm.region || null, patch: sm.patch || null, map: m.map, mode: m.mode,
         teamA: m.teamA, teamB: m.teamB, winner: m.winner || null, winnerConflict: false,
@@ -87,7 +109,11 @@
         vod: null, sheet: m, vodUrl: m.vodUrl || null,
       });
     });
+    /* Newest first. Dated maps (VOD) by date; undated spreadsheet maps
+       after them, newest first by the sheet's own stage/week/day/game
+       order. An undated map is never placed among dated ones by a guess. */
     out.sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")) ||
+      (a.date ? 0 : (a.seq && b.seq ? seqCmp(b.seq, a.seq) : a.seq ? -1 : b.seq ? 1 : 0)) ||
       String(a.id).localeCompare(String(b.id)));
     return out;
   }
@@ -130,24 +156,52 @@
   }
 
   /* Recency weight: relative to the newest date IN THE DATA (not the
-     wall clock), so the same data always gives the same numbers. */
+     wall clock), so the same data always gives the same numbers. A map
+     with no date gets NO weight (null): it is left out of every weighted
+     rate and counted as such — a half-weight would be an invented age. */
   function weigher(entries, halfLifeDays) {
     if (!halfLifeDays) return () => 1;
     const newest = entries.reduce((m, e) => (e.date && e.date > m ? e.date : m), "");
     const t0 = newest ? Date.parse(newest) : 0;
     return (e) => {
-      if (!e.date || !t0) return 0.5;
+      if (!e.date || !t0) return null;
       const age = Math.max(0, (t0 - Date.parse(e.date)) / DAY);
       return Math.pow(0.5, age / halfLifeDays);
     };
   }
 
+  /* A window counted in days keeps only DATED maps inside it. Undated maps
+     cannot be placed in any window, so they are always outside it — the
+     page says how many (dateExclusions), it never drops them silently. */
   function windowed(entries, days) {
     if (!days) return entries;
     const newest = entries.reduce((m, e) => (e.date && e.date > m ? e.date : m), "");
-    if (!newest) return entries;
+    if (!newest) return [];
     const cut = new Date(Date.parse(newest) - days * DAY).toISOString().slice(0, 10);
     return entries.filter((e) => e.date && e.date >= cut);
+  }
+
+  /* What a date-based feature leaves out because the map has no date:
+     { byRange: maps the from/to filter excludes only for having no date,
+       byWindow: maps a day window excludes for having no date,
+       byWeighting: maps recency weighting leaves out of weighted rates,
+       undated: undated maps among `entries` (already filtered otherwise),
+       sheet: how many of the excluded are spreadsheet maps }. */
+  function dateExclusions(entries, f, opt) {
+    f = f || {};
+    opt = opt || {};
+    const undated = entries.filter((e) => !e.date);
+    const ranged = (f.from && f.from !== "all") || (f.to && f.to !== "all");
+    const out = { undated: undated.length, byRange: 0, byWindow: 0, byWeighting: 0,
+      sheet: undated.filter((e) => e.sheet).length };
+    /* Each feature is counted on its own, against every OTHER filter, so
+       the note can say what each one leaves out. */
+    const g = Object.assign({}, f, { from: "", to: "" });
+    const undatedOthers = filterEntries(entries, g).filter((e) => !e.date).length;
+    if (ranged) out.byRange = undatedOthers;
+    if (opt.days) out.byWindow = undatedOthers;
+    if (opt.halfLife) out.byWeighting = undatedOthers;
+    return out;
   }
 
   /* A VOD timeline below the requested coverage is left out of every
@@ -168,8 +222,11 @@
     const vod = {}, sheet = {};
     let vodKnown = 0, vodTimelines = 0, sheetUnits = 0, sheetUnitsW = 0;
     const roleKnown = {};
+    let undatedSkipped = 0;
     entries.forEach((e) => {
-      const we = w(e);
+      const wRaw = w(e);
+      const we = wRaw == null ? 0 : wRaw;
+      if (wRaw == null) undatedSkipped += 1;
       if (vodOk(e, f)) {
         sidesOf(e, f).forEach((s) => {
           const t = (e.vod.teams || []).filter((x) => x.side === s.side)[0];
@@ -224,7 +281,7 @@
     rows.sort((a, b) => (b.vodSeconds - a.vodSeconds) || (b.sheetCount - a.sheetCount) ||
       a.hero.localeCompare(b.hero));
     return { rows: rows, vodTimelines: vodTimelines, vodKnownSeconds: Math.round(vodKnown),
-      sheetUnits: sheetUnits };
+      sheetUnits: sheetUnits, undatedUnweighted: opt.halfLife ? undatedSkipped : 0 };
   }
 
   /* ----------------------------------------------------------- comps */
@@ -512,6 +569,12 @@
       team: team, available: mine.length, window: recent.length,
       from: recent.length ? recent[recent.length - 1].date : null,
       to: recent.length ? recent[0].date : null,
+      /* How "recent" was decided: by date, by the sheet's stage/week/day/
+         game order (no dates in it), or both (dated maps first). */
+      ordering: !recent.length ? null : recent.every((e) => e.date) ? "date"
+        : recent.some((e) => e.date) ? "mixed" : "sheet",
+      fromLabel: recent.length ? recent[recent.length - 1].date || seqLabel(recent[recent.length - 1]) : null,
+      toLabel: recent.length ? recent[0].date || seqLabel(recent[0]) : null,
       maps: recent,
       sources: { vod: recent.filter((e) => e.vod).length, sheet: recent.filter((e) => e.sheet).length },
       comfort: Object.values(comfort).sort((a, b) => b.played - a.played || a.map.localeCompare(b.map)),
@@ -522,6 +585,8 @@
       vodKnownSeconds: vodSeconds,
     };
   }
+
+  const seqLabel = (e) => [e.stage, e.label].filter(Boolean).join(" · ") || null;
 
   function options(entries) {
     const uniq = (fn) => Array.from(new Set(entries.map(fn).filter((v) => v != null && v !== "")))
@@ -540,6 +605,7 @@
     vodLineups: vodLineups, sheetComps: sheetComps, coOccurrence: coOccurrence, bans: bans,
     mapRecords: mapRecords, mapPicks: mapPicks, matchups: matchups, teamMapComps: teamMapComps,
     scouting: scouting, options: options, windowed: windowed, weigher: weigher,
+    dateExclusions: dateExclusions, sheetSeq: sheetSeq, STAGE_ORDER: STAGE_ORDER,
     classify: classify, sheetCompOf: sheetCompOf, sheetHeroesFor: sheetHeroesFor };
 
   if (typeof module !== "undefined" && module.exports) module.exports = api;

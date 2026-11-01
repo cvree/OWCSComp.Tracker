@@ -69,6 +69,10 @@ class Paths:
     @property
     def export_detail_dir(self) -> str: return self.p("assets", "data", "external_sheet")
     @property
+    def export_summary(self) -> str: return self.p("assets", "data", "external_summary.v1.js")
+    @property
+    def export_series(self) -> str: return self.p("assets", "data", "external_series.v1.js")
+    @property
     def public(self) -> str: return self.p("assets", "data", "public_data.v1.js")
     @property
     def cache(self) -> str: return self.p("work", "gsheet")

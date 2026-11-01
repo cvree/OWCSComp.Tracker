@@ -20,6 +20,7 @@
     P.evidence.wire(document);
     renderCoverage();
     renderHeroes();
+    renderSheetHeroes();
     renderComps();
     renderByMap();
     renderMaps();
@@ -27,6 +28,22 @@
     renderSwaps();
     P.initTabs(document, { key: "tab" });
   });
+
+  /* The spreadsheet's headline numbers and coverage, as their own labelled
+     row under the VOD one — two series, never one total. */
+  function sheetCoverage() {
+    if (!P.extHeadline || !P.extSummary || !P.extSummary.snapshot) return "";
+    return '<div class="u-mt-5"><p class="label">' + P.srcBadge("sheet") + " The community spreadsheet, counted separately</p>" +
+      '<div class="u-mt-3">' + P.extHeadline() + "</div>" +
+      '<div class="u-mt-4">' + P.extCoverageCard() + "</div></div>";
+  }
+
+  function renderSheetHeroes() {
+    const host = document.getElementById("p-heroes");
+    if (!host || !P.mountExtHeroesBlock) return;
+    host.insertAdjacentHTML("beforeend", '<div class="u-mt-6" id="sheet-heroes"></div>');
+    P.mountExtHeroesBlock("sheet-heroes");
+  }
 
   /* --------------------------------------------------------- coverage */
   function renderCoverage() {
@@ -43,19 +60,20 @@
         P.isAdmin()
           ? '<a class="btn btn--sm btn--primary" href="submit.html">Submit a game</a>' +
             '<a class="btn btn--sm btn--ghost" href="review.html">Open the review queue</a>'
-          : "");
+          : "") + sheetCoverage();
       return;
     }
     const tile = (k, v, note) =>
       '<div class="stat"><span class="stat__k">' + esc(k) + '</span>' +
       '<span class="stat__v">' + v + "</span>" +
       '<span class="stat__note">' + esc(note) + "</span></div>";
-    el.innerHTML = '<div class="grid grid--4">' +
+    el.innerHTML = '<p class="label">' + P.srcBadge("vod") + " Read off the broadcast</p>" +
+      '<div class="grid grid--4 u-mt-3">' +
       tile("Line-ups read", comps.length, "each one linked to its frame") +
       tile("Maps with comps", maps.size, "both teams read hero by hero") +
       tile("Series", games.size, "with at least one map read") +
       tile("Teams", teams.size, "seen in a read line-up") +
-      "</div>";
+      "</div>" + sheetCoverage();
   }
 
   /* ----------------------------------------------------------- heroes */

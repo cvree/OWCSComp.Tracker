@@ -31,6 +31,16 @@
 
   <div id="scan-status" class="u-mt-5"></div>
 
+  <div class="row u-mt-4" role="group" aria-label="Which source to list">
+    <div class="seg" id="src-filter">
+      <button type="button" data-src="all" aria-pressed="true">Everything</button>
+      <button type="button" data-src="vod" aria-pressed="false">VOD games</button>
+      <button type="button" data-src="sheet" aria-pressed="false">Spreadsheet series</button>
+    </div>
+  </div>
+
+  <div id="vod-games">
+
   <div class="row u-mt-4" role="group" aria-label="Filter games by state">
     <div class="seg" id="state-filter"></div>
     <div class="spacer"></div>
@@ -42,6 +52,18 @@
   <div id="games" class="u-mt-5" aria-live="polite"></div>
 
   <div id="upcoming" class="u-mt-6"></div>
+  </div>
+
+  <section class="band" id="sheet-series" aria-labelledby="h-sheet-series">
+    <div class="sec-head">
+      <h2 id="h-sheet-series">Spreadsheet series</h2>
+      <a class="sec-link" href="series.html">Public series page →</a>
+    </div>
+    <p class="dim small" style="max-width:75ch">Series the community spreadsheet documents. They are not games
+      the tracker processed: nothing was read off a broadcast for them unless a map says it is also read off a
+      VOD. No dates and no map picks, because the sheet records neither.</p>
+    <div id="series-browser" class="u-mt-4"></div>
+  </section>
 
 </main>
 
@@ -54,10 +76,15 @@
 <script src="assets/data/public_data.v1.js"></script>
 <script src="assets/data/discovered.v1.js"></script>
 <script src="assets/data/broadcast_maps.v1.js"></script>
+<script src="assets/data/external_summary.v1.js"></script>
+<script src="assets/data/external_series.v1.js"></script>
 <script src="assets/js/data.js"></script>
 <script src="assets/js/app/core.js"></script>
 <script src="assets/js/app/games.js"></script>
 <script src="assets/js/app/mapindex.js"></script>
+<script src="assets/js/app/sources.js"></script>
+<script src="assets/js/app/extstats.js"></script>
+<script src="assets/js/app/extui.js"></script>
 <script src="assets/js/app/api.js"></script>
 <script src="assets/js/app/hovercard.js" defer></script>
 <script src="assets/js/app/shell.js"></script>

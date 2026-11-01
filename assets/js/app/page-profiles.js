@@ -37,6 +37,17 @@
       "how many maps of it there are to watch, and the heroes it has been seen playing.</p></div>");
 
     const teams = P.teams().slice().sort((a, b) => a.name.localeCompare(b.name));
+    /* Every team the community spreadsheet names, as its own lane: its
+       records are the sheet's, and a team no registry knows keeps the
+       sheet's spelling, marked unmapped. */
+    const sheetLane = P.extTeamsTable && P.extSummary && P.extSummary.snapshot
+      ? '<section class="band" id="sheet-teams"><div class="sec-head"><h2>In the community spreadsheet</h2>' +
+        P.srcBadge("sheet") + '<a class="sec-link" href="series.html">Every series →</a></div>' + P.extTeamsTable() + "</section>"
+      : "";
+    if (!teams.length && sheetLane) {
+      set("body", sheetLane);
+      return;
+    }
     if (!teams.length) {
       set("body", P.empty("◇", "No teams on record",
         "Teams appear as games are submitted and matched."));
@@ -76,12 +87,62 @@
         ? '<div class="u-mt-6">' + P.diag("Also on record, no maps yet (" + quiet.length + ")",
           '<div class="row">' + quiet.map((r) =>
             P.teamPlate(r.t.id, { link: true, size: "sm" })).join("") + "</div>") + "</div>"
-        : ""));
+        : "") + sheetLane);
   }
 
   /* ------------------------------------------------------------- team */
+  /* The community spreadsheet's record of a team: profile + series. */
+  function sheetTeamParts(id) {
+    const out = [];
+    const panel = P.extTeamPanel ? P.extTeamPanel(id) : "";
+    if (panel) {
+      out.push('<section class="band" id="sheet"><div class="sec-head"><h2>In the community spreadsheet</h2>' +
+        P.srcBadge("sheet") + "</div>" + P.extProvenanceLine() + panel + "</section>");
+    }
+    const rs = P.extSeries;
+    if (rs && P.extStats) {
+      const rows = P.extStats.filterSeries(rs.series, { team: id });
+      if (rows.length) {
+        out.push('<section class="band" id="series"><div class="sec-head"><h2>Series in the spreadsheet</h2>' +
+          '<span class="dim small">' + rows.length + " · in the sheet’s order (no dates)</span>" +
+          '<a class="sec-link" href="series.html?team=' + encodeURIComponent(id) + '">Filter them →</a></div>' +
+          P.extSeriesListHtml(rows) + "</section>");
+      }
+    }
+    return out;
+  }
+
+  /* A team only the spreadsheet names: no registry entry, no VOD. Shown
+     with the sheet's spelling and said to be unmapped — never dressed up
+     as a verified organisation. */
+  function renderSheetTeam(id) {
+    const name = P.anyTeamName(id);
+    document.title = name + " — OWCS Comp Tracker";
+    set("crumbs", P.breadcrumbs([
+      { label: "Maps", href: "index.html" },
+      { label: "Teams", href: "teams.html" },
+      { label: name }]));
+    set("head", '<div class="page-head page-head--tight"><div class="u-flex u-center u-gap-4 u-wrap">' +
+      P.anyTeamPlate(id, { size: "lg" }) + P.srcBadge("sheet") + "</div>" +
+      '<p class="lede u-mt-4">' + (P.extTeamKnown(id) && /^x-/.test(id)
+        ? "Named by the community spreadsheet only. The tracker’s team registry does not know this team, so it " +
+          "keeps the sheet’s spelling, has no mark of its own and is not matched to any broadcast."
+        : "Recorded by the community spreadsheet.") + "</p></div>");
+    const parts = [];
+    if (P.scoutingHtml && P.metaEntries) {
+      const n = Number(P.qs("scout") || 10) === 5 ? 5 : 10;
+      const link = (k) => '<a class="btn btn--sm ' + (k === n ? "btn--primary" : "btn--ghost") +
+        '" href="team.html?id=' + encodeURIComponent(id) + "&scout=" + k + '#scout">Last ' + k + " maps</a>";
+      parts.push('<section class="band" id="scout"><div class="sec-head"><h2>Scouting report</h2>' +
+        '<span class="row">' + link(5) + link(10) + "</span></div>" + P.scoutingHtml(id, n) + "</section>");
+    }
+    set("body", sheetTeamParts(id).concat(parts).join("") ||
+      P.empty("◇", "Nothing recorded for this team", "Neither source records a map for it yet."));
+  }
+
   function renderTeam() {
     const t = P.team(P.qs("id"));
+    if (!t && P.extTeamKnown && P.extTeamKnown(P.qs("id"))) return renderSheetTeam(P.qs("id"));
     if (!t) {
       set("head", notFound("team", "teams.html", "See every team"));
       return;
@@ -142,6 +203,8 @@
         '<a class="sec-link" href="meta.html?tab=scout&team=' + encodeURIComponent(t.id) + '">Filter it →</a></span></div>' +
         P.scoutingHtml(t.id, n) + "</section>");
     }
+
+    sheetTeamParts(t.id).forEach((x) => parts.push(x));
 
     if (pool) {
       parts.push('<section class="band"><div class="sec-head"><h2>Hero pool</h2>' +
@@ -252,6 +315,29 @@
             '<p class="dim small u-mt-3">' + e.snapshotIds.length +
             " approved snapshot(s) behind this.</p></div>").join("") + "</div>"
           : "") + "</section>");
+    }
+
+    /* Two sources, two measures, side by side and never added: seconds on
+       the field from VOD timelines, and how often the spreadsheet lists
+       the hero (an appearance count). Each says which it is. */
+    const tw = ((D && D.timeWeighting && D.timeWeighting.heroes) || []).filter((r) => r.hero === h.id)[0];
+    const vodCard = '<div class="card"><h3>' + P.srcBadge("vod") + " On the broadcast, timed</h3>" +
+      (tw
+        ? '<div class="grid grid--4 u-mt-4">' +
+          stat("Time on the field", P.fmtClock(tw.seconds), "known player-time across VOD timelines") +
+          stat("Share of known time", P.pctHonest(tw.shareOfAllKnownPlayerSeconds), "of every known player-second") +
+          stat("Present in", tw.timelinesPresent + " / " + tw.timelines, "team timelines (" + P.pctHonest(tw.presenceRate) + ")") +
+          stat("Maps", (tw.mapIds || []).length, "VOD maps with a timeline") + "</div>" +
+          '<p class="dim small u-mt-3">Time-weighted from published hero stints inside detected rounds. ' +
+          P.sampleNote((tw.mapIds || []).length) + "</p>"
+        : '<p class="dim small u-mt-3">No published VOD timeline shows this hero yet.</p>') + "</div>";
+    const sheetCard = P.extHeroPanel ? P.extHeroPanel(h.id) : "";
+    if (tw || sheetCard) {
+      parts.push('<section class="band" id="sources"><div class="sec-head"><h2>Two sources, two measures</h2>' +
+        '<a class="sec-link" href="how-it-works.html#sources">How they differ →</a></div>' +
+        '<p class="dim small">Seconds read off the broadcast and appearances listed by the community spreadsheet ' +
+        "measure different things and are never added together.</p>" +
+        '<div class="stack u-mt-4">' + vodCard + sheetCard + "</div></section>");
     }
 
     const teams = ((D && D.teamHeroPools) || [])

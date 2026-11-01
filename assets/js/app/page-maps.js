@@ -28,6 +28,7 @@
   document.addEventListener("DOMContentLoaded", () => {
     renderCounts();
     renderOverall();
+    renderSheet();
     renderFilters();
     renderFeed();
   });
@@ -41,12 +42,26 @@
     const tile = (k, v, note) =>
       '<div class="stat"><span class="stat__k">' + esc(k) + '</span><span class="stat__v">' +
       esc(v) + '</span><span class="stat__note">' + esc(note) + "</span></div>";
+    const tileB = (k, v, note, badge) =>
+      '<div class="stat"><span class="stat__k">' + esc(k) + badge + '</span><span class="stat__v">' +
+      esc(v) + '</span><span class="stat__note">' + esc(note) + "</span></div>";
+    const S = P.extSummary;
+    const t = S && S.snapshot && S.totals;
+    const b = (k, text) => (P.srcBadge ? " " + P.srcBadge(k, text) : "");
     document.getElementById("counts").innerHTML = '<div class="grid grid--4">' +
       tile("Maps", maps.length, "found on official broadcasts") +
       tile("Maps with comps", withComps, "both line-ups read off the HUD") +
       tile("Teams", teams.size, "every one with its mark") +
       tile("Broadcasts", F.groups().length, "newest first below") +
-      "</div>";
+      "</div>" +
+      /* The community spreadsheet, as its own row: a separate source with
+         its own badge, never added to the broadcast counts above. */
+      (t ? '<div class="grid grid--4 u-mt-3">' +
+        tileB("Spreadsheet series", t.matches.toLocaleString("en-US"), "documented by the community spreadsheet", b("sheet", "Sheet")) +
+        tileB("Spreadsheet maps", t.maps.toLocaleString("en-US"), t.linkedMaps + " also read off a VOD, counted once", b("sheet", "Sheet")) +
+        tileB("Teams in the sheet", t.teams, t.unmappedTeams + " not in the tracker’s registry", b("sheet", "Sheet")) +
+        tileB("Hero bans", t.resolvedBans.toLocaleString("en-US"), "as the sheet lists them", b("sheet", "Sheet")) +
+        "</div>" : "");
   }
 
   /* ----------------------------------------------------------- overall */
@@ -101,6 +116,25 @@
       '<p class="dim small u-mt-3">From ' + sample + " published line-up" + (sample === 1 ? "" : "s") +
       " across " + F.maps().filter(F.hasComp).length + " map" +
       (F.maps().filter(F.hasComp).length === 1 ? "" : "s") + ". Grows with every map read.</p>";
+  }
+
+  /* ------------------------------------------------- the spreadsheet */
+  /* What the community spreadsheet adds: its most-listed heroes per role
+     (appearance rate, not time) and its coverage. Own section, own badge,
+     own numbers — the broadcast comps above are untouched by it. */
+  function renderSheet() {
+    const host = document.getElementById("sheet");
+    if (!host || !P.extSummary || !P.extSummary.snapshot || !P.extRoleTopHtml) {
+      if (host) host.closest("section").hidden = true;
+      return;
+    }
+    const t = P.extSummary.heroDenominators.all;
+    host.innerHTML = '<div class="oc"><div class="oc__col" style="flex:1 1 100%"><h3 class="oc__h">Most-listed heroes ' +
+      P.srcBadge("sheet", "Sheet") + '</h3><div class="oc-roles">' + P.extRoleTopHtml(5) + "</div>" +
+      '<p class="dim small u-mt-3">Share of ' + t.maps.toLocaleString("en-US") + " spreadsheet maps on which any player " +
+      "is listed on the hero. Appearances, not playtime; not comparable with the broadcast numbers above. " +
+      '<a href="stats.html?tab=heroes#sheet-heroes">By region and stage →</a></p></div></div>' +
+      '<div class="u-mt-5">' + P.extCoverageCard() + "</div>";
   }
 
   /* ----------------------------------------------------------- filters */

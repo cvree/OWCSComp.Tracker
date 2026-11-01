@@ -27,9 +27,17 @@
   if (!P) return;
   const esc = P.esc;
   const X = window.OWCS_EXTERNAL || null;
+  /* Pages that do not need every map load only the small derived files
+     (external_summary.v1.js / external_series.v1.js, pipeline/external_sheet/
+     summary.py). Everything below reads the full export when it is there
+     and the summary otherwise — the same import, the same labels. */
+  const S = window.OWCS_EXTERNAL_SUMMARY || null;
+  const XS = X || S;
   P.ext = X;
+  P.extSummary = S;
+  P.extSeries = window.OWCS_EXTERNAL_SERIES || null;
 
-  const LABELS = (X && X.meta && X.meta.provenanceLabels) || {
+  const LABELS = (XS && XS.meta && XS.meta.provenanceLabels) || {
     vod: "VOD verified", sheet: "Spreadsheet imported",
     both: "Both sources agree", conflict: "Conflicting sources",
   };
@@ -67,7 +75,8 @@
   /* ----------------------------------------------------- accessors */
   const maps = (X && X.maps) || [];
   const matches = (X && X.matches) || [];
-  const recs = (X && X.reconciliation && X.reconciliation.records) || [];
+  const recs = (X && X.reconciliation && X.reconciliation.records) ||
+    (P.extSeries && P.extSeries.records) || (S && S.links) || [];
   const byId = new Map(maps.map((m) => [m.id, m]));
   const matchById = new Map(matches.map((m) => [m.id, m]));
   const recByExt = new Map(recs.map((r) => [r.externalMapId, r]));
@@ -77,8 +86,9 @@
 
   /* Maps only the spreadsheet plays (not in the published catalog) get
      their proper name and mode instead of a raw id. */
-  Object.keys((X && X.mapsExtra) || {}).forEach((id) => {
-    if (P.idx && P.idx.maps && !P.idx.maps.has(id)) P.idx.maps.set(id, X.mapsExtra[id]);
+  const extra = (XS && XS.mapsExtra) || {};
+  Object.keys(extra).forEach((id) => {
+    if (P.idx && P.idx.maps && !P.idx.maps.has(id)) P.idx.maps.set(id, extra[id]);
   });
 
   P.extMaps = () => maps;
@@ -92,13 +102,14 @@
     const r = recByVod.get(vodMapId);
     return r ? byId.get(r.externalMapId) || null : null;
   };
-  P.extStatus = () => (X && X.meta && X.meta.status) || "missing";
-  P.extIsFixture = () => !!(X && X.meta && X.meta.fixture);
+  P.extStatus = () => (XS && XS.meta && XS.meta.status) || "missing";
+  P.extIsFixture = () => !!(XS && XS.meta && XS.meta.fixture);
 
   /* A team the registry knows renders as itself. A team only the sheet
      names renders with the sheet's spelling and an explicit marker — never
      dressed up as a verified organisation. */
-  const extTeams = (X && X.teams) || {};
+  const extTeams = (XS && XS.teams) || {};
+  P.extTeamKnown = (id) => !!(id && extTeams[id]);
   P.anyTeamName = (id) => {
     const t = id && P.team(id);
     if (t) return t.name;
@@ -137,8 +148,10 @@
     if (have()) return Promise.resolve(have());
     if (!detailLoads[bucket]) {
       detailLoads[bucket] = new Promise((resolve) => {
-        const known = (X && X.detailShards) || [];
-        if (known.indexOf(bucket) < 0) { resolve(); return; }
+        /* With the full export the shard list is known; with only the
+           summary loaded, a missing shard just fails to load (onerror). */
+        const known = X ? (X.detailShards || []) : null;
+        if (known && known.indexOf(bucket) < 0) { resolve(); return; }
         const el = document.createElement("script");
         el.src = "assets/data/external_sheet/detail-" + bucket + ".js";
         el.onload = () => resolve();
@@ -153,7 +166,7 @@
   P.mapPageHref = (e) => e.vodId ? "map.html?id=" + encodeURIComponent(e.vodId)
     : "map.html?ext=" + encodeURIComponent(e.extId);
 
-  P.sheetLink = () => (X && X.source && X.source.viewUrl) || null;
+  P.sheetLink = () => (XS && XS.source && XS.source.viewUrl) || null;
   P.cellRef = (src) => (src && src.sheet ? src.sheet + (src.row ? " row " + src.row : "") +
     (src.cell ? " · " + src.cell : "") : "");
 
@@ -182,12 +195,12 @@
 
   /* One line that says what the external dataset is and how fresh it is. */
   P.extProvenanceLine = () => {
-    if (!X) return P.note("info", "Spreadsheet data not loaded", "<p>This page could not load " +
+    if (!XS) return P.note("info", "Spreadsheet data not loaded", "<p>This page could not load " +
       "the imported spreadsheet dataset.</p>");
-    const snap = X.snapshot;
+    const snap = XS.snapshot;
     const url = P.sheetLink();
     const fixture = P.extIsFixture()
-      ? P.note("warn", "Fixture data", "<p>" + esc(X.meta.fixtureNote || "") + "</p>") : "";
+      ? P.note("warn", "Fixture data", "<p>" + esc(XS.meta.fixtureNote || "") + "</p>") : "";
     if (!snap) {
       return fixture + P.note("info", "The community spreadsheet has not been imported yet",
         "<p>Spreadsheet observations appear here after the first successful sync " +

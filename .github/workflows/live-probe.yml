@@ -121,7 +121,7 @@ jobs:
           git config user.name  "owcs-live-probe[bot]"
           git config user.email "actions@users.noreply.github.com"
           git add data/broadcast_maps assets/data/broadcast_maps.v1.js data/owcs.sqlite \
-            assets/img/teams assets/data/public_data.v1.js assets/js/data.js assets/data/external_sheet.v1.js \
+            assets/img/teams assets/data/public_data.v1.js assets/js/data.js assets/data/external_sheet.v1.js assets/data/external_summary.v1.js assets/data/external_series.v1.js \
             assets/data/asset_manifest.json assets/data/team_asset_sources.json
           if git diff --cached --quiet; then
             echo "committed=false" >> "$GITHUB_OUTPUT"; exit 0

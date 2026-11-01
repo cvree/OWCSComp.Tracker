@@ -59,6 +59,8 @@ field by field, and labelled on every page.
                 auto-link only when unambiguous; otherwise review queue
                 ▼
    export.py    ─► assets/data/external_sheet.v1.js   (window.OWCS_EXTERNAL)
+   summary.py   ─► assets/data/external_summary.v1.js (window.OWCS_EXTERNAL_SUMMARY, ~115 KB)
+                ─► assets/data/external_series.v1.js  (window.OWCS_EXTERNAL_SERIES,  ~390 KB)
                 ─► reports/external/gsheet/{inventory,reconciliation,last_failure}.{json,md}
                 ─► data/external/gsheet/manifest.json (snapshot ledger)
                 ▼
@@ -68,8 +70,18 @@ field by field, and labelled on every page.
                                ├─ app/metastats.js (one entry per real map; lanes kept apart)
    external_sheet.v1.js ───────┘    ├─ map.html       scouting page (VOD lane | sheet lane | compared)
                                     ├─ meta.html      filterable meta explorer
-                                    ├─ team.html      recent-match scouting report
+                                    ├─ team.html      recent-match scouting report + sheet profile
                                     └─ sheet-sync.html  admin Source health + review queue
+   external_summary.v1.js ┐
+   external_series.v1.js ─┴─ app/extstats.js (pure) + app/extui.js (drawing)
+                                    ├─ index.html     sheet headline row, most-listed heroes, coverage card
+                                    ├─ stats.html     sheet headline row, coverage, hero chart by region/stage
+                                    ├─ hero.html      VOD seconds | sheet appearance + ban rates, by region/stage
+                                    ├─ teams.html     every team the sheet names (unmapped ones marked)
+                                    ├─ team.html      sheet-only teams get a profile too (?id=x-…)
+                                    ├─ series.html    every series (filters) and one series' match card (?id=)
+                                    ├─ game.html      "also in the spreadsheet" for linked VOD games
+                                    └─ games.html     admin: VOD games | spreadsheet series switch
 ```
 
 The VOD side gained one module, `pipeline/time_weighting.py`. It turns the
@@ -111,7 +123,9 @@ VOD maps are published changes the links.
 | `data/external/gsheet/manifest.json` | every snapshot: sha256, date, bytes, tabs, versions, counts, changes; `lastGood`, `lastAttempt` | `sync` |
 | `reports/external/gsheet/*` | source inventory, reconciliation, last failure (md + json) | `sync`, `rebuild` |
 | `assets/data/external_sheet.v1.js` | the public external dataset: compact, one line per map | `sync`, `rebuild`, `export_data.py --public` |
-| `assets/data/external_sheet/detail-<xx>.js` | per-map player listings, loaded only by `map.html` | `sync`, `rebuild` |
+| `assets/data/external_sheet/detail-<xx>.js` | per-map player listings, loaded on demand by `map.html` and `series.html` | `sync`, `rebuild` |
+| `assets/data/external_summary.v1.js` | totals, coverage, per-hero and per-team aggregates (spreadsheet only) | `sync`, `rebuild`, `export_data.py --public` |
+| `assets/data/external_series.v1.js` | one row per series in the sheet's order + reconciliation records with a link/candidate | `sync`, `rebuild`, `export_data.py --public` |
 | `work/gsheet/owcs-sheet_<date>_<sha12>.xlsx` | the original bytes (git-ignored; also a workflow artifact for 30 days) | `sync` |
 
 Old snapshots stay recoverable from git history (`raw/` at any commit)
@@ -216,6 +230,59 @@ good snapshot is gone or now reads as something else. Pass
 | `reconciliation.records[]` | Every record with a link, a candidate, a decision or a non-`unmatched` status. Plain "no candidate" records are counted in `summary` only. **ReconciliationRecord** `{id, externalMapId, vodMapId, status, method ("auto" or "manual"), score, candidates[{vodMapId, score, reasons[], mapDisagrees}], fields{date, map, order, mode, winner, pickedBy, bans, heroes:<team>{sheet, vod, agree, note, sheetOnly[], vodOnly[], vodOnlyBrief[]}}, decisions[], ignored, reason}`. `agree` is `true`, `false`, or `null` (only one source recorded it) |
 | `decisions` | every committed manual decision and alias approval, carried into export provenance |
 | `health` | `{counts, tabCount, dataTabs, sourceRowCount, layoutVersion, aliasesVersion, tabs[], unmapped{kind:[{raw,count,refs}]}, issues[], errors[]}` |
+
+### The two small files (`pipeline/external_sheet/summary.py`)
+
+The full export is over 2 MB, so pages that need aggregates or the series
+list load two files derived from **the same payload in the same run**.
+`sheet_sync.py check` rebuilds them and fails on drift, like the main export,
+and every workflow that stages `external_sheet.v1.js` stages them too.
+
+`window.OWCS_EXTERNAL_SUMMARY` (`external-summary.v1`):
+
+| key | shape |
+|---|---|
+| `meta`, `source`, `snapshot`, `lastAttempt` | as in the main export, trimmed; `source.credits[]` is the workbook's credit text, de-duplicated |
+| `stageOrder`, `regionOrder` | the season's stage order (`pre-season`, `stage-1`, `champions-clash`, `stage-2`, `midseason-championship`, `stage-3`, `world-finals`), mirrored in `extstats.js` and `metastats.js` (a test keeps the three equal) |
+| `teams`, `mapsExtra` | names for teams/maps the registries do not know |
+| `totals` | `matches, maps, bans, resolvedBans, listings, unresolvedListings, teams, unmappedTeams, linkedMaps, sheetOnlyMaps, undatedMaps, mapsWithPick, conflict, needsReview` |
+| `links[]` | `{externalMapId, vodMapId, status, matchId, candidates[]}` for every map with a VOD link or candidate |
+| `coverage[]` | `{stage, stageRaw, region, event, tournamentId, matches, maps, bans, listings}` per stage × region, in season order |
+| `heroDenominators` | `{all: {maps, banMaps, sides}, region: {r: {maps, banMaps}}, stage: {s: …}}`: maps with any hero listing, maps with a ban recorded |
+| `heroes.<id>` | `{listedMaps, listedSides, bans, banMaps, region: {r: [listedMaps, bans, banMaps]}, stage: {s: […]}}` |
+| `teamProfiles.<id>` | `{name, mapped, regions, stages, series{played,won,lost,undecided}, maps{played,won,lost,draw,undecided,disputed,listed,banned}, byMap{map: [played,won,lost,draw]}, byMode{…}, heroes[[hero,maps]], bansBy[[hero,n]], bansAgainst[[hero,n]]}` |
+| `unmapped` | the hero / map / team values no alias resolves, with counts |
+
+* **Appearance rate** = maps on which any player is listed on the hero ÷ maps
+  with any listing. **Ban rate** = maps the hero is banned on ÷ maps with a
+  ban recorded. Unresolved bans and listings are never counted.
+* A map whose winner the VOD reading disputes (`fields.winner.agree === false`)
+  is `disputed`: out of every win count. No resolved winner is `undecided`.
+  Map win share = won ÷ (won + lost + draw).
+* A linked map is one map: its sheet claim is counted once in the sheet lane,
+  its VOD claim once in the VOD lane, and the two are never added.
+
+`window.OWCS_EXTERNAL_SERIES` (`external-series.v1`): `series[]` of
+`{id, region, stage, stageRaw, event, tournamentId, year, week, day, game,
+label, format, bestOf, teamA, teamB, scoreA, scoreB, complete, winner, potm,
+flags, src, maps[{id, n, map, raw?, w ("a"|"b"|"draw"|null), rec?}]}`, ordered
+by stage of the season, region, week, day, game. `records[]` are the
+reconciliation records with a link or candidate. `series.html?id=` fetches the
+detail shards of that series' maps for bans and player listings.
+
+### Undated data
+
+The sheet records no dates, so every date-based feature says what it leaves
+out instead of guessing:
+
+* **From / To** and the **day window** on `meta.html` exclude undated maps and
+  a warning states how many (`metastats.dateExclusions`). A window over data
+  with no dates at all is empty, not "everything".
+* **Recency weighting** gives an undated map no weight (it used to get 0.5,
+  an invented age): it is left out of every weighted rate and counted.
+* **"Last N maps"** (scouting): dated maps first, then undated sheet maps in
+  the sheet's own stage/week/day/game/map-number order; the report says which
+  order it used. Rows show the sheet's game label where there is no date.
 
 `normalized.json.gz` holds the same records flat and un-nested, the original text
 for every value, and `fieldProvenance[]` (**SourceFieldProvenance**:
@@ -346,6 +413,22 @@ After that it runs daily on its own; you only merge the PR it opens.
   2. Download the merged `corrections/external_reconciliation.json` and commit it.
   3. Run `sheet_sync.py rebuild`.
   4. Commit the result.
+* **A hero the catalog does not have yet** (the sheet lists **D.Mon** and
+  **Doctrine**; both stay unmapped, shown as the sheet wrote them and never
+  counted):
+  1. Add `{"id": "dmon", "name": "D.Mon", "role": "…"}` (and the same for
+     Doctrine) to `heroes` in `pipeline/sample_data.json`, with the role the
+     game gives it. Do not guess a role.
+  2. Re-seed the reference tables (`python3 pipeline/init_db.py`, which
+     upserts heroes) and re-export: `python3 pipeline/export_data.py --public`.
+  3. Only if the sheet's spelling differs from the name after normalisation
+     (`D.Mon` already normalises to `dmon`), add it under `heroes` in
+     `config/external/aliases.json` and bump `version`.
+  4. `python3 pipeline/sheet_sync.py rebuild`, then commit. Portraits are
+     optional: `build_hero_official_assets.py` once official art exists.
+* **A map the catalog does not have** (Grímsvötn was one): add it to
+  `extraMaps` in `config/external/aliases.json` with its real mode, bump
+  `version`, rebuild.
 * **Credit:** once the maintainer is confirmed, set `maintainer` in
   `config/external/gsheet_source.json` and rebuild. Until then the site quotes
   any credit text the workbook itself carries, with its cell.
@@ -409,3 +492,17 @@ to link to. The other two show the committed, never-synced state.
 | ![Source health](screenshots/external-source-health.fixture.jpg) | Admin Source health: sync status, hash, counts, coverage, review queue, unmapped values, per-tab inventory |
 | ![Never synced](screenshots/external-source-health-never-synced.jpg) | The committed state before the first real sync |
 | ![Methodology](screenshots/external-methodology-sources.jpg) | Public methodology and credit |
+
+Rendered from the **real** import (snapshot `1804dc386175`) after the sheet
+was added across the public site:
+
+| | |
+|---|---|
+| ![Home](screenshots/external-home-sheet-row.jpg) | Home: the broadcast counts, then the spreadsheet's own labelled row; most-listed heroes per role (appearance rate) and the coverage card |
+| ![Comps](screenshots/external-comps-coverage-heroes.jpg) | Comps: VOD row and sheet row, coverage per stage × region with sync time and credit, and the sheet's hero chart by region/stage beside the VOD picks |
+| ![Hero](screenshots/external-hero-two-measures.jpg) | Hero: VOD seconds and the sheet's appearance/ban rates side by side, never added, split by region and stage with sample sizes |
+| ![Series list](screenshots/external-series-list.jpg) | `series.html`: every series in the sheet's order, filterable by region, stage, event, source and team |
+| ![Linked series](screenshots/external-series-linked-vod.jpg) | One series: per map the winner, map score, bans and each player's listed heroes (#n = list order); the linked QAD vs TM map shows both sources and the conflict, undecided |
+| ![Unmapped team](screenshots/external-team-unmapped.jpg) | A team only the sheet names: its record, maps, modes, heroes, bans and series, marked unmapped |
+| ![Undated note](screenshots/external-meta-undated-note.jpg) | Meta explorer: a day window says how many undated spreadsheet maps it leaves out |
+| ![Phone](screenshots/external-series-linked-vod.phone.jpg) | The series page at phone width |
