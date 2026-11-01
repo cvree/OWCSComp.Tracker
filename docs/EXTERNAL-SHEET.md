@@ -82,6 +82,8 @@ draws into seconds. There is no second timeline model.
 python3 pipeline/sheet_sync.py sync              # download → import → reconcile → export
 python3 pipeline/sheet_sync.py import --xlsx F   # same, from a local workbook (offline)
 python3 pipeline/sheet_sync.py inventory --xlsx F  # what each tab would be read as (no writes)
+python3 pipeline/sheet_sync.py inventory --download --sample 3  # same for the live sheet, plus parsed
+                                                 # maps, Self-Check and reconciliation (no writes)
 python3 pipeline/sheet_sync.py rebuild           # re-parse the COMMITTED raw layer (no download)
 python3 pipeline/sheet_sync.py check             # CI gate: committed layer == rebuild (exit 1 on drift)
 python3 pipeline/sheet_sync.py status            # last sync, counts, reconciliation summary
@@ -145,6 +147,48 @@ No tab name and no column letter is hard-coded. For **every** tab:
 5. A cell like `Juno / Lúcio` becomes two appearances, `listOrder` 1 and 2.
    Separators are configurable.
 
+### Match cards (the real sheet)
+
+The real community sheet is **not a table**. Each series is a fixed-size
+**match card** with the heroes shown as pictures. `pipeline/external_sheet/cards.py`
+reads them, using offsets kept in `gsheet_layout.json` → `matchCards`
+(geometry and probe history: `docs/SHEET-LAYOUT-NOTES.md`). Before any header
+detection, each tab is classified like this:
+
+1. **By name** (`tabPurposes`): `Self-Check` and `… Index` tabs are
+   `reference`, read as lookups and never imported as matches. `Stage N Hero
+   Bans / Regional Maps / LAN Maps` and `… Totals` are `summary`: the
+   sheet's own totals, which are re-derived from the cards and never imported.
+   `Landing Page` is `credits`.
+2. **By content**: a tab with a game label (`Week 1 | Day 2 | Game 3`) in the
+   label column is `match_cards`.
+3. Anything else goes through the header logic above.
+
+A card gives one match, one map per **map-list row**, two bans per map (from
+the ban text; the ban picture is used when the text is empty), and one
+appearance per hero picture, with its `listOrder`. Each picture is named by the
+sheet's own `Hero Index` tab (picture, name below), then the hero aliases. A
+picture the Hero Index does not name, or a name no alias knows (a hero newer
+than the catalog), stays an **unmapped hero**. Pictures the Hero Index does
+not name but that sit beside ban text are reported as evidence in the
+inventory. They become a hero only through a reviewed `aliases.json`
+`pictures` entry.
+
+Never produced, because the sheet does not record them: **dates** (`date`
+null, `dateMethod: not-in-source`; the match keeps `week`/`day`/`game` and its
+label), **map picks** (`pickedBy` null) and any time. A card without teams, or
+with teams but no maps, is *scheduled*. A card whose map list says
+`Map Forfeit` is *forfeited*. A card with filled panels but an empty map list
+is *incomplete*. All three are counted, not imported. A map-list row with no
+panel left (a tiebreak after a draw) is imported with the flag
+`card-no-map-panel`. The season year comes from the landing tab.
+
+**Self-Check.** After parsing, the importer compares its own match and map
+counts per region and stage with the sheet's `Self-Check` tab
+(`gsheet_layout.json` → `selfCheck`). A row that disagrees becomes a
+`SELF_CHECK_MISMATCH` warning in the inventory. It is not a failure, because
+the sheet's own checks can lag behind an in-progress stage.
+
 **The gate fails the import and keeps the last good data when:** no tab is
 recognised; a recognised tab yields no map; more than `maxIgnoredRowShare`
 (50%) of a data tab's rows are unparseable; or a tab that held data in the last
@@ -204,6 +248,12 @@ A candidate VOD map must have **the same two resolved teams**. Then:
 | same VOD video id | +3 |
 | different VOD video id | −2 |
 
+* **No date on either side** (the match-card sheet records none): the stage of
+  the season stands in for the date. A different stage (`stage-1` vs
+  `stage-2`; phase words such as *Playoffs* are ignored, `aliases.json` →
+  `phaseStages`) **rejects** the candidate, and the same stage scores **+2**. A
+  different season year also rejects it. With no stage on one side the score
+  gets +0.
 * **Auto-link** needs ≥ 9, a lead of ≥ 3 over the runner-up, and no disagreeing map.
 * A score of 5 or more that misses those conditions goes to **needs_review** with
   every candidate and its reasons.

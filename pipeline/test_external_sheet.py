@@ -863,6 +863,14 @@ class MatchCards(unittest.TestCase):
         self.assertEqual(codes.count("SELF_CHECK_UNPAIRED"), 1)
         self.assertEqual(sc["mismatches"], 1)
 
+    def test_team_suffixes_are_stripped(self):
+        from external_sheet.cards import _strip_team
+        L = bundle().layout().cards
+        for raw, want in (("Telomere [0-0]", "Telomere"), ("VARREL [JP #1]", "VARREL"),
+                          ("Spacestation Gaming 0-0]", "Spacestation Gaming"),
+                          ("ENTER FORCE.36", "ENTER FORCE.36"), ("Team 1234", "Team 1234")):
+            self.assertEqual(_strip_team(L, raw), want)
+
     def test_ids_are_stable(self):
         b = bundle()
         again = import_workbook(read_xlsx(cards_bytes()), b.aliases(), b.layout())

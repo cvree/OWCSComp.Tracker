@@ -127,7 +127,10 @@
   "_phaseStages": "Stage ids that are a PHASE inside a stage (the playoffs of Stage 2), not the stage itself. stage_key() skips them, so 'Stage 2 Playoffs' compares as stage-2 when there is no date to go on.",
   "phaseStages": ["playoffs", "regular-season", "qualifiers", "grand-final"],
   "_pictures": "Reviewed overrides for match-card sheets that show heroes as pictures: {picture content hash (10 hex, as the inventory lists it): hero id}. The sheet's own Hero Index names nearly every picture; add one here only for a picture it does not name, after checking it.",
-  "pictures": {},
+  "pictures": {
+    "_7a2a731516": "Reviewed 2026-11-01 (inventory run 8): not in the sheet's Hero Index, used 147 times in EMEA - Stage 2; the ban text beside it reads 'Shion' 14 of 14 times, and on the VOD-linked QAD vs Twisted Minds Nepal map the VOD shows Shion where the sheet had only this picture.",
+    "7a2a731516": "shion"
+  },
   "tournaments": {},
   "teams": {
     "twis": ["twisted minds", "tm", "twis", "twisted"],

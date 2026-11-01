@@ -71,7 +71,36 @@ Order matches by (tab, week, day, game). Reconciliation with VOD maps must then
 rely on teams + stage + map + map number (no date). Add: when either side has no
 date, a stage mismatch rejects the candidate and a stage match scores +2.
 
-## Plan (in progress)
+## More findings (probe run 6, inventory runs 7–8, 2026-11-01)
+- `Self-Check` row 2 headers: H "Maps⏎(Spreadsheet)", I "Matches⏎(Spreadsheet)". B2 says
+  "Region" but column B holds the STAGE, written once per group ("Stage 1" over its rows,
+  so it is filled down). The region code in D has no header. Codes: PRE, JP, KR, CN, EMEA, NA,
+  PAC, ASIA, CC (Stage 1), EWC (Stage 2 = `Midseason Championship Paris`), WF (Stage 3).
+  The last row is `SUM` and is skipped.
+- `Hero Index`: role icons in row 2 with the label to the right (B2 → C2 "TANK"); 54 named
+  hero pictures. "D.Mon" and "Doctrine" are heroes our catalog does not have yet.
+- Map list rows are not evenly spaced: a card that went to a tiebreak after a draw ("Draw!",
+  "Map: 3-3") lists a SIXTH map (e.g. Pre-Season W1D1G1, Gibraltar) with no panel left.
+- Push maps list distances in the map list (D16 = 70.36, J16 = 109). The panel's "Map: 0-1"
+  is the map score.
+- Bans can say "Forfeit". Some series list "Map Forfeit" maps (Asia - Stage 1), which the
+  Self-Check does not count.
+- Some cards have filled map panels before their map list (China/EMEA Stage 3, in
+  progress). The Self-Check counts the map list, so the map list defines the maps.
+- Winner text has typos ("TOKYO TA1YOs Wins!", "TOKYO TAIYOsWins!"). The ► / ◄ arrow in the
+  map list decides then, and the text is listed as unmapped.
+- `World Finals Guangzhou` has only its title (C3), no game labels yet: unrecognised.
+- One picture (7a2a731516, EMEA - Stage 2) is not in the Hero Index but is used 147 times;
+  the inventory lists what the ban text beside it says, for a reviewed `pictures` alias.
+
+## Plan
+Steps 2–7 are implemented (`cards.py`, `match_cards` / `summary` / `reference`
+purposes, Self-Check comparison, the no-date stage rule, `owcs_cards_fixture.xlsx` +
+tests, `inventory --download` / workflow input `inventory`). Verified read-only on the
+real sheet from the workflow log. Next: merge, then run a normal sync from main
+(it opens the review PR on `auto/sheet-sync`).
+
+### Original plan
 1. DONE (uncommitted → committed with these notes): `workbook.read_xlsx` stores each tab's
    picture anchors as `sheet["images"] = [[cell, hash], …]`; `image_anchors()` moved
    into `workbook.py`.

@@ -255,7 +255,34 @@
           (t.unmappedColumns.length ? '<p class="small"><b>Kept in the raw layer only:</b> ' + t.unmappedColumns.map((c) =>
             esc(c.column + " “" + c.header + "”")).join("; ") + "</p>" : "") +
           (t.ignoredRows.length ? '<ul class="small">' + t.ignoredRows.map((r) => "<li>row " + r.row + ": " + esc(r.reason) +
-            "</li>").join("") + "</ul>" : "") + "</div></details>" : "").join(""));
+            "</li>").join("") + "</ul>" : "") + "</div></details>" : "").join("") + renderCards());
+  }
+
+  /* Match cards + the sheet's own Self-Check (the real sheet's layout). */
+  function renderCards() {
+    const mc = H.matchCards, sc = H.selfCheck;
+    let html = "";
+    if (mc) {
+      html += '<p class="small u-mt-4"><b>Match cards:</b> ' + mc.blocks + " found · " + mc.played + " imported · " +
+        mc.scheduled + " scheduled · " + (mc.incomplete || 0) + " incomplete · " + (mc.forfeited || 0) +
+        " forfeited · " + mc.failed + " unreadable. Season " + esc(mc.year || "not stated") +
+        ". Heroes are pictures named by the sheet\u2019s " + esc(mc.heroIndexTab || "Hero Index") +
+        "; the sheet records no dates and no map picks.</p>";
+    }
+    if (sc && (sc.rows || []).length) {
+      html += '<h3 class="u-mt-4">Self-Check — the sheet\u2019s own counts vs this import</h3>' +
+        '<div class="table-wrap"><table class="tbl tbl--compact"><thead><tr><th>Stage</th><th>Region</th><th>Tab</th>' +
+        '<th class="num">Matches (sheet / parsed)</th><th class="num">Maps (sheet / parsed)</th><th></th></tr></thead><tbody>' +
+        sc.rows.map((r) => {
+          const p = r.parsed || {};
+          const mark = r.agree === true ? "agree" : r.agree === false ? "<b>disagree</b>" : '<span class="dim">not paired</span>';
+          return "<tr><td>" + esc(r.stage || "—") + "</td><td>" + esc(r.region) + "</td><td>" +
+            esc((r.tabs || []).join(", ") || "—") + '</td><td class="num">' + esc(r.sheet.matches) + " / " +
+            esc(p.matches != null ? p.matches : "—") + '</td><td class="num">' + esc(r.sheet.maps) + " / " +
+            esc(p.maps != null ? p.maps : "—") + "</td><td>" + mark + "</td></tr>";
+        }).join("") + "</tbody></table></div>";
+    }
+    return html;
   }
 
   function renderIssues() {
