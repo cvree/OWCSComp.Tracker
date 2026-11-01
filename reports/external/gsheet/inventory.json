@@ -1,5 +1,5 @@
 {
- "aliasesVersion": 2,
+ "aliasesVersion": 3,
  "counts": {
   "appearances": 34206,
   "bans": 4127,
@@ -10,7 +10,7 @@
   "maps": 2098,
   "matches": 577,
   "tournaments": 10,
-  "unmappedValues": 422
+  "unmappedValues": 421
  },
  "credits": [
   {
@@ -1899,19 +1899,6 @@
     "raw": "picture:4451f92648",
     "refs": [
      "EMEA - Stage 3!AG472"
-    ]
-   }
-  ],
-  "map": [
-   {
-    "count": 25,
-    "raw": "Grímsvötn",
-    "refs": [
-     "EMEA - Stage 3!F40",
-     "EMEA - Stage 3!F66",
-     "EMEA - Stage 3!F118",
-     "EMEA - Stage 3!F144",
-     "EMEA - Stage 3!F173"
     ]
    }
   ],
