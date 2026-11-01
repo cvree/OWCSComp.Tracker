@@ -20,7 +20,8 @@ and named to look invented ('Fixture …').
                       and a tiebreak map that has no map panel
                       card 3: scheduled — label only, no teams
   Japan - Stage 1     one card with an unknown hero and a picture the Hero
-                      Index does not name
+                      Index does not name; a forfeited card ('Map Forfeit');
+                      a half-edited card (panel filled, map list empty)
   Stage 2 Hero Bans   the sheet's own totals (summary — never imported)
   Map Index           reference
   Self-Check          the sheet's own counts: EMEA Stage 2 agrees, Japan
@@ -220,6 +221,15 @@ def japan(wb) -> None:
                       winner="Fixture Gamma Wins!", score="2-0"),
                  dict(map="Rialto", a=g, b=d, banA="Ana", banB="Sigma",
                       winner="Fixture Gamma Wins!", score="3-1")])
+    # A forfeited series: its two map-list rows say 'Map Forfeit'. Not maps.
+    card(ws, 29, event="OWCS Japan", fmt="Round Robin [Bo3]", label="Week 1 | Day 1 | Game 2",
+         teams=(("FXG", "Fixture Gamma"), ("FXE", "Fixture Epsilon")), series=(2, 0),
+         maplist=[("►", None, "Map Forfeit", None, None), ("►", None, "Map Forfeit", None, None)])
+    # Half-edited: a map panel is filled in but the map list is still empty.
+    card(ws, 55, event="OWCS Japan", fmt="Round Robin [Bo3]", label="Week 1 | Day 2 | Game 1",
+         teams=(("FXD", "Fixture Delta"), ("FXE", "Fixture Epsilon")),
+         panels=[dict(map="Busan", a=d, b=g, banA="Mercy", banB="Juno",
+                      winner="Fixture Delta Wins!", score="2-1")])
 
 
 def totals(wb) -> None:

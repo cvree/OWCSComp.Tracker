@@ -170,6 +170,24 @@ def sample_lines(normalized: dict, per_tab: int, hero_names: dict | None = None)
     return out
 
 
+def card_lines(normalized: dict, tabs: list[str]) -> list[str]:
+    """One line per imported card: where it is, its teams, format, series
+    score and the maps it produced — to see which cards a count differs by."""
+    maps = {m["id"]: m for m in normalized.get("maps") or []}
+    out = []
+    for tab in tabs:
+        ms = sorted((m for m in normalized.get("matches") or [] if m["src"]["sheet"] == tab),
+                    key=lambda m: m["src"]["row"])
+        out.append(f"--- {tab}: {len(ms)} cards, {sum(len(m['mapIds']) for m in ms)} maps")
+        for m in ms:
+            names = ", ".join(str(maps[i]["mapRaw"]) for i in m["mapIds"] if i in maps)
+            out.append(f"  row {m['src']['row']} {m.get('gameLabel')} | {m.get('format')} | "
+                       f"{m.get('teamARaw')} {m.get('seriesScoreA')}-{m.get('seriesScoreB')} {m.get('teamBRaw')} "
+                       f"| complete {m.get('seriesComplete')} | {len(m['mapIds'])} maps: {names} "
+                       f"| flags {m.get('flags') or '—'}")
+    return out
+
+
 def cmd_inventory(args, paths: Paths) -> int:
     bundle = S.Bundle.load(paths)
     if args.download:
@@ -201,6 +219,11 @@ def cmd_inventory(args, paths: Paths) -> int:
         from external_sheet.reconcile import reconcile
         print("## Sample of parsed maps\n")
         print("\n".join(sample_lines(normalized, args.sample)))
+        bad = sorted({t for r in (inv.get("selfCheck") or {}).get("rows") or []
+                      if r.get("agree") is False for t in r["tabs"]})
+        if bad:
+            print("\n## Every parsed card of the tabs the Self-Check disagrees with\n")
+            print("\n".join(card_lines(normalized, bad)))
         recon = reconcile(normalized, bundle.public, bundle.decisions, bundle.aliases())
         print("\n## Reconciliation against the published VOD maps (not written)\n")
         print(", ".join(f"{k} {v}" for k, v in recon["summary"].items()))
@@ -208,6 +231,13 @@ def cmd_inventory(args, paths: Paths) -> int:
             if r["candidates"] or r["vodMapId"]:
                 print(f"- {r['externalMapId']} -> {r['vodMapId'] or '—'} [{r['status']}] {r['reason']}; "
                       f"best: {r['candidates'][0]['reasons'] if r['candidates'] else '—'}")
+                ext = next((m for m in normalized["maps"] if m["id"] == r["externalMapId"]), {})
+                print(f"    sheet: {ext.get('slug')} ({ext.get('src', {}).get('sheet')} row "
+                      f"{ext.get('src', {}).get('row')})")
+                for k, f in (r.get("fields") or {}).items():
+                    if f.get("agree") is not True:
+                        print(f"    {k}: sheet {f.get('sheet')} | vod {f.get('vod')} | agree {f.get('agree')}"
+                              + (f" | {f['note']}" if f.get("note") else ""))
     return 0
 
 

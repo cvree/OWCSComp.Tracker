@@ -68,6 +68,8 @@ class CardLayout:
         self.list_rows = (int(ml.get("firstRow", 9)), int(ml.get("lastRow", 20)))
         self.list_cols = {k: col(ml[k]) for k in ("wonA", "scoreA", "map", "scoreB", "wonB") if ml.get(k)}
         self.won_a, self.won_b = ml.get("wonAMark") or "►", ml.get("wonBMark") or "◄"
+        self.map_forfeit = {norm(x) for x in ml.get("forfeit") or []}
+        self.best_of = re.compile(c.get("bestOf") or r"\[\s*bo\s*(?P<n>\d+)\s*\]", re.I)
         p = c.get("panels") or {}
         self.panel0 = col(p.get("firstColumn") or "N")
         self.panel_step = int(p.get("step") or 17)
@@ -240,7 +242,10 @@ def read_card(g: list, origin: dict, imgs: dict, b: int, label: re.Match, L: Car
                         i = max(j for j, s in enumerate(L.starts) if s <= off) if off >= L.starts[0] else 0
                         players[i]["heroes"].append((h, a1(r, c)))
             pan["players" + side.upper()] = players
-        pan["played"] = bool(_text(pan["map"][0]) or _text(pan["teamA"][0]) or _text(pan["teamB"][0]))
+        # A panel is a played map only when it names its map; a template
+        # panel can carry the team names before anything is played.
+        pan["played"] = bool(_text(pan["map"][0]))
+        pan["teamsNamed"] = bool(_text(pan["teamA"][0]) or _text(pan["teamB"][0]))
         panels.append(pan)
     card["panels"] = panels
     return card
@@ -287,7 +292,8 @@ def parse_card_sheet(ctx, sheet: dict, g: list, origin: dict, inv: dict, ref: di
     name = sheet["name"]
     imgs = images_by_cell(sheet)
     blocks = find_blocks(g, L)
-    stats = {"blocks": len(blocks), "played": 0, "scheduled": 0, "failed": 0, "labels": []}
+    stats = {"blocks": len(blocks), "played": 0, "scheduled": 0, "incomplete": 0, "forfeited": 0,
+             "failed": 0, "labels": []}
     inv["cards"] = stats
     ignored: list[dict] = []
     seen_labels: dict[str, int] = {}
@@ -300,8 +306,8 @@ def parse_card_sheet(ctx, sheet: dict, g: list, origin: dict, inv: dict, ref: di
             reason = f"parser error: {type(exc).__name__}: {exc}"
             ctx.issues.append({"level": "error", "code": "CARD_PARSE_ERROR", "sheet": name,
                                "row": b + 1, "message": reason})
-        if reason == "scheduled":
-            stats["scheduled"] += 1
+        if reason in ("scheduled", "incomplete", "forfeited"):
+            stats[reason] += 1
         elif reason:
             stats["failed"] += 1
             ignored.append({"row": b + 1, "reason": f"{card['label']}: {reason}"})
@@ -364,15 +370,29 @@ def _card(ctx, N, sheet: dict, card: dict, inv: dict, ref: dict) -> str | None:
     L: CardLayout = ref["layout"]
     name = sheet["name"]
     played = [p for p in card["panels"] if p["played"]]
+    named = [p for p in card["panels"] if p["teamsNamed"]]
     code_a, code_a_cell = card.get("teamACode", (None, None))
     code_b, code_b_cell = card.get("teamBCode", (None, None))
-    full_a = next((_strip_team(L, p["teamA"][0]) for p in played if _strip_team(L, p["teamA"][0])), None)
-    full_b = next((_strip_team(L, p["teamB"][0]) for p in played if _strip_team(L, p["teamB"][0])), None)
+    full_a = next((_strip_team(L, p["teamA"][0]) for p in named if _strip_team(L, p["teamA"][0])), None)
+    full_b = next((_strip_team(L, p["teamB"][0]) for p in named if _strip_team(L, p["teamB"][0])), None)
     code_a, code_b = _text(code_a), _text(code_b)
     if not (full_a or code_a) or not (full_b or code_b):
         return "scheduled"                      # teams not filled in yet
-    if not played and not card["mapList"]:
-        return "scheduled"                      # teams known, nothing played yet
+    # The map LIST is the card's record of what was played (the sheet's
+    # own Self-Check counts it). 'Map Forfeit' rows are not maps.
+    real = [e for e in card["mapList"] if norm(e["map"][0]) not in L.map_forfeit]
+    forfeits = len(card["mapList"]) - len(real)
+    if not real:
+        if forfeits:
+            return "forfeited"                  # a forfeited series: no map was played
+        if not played:
+            return "scheduled"                  # teams known, nothing played yet
+        ctx.issues.append({"level": "warning", "code": "CARD_INCOMPLETE", "sheet": name,
+                           "row": card["top"] + 1, "message": (
+            f"'{name}' {card['label']} (row {card['top'] + 1}): {len(played)} map panel(s) filled in "
+            "but the card's map list is empty — not imported until the editors finish the card")})
+        return "incomplete"
+    card = dict(card, mapList=real)
     ta = _team(ctx, N, full_a, code_a, name, code_a_cell)
     tb = _team(ctx, N, full_b, code_b, name, code_b_cell)
     if N._team_key(ta) == N._team_key(tb):
@@ -390,6 +410,8 @@ def _card(ctx, N, sheet: dict, card: dict, inv: dict, ref: dict) -> str | None:
     b_slug = (tb.id or slugify(tb.raw)).replace("x-", "")
     label_slug = "-".join(f"{k[0]}{card[k]}" for k in ("week", "day", "game") if card.get(k) is not None)
     fmt = _text(card.get("format", (None,))[0])
+    bo = L.best_of.search(fmt or "")
+    best_of = int(bo.group("n")) if bo else None
     m = ctx.matches.get(mid)
     if m is None:
         m = {
@@ -407,7 +429,8 @@ def _card(ctx, N, sheet: dict, card: dict, inv: dict, ref: dict) -> str | None:
             "teamACode": code_a, "teamBCode": code_b,
             "seriesScoreA": None, "seriesScoreB": None, "seriesScoreRaw": None,
             "seriesScoreMethod": None, "winner": None, "winnerMethod": None,
-            "format": fmt, "gameLabel": card["label"],
+            "format": fmt, "gameLabel": card["label"], "bestOf": best_of,
+            "seriesComplete": None,
             "week": card["week"], "day": card["day"], "game": card["game"],
             "playerOfTheMatchRaw": _potm(card),
             "mapIds": [], "src": {"sheet": name, "row": card["top"] + 1, "kind": "match-card"},
@@ -421,15 +444,23 @@ def _card(ctx, N, sheet: dict, card: dict, inv: dict, ref: dict) -> str | None:
             m["seriesScoreA"], m["seriesScoreB"] = _int(sa), _int(sb)
             m["seriesScoreRaw"], m["seriesScoreMethod"] = f"{sa}-{sb}", "sheet"
             ctx.prov(mid, "seriesScore", name, sa_cell, "direct", f"{sa}-{sb}", [_int(sa), _int(sb)])
+            if best_of:
+                # 'Bo5' and a side on 3: the series is over. Counted, not inferred.
+                m["seriesComplete"] = max(_int(sa), _int(sb)) >= best_of // 2 + 1
+        if forfeits:
+            m.setdefault("flags", []).append(f"forfeited-maps:{forfeits}")
         inv["parsed"]["matches"] += 1
 
     names = {"a": [full_a, code_a], "b": [full_b, code_b]}
-    n_maps = max(len(card["mapList"]), max([p["index"] + 1 for p in played] + [0]))
-    if len(card["mapList"]) < len(played):
+    n_maps = len(card["mapList"])
+    extra = [p for p in played if p["index"] >= n_maps]
+    if extra:
         # More map panels than the map list names: the card is half-edited.
+        # Only the listed maps are imported.
         ctx.issues.append({"level": "warning", "code": "CARD_SHAPE", "sheet": name, "row": card["top"] + 1,
-                           "message": f"{card['label']}: the map list names {len(card['mapList'])} maps "
-                                      f"but {len(played)} map panels are filled in"})
+                           "message": f"'{name}' {card['label']} (row {card['top'] + 1}): the map list names "
+                                      f"{n_maps} maps but {len(played)} map panels are filled in; the "
+                                      f"unlisted panel(s) {[p['map'][0] for p in extra]} are not imported"})
     # (A map list LONGER than the panels is normal: a tiebreak map after a
     # draw has no panel left. Those maps carry the flag card-no-map-panel.)
     for i in range(n_maps):
@@ -568,6 +599,12 @@ def _card_map(ctx, N, name: str, card: dict, m: dict, order: int, entry: dict | 
                         rec["flags"].append(f"ban-text-disagrees-with-picture:{side}")
             elif pic:
                 res, cell = _hero(ctx, ref, pic, name, pic_cell), pic_cell
+            if res is not None and res.id and pic and pic not in ref["pictures"]["heroes"] \
+                    and pic not in ctx.aliases.pictures:
+                # A picture the Hero Index does not name, beside ban text that
+                # names a hero: EVIDENCE for a reviewer, never applied here.
+                ev = ref.setdefault("suggest", {}).setdefault(pic, {})
+                ev[res.id] = ev.get(res.id, 0) + 1
             if res is None or res.method == "empty":
                 continue
             bans.append({"id": f"xban-{map_id[5:]}-{side}-1", "mapId": map_id, "matchId": m["id"],
@@ -626,6 +663,7 @@ def self_check(raw: dict, cfg: dict, tabs: list[dict], aliases) -> dict | None:
     rows = []
     start = (header_row + 1) if header_row is not None else 0
     fill = set(cfg.get("fillDown") or [])
+    skip = {norm(x) for x in cfg.get("skipRows") or ["sum", "total"]}
     last: dict[str, str | None] = {}
     for r in range(start, len(g)):
         get = lambda k: _val(g, r, cols[k]) if k in cols else None
@@ -636,7 +674,7 @@ def self_check(raw: dict, cfg: dict, tabs: list[dict], aliases) -> dict | None:
             last["stage"] = stage_v
         if maps_v is None and matches_v is None:
             continue
-        if not region_v:
+        if not region_v or norm(region_v) in skip or norm(stage_v) in skip:
             continue
         rx = code_res.get(region_v.strip().upper())
         cands = [t for t in card_tabs if rx and rx.search(t["name"].strip())]

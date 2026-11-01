@@ -164,7 +164,8 @@
       "scoreB": "J",
       "wonB": "K",
       "wonAMark": "►",
-      "wonBMark": "◄"
+      "wonBMark": "◄",
+      "forfeit": ["map forfeit", "forfeit", "forfeited"]
     },
     "panels": {
       "firstColumn": "N",
@@ -183,7 +184,8 @@
       "banPictureB": [7, 7],
       "mapScore": [16, 10]
     },
-    "winnerText": "^(?P<team>.+?)\\s+wins!?$",
+    "winnerText": "^(?P<team>.+?)\\s*wins!?$",
+    "bestOf": "\\[\\s*bo\\s*(?P<n>\\d+)\\s*\\]",
     "mapScoreText": "^map\\s*:?\\s*(?P<a>\\d+)\\s*[-–:]\\s*(?P<b>\\d+)",
     "teamSuffix": "\\s*\\[[^\\]]*\\]\\s*$",
     "heroIndex": {"tab": "^hero index$", "nameBelow": 1, "roleLabelRight": 1},
@@ -215,6 +217,7 @@
     },
     "columns": {"stage": "B", "region": "D", "maps": "H", "matches": "I"},
     "fillDown": ["stage"],
+    "skipRows": ["sum", "total"],
     "regionCodes": {
       "PRE": "^pre-season bootcamp$",
       "JP": "^japan - ",

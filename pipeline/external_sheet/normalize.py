@@ -247,10 +247,15 @@ def import_workbook(raw: dict, aliases: AliasBook, layout: Layout,
             "year": card_ref["year"], "yearCell": card_ref["yearCell"],
             "heroIndexTab": pics["tab"], "heroPictures": len(pics["heroes"]),
             "rolePictures": len(pics["roles"]), "heroIndexConflicts": pics["conflicts"],
-            "blocks": sum((t.get("cards") or {}).get("blocks", 0) for t in sheets_inv),
-            "played": sum((t.get("cards") or {}).get("played", 0) for t in sheets_inv),
-            "scheduled": sum((t.get("cards") or {}).get("scheduled", 0) for t in sheets_inv),
-            "failed": sum((t.get("cards") or {}).get("failed", 0) for t in sheets_inv),
+            **{k: sum((t.get("cards") or {}).get(k, 0) for t in sheets_inv)
+               for k in ("blocks", "played", "scheduled", "incomplete", "forfeited", "failed")},
+            # Pictures the Hero Index does not name, with the heroes the ban
+            # text beside them names: evidence for a reviewed aliases.json
+            # "pictures" entry. Never applied automatically.
+            "pictureSuggestions": [
+                {"picture": h, "banTextSays": dict(sorted(ev.items(), key=lambda kv: -kv[1])),
+                 "unanimous": len(ev) == 1}
+                for h, ev in sorted((card_ref.get("suggest") or {}).items())],
         }
         if not card_ref["year"]:
             ctx.issues.append({"level": "warning", "code": "NO_SEASON_YEAR", "message": (

@@ -351,8 +351,14 @@ def inventory_markdown(inv: dict, snapshot: dict | None, source: dict) -> str:
                   f"{mc.get('heroPictures', 0)} heroes, {mc.get('rolePictures', 0)} role icons",
                   f"- Cards: {mc.get('blocks', 0)} found · {mc.get('played', 0)} imported · "
                   f"{mc.get('scheduled', 0)} scheduled (no teams or no maps yet) · "
-                  f"{mc.get('failed', 0)} could not be read",
+                  f"{mc.get('incomplete', 0)} incomplete (panels filled, map list empty) · "
+                  f"{mc.get('forfeited', 0)} forfeited · {mc.get('failed', 0)} could not be read",
                   "- The sheet records no calendar dates and no map picks: neither is imported."]
+        for sug in mc.get("pictureSuggestions") or []:
+            says = ", ".join(f"{h} ×{n}" for h, n in sug["banTextSays"].items())
+            lines.append(f"- Picture `{sug['picture']}` is not named by the Hero Index; the ban text beside "
+                         f"it says: {says}{' (unanimous)' if sug['unanimous'] else ' (DISAGREES)'} — add it to "
+                         "config/external/aliases.json `pictures` only after checking")
     sc = inv.get("selfCheck")
     if sc:
         lines += ["", f"## Self-Check (`{sc['tab']}`) — the sheet's own counts vs the importer's", "",
@@ -371,7 +377,8 @@ def inventory_markdown(inv: dict, snapshot: dict | None, source: dict) -> str:
         if t.get("cards"):
             cc = t["cards"]
             lines.append(f"Cards: {cc['blocks']} found · {cc['played']} imported · "
-                         f"{cc['scheduled']} scheduled · {cc['failed']} could not be read · "
+                         f"{cc['scheduled']} scheduled · {cc.get('incomplete', 0)} incomplete · "
+                         f"{cc.get('forfeited', 0)} forfeited · {cc['failed']} could not be read · "
                          f"{(t.get('parsed') or {}).get('matches', 0)} matches")
         if t.get("mappedColumns"):
             lines.append("Columns: " + "; ".join(f"{m['column']} “{m['header']}” → {m['as']}"
