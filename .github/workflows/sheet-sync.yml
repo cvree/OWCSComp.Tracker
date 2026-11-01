@@ -47,6 +47,14 @@ on:
         description: "With probe: ranges to print cell by cell, e.g. Japan - Stage 1!A1:CR27"
         type: string
         default: ""
+      inventory:
+        description: "Only parse the workbook and print the inventory, Self-Check comparison, a sample of parsed maps and the reconciliation summary to the log — writes and commits nothing"
+        type: boolean
+        default: false
+      inventory_sample:
+        description: "With inventory: how many parsed maps to print per tab"
+        type: string
+        default: "4"
 
 # Every workflow that commits generated data shares ONE group so they
 # serialise (test_release_reproducibility / test_discovery_workflow).
@@ -88,8 +96,20 @@ jobs:
             python pipeline/sheet_sync.py probe --download --rows 40
           fi
 
+      - name: Parse inventory (read-only, prints to this log)
+        if: github.event.inputs.inventory == 'true' && github.event.inputs.probe != 'true'
+        env:
+          SAMPLE: ${{ github.event.inputs.inventory_sample }}
+        run: |
+          python pipeline/sheet_sync.py inventory --download --sample "${SAMPLE:-4}" | tee inventory.md
+          {
+            echo "## Spreadsheet parse inventory (nothing written)"
+            echo
+            sed -n '1,80p' inventory.md
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Download, compare hash, import, reconcile
-        if: github.event.inputs.probe != 'true'
+        if: github.event.inputs.probe != 'true' && github.event.inputs.inventory != 'true'
         id: sync
         run: |
           args=""
@@ -117,7 +137,7 @@ jobs:
           fi
 
       - name: Keep the failure report and the downloaded workbook
-        if: always() && github.event.inputs.probe != 'true'
+        if: always() && github.event.inputs.probe != 'true' && github.event.inputs.inventory != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: sheet-sync-${{ github.run_id }}
@@ -130,7 +150,7 @@ jobs:
           retention-days: 30
 
       - name: Fail the run when the sync failed
-        if: github.event.inputs.probe != 'true' && steps.sync.outputs.exit != '0'
+        if: github.event.inputs.probe != 'true' && github.event.inputs.inventory != 'true' && steps.sync.outputs.exit != '0'
         run: |
           echo "::error::Spreadsheet sync failed; nothing was committed. See the job summary."
           exit 1

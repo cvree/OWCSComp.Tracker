@@ -68,6 +68,8 @@ class AliasBook:
         self.modes: dict[str, str] = {}
         self.regions: dict[str, str] = {}
         self.stages: dict[str, str] = {}
+        self.phase_stages: set[str] = set()
+        self.pictures: dict[str, str] = {}
         self.tournaments: dict[str, str] = {}
         self.teams: dict[str, str] = {}
         self.team_names: dict[str, str] = {}
@@ -135,6 +137,11 @@ class AliasBook:
         for sid, spellings in (config.get("stages") or {}).items():
             for sp in spellings:
                 add(book.stages, "stage", sp, sid, "alias")
+        book.phase_stages = set(config.get("phaseStages") or [])
+        # Reviewed picture -> hero overrides for match-card sheets that show
+        # heroes as images ({content hash: hero id}).
+        book.pictures = {str(h): str(v) for h, v in (config.get("pictures") or {}).items()
+                         if not str(h).startswith("_")}
         for tid, spellings in (config.get("tournaments") or {}).items():
             for sp in spellings:
                 add(book.tournaments, "tournament", sp, tid, "alias")
@@ -203,6 +210,33 @@ class AliasBook:
         for spelling, sid in self.stages.items():
             if f" {spelling} " in k and (best is None or len(spelling) > len(best[0])):
                 best = (spelling, sid)
+        return Resolution(best[1], "contains", r.raw) if best else r
+
+    def stage_key(self, *texts: Any) -> str | None:
+        """Which stage of the season a text names, ignoring phase words:
+        'Stage 2 Playoffs' and 'EMEA - Stage 2' are both 'stage-2'. Used
+        to compare stages when there is no date to go on. None when the
+        text names no stage."""
+        k = f" {norm(' '.join(str(t) for t in texts if t))} "
+        best = None
+        for spelling, sid in self.stages.items():
+            if sid in self.phase_stages:
+                continue
+            if f" {spelling} " in k and (best is None or len(spelling) > len(best[0])):
+                best = (spelling, sid)
+        return best[1] if best else None
+
+    def region_in(self, raw: Any) -> Resolution:
+        """A region named anywhere in a text, as a whole phrase ('North
+        America - Stage 1' -> na). The longest known spelling wins."""
+        r = self.region(raw)
+        if r.id or r.method == "empty":
+            return r
+        k = f" {norm(raw)} "
+        best = None
+        for spelling, rid in self.regions.items():
+            if f" {spelling} " in k and (best is None or len(spelling) > len(best[0])):
+                best = (spelling, rid)
         return Resolution(best[1], "contains", r.raw) if best else r
 
     def tournament(self, raw: Any) -> Resolution:

@@ -18,7 +18,7 @@
     "corrections/external_reconciliation.json (aliasApprovals), not here, so",
     "this file stays the hand-curated base and the decisions stay auditable."
   ],
-  "version": 1,
+  "version": 2,
   "ignoreValues": ["", "-", "--", "—", "n/a", "na", "none", "?", "??", "tbd", "tba", "x", "null", "unknown", "/"],
   "heroes": {
     "cass": ["cassidy", "mccree", "cass", "cree"],
@@ -118,8 +118,16 @@
     "playoffs": ["playoffs", "playoff", "main event"],
     "regular-season": ["regular season", "group stage", "groups", "swiss", "league play"],
     "qualifiers": ["qualifiers", "qualifier", "open qualifiers", "closed qualifiers"],
-    "grand-final": ["grand final", "grand finals", "finals", "gf"]
+    "grand-final": ["grand final", "grand finals", "finals", "gf"],
+    "pre-season": ["pre season bootcamp", "pre season", "preseason", "bootcamp"],
+    "midseason-championship": ["midseason championship", "midseason", "msc"],
+    "champions-clash": ["champions clash"],
+    "world-finals": ["world finals", "world final"]
   },
+  "_phaseStages": "Stage ids that are a PHASE inside a stage (the playoffs of Stage 2), not the stage itself. stage_key() skips them, so 'Stage 2 Playoffs' compares as stage-2 when there is no date to go on.",
+  "phaseStages": ["playoffs", "regular-season", "qualifiers", "grand-final"],
+  "_pictures": "Reviewed overrides for match-card sheets that show heroes as pictures: {picture content hash (10 hex, as the inventory lists it): hero id}. The sheet's own Hero Index names nearly every picture; add one here only for a picture it does not name, after checking it.",
+  "pictures": {},
   "tournaments": {},
   "teams": {
     "twis": ["twisted minds", "tm", "twis", "twisted"],

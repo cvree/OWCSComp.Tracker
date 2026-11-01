@@ -99,6 +99,8 @@ def _compact_map(mp: dict, bans: list, apps: list, comps: list, hero_names: dict
         "modeMethod", "teamA", "teamB", "winner", "winnerSide", "winnerRaw", "winnerMethod",
         "pickedBy", "pickedBySide", "pickedByRaw", "pickNote", "scoreA", "scoreB", "scoreRaw",
         "vodUrl", "notes", "flags", "src", "alsoListedAt")}
+    if mp.get("card"):
+        out["card"] = mp["card"]
     if mp.get("duplicateConflicts"):
         out["duplicateConflicts"] = mp["duplicateConflicts"]
     out["bans"] = [{"side": b.get("side"), "teamId": b.get("teamId"), "hero": b.get("hero"),
@@ -262,6 +264,8 @@ def build_payload(*, normalized: dict | None, recon: dict | None, manifest: dict
             "unmapped": unmapped,
             "issues": (inv.get("issues") or [])[:100],
             "errors": inv.get("errors") or [],
+            "matchCards": inv.get("matchCards"),
+            "selfCheck": inv.get("selfCheck"),
         },
     }, details
 
@@ -338,8 +342,37 @@ def inventory_markdown(inv: dict, snapshot: dict | None, source: dict) -> str:
         lines.append(f"| {t['index'] + 1} | {t['name']} | {t['rows']} | {t['purpose']} | "
                      f"{t.get('headerRow') or '—'} | {p.get('maps', 0)} | {p.get('bans', 0)} | "
                      f"{p.get('appearances', 0)} | {t.get('ignoredCount', 0)} |")
+    mc = inv.get("matchCards")
+    if mc:
+        lines += ["", "## Match cards", "",
+                  f"- Season year: {mc.get('year') or 'not stated'}"
+                  + (f" ({mc['yearCell']})" if mc.get("yearCell") else ""),
+                  f"- Hero pictures named by `{mc.get('heroIndexTab') or 'no Hero Index tab'}`: "
+                  f"{mc.get('heroPictures', 0)} heroes, {mc.get('rolePictures', 0)} role icons",
+                  f"- Cards: {mc.get('blocks', 0)} found · {mc.get('played', 0)} imported · "
+                  f"{mc.get('scheduled', 0)} scheduled (no teams or no maps yet) · "
+                  f"{mc.get('failed', 0)} could not be read",
+                  "- The sheet records no calendar dates and no map picks: neither is imported."]
+    sc = inv.get("selfCheck")
+    if sc:
+        lines += ["", f"## Self-Check (`{sc['tab']}`) — the sheet's own counts vs the importer's", "",
+                  f"{sc.get('compared', 0)} rows compared · {sc.get('mismatches', 0)} disagree · "
+                  f"{sc.get('unpaired', 0)} without a single tab to compare", "",
+                  "| stage | region | tab | matches (sheet / parsed) | maps (sheet / parsed) | |",
+                  "|---|---|---|---|---|---|"]
+        for r in sc.get("rows") or []:
+            p = r.get("parsed") or {}
+            mark = {True: "agree", False: "**DISAGREE**", None: "not paired"}[r.get("agree")]
+            lines.append(f"| {r.get('stage') or '—'} | {r.get('region')} | {', '.join(r.get('tabs') or []) or '—'} | "
+                         f"{r['sheet'].get('matches')} / {p.get('matches', '—')} | "
+                         f"{r['sheet'].get('maps')} / {p.get('maps', '—')} | {mark} |")
     for t in inv.get("tabs") or []:
         lines += ["", f"## {t['name']} — {t['purposeLabel']}"]
+        if t.get("cards"):
+            cc = t["cards"]
+            lines.append(f"Cards: {cc['blocks']} found · {cc['played']} imported · "
+                         f"{cc['scheduled']} scheduled · {cc['failed']} could not be read · "
+                         f"{(t.get('parsed') or {}).get('matches', 0)} matches")
         if t.get("mappedColumns"):
             lines.append("Columns: " + "; ".join(f"{m['column']} “{m['header']}” → {m['as']}"
                                                  for m in t["mappedColumns"]))
