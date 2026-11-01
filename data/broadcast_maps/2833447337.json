@@ -1,0 +1,251 @@
+{
+ "durationSeconds": 25830.0,
+ "layout": "owcs_8c105lnzlam.json",
+ "maps": [
+  {
+   "check": [],
+   "end": 4110,
+   "game": 1,
+   "index": 1,
+   "map": "nepal",
+   "series": 1,
+   "start": 3540,
+   "team_a": {
+    "id": "virtus-pro",
+    "name": "VIRTUS.PRO"
+   },
+   "team_b": {
+    "id": "twis",
+    "name": "TWISTED MINDS"
+   }
+  },
+  {
+   "check": [],
+   "end": 5250,
+   "game": 2,
+   "index": 2,
+   "map": "neonjunction",
+   "series": 1,
+   "start": 4470,
+   "team_a": {
+    "id": "twis",
+    "name": "TWISTED MINDS"
+   },
+   "team_b": {
+    "id": "virtus-pro",
+    "name": "VIRTUS.PRO"
+   }
+  },
+  {
+   "check": [],
+   "end": 7230,
+   "game": 1,
+   "index": 3,
+   "map": "busan",
+   "series": 2,
+   "start": 6690,
+   "team_a": {
+    "id": "geekay-esports",
+    "name": "GEEKAY ESPORTS"
+   },
+   "team_b": {
+    "id": "zeta",
+    "name": "ZETA DIVISION"
+   }
+  },
+  {
+   "check": [],
+   "end": 8250,
+   "game": 2,
+   "index": 4,
+   "map": "njc",
+   "series": 2,
+   "start": 7560,
+   "team_a": {
+    "id": "zeta",
+    "name": "ZETA DIVISION"
+   },
+   "team_b": {
+    "id": "geekay-esports",
+    "name": "GEEKAY ESPORTS"
+   }
+  },
+  {
+   "check": [],
+   "end": 9600,
+   "game": 3,
+   "index": 5,
+   "map": "route66",
+   "series": 2,
+   "start": 8850,
+   "team_a": {
+    "id": "geekay-esports",
+    "name": "GEEKAY ESPORTS"
+   },
+   "team_b": {
+    "id": "zeta",
+    "name": "ZETA DIVISION"
+   }
+  },
+  {
+   "check": [
+    "team_a"
+   ],
+   "end": 11910,
+   "game": 1,
+   "index": 6,
+   "map": "samoa",
+   "series": 3,
+   "start": 11070,
+   "team_a": {
+    "id": "t1",
+    "name": "T1"
+   },
+   "team_b": {
+    "id": "falcons",
+    "name": "TEAM FALCONS"
+   }
+  },
+  {
+   "check": [],
+   "end": 12930,
+   "game": 2,
+   "index": 7,
+   "map": "shambali",
+   "series": 3,
+   "start": 12480,
+   "team_a": {
+    "id": "t1",
+    "name": "T1"
+   },
+   "team_b": {
+    "id": "falcons",
+    "name": "TEAM FALCONS"
+   }
+  },
+  {
+   "check": [],
+   "end": 15240,
+   "game": 1,
+   "index": 8,
+   "map": "samoa",
+   "paused": true,
+   "series": 4,
+   "start": 14520,
+   "team_a": {
+    "id": "ssg",
+    "name": "SPACESTATION GAMING"
+   },
+   "team_b": {
+    "id": "varrel",
+    "name": "VARREL"
+   }
+  },
+  {
+   "check": [],
+   "end": 16080,
+   "game": 2,
+   "index": 9,
+   "map": "njc",
+   "series": 4,
+   "start": 15570,
+   "team_a": {
+    "id": "varrel",
+    "name": "VARREL"
+   },
+   "team_b": {
+    "id": "ssg",
+    "name": "SPACESTATIONGAMING"
+   }
+  },
+  {
+   "check": [],
+   "end": 17400,
+   "game": 3,
+   "index": 10,
+   "map": "shambali",
+   "series": 4,
+   "start": 16380,
+   "team_a": {
+    "id": "varrel",
+    "name": "VARREL"
+   },
+   "team_b": {
+    "id": "ssg",
+    "name": "SPACESTATIONGAMING"
+   }
+  },
+  {
+   "check": [],
+   "end": 19410,
+   "game": 1,
+   "index": 11,
+   "map": "nepal",
+   "series": 5,
+   "start": 18780,
+   "team_a": {
+    "id": "virtus-pro",
+    "name": "VIRTUS.PRO"
+   },
+   "team_b": {
+    "id": "dallas-fuel",
+    "name": "DALLAS FUEL"
+   }
+  },
+  {
+   "check": [],
+   "end": 20490,
+   "game": 2,
+   "index": 12,
+   "map": "njc",
+   "series": 5,
+   "start": 19740,
+   "team_a": {
+    "id": "virtus-pro",
+    "name": "VIRTUS PRO"
+   },
+   "team_b": {
+    "id": "dallas-fuel",
+    "name": "DALLAS FUEL"
+   }
+  },
+  {
+   "check": [],
+   "end": 22440,
+   "game": 1,
+   "index": 13,
+   "map": "samoa",
+   "series": 6,
+   "start": 21870,
+   "team_a": {
+    "id": "jd-gaming",
+    "name": "JD GAMING"
+   },
+   "team_b": {
+    "id": "geekay-esports",
+    "name": "GEEKAY ESPORTS"
+   }
+  },
+  {
+   "check": [],
+   "end": 23670,
+   "game": 2,
+   "index": 14,
+   "map": "route66",
+   "series": 6,
+   "start": 22770,
+   "team_a": {
+    "id": "jd-gaming",
+    "name": "JD GAMING"
+   },
+   "team_b": {
+    "id": "geekay-esports",
+    "name": "GEEKAY ESPORTS"
+   }
+  }
+ ],
+ "schema": "broadcast-maps.v1",
+ "step": 30.0,
+ "url": "https://www.twitch.tv/videos/2833447337",
+ "videoId": "2833447337"
+}
