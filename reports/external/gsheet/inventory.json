@@ -1,0 +1,6440 @@
+{
+ "aliasesVersion": 2,
+ "counts": {
+  "appearances": 34206,
+  "bans": 4127,
+  "compositions": 7987,
+  "duplicateConflicts": 0,
+  "duplicates": 0,
+  "ignoredRows": 0,
+  "maps": 2098,
+  "matches": 577,
+  "tournaments": 10,
+  "unmappedValues": 422
+ },
+ "credits": [
+  {
+   "cell": "G3",
+   "sheet": "Landing Page",
+   "text": "Editor Contacts:\n@pthandley32\nTwitter | Discord"
+  },
+  {
+   "cell": "H3",
+   "sheet": "Landing Page",
+   "text": "Editor Contacts:\n@pthandley32\nTwitter | Discord"
+  },
+  {
+   "cell": "I3",
+   "sheet": "Landing Page",
+   "text": "Editor Contacts:\n@pthandley32\nTwitter | Discord"
+  },
+  {
+   "cell": "AD3",
+   "sheet": "Landing Page",
+   "text": "OWTV Contacts:\nhttps://owtv.gg/\nTwitter | Discord"
+  },
+  {
+   "cell": "AE3",
+   "sheet": "Landing Page",
+   "text": "OWTV Contacts:\nhttps://owtv.gg/\nTwitter | Discord"
+  },
+  {
+   "cell": "AF3",
+   "sheet": "Landing Page",
+   "text": "OWTV Contacts:\nhttps://owtv.gg/\nTwitter | Discord"
+  }
+ ],
+ "dataTabs": 23,
+ "duplicates": [],
+ "errors": [],
+ "issues": [
+  {
+   "code": "CARD_LABEL_REPEATED",
+   "level": "warning",
+   "message": "tab 'Japan - Stage 1' has more than one card labelled ['Week 2 | Day 1 | Game 2', 'Week 2 | Day 1 | Game 3']",
+   "sheet": "Japan - Stage 1"
+  },
+  {
+   "code": "CARD_LABEL_REPEATED",
+   "level": "warning",
+   "message": "tab 'Japan - Stage 2' has more than one card labelled ['Week 2 | Day 1 | Game 2', 'Week 2 | Day 1 | Game 3']",
+   "sheet": "Japan - Stage 2"
+  },
+  {
+   "code": "CARD_LABEL_REPEATED",
+   "level": "warning",
+   "message": "tab 'Japan - Stage 3' has more than one card labelled ['Week 2 | Day 1 | Game 2', 'Week 2 | Day 1 | Game 3']",
+   "sheet": "Japan - Stage 3"
+  },
+  {
+   "code": "CARD_LABEL_REPEATED",
+   "level": "warning",
+   "message": "tab 'Korea - Stage 1' has more than one card labelled ['Week 6 | Day 1 | Game 1']",
+   "sheet": "Korea - Stage 1"
+  },
+  {
+   "code": "CARD_LABEL_REPEATED",
+   "level": "warning",
+   "message": "tab 'Korea - Stage 2' has more than one card labelled ['Week 6 | Day 1 | Game 1']",
+   "sheet": "Korea - Stage 2"
+  },
+  {
+   "code": "CARD_LABEL_REPEATED",
+   "level": "warning",
+   "message": "tab 'Korea - Stage 3' has more than one card labelled ['Week 6 | Day 1 | Game 1']",
+   "sheet": "Korea - Stage 3"
+  },
+  {
+   "code": "CARD_LABEL_REPEATED",
+   "level": "warning",
+   "message": "tab 'China - Stage 3' has more than one card labelled ['Week 4 | Day 2 | Game 1', 'Week 4 | Day 2 | Game 2', 'Week 5 | Day 1 | Game 1', 'Week 5 | Day 1 | Game 2', 'Week 5 | Day 1 | Game 3']",
+   "sheet": "China - Stage 3"
+  },
+  {
+   "code": "SELF_CHECK_MISMATCH",
+   "level": "warning",
+   "message": "Self-Check Stage 1 CC: the sheet counts 13 matches / 48 maps, the importer parsed 14 / 48 from 'Champions Clash Tokyo'",
+   "row": 11,
+   "sheet": "Self-Check"
+  },
+  {
+   "code": "SELF_CHECK_MISMATCH",
+   "level": "warning",
+   "message": "Self-Check Stage 3 EMEA: the sheet counts 20 matches / 84 maps, the importer parsed 21 / 84 from 'EMEA - Stage 3'",
+   "row": 22,
+   "sheet": "Self-Check"
+  },
+  {
+   "code": "SELF_CHECK_MISMATCH",
+   "level": "warning",
+   "message": "Self-Check Stage 3 NA: the sheet counts 17 matches / 68 maps, the importer parsed 19 / 68 from 'North America - Stage 3'",
+   "row": 23,
+   "sheet": "Self-Check"
+  }
+ ],
+ "layoutVersion": 2,
+ "matchCards": {
+  "blocks": 629,
+  "failed": 0,
+  "forfeited": 1,
+  "heroIndexConflicts": [],
+  "heroIndexTab": "Hero Index",
+  "heroPictures": 54,
+  "incomplete": 0,
+  "pictureSuggestions": [],
+  "played": 577,
+  "rolePictures": 6,
+  "scheduled": 51,
+  "year": 2026,
+  "yearCell": "Landing Page!B1"
+ },
+ "package": {
+  "bytes": 55395255,
+  "largestMembers": [
+   {
+    "bytes": 4047640,
+    "path": "xl/worksheets/sheet7.xml"
+   },
+   {
+    "bytes": 4035264,
+    "path": "xl/worksheets/sheet8.xml"
+   },
+   {
+    "bytes": 3995319,
+    "path": "xl/worksheets/sheet6.xml"
+   },
+   {
+    "bytes": 3401564,
+    "path": "xl/drawings/drawing7.xml"
+   },
+   {
+    "bytes": 3229136,
+    "path": "xl/drawings/drawing6.xml"
+   },
+   {
+    "bytes": 2885859,
+    "path": "xl/drawings/drawing8.xml"
+   },
+   {
+    "bytes": 2866778,
+    "path": "xl/worksheets/sheet11.xml"
+   },
+   {
+    "bytes": 2789980,
+    "path": "xl/worksheets/sheet9.xml"
+   }
+  ],
+  "mediaBytes": 47856008,
+  "mediaFiles": 229,
+  "members": 398,
+  "uncompressedBytes": 141489517,
+  "worksheetXml": [
+   {
+    "bytes": 4047640,
+    "path": "xl/worksheets/sheet7.xml"
+   },
+   {
+    "bytes": 4035264,
+    "path": "xl/worksheets/sheet8.xml"
+   },
+   {
+    "bytes": 3995319,
+    "path": "xl/worksheets/sheet6.xml"
+   },
+   {
+    "bytes": 2866778,
+    "path": "xl/worksheets/sheet11.xml"
+   },
+   {
+    "bytes": 2789980,
+    "path": "xl/worksheets/sheet9.xml"
+   },
+   {
+    "bytes": 2764596,
+    "path": "xl/worksheets/sheet10.xml"
+   },
+   {
+    "bytes": 2509984,
+    "path": "xl/worksheets/sheet5.xml"
+   },
+   {
+    "bytes": 2483491,
+    "path": "xl/worksheets/sheet3.xml"
+   },
+   {
+    "bytes": 2471232,
+    "path": "xl/worksheets/sheet4.xml"
+   },
+   {
+    "bytes": 2173158,
+    "path": "xl/worksheets/sheet25.xml"
+   },
+   {
+    "bytes": 2068362,
+    "path": "xl/worksheets/sheet26.xml"
+   },
+   {
+    "bytes": 1650125,
+    "path": "xl/worksheets/sheet14.xml"
+   },
+   {
+    "bytes": 1648238,
+    "path": "xl/worksheets/sheet17.xml"
+   },
+   {
+    "bytes": 1646188,
+    "path": "xl/worksheets/sheet18.xml"
+   },
+   {
+    "bytes": 1632358,
+    "path": "xl/worksheets/sheet16.xml"
+   },
+   {
+    "bytes": 1630340,
+    "path": "xl/worksheets/sheet13.xml"
+   },
+   {
+    "bytes": 1625936,
+    "path": "xl/worksheets/sheet12.xml"
+   },
+   {
+    "bytes": 1493913,
+    "path": "xl/worksheets/sheet20.xml"
+   },
+   {
+    "bytes": 1477521,
+    "path": "xl/worksheets/sheet19.xml"
+   },
+   {
+    "bytes": 1404101,
+    "path": "xl/worksheets/sheet21.xml"
+   },
+   {
+    "bytes": 1393833,
+    "path": "xl/worksheets/sheet22.xml"
+   },
+   {
+    "bytes": 1330004,
+    "path": "xl/worksheets/sheet23.xml"
+   },
+   {
+    "bytes": 1077676,
+    "path": "xl/worksheets/sheet24.xml"
+   },
+   {
+    "bytes": 851357,
+    "path": "xl/worksheets/sheet2.xml"
+   },
+   {
+    "bytes": 655389,
+    "path": "xl/worksheets/sheet39.xml"
+   },
+   {
+    "bytes": 502496,
+    "path": "xl/worksheets/sheet38.xml"
+   },
+   {
+    "bytes": 178894,
+    "path": "xl/worksheets/sheet37.xml"
+   },
+   {
+    "bytes": 168164,
+    "path": "xl/worksheets/sheet27.xml"
+   },
+   {
+    "bytes": 154114,
+    "path": "xl/worksheets/sheet29.xml"
+   },
+   {
+    "bytes": 134811,
+    "path": "xl/worksheets/sheet28.xml"
+   },
+   {
+    "bytes": 108099,
+    "path": "xl/worksheets/sheet30.xml"
+   },
+   {
+    "bytes": 95919,
+    "path": "xl/worksheets/sheet32.xml"
+   },
+   {
+    "bytes": 92889,
+    "path": "xl/worksheets/sheet31.xml"
+   },
+   {
+    "bytes": 71247,
+    "path": "xl/worksheets/sheet34.xml"
+   },
+   {
+    "bytes": 63157,
+    "path": "xl/worksheets/sheet41.xml"
+   },
+   {
+    "bytes": 53985,
+    "path": "xl/worksheets/sheet33.xml"
+   },
+   {
+    "bytes": 27060,
+    "path": "xl/worksheets/sheet35.xml"
+   },
+   {
+    "bytes": 24232,
+    "path": "xl/worksheets/sheet40.xml"
+   },
+   {
+    "bytes": 21166,
+    "path": "xl/worksheets/sheet1.xml"
+   },
+   {
+    "bytes": 15838,
+    "path": "xl/worksheets/sheet36.xml"
+   }
+  ]
+ },
+ "parserVersion": "gsheet-parser-2",
+ "selfCheck": {
+  "compared": 21,
+  "headerRow": 2,
+  "mismatches": 3,
+  "rows": [
+   {
+    "agree": true,
+    "parsed": {
+     "maps": 47,
+     "matches": 11
+    },
+    "region": "PRE",
+    "row": 3,
+    "sheet": {
+     "maps": 47,
+     "matches": 11
+    },
+    "stage": "Stage 1",
+    "tabs": [
+     "Pre-Season Bootcamp"
+    ]
+   },
+   {
+    "agree": true,
+    "parsed": {
+     "maps": 116,
+     "matches": 32
+    },
+    "region": "JP",
+    "row": 4,
+    "sheet": {
+     "maps": 116,
+     "matches": 32
+    },
+    "stage": "Stage 1",
+    "tabs": [
+     "Japan - Stage 1"
+    ]
+   },
+   {
+    "agree": true,
+    "parsed": {
+     "maps": 186,
+     "matches": 51
+    },
+    "region": "KR",
+    "row": 5,
+    "sheet": {
+     "maps": 186,
+     "matches": 51
+    },
+    "stage": "Stage 1",
+    "tabs": [
+     "Korea - Stage 1"
+    ]
+   },
+   {
+    "agree": true,
+    "parsed": {
+     "maps": 129,
+     "matches": 36
+    },
+    "region": "CN",
+    "row": 6,
+    "sheet": {
+     "maps": 129,
+     "matches": 36
+    },
+    "stage": "Stage 1",
+    "tabs": [
+     "China - Stage 1"
+    ]
+   },
+   {
+    "agree": true,
+    "parsed": {
+     "maps": 78,
+     "matches": 21
+    },
+    "region": "EMEA",
+    "row": 7,
+    "sheet": {
+     "maps": 78,
+     "matches": 21
+    },
+    "stage": "Stage 1",
+    "tabs": [
+     "EMEA - Stage 1"
+    ]
+   },
+   {
+    "agree": true,
+    "parsed": {
+     "maps": 82,
+     "matches": 21
+    },
+    "region": "NA",
+    "row": 8,
+    "sheet": {
+     "maps": 82,
+     "matches": 21
+    },
+    "stage": "Stage 1",
+    "tabs": [
+     "North America - Stage 1"
+    ]
+   },
+   {
+    "agree": true,
+    "parsed": {
+     "maps": 66,
+     "matches": 19
+    },
+    "region": "PAC",
+    "row": 9,
+    "sheet": {
+     "maps": 66,
+     "matches": 19
+    },
+    "stage": "Stage 1",
+    "tabs": [
+     "Pacific - Stage 1"
+    ]
+   },
+   {
+    "agree": true,
+    "parsed": {
+     "maps": 52,
+     "matches": 17
+    },
+    "region": "ASIA",
+    "row": 10,
+    "sheet": {
+     "maps": 52,
+     "matches": 17
+    },
+    "stage": "Stage 1",
+    "tabs": [
+     "Asia - Stage 1"
+    ]
+   },
+   {
+    "agree": false,
+    "parsed": {
+     "maps": 48,
+     "matches": 14
+    },
+    "region": "CC",
+    "row": 11,
+    "sheet": {
+     "maps": 48,
+     "matches": 13
+    },
+    "stage": "Stage 1",
+    "tabs": [
+     "Champions Clash Tokyo"
+    ]
+   },
+   {
+    "agree": true,
+    "parsed": {
+     "maps": 120,
+     "matches": 32
+    },
+    "region": "JP",
+    "row": 12,
+    "sheet": {
+     "maps": 120,
+     "matches": 32
+    },
+    "stage": "Stage 2",
+    "tabs": [
+     "Japan - Stage 2"
+    ]
+   },
+   {
+    "agree": true,
+    "parsed": {
+     "maps": 72,
+     "matches": 19
+    },
+    "region": "PAC",
+    "row": 13,
+    "sheet": {
+     "maps": 72,
+     "matches": 19
+    },
+    "stage": "Stage 2",
+    "tabs": [
+     "Pacific - Stage 2"
+    ]
+   },
+   {
+    "agree": true,
+    "parsed": {
+     "maps": 188,
+     "matches": 51
+    },
+    "region": "KR",
+    "row": 14,
+    "sheet": {
+     "maps": 188,
+     "matches": 51
+    },
+    "stage": "Stage 2",
+    "tabs": [
+     "Korea - Stage 2"
+    ]
+   },
+   {
+    "agree": true,
+    "parsed": {
+     "maps": 126,
+     "matches": 36
+    },
+    "region": "CN",
+    "row": 15,
+    "sheet": {
+     "maps": 126,
+     "matches": 36
+    },
+    "stage": "Stage 2",
+    "tabs": [
+     "China - Stage 2"
+    ]
+   },
+   {
+    "agree": true,
+    "parsed": {
+     "maps": 88,
+     "matches": 21
+    },
+    "region": "EMEA",
+    "row": 16,
+    "sheet": {
+     "maps": 88,
+     "matches": 21
+    },
+    "stage": "Stage 2",
+    "tabs": [
+     "EMEA - Stage 2"
+    ]
+   },
+   {
+    "agree": true,
+    "parsed": {
+     "maps": 75,
+     "matches": 21
+    },
+    "region": "NA",
+    "row": 17,
+    "sheet": {
+     "maps": 75,
+     "matches": 21
+    },
+    "stage": "Stage 2",
+    "tabs": [
+     "North America - Stage 2"
+    ]
+   },
+   {
+    "agree": true,
+    "parsed": {
+     "maps": 78,
+     "matches": 28
+    },
+    "region": "EWC",
+    "row": 18,
+    "sheet": {
+     "maps": 78,
+     "matches": 28
+    },
+    "stage": "Stage 2",
+    "tabs": [
+     "Midseason Championship Paris"
+    ]
+   },
+   {
+    "agree": true,
+    "parsed": {
+     "maps": 118,
+     "matches": 32
+    },
+    "region": "JP",
+    "row": 19,
+    "sheet": {
+     "maps": 118,
+     "matches": 32
+    },
+    "stage": "Stage 3",
+    "tabs": [
+     "Japan - Stage 3"
+    ]
+   },
+   {
+    "agree": true,
+    "parsed": {
+     "maps": 160,
+     "matches": 45
+    },
+    "region": "KR",
+    "row": 20,
+    "sheet": {
+     "maps": 160,
+     "matches": 45
+    },
+    "stage": "Stage 3",
+    "tabs": [
+     "Korea - Stage 3"
+    ]
+   },
+   {
+    "agree": true,
+    "parsed": {
+     "maps": 117,
+     "matches": 30
+    },
+    "region": "CN",
+    "row": 21,
+    "sheet": {
+     "maps": 117,
+     "matches": 30
+    },
+    "stage": "Stage 3",
+    "tabs": [
+     "China - Stage 3"
+    ]
+   },
+   {
+    "agree": false,
+    "parsed": {
+     "maps": 84,
+     "matches": 21
+    },
+    "region": "EMEA",
+    "row": 22,
+    "sheet": {
+     "maps": 84,
+     "matches": 20
+    },
+    "stage": "Stage 3",
+    "tabs": [
+     "EMEA - Stage 3"
+    ]
+   },
+   {
+    "agree": false,
+    "parsed": {
+     "maps": 68,
+     "matches": 19
+    },
+    "region": "NA",
+    "row": 23,
+    "sheet": {
+     "maps": 68,
+     "matches": 17
+    },
+    "stage": "Stage 3",
+    "tabs": [
+     "North America - Stage 3"
+    ]
+   }
+  ],
+  "tab": "Self-Check",
+  "unpaired": 0
+ },
+ "sourceRowCount": 9415,
+ "tabCount": 41,
+ "tabs": [
+  {
+   "columns": 35,
+   "dataRows": 0,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 44,
+   "index": 0,
+   "mappedColumns": [],
+   "name": "Landing Page",
+   "parsed": {
+    "appearances": 0,
+    "bans": 0,
+    "compositions": 0,
+    "duplicates": 0,
+    "maps": 0,
+    "matches": 0
+   },
+   "purpose": "credits",
+   "purposeLabel": "Credits / about text",
+   "rows": 8,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "cards": {
+    "blocks": 11,
+    "failed": 0,
+    "forfeited": 0,
+    "incomplete": 0,
+    "played": 11,
+    "scheduled": 0
+   },
+   "columns": 113,
+   "dataRows": 11,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 1457,
+   "index": 1,
+   "mappedColumns": [],
+   "name": "Pre-Season Bootcamp",
+   "parsed": {
+    "appearances": 670,
+    "bans": 63,
+    "compositions": 152,
+    "duplicates": 0,
+    "maps": 47,
+    "matches": 11
+   },
+   "purpose": "match_cards",
+   "purposeLabel": "Match cards — one fixed-size card per series, heroes shown as pictures",
+   "rows": 155,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "cards": {
+    "blocks": 32,
+    "failed": 0,
+    "forfeited": 0,
+    "incomplete": 0,
+    "played": 32,
+    "scheduled": 0
+   },
+   "columns": 96,
+   "dataRows": 32,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 3834,
+   "index": 2,
+   "mappedColumns": [],
+   "name": "Japan - Stage 1",
+   "parsed": {
+    "appearances": 1914,
+    "bans": 232,
+    "compositions": 445,
+    "duplicates": 0,
+    "maps": 116,
+    "matches": 32
+   },
+   "purpose": "match_cards",
+   "purposeLabel": "Match cards — one fixed-size card per series, heroes shown as pictures",
+   "rows": 463,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "cards": {
+    "blocks": 32,
+    "failed": 0,
+    "forfeited": 0,
+    "incomplete": 0,
+    "played": 32,
+    "scheduled": 0
+   },
+   "columns": 113,
+   "dataRows": 32,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 3913,
+   "index": 3,
+   "mappedColumns": [],
+   "name": "Japan - Stage 2",
+   "parsed": {
+    "appearances": 1917,
+    "bans": 238,
+    "compositions": 453,
+    "duplicates": 0,
+    "maps": 120,
+    "matches": 32
+   },
+   "purpose": "match_cards",
+   "purposeLabel": "Match cards — one fixed-size card per series, heroes shown as pictures",
+   "rows": 464,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "cards": {
+    "blocks": 32,
+    "failed": 0,
+    "forfeited": 0,
+    "incomplete": 0,
+    "played": 32,
+    "scheduled": 0
+   },
+   "columns": 130,
+   "dataRows": 32,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 3752,
+   "index": 4,
+   "mappedColumns": [],
+   "name": "Japan - Stage 3",
+   "parsed": {
+    "appearances": 1750,
+    "bans": 230,
+    "compositions": 436,
+    "duplicates": 0,
+    "maps": 118,
+    "matches": 32
+   },
+   "purpose": "match_cards",
+   "purposeLabel": "Match cards — one fixed-size card per series, heroes shown as pictures",
+   "rows": 467,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "cards": {
+    "blocks": 51,
+    "failed": 0,
+    "forfeited": 0,
+    "incomplete": 0,
+    "played": 51,
+    "scheduled": 0
+   },
+   "columns": 113,
+   "dataRows": 51,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 6053,
+   "index": 5,
+   "mappedColumns": [],
+   "name": "Korea - Stage 1",
+   "parsed": {
+    "appearances": 2961,
+    "bans": 370,
+    "compositions": 708,
+    "duplicates": 0,
+    "maps": 186,
+    "matches": 51
+   },
+   "purpose": "match_cards",
+   "purposeLabel": "Match cards — one fixed-size card per series, heroes shown as pictures",
+   "rows": 716,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "cards": {
+    "blocks": 51,
+    "failed": 0,
+    "forfeited": 0,
+    "incomplete": 0,
+    "played": 51,
+    "scheduled": 0
+   },
+   "columns": 133,
+   "dataRows": 51,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 6374,
+   "index": 6,
+   "mappedColumns": [],
+   "name": "Korea - Stage 2",
+   "parsed": {
+    "appearances": 3220,
+    "bans": 372,
+    "compositions": 724,
+    "duplicates": 0,
+    "maps": 188,
+    "matches": 51
+   },
+   "purpose": "match_cards",
+   "purposeLabel": "Match cards — one fixed-size card per series, heroes shown as pictures",
+   "rows": 717,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "cards": {
+    "blocks": 51,
+    "failed": 0,
+    "forfeited": 0,
+    "incomplete": 0,
+    "played": 45,
+    "scheduled": 6
+   },
+   "columns": 133,
+   "dataRows": 45,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 5410,
+   "index": 7,
+   "mappedColumns": [],
+   "name": "Korea - Stage 3",
+   "parsed": {
+    "appearances": 2760,
+    "bans": 320,
+    "compositions": 625,
+    "duplicates": 0,
+    "maps": 160,
+    "matches": 45
+   },
+   "purpose": "match_cards",
+   "purposeLabel": "Match cards — one fixed-size card per series, heroes shown as pictures",
+   "rows": 649,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "cards": {
+    "blocks": 36,
+    "failed": 0,
+    "forfeited": 0,
+    "incomplete": 0,
+    "played": 36,
+    "scheduled": 0
+   },
+   "columns": 96,
+   "dataRows": 36,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 4238,
+   "index": 8,
+   "mappedColumns": [],
+   "name": "China - Stage 1",
+   "parsed": {
+    "appearances": 2100,
+    "bans": 258,
+    "compositions": 490,
+    "duplicates": 0,
+    "maps": 129,
+    "matches": 36
+   },
+   "purpose": "match_cards",
+   "purposeLabel": "Match cards — one fixed-size card per series, heroes shown as pictures",
+   "rows": 505,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "cards": {
+    "blocks": 36,
+    "failed": 0,
+    "forfeited": 0,
+    "incomplete": 0,
+    "played": 36,
+    "scheduled": 0
+   },
+   "columns": 96,
+   "dataRows": 36,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 4174,
+   "index": 9,
+   "mappedColumns": [],
+   "name": "China - Stage 2",
+   "parsed": {
+    "appearances": 2084,
+    "bans": 252,
+    "compositions": 474,
+    "duplicates": 0,
+    "maps": 126,
+    "matches": 36
+   },
+   "purpose": "match_cards",
+   "purposeLabel": "Match cards — one fixed-size card per series, heroes shown as pictures",
+   "rows": 504,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "cards": {
+    "blocks": 36,
+    "failed": 0,
+    "forfeited": 0,
+    "incomplete": 0,
+    "played": 30,
+    "scheduled": 6
+   },
+   "columns": 96,
+   "dataRows": 30,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 3806,
+   "index": 10,
+   "mappedColumns": [],
+   "name": "China - Stage 3",
+   "parsed": {
+    "appearances": 1867,
+    "bans": 234,
+    "compositions": 453,
+    "duplicates": 0,
+    "maps": 117,
+    "matches": 30
+   },
+   "purpose": "match_cards",
+   "purposeLabel": "Match cards — one fixed-size card per series, heroes shown as pictures",
+   "rows": 438,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "cards": {
+    "blocks": 21,
+    "failed": 0,
+    "forfeited": 0,
+    "incomplete": 0,
+    "played": 21,
+    "scheduled": 0
+   },
+   "columns": 96,
+   "dataRows": 21,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 2464,
+   "index": 11,
+   "mappedColumns": [],
+   "name": "EMEA - Stage 1",
+   "parsed": {
+    "appearances": 1172,
+    "bans": 156,
+    "compositions": 296,
+    "duplicates": 0,
+    "maps": 78,
+    "matches": 21
+   },
+   "purpose": "match_cards",
+   "purposeLabel": "Match cards — one fixed-size card per series, heroes shown as pictures",
+   "rows": 294,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "cards": {
+    "blocks": 21,
+    "failed": 0,
+    "forfeited": 0,
+    "incomplete": 0,
+    "played": 21,
+    "scheduled": 0
+   },
+   "columns": 130,
+   "dataRows": 21,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 2903,
+   "index": 12,
+   "mappedColumns": [],
+   "name": "EMEA - Stage 2",
+   "parsed": {
+    "appearances": 1424,
+    "bans": 172,
+    "compositions": 336,
+    "duplicates": 0,
+    "maps": 88,
+    "matches": 21
+   },
+   "purpose": "match_cards",
+   "purposeLabel": "Match cards — one fixed-size card per series, heroes shown as pictures",
+   "rows": 296,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "cards": {
+    "blocks": 21,
+    "failed": 0,
+    "forfeited": 0,
+    "incomplete": 0,
+    "played": 21,
+    "scheduled": 0
+   },
+   "columns": 113,
+   "dataRows": 21,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 2707,
+   "index": 13,
+   "mappedColumns": [],
+   "name": "EMEA - Stage 3",
+   "parsed": {
+    "appearances": 1291,
+    "bans": 164,
+    "compositions": 313,
+    "duplicates": 0,
+    "maps": 84,
+    "matches": 21
+   },
+   "purpose": "match_cards",
+   "purposeLabel": "Match cards — one fixed-size card per series, heroes shown as pictures",
+   "rows": 294,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "columns": 17,
+   "dataRows": 0,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 60,
+   "index": 14,
+   "mappedColumns": [],
+   "name": "Hero Index",
+   "parsed": {
+    "appearances": 0,
+    "bans": 0,
+    "compositions": 0,
+    "duplicates": 0,
+    "maps": 0,
+    "matches": 0
+   },
+   "purpose": "reference",
+   "purposeLabel": "Reference tab (hero / map pictures, rosters, self-check) — read as a lookup, not imported",
+   "rows": 9,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "cards": {
+    "blocks": 21,
+    "failed": 0,
+    "forfeited": 0,
+    "incomplete": 0,
+    "played": 21,
+    "scheduled": 0
+   },
+   "columns": 96,
+   "dataRows": 21,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 2683,
+   "index": 15,
+   "mappedColumns": [],
+   "name": "North America - Stage 1",
+   "parsed": {
+    "appearances": 1329,
+    "bans": 164,
+    "compositions": 313,
+    "duplicates": 0,
+    "maps": 82,
+    "matches": 21
+   },
+   "purpose": "match_cards",
+   "purposeLabel": "Match cards — one fixed-size card per series, heroes shown as pictures",
+   "rows": 298,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "cards": {
+    "blocks": 21,
+    "failed": 0,
+    "forfeited": 0,
+    "incomplete": 0,
+    "played": 21,
+    "scheduled": 0
+   },
+   "columns": 113,
+   "dataRows": 21,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 2619,
+   "index": 16,
+   "mappedColumns": [],
+   "name": "North America - Stage 2",
+   "parsed": {
+    "appearances": 1349,
+    "bans": 148,
+    "compositions": 292,
+    "duplicates": 0,
+    "maps": 75,
+    "matches": 21
+   },
+   "purpose": "match_cards",
+   "purposeLabel": "Match cards — one fixed-size card per series, heroes shown as pictures",
+   "rows": 296,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "cards": {
+    "blocks": 21,
+    "failed": 0,
+    "forfeited": 0,
+    "incomplete": 0,
+    "played": 19,
+    "scheduled": 2
+   },
+   "columns": 96,
+   "dataRows": 19,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 2243,
+   "index": 17,
+   "mappedColumns": [],
+   "name": "North America - Stage 3",
+   "parsed": {
+    "appearances": 1085,
+    "bans": 136,
+    "compositions": 269,
+    "duplicates": 0,
+    "maps": 68,
+    "matches": 19
+   },
+   "purpose": "match_cards",
+   "purposeLabel": "Match cards — one fixed-size card per series, heroes shown as pictures",
+   "rows": 276,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "cards": {
+    "blocks": 19,
+    "failed": 0,
+    "forfeited": 0,
+    "incomplete": 0,
+    "played": 19,
+    "scheduled": 0
+   },
+   "columns": 96,
+   "dataRows": 19,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 2176,
+   "index": 18,
+   "mappedColumns": [],
+   "name": "Pacific - Stage 1",
+   "parsed": {
+    "appearances": 1082,
+    "bans": 132,
+    "compositions": 258,
+    "duplicates": 0,
+    "maps": 66,
+    "matches": 19
+   },
+   "purpose": "match_cards",
+   "purposeLabel": "Match cards — one fixed-size card per series, heroes shown as pictures",
+   "rows": 266,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "cards": {
+    "blocks": 19,
+    "failed": 0,
+    "forfeited": 0,
+    "incomplete": 0,
+    "played": 19,
+    "scheduled": 0
+   },
+   "columns": 130,
+   "dataRows": 19,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 2424,
+   "index": 19,
+   "mappedColumns": [],
+   "name": "Pacific - Stage 2",
+   "parsed": {
+    "appearances": 1195,
+    "bans": 140,
+    "compositions": 274,
+    "duplicates": 0,
+    "maps": 72,
+    "matches": 19
+   },
+   "purpose": "match_cards",
+   "purposeLabel": "Match cards — one fixed-size card per series, heroes shown as pictures",
+   "rows": 268,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "cards": {
+    "blocks": 19,
+    "failed": 0,
+    "forfeited": 0,
+    "incomplete": 0,
+    "played": 0,
+    "scheduled": 19
+   },
+   "columns": 3,
+   "dataRows": 0,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 0,
+   "index": 20,
+   "mappedColumns": [],
+   "name": "Pacific - Stage 3",
+   "parsed": {
+    "appearances": 0,
+    "bans": 0,
+    "compositions": 0,
+    "duplicates": 0,
+    "maps": 0,
+    "matches": 0
+   },
+   "purpose": "match_cards",
+   "purposeLabel": "Match cards — one fixed-size card per series, heroes shown as pictures",
+   "rows": 57,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "cards": {
+    "blocks": 18,
+    "failed": 0,
+    "forfeited": 1,
+    "incomplete": 0,
+    "played": 17,
+    "scheduled": 0
+   },
+   "columns": 130,
+   "dataRows": 17,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 1727,
+   "index": 21,
+   "mappedColumns": [],
+   "name": "Asia - Stage 1",
+   "parsed": {
+    "appearances": 803,
+    "bans": 100,
+    "compositions": 193,
+    "duplicates": 0,
+    "maps": 52,
+    "matches": 17
+   },
+   "purpose": "match_cards",
+   "purposeLabel": "Match cards — one fixed-size card per series, heroes shown as pictures",
+   "rows": 251,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "cards": {
+    "blocks": 18,
+    "failed": 0,
+    "forfeited": 0,
+    "incomplete": 0,
+    "played": 0,
+    "scheduled": 18
+   },
+   "columns": 3,
+   "dataRows": 0,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 0,
+   "index": 22,
+   "mappedColumns": [],
+   "name": "Asia - Stage 3",
+   "parsed": {
+    "appearances": 0,
+    "bans": 0,
+    "compositions": 0,
+    "duplicates": 0,
+    "maps": 0,
+    "matches": 0
+   },
+   "purpose": "match_cards",
+   "purposeLabel": "Match cards — one fixed-size card per series, heroes shown as pictures",
+   "rows": 54,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "cards": {
+    "blocks": 14,
+    "failed": 0,
+    "forfeited": 0,
+    "incomplete": 0,
+    "played": 14,
+    "scheduled": 0
+   },
+   "columns": 130,
+   "dataRows": 14,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 1609,
+   "index": 23,
+   "mappedColumns": [],
+   "name": "Champions Clash Tokyo",
+   "parsed": {
+    "appearances": 783,
+    "bans": 92,
+    "compositions": 178,
+    "duplicates": 0,
+    "maps": 48,
+    "matches": 14
+   },
+   "purpose": "match_cards",
+   "purposeLabel": "Match cards — one fixed-size card per series, heroes shown as pictures",
+   "rows": 198,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "cards": {
+    "blocks": 28,
+    "failed": 0,
+    "forfeited": 0,
+    "incomplete": 0,
+    "played": 28,
+    "scheduled": 0
+   },
+   "columns": 113,
+   "dataRows": 28,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 2773,
+   "index": 24,
+   "mappedColumns": [],
+   "name": "Midseason Championship Paris",
+   "parsed": {
+    "appearances": 1450,
+    "bans": 154,
+    "compositions": 305,
+    "duplicates": 0,
+    "maps": 78,
+    "matches": 28
+   },
+   "purpose": "match_cards",
+   "purposeLabel": "Match cards — one fixed-size card per series, heroes shown as pictures",
+   "rows": 393,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "columns": 3,
+   "dataRows": 0,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 0,
+   "index": 25,
+   "mappedColumns": [],
+   "name": "World Finals Guangzhou",
+   "parsed": {
+    "appearances": 0,
+    "bans": 0,
+    "compositions": 0,
+    "duplicates": 0,
+    "maps": 0,
+    "matches": 0
+   },
+   "purpose": "unrecognised",
+   "purposeLabel": "Not recognised — preserved in the raw layer only",
+   "rows": 28,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "columns": 34,
+   "dataRows": 0,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 600,
+   "index": 26,
+   "mappedColumns": [],
+   "name": "Stage 1 Hero Bans",
+   "parsed": {
+    "appearances": 0,
+    "bans": 0,
+    "compositions": 0,
+    "duplicates": 0,
+    "maps": 0,
+    "matches": 0
+   },
+   "purpose": "summary",
+   "purposeLabel": "The sheet's own totals — re-derived from the match cards, never imported",
+   "rows": 100,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "columns": 34,
+   "dataRows": 0,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 488,
+   "index": 27,
+   "mappedColumns": [],
+   "name": "Stage 2 Hero Bans",
+   "parsed": {
+    "appearances": 0,
+    "bans": 0,
+    "compositions": 0,
+    "duplicates": 0,
+    "maps": 0,
+    "matches": 0
+   },
+   "purpose": "summary",
+   "purposeLabel": "The sheet's own totals — re-derived from the match cards, never imported",
+   "rows": 80,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "columns": 34,
+   "dataRows": 0,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 566,
+   "index": 28,
+   "mappedColumns": [],
+   "name": "Stage 3 Hero Bans",
+   "parsed": {
+    "appearances": 0,
+    "bans": 0,
+    "compositions": 0,
+    "duplicates": 0,
+    "maps": 0,
+    "matches": 0
+   },
+   "purpose": "summary",
+   "purposeLabel": "The sheet's own totals — re-derived from the match cards, never imported",
+   "rows": 90,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "columns": 17,
+   "dataRows": 0,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 160,
+   "index": 29,
+   "mappedColumns": [],
+   "name": "Stage 1 Regional Maps",
+   "parsed": {
+    "appearances": 0,
+    "bans": 0,
+    "compositions": 0,
+    "duplicates": 0,
+    "maps": 0,
+    "matches": 0
+   },
+   "purpose": "summary",
+   "purposeLabel": "The sheet's own totals — re-derived from the match cards, never imported",
+   "rows": 144,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "columns": 17,
+   "dataRows": 0,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 140,
+   "index": 30,
+   "mappedColumns": [],
+   "name": "Stage 2 Regional Maps - Regular",
+   "parsed": {
+    "appearances": 0,
+    "bans": 0,
+    "compositions": 0,
+    "duplicates": 0,
+    "maps": 0,
+    "matches": 0
+   },
+   "purpose": "summary",
+   "purposeLabel": "The sheet's own totals — re-derived from the match cards, never imported",
+   "rows": 126,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "columns": 17,
+   "dataRows": 0,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 140,
+   "index": 31,
+   "mappedColumns": [],
+   "name": "Stage 2 Regional Maps - Playoff",
+   "parsed": {
+    "appearances": 0,
+    "bans": 0,
+    "compositions": 0,
+    "duplicates": 0,
+    "maps": 0,
+    "matches": 0
+   },
+   "purpose": "summary",
+   "purposeLabel": "The sheet's own totals — re-derived from the match cards, never imported",
+   "rows": 126,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "columns": 17,
+   "dataRows": 0,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 84,
+   "index": 32,
+   "mappedColumns": [],
+   "name": "Stage 3 Regional Maps (Season 4",
+   "parsed": {
+    "appearances": 0,
+    "bans": 0,
+    "compositions": 0,
+    "duplicates": 0,
+    "maps": 0,
+    "matches": 0
+   },
+   "purpose": "summary",
+   "purposeLabel": "The sheet's own totals — re-derived from the match cards, never imported",
+   "rows": 72,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "columns": 17,
+   "dataRows": 0,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 110,
+   "index": 33,
+   "mappedColumns": [],
+   "name": "Stage 3 Regional Maps (Season 5",
+   "parsed": {
+    "appearances": 0,
+    "bans": 0,
+    "compositions": 0,
+    "duplicates": 0,
+    "maps": 0,
+    "matches": 0
+   },
+   "purpose": "summary",
+   "purposeLabel": "The sheet's own totals — re-derived from the match cards, never imported",
+   "rows": 90,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "columns": 17,
+   "dataRows": 0,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 40,
+   "index": 34,
+   "mappedColumns": [],
+   "name": "Stage 1 LAN Maps",
+   "parsed": {
+    "appearances": 0,
+    "bans": 0,
+    "compositions": 0,
+    "duplicates": 0,
+    "maps": 0,
+    "matches": 0
+   },
+   "purpose": "summary",
+   "purposeLabel": "The sheet's own totals — re-derived from the match cards, never imported",
+   "rows": 36,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "columns": 17,
+   "dataRows": 0,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 21,
+   "index": 35,
+   "mappedColumns": [],
+   "name": "Stage 2 LAN Maps",
+   "parsed": {
+    "appearances": 0,
+    "bans": 0,
+    "compositions": 0,
+    "duplicates": 0,
+    "maps": 0,
+    "matches": 0
+   },
+   "purpose": "summary",
+   "purposeLabel": "The sheet's own totals — re-derived from the match cards, never imported",
+   "rows": 18,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "columns": 79,
+   "dataRows": 0,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 326,
+   "index": 36,
+   "mappedColumns": [],
+   "name": "Partner Team Index",
+   "parsed": {
+    "appearances": 0,
+    "bans": 0,
+    "compositions": 0,
+    "duplicates": 0,
+    "maps": 0,
+    "matches": 0
+   },
+   "purpose": "reference",
+   "purposeLabel": "Reference tab (hero / map pictures, rosters, self-check) — read as a lookup, not imported",
+   "rows": 32,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "columns": 147,
+   "dataRows": 0,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 672,
+   "index": 37,
+   "mappedColumns": [],
+   "name": "Non-Partner Team Index",
+   "parsed": {
+    "appearances": 0,
+    "bans": 0,
+    "compositions": 0,
+    "duplicates": 0,
+    "maps": 0,
+    "matches": 0
+   },
+   "purpose": "reference",
+   "purposeLabel": "Reference tab (hero / map pictures, rosters, self-check) — read as a lookup, not imported",
+   "rows": 48,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "columns": 164,
+   "dataRows": 0,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 674,
+   "index": 38,
+   "mappedColumns": [],
+   "name": "Old Team Index",
+   "parsed": {
+    "appearances": 0,
+    "bans": 0,
+    "compositions": 0,
+    "duplicates": 0,
+    "maps": 0,
+    "matches": 0
+   },
+   "purpose": "reference",
+   "purposeLabel": "Reference tab (hero / map pictures, rosters, self-check) — read as a lookup, not imported",
+   "rows": 56,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "columns": 13,
+   "dataRows": 0,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 24,
+   "index": 39,
+   "mappedColumns": [],
+   "name": "Self-Check",
+   "parsed": {
+    "appearances": 0,
+    "bans": 0,
+    "compositions": 0,
+    "duplicates": 0,
+    "maps": 0,
+    "matches": 0
+   },
+   "purpose": "reference",
+   "purposeLabel": "Reference tab (hero / map pictures, rosters, self-check) — read as a lookup, not imported",
+   "rows": 26,
+   "state": "visible",
+   "unmappedColumns": []
+  },
+  {
+   "columns": 51,
+   "dataRows": 0,
+   "headerRow": null,
+   "ignoredCount": 0,
+   "ignoredRows": [],
+   "images": 44,
+   "index": 40,
+   "mappedColumns": [],
+   "name": "Map Index",
+   "parsed": {
+    "appearances": 0,
+    "bans": 0,
+    "compositions": 0,
+    "duplicates": 0,
+    "maps": 0,
+    "matches": 0
+   },
+   "purpose": "reference",
+   "purposeLabel": "Reference tab (hero / map pictures, rosters, self-check) — read as a lookup, not imported",
+   "rows": 7,
+   "state": "visible",
+   "unmappedColumns": []
+  }
+ ],
+ "unmapped": {
+  "hero": [
+   {
+    "count": 778,
+    "raw": "Doctrine",
+    "refs": [
+     "Japan - Stage 3!U485",
+     "Japan - Stage 3!U478",
+     "Japan - Stage 3!AO472",
+     "Japan - Stage 3!AO489",
+     "Japan - Stage 3!BW472"
+    ]
+   },
+   {
+    "count": 740,
+    "raw": "D.Mon",
+    "refs": [
+     "Japan - Stage 3!U4",
+     "Japan - Stage 3!U21",
+     "Japan - Stage 3!AL4",
+     "Japan - Stage 3!AN21",
+     "Japan - Stage 3!BC4"
+    ]
+   },
+   {
+    "count": 1,
+    "raw": "picture:4451f92648",
+    "refs": [
+     "EMEA - Stage 3!AG472"
+    ]
+   }
+  ],
+  "map": [
+   {
+    "count": 25,
+    "raw": "Grímsvötn",
+    "refs": [
+     "EMEA - Stage 3!F40",
+     "EMEA - Stage 3!F66",
+     "EMEA - Stage 3!F118",
+     "EMEA - Stage 3!F144",
+     "EMEA - Stage 3!F173"
+    ]
+   }
+  ],
+  "player": [
+   {
+    "count": 197,
+    "raw": "Ch0r0ng",
+    "refs": [
+     "Pre-Season Bootcamp!Y107",
+     "Pre-Season Bootcamp!AP107",
+     "Pre-Season Bootcamp!BG107",
+     "Pre-Season Bootcamp!BX107",
+     "Pre-Season Bootcamp!Y211"
+    ]
+   },
+   {
+    "count": 197,
+    "raw": "knife",
+    "refs": [
+     "Korea - Stage 1!R51",
+     "Korea - Stage 1!AI51",
+     "Korea - Stage 1!AZ51",
+     "Korea - Stage 1!BQ51",
+     "Korea - Stage 1!O211"
+    ]
+   },
+   {
+    "count": 197,
+    "raw": "Proper",
+    "refs": [
+     "Korea - Stage 1!O51",
+     "Korea - Stage 1!AF51",
+     "Korea - Stage 1!AW51",
+     "Korea - Stage 1!BN51",
+     "Korea - Stage 1!R211"
+    ]
+   },
+   {
+    "count": 197,
+    "raw": "shu",
+    "refs": [
+     "Korea - Stage 1!Y51",
+     "Korea - Stage 1!AP51",
+     "Korea - Stage 1!BG51",
+     "Korea - Stage 1!BX51",
+     "Korea - Stage 1!AB211"
+    ]
+   },
+   {
+    "count": 197,
+    "raw": "Viol2t",
+    "refs": [
+     "Korea - Stage 1!AB51",
+     "Korea - Stage 1!AS51",
+     "Korea - Stage 1!BJ51",
+     "Korea - Stage 1!CA51",
+     "Korea - Stage 1!Y211"
+    ]
+   },
+   {
+    "count": 186,
+    "raw": "HeeSang",
+    "refs": [
+     "Pre-Season Bootcamp!O107",
+     "Pre-Season Bootcamp!AF107",
+     "Pre-Season Bootcamp!AW107",
+     "Pre-Season Bootcamp!BN107",
+     "Pre-Season Bootcamp!O211"
+    ]
+   },
+   {
+    "count": 175,
+    "raw": "Vigilante",
+    "refs": [
+     "Pre-Season Bootcamp!AB107",
+     "Pre-Season Bootcamp!AS107",
+     "Pre-Season Bootcamp!BJ107",
+     "Pre-Season Bootcamp!CA107",
+     "Pre-Season Bootcamp!AB211"
+    ]
+   },
+   {
+    "count": 172,
+    "raw": "Proud",
+    "refs": [
+     "Pre-Season Bootcamp!O77",
+     "Pre-Season Bootcamp!AF77",
+     "Pre-Season Bootcamp!AW77",
+     "Pre-Season Bootcamp!BN77",
+     "Pre-Season Bootcamp!O181"
+    ]
+   },
+   {
+    "count": 172,
+    "raw": "skewed",
+    "refs": [
+     "Pre-Season Bootcamp!Y77",
+     "Pre-Season Bootcamp!AP77",
+     "Pre-Season Bootcamp!BG77",
+     "Pre-Season Bootcamp!BX77",
+     "Pre-Season Bootcamp!Y181"
+    ]
+   },
+   {
+    "count": 172,
+    "raw": "Zest",
+    "refs": [
+     "Pre-Season Bootcamp!R77",
+     "Pre-Season Bootcamp!AI77",
+     "Pre-Season Bootcamp!AZ77",
+     "Pre-Season Bootcamp!BQ77",
+     "Pre-Season Bootcamp!R181"
+    ]
+   },
+   {
+    "count": 171,
+    "raw": "Bliss",
+    "refs": [
+     "Pre-Season Bootcamp!AB77",
+     "Pre-Season Bootcamp!AS77",
+     "Pre-Season Bootcamp!BJ77",
+     "Pre-Season Bootcamp!CA77",
+     "Pre-Season Bootcamp!AB181"
+    ]
+   },
+   {
+    "count": 164,
+    "raw": "STALK3R",
+    "refs": [
+     "Korea - Stage 1!R29",
+     "Korea - Stage 1!AI29",
+     "Korea - Stage 1!AZ29",
+     "Korea - Stage 1!BQ29",
+     "Korea - Stage 1!R155"
+    ]
+   },
+   {
+    "count": 152,
+    "raw": "ChiYo",
+    "refs": [
+     "Pre-Season Bootcamp!AB51",
+     "Pre-Season Bootcamp!AS51",
+     "Pre-Season Bootcamp!BJ51",
+     "Pre-Season Bootcamp!AB155",
+     "Pre-Season Bootcamp!AS155"
+    ]
+   },
+   {
+    "count": 152,
+    "raw": "Fielder",
+    "refs": [
+     "Pre-Season Bootcamp!Y51",
+     "Pre-Season Bootcamp!AP51",
+     "Pre-Season Bootcamp!BG51",
+     "Pre-Season Bootcamp!Y155",
+     "Pre-Season Bootcamp!AP155"
+    ]
+   },
+   {
+    "count": 144,
+    "raw": "Lengsa",
+    "refs": [
+     "Pre-Season Bootcamp!AB103",
+     "Pre-Season Bootcamp!AS103",
+     "Pre-Season Bootcamp!BJ103",
+     "China - Stage 1!AB29",
+     "China - Stage 1!AS29"
+    ]
+   },
+   {
+    "count": 143,
+    "raw": "BERNAR",
+    "refs": [
+     "Korea - Stage 1!V51",
+     "Korea - Stage 1!AM51",
+     "Korea - Stage 1!BD51",
+     "Korea - Stage 1!V211",
+     "Korea - Stage 1!AM211"
+    ]
+   },
+   {
+    "count": 143,
+    "raw": "Leave",
+    "refs": [
+     "Pre-Season Bootcamp!R133",
+     "Pre-Season Bootcamp!AI133",
+     "Pre-Season Bootcamp!AZ133",
+     "Pre-Season Bootcamp!BQ133",
+     "Pre-Season Bootcamp!CH133"
+    ]
+   },
+   {
+    "count": 143,
+    "raw": "LeeSooMin",
+    "refs": [
+     "Pre-Season Bootcamp!Y133",
+     "Pre-Season Bootcamp!AP133",
+     "Pre-Season Bootcamp!BG133",
+     "Pre-Season Bootcamp!BX133",
+     "Pre-Season Bootcamp!CO133"
+    ]
+   },
+   {
+    "count": 143,
+    "raw": "MAKA",
+    "refs": [
+     "Pre-Season Bootcamp!AB133",
+     "Pre-Season Bootcamp!AS133",
+     "Pre-Season Bootcamp!BJ133",
+     "Pre-Season Bootcamp!CA133",
+     "Pre-Season Bootcamp!CR133"
+    ]
+   },
+   {
+    "count": 143,
+    "raw": "Shy",
+    "refs": [
+     "Pre-Season Bootcamp!O133",
+     "Pre-Season Bootcamp!AF133",
+     "Pre-Season Bootcamp!AW133",
+     "Pre-Season Bootcamp!BN133",
+     "Pre-Season Bootcamp!CE133"
+    ]
+   },
+   {
+    "count": 141,
+    "raw": "Ezhan",
+    "refs": [
+     "China - Stage 1!O29",
+     "China - Stage 1!AF29",
+     "China - Stage 1!AW29",
+     "China - Stage 1!R181",
+     "China - Stage 1!AI181"
+    ]
+   },
+   {
+    "count": 141,
+    "raw": "Recall",
+    "refs": [
+     "China - Stage 1!Y29",
+     "China - Stage 1!AP29",
+     "China - Stage 1!BG29",
+     "China - Stage 1!Y181",
+     "China - Stage 1!AP181"
+    ]
+   },
+   {
+    "count": 135,
+    "raw": "MER1T",
+    "refs": [
+     "Pre-Season Bootcamp!O51",
+     "Pre-Season Bootcamp!AF51",
+     "Pre-Season Bootcamp!AW51",
+     "Pre-Season Bootcamp!O155",
+     "Pre-Season Bootcamp!AF155"
+    ]
+   },
+   {
+    "count": 133,
+    "raw": "iRONY",
+    "refs": [
+     "Korea - Stage 1!AB77",
+     "Korea - Stage 1!AS77",
+     "Korea - Stage 1!BJ77",
+     "Korea - Stage 1!CA77",
+     "Korea - Stage 1!CR77"
+    ]
+   },
+   {
+    "count": 130,
+    "raw": "OPENER",
+    "refs": [
+     "Korea - Stage 1!Y77",
+     "Korea - Stage 1!AP77",
+     "Korea - Stage 1!BG77",
+     "Korea - Stage 1!BX77",
+     "Korea - Stage 1!CO77"
+    ]
+   },
+   {
+    "count": 127,
+    "raw": "MewTwo",
+    "refs": [
+     "China - Stage 1!AB81",
+     "China - Stage 1!AS81",
+     "China - Stage 1!BJ81",
+     "China - Stage 1!CA81",
+     "China - Stage 1!Y159"
+    ]
+   },
+   {
+    "count": 123,
+    "raw": "Kaneki",
+    "refs": [
+     "China - Stage 1!R81",
+     "China - Stage 1!AI81",
+     "China - Stage 1!AZ81",
+     "China - Stage 1!BQ81",
+     "China - Stage 1!R159"
+    ]
+   },
+   {
+    "count": 123,
+    "raw": "MAX",
+    "refs": [
+     "Pre-Season Bootcamp!BD107",
+     "Pre-Season Bootcamp!BU107",
+     "Pre-Season Bootcamp!AM211",
+     "Pre-Season Bootcamp!AM263",
+     "Pre-Season Bootcamp!BU263"
+    ]
+   },
+   {
+    "count": 120,
+    "raw": "DONGHAK",
+    "refs": [
+     "Pre-Season Bootcamp!V77",
+     "Pre-Season Bootcamp!V181",
+     "Korea - Stage 1!BD523",
+     "Korea - Stage 1!BU523",
+     "Korea - Stage 1!CL523"
+    ]
+   },
+   {
+    "count": 120,
+    "raw": "KSG",
+    "refs": [
+     "Pre-Season Bootcamp!V29",
+     "Pre-Season Bootcamp!AM29",
+     "Pre-Season Bootcamp!BD29",
+     "Japan - Stage 1!V77",
+     "Japan - Stage 1!AM77"
+    ]
+   },
+   {
+    "count": 120,
+    "raw": "Nico",
+    "refs": [
+     "Pre-Season Bootcamp!O29",
+     "Pre-Season Bootcamp!AF29",
+     "Pre-Season Bootcamp!AW29",
+     "Japan - Stage 1!O77",
+     "Japan - Stage 1!AF77"
+    ]
+   },
+   {
+    "count": 120,
+    "raw": "Qloud",
+    "refs": [
+     "Pre-Season Bootcamp!AB29",
+     "Pre-Season Bootcamp!AS29",
+     "Pre-Season Bootcamp!BJ29",
+     "Japan - Stage 1!AB77",
+     "Japan - Stage 1!AS77"
+    ]
+   },
+   {
+    "count": 120,
+    "raw": "TOPDRAGON",
+    "refs": [
+     "Pre-Season Bootcamp!R29",
+     "Pre-Season Bootcamp!AI29",
+     "Pre-Season Bootcamp!AZ29",
+     "Japan - Stage 1!R77",
+     "Japan - Stage 1!AI77"
+    ]
+   },
+   {
+    "count": 119,
+    "raw": "Checkmate",
+    "refs": [
+     "Pre-Season Bootcamp!R51",
+     "Pre-Season Bootcamp!AI51",
+     "Pre-Season Bootcamp!AZ51",
+     "Pre-Season Bootcamp!R155",
+     "Pre-Season Bootcamp!AI155"
+    ]
+   },
+   {
+    "count": 119,
+    "raw": "Sley",
+    "refs": [
+     "Pre-Season Bootcamp!Y29",
+     "Pre-Season Bootcamp!AP29",
+     "Pre-Season Bootcamp!BG29",
+     "Japan - Stage 1!Y77",
+     "Japan - Stage 1!AP77"
+    ]
+   },
+   {
+    "count": 115,
+    "raw": "eisgnom",
+    "refs": [
+     "Pre-Season Bootcamp!V81",
+     "Pre-Season Bootcamp!AM81",
+     "Pre-Season Bootcamp!BD81",
+     "Pre-Season Bootcamp!V207",
+     "Pre-Season Bootcamp!AM207"
+    ]
+   },
+   {
+    "count": 115,
+    "raw": "FiXa",
+    "refs": [
+     "Pre-Season Bootcamp!Y81",
+     "Pre-Season Bootcamp!AP81",
+     "Pre-Season Bootcamp!BG81",
+     "Pre-Season Bootcamp!Y207",
+     "Pre-Season Bootcamp!AP207"
+    ]
+   },
+   {
+    "count": 115,
+    "raw": "Kevster",
+    "refs": [
+     "Pre-Season Bootcamp!O81",
+     "Pre-Season Bootcamp!AF81",
+     "Pre-Season Bootcamp!AW81",
+     "Pre-Season Bootcamp!O207",
+     "Pre-Season Bootcamp!AF207"
+    ]
+   },
+   {
+    "count": 115,
+    "raw": "Landon",
+    "refs": [
+     "Pre-Season Bootcamp!AB81",
+     "Pre-Season Bootcamp!AS81",
+     "Pre-Season Bootcamp!BJ81",
+     "Pre-Season Bootcamp!AB207",
+     "Pre-Season Bootcamp!AS207"
+    ]
+   },
+   {
+    "count": 115,
+    "raw": "Seicoe",
+    "refs": [
+     "Pre-Season Bootcamp!R81",
+     "Pre-Season Bootcamp!AI81",
+     "Pre-Season Bootcamp!AZ81",
+     "Pre-Season Bootcamp!R207",
+     "Pre-Season Bootcamp!AI207"
+    ]
+   },
+   {
+    "count": 110,
+    "raw": "Cjay",
+    "refs": [
+     "Pre-Season Bootcamp!Y55",
+     "Pre-Season Bootcamp!AS55",
+     "Pre-Season Bootcamp!BJ55",
+     "Pre-Season Bootcamp!CA55",
+     "North America - Stage 1!AB3"
+    ]
+   },
+   {
+    "count": 110,
+    "raw": "Kellan",
+    "refs": [
+     "Pre-Season Bootcamp!V55",
+     "Pre-Season Bootcamp!AM55",
+     "Pre-Season Bootcamp!BD55",
+     "Pre-Season Bootcamp!BU55",
+     "North America - Stage 1!V3"
+    ]
+   },
+   {
+    "count": 110,
+    "raw": "Kronik",
+    "refs": [
+     "Pre-Season Bootcamp!O55",
+     "Pre-Season Bootcamp!AF55",
+     "Pre-Season Bootcamp!AW55",
+     "Pre-Season Bootcamp!BN55",
+     "North America - Stage 1!O3"
+    ]
+   },
+   {
+    "count": 110,
+    "raw": "Lukemino",
+    "refs": [
+     "Pre-Season Bootcamp!AB55",
+     "Pre-Season Bootcamp!AP55",
+     "Pre-Season Bootcamp!BG55",
+     "Pre-Season Bootcamp!BX55",
+     "North America - Stage 1!Y3"
+    ]
+   },
+   {
+    "count": 110,
+    "raw": "prot3ct",
+    "refs": [
+     "China - Stage 1!V103",
+     "China - Stage 1!AM103",
+     "China - Stage 1!BD103",
+     "China - Stage 1!BU103",
+     "China - Stage 1!V155"
+    ]
+   },
+   {
+    "count": 110,
+    "raw": "Seonjun",
+    "refs": [
+     "Pre-Season Bootcamp!R55",
+     "Pre-Season Bootcamp!AI55",
+     "Pre-Season Bootcamp!AZ55",
+     "Pre-Season Bootcamp!BQ55",
+     "North America - Stage 1!R3"
+    ]
+   },
+   {
+    "count": 109,
+    "raw": "Admiral",
+    "refs": [
+     "North America - Stage 1!Y29",
+     "North America - Stage 1!AP29",
+     "North America - Stage 1!BG29",
+     "North America - Stage 1!Y81",
+     "North America - Stage 1!AP81"
+    ]
+   },
+   {
+    "count": 109,
+    "raw": "Lethal",
+    "refs": [
+     "North America - Stage 1!O29",
+     "North America - Stage 1!AF29",
+     "North America - Stage 1!AW29",
+     "North America - Stage 1!R81",
+     "North America - Stage 1!AI81"
+    ]
+   },
+   {
+    "count": 109,
+    "raw": "Sugarfree",
+    "refs": [
+     "North America - Stage 1!R29",
+     "North America - Stage 1!AI29",
+     "North America - Stage 1!AZ29",
+     "North America - Stage 1!O81",
+     "North America - Stage 1!AF81"
+    ]
+   },
+   {
+    "count": 109,
+    "raw": "UltraViolet",
+    "refs": [
+     "North America - Stage 1!AB29",
+     "North America - Stage 1!AS29",
+     "North America - Stage 1!BJ29",
+     "North America - Stage 1!AB81",
+     "North America - Stage 1!AS81"
+    ]
+   },
+   {
+    "count": 107,
+    "raw": "BABAYAGA",
+    "refs": [
+     "China - Stage 1!O103",
+     "China - Stage 1!AF103",
+     "China - Stage 1!AW103",
+     "China - Stage 1!BN103",
+     "China - Stage 1!O155"
+    ]
+   },
+   {
+    "count": 107,
+    "raw": "Hawk",
+    "refs": [
+     "North America - Stage 1!V29",
+     "North America - Stage 1!AM29",
+     "North America - Stage 1!BD29",
+     "North America - Stage 1!V81",
+     "North America - Stage 1!AM81"
+    ]
+   },
+   {
+    "count": 107,
+    "raw": "Ky0n",
+    "refs": [
+     "Japan - Stage 1!O3",
+     "Japan - Stage 1!AF3",
+     "Japan - Stage 1!AW3",
+     "Japan - Stage 1!BN3",
+     "Japan - Stage 1!O107"
+    ]
+   },
+   {
+    "count": 105,
+    "raw": "Edison",
+    "refs": [
+     "Japan - Stage 1!R29",
+     "Japan - Stage 1!AI29",
+     "Japan - Stage 1!AZ29",
+     "Japan - Stage 1!R233",
+     "Japan - Stage 1!AI233"
+    ]
+   },
+   {
+    "count": 105,
+    "raw": "Gaisen",
+    "refs": [
+     "Japan - Stage 1!AB29",
+     "Japan - Stage 1!AS29",
+     "Japan - Stage 1!BJ29",
+     "Japan - Stage 1!AB233",
+     "Japan - Stage 1!AS233"
+    ]
+   },
+   {
+    "count": 105,
+    "raw": "NewJ",
+    "refs": [
+     "Japan - Stage 1!O29",
+     "Japan - Stage 1!AF29",
+     "Japan - Stage 1!AW29",
+     "Japan - Stage 1!O233",
+     "Japan - Stage 1!AF233"
+    ]
+   },
+   {
+    "count": 105,
+    "raw": "Ydot",
+    "refs": [
+     "Japan - Stage 1!Y29",
+     "Japan - Stage 1!AP29",
+     "Japan - Stage 1!BG29",
+     "Japan - Stage 1!Y233",
+     "Japan - Stage 1!AP233"
+    ]
+   },
+   {
+    "count": 104,
+    "raw": "AlphaYi",
+    "refs": [
+     "EMEA - Stage 1!O77",
+     "EMEA - Stage 1!AF77",
+     "EMEA - Stage 1!AW77",
+     "EMEA - Stage 1!O155",
+     "EMEA - Stage 1!AF155"
+    ]
+   },
+   {
+    "count": 104,
+    "raw": "FiNN",
+    "refs": [
+     "EMEA - Stage 1!AB77",
+     "EMEA - Stage 1!AS77",
+     "EMEA - Stage 1!BJ77",
+     "EMEA - Stage 1!AB155",
+     "EMEA - Stage 1!AS155"
+    ]
+   },
+   {
+    "count": 104,
+    "raw": "LBBD7",
+    "refs": [
+     "EMEA - Stage 1!R77",
+     "EMEA - Stage 1!AI77",
+     "EMEA - Stage 1!AZ77",
+     "EMEA - Stage 1!R155",
+     "EMEA - Stage 1!AI155"
+    ]
+   },
+   {
+    "count": 104,
+    "raw": "ZIYAD",
+    "refs": [
+     "EMEA - Stage 1!V77",
+     "EMEA - Stage 1!AM77",
+     "EMEA - Stage 1!BD77",
+     "EMEA - Stage 1!V155",
+     "EMEA - Stage 1!AM155"
+    ]
+   },
+   {
+    "count": 103,
+    "raw": "Faith",
+    "refs": [
+     "Korea - Stage 1!AB3",
+     "Korea - Stage 1!AS3",
+     "Korea - Stage 1!BJ3",
+     "Korea - Stage 1!AB107",
+     "Korea - Stage 1!AS107"
+    ]
+   },
+   {
+    "count": 101,
+    "raw": "Alphari",
+    "refs": [
+     "China - Stage 1!R29",
+     "China - Stage 1!AI29",
+     "China - Stage 1!AZ29",
+     "China - Stage 1!O181",
+     "China - Stage 1!AF181"
+    ]
+   },
+   {
+    "count": 101,
+    "raw": "Becky",
+    "refs": [
+     "Korea - Stage 1!R55",
+     "Korea - Stage 1!AI55",
+     "Korea - Stage 1!AZ55",
+     "Korea - Stage 1!BQ55",
+     "Korea - Stage 1!CH55"
+    ]
+   },
+   {
+    "count": 101,
+    "raw": "HEISER",
+    "refs": [
+     "Korea - Stage 1!V55",
+     "Korea - Stage 1!AM55",
+     "Korea - Stage 1!BD55",
+     "Korea - Stage 1!BU55",
+     "Korea - Stage 1!CL55"
+    ]
+   },
+   {
+    "count": 101,
+    "raw": "TR33",
+    "refs": [
+     "Pre-Season Bootcamp!R185",
+     "Pre-Season Bootcamp!AI185",
+     "Pre-Season Bootcamp!AZ185",
+     "Pre-Season Bootcamp!BQ185",
+     "Pre-Season Bootcamp!R259"
+    ]
+   },
+   {
+    "count": 101,
+    "raw": "Vega",
+    "refs": [
+     "Pre-Season Bootcamp!Y185",
+     "Pre-Season Bootcamp!AP185",
+     "Pre-Season Bootcamp!BG185",
+     "Pre-Season Bootcamp!BX185",
+     "Pre-Season Bootcamp!Y259"
+    ]
+   },
+   {
+    "count": 101,
+    "raw": "Zeruhh",
+    "refs": [
+     "Pre-Season Bootcamp!O185",
+     "Pre-Season Bootcamp!AF185",
+     "Pre-Season Bootcamp!AW185",
+     "Pre-Season Bootcamp!BN185",
+     "Pre-Season Bootcamp!O259"
+    ]
+   },
+   {
+    "count": 100,
+    "raw": "KILO",
+    "refs": [
+     "Korea - Stage 1!R77",
+     "Korea - Stage 1!AI77",
+     "Korea - Stage 1!AZ77",
+     "Korea - Stage 1!BQ77",
+     "Korea - Stage 1!CH77"
+    ]
+   },
+   {
+    "count": 100,
+    "raw": "NEIVIS",
+    "refs": [
+     "Japan - Stage 1!AB3",
+     "Japan - Stage 1!AS3",
+     "Japan - Stage 1!BJ3",
+     "Japan - Stage 1!CA3",
+     "Japan - Stage 1!AB107"
+    ]
+   },
+   {
+    "count": 99,
+    "raw": "D4RT",
+    "refs": [
+     "Korea - Stage 1!R25",
+     "Korea - Stage 1!AI25",
+     "Korea - Stage 1!AZ25",
+     "Korea - Stage 1!R159",
+     "Korea - Stage 1!AI159"
+    ]
+   },
+   {
+    "count": 99,
+    "raw": "JaeWoo",
+    "refs": [
+     "Pre-Season Bootcamp!O159",
+     "Pre-Season Bootcamp!AF159",
+     "Pre-Season Bootcamp!AW159",
+     "Pre-Season Bootcamp!O237",
+     "Pre-Season Bootcamp!AF237"
+    ]
+   },
+   {
+    "count": 99,
+    "raw": "YangJun",
+    "refs": [
+     "Japan - Stage 2!AB103",
+     "Japan - Stage 2!AS103",
+     "Japan - Stage 2!BJ103",
+     "Japan - Stage 2!CA103",
+     "Japan - Stage 2!CR103"
+    ]
+   },
+   {
+    "count": 98,
+    "raw": "M1NUT2",
+    "refs": [
+     "Korea - Stage 1!O25",
+     "Korea - Stage 1!AF25",
+     "Korea - Stage 1!AW25",
+     "Korea - Stage 1!O159",
+     "Korea - Stage 1!AF159"
+    ]
+   },
+   {
+    "count": 98,
+    "raw": "SP1NT",
+    "refs": [
+     "Korea - Stage 1!O77",
+     "Korea - Stage 1!AF77",
+     "Korea - Stage 1!AW77",
+     "Korea - Stage 1!BN77",
+     "Korea - Stage 1!CE77"
+    ]
+   },
+   {
+    "count": 97,
+    "raw": "Sakume",
+    "refs": [
+     "Japan - Stage 1!Y3",
+     "Japan - Stage 1!AP3",
+     "Japan - Stage 1!BG3",
+     "Japan - Stage 1!BX3",
+     "Japan - Stage 1!Y107"
+    ]
+   },
+   {
+    "count": 97,
+    "raw": "TenTen",
+    "refs": [
+     "Korea - Stage 1!AB25",
+     "Korea - Stage 1!BJ25",
+     "Korea - Stage 1!AB159",
+     "Korea - Stage 1!AS159",
+     "Korea - Stage 1!BJ159"
+    ]
+   },
+   {
+    "count": 96,
+    "raw": "epic",
+    "refs": [
+     "Japan - Stage 1!Y55",
+     "Japan - Stage 1!AP55",
+     "Japan - Stage 1!BG55",
+     "Japan - Stage 1!Y133",
+     "Japan - Stage 1!AP133"
+    ]
+   },
+   {
+    "count": 96,
+    "raw": "PEPPI",
+    "refs": [
+     "Japan - Stage 1!V55",
+     "Japan - Stage 1!AM55",
+     "Japan - Stage 1!BD55",
+     "Japan - Stage 1!V133",
+     "Japan - Stage 1!AM133"
+    ]
+   },
+   {
+    "count": 94,
+    "raw": "Belosrea",
+    "refs": [
+     "Korea - Stage 3!V3",
+     "Korea - Stage 3!AM3",
+     "Korea - Stage 3!BD3",
+     "Korea - Stage 3!V81",
+     "Korea - Stage 3!AM81"
+    ]
+   },
+   {
+    "count": 93,
+    "raw": "ATTACK",
+    "refs": [
+     "Korea - Stage 1!V77",
+     "Korea - Stage 1!AM77",
+     "Korea - Stage 1!BD77",
+     "Korea - Stage 1!BU77",
+     "Korea - Stage 1!CL77"
+    ]
+   },
+   {
+    "count": 93,
+    "raw": "SORI",
+    "refs": [
+     "Japan - Stage 1!O103",
+     "Japan - Stage 1!AF103",
+     "Japan - Stage 1!AW103",
+     "Japan - Stage 1!O207",
+     "Japan - Stage 1!AF207"
+    ]
+   },
+   {
+    "count": 92,
+    "raw": "orca",
+    "refs": [
+     "Japan - Stage 1!AB51",
+     "Japan - Stage 1!AS51",
+     "Japan - Stage 1!BJ51",
+     "Japan - Stage 1!AB155",
+     "Japan - Stage 1!AS155"
+    ]
+   },
+   {
+    "count": 92,
+    "raw": "Roxy",
+    "refs": [
+     "Japan - Stage 1!V51",
+     "Japan - Stage 1!AM51",
+     "Japan - Stage 1!BD51",
+     "Japan - Stage 1!V155",
+     "Japan - Stage 1!AM155"
+    ]
+   },
+   {
+    "count": 91,
+    "raw": "ICHI",
+    "refs": [
+     "Japan - Stage 1!V103",
+     "Japan - Stage 1!AM103",
+     "Japan - Stage 1!BD103",
+     "Japan - Stage 1!V207",
+     "Japan - Stage 1!AM207"
+    ]
+   },
+   {
+    "count": 91,
+    "raw": "Mmonk",
+    "refs": [
+     "China - Stage 1!Y81",
+     "China - Stage 1!AP81",
+     "China - Stage 1!BG81",
+     "China - Stage 1!BX81",
+     "China - Stage 1!AB159"
+    ]
+   },
+   {
+    "count": 91,
+    "raw": "Pineapple",
+    "refs": [
+     "China - Stage 1!O81",
+     "China - Stage 1!AF81",
+     "China - Stage 1!AW81",
+     "China - Stage 1!BN81",
+     "China - Stage 1!O159"
+    ]
+   },
+   {
+    "count": 88,
+    "raw": "umi",
+    "refs": [
+     "Japan - Stage 1!AP81",
+     "Japan - Stage 1!BG81",
+     "Japan - Stage 1!AB181",
+     "Japan - Stage 1!AS181",
+     "Japan - Stage 1!BJ181"
+    ]
+   },
+   {
+    "count": 85,
+    "raw": "Hanbin",
+    "refs": [
+     "Pre-Season Bootcamp!V51",
+     "Pre-Season Bootcamp!AM51",
+     "Pre-Season Bootcamp!BD51",
+     "Pre-Season Bootcamp!V155",
+     "Pre-Season Bootcamp!AM155"
+    ]
+   },
+   {
+    "count": 84,
+    "raw": "Soae",
+    "refs": [
+     "Japan - Stage 1!R3",
+     "Japan - Stage 1!AI3",
+     "Japan - Stage 1!AZ3",
+     "Japan - Stage 1!BQ3",
+     "Japan - Stage 1!R107"
+    ]
+   },
+   {
+    "count": 83,
+    "raw": "Heesung",
+    "refs": [
+     "Japan - Stage 1!V29",
+     "Japan - Stage 1!AM29",
+     "Japan - Stage 1!BD29",
+     "Japan - Stage 1!V233",
+     "Japan - Stage 1!AM233"
+    ]
+   },
+   {
+    "count": 83,
+    "raw": "SUNZO",
+    "refs": [
+     "Pre-Season Bootcamp!AM133",
+     "Pre-Season Bootcamp!BD133",
+     "Pre-Season Bootcamp!BU133",
+     "Pre-Season Bootcamp!CL133",
+     "China - Stage 1!V55"
+    ]
+   },
+   {
+    "count": 82,
+    "raw": "Insane",
+    "refs": [
+     "Pre-Season Bootcamp!R103",
+     "Pre-Season Bootcamp!AI103",
+     "Pre-Season Bootcamp!AZ103",
+     "China - Stage 1!AW181",
+     "China - Stage 1!AI471"
+    ]
+   },
+   {
+    "count": 82,
+    "raw": "LiGe",
+    "refs": [
+     "Pre-Season Bootcamp!V103",
+     "Pre-Season Bootcamp!AM103",
+     "Pre-Season Bootcamp!BD103",
+     "China - Stage 1!V29",
+     "China - Stage 1!AM29"
+    ]
+   },
+   {
+    "count": 80,
+    "raw": "APDO",
+    "refs": [
+     "Japan - Stage 1!R51",
+     "Japan - Stage 1!AI51",
+     "Japan - Stage 1!AZ51",
+     "Japan - Stage 1!R155",
+     "Japan - Stage 1!AI155"
+    ]
+   },
+   {
+    "count": 76,
+    "raw": "NenWhy",
+    "refs": [
+     "North America - Stage 1!AB51",
+     "North America - Stage 1!AS51",
+     "North America - Stage 1!BG51",
+     "North America - Stage 1!AB107",
+     "North America - Stage 1!AS107"
+    ]
+   },
+   {
+    "count": 76,
+    "raw": "xomba",
+    "refs": [
+     "North America - Stage 1!R51",
+     "North America - Stage 1!AI51",
+     "North America - Stage 1!AZ51",
+     "North America - Stage 1!O107",
+     "North America - Stage 1!AF107"
+    ]
+   },
+   {
+    "count": 76,
+    "raw": "xten",
+    "refs": [
+     "North America - Stage 1!O51",
+     "North America - Stage 1!AF51",
+     "North America - Stage 1!AW51",
+     "North America - Stage 1!R107",
+     "North America - Stage 1!AI107"
+    ]
+   },
+   {
+    "count": 76,
+    "raw": "zzz",
+    "refs": [
+     "North America - Stage 1!Y51",
+     "North America - Stage 1!AP51",
+     "North America - Stage 1!BJ51",
+     "North America - Stage 1!Y107",
+     "North America - Stage 1!AP107"
+    ]
+   },
+   {
+    "count": 75,
+    "raw": "JunBin",
+    "refs": [
+     "Pre-Season Bootcamp!V107",
+     "Pre-Season Bootcamp!AM107",
+     "Pre-Season Bootcamp!V211",
+     "Pre-Season Bootcamp!BD211",
+     "Pre-Season Bootcamp!BU211"
+    ]
+   },
+   {
+    "count": 75,
+    "raw": "Kivis",
+    "refs": [
+     "Pre-Season Bootcamp!Y103",
+     "Pre-Season Bootcamp!AP103",
+     "Pre-Season Bootcamp!BG103",
+     "Korea - Stage 1!AB55",
+     "Korea - Stage 1!AS55"
+    ]
+   },
+   {
+    "count": 75,
+    "raw": "SeungAn",
+    "refs": [
+     "Korea - Stage 1!V3",
+     "Korea - Stage 1!AM3",
+     "Korea - Stage 1!BD3",
+     "Korea - Stage 1!V107",
+     "Korea - Stage 1!BD107"
+    ]
+   },
+   {
+    "count": 74,
+    "raw": "Damo",
+    "refs": [
+     "China - Stage 2!Y25",
+     "China - Stage 2!AP25",
+     "China - Stage 2!BG25",
+     "China - Stage 2!BX25",
+     "China - Stage 2!CO25"
+    ]
+   },
+   {
+    "count": 74,
+    "raw": "sara",
+    "refs": [
+     "China - Stage 1!Y77",
+     "China - Stage 1!AP77",
+     "China - Stage 1!BG77",
+     "China - Stage 1!Y129",
+     "China - Stage 1!AP129"
+    ]
+   },
+   {
+    "count": 73,
+    "raw": "800",
+    "refs": [
+     "China - Stage 2!V51",
+     "China - Stage 2!AM51",
+     "China - Stage 2!BD51",
+     "China - Stage 2!V133",
+     "China - Stage 2!AM133"
+    ]
+   },
+   {
+    "count": 73,
+    "raw": "A1IEN",
+    "refs": [
+     "Korea - Stage 1!O55",
+     "Korea - Stage 1!AF55",
+     "Korea - Stage 1!AW55",
+     "Korea - Stage 1!BN55",
+     "Korea - Stage 1!CE55"
+    ]
+   },
+   {
+    "count": 73,
+    "raw": "Breadturtle",
+    "refs": [
+     "Japan - Stage 1!O25",
+     "Japan - Stage 1!AF25",
+     "Japan - Stage 1!AW25",
+     "Japan - Stage 1!BN25",
+     "Japan - Stage 1!O237"
+    ]
+   },
+   {
+    "count": 72,
+    "raw": "Apr1ta",
+    "refs": [
+     "China - Stage 2!R3",
+     "China - Stage 2!AI3",
+     "China - Stage 2!AZ3",
+     "China - Stage 2!BQ3",
+     "China - Stage 2!CH3"
+    ]
+   },
+   {
+    "count": 72,
+    "raw": "Diya",
+    "refs": [
+     "China - Stage 1!AB3",
+     "China - Stage 1!AS3",
+     "China - Stage 1!BJ3",
+     "China - Stage 1!CA3",
+     "China - Stage 1!CR3"
+    ]
+   },
+   {
+    "count": 72,
+    "raw": "Kellex",
+    "refs": [
+     "EMEA - Stage 2!AB3",
+     "EMEA - Stage 2!AS3",
+     "EMEA - Stage 2!BJ3",
+     "EMEA - Stage 2!AB129",
+     "EMEA - Stage 2!AS129"
+    ]
+   },
+   {
+    "count": 72,
+    "raw": "Zeb",
+    "refs": [
+     "North America - Stage 1!V51",
+     "North America - Stage 1!BD51",
+     "North America - Stage 1!V107",
+     "North America - Stage 1!AM107",
+     "North America - Stage 1!BD107"
+    ]
+   },
+   {
+    "count": 71,
+    "raw": "Viper",
+    "refs": [
+     "Pre-Season Bootcamp!O103",
+     "Pre-Season Bootcamp!AF103",
+     "Pre-Season Bootcamp!AW103",
+     "Japan - Stage 2!R3",
+     "Japan - Stage 2!AI3"
+    ]
+   },
+   {
+    "count": 71,
+    "raw": "WuTian",
+    "refs": [
+     "Korea - Stage 2!R3",
+     "Korea - Stage 2!AI3",
+     "Korea - Stage 2!AZ3",
+     "Korea - Stage 2!R181",
+     "Korea - Stage 2!AI181"
+    ]
+   },
+   {
+    "count": 70,
+    "raw": "crispy",
+    "refs": [
+     "EMEA - Stage 1!AB103",
+     "EMEA - Stage 1!AS103",
+     "EMEA - Stage 1!BJ103",
+     "EMEA - Stage 1!AB181",
+     "EMEA - Stage 1!AS181"
+    ]
+   },
+   {
+    "count": 70,
+    "raw": "Khenail",
+    "refs": [
+     "EMEA - Stage 1!Y103",
+     "EMEA - Stage 1!AP103",
+     "EMEA - Stage 1!BG103",
+     "EMEA - Stage 1!Y181",
+     "EMEA - Stage 1!AP181"
+    ]
+   },
+   {
+    "count": 70,
+    "raw": "LIP",
+    "refs": [
+     "Pre-Season Bootcamp!R107",
+     "Pre-Season Bootcamp!AI107",
+     "Pre-Season Bootcamp!AZ107",
+     "Pre-Season Bootcamp!BQ107",
+     "Pre-Season Bootcamp!R211"
+    ]
+   },
+   {
+    "count": 67,
+    "raw": "perr",
+    "refs": [
+     "Korea - Stage 1!O81",
+     "Korea - Stage 1!AF81",
+     "Korea - Stage 1!AW81",
+     "Korea - Stage 1!O181",
+     "Korea - Stage 1!AF181"
+    ]
+   },
+   {
+    "count": 67,
+    "raw": "SOMEONE",
+    "refs": [
+     "Pre-Season Bootcamp!CL233",
+     "Korea - Stage 1!V497",
+     "Korea - Stage 1!AM497",
+     "Korea - Stage 1!BD497",
+     "Korea - Stage 1!V627"
+    ]
+   },
+   {
+    "count": 66,
+    "raw": "WMaimone",
+    "refs": [
+     "EMEA - Stage 1!R103",
+     "EMEA - Stage 1!AI103",
+     "EMEA - Stage 1!AZ103",
+     "EMEA - Stage 1!R181",
+     "EMEA - Stage 1!AI181"
+    ]
+   },
+   {
+    "count": 65,
+    "raw": "WoochaN",
+    "refs": [
+     "Korea - Stage 1!Y3",
+     "Korea - Stage 1!AP3",
+     "Korea - Stage 1!BG3",
+     "Korea - Stage 1!Y107",
+     "Korea - Stage 1!AP107"
+    ]
+   },
+   {
+    "count": 64,
+    "raw": "Argon",
+    "refs": [
+     "Korea - Stage 1!O3",
+     "Korea - Stage 1!AF3",
+     "Korea - Stage 1!AW3",
+     "Korea - Stage 1!O107",
+     "Korea - Stage 1!AF107"
+    ]
+   },
+   {
+    "count": 64,
+    "raw": "K4ne",
+    "refs": [
+     "Korea - Stage 2!O81",
+     "Korea - Stage 2!AF81",
+     "Korea - Stage 2!AW81",
+     "Korea - Stage 2!O233",
+     "Korea - Stage 2!AF233"
+    ]
+   },
+   {
+    "count": 63,
+    "raw": "Misin",
+    "refs": [
+     "Korea - Stage 2!Y3",
+     "Korea - Stage 2!AP3",
+     "Korea - Stage 2!BG3",
+     "Korea - Stage 2!Y181",
+     "Korea - Stage 2!AP181"
+    ]
+   },
+   {
+    "count": 62,
+    "raw": "DOX",
+    "refs": [
+     "Japan - Stage 1!V81",
+     "Japan - Stage 1!AM81",
+     "Japan - Stage 1!BD81",
+     "Japan - Stage 1!V181",
+     "Japan - Stage 1!AM181"
+    ]
+   },
+   {
+    "count": 62,
+    "raw": "Mag",
+    "refs": [
+     "China - Stage 1!BD181",
+     "China - Stage 1!AM471",
+     "China - Stage 1!BD471",
+     "China - Stage 1!BU471",
+     "China - Stage 1!V653"
+    ]
+   },
+   {
+    "count": 61,
+    "raw": "ALTHOUGH",
+    "refs": [
+     "Japan - Stage 2!O81",
+     "Japan - Stage 2!AF81",
+     "Japan - Stage 2!AW81",
+     "Japan - Stage 2!BN81",
+     "Japan - Stage 2!CE81"
+    ]
+   },
+   {
+    "count": 61,
+    "raw": "OFF",
+    "refs": [
+     "Korea - Stage 3!Y55",
+     "Korea - Stage 3!AP55",
+     "Korea - Stage 3!BG55",
+     "Korea - Stage 3!Y181",
+     "Korea - Stage 3!AP181"
+    ]
+   },
+   {
+    "count": 61,
+    "raw": "TCC",
+    "refs": [
+     "China - Stage 1!AP3",
+     "China - Stage 1!BX3",
+     "China - Stage 1!CO3",
+     "China - Stage 1!Y107",
+     "China - Stage 1!AP107"
+    ]
+   },
+   {
+    "count": 60,
+    "raw": "Guxue",
+    "refs": [
+     "Pre-Season Bootcamp!V133",
+     "China - Stage 1!V445",
+     "China - Stage 1!AM445",
+     "China - Stage 1!BD445",
+     "China - Stage 1!V497"
+    ]
+   },
+   {
+    "count": 60,
+    "raw": "Yot1y",
+    "refs": [
+     "Japan - Stage 1!R81",
+     "Japan - Stage 1!AZ81",
+     "Japan - Stage 1!R181",
+     "Japan - Stage 1!AI181",
+     "Japan - Stage 1!R259"
+    ]
+   },
+   {
+    "count": 59,
+    "raw": "FDGod",
+    "refs": [
+     "Pre-Season Bootcamp!Y25",
+     "Pre-Season Bootcamp!AP25",
+     "Pre-Season Bootcamp!BG25",
+     "Pre-Season Bootcamp!BX25",
+     "Pre-Season Bootcamp!CO25"
+    ]
+   },
+   {
+    "count": 59,
+    "raw": "homerunball",
+    "refs": [
+     "Japan - Stage 1!V3",
+     "Japan - Stage 1!AM3",
+     "Japan - Stage 1!BD3",
+     "Japan - Stage 1!BU3",
+     "Japan - Stage 1!V107"
+    ]
+   },
+   {
+    "count": 59,
+    "raw": "PGE",
+    "refs": [
+     "Pre-Season Bootcamp!O3",
+     "Pre-Season Bootcamp!AF3",
+     "Pre-Season Bootcamp!AW3",
+     "Pre-Season Bootcamp!BN3",
+     "Pre-Season Bootcamp!CE3"
+    ]
+   },
+   {
+    "count": 59,
+    "raw": "Scyle",
+    "refs": [
+     "Pre-Season Bootcamp!Y3",
+     "Pre-Season Bootcamp!AP3",
+     "Pre-Season Bootcamp!BG3",
+     "Pre-Season Bootcamp!BX3",
+     "Pre-Season Bootcamp!CO3"
+    ]
+   },
+   {
+    "count": 59,
+    "raw": "Xerion",
+    "refs": [
+     "Pre-Season Bootcamp!AB25",
+     "Pre-Season Bootcamp!AS25",
+     "Pre-Season Bootcamp!BJ25",
+     "Pre-Season Bootcamp!CA25",
+     "Pre-Season Bootcamp!CR25"
+    ]
+   },
+   {
+    "count": 58,
+    "raw": "Rokit",
+    "refs": [
+     "Pre-Season Bootcamp!R3",
+     "Pre-Season Bootcamp!AI3",
+     "Pre-Season Bootcamp!AZ3",
+     "Pre-Season Bootcamp!BQ3",
+     "Pre-Season Bootcamp!CH3"
+    ]
+   },
+   {
+    "count": 58,
+    "raw": "wntr",
+    "refs": [
+     "Pacific - Stage 1!AB51",
+     "Pacific - Stage 1!AS51",
+     "Pacific - Stage 1!BJ51",
+     "Pacific - Stage 1!AB103",
+     "Pacific - Stage 1!AS103"
+    ]
+   },
+   {
+    "count": 57,
+    "raw": "Gur3um",
+    "refs": [
+     "Korea - Stage 1!V25",
+     "Korea - Stage 1!AM25",
+     "Korea - Stage 1!BD25",
+     "Korea - Stage 1!V159",
+     "Korea - Stage 1!AM159"
+    ]
+   },
+   {
+    "count": 57,
+    "raw": "Zorrow",
+    "refs": [
+     "Pre-Season Bootcamp!O25",
+     "Pre-Season Bootcamp!AF25",
+     "Pre-Season Bootcamp!AW25",
+     "Pre-Season Bootcamp!BN25",
+     "Pre-Season Bootcamp!CE25"
+    ]
+   },
+   {
+    "count": 56,
+    "raw": "CARU",
+    "refs": [
+     "Korea - Stage 1!Y25",
+     "Korea - Stage 1!AP25",
+     "Korea - Stage 1!BG25",
+     "Korea - Stage 1!Y159",
+     "Korea - Stage 1!AP159"
+    ]
+   },
+   {
+    "count": 56,
+    "raw": "probe",
+    "refs": [
+     "Japan - Stage 3!O25",
+     "Japan - Stage 3!AF25",
+     "Japan - Stage 3!AW25",
+     "Japan - Stage 3!O181",
+     "Japan - Stage 3!AF181"
+    ]
+   },
+   {
+    "count": 56,
+    "raw": "sgy",
+    "refs": [
+     "Pacific - Stage 1!R51",
+     "Pacific - Stage 1!AI51",
+     "Pacific - Stage 1!AZ51",
+     "Pacific - Stage 1!R103",
+     "Pacific - Stage 1!AI103"
+    ]
+   },
+   {
+    "count": 54,
+    "raw": "brysonbtw",
+    "refs": [
+     "Pacific - Stage 1!O25",
+     "Pacific - Stage 1!AF25",
+     "Pacific - Stage 1!AW25",
+     "Pacific - Stage 1!O155",
+     "Pacific - Stage 1!AF155"
+    ]
+   },
+   {
+    "count": 54,
+    "raw": "Develop",
+    "refs": [
+     "Japan - Stage 2!O51",
+     "Japan - Stage 2!AF51",
+     "Japan - Stage 2!AW51",
+     "Japan - Stage 2!BN51",
+     "Japan - Stage 2!CE51"
+    ]
+   },
+   {
+    "count": 54,
+    "raw": "FEI",
+    "refs": [
+     "Pacific - Stage 1!AB25",
+     "Pacific - Stage 1!AS25",
+     "Pacific - Stage 1!BJ25",
+     "Pacific - Stage 1!AB155",
+     "Pacific - Stage 1!AS155"
+    ]
+   },
+   {
+    "count": 54,
+    "raw": "Mealgaru",
+    "refs": [
+     "Korea - Stage 1!BU51",
+     "Korea - Stage 1!CL211",
+     "Korea - Stage 1!AM285",
+     "Korea - Stage 1!V575",
+     "Korea - Stage 1!AM575"
+    ]
+   },
+   {
+    "count": 54,
+    "raw": "yumilalan",
+    "refs": [
+     "Japan - Stage 2!V51",
+     "Japan - Stage 2!AM51",
+     "Japan - Stage 2!BD51",
+     "Japan - Stage 2!BU51",
+     "Japan - Stage 2!CL51"
+    ]
+   },
+   {
+    "count": 54,
+    "raw": "Zephyr",
+    "refs": [
+     "Pacific - Stage 1!R25",
+     "Pacific - Stage 1!AI25",
+     "Pacific - Stage 1!AZ25",
+     "Pacific - Stage 1!R155",
+     "Pacific - Stage 1!AI155"
+    ]
+   },
+   {
+    "count": 53,
+    "raw": "Colourhex",
+    "refs": [
+     "Pacific - Stage 1!O51",
+     "Pacific - Stage 1!AF51",
+     "Pacific - Stage 1!AW51",
+     "Pacific - Stage 1!O103",
+     "Pacific - Stage 1!AF103"
+    ]
+   },
+   {
+    "count": 53,
+    "raw": "PaLee",
+    "refs": [
+     "Pacific - Stage 1!Y3",
+     "Pacific - Stage 1!AP3",
+     "Pacific - Stage 1!BG3",
+     "Pacific - Stage 1!Y107",
+     "Pacific - Stage 1!AP107"
+    ]
+   },
+   {
+    "count": 53,
+    "raw": "Unkn0w",
+    "refs": [
+     "China - Stage 1!Y25",
+     "China - Stage 1!AP25",
+     "China - Stage 1!BG25",
+     "China - Stage 1!BX25",
+     "China - Stage 1!CO25"
+    ]
+   },
+   {
+    "count": 52,
+    "raw": "Infekted",
+    "refs": [
+     "Pre-Season Bootcamp!V185",
+     "Pre-Season Bootcamp!AM185",
+     "Pre-Season Bootcamp!BD185",
+     "Pre-Season Bootcamp!BU185",
+     "Pre-Season Bootcamp!V259"
+    ]
+   },
+   {
+    "count": 52,
+    "raw": "NHZ",
+    "refs": [
+     "Japan - Stage 1!Y81",
+     "Japan - Stage 1!Y181",
+     "Japan - Stage 1!AP181",
+     "Japan - Stage 1!BG181",
+     "Japan - Stage 1!Y259"
+    ]
+   },
+   {
+    "count": 51,
+    "raw": "D0D0",
+    "refs": [
+     "Korea - Stage 1!R81",
+     "Korea - Stage 1!AI81",
+     "Korea - Stage 1!AZ81",
+     "Korea - Stage 1!R181",
+     "Korea - Stage 1!AI181"
+    ]
+   },
+   {
+    "count": 51,
+    "raw": "Jasm1ne",
+    "refs": [
+     "Pre-Season Bootcamp!AM77",
+     "Pre-Season Bootcamp!BD77",
+     "Pre-Season Bootcamp!BU77",
+     "Pre-Season Bootcamp!AM181",
+     "Pre-Season Bootcamp!BD181"
+    ]
+   },
+   {
+    "count": 51,
+    "raw": "Secret",
+    "refs": [
+     "Japan - Stage 3!AB51",
+     "Japan - Stage 3!AS51",
+     "Japan - Stage 3!BJ51",
+     "Japan - Stage 3!CA51",
+     "Japan - Stage 3!CR51"
+    ]
+   },
+   {
+    "count": 51,
+    "raw": "SirMajed",
+    "refs": [
+     "EMEA - Stage 1!Y25",
+     "EMEA - Stage 1!AP25",
+     "EMEA - Stage 1!BG25",
+     "EMEA - Stage 1!BX25",
+     "EMEA - Stage 1!AB107"
+    ]
+   },
+   {
+    "count": 50,
+    "raw": "Ackyyy",
+    "refs": [
+     "Pacific - Stage 1!Y51",
+     "Pacific - Stage 1!AP51",
+     "Pacific - Stage 1!BG51",
+     "Pacific - Stage 1!Y103",
+     "Pacific - Stage 1!AP103"
+    ]
+   },
+   {
+    "count": 50,
+    "raw": "FARMER",
+    "refs": [
+     "Japan - Stage 3!V25",
+     "Japan - Stage 3!AM25",
+     "Japan - Stage 3!BD25",
+     "Japan - Stage 3!V181",
+     "Japan - Stage 3!AM181"
+    ]
+   },
+   {
+    "count": 50,
+    "raw": "MCD",
+    "refs": [
+     "Korea - Stage 1!Y81",
+     "Korea - Stage 1!AP81",
+     "Korea - Stage 1!BG81",
+     "Korea - Stage 1!Y181",
+     "Korea - Stage 1!AP181"
+    ]
+   },
+   {
+    "count": 50,
+    "raw": "Ryan",
+    "refs": [
+     "North America - Stage 1!R77",
+     "North America - Stage 1!AI77",
+     "North America - Stage 1!AZ77",
+     "North America - Stage 1!BQ77",
+     "North America - Stage 1!CH77"
+    ]
+   },
+   {
+    "count": 50,
+    "raw": "Tom4to",
+    "refs": [
+     "Pacific - Stage 1!Y25",
+     "Pacific - Stage 1!AP25",
+     "Pacific - Stage 1!BG25",
+     "Pacific - Stage 1!Y155",
+     "Pacific - Stage 1!AP155"
+    ]
+   },
+   {
+    "count": 50,
+    "raw": "UYOU",
+    "refs": [
+     "Japan - Stage 3!V51",
+     "Japan - Stage 3!AM51",
+     "Japan - Stage 3!BD51",
+     "Japan - Stage 3!BU51",
+     "Japan - Stage 3!CL51"
+    ]
+   },
+   {
+    "count": 49,
+    "raw": "GoldenPants",
+    "refs": [
+     "EMEA - Stage 2!V77",
+     "EMEA - Stage 2!AM77",
+     "EMEA - Stage 2!BD77",
+     "EMEA - Stage 2!BU77",
+     "EMEA - Stage 2!CL77"
+    ]
+   },
+   {
+    "count": 48,
+    "raw": "Elysia",
+    "refs": [
+     "Japan - Stage 1!AB25",
+     "Japan - Stage 1!AS25",
+     "Japan - Stage 1!BJ25",
+     "Japan - Stage 1!CA25",
+     "Japan - Stage 1!AB237"
+    ]
+   },
+   {
+    "count": 48,
+    "raw": "Punk",
+    "refs": [
+     "Pacific - Stage 1!V51",
+     "Pacific - Stage 1!AM51",
+     "Pacific - Stage 1!BD51",
+     "Pacific - Stage 1!V103",
+     "Pacific - Stage 1!AM103"
+    ]
+   },
+   {
+    "count": 47,
+    "raw": "Hypnos",
+    "refs": [
+     "China - Stage 1!Y3",
+     "China - Stage 1!BG3",
+     "China - Stage 1!Y415",
+     "China - Stage 1!Y493",
+     "China - Stage 1!AP493"
+    ]
+   },
+   {
+    "count": 46,
+    "raw": "Fate",
+    "refs": [
+     "Korea - Stage 2!V3",
+     "Korea - Stage 2!V181",
+     "Korea - Stage 2!BD263",
+     "Korea - Stage 2!V363",
+     "Korea - Stage 2!V519"
+    ]
+   },
+   {
+    "count": 46,
+    "raw": "Lilko",
+    "refs": [
+     "China - Stage 1!O25",
+     "China - Stage 1!AF25",
+     "China - Stage 1!AW25",
+     "China - Stage 1!BN25",
+     "China - Stage 1!CE25"
+    ]
+   },
+   {
+    "count": 44,
+    "raw": "Gamjung",
+    "refs": [
+     "Korea - Stage 2!Y727",
+     "Korea - Stage 2!AP727",
+     "Korea - Stage 2!BG727",
+     "Korea - Stage 2!BX727",
+     "Korea - Stage 2!Y861"
+    ]
+   },
+   {
+    "count": 44,
+    "raw": "harutoon",
+    "refs": [
+     "Japan - Stage 1!AZ103",
+     "Japan - Stage 1!AZ289",
+     "Japan - Stage 1!AI315",
+     "Japan - Stage 1!BQ315",
+     "Japan - Stage 1!AI471"
+    ]
+   },
+   {
+    "count": 43,
+    "raw": "Tred",
+    "refs": [
+     "Pre-Season Bootcamp!V3",
+     "Pre-Season Bootcamp!AM3",
+     "Pre-Season Bootcamp!BD3",
+     "Pre-Season Bootcamp!BU3",
+     "Pre-Season Bootcamp!CL3"
+    ]
+   },
+   {
+    "count": 43,
+    "raw": "UGH",
+    "refs": [
+     "Japan - Stage 2!Y51",
+     "Japan - Stage 2!AP51",
+     "Japan - Stage 2!BG51",
+     "Japan - Stage 2!BX51",
+     "Japan - Stage 2!CO51"
+    ]
+   },
+   {
+    "count": 42,
+    "raw": "Despair",
+    "refs": [
+     "Pacific - Stage 1!V25",
+     "Pacific - Stage 1!AM25",
+     "Pacific - Stage 1!BD25",
+     "Pacific - Stage 1!V155",
+     "Pacific - Stage 1!AM155"
+    ]
+   },
+   {
+    "count": 41,
+    "raw": "Beeple",
+    "refs": [
+     "Pacific - Stage 1!AB77",
+     "Pacific - Stage 1!AS77",
+     "Pacific - Stage 1!BJ77",
+     "Pacific - Stage 1!CA77",
+     "Pacific - Stage 1!AB133"
+    ]
+   },
+   {
+    "count": 41,
+    "raw": "Kai",
+    "refs": [
+     "EMEA - Stage 1!O103",
+     "EMEA - Stage 1!AF103",
+     "EMEA - Stage 1!AW103",
+     "EMEA - Stage 1!O181",
+     "EMEA - Stage 1!AF181"
+    ]
+   },
+   {
+    "count": 41,
+    "raw": "Regr3t",
+    "refs": [
+     "Pacific - Stage 1!R55",
+     "Pacific - Stage 1!AI55",
+     "Pacific - Stage 1!AZ55",
+     "Pacific - Stage 1!BQ55",
+     "Pacific - Stage 1!R81"
+    ]
+   },
+   {
+    "count": 41,
+    "raw": "SENTIER",
+    "refs": [
+     "Korea - Stage 2!V129",
+     "Korea - Stage 2!V159",
+     "Korea - Stage 2!BD159",
+     "Korea - Stage 2!V259",
+     "Korea - Stage 2!V571"
+    ]
+   },
+   {
+    "count": 40,
+    "raw": "Lep",
+    "refs": [
+     "Pre-Season Bootcamp!AB3",
+     "Pre-Season Bootcamp!AS3",
+     "Pre-Season Bootcamp!BJ3",
+     "Pre-Season Bootcamp!CA3",
+     "Pre-Season Bootcamp!CR3"
+    ]
+   },
+   {
+    "count": 39,
+    "raw": "Ir1s",
+    "refs": [
+     "China - Stage 3!AB25",
+     "China - Stage 3!AS25",
+     "China - Stage 3!BJ25",
+     "China - Stage 3!CA25",
+     "China - Stage 3!CR25"
+    ]
+   },
+   {
+    "count": 39,
+    "raw": "SWOO",
+    "refs": [
+     "Korea - Stage 3!BD233",
+     "Korea - Stage 3!BD263",
+     "Korea - Stage 3!BD445",
+     "Korea - Stage 3!AM675",
+     "China - Stage 2!V25"
+    ]
+   },
+   {
+    "count": 39,
+    "raw": "Victoria",
+    "refs": [
+     "China - Stage 3!R25",
+     "China - Stage 3!AI25",
+     "China - Stage 3!AZ25",
+     "China - Stage 3!BQ25",
+     "China - Stage 3!CH25"
+    ]
+   },
+   {
+    "count": 38,
+    "raw": "amdp",
+    "refs": [
+     "EMEA - Stage 1!BD259",
+     "EMEA - Stage 1!V289",
+     "EMEA - Stage 1!AM289",
+     "EMEA - Stage 1!BD289",
+     "EMEA - Stage 1!BU289"
+    ]
+   },
+   {
+    "count": 38,
+    "raw": "Pride",
+    "refs": [
+     "China - Stage 3!R51",
+     "China - Stage 3!AI51",
+     "China - Stage 3!AZ51",
+     "China - Stage 3!BQ51",
+     "China - Stage 3!CH51"
+    ]
+   },
+   {
+    "count": 38,
+    "raw": "SoLA",
+    "refs": [
+     "Korea - Stage 1!V81",
+     "Korea - Stage 1!AM81",
+     "Korea - Stage 1!BD81",
+     "Korea - Stage 1!V181",
+     "Korea - Stage 1!AM181"
+    ]
+   },
+   {
+    "count": 38,
+    "raw": "Upan",
+    "refs": [
+     "China - Stage 3!O51",
+     "China - Stage 3!AF51",
+     "China - Stage 3!AW51",
+     "China - Stage 3!BN51",
+     "China - Stage 3!CE51"
+    ]
+   },
+   {
+    "count": 38,
+    "raw": "Willys",
+    "refs": [
+     "Pre-Season Bootcamp!V25",
+     "Pre-Season Bootcamp!AM25",
+     "Pre-Season Bootcamp!BD25",
+     "Pre-Season Bootcamp!BU25",
+     "Pre-Season Bootcamp!CL25"
+    ]
+   },
+   {
+    "count": 37,
+    "raw": "Sa1nt",
+    "refs": [
+     "China - Stage 2!Y51",
+     "China - Stage 2!AP51",
+     "China - Stage 2!BG51",
+     "China - Stage 2!AB133",
+     "China - Stage 2!AS133"
+    ]
+   },
+   {
+    "count": 37,
+    "raw": "Trest",
+    "refs": [
+     "Korea - Stage 3!Y3",
+     "Korea - Stage 3!AP3",
+     "Korea - Stage 3!BG3",
+     "Korea - Stage 3!Y81",
+     "Korea - Stage 3!AP81"
+    ]
+   },
+   {
+    "count": 36,
+    "raw": "Coldj",
+    "refs": [
+     "China - Stage 1!AB77",
+     "China - Stage 1!AS77",
+     "China - Stage 1!BJ77",
+     "China - Stage 1!AB129",
+     "China - Stage 1!AS129"
+    ]
+   },
+   {
+    "count": 36,
+    "raw": "jamorant",
+    "refs": [
+     "Pacific - Stage 1!V133",
+     "Pacific - Stage 1!AM133",
+     "Pacific - Stage 1!AM233",
+     "Pacific - Stage 1!BD233",
+     "Pacific - Stage 1!BU233"
+    ]
+   },
+   {
+    "count": 36,
+    "raw": "JAYA",
+    "refs": [
+     "China - Stage 1!R77",
+     "China - Stage 1!AI77",
+     "China - Stage 1!AZ77",
+     "China - Stage 1!R129",
+     "China - Stage 1!AI129"
+    ]
+   },
+   {
+    "count": 36,
+    "raw": "Lateyoung",
+    "refs": [
+     "China - Stage 1!V77",
+     "China - Stage 1!AM77",
+     "China - Stage 1!BD77",
+     "China - Stage 1!V129",
+     "China - Stage 1!AM129"
+    ]
+   },
+   {
+    "count": 36,
+    "raw": "Lavender",
+    "refs": [
+     "Korea - Stage 3!AB55",
+     "Korea - Stage 3!AS55",
+     "Korea - Stage 3!BJ55",
+     "Korea - Stage 3!AB181",
+     "Korea - Stage 3!AS181"
+    ]
+   },
+   {
+    "count": 36,
+    "raw": "Setsuna",
+    "refs": [
+     "Japan - Stage 1!O81",
+     "Japan - Stage 1!AF81",
+     "Japan - Stage 1!AW81",
+     "Japan - Stage 1!O181",
+     "Japan - Stage 1!AF181"
+    ]
+   },
+   {
+    "count": 36,
+    "raw": "Vosa1q",
+    "refs": [
+     "Japan - Stage 1!V237",
+     "Japan - Stage 1!AM237",
+     "Japan - Stage 1!BD237",
+     "Japan - Stage 1!V341",
+     "Japan - Stage 1!V419"
+    ]
+   },
+   {
+    "count": 36,
+    "raw": "wh4le",
+    "refs": [
+     "China - Stage 1!O77",
+     "China - Stage 1!AF77",
+     "China - Stage 1!AW77",
+     "China - Stage 1!O129",
+     "China - Stage 1!AF129"
+    ]
+   },
+   {
+    "count": 35,
+    "raw": "A1WAYS",
+    "refs": [
+     "China - Stage 1!AB103",
+     "China - Stage 1!AS103",
+     "China - Stage 1!BJ103",
+     "China - Stage 1!CA103",
+     "China - Stage 1!Y155"
+    ]
+   },
+   {
+    "count": 35,
+    "raw": "Hyunjae",
+    "refs": [
+     "Pacific - Stage 1!AB29",
+     "Pacific - Stage 1!AS29",
+     "Pacific - Stage 1!BJ29",
+     "Pacific - Stage 1!Y129",
+     "Pacific - Stage 1!AP129"
+    ]
+   },
+   {
+    "count": 35,
+    "raw": "Littlemoon",
+    "refs": [
+     "China - Stage 1!R103",
+     "China - Stage 1!AI103",
+     "China - Stage 1!AZ103",
+     "China - Stage 1!BQ103",
+     "China - Stage 1!R155"
+    ]
+   },
+   {
+    "count": 35,
+    "raw": "Noy",
+    "refs": [
+     "China - Stage 1!Y103",
+     "China - Stage 1!AP103",
+     "China - Stage 1!BG103",
+     "China - Stage 1!BX103",
+     "China - Stage 1!AB155"
+    ]
+   },
+   {
+    "count": 35,
+    "raw": "Profit",
+    "refs": [
+     "Korea - Stage 3!R3",
+     "Korea - Stage 3!AI3",
+     "Korea - Stage 3!AZ3",
+     "Korea - Stage 3!R81",
+     "Korea - Stage 3!AI81"
+    ]
+   },
+   {
+    "count": 34,
+    "raw": "Eileen",
+    "refs": [
+     "China - Stage 1!O3",
+     "China - Stage 1!AF3",
+     "China - Stage 1!AW3",
+     "China - Stage 1!BN3",
+     "China - Stage 1!CE3"
+    ]
+   },
+   {
+    "count": 34,
+    "raw": "feiyang",
+    "refs": [
+     "China - Stage 1!V3",
+     "China - Stage 1!AM3",
+     "China - Stage 1!BD3",
+     "China - Stage 1!BU3",
+     "China - Stage 1!CL3"
+    ]
+   },
+   {
+    "count": 34,
+    "raw": "Flora",
+    "refs": [
+     "Japan - Stage 2!O55",
+     "Japan - Stage 2!AF55",
+     "Japan - Stage 2!AW55",
+     "Japan - Stage 2!O107",
+     "Japan - Stage 2!AF107"
+    ]
+   },
+   {
+    "count": 34,
+    "raw": "Grapes",
+    "refs": [
+     "North America - Stage 1!Y77",
+     "North America - Stage 1!AP77",
+     "North America - Stage 1!BG77",
+     "North America - Stage 1!BX77",
+     "North America - Stage 1!CO77"
+    ]
+   },
+   {
+    "count": 34,
+    "raw": "Kalios",
+    "refs": [
+     "Japan - Stage 2!V55",
+     "Japan - Stage 2!AM55",
+     "Japan - Stage 2!BD55",
+     "Japan - Stage 2!V107",
+     "Japan - Stage 2!AM107"
+    ]
+   },
+   {
+    "count": 34,
+    "raw": "KiWii",
+    "refs": [
+     "North America - Stage 2!AB51",
+     "North America - Stage 2!AS51",
+     "North America - Stage 2!BJ51",
+     "North America - Stage 2!CA51",
+     "North America - Stage 2!AB155"
+    ]
+   },
+   {
+    "count": 34,
+    "raw": "pdk",
+    "refs": [
+     "North America - Stage 1!O77",
+     "North America - Stage 1!AF77",
+     "North America - Stage 1!AW77",
+     "North America - Stage 1!BN77",
+     "North America - Stage 1!CE77"
+    ]
+   },
+   {
+    "count": 34,
+    "raw": "Soulsay",
+    "refs": [
+     "Japan - Stage 2!R55",
+     "Japan - Stage 2!AI55",
+     "Japan - Stage 2!AZ55",
+     "Japan - Stage 2!R107",
+     "Japan - Stage 2!AI107"
+    ]
+   },
+   {
+    "count": 33,
+    "raw": "D4IJIN",
+    "refs": [
+     "Japan - Stage 1!AB103",
+     "Japan - Stage 1!AS103",
+     "Japan - Stage 1!BJ103",
+     "Japan - Stage 1!AB207",
+     "Japan - Stage 1!AS207"
+    ]
+   },
+   {
+    "count": 33,
+    "raw": "MN3",
+    "refs": [
+     "Japan - Stage 3!O55",
+     "Japan - Stage 3!AF55",
+     "Japan - Stage 3!AW55",
+     "Japan - Stage 3!BN55",
+     "Japan - Stage 3!O207"
+    ]
+   },
+   {
+    "count": 33,
+    "raw": "smash",
+    "refs": [
+     "Japan - Stage 1!AB81",
+     "Japan - Stage 1!AS81",
+     "Japan - Stage 1!BJ81",
+     "Japan - Stage 1!BJ415",
+     "Japan - Stage 1!BJ523"
+    ]
+   },
+   {
+    "count": 33,
+    "raw": "Supreme",
+    "refs": [
+     "Japan - Stage 1!Y103",
+     "Japan - Stage 1!AP103",
+     "Japan - Stage 1!BG103",
+     "Japan - Stage 1!Y207",
+     "Japan - Stage 1!AP207"
+    ]
+   },
+   {
+    "count": 33,
+    "raw": "TKL",
+    "refs": [
+     "Pacific - Stage 1!O77",
+     "Pacific - Stage 1!AF77",
+     "Pacific - Stage 1!AW77",
+     "Pacific - Stage 1!BN77",
+     "Pacific - Stage 1!O133"
+    ]
+   },
+   {
+    "count": 33,
+    "raw": "Wolf",
+    "refs": [
+     "Japan - Stage 1!AI81",
+     "Japan - Stage 1!AZ181",
+     "Japan - Stage 1!AZ415",
+     "Japan - Stage 1!AZ523",
+     "Japan - Stage 1!AZ575"
+    ]
+   },
+   {
+    "count": 32,
+    "raw": "Farway",
+    "refs": [
+     "China - Stage 3!Y81",
+     "China - Stage 3!AP81",
+     "China - Stage 3!BG81",
+     "China - Stage 3!Y185",
+     "China - Stage 3!AP185"
+    ]
+   },
+   {
+    "count": 32,
+    "raw": "Fearless",
+    "refs": [
+     "Japan - Stage 3!V3",
+     "Japan - Stage 3!AM3",
+     "Japan - Stage 3!BD3",
+     "Japan - Stage 3!V107",
+     "Japan - Stage 3!AM107"
+    ]
+   },
+   {
+    "count": 32,
+    "raw": "Haku",
+    "refs": [
+     "EMEA - Stage 1!Y77",
+     "EMEA - Stage 1!AP77",
+     "EMEA - Stage 1!BG77",
+     "EMEA - Stage 1!Y155",
+     "EMEA - Stage 1!AP155"
+    ]
+   },
+   {
+    "count": 32,
+    "raw": "HaoYoqian",
+    "refs": [
+     "China - Stage 3!AB81",
+     "China - Stage 3!AS81",
+     "China - Stage 3!BJ81",
+     "China - Stage 3!AB185",
+     "China - Stage 3!AS185"
+    ]
+   },
+   {
+    "count": 32,
+    "raw": "Prophet",
+    "refs": [
+     "China - Stage 3!O81",
+     "China - Stage 3!AF81",
+     "China - Stage 3!AW81",
+     "China - Stage 3!R185",
+     "China - Stage 3!AI185"
+    ]
+   },
+   {
+    "count": 32,
+    "raw": "scuffed",
+    "refs": [
+     "North America - Stage 1!AB77",
+     "North America - Stage 1!AS77",
+     "North America - Stage 1!BJ77",
+     "North America - Stage 1!CA77",
+     "North America - Stage 1!CR77"
+    ]
+   },
+   {
+    "count": 31,
+    "raw": "Escanor",
+    "refs": [
+     "North America - Stage 1!AB55",
+     "North America - Stage 1!AS55",
+     "North America - Stage 1!BJ55",
+     "North America - Stage 1!CA55",
+     "North America - Stage 1!CR55"
+    ]
+   },
+   {
+    "count": 31,
+    "raw": "Rav",
+    "refs": [
+     "EMEA - Stage 3!O25",
+     "EMEA - Stage 3!AI25",
+     "EMEA - Stage 3!AZ25",
+     "EMEA - Stage 3!BQ25",
+     "EMEA - Stage 3!R129"
+    ]
+   },
+   {
+    "count": 31,
+    "raw": "Remaker",
+    "refs": [
+     "China - Stage 2!R25",
+     "China - Stage 2!AI25",
+     "China - Stage 2!AZ25",
+     "China - Stage 2!BQ25",
+     "China - Stage 2!CH25"
+    ]
+   },
+   {
+    "count": 31,
+    "raw": "Xzodyal",
+    "refs": [
+     "EMEA - Stage 3!R25",
+     "EMEA - Stage 3!AF25",
+     "EMEA - Stage 3!AW25",
+     "EMEA - Stage 3!BN25",
+     "EMEA - Stage 3!O129"
+    ]
+   },
+   {
+    "count": 30,
+    "raw": "Caffeine",
+    "refs": [
+     "Korea - Stage 3!AB25",
+     "Korea - Stage 3!AS25",
+     "Korea - Stage 3!BJ25",
+     "Korea - Stage 3!AB233",
+     "Korea - Stage 3!AS233"
+    ]
+   },
+   {
+    "count": 30,
+    "raw": "cuFFa",
+    "refs": [
+     "Pacific - Stage 2!V55",
+     "Pacific - Stage 2!AM55",
+     "Pacific - Stage 2!BD55",
+     "Pacific - Stage 2!BU55",
+     "Pacific - Stage 2!V107"
+    ]
+   },
+   {
+    "count": 30,
+    "raw": "F1nally",
+    "refs": [
+     "Korea - Stage 3!O25",
+     "Korea - Stage 3!AI25",
+     "Korea - Stage 3!AZ25",
+     "Korea - Stage 3!R233",
+     "Korea - Stage 3!AI233"
+    ]
+   },
+   {
+    "count": 30,
+    "raw": "hyvisi0n",
+    "refs": [
+     "Pacific - Stage 2!O55",
+     "Pacific - Stage 2!AF55",
+     "Pacific - Stage 2!AW55",
+     "Pacific - Stage 2!BN55",
+     "Pacific - Stage 2!O107"
+    ]
+   },
+   {
+    "count": 30,
+    "raw": "sniper",
+    "refs": [
+     "North America - Stage 1!V77",
+     "North America - Stage 1!AM77",
+     "North America - Stage 1!BD77",
+     "North America - Stage 1!BU77",
+     "North America - Stage 1!CL77"
+    ]
+   },
+   {
+    "count": 30,
+    "raw": "Taimouren",
+    "refs": [
+     "China - Stage 1!R3",
+     "China - Stage 1!AI3",
+     "China - Stage 1!AZ3",
+     "China - Stage 1!BQ3",
+     "China - Stage 1!CH3"
+    ]
+   },
+   {
+    "count": 30,
+    "raw": "UNIV2R",
+    "refs": [
+     "Korea - Stage 2!AB129",
+     "Korea - Stage 2!AS129",
+     "Korea - Stage 2!BJ129",
+     "Korea - Stage 2!AB159",
+     "Korea - Stage 2!AS159"
+    ]
+   },
+   {
+    "count": 30,
+    "raw": "Zesin",
+    "refs": [
+     "Korea - Stage 1!R3",
+     "Korea - Stage 1!AI3",
+     "Korea - Stage 1!AZ3",
+     "Korea - Stage 1!R107",
+     "Korea - Stage 1!AI107"
+    ]
+   },
+   {
+    "count": 29,
+    "raw": "alvicate",
+    "refs": [
+     "EMEA - Stage 3!O81",
+     "EMEA - Stage 3!AF81",
+     "EMEA - Stage 3!AW81",
+     "EMEA - Stage 3!R181",
+     "EMEA - Stage 3!AI181"
+    ]
+   },
+   {
+    "count": 29,
+    "raw": "Fearful",
+    "refs": [
+     "Korea - Stage 1!BD705",
+     "Korea - Stage 1!AM883",
+     "Korea - Stage 1!V1017",
+     "Korea - Stage 2!V81",
+     "Korea - Stage 2!AM81"
+    ]
+   },
+   {
+    "count": 29,
+    "raw": "skeledirge",
+    "refs": [
+     "Pacific - Stage 2!V77",
+     "Pacific - Stage 2!AM77",
+     "Pacific - Stage 2!BD77",
+     "Pacific - Stage 2!BU77",
+     "Pacific - Stage 2!V103"
+    ]
+   },
+   {
+    "count": 29,
+    "raw": "Sp1nel",
+    "refs": [
+     "Korea - Stage 1!AS25",
+     "Korea - Stage 1!AS705",
+     "Korea - Stage 2!AB81",
+     "Korea - Stage 2!AS81",
+     "Korea - Stage 2!BJ81"
+    ]
+   },
+   {
+    "count": 29,
+    "raw": "Undersea",
+    "refs": [
+     "Japan - Stage 1!O51",
+     "Japan - Stage 1!AF51",
+     "Japan - Stage 1!BN493",
+     "Japan - Stage 1!AI571",
+     "Japan - Stage 1!AZ571"
+    ]
+   },
+   {
+    "count": 28,
+    "raw": "ans",
+    "refs": [
+     "Japan - Stage 1!O55",
+     "Japan - Stage 1!AF55",
+     "Japan - Stage 1!AW55",
+     "Japan - Stage 1!O133",
+     "Japan - Stage 1!AF133"
+    ]
+   },
+   {
+    "count": 28,
+    "raw": "Dip",
+    "refs": [
+     "Pre-Season Bootcamp!R25",
+     "Pre-Season Bootcamp!AI25",
+     "Pre-Season Bootcamp!AZ25",
+     "Pre-Season Bootcamp!BQ25",
+     "Pre-Season Bootcamp!CH25"
+    ]
+   },
+   {
+    "count": 27,
+    "raw": "RLG5656",
+    "refs": [
+     "Japan - Stage 3!O51",
+     "Japan - Stage 3!AF51",
+     "Japan - Stage 3!AW51",
+     "Japan - Stage 3!BN51",
+     "Japan - Stage 3!CE51"
+    ]
+   },
+   {
+    "count": 27,
+    "raw": "Suraimu1",
+    "refs": [
+     "Japan - Stage 3!R51",
+     "Japan - Stage 3!AI51",
+     "Japan - Stage 3!AZ51",
+     "Japan - Stage 3!BQ51",
+     "Japan - Stage 3!CH51"
+    ]
+   },
+   {
+    "count": 26,
+    "raw": "H0YA",
+    "refs": [
+     "Pacific - Stage 2!R25",
+     "Pacific - Stage 2!AI25",
+     "Pacific - Stage 2!AZ25",
+     "Pacific - Stage 2!R155",
+     "Pacific - Stage 2!AI155"
+    ]
+   },
+   {
+    "count": 26,
+    "raw": "Huntin",
+    "refs": [
+     "Pacific - Stage 1!Y77",
+     "Pacific - Stage 1!AP77",
+     "Pacific - Stage 1!BG77",
+     "Pacific - Stage 1!BX77",
+     "Pacific - Stage 1!Y133"
+    ]
+   },
+   {
+    "count": 26,
+    "raw": "Mihawk",
+    "refs": [
+     "Japan - Stage 1!AB55",
+     "Japan - Stage 1!AS55",
+     "Japan - Stage 1!BJ55",
+     "Japan - Stage 1!AB133",
+     "Japan - Stage 1!AS133"
+    ]
+   },
+   {
+    "count": 26,
+    "raw": "mint",
+    "refs": [
+     "Japan - Stage 1!Y51",
+     "Japan - Stage 1!AP51",
+     "Japan - Stage 1!BG51",
+     "Japan - Stage 1!Y155",
+     "Japan - Stage 1!AP155"
+    ]
+   },
+   {
+    "count": 26,
+    "raw": "Yoko",
+    "refs": [
+     "Pacific - Stage 1!R77",
+     "Pacific - Stage 1!AI77",
+     "Pacific - Stage 1!AZ77",
+     "Pacific - Stage 1!BQ77",
+     "Pacific - Stage 1!R133"
+    ]
+   },
+   {
+    "count": 25,
+    "raw": "AZENT",
+    "refs": [
+     "Korea - Stage 2!R129",
+     "Korea - Stage 2!AZ129",
+     "Korea - Stage 2!R159",
+     "Korea - Stage 2!AI159",
+     "Korea - Stage 2!AZ159"
+    ]
+   },
+   {
+    "count": 25,
+    "raw": "Pugz",
+    "refs": [
+     "Pacific - Stage 1!AB55",
+     "Pacific - Stage 1!AS55",
+     "Pacific - Stage 1!BJ55",
+     "Pacific - Stage 1!CA55",
+     "Pacific - Stage 1!Y81"
+    ]
+   },
+   {
+    "count": 25,
+    "raw": "sHockWave",
+    "refs": [
+     "EMEA - Stage 3!O103",
+     "EMEA - Stage 3!AF103",
+     "EMEA - Stage 3!AW103",
+     "EMEA - Stage 3!O155",
+     "EMEA - Stage 3!AF155"
+    ]
+   },
+   {
+    "count": 25,
+    "raw": "ta1yo",
+    "refs": [
+     "Japan - Stage 1!R55",
+     "Japan - Stage 1!AI55",
+     "Japan - Stage 1!AZ55",
+     "Japan - Stage 1!R133",
+     "Japan - Stage 1!R185"
+    ]
+   },
+   {
+    "count": 24,
+    "raw": "Amateru",
+    "refs": [
+     "Japan - Stage 3!Y25",
+     "Japan - Stage 3!AP25",
+     "Japan - Stage 3!BG25",
+     "Japan - Stage 3!Y181",
+     "Japan - Stage 3!AP181"
+    ]
+   },
+   {
+    "count": 24,
+    "raw": "Anarchy",
+    "refs": [
+     "Japan - Stage 3!R29",
+     "Japan - Stage 3!AI29",
+     "Japan - Stage 3!AZ29",
+     "Japan - Stage 3!BQ29",
+     "Japan - Stage 3!CH29"
+    ]
+   },
+   {
+    "count": 24,
+    "raw": "FodCarry",
+    "refs": [
+     "Japan - Stage 2!O103",
+     "Japan - Stage 2!AF103",
+     "Japan - Stage 2!AW103",
+     "Japan - Stage 2!BN103",
+     "Japan - Stage 2!CE103"
+    ]
+   },
+   {
+    "count": 24,
+    "raw": "GACHAPIN",
+    "refs": [
+     "Japan - Stage 2!R103",
+     "Japan - Stage 2!AI103",
+     "Japan - Stage 2!AZ103",
+     "Japan - Stage 2!BQ103",
+     "Japan - Stage 2!CH103"
+    ]
+   },
+   {
+    "count": 24,
+    "raw": "kiibo",
+    "refs": [
+     "Japan - Stage 1!Y25",
+     "Japan - Stage 1!AP25",
+     "Japan - Stage 1!BG25",
+     "Japan - Stage 1!BX25",
+     "Japan - Stage 1!Y237"
+    ]
+   },
+   {
+    "count": 24,
+    "raw": "pav2l",
+    "refs": [
+     "Japan - Stage 1!R25",
+     "Japan - Stage 1!AI25",
+     "Japan - Stage 1!AZ25",
+     "Japan - Stage 1!BQ25",
+     "Japan - Stage 1!R237"
+    ]
+   },
+   {
+    "count": 24,
+    "raw": "sans",
+    "refs": [
+     "Japan - Stage 3!AB25",
+     "Japan - Stage 3!AS25",
+     "Japan - Stage 3!BJ25",
+     "Japan - Stage 3!AB181",
+     "Japan - Stage 3!AS181"
+    ]
+   },
+   {
+    "count": 23,
+    "raw": "Daisy",
+    "refs": [
+     "Japan - Stage 1!AW51",
+     "Japan - Stage 1!O155",
+     "Japan - Stage 1!AF155",
+     "Japan - Stage 1!AW155",
+     "Japan - Stage 1!BN155"
+    ]
+   },
+   {
+    "count": 23,
+    "raw": "HESTY",
+    "refs": [
+     "Japan - Stage 2!AB25",
+     "Japan - Stage 2!AS25",
+     "Japan - Stage 2!BJ25",
+     "Japan - Stage 2!CA25",
+     "Japan - Stage 2!AB237"
+    ]
+   },
+   {
+    "count": 23,
+    "raw": "Hyvision",
+    "refs": [
+     "Pacific - Stage 1!O3",
+     "Pacific - Stage 1!AF3",
+     "Pacific - Stage 1!AW3",
+     "Pacific - Stage 1!O107",
+     "Pacific - Stage 1!AF107"
+    ]
+   },
+   {
+    "count": 23,
+    "raw": "imalone",
+    "refs": [
+     "Japan - Stage 2!Y25",
+     "Japan - Stage 2!AP25",
+     "Japan - Stage 2!BG25",
+     "Japan - Stage 2!BX25",
+     "Japan - Stage 2!Y237"
+    ]
+   },
+   {
+    "count": 23,
+    "raw": "Kirito",
+    "refs": [
+     "Japan - Stage 2!R25",
+     "Japan - Stage 2!AI25",
+     "Japan - Stage 2!AZ25",
+     "Japan - Stage 2!BQ25",
+     "Japan - Stage 2!R237"
+    ]
+   },
+   {
+    "count": 23,
+    "raw": "Lumi",
+    "refs": [
+     "Pacific - Stage 1!V77",
+     "Pacific - Stage 1!AM77",
+     "Pacific - Stage 1!BD77",
+     "Pacific - Stage 1!BU77",
+     "Pacific - Stage 1!BD133"
+    ]
+   },
+   {
+    "count": 23,
+    "raw": "Yoshinori2k",
+    "refs": [
+     "Pacific - Stage 1!R3",
+     "Pacific - Stage 1!AI3",
+     "Pacific - Stage 1!AZ3",
+     "Pacific - Stage 1!R107",
+     "Pacific - Stage 1!AI107"
+    ]
+   },
+   {
+    "count": 23,
+    "raw": "Yui",
+    "refs": [
+     "Pacific - Stage 1!AB3",
+     "Pacific - Stage 1!AS3",
+     "Pacific - Stage 1!BJ3",
+     "Pacific - Stage 1!AB107",
+     "Pacific - Stage 1!AS107"
+    ]
+   },
+   {
+    "count": 22,
+    "raw": "SeungHyeon",
+    "refs": [
+     "Japan - Stage 2!V25",
+     "Japan - Stage 2!AM25",
+     "Japan - Stage 2!BU25",
+     "Japan - Stage 2!V237",
+     "Japan - Stage 2!AM237"
+    ]
+   },
+   {
+    "count": 21,
+    "raw": "Azue1recker",
+    "refs": [
+     "Japan - Stage 3!AB29",
+     "Japan - Stage 3!AS29",
+     "Japan - Stage 3!BJ29",
+     "Japan - Stage 3!CA29",
+     "Japan - Stage 3!CR29"
+    ]
+   },
+   {
+    "count": 21,
+    "raw": "Dumbbell",
+    "refs": [
+     "Korea - Stage 2!AP129",
+     "Korea - Stage 2!BG129",
+     "Korea - Stage 2!AP159",
+     "Korea - Stage 2!Y259",
+     "Korea - Stage 2!AP259"
+    ]
+   },
+   {
+    "count": 21,
+    "raw": "KroxZ",
+    "refs": [
+     "EMEA - Stage 3!AM25",
+     "EMEA - Stage 3!BD25",
+     "EMEA - Stage 3!V129",
+     "EMEA - Stage 3!AM129",
+     "EMEA - Stage 3!BD129"
+    ]
+   },
+   {
+    "count": 18,
+    "raw": "Elva",
+    "refs": [
+     "Pacific - Stage 1!O29",
+     "Pacific - Stage 1!AF29",
+     "Pacific - Stage 1!AW29",
+     "Pacific - Stage 1!O129",
+     "Pacific - Stage 1!AF129"
+    ]
+   },
+   {
+    "count": 18,
+    "raw": "icav",
+    "refs": [
+     "EMEA - Stage 2!R103",
+     "EMEA - Stage 2!AI103",
+     "EMEA - Stage 2!AZ103",
+     "EMEA - Stage 2!BQ103",
+     "EMEA - Stage 2!O155"
+    ]
+   },
+   {
+    "count": 18,
+    "raw": "Johnowich",
+    "refs": [
+     "EMEA - Stage 2!AB103",
+     "EMEA - Stage 2!AS103",
+     "EMEA - Stage 2!BJ103",
+     "EMEA - Stage 2!CA103",
+     "EMEA - Stage 2!AB155"
+    ]
+   },
+   {
+    "count": 18,
+    "raw": "Lars",
+    "refs": [
+     "EMEA - Stage 2!V103",
+     "EMEA - Stage 2!AM103",
+     "EMEA - Stage 2!BD103",
+     "EMEA - Stage 2!BU103",
+     "EMEA - Stage 2!V155"
+    ]
+   },
+   {
+    "count": 18,
+    "raw": "MSCG",
+    "refs": [
+     "Pacific - Stage 1!Y29",
+     "Pacific - Stage 1!AP29",
+     "Pacific - Stage 1!BG29",
+     "Pacific - Stage 1!AB129",
+     "Pacific - Stage 1!AS129"
+    ]
+   },
+   {
+    "count": 18,
+    "raw": "Ripples",
+    "refs": [
+     "China - Stage 2!R77",
+     "China - Stage 2!AI77",
+     "China - Stage 2!AZ77",
+     "China - Stage 2!R129",
+     "China - Stage 2!AI129"
+    ]
+   },
+   {
+    "count": 18,
+    "raw": "Sunset",
+    "refs": [
+     "Pacific - Stage 1!R29",
+     "Pacific - Stage 1!AI29",
+     "Pacific - Stage 1!AZ29",
+     "Pacific - Stage 1!R129",
+     "Pacific - Stage 1!AI129"
+    ]
+   },
+   {
+    "count": 18,
+    "raw": "sxj",
+    "refs": [
+     "EMEA - Stage 2!O103",
+     "EMEA - Stage 2!AF103",
+     "EMEA - Stage 2!AW103",
+     "EMEA - Stage 2!BN103",
+     "EMEA - Stage 2!R155"
+    ]
+   },
+   {
+    "count": 18,
+    "raw": "teksol",
+    "refs": [
+     "EMEA - Stage 2!Y103",
+     "EMEA - Stage 2!AP103",
+     "EMEA - Stage 2!BG103",
+     "EMEA - Stage 2!BX103",
+     "EMEA - Stage 2!Y155"
+    ]
+   },
+   {
+    "count": 17,
+    "raw": "Bertlog",
+    "refs": [
+     "Pacific - Stage 2!AB3",
+     "Pacific - Stage 2!AS3",
+     "Pacific - Stage 2!BJ3",
+     "Pacific - Stage 2!AB129",
+     "Pacific - Stage 2!AS129"
+    ]
+   },
+   {
+    "count": 17,
+    "raw": "bnji",
+    "refs": [
+     "Pacific - Stage 2!V3",
+     "Pacific - Stage 2!AM3",
+     "Pacific - Stage 2!BD3",
+     "Pacific - Stage 2!V129",
+     "Pacific - Stage 2!AM129"
+    ]
+   },
+   {
+    "count": 17,
+    "raw": "hamster",
+    "refs": [
+     "Pacific - Stage 2!Y3",
+     "Pacific - Stage 2!AP3",
+     "Pacific - Stage 2!BG3",
+     "Pacific - Stage 2!Y129",
+     "Pacific - Stage 2!AP129"
+    ]
+   },
+   {
+    "count": 17,
+    "raw": "Kouzi",
+    "refs": [
+     "China - Stage 2!AB103",
+     "China - Stage 2!AS103",
+     "China - Stage 2!BJ103",
+     "China - Stage 2!Y155",
+     "China - Stage 2!AP155"
+    ]
+   },
+   {
+    "count": 17,
+    "raw": "MangoJai",
+    "refs": [
+     "Pacific - Stage 2!AB29",
+     "Pacific - Stage 2!AS29",
+     "Pacific - Stage 2!BJ29",
+     "Pacific - Stage 2!AB133",
+     "Pacific - Stage 2!AS133"
+    ]
+   },
+   {
+    "count": 16,
+    "raw": "dra",
+    "refs": [
+     "Japan - Stage 3!R25",
+     "Japan - Stage 3!AI25",
+     "Japan - Stage 3!AZ25",
+     "Japan - Stage 3!AZ181",
+     "Japan - Stage 3!BQ181"
+    ]
+   },
+   {
+    "count": 16,
+    "raw": "Moon1ightT",
+    "refs": [
+     "China - Stage 2!Y77",
+     "China - Stage 2!BJ77",
+     "China - Stage 2!Y129",
+     "China - Stage 2!BG129",
+     "China - Stage 2!Y311"
+    ]
+   },
+   {
+    "count": 16,
+    "raw": "PKFishy",
+    "refs": [
+     "Pacific - Stage 1!O55",
+     "Pacific - Stage 1!AF55",
+     "Pacific - Stage 1!AW55",
+     "Pacific - Stage 1!BN55",
+     "Pacific - Stage 1!O81"
+    ]
+   },
+   {
+    "count": 16,
+    "raw": "Scorch",
+    "refs": [
+     "Pacific - Stage 1!V55",
+     "Pacific - Stage 1!AM55",
+     "Pacific - Stage 1!BD55",
+     "Pacific - Stage 1!BU55",
+     "Pacific - Stage 1!V81"
+    ]
+   },
+   {
+    "count": 16,
+    "raw": "smurf",
+    "refs": [
+     "North America - Stage 3!V51",
+     "North America - Stage 3!AM51",
+     "North America - Stage 3!BD51",
+     "North America - Stage 3!BU51",
+     "North America - Stage 3!V103"
+    ]
+   },
+   {
+    "count": 15,
+    "raw": "JUTSU",
+    "refs": [
+     "North America - Stage 3!O77",
+     "North America - Stage 3!AF77",
+     "North America - Stage 3!AW77",
+     "North America - Stage 3!R159",
+     "North America - Stage 3!AI159"
+    ]
+   },
+   {
+    "count": 15,
+    "raw": "Kairen",
+    "refs": [
+     "Pacific - Stage 1!V29",
+     "Pacific - Stage 1!AM29",
+     "Pacific - Stage 1!BD29",
+     "Pacific - Stage 1!V129",
+     "Pacific - Stage 1!AM129"
+    ]
+   },
+   {
+    "count": 15,
+    "raw": "Painkiller",
+    "refs": [
+     "North America - Stage 3!V77",
+     "North America - Stage 3!AM77",
+     "North America - Stage 3!BD77",
+     "North America - Stage 3!V159",
+     "North America - Stage 3!AM159"
+    ]
+   },
+   {
+    "count": 15,
+    "raw": "QIN",
+    "refs": [
+     "Pacific - Stage 2!AZ3",
+     "Pacific - Stage 2!R129",
+     "Pacific - Stage 2!AI129",
+     "Pacific - Stage 2!AZ129",
+     "Pacific - Stage 2!O159"
+    ]
+   },
+   {
+    "count": 15,
+    "raw": "Virtual",
+    "refs": [
+     "North America - Stage 3!Y77",
+     "North America - Stage 3!AP77",
+     "North America - Stage 3!BG77",
+     "North America - Stage 3!AB159",
+     "North America - Stage 3!AS159"
+    ]
+   },
+   {
+    "count": 14,
+    "raw": "9TRIBEZ",
+    "refs": [
+     "China - Stage 1!V25",
+     "China - Stage 1!AM25",
+     "China - Stage 1!BD25",
+     "China - Stage 1!BU25",
+     "China - Stage 1!CL25"
+    ]
+   },
+   {
+    "count": 14,
+    "raw": "fari",
+    "refs": [
+     "China - Stage 1!R25",
+     "China - Stage 1!AI25",
+     "China - Stage 1!AZ25",
+     "China - Stage 1!BQ25",
+     "China - Stage 1!CH25"
+    ]
+   },
+   {
+    "count": 14,
+    "raw": "Remedy",
+    "refs": [
+     "China - Stage 1!AB25",
+     "China - Stage 1!AS25",
+     "China - Stage 1!BJ25",
+     "China - Stage 1!CA25",
+     "China - Stage 1!CR25"
+    ]
+   },
+   {
+    "count": 12,
+    "raw": "Exrai",
+    "refs": [
+     "Pacific - Stage 1!AB81",
+     "Pacific - Stage 1!AS81",
+     "Pacific - Stage 1!BJ81",
+     "Pacific - Stage 1!AB159",
+     "Pacific - Stage 1!AS159"
+    ]
+   },
+   {
+    "count": 12,
+    "raw": "fedfs",
+    "refs": [
+     "Pacific - Stage 2!R3",
+     "Pacific - Stage 2!AI3",
+     "Pacific - Stage 2!AW3",
+     "Pacific - Stage 2!O129",
+     "Pacific - Stage 2!R159"
+    ]
+   },
+   {
+    "count": 12,
+    "raw": "HRY",
+    "refs": [
+     "Japan - Stage 1!R103",
+     "Japan - Stage 1!AI103",
+     "Japan - Stage 1!R207",
+     "Japan - Stage 1!AI207",
+     "Japan - Stage 1!AZ207"
+    ]
+   },
+   {
+    "count": 12,
+    "raw": "Kurumi",
+    "refs": [
+     "Pacific - Stage 2!O29",
+     "Pacific - Stage 2!AF29",
+     "Pacific - Stage 2!O211",
+     "Pacific - Stage 2!AF211",
+     "Pacific - Stage 2!AW211"
+    ]
+   },
+   {
+    "count": 12,
+    "raw": "Leonopteryx",
+    "refs": [
+     "Japan - Stage 1!V25",
+     "Japan - Stage 1!AM25",
+     "Japan - Stage 1!BD25",
+     "Japan - Stage 1!BU25",
+     "Japan - Stage 1!AM341"
+    ]
+   },
+   {
+    "count": 12,
+    "raw": "Yate",
+    "refs": [
+     "Korea - Stage 1!Y549",
+     "Korea - Stage 1!AP549",
+     "Korea - Stage 1!BG549",
+     "Korea - Stage 1!Y701",
+     "Korea - Stage 1!AP701"
+    ]
+   },
+   {
+    "count": 11,
+    "raw": "Void",
+    "refs": [
+     "Korea - Stage 2!V25",
+     "Korea - Stage 2!AM25",
+     "Korea - Stage 2!BD25",
+     "Korea - Stage 2!V133",
+     "Korea - Stage 2!AM133"
+    ]
+   },
+   {
+    "count": 10,
+    "raw": "AL1EN",
+    "refs": [
+     "China - Stage 2!AW289",
+     "China - Stage 2!O367",
+     "China - Stage 2!AF367",
+     "China - Stage 2!AW367",
+     "China - Stage 2!BN367"
+    ]
+   },
+   {
+    "count": 10,
+    "raw": "Limbo",
+    "refs": [
+     "China - Stage 1!V51",
+     "China - Stage 1!AM51",
+     "China - Stage 1!BD51",
+     "China - Stage 1!V133",
+     "China - Stage 1!AM133"
+    ]
+   },
+   {
+    "count": 10,
+    "raw": "Saya",
+    "refs": [
+     "China - Stage 1!AB51",
+     "China - Stage 1!AS51",
+     "China - Stage 1!BJ51",
+     "China - Stage 1!Y133",
+     "China - Stage 1!AP133"
+    ]
+   },
+   {
+    "count": 10,
+    "raw": "SINCE",
+    "refs": [
+     "China - Stage 1!Y51",
+     "China - Stage 1!AP51",
+     "China - Stage 1!BG51",
+     "China - Stage 1!AB133",
+     "China - Stage 1!AS133"
+    ]
+   },
+   {
+    "count": 10,
+    "raw": "skyshow",
+    "refs": [
+     "China - Stage 1!O51",
+     "China - Stage 1!AF51",
+     "China - Stage 1!AW51",
+     "China - Stage 1!R133",
+     "China - Stage 1!AI133"
+    ]
+   },
+   {
+    "count": 10,
+    "raw": "Wangming",
+    "refs": [
+     "China - Stage 1!R51",
+     "China - Stage 1!AI51",
+     "China - Stage 1!AZ51",
+     "China - Stage 1!O133",
+     "China - Stage 1!AF133"
+    ]
+   },
+   {
+    "count": 9,
+    "raw": "asphy",
+    "refs": [
+     "China - Stage 2!O103",
+     "China - Stage 2!AF103",
+     "China - Stage 2!AW103",
+     "China - Stage 2!O155",
+     "China - Stage 2!AF155"
+    ]
+   },
+   {
+    "count": 9,
+    "raw": "Dosoldier",
+    "refs": [
+     "China - Stage 2!O77",
+     "China - Stage 2!AF77",
+     "China - Stage 2!AW77",
+     "China - Stage 2!O129",
+     "China - Stage 2!AF129"
+    ]
+   },
+   {
+    "count": 9,
+    "raw": "Heesu",
+    "refs": [
+     "China - Stage 3!O77",
+     "China - Stage 3!AF77",
+     "China - Stage 3!AW77",
+     "China - Stage 3!O129",
+     "China - Stage 3!AF129"
+    ]
+   },
+   {
+    "count": 9,
+    "raw": "Ign0re",
+    "refs": [
+     "China - Stage 2!Y103",
+     "China - Stage 2!AP103",
+     "China - Stage 2!BG103",
+     "China - Stage 2!AB155",
+     "China - Stage 2!AS155"
+    ]
+   },
+   {
+    "count": 9,
+    "raw": "Imdaon",
+    "refs": [
+     "China - Stage 2!R103",
+     "China - Stage 2!AI103",
+     "China - Stage 2!AZ103",
+     "China - Stage 2!R155",
+     "China - Stage 2!AI155"
+    ]
+   },
+   {
+    "count": 9,
+    "raw": "KIRSI",
+    "refs": [
+     "China - Stage 3!V103",
+     "China - Stage 3!AM103",
+     "China - Stage 3!BD103",
+     "China - Stage 3!V155",
+     "China - Stage 3!AM155"
+    ]
+   },
+   {
+    "count": 9,
+    "raw": "Mikouw",
+    "refs": [
+     "Pacific - Stage 2!V133",
+     "Pacific - Stage 2!AM133",
+     "Pacific - Stage 2!BD133",
+     "Pacific - Stage 2!V211",
+     "Pacific - Stage 2!AM211"
+    ]
+   },
+   {
+    "count": 9,
+    "raw": "Ringleader",
+    "refs": [
+     "China - Stage 2!V77",
+     "China - Stage 2!AM77",
+     "China - Stage 2!BD77",
+     "China - Stage 2!V129",
+     "China - Stage 2!AM129"
+    ]
+   },
+   {
+    "count": 9,
+    "raw": "Rupal",
+    "refs": [
+     "Pre-Season Bootcamp!AB185",
+     "Pre-Season Bootcamp!AS185",
+     "Pre-Season Bootcamp!BJ185",
+     "Pre-Season Bootcamp!CA185",
+     "Pre-Season Bootcamp!AB259"
+    ]
+   },
+   {
+    "count": 9,
+    "raw": "ShouSong",
+    "refs": [
+     "China - Stage 3!R77",
+     "China - Stage 3!AI77",
+     "China - Stage 3!AZ77",
+     "China - Stage 3!R129",
+     "China - Stage 3!AI129"
+    ]
+   },
+   {
+    "count": 9,
+    "raw": "suna",
+    "refs": [
+     "China - Stage 2!V103",
+     "China - Stage 2!AM103",
+     "China - Stage 2!BD103",
+     "China - Stage 2!V155",
+     "China - Stage 2!V337"
+    ]
+   },
+   {
+    "count": 9,
+    "raw": "wya",
+    "refs": [
+     "China - Stage 3!AB77",
+     "China - Stage 3!AS77",
+     "China - Stage 3!BJ77",
+     "China - Stage 3!Y129",
+     "China - Stage 3!AP129"
+    ]
+   },
+   {
+    "count": 8,
+    "raw": "Aria",
+    "refs": [
+     "Pacific - Stage 2!R29",
+     "Pacific - Stage 2!AI29",
+     "Pacific - Stage 2!AW29",
+     "Pacific - Stage 2!O133",
+     "Pacific - Stage 2!AF133"
+    ]
+   },
+   {
+    "count": 8,
+    "raw": "KORZ",
+    "refs": [
+     "EMEA - Stage 2!R25",
+     "EMEA - Stage 2!AI25",
+     "EMEA - Stage 2!AZ25",
+     "EMEA - Stage 2!R55",
+     "EMEA - Stage 2!AI55"
+    ]
+   },
+   {
+    "count": 8,
+    "raw": "Rockclimb",
+    "refs": [
+     "China - Stage 3!Y103",
+     "China - Stage 3!AP103",
+     "China - Stage 3!BG103",
+     "China - Stage 3!AF155",
+     "China - Stage 3!AW155"
+    ]
+   },
+   {
+    "count": 8,
+    "raw": "Tama",
+    "refs": [
+     "EMEA - Stage 1!V103",
+     "EMEA - Stage 1!AM103",
+     "EMEA - Stage 1!BD103",
+     "EMEA - Stage 1!V181",
+     "EMEA - Stage 1!AM181"
+    ]
+   },
+   {
+    "count": 8,
+    "raw": "zenith",
+    "refs": [
+     "Japan - Stage 3!R181",
+     "Japan - Stage 3!AI181",
+     "Japan - Stage 3!R289",
+     "Japan - Stage 3!R389",
+     "Japan - Stage 3!AI389"
+    ]
+   },
+   {
+    "count": 6,
+    "raw": "Coluge",
+    "refs": [
+     "North America - Stage 1!V133",
+     "North America - Stage 1!AM133",
+     "North America - Stage 1!BD133",
+     "North America - Stage 1!V259",
+     "North America - Stage 1!AM259"
+    ]
+   },
+   {
+    "count": 6,
+    "raw": "KSAA",
+    "refs": [
+     "EMEA - Stage 1!V55",
+     "EMEA - Stage 1!AM55",
+     "EMEA - Stage 1!BD55",
+     "EMEA - Stage 2!V81",
+     "EMEA - Stage 3!BD133"
+    ]
+   },
+   {
+    "count": 6,
+    "raw": "L1tPk",
+    "refs": [
+     "China - Stage 2!AP77",
+     "China - Stage 2!BG77",
+     "China - Stage 2!AP129",
+     "China - Stage 2!AB311",
+     "China - Stage 2!AS311"
+    ]
+   },
+   {
+    "count": 6,
+    "raw": "Nyang",
+    "refs": [
+     "Pacific - Stage 1!O285",
+     "Pacific - Stage 1!AF285",
+     "Pacific - Stage 1!AW285",
+     "Pacific - Stage 1!O367",
+     "Asia - Stage 1!R233"
+    ]
+   },
+   {
+    "count": 5,
+    "raw": "GhostShadow",
+    "refs": [
+     "China - Stage 2!O315",
+     "China - Stage 2!AF315",
+     "China - Stage 2!AW315",
+     "China - Stage 2!AF519",
+     "China - Stage 2!AW519"
+    ]
+   },
+   {
+    "count": 5,
+    "raw": "Jackjieke",
+    "refs": [
+     "China - Stage 2!AB77",
+     "China - Stage 2!AS77",
+     "China - Stage 2!AB129",
+     "China - Stage 2!AS129",
+     "China - Stage 2!BJ129"
+    ]
+   },
+   {
+    "count": 5,
+    "raw": "Rrmy",
+    "refs": [
+     "Japan - Stage 1!AI133",
+     "Japan - Stage 1!AZ133",
+     "Japan - Stage 1!BQ133",
+     "Japan - Stage 1!AF705",
+     "Japan - Stage 1!AW705"
+    ]
+   },
+   {
+    "count": 4,
+    "raw": "Agony",
+    "refs": [
+     "China - Stage 3!O103",
+     "China - Stage 3!AF103",
+     "China - Stage 3!AW103",
+     "China - Stage 3!O155"
+    ]
+   },
+   {
+    "count": 4,
+    "raw": "Akraken",
+    "refs": [
+     "Pacific - Stage 1!Y55",
+     "Pacific - Stage 1!AP55",
+     "Pacific - Stage 1!BG55",
+     "Pacific - Stage 1!BX55"
+    ]
+   },
+   {
+    "count": 4,
+    "raw": "Astro",
+    "refs": [
+     "North America - Stage 2!V181",
+     "North America - Stage 2!BU181",
+     "North America - Stage 2!V211",
+     "North America - Stage 2!BD337"
+    ]
+   },
+   {
+    "count": 4,
+    "raw": "Bearfoo",
+    "refs": [
+     "Pacific - Stage 2!BD29",
+     "Pacific - Stage 2!BD311",
+     "Pacific - Stage 2!V315",
+     "Pacific - Stage 2!AM315"
+    ]
+   },
+   {
+    "count": 4,
+    "raw": "cartifan22",
+    "refs": [
+     "North America - Stage 1!AM51",
+     "North America - Stage 1!BD207",
+     "North America - Stage 1!BU311",
+     "North America - Stage 1!AM337"
+    ]
+   },
+   {
+    "count": 4,
+    "raw": "CLEAR",
+    "refs": [
+     "Midseason Championship Paris!V181",
+     "Midseason Championship Paris!AM181",
+     "Midseason Championship Paris!V315",
+     "Midseason Championship Paris!AM315"
+    ]
+   },
+   {
+    "count": 4,
+    "raw": "Hydron",
+    "refs": [
+     "Midseason Championship Paris!O181",
+     "Midseason Championship Paris!AF181",
+     "Midseason Championship Paris!O315",
+     "Midseason Championship Paris!AF315"
+    ]
+   },
+   {
+    "count": 4,
+    "raw": "LCŠ",
+    "refs": [
+     "Midseason Championship Paris!AB181",
+     "Midseason Championship Paris!AS181",
+     "Midseason Championship Paris!AB315",
+     "Midseason Championship Paris!AS315"
+    ]
+   },
+   {
+    "count": 4,
+    "raw": "Lightt",
+    "refs": [
+     "Midseason Championship Paris!R181",
+     "Midseason Championship Paris!AI181",
+     "Midseason Championship Paris!R315",
+     "Midseason Championship Paris!AI315"
+    ]
+   },
+   {
+    "count": 4,
+    "raw": "TiAmo",
+    "refs": [
+     "Pacific - Stage 2!AB233",
+     "Pacific - Stage 2!AS233",
+     "Pacific - Stage 2!BJ233",
+     "Pacific - Stage 2!CA233"
+    ]
+   },
+   {
+    "count": 4,
+    "raw": "Wed",
+    "refs": [
+     "Midseason Championship Paris!Y181",
+     "Midseason Championship Paris!AP181",
+     "Midseason Championship Paris!Y315",
+     "Midseason Championship Paris!AP315"
+    ]
+   },
+   {
+    "count": 3,
+    "raw": "Aprita",
+    "refs": [
+     "China - Stage 3!O753",
+     "China - Stage 3!AF753",
+     "China - Stage 3!AW753"
+    ]
+   },
+   {
+    "count": 3,
+    "raw": "BABYAGA",
+    "refs": [
+     "China - Stage 1!R883",
+     "China - Stage 1!AI883",
+     "China - Stage 1!AZ883"
+    ]
+   },
+   {
+    "count": 3,
+    "raw": "Decade",
+    "refs": [
+     "China - Stage 2!AM155",
+     "China - Stage 2!BD155",
+     "China - Stage 2!BD337"
+    ]
+   },
+   {
+    "count": 3,
+    "raw": "Jamelgong",
+    "refs": [
+     "Korea - Stage 1!R389",
+     "Korea - Stage 1!AI389",
+     "Korea - Stage 1!AZ389"
+    ]
+   },
+   {
+    "count": 3,
+    "raw": "Renaco",
+    "refs": [
+     "Pacific - Stage 1!V363",
+     "Pacific - Stage 1!AM363",
+     "Pacific - Stage 1!AW363"
+    ]
+   },
+   {
+    "count": 2,
+    "raw": "Gorilla",
+    "refs": [
+     "North America - Stage 1!AS363",
+     "North America - Stage 1!BJ363"
+    ]
+   },
+   {
+    "count": 2,
+    "raw": "solace",
+    "refs": [
+     "Japan - Stage 2!AF315",
+     "Japan - Stage 2!AI471"
+    ]
+   },
+   {
+    "count": 1,
+    "raw": "1",
+    "refs": [
+     "Korea - Stage 2!AM341"
+    ]
+   },
+   {
+    "count": 1,
+    "raw": "fizz",
+    "refs": [
+     "Japan - Stage 2!BJ415"
+    ]
+   },
+   {
+    "count": 1,
+    "raw": "Fleta",
+    "refs": [
+     "Korea - Stage 2!BG107"
+    ]
+   },
+   {
+    "count": 1,
+    "raw": "HAVIRA",
+    "refs": [
+     "Korea - Stage 1!BG571"
+    ]
+   },
+   {
+    "count": 1,
+    "raw": "HyeoN",
+    "refs": [
+     "Korea - Stage 2!BD701"
+    ]
+   },
+   {
+    "count": 1,
+    "raw": "Mikuow",
+    "refs": [
+     "Pacific - Stage 2!BU133"
+    ]
+   },
+   {
+    "count": 1,
+    "raw": "milk",
+    "refs": [
+     "China - Stage 3!BG77"
+    ]
+   },
+   {
+    "count": 1,
+    "raw": "Nozl",
+    "refs": [
+     "Japan - Stage 2!BD25"
+    ]
+   },
+   {
+    "count": 1,
+    "raw": "Player of the Match:\nSLEY",
+    "refs": [
+     "Japan - Stage 1!BG77"
+    ]
+   },
+   {
+    "count": 1,
+    "raw": "Soe",
+    "refs": [
+     "Korea - Stage 3!AP835"
+    ]
+   }
+  ],
+  "team": [
+   {
+    "count": 37,
+    "raw": "All Gamers",
+    "refs": [
+     "Pre-Season Bootcamp!J85",
+     "China - Stage 1!C33",
+     "China - Stage 1!J163",
+     "China - Stage 1!C215",
+     "China - Stage 1!C345"
+    ]
+   },
+   {
+    "count": 31,
+    "raw": "Cheeseburger",
+    "refs": [
+     "Korea - Stage 1!C7",
+     "Korea - Stage 1!C111",
+     "Korea - Stage 1!C241",
+     "Korea - Stage 1!J371",
+     "Korea - Stage 1!J475"
+    ]
+   },
+   {
+    "count": 30,
+    "raw": "ENTER FORCE.36",
+    "refs": [
+     "Japan - Stage 1!C33",
+     "Japan - Stage 1!J215",
+     "Japan - Stage 1!J293",
+     "Japan - Stage 1!J345",
+     "Japan - Stage 1!C449"
+    ]
+   },
+   {
+    "count": 28,
+    "raw": "Please Not Hero Ban",
+    "refs": [
+     "Japan - Stage 1!C7",
+     "Japan - Stage 1!C111",
+     "Japan - Stage 1!C163",
+     "Japan - Stage 1!J267",
+     "Japan - Stage 1!J319"
+    ]
+   },
+   {
+    "count": 25,
+    "raw": "99DIVINE",
+    "refs": [
+     "Japan - Stage 1!J85",
+     "Japan - Stage 1!J189",
+     "Japan - Stage 1!C293",
+     "Japan - Stage 1!C319",
+     "Japan - Stage 1!C475"
+    ]
+   },
+   {
+    "count": 25,
+    "raw": "Poker Face",
+    "refs": [
+     "Korea - Stage 1!J7",
+     "Korea - Stage 1!C163",
+     "Korea - Stage 1!C267",
+     "Korea - Stage 1!J345",
+     "Korea - Stage 1!J501"
+    ]
+   },
+   {
+    "count": 22,
+    "raw": "RØDE ZANSIDE GAMING",
+    "refs": [
+     "Korea - Stage 2!J7",
+     "Korea - Stage 2!C137",
+     "Korea - Stage 2!J293",
+     "Korea - Stage 2!C397",
+     "Korea - Stage 2!C475"
+    ]
+   },
+   {
+    "count": 22,
+    "raw": "Solus Victorem",
+    "refs": [
+     "China - Stage 1!J85",
+     "China - Stage 1!J137",
+     "China - Stage 1!J241",
+     "China - Stage 1!J345",
+     "China - Stage 1!J449"
+    ]
+   },
+   {
+    "count": 21,
+    "raw": "Lazuli",
+    "refs": [
+     "Japan - Stage 1!C85",
+     "Japan - Stage 1!J163",
+     "Japan - Stage 1!J241",
+     "Japan - Stage 1!J397",
+     "Japan - Stage 1!C527"
+    ]
+   },
+   {
+    "count": 20,
+    "raw": "HUNENG Gaming",
+    "refs": [
+     "China - Stage 2!J7",
+     "China - Stage 2!J163",
+     "China - Stage 2!J267",
+     "China - Stage 2!C319",
+     "China - Stage 2!J371"
+    ]
+   },
+   {
+    "count": 20,
+    "raw": "O2 Blast",
+    "refs": [
+     "Korea - Stage 2!C7",
+     "Korea - Stage 2!J163",
+     "Korea - Stage 2!C267",
+     "Korea - Stage 2!J345",
+     "Korea - Stage 2!J501"
+    ]
+   },
+   {
+    "count": 18,
+    "raw": "MURASH GAMING",
+    "refs": [
+     "Japan - Stage 2!C7",
+     "Japan - Stage 2!C137",
+     "Japan - Stage 2!C189",
+     "Japan - Stage 2!J267",
+     "Japan - Stage 2!J319"
+    ]
+   },
+   {
+    "count": 16,
+    "raw": "Disguised",
+    "refs": [
+     "Pre-Season Bootcamp!C7",
+     "North America - Stage 1!J7",
+     "North America - Stage 1!J85",
+     "North America - Stage 1!C163",
+     "North America - Stage 1!C241"
+    ]
+   },
+   {
+    "count": 14,
+    "raw": "LuneX Gaming",
+    "refs": [
+     "North America - Stage 1!J33",
+     "North America - Stage 1!C111",
+     "North America - Stage 1!J189",
+     "North America - Stage 1!J293",
+     "North America - Stage 1!J319"
+    ]
+   },
+   {
+    "count": 14,
+    "raw": "REVATI",
+    "refs": [
+     "Japan - Stage 2!J7",
+     "Japan - Stage 2!C241",
+     "Japan - Stage 2!C345",
+     "Japan - Stage 2!C423",
+     "Japan - Stage 2!J501"
+    ]
+   },
+   {
+    "count": 14,
+    "raw": "Uwinks",
+    "refs": [
+     "Japan - Stage 2!J33",
+     "Japan - Stage 2!J111",
+     "Japan - Stage 2!J371",
+     "Japan - Stage 2!J423",
+     "Japan - Stage 2!J475"
+    ]
+   },
+   {
+    "count": 13,
+    "raw": "1234",
+    "refs": [
+     "EMEA - Stage 2!J59",
+     "EMEA - Stage 2!J163",
+     "EMEA - Stage 2!J215",
+     "EMEA - Stage 2!J293",
+     "EMEA - Stage 2!C345"
+    ]
+   },
+   {
+    "count": 12,
+    "raw": "RØDE ONSIDE GAMING",
+    "refs": [
+     "Korea - Stage 1!J59",
+     "Korea - Stage 1!C189",
+     "Korea - Stage 1!J293",
+     "Korea - Stage 1!C397",
+     "Korea - Stage 1!C475"
+    ]
+   },
+   {
+    "count": 12,
+    "raw": "The Kafe",
+    "refs": [
+     "North America - Stage 2!J59",
+     "North America - Stage 2!J85",
+     "North America - Stage 2!J163",
+     "North America - Stage 2!C215",
+     "North America - Stage 2!J319"
+    ]
+   },
+   {
+    "count": 11,
+    "raw": "ZAN Esports",
+    "refs": [
+     "Korea - Stage 1!C59",
+     "Korea - Stage 1!C137",
+     "Korea - Stage 1!J241",
+     "Korea - Stage 1!C423",
+     "Korea - Stage 1!J553"
+    ]
+   },
+   {
+    "count": 10,
+    "raw": "Four Angry Men",
+    "refs": [
+     "China - Stage 2!J33",
+     "China - Stage 2!C137",
+     "China - Stage 2!J241",
+     "China - Stage 2!C293",
+     "China - Stage 2!C371"
+    ]
+   },
+   {
+    "count": 10,
+    "raw": "Naive Piggy",
+    "refs": [
+     "China - Stage 1!J59",
+     "China - Stage 1!J111",
+     "China - Stage 1!J215",
+     "China - Stage 1!C319",
+     "China - Stage 1!J371"
+    ]
+   },
+   {
+    "count": 10,
+    "raw": "OU Gaming",
+    "refs": [
+     "China - Stage 3!J7",
+     "China - Stage 3!C111",
+     "China - Stage 3!J215",
+     "China - Stage 3!C293",
+     "China - Stage 3!C371"
+    ]
+   },
+   {
+    "count": 10,
+    "raw": "SEIJI ESPORTS",
+    "refs": [
+     "Korea - Stage 3!C59",
+     "Korea - Stage 3!J163",
+     "Korea - Stage 3!C293",
+     "Korea - Stage 3!C319",
+     "Korea - Stage 3!J475"
+    ]
+   },
+   {
+    "count": 10,
+    "raw": "SHENGSHI Esports",
+    "refs": [
+     "China - Stage 3!J59",
+     "China - Stage 3!J111",
+     "China - Stage 3!J319",
+     "Pacific - Stage 2!J7",
+     "Pacific - Stage 2!J137"
+    ]
+   },
+   {
+    "count": 9,
+    "raw": "Milk Tea",
+    "refs": [
+     "China - Stage 1!C7",
+     "China - Stage 1!C111",
+     "China - Stage 1!J293",
+     "China - Stage 1!C371",
+     "China - Stage 1!J397"
+    ]
+   },
+   {
+    "count": 9,
+    "raw": "Solus Victorem Crush",
+    "refs": [
+     "China - Stage 3!C7",
+     "China - Stage 3!J163",
+     "China - Stage 3!C241",
+     "China - Stage 3!J345",
+     "China - Stage 3!J449"
+    ]
+   },
+   {
+    "count": 9,
+    "raw": "SuperBad",
+    "refs": [
+     "Korea - Stage 2!J111",
+     "Korea - Stage 2!C163",
+     "Korea - Stage 2!J241",
+     "Korea - Stage 2!C371",
+     "Korea - Stage 2!J553"
+    ]
+   },
+   {
+    "count": 9,
+    "raw": "The Gatos Guapos",
+    "refs": [
+     "Pacific - Stage 1!J33",
+     "Pacific - Stage 1!J85",
+     "Pacific - Stage 1!C189",
+     "Pacific - Stage 1!J267",
+     "Pacific - Stage 1!C371"
+    ]
+   },
+   {
+    "count": 8,
+    "raw": "New Era",
+    "refs": [
+     "Korea - Stage 1!C85",
+     "Korea - Stage 1!J163",
+     "Korea - Stage 1!C319",
+     "Korea - Stage 1!J397",
+     "Korea - Stage 1!C553"
+    ]
+   },
+   {
+    "count": 7,
+    "raw": "Najdorf Esports",
+    "refs": [
+     "Pacific - Stage 2!J59",
+     "Pacific - Stage 2!J85",
+     "Pacific - Stage 2!J215",
+     "Pacific - Stage 2!J267",
+     "Pacific - Stage 2!J371"
+    ]
+   },
+   {
+    "count": 7,
+    "raw": "Nyam Gaming",
+    "refs": [
+     "Japan - Stage 1!J33",
+     "Japan - Stage 1!J137",
+     "Japan - Stage 1!J371",
+     "Japan - Stage 1!J423",
+     "Japan - Stage 1!J475"
+    ]
+   },
+   {
+    "count": 7,
+    "raw": "Quasar Esports",
+    "refs": [
+     "Pacific - Stage 1!J59",
+     "Pacific - Stage 1!C137",
+     "Pacific - Stage 1!J215",
+     "Pacific - Stage 1!C267",
+     "Pacific - Stage 1!J319"
+    ]
+   },
+   {
+    "count": 7,
+    "raw": "Rankers",
+    "refs": [
+     "Pacific - Stage 1!J7",
+     "Pacific - Stage 1!J137",
+     "Pacific - Stage 1!J163",
+     "Pacific - Stage 1!J293",
+     "Pacific - Stage 1!J371"
+    ]
+   },
+   {
+    "count": 7,
+    "raw": "Team Risk",
+    "refs": [
+     "EMEA - Stage 3!J85",
+     "EMEA - Stage 3!J137",
+     "EMEA - Stage 3!J215",
+     "EMEA - Stage 3!C267",
+     "EMEA - Stage 3!J371"
+    ]
+   },
+   {
+    "count": 7,
+    "raw": "Telomere",
+    "refs": [
+     "Japan - Stage 1!J7",
+     "Japan - Stage 1!C241",
+     "Japan - Stage 1!C345",
+     "Japan - Stage 1!C423",
+     "Japan - Stage 1!J501"
+    ]
+   },
+   {
+    "count": 7,
+    "raw": "TOKYO TAIYOs",
+    "refs": [
+     "Japan - Stage 1!C59",
+     "Japan - Stage 1!C137",
+     "Japan - Stage 1!C189",
+     "Japan - Stage 1!C267",
+     "Japan - Stage 1!J449"
+    ]
+   },
+   {
+    "count": 7,
+    "raw": "Trap12",
+    "refs": [
+     "Pacific - Stage 2!J33",
+     "Pacific - Stage 2!C85",
+     "Pacific - Stage 2!J163",
+     "Pacific - Stage 2!C241",
+     "Pacific - Stage 2!J345"
+    ]
+   },
+   {
+    "count": 5,
+    "raw": "Anyone's Legend",
+    "refs": [
+     "EMEA - Stage 1!J85",
+     "EMEA - Stage 1!J163",
+     "EMEA - Stage 1!J241",
+     "EMEA - Stage 1!C293",
+     "EMEA - Stage 1!C371"
+    ]
+   },
+   {
+    "count": 5,
+    "raw": "Elemental",
+    "refs": [
+     "Pacific - Stage 2!C7",
+     "Pacific - Stage 2!J111",
+     "Pacific - Stage 2!C163",
+     "Pacific - Stage 2!C267",
+     "Pacific - Stage 2!J319"
+    ]
+   },
+   {
+    "count": 5,
+    "raw": "Extinction",
+    "refs": [
+     "North America - Stage 1!J59",
+     "North America - Stage 1!J111",
+     "North America - Stage 1!J163",
+     "North America - Stage 1!J215",
+     "North America - Stage 1!J345"
+    ]
+   },
+   {
+    "count": 5,
+    "raw": "FURY",
+    "refs": [
+     "Pacific - Stage 1!C59",
+     "Pacific - Stage 1!C85",
+     "Pacific - Stage 1!C163",
+     "Pacific - Stage 1!J241",
+     "Pacific - Stage 1!C345"
+    ]
+   },
+   {
+    "count": 5,
+    "raw": "MENG GONG 3",
+    "refs": [
+     "Pacific - Stage 2!C33",
+     "Pacific - Stage 2!C137",
+     "Pacific - Stage 2!C215",
+     "Pacific - Stage 2!J293",
+     "Pacific - Stage 2!C319"
+    ]
+   },
+   {
+    "count": 5,
+    "raw": "MieMieYang",
+    "refs": [
+     "Pacific - Stage 1!C33",
+     "Pacific - Stage 1!J111",
+     "Pacific - Stage 1!C215",
+     "Pacific - Stage 1!C293",
+     "Pacific - Stage 1!J345"
+    ]
+   },
+   {
+    "count": 5,
+    "raw": "NTMR",
+    "refs": [
+     "North America - Stage 3!J59",
+     "North America - Stage 3!C163",
+     "North America - Stage 3!J241",
+     "North America - Stage 3!J293",
+     "North America - Stage 3!J345"
+    ]
+   },
+   {
+    "count": 5,
+    "raw": "Telacy",
+    "refs": [
+     "EMEA - Stage 2!J85",
+     "EMEA - Stage 2!J137",
+     "EMEA - Stage 2!J241",
+     "EMEA - Stage 2!J267",
+     "EMEA - Stage 2!J345"
+    ]
+   },
+   {
+    "count": 4,
+    "raw": "Homie E",
+    "refs": [
+     "China - Stage 1!J7",
+     "China - Stage 1!J189",
+     "China - Stage 1!C241",
+     "China - Stage 1!C293"
+    ]
+   },
+   {
+    "count": 3,
+    "raw": "Black Flag",
+    "refs": [
+     "China - Stage 3!J85",
+     "China - Stage 3!J137",
+     "China - Stage 3!J293"
+    ]
+   },
+   {
+    "count": 3,
+    "raw": "DEG",
+    "refs": [
+     "China - Stage 1!J33",
+     "China - Stage 1!C137",
+     "China - Stage 1!J319"
+    ]
+   },
+   {
+    "count": 3,
+    "raw": "Kitsune Kage",
+    "refs": [
+     "China - Stage 2!J59",
+     "China - Stage 2!J111",
+     "China - Stage 2!J293"
+    ]
+   },
+   {
+    "count": 3,
+    "raw": "ReturnZ",
+    "refs": [
+     "China - Stage 2!J85",
+     "China - Stage 2!J137",
+     "China - Stage 2!J319"
+    ]
+   },
+   {
+    "count": 2,
+    "raw": "9z Globant",
+    "refs": [
+     "Midseason Championship Paris!J163",
+     "Midseason Championship Paris!C319"
+    ]
+   }
+  ],
+  "winner": [
+   {
+    "count": 9,
+    "raw": "TOKYO TA1YOs Wins!",
+    "refs": [
+     "Japan - Stage 1!X458",
+     "Japan - Stage 1!AO458",
+     "Japan - Stage 1!CN458",
+     "Japan - Stage 1!AO588",
+     "Japan - Stage 1!BF588"
+    ]
+   },
+   {
+    "count": 3,
+    "raw": "Elemntal Wins!",
+    "refs": [
+     "Pacific - Stage 2!X328",
+     "Pacific - Stage 2!AO328",
+     "Pacific - Stage 2!BF328"
+    ]
+   },
+   {
+    "count": 3,
+    "raw": "Spacesation Gaming Wins!",
+    "refs": [
+     "Midseason Championship Paris!AO458",
+     "Midseason Championship Paris!BF458",
+     "Midseason Championship Paris!X588"
+    ]
+   }
+  ]
+ }
+}
