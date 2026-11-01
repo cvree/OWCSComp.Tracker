@@ -72,7 +72,7 @@ def normalize_raw(raw_doc: dict, bundle: Bundle, previous_tabs: dict | None = No
 
 
 def payload_for(normalized: dict | None, manifest: dict, bundle: Bundle, fixture: bool = False):
-    recon = reconcile(normalized, bundle.public, bundle.decisions) if normalized else None
+    recon = reconcile(normalized, bundle.public, bundle.decisions, bundle.aliases()) if normalized else None
     catalog = {m["id"] for m in bundle.public.get("mapsCatalog") or []}
     extra = {e["id"]: {"id": e["id"], "name": e.get("name") or e["id"], "mode": e.get("mode") or ""}
              for e in bundle.aliases_cfg.get("extraMaps") or [] if e.get("id") not in catalog}

@@ -89,6 +89,12 @@ class Layout:
         self.forward_fill = list(cfg.get("forwardFill") or [])
         self.purposes = cfg.get("purposes") or {}
         self.credit_res = [re.compile(r"\b" + p, re.I) for p in cfg.get("creditPatterns") or []]
+        # Tabs whose purpose the NAME decides (summary / reference / credits).
+        self.tab_purposes = [(re.compile(t["pattern"], re.I), t["purpose"])
+                             for t in cfg.get("tabPurposes") or [] if t.get("pattern") and t.get("purpose")]
+        from .cards import CardLayout
+        self.cards = CardLayout(cfg.get("matchCards") or {})
+        self.self_check = cfg.get("selfCheck") or {}
         self.field_names: dict[str, str] = {}
         for fname, spellings in (cfg.get("fields") or {}).items():
             for sp in spellings:
@@ -201,6 +207,13 @@ class Layout:
                     c.p = index[(c.role or "", c.p or 0)]
 
     # ------------------------------------------------------ purpose
+    def tab_purpose(self, name: str) -> str | None:
+        """The purpose a tab's NAME decides, or None (then its content does)."""
+        for rx, purpose in self.tab_purposes:
+            if rx.search(name.strip()):
+                return purpose
+        return None
+
     def purpose(self, h: Header | None) -> str:
         if h is None:
             return "unrecognised"
@@ -224,6 +237,9 @@ class Layout:
     def purpose_label(self, name: str) -> str:
         return (self.purposes.get(name) or {}).get("label") or {
             "unrecognised": "Not recognised — preserved in the raw layer only",
+            "match_cards": "Match cards — one fixed-size card per series, heroes shown as pictures",
+            "summary": "The sheet's own totals — re-derived from the match cards, never imported",
+            "reference": "Reference tab (hero / map pictures, rosters, self-check) — read as a lookup, not imported",
             "credits": "Credits / about text",
             "empty": "Empty",
         }.get(name, name)

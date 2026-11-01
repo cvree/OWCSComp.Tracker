@@ -35,10 +35,10 @@ from .aliases import AliasBook, Resolution, norm, slugify, year_in
 from .layout import Header, Layout
 from .workbook import a1, grid
 
-DATA_PURPOSES = ("map_rows", "player_rows", "ban_rows", "match_rows")
+DATA_PURPOSES = ("map_rows", "player_rows", "ban_rows", "match_rows", "match_cards")
 #: Purposes are parsed in this order so player/ban/match rows can attach to
-#: maps that map_rows already created.
-PARSE_ORDER = {"map_rows": 0, "player_rows": 1, "ban_rows": 2, "match_rows": 3}
+#: maps that map_rows already created. Match cards are self-contained.
+PARSE_ORDER = {"match_cards": 0, "map_rows": 0, "player_rows": 1, "ban_rows": 2, "match_rows": 3}
 
 
 class ImportFailed(RuntimeError):
@@ -180,14 +180,33 @@ def import_workbook(raw: dict, aliases: AliasBook, layout: Layout,
                     accept_structure_change: bool = False) -> dict:
     """Parse the whole workbook. Returns {records…, inventory}. Raises
     ImportFailed when the structure cannot be trusted."""
+    from . import cards as C
     ctx = Ctx(aliases=aliases, layout=layout)
     sheets_inv: list[dict] = []
     credits: list[dict] = []
     plan = []
+    # Workbook-wide lookups for match cards: the Hero Index pictures and the
+    # season year the landing tab states.
+    card_ref = {"layout": layout.cards, "pictures": C.hero_pictures(raw, layout.cards),
+                "tabs": {}, "year": None, "yearCell": None}
+    card_ref["year"], card_ref["yearCell"] = C.workbook_year(raw, layout.cards)
     for sheet in raw.get("sheets") or []:
         g, origin = grid(sheet)
-        header = layout.find_header(g) if g else None
-        purpose = layout.purpose(header) if g else "empty"
+        header = None
+        named = layout.tab_purpose(sheet["name"]) if g else None
+        if not g:
+            purpose = "empty"
+        elif named:
+            purpose = named
+        elif C.find_blocks(g, layout.cards):
+            purpose = "match_cards"
+            card_ref["tabs"][sheet["name"]] = {
+                "region": aliases.region_in(sheet["name"]),
+                "stage": aliases.stage(sheet["name"]).id,
+                "stageKey": aliases.stage_key(sheet["name"])}
+        else:
+            header = layout.find_header(g)
+            purpose = layout.purpose(header)
         sheet_credits = layout.credits(sheet["name"], g, a1) if g else []
         credits.extend(sheet_credits)
         if purpose == "unrecognised" and sheet_credits:
@@ -207,16 +226,61 @@ def import_workbook(raw: dict, aliases: AliasBook, layout: Layout,
             "parsed": {"maps": 0, "bans": 0, "appearances": 0, "compositions": 0, "matches": 0,
                        "duplicates": 0},
             "ignoredRows": [], "ignoredCount": 0, "dataRows": 0,
+            "images": len(sheet.get("images") or []),
         }
         sheets_inv.append(inv)
         if purpose in DATA_PURPOSES:
             plan.append((PARSE_ORDER[purpose], sheet["index"], sheet, g, origin, header, inv))
 
     for _, _, sheet, g, origin, header, inv in sorted(plan, key=lambda p: (p[0], p[1])):
-        _parse_sheet(ctx, sheet, g, origin, header, inv)
+        if inv["purpose"] == "match_cards":
+            ctx.current_inv = inv
+            C.parse_card_sheet(ctx, sheet, g, origin, inv, card_ref)
+        else:
+            _parse_sheet(ctx, sheet, g, origin, header, inv)
 
     _finish_matches(ctx)
     inventory = _inventory(ctx, raw, sheets_inv, credits)
+    if any(t["purpose"] == "match_cards" for t in sheets_inv):
+        pics = card_ref["pictures"]
+        inventory["matchCards"] = {
+            "year": card_ref["year"], "yearCell": card_ref["yearCell"],
+            "heroIndexTab": pics["tab"], "heroPictures": len(pics["heroes"]),
+            "rolePictures": len(pics["roles"]), "heroIndexConflicts": pics["conflicts"],
+            **{k: sum((t.get("cards") or {}).get(k, 0) for t in sheets_inv)
+               for k in ("blocks", "played", "scheduled", "incomplete", "forfeited", "failed")},
+            # Pictures the Hero Index does not name, with the heroes the ban
+            # text beside them names: evidence for a reviewed aliases.json
+            # "pictures" entry. Never applied automatically.
+            "pictureSuggestions": [
+                {"picture": h, "banTextSays": dict(sorted(ev.items(), key=lambda kv: -kv[1])),
+                 "unanimous": len(ev) == 1}
+                for h, ev in sorted((card_ref.get("suggest") or {}).items())],
+        }
+        if not card_ref["year"]:
+            ctx.issues.append({"level": "warning", "code": "NO_SEASON_YEAR", "message": (
+                "the landing tab states no season year; match-card records keep year = null")})
+        for c in pics["conflicts"]:
+            ctx.issues.append({"level": "warning", "code": "HERO_INDEX_CONFLICT", "message": (
+                f"picture {c['picture']} is named both {c['names'][0]!r} and {c['names'][1]!r} "
+                f"in the Hero Index ({c['cell']}); the first name is used")})
+    sc = C.self_check(raw, layout.self_check, sheets_inv, aliases)
+    if sc is not None:
+        inventory["selfCheck"] = sc
+        for row in sc["rows"]:
+            if row["agree"] is False:
+                ctx.issues.append({"level": "warning", "code": "SELF_CHECK_MISMATCH",
+                                   "sheet": sc["tab"], "row": row["row"], "message": (
+                    f"Self-Check {row['stage']} {row['region']}: the sheet counts "
+                    f"{row['sheet']['matches']} matches / {row['sheet']['maps']} maps, the importer "
+                    f"parsed {row['parsed']['matches']} / {row['parsed']['maps']} from "
+                    f"'{row['tabs'][0]}'")})
+            elif row["agree"] is None:
+                ctx.issues.append({"level": "warning", "code": "SELF_CHECK_UNPAIRED",
+                                   "sheet": sc["tab"], "row": row["row"], "message": (
+                    f"Self-Check {row['stage']} {row['region']}: no single match-card tab to compare "
+                    f"with (candidates: {row['tabs'] or 'none'}) — add the region code to "
+                    "selfCheck.regionCodes in config/external/gsheet_layout.json")})
     _gate(inventory, previous_tabs, accept_structure_change, layout)
     return {
         "parserVersion": PARSER_VERSION,

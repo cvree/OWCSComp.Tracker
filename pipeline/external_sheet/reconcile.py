@@ -8,6 +8,10 @@ Conservative by construction:
   * The score adds evidence: date (same day / ±1 day for time-zone edges),
     map name, map order, event/stage wording, and the VOD link when the sheet
     has one. A disagreeing map name or order SUBTRACTS.
+  * When either side has NO DATE (the match-card sheet records none), the
+    stage stands in for it: a different stage of the season (Stage 1 vs
+    Stage 2) rejects the candidate, the same stage adds +2, and a different
+    season year rejects it. Nothing else about a date is assumed.
   * Auto-link only when the best candidate clears AUTO_LINK_SCORE, beats the
     runner-up by AUTO_LINK_MARGIN, and its map name does not disagree.
     Anything weaker goes to the review queue (`needs_review`) with every
@@ -62,8 +66,10 @@ def _days(a: str | None, b: str | None) -> int | None:
         return None
 
 
-def vod_maps(public: dict) -> list[dict]:
-    """The published VOD maps, flattened with what reconciliation compares."""
+def vod_maps(public: dict, aliases=None) -> list[dict]:
+    """The published VOD maps, flattened with what reconciliation compares.
+    With an AliasBook, each also gets its stage key ('stage-2') for the
+    no-date rule."""
     tw = {m["mapId"]: m for m in ((public.get("timeWeighting") or {}).get("maps") or [])}
     stints = public.get("heroStints") or []
     tours = {t["id"]: t for t in public.get("tournaments") or []}
@@ -81,7 +87,9 @@ def vod_maps(public: dict) -> list[dict]:
                     if s.get("mapId") == mp["id"]:
                         heroes.setdefault(s["teamId"], {})[s["hero"]] = BRIEF_SECONDS
             bans = sorted(b["hero"] for b in public.get("heroBans") or [] if b.get("mapId") == mp["id"])
+            stage_name = ((tour.get("stages") or [{}])[0] or {}).get("name")
             out.append({
+                "stageKey": aliases.stage_key(stage_name, tour.get("name")) if aliases else None,
                 "vodMapId": mp["id"], "matchId": match["id"],
                 "date": (match.get("scheduledAt") or "")[:10] or None,
                 "teamA": match.get("teamA"), "teamB": match.get("teamB"),
@@ -103,7 +111,18 @@ def score(ext: dict, match: dict, vod: dict) -> tuple[float, list[str], bool]:
     s, why, map_conflict = 4.0, ["same two teams (+4)"], False
     d = _days(ext.get("date"), vod.get("date"))
     if d is None:
+        # No date to go on: the stage of the season has to agree instead.
         why.append("one side has no date (+0)")
+        ek, vk = match.get("stageKey"), vod.get("stageKey")
+        if ek and vk:
+            if ek != vk:
+                return float("-inf"), [f"no date, and different stages: sheet {ek} vs VOD {vk}"], False
+            s += 2; why.append(f"no date, same stage {ek} (+2)")
+        else:
+            why.append("no date and no stage to compare (+0)")
+        ey, vy = match.get("year"), (vod.get("date") or "")[:4]
+        if ey and vy.isdigit() and int(vy) != int(ey):
+            return float("-inf"), [f"different season: sheet {ey} vs VOD {vy}"], False
     elif d == 0:
         s += 3; why.append("same date (+3)")
     elif d == 1:
@@ -193,8 +212,8 @@ def status_of(fields: dict) -> str:
     return "matched"
 
 
-def reconcile(normalized: dict, public: dict, decisions: dict) -> dict:
-    vods = vod_maps(public)
+def reconcile(normalized: dict, public: dict, decisions: dict, aliases=None) -> dict:
+    vods = vod_maps(public, aliases)
     vod_by_id = {v["vodMapId"]: v for v in vods}
     matches = {m["id"]: m for m in normalized.get("matches") or []}
     bans_by, apps_by, comps_by = {}, {}, {}
@@ -281,4 +300,5 @@ def reconcile(normalized: dict, public: dict, decisions: dict) -> dict:
     summary["vodOnly"] = len(vod_only)
     return {"records": records, "vodOnlyMaps": vod_only, "summary": summary,
             "rules": {"autoLinkScore": AUTO_LINK_SCORE, "autoLinkMargin": AUTO_LINK_MARGIN,
-                      "reviewScore": REVIEW_SCORE, "briefSeconds": BRIEF_SECONDS}}
+                      "reviewScore": REVIEW_SCORE, "briefSeconds": BRIEF_SECONDS,
+                      "noDateStage": "no date on either side: different stage rejects, same stage +2"}}

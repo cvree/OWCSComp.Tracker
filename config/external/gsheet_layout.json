@@ -22,7 +22,7 @@
     "bump `version`, and run `python3 pipeline/sheet_sync.py rebuild` — the",
     "committed raw cell layer is re-parsed without downloading anything."
   ],
-  "version": 1,
+  "version": 2,
   "headerScanRows": 40,
   "minHeaderFields": 3,
   "maxIgnoredRowShare": 0.5,
@@ -112,5 +112,126 @@
   },
   "_forwardFill": "Fields a block of rows may state once (a date over its maps). Team names are deliberately NOT forward-filled: a row with a blank team is reported, never attached to the previous row's team. Merged cells are expanded separately and always apply.",
   "forwardFill": ["date", "event", "stage", "region", "patch"],
-  "creditPatterns": ["made by", "maintained by", "created by", "compiled by", "credits?", "curated by", "by @", "contact", "data by", "tracked by"]
+  "creditPatterns": ["made by", "maintained by", "created by", "compiled by", "credits?", "curated by", "by @", "contact", "data by", "tracked by"],
+  "_tabPurposes": [
+    "Tabs whose PURPOSE is decided by name, before anything else is tried (first match wins,",
+    "case-insensitive regex on the tab name). 'summary' = the sheet's own totals, which are",
+    "re-derived from the match cards and never imported; 'reference' = index tabs (hero / map",
+    "pictures, team rosters) and the Self-Check tab, read as lookups, never as matches."
+  ],
+  "tabPurposes": [
+    {"pattern": "^self[- ]?check$", "purpose": "reference"},
+    {"pattern": "index$", "purpose": "reference"},
+    {"pattern": "^stage \\d+ (hero bans|regional maps|lan maps)", "purpose": "summary"},
+    {"pattern": "totals?$", "purpose": "summary"},
+    {"pattern": "^landing page$", "purpose": "credits"}
+  ],
+  "matchCards": {
+    "_readme": [
+      "The real community sheet is not a table: every series is a fixed-size MATCH CARD",
+      "(docs/SHEET-LAYOUT-NOTES.md). pipeline/external_sheet/cards.py finds each card by its",
+      "game label ('Week 1 | Day 2 | Game 3') and reads every value at a fixed offset from the",
+      "card's top row b (the row of the event label, `labelRow` rows above the game label).",
+      "",
+      "Offsets are [row offset from b, column]. Left-panel columns are absolute letters; map",
+      "panel columns are offsets from the panel's first column (panel k starts at",
+      "`panels.firstColumn` + k * `panels.step`). Heroes are PICTURES, decoded through the",
+      "sheet's own Hero Index tab (picture, name in the cell below) plus the reviewed",
+      "`pictures` overrides in config/external/aliases.json. A picture nobody names stays an",
+      "unmapped hero; it is never guessed.",
+      "",
+      "Not in the sheet, so never produced: calendar dates, who picked each map, any time."
+    ],
+    "gameLabel": "^(?:week\\s*(?P<week>\\d+)\\s*\\|\\s*)?day\\s*(?P<day>\\d+)\\s*\\|\\s*game\\s*(?P<game>\\d+)$",
+    "labelColumn": "C",
+    "labelRow": 2,
+    "blockRows": 26,
+    "left": {
+      "event": [0, "C"],
+      "format": [1, "C"],
+      "teamACode": [4, "C"],
+      "seriesA": [4, "G"],
+      "seriesB": [4, "H"],
+      "teamBCode": [4, "J"],
+      "playerOfTheMatch": [21, "C"]
+    },
+    "mapList": {
+      "firstRow": 9,
+      "lastRow": 20,
+      "wonA": "C",
+      "scoreA": "D",
+      "map": "F",
+      "scoreB": "J",
+      "wonB": "K",
+      "wonAMark": "►",
+      "wonBMark": "◄",
+      "forfeit": ["map forfeit", "forfeit", "forfeited"]
+    },
+    "panels": {
+      "firstColumn": "N",
+      "step": 17,
+      "count": 5,
+      "width": 17,
+      "playerStarts": [0, 3, 7, 10, 13],
+      "nameOffset": 1,
+      "a": {"playerRow": 0, "heroRows": [1, 2], "team": [3, 0]},
+      "b": {"playerRow": 22, "heroRows": [18, 19, 20], "team": [15, 0]},
+      "map": [3, 10],
+      "winner": [13, 10],
+      "banA": [14, 3],
+      "banB": [14, 7],
+      "banPictureA": [7, 3],
+      "banPictureB": [7, 7],
+      "mapScore": [16, 10]
+    },
+    "winnerText": "^(?P<team>.+?)\\s*wins!?$",
+    "bestOf": "\\[\\s*bo\\s*(?P<n>\\d+)\\s*\\]",
+    "mapScoreText": "^map\\s*:?\\s*(?P<a>\\d+)\\s*[-–:]\\s*(?P<b>\\d+)",
+    "_teamSuffix": "The record/seed after a team name on a map panel: 'Telomere [0-0]', 'VARREL [JP #1]', and the malformed 'Spacestation Gaming 0-0]' seen in North America - Stage 3.",
+    "teamSuffix": "\\s*(?:\\[[^\\]]*\\]+|\\[?\\s*\\d+\\s*-\\s*\\d+\\s*\\]+)\\s*$",
+    "heroIndex": {"tab": "^hero index$", "nameBelow": 1, "roleLabelRight": 1},
+    "roleWords": {"tank": "Tank", "damage": "Damage", "dps": "Damage", "support": "Support"},
+    "_roleIcons": "Role icons by picture hash. The Hero Index row-2 icons are read from the sheet itself (label to the right); the second colour set, used on the other team's rows, is listed here (probe run 5).",
+    "roleIcons": {
+      "3135baa3c0": "Tank", "030992f9af": "Damage", "9bd5d8fb03": "Support",
+      "b71bf5d1ea": "Tank", "2703490da3": "Damage", "b62b05504e": "Support"
+    },
+    "_banBlank": "Ban cells that say no hero was banned (a forfeited map). Recorded as a flag on the map, never as a hero.",
+    "banBlank": ["forfeit", "forfeited", "no ban", "none"],
+    "drawText": ["draw", "draw!", "tie"],
+    "yearFrom": {"tab": "^landing page$", "rows": 3}
+  },
+  "selfCheck": {
+    "_readme": [
+      "The sheet's own ground truth (tab 'Self-Check'): per stage and region, how many",
+      "matches and maps the editors count. After parsing, the importer compares its own",
+      "counts with these per row; a mismatch is a WARNING in the inventory, not a failure.",
+      "Columns are found by header text in the first `headerScanRows` rows; `columns` gives",
+      "the letters to fall back on when a header is not found."
+    ],
+    "tab": "^self[- ]?check$",
+    "headerScanRows": 6,
+    "_columns": "Probe run 6: row 2 headers 'Maps (Spreadsheet)' (H) and 'Matches (Spreadsheet)' (I); the stage is written once per group in B ('Stage 1' over its rows, so it is filled down) and the region code in D has no header (B2 says 'Region'). So stage and region are read by column letter.",
+    "headers": {
+      "maps": ["maps (spreadsheet)", "maps spreadsheet"],
+      "matches": ["matches (spreadsheet)", "matches spreadsheet"]
+    },
+    "columns": {"stage": "B", "region": "D", "maps": "H", "matches": "I"},
+    "fillDown": ["stage"],
+    "skipRows": ["sum", "total"],
+    "regionCodes": {
+      "PRE": "^pre-season bootcamp$",
+      "JP": "^japan - ",
+      "KR": "^korea - ",
+      "CN": "^china - ",
+      "EMEA": "^emea - ",
+      "NA": "^north america - ",
+      "PAC": "^pacific - ",
+      "ASIA": "^asia - ",
+      "CC": "^champions clash",
+      "EWC": "^midseason championship",
+      "MSC": "^midseason championship",
+      "WF": "^world finals"
+    }
+  }
 }

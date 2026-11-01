@@ -412,6 +412,7 @@ class Sync(unittest.TestCase):
         for entry in index["sheets"]:                       # one gzip per tab
             self.assertTrue(os.path.exists(os.path.join(p.raw_dir, entry["file"])))
         self.assertEqual(raw["workbook"]["sheets"], read_xlsx(data)["sheets"])  # lossless
+        self.assertTrue(all("images" in s for s in raw["workbook"]["sheets"]))
         before = {f: os.path.getmtime(f) for f in (p.raw, p.normalized, p.manifest, p.export)}
         again = S.sync(p, data=data, at="2026-11-01T00:00:00+00:00")
         self.assertEqual(again["status"], "unchanged")
@@ -700,6 +701,294 @@ class PublicExport(unittest.TestCase):
         self.assertNotIn("XMLHttpRequest", body)
         exp = read_public(CFG.export)
         self.assertFalse(exp["meta"]["fixture"], "the committed export must never be the fixture")
+
+
+# ============================================================ match cards
+CARDS = os.path.join(HERE, "fixtures", "gsheet", "owcs_cards_fixture.xlsx")
+
+
+def cards_bytes() -> bytes:
+    with open(CARDS, "rb") as f:
+        return f.read()
+
+
+class MatchCards(unittest.TestCase):
+    """The real sheet's layout: fixed-size match cards, heroes as pictures
+    (pipeline/fixtures/gsheet/build_cards_fixture.py)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.raw = read_xlsx(cards_bytes())
+        b = bundle()
+        cls.n = import_workbook(cls.raw, b.aliases(), b.layout())
+        cls.inv = cls.n["inventory"]
+        cls.tabs = {t["name"]: t for t in cls.inv["tabs"]}
+
+    def match(self, part):
+        hits = [m for m in self.n["matches"] if part in m["slug"]]
+        self.assertEqual(len(hits), 1, part)
+        return hits[0]
+
+    def map(self, part):
+        hits = [m for m in self.n["maps"] if part in m["slug"]]
+        self.assertEqual(len(hits), 1, part)
+        return hits[0]
+
+    def apps(self, mp, side):
+        return sorted((a for a in self.n["appearances"] if a["mapId"] == mp["id"] and a["side"] == side),
+                      key=lambda a: (a["position"], a["listOrder"]))
+
+    def test_tab_purposes(self):
+        want = {"Landing Page": "credits", "EMEA - Stage 2": "match_cards", "Japan - Stage 1": "match_cards",
+                "Stage 2 Hero Bans": "summary", "Map Index": "reference", "Hero Index": "reference",
+                "Self-Check": "reference"}
+        self.assertEqual({k: t["purpose"] for k, t in self.tabs.items()}, want)
+        self.assertEqual(self.tabs["Stage 2 Hero Bans"]["parsed"]["maps"], 0)   # totals never imported
+
+    def test_counts_and_scheduled_card(self):
+        c = self.inv["counts"]
+        self.assertEqual((c["matches"], c["maps"]), (3, 9))
+        self.assertEqual(self.tabs["EMEA - Stage 2"]["cards"],
+                         {"blocks": 3, "played": 2, "scheduled": 1, "incomplete": 0, "forfeited": 0,
+                          "failed": 0})
+        self.assertEqual(self.tabs["Japan - Stage 1"]["cards"],
+                         {"blocks": 3, "played": 1, "scheduled": 0, "incomplete": 1, "forfeited": 1,
+                          "failed": 0})
+        self.assertNotIn("Map Forfeit", [m["mapRaw"] for m in self.n["maps"]])
+        self.assertIn("CARD_INCOMPLETE", [i["code"] for i in self.inv["issues"]])
+        mc = self.inv["matchCards"]
+        self.assertEqual((mc["year"], mc["yearCell"], mc["heroIndexTab"]), (2026, "Landing Page!B1", "Hero Index"))
+
+    def test_nothing_the_sheet_does_not_say(self):
+        for m in self.n["matches"]:
+            self.assertIsNone(m["date"])
+            self.assertEqual(m["dateMethod"], "not-in-source")
+        for mp in self.n["maps"]:
+            self.assertIsNone(mp["date"])
+            self.assertIsNone(mp["pickedBy"])
+            self.assertIsNone(mp["pickedByRaw"])
+        for a in self.n["appearances"]:
+            for forbidden in ("seconds", "start", "end", "duration", "offset"):
+                self.assertNotIn(forbidden, a)
+
+    def test_card_match_fields(self):
+        m = self.match("qadsiah-vs-twis")
+        self.assertEqual((m["teamA"], m["teamARaw"], m["teamB"], m["teamBRaw"]),
+                         ("qadsiah", "Al Qadsiah", "twis", "Twisted Minds"))     # '[0-0]' stripped
+        self.assertEqual((m["week"], m["day"], m["game"], m["gameLabel"]), (3, 2, 1, "Week 3 | Day 2 | Game 1"))
+        self.assertEqual(m["format"], "Playoffs Upper Final [Bo3]")
+        self.assertEqual((m["region"], m["stage"], m["stageKey"], m["year"]), ("emea", "stage-2", "stage-2", 2026))
+        self.assertEqual((m["seriesScoreA"], m["seriesScoreB"], m["seriesScoreMethod"]), (1, 2, "sheet"))
+        self.assertEqual((m["bestOf"], m["seriesComplete"]), (3, True))
+        self.assertEqual(m["winner"], "twis")
+        self.assertEqual(m["playerOfTheMatchRaw"], "FixT-Sup2")
+        self.assertEqual(len(m["mapIds"]), 3)
+        self.assertNotIn("series-score-disagrees-with-map-winners", m["flags"])
+
+    def test_heroes_from_pictures_keep_list_order(self):
+        nepal = self.map("qadsiah-vs-twis-m1-nepal")
+        a = self.apps(nepal, "a")
+        self.assertEqual([(x["playerRaw"], x["hero"], x["listOrder"]) for x in a],
+                         [("FixQ-Dps1", "shion", 1), ("FixQ-Dps2", "sym", 1), ("FixQ-Tank", "mauga", 1),
+                          ("FixQ-Sup1", "kiriko", 1), ("FixQ-Sup2", "juno", 1), ("FixQ-Sup2", "lucio", 2)])
+        self.assertTrue(all(x["heroMethod"].startswith("hero-index+") for x in a))
+        self.assertTrue(all(x["src"]["picture"] for x in a))
+        self.assertEqual([x["position"] for x in self.apps(nepal, "b")], [1, 2, 3, 4, 5])
+        colosseo = self.map("qadsiah-vs-twis-m3-colosseo")
+        b1 = [x["hero"] for x in self.apps(colosseo, "b") if x["position"] == 1]
+        self.assertEqual(b1, ["tracer", "sojourn"])
+        comp = next(c for c in self.n["compositions"] if c["mapId"] == nepal["id"]
+                    and c["side"] == "a" and c["kind"] == "first-listed")
+        self.assertEqual(sorted(comp["heroes"]), sorted(["shion", "sym", "mauga", "kiriko", "juno"]))
+        self.assertTrue(comp["complete"])
+
+    def test_unknown_hero_and_unnamed_picture_stay_unmapped(self):
+        busan = self.map("fixture-gamma-vs-fixture-delta-m1-busan")
+        a = {x["position"]: x for x in self.apps(busan, "a")}
+        self.assertEqual((a[1]["hero"], a[1]["heroRaw"]), (None, "Fixturehero"))
+        self.assertIsNone(a[2]["hero"])
+        self.assertTrue(a[2]["heroRaw"].startswith("picture:"))
+        raws = [u["raw"] for u in self.inv["unmapped"]["hero"]]
+        self.assertIn("Fixturehero", raws)
+        self.assertIn(a[2]["heroRaw"], raws)
+        comp = next(c for c in self.n["compositions"] if c["mapId"] == busan["id"]
+                    and c["side"] == "a" and c["kind"] == "first-listed")
+        self.assertFalse(comp["complete"])
+
+    def test_reviewed_picture_override(self):
+        busan = self.map("fixture-gamma-vs-fixture-delta-m1-busan")
+        pic = next(x for x in self.apps(busan, "a") if x["position"] == 2)["heroRaw"][len("picture:"):]
+        b = bundle()
+        cfg = copy.deepcopy(b.aliases_cfg)
+        cfg["pictures"] = {pic: "sojourn"}
+        n = import_workbook(self.raw, AliasBook.build(cfg, b.public), b.layout())
+        x = next(a for a in n["appearances"] if a["mapId"] == busan["id"] and a["side"] == "a"
+                 and a["position"] == 2)
+        self.assertEqual((x["hero"], x["heroMethod"]), ("sojourn", "picture-override"))
+
+    def test_bans_from_text_and_forfeit(self):
+        nepal = self.map("qadsiah-vs-twis-m1-nepal")
+        bans = {b["side"]: (b["teamId"], b["hero"]) for b in self.n["bans"] if b["mapId"] == nepal["id"]}
+        self.assertEqual(bans, {"a": ("qadsiah", "tracer"), "b": ("twis", "ana")})
+        busan = self.map("fixture-alpha-vs-fixture-beta-m1-busan")
+        self.assertEqual([b for b in self.n["bans"] if b["mapId"] == busan["id"]], [])
+        self.assertIn("no-ban:a:forfeit", busan["flags"])
+
+    def test_results_draw_push_and_tiebreak(self):
+        nepal = self.map("qadsiah-vs-twis-m1-nepal")
+        self.assertEqual((nepal["winner"], nepal["winnerMethod"], nepal["scoreA"], nepal["scoreB"]),
+                         ("twis", "card-winner-text", 1, 2))
+        self.assertEqual((nepal["order"], nepal["mode"]), (1, "Control"))
+        push = self.map("fixture-alpha-vs-fixture-beta-m2-runasapi")
+        self.assertEqual((push["winnerSide"], push["scoreA"], push["scoreB"]), ("b", 0, 1))
+        self.assertNotIn("card-score-disagrees-with-map-list", push["flags"])   # distances, not rounds
+        draw = self.map("fixture-alpha-vs-fixture-beta-m3-midtown")
+        self.assertEqual((draw["winner"], draw["winnerSide"]), (None, "draw"))
+        tb = self.map("fixture-alpha-vs-fixture-beta-m4-gibraltar")
+        self.assertIn("card-no-map-panel", tb["flags"])
+        self.assertEqual((tb["winnerSide"], tb["winnerMethod"]), ("b", "card-map-list-arrow"))
+        self.assertEqual([a for a in self.n["appearances"] if a["mapId"] == tb["id"]], [])
+        m = self.match("fixture-alpha-vs-fixture-beta")
+        self.assertEqual((m["seriesScoreA"], m["seriesScoreB"], m["winner"]), (1, 2, "x-fixture-beta"))
+
+    def test_self_check(self):
+        sc = self.inv["selfCheck"]
+        rows = {(r["stage"], r["region"]): r for r in sc["rows"]}
+        self.assertTrue(rows[("Stage 2", "EMEA")]["agree"])
+        self.assertEqual(rows[("Stage 2", "EMEA")]["tabs"], ["EMEA - Stage 2"])
+        self.assertFalse(rows[("Stage 1", "JP")]["agree"])
+        self.assertIsNone(rows[("Stage 2", "NA")]["agree"])       # stage filled down; no tab
+        codes = [i["code"] for i in self.inv["issues"]]
+        self.assertEqual(codes.count("SELF_CHECK_MISMATCH"), 1)
+        self.assertEqual(codes.count("SELF_CHECK_UNPAIRED"), 1)
+        self.assertEqual(sc["mismatches"], 1)
+
+    def test_team_suffixes_are_stripped(self):
+        from external_sheet.cards import _strip_team
+        L = bundle().layout().cards
+        for raw, want in (("Telomere [0-0]", "Telomere"), ("VARREL [JP #1]", "VARREL"),
+                          ("Spacestation Gaming 0-0]", "Spacestation Gaming"),
+                          ("ENTER FORCE.36", "ENTER FORCE.36"), ("Team 1234", "Team 1234")):
+            self.assertEqual(_strip_team(L, raw), want)
+
+    def test_ids_are_stable(self):
+        b = bundle()
+        again = import_workbook(read_xlsx(cards_bytes()), b.aliases(), b.layout())
+        self.assertEqual([m["id"] for m in again["maps"]], [m["id"] for m in self.n["maps"]])
+        self.assertEqual(len({m["slug"] for m in self.n["maps"]}), len(self.n["maps"]))
+
+    def test_raw_layer_keeps_pictures(self):
+        emea = next(s for s in self.raw["sheets"] if s["name"] == "EMEA - Stage 2")
+        self.assertTrue(emea["images"])
+        self.assertTrue(all(len(h) == 10 for _, h in emea["images"]))
+
+    def test_mostly_unreadable_cards_fail_the_import(self):
+        raw = copy.deepcopy(self.raw)
+        jp = next(s for s in raw["sheets"] if s["name"] == "Japan - Stage 1")
+        # Five cards whose two teams are the same team cannot be read.
+        rows = {r: list(v) for r, v in jp["rows"]}
+        for k in range(5):
+            top = 3 + 26 * (k + 1)
+            rows[top] = [None, None, "OWCS Japan"]
+            rows[top + 2] = [None, None, f"Week 2 | Day 1 | Game {k + 1}"]
+            rows[top + 4] = [None, None, "SAME", None, None, None, 1, 0, None, "SAME"]
+            rows[top + 9] = [None, None, "►", 2, None, "Busan", None, None, None, 0]
+        jp["rows"] = sorted([r, v] for r, v in rows.items())
+        b = bundle()
+        with self.assertRaises(ImportFailed) as cm:
+            import_workbook(raw, b.aliases(), b.layout())
+        self.assertIn("MOSTLY_IGNORED", [e["code"] for e in cm.exception.inventory["errors"]])
+
+
+class MatchCardReconcile(unittest.TestCase):
+    """No date in the sheet: the stage of the season stands in for it."""
+
+    @classmethod
+    def setUpClass(cls):
+        b = bundle()
+        cls.aliases = b.aliases()
+        cls.n = import_workbook(read_xlsx(cards_bytes()), cls.aliases, b.layout())
+        cls.pub = read_public(CFG.public)
+
+    def nepal_record(self, n):
+        nepal = next(m for m in n["maps"] if m["map"] == "nepal")
+        recon = R.reconcile(n, self.pub, {}, self.aliases)
+        return next(r for r in recon["records"] if r["externalMapId"] == nepal["id"])
+
+    def test_same_stage_links_without_a_date(self):
+        r = self.nepal_record(self.n)
+        self.assertEqual((r["vodMapId"], r["method"]), ("m-qad-twis-s2po-m1", "auto"))
+        self.assertIn("no date, same stage stage-2 (+2)", r["candidates"][0]["reasons"])
+        self.assertEqual(r["status"], "partial")             # no date / pick / bans on one side
+        self.assertIsNone(r["fields"]["date"]["agree"])
+        self.assertIsNone(r["fields"]["pickedBy"]["agree"])
+        self.assertTrue(r["fields"]["winner"]["agree"])
+        self.assertTrue(r["fields"]["heroes:qadsiah"]["agree"])
+        self.assertTrue(r["fields"]["heroes:twis"]["agree"])
+
+    def test_different_stage_rejects(self):
+        n = copy.deepcopy(self.n)
+        for m in n["matches"]:
+            m["stageKey"] = "stage-1"
+        r = self.nepal_record(n)
+        self.assertIsNone(r["vodMapId"])
+        self.assertEqual((r["status"], r["candidates"]), ("unmatched", []))
+
+    def test_different_season_rejects(self):
+        n = copy.deepcopy(self.n)
+        for m in n["matches"]:
+            m["year"] = 2025
+        self.assertEqual(self.nepal_record(n)["candidates"], [])
+
+    def test_stage_key_ignores_phase_words(self):
+        self.assertEqual(self.aliases.stage_key("Stage 2 Playoffs"), "stage-2")
+        self.assertEqual(self.aliases.stage_key("EMEA - Stage 2"), "stage-2")
+        self.assertEqual(self.aliases.stage_key("Midseason Championship Paris"), "midseason-championship")
+        self.assertIsNone(self.aliases.stage_key("Playoffs"))
+        self.assertEqual(self.aliases.region_in("North America - Stage 1").id, "na")
+
+    def test_dated_records_are_unaffected(self):
+        n = parse(fixture_bytes())
+        recon = R.reconcile(n, self.pub, {}, self.aliases)
+        r = next(x for x in recon["records"] if x["vodMapId"])
+        self.assertNotIn("no date", " ".join(r["candidates"][0]["reasons"]))
+
+
+class MatchCardSync(unittest.TestCase):
+    def test_sync_export_and_check(self):
+        p = temp_repo(self)
+        res = S.sync(p, data=cards_bytes(), at="2026-11-01T00:00:00+00:00")
+        self.assertEqual(res["status"], "imported", res)
+        self.assertEqual(res["reconciliation"]["linked"], 1)
+        exp = read_public(p.export)
+        nepal = next(m for m in exp["maps"] if m["map"] == "nepal")
+        self.assertIsNone(nepal["date"])
+        self.assertIsNone(nepal["pickedBy"])
+        self.assertEqual(exp["health"]["selfCheck"]["mismatches"], 1)
+        self.assertEqual(exp["health"]["matchCards"]["played"], 3)
+        text = json.dumps(exp["maps"])
+        for forbidden in ('"seconds"', '"start"', '"end"', '"duration"', '"offset"'):
+            self.assertNotIn(forbidden, text)
+        md = slurp(os.path.join(p.reports, "inventory.md"))
+        self.assertIn("## Self-Check", md)
+        self.assertIn("**DISAGREE**", md)
+        # the committed raw layer (with picture anchors) rebuilds identically
+        self.assertEqual(S.check(p), [])
+
+    def test_inventory_cli_writes_nothing(self):
+        import contextlib
+        import sheet_sync
+        p = temp_repo(self)
+        before = sorted(os.listdir(p.root))
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            code = sheet_sync.main(["--root", p.root, "inventory", "--xlsx", CARDS, "--sample", "1"])
+        self.assertEqual(code, 0)
+        self.assertEqual(sorted(os.listdir(p.root)), before)
+        self.assertFalse(os.path.exists(p.manifest))
+        text = out.getvalue()
+        self.assertIn("## Sample of parsed maps", text)
+        self.assertIn("Reconciliation against the published VOD maps (not written)", text)
 
 
 if __name__ == "__main__":

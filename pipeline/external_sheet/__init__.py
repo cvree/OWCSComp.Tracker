@@ -29,5 +29,5 @@ This package imports that sheet WITHOUT blurring the two:
 The CLI is pipeline/sheet_sync.py. Contracts: docs/EXTERNAL-SHEET.md.
 """
 
-PARSER_VERSION = "gsheet-parser-1"
+PARSER_VERSION = "gsheet-parser-2"
 SCHEMA = "external.v1"
