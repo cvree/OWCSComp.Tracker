@@ -218,6 +218,28 @@ class Generated(unittest.TestCase):
         S.rebuild(p)
         self.assertEqual(S.check(p), [])
 
+    def test_check_compares_content_not_gzip_bytes(self):
+        """Python 3.13 writes a different gzip header byte than 3.12 for the
+        same input, and zlib builds can compress differently. Neither is
+        drift; changed content is."""
+        import gzip
+        p = self.temp_repo()
+        with open(CARDS, "rb") as f:
+            S.sync(p, data=f.read(), at="2026-11-01T00:00:00+00:00")
+        with open(p.normalized, "rb") as f:
+            body = gzip.decompress(f.read())
+        other = bytearray(gzip.compress(body, compresslevel=6, mtime=0))
+        other[9] = 3                                    # what Python 3.12 writes
+        with open(p.normalized, "wb") as f:
+            f.write(bytes(other))
+        self.assertEqual(S.check(p), [])
+        S.rebuild(p)                                    # same content: file left alone
+        with open(p.normalized, "rb") as f:
+            self.assertEqual(f.read(), bytes(other))
+        with open(p.normalized, "wb") as f:
+            f.write(gzip.compress(body.replace(b'"nepal"', b'"busan"', 1), mtime=0))
+        self.assertTrue(any("normalized.json.gz" in x for x in S.check(p)))
+
     def test_committed_files_agree_with_committed_export(self):
         exp = read_public(CFG.export)
         summ = read_public(CFG.export_summary)

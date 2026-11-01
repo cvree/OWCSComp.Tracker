@@ -142,6 +142,27 @@ def _shard_name(index: int, name: str) -> str:
     return f"sheets/{index:03d}-{slug}.json.gz"
 
 
+def deterministic_gzip(body: bytes) -> bytes:
+    """gzip with a fixed mtime AND a fixed OS byte. Python 3.13 changed the
+    header's OS field (3 -> 255) for the same input, so the byte-for-byte
+    drift gate failed between a 3.13 laptop and the 3.12 CI runner with
+    identical content. The header has no checksum, so pinning byte 9 is safe."""
+    blob = bytearray(gzip.compress(body, compresslevel=9, mtime=0))
+    blob[9] = 255
+    return bytes(blob)
+
+
+def same_gzip_content(path: str, blob: bytes) -> bool:
+    """True when the gzip file at `path` holds exactly the bytes `blob`
+    decompresses to. zlib builds may compress the same input differently,
+    so what must not drift is the CONTENT, not the compressed bytes."""
+    try:
+        with open(path, "rb") as f:
+            return gzip.decompress(f.read()) == gzip.decompress(blob)
+    except (OSError, EOFError, gzip.BadGzipFile):
+        return False
+
+
 def raw_shards(raw_doc: dict) -> tuple[dict, dict[str, bytes]]:
     """Pure: the raw document -> (index document, {relative path: gzip bytes}).
 
@@ -156,7 +177,7 @@ def raw_shards(raw_doc: dict) -> tuple[dict, dict[str, bytes]]:
     for sheet in wb.get("sheets") or []:
         rel = _shard_name(sheet["index"], sheet["name"])
         body = json.dumps(sheet, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
-        blob = gzip.compress(body, compresslevel=9, mtime=0)
+        blob = deterministic_gzip(body)
         if len(blob) > MAX_COMMITTED_FILE_BYTES:
             raise StoreTooLarge(f"tab '{sheet['name']}' compresses to {_mb(len(blob))} (limit {_mb(MAX_COMMITTED_FILE_BYTES)}), "
                                 "over GitHub's file limit — it cannot be committed")
@@ -219,7 +240,7 @@ def normalized_bytes(doc: dict) -> bytes:
     expands to many tens of MB of JSON (every listed hero is a record with
     its cell reference); compressed it stays far under GitHub's limit."""
     body = json.dumps(doc, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
-    blob = gzip.compress(body, compresslevel=9, mtime=0)
+    blob = deterministic_gzip(body)
     if len(blob) > MAX_COMMITTED_FILE_BYTES:
         raise StoreTooLarge(f"normalized.json.gz would be {_mb(len(blob))} (limit {_mb(MAX_COMMITTED_FILE_BYTES)}), over GitHub's file limit")
     return blob
@@ -227,8 +248,12 @@ def normalized_bytes(doc: dict) -> bytes:
 
 def write_normalized(paths: "Paths", doc: dict, blob: bytes | None = None) -> None:
     os.makedirs(os.path.dirname(paths.normalized), exist_ok=True)
-    with open(paths.normalized, "wb") as f:
-        f.write(blob if blob is not None else normalized_bytes(doc))
+    blob = blob if blob is not None else normalized_bytes(doc)
+    # Same content already committed: leave the file alone, so machines
+    # with different zlib/Python builds never rewrite it back and forth.
+    if not same_gzip_content(paths.normalized, blob):
+        with open(paths.normalized, "wb") as f:
+            f.write(blob)
     if os.path.exists(paths.normalized_legacy):
         os.remove(paths.normalized_legacy)
 

@@ -31,7 +31,7 @@ from .normalize import ImportFailed, import_workbook
 from .reconcile import reconcile
 from .summary import build_series, build_summary, render_series, render_summary
 from .store import (Paths, StoreTooLarge, check_size, empty_manifest, last_good,
-                    normalized_bytes, raw_shards, read_json, read_normalized, read_public,
+                    normalized_bytes, raw_shards, read_json, same_gzip_content, read_normalized, read_public,
                     read_raw, write_json, write_normalized, write_raw, write_text)
 from .workbook import WorkbookError, package_profile, read_xlsx, source_row_count
 
@@ -301,12 +301,9 @@ def check(paths: Paths) -> list[str]:
     fresh = rebuild(paths, write=False)
     problems = []
     if fresh["normalized"] is not None:
-        try:
-            with open(paths.normalized, "rb") as f:
-                committed = f.read()
-        except OSError:
-            committed = None
-        if committed != normalized_bytes(fresh["normalized"]):
+        # Compare what the file HOLDS: the same JSON compressed by another
+        # zlib/Python build is not drift.
+        if not same_gzip_content(paths.normalized, normalized_bytes(fresh["normalized"])):
             problems.append("data/external/gsheet/normalized.json.gz is not what the committed raw "
                             "layer + configs produce — run: python3 pipeline/sheet_sync.py rebuild")
     expected = export_files(paths, fresh["payload"], fresh["details"])
