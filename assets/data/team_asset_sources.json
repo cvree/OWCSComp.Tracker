@@ -347,6 +347,12 @@
    "sourceKind": "official-owcs-broadcast",
    "attribution": "WHO Gaming mark as drawn by the official OWCS broadcast HUD (team plate), cut from the indexed broadcast and redrawn white.",
    "retrievedAt": "2026-10-31T15:49:39+00:00"
+  },
+  "whibo-gaming": {
+   "sourceUrl": "https://www.twitch.tv/videos/2832630268",
+   "sourceKind": "official-owcs-broadcast",
+   "attribution": "Whibo Gaming mark as drawn by the official OWCS broadcast HUD (team plate), cut from the indexed broadcast and redrawn white.",
+   "retrievedAt": "2026-11-02T19:55:28+00:00"
   }
  }
 }

@@ -347,6 +347,254 @@ window.OWCS_BROADCAST_MAPS = {
    ],
    "url": "https://www.twitch.tv/videos/2831815423"
   },
+  "2832630268": {
+   "durationSeconds": 25493.0,
+   "maps": [
+    {
+     "check": [],
+     "end": 3750,
+     "game": 1,
+     "index": 1,
+     "map": "nepal",
+     "series": 1,
+     "start": 3150,
+     "team_a": {
+      "id": "cr",
+      "name": "CRAZY RACCOON"
+     },
+     "team_b": {
+      "id": "ssg",
+      "name": "SPACESTATION GAMING"
+     }
+    },
+    {
+     "check": [],
+     "end": 4650,
+     "game": 2,
+     "index": 2,
+     "map": "aatlis",
+     "series": 1,
+     "start": 4140,
+     "team_a": {
+      "id": "ssg",
+      "name": "SPACESTATION GAMING"
+     },
+     "team_b": {
+      "id": "cr",
+      "name": "CRAZY RACCOON"
+     }
+    },
+    {
+     "check": [],
+     "end": 6840,
+     "game": 1,
+     "index": 3,
+     "map": "nepal",
+     "series": 2,
+     "start": 6240,
+     "team_a": {
+      "id": "falcons",
+      "name": "TEAM FALCONS"
+     },
+     "team_b": {
+      "id": "whibo-gaming",
+      "name": "WHIBO GAMING"
+     }
+    },
+    {
+     "check": [],
+     "end": 8460,
+     "game": 2,
+     "index": 4,
+     "map": "neonjunction",
+     "series": 2,
+     "start": 7440,
+     "team_a": {
+      "id": "falcons",
+      "name": "TEAM FALCONS"
+     },
+     "team_b": {
+      "id": "weibo-gaming",
+      "name": "WEIBO GAMING"
+     }
+    },
+    {
+     "check": [],
+     "end": 10110,
+     "game": 3,
+     "index": 5,
+     "map": "colosseo",
+     "series": 2,
+     "start": 9450,
+     "team_a": {
+      "id": "weibo-gaming",
+      "name": "WEIBO GAMING"
+     },
+     "team_b": {
+      "id": "falcons",
+      "name": "TEAM FALCONS"
+     }
+    },
+    {
+     "check": [],
+     "end": 12240,
+     "game": 1,
+     "index": 6,
+     "map": "nepal",
+     "series": 3,
+     "start": 11520,
+     "team_a": {
+      "id": "ag-al",
+      "name": "AG.AL"
+     },
+     "team_b": {
+      "id": "varrel",
+      "name": "VARREL"
+     }
+    },
+    {
+     "check": [],
+     "end": 13050,
+     "game": 2,
+     "index": 7,
+     "map": "shambali",
+     "series": 3,
+     "start": 12540,
+     "team_a": {
+      "id": "varrel",
+      "name": "VARREL"
+     },
+     "team_b": {
+      "id": "ag-al",
+      "name": "AG.AL"
+     }
+    },
+    {
+     "check": [],
+     "end": 14280,
+     "game": 3,
+     "index": 8,
+     "map": "aatlis",
+     "series": 3,
+     "start": 13320,
+     "team_a": {
+      "id": "varrel",
+      "name": "VARREL"
+     },
+     "team_b": {
+      "id": "ag-al",
+      "name": "AG.AL"
+     }
+    },
+    {
+     "check": [],
+     "end": 16770,
+     "game": 1,
+     "index": 9,
+     "map": "nepal",
+     "series": 4,
+     "start": 15930,
+     "team_a": {
+      "id": "jd-gaming",
+      "name": "JD GAMING"
+     },
+     "team_b": {
+      "id": "team-secret",
+      "name": "TEAM SECRET"
+     }
+    },
+    {
+     "check": [],
+     "end": 17760,
+     "game": 2,
+     "index": 10,
+     "map": "njc",
+     "series": 4,
+     "start": 17190,
+     "team_a": {
+      "id": "team-secret",
+      "name": "TEAM SECRET"
+     },
+     "team_b": {
+      "id": "jd-gaming",
+      "name": "JD GAMING"
+     }
+    },
+    {
+     "check": [
+      "team_a"
+     ],
+     "end": 19890,
+     "game": 1,
+     "index": 11,
+     "map": "samoa",
+     "series": 5,
+     "start": 19410,
+     "team_a": {
+      "id": "t1",
+      "name": "T1"
+     },
+     "team_b": {
+      "id": "globant",
+      "name": "GLOBANT"
+     }
+    },
+    {
+     "check": [
+      "team_a"
+     ],
+     "end": 20820,
+     "game": 2,
+     "index": 12,
+     "map": "njc",
+     "series": 5,
+     "start": 20280,
+     "team_a": {
+      "id": "t1",
+      "name": "T1"
+     },
+     "team_b": {
+      "id": "globant",
+      "name": "GLOBANT"
+     }
+    },
+    {
+     "check": [],
+     "end": 23280,
+     "game": 1,
+     "index": 13,
+     "map": "nepal",
+     "series": 6,
+     "start": 22260,
+     "team_a": {
+      "id": "dallas-fuel",
+      "name": "DALLAS FUEL"
+     },
+     "team_b": {
+      "id": "team-liquid",
+      "name": "TEAM LIQUID"
+     }
+    },
+    {
+     "check": [],
+     "end": 24420,
+     "game": 2,
+     "index": 14,
+     "map": "njc",
+     "series": 6,
+     "start": 23550,
+     "team_a": {
+      "id": "team-liquid",
+      "name": "TEAM LIQUID"
+     },
+     "team_b": {
+      "id": "dallas-fuel",
+      "name": "DALLAS FUEL"
+     }
+    }
+   ],
+   "url": "https://www.twitch.tv/videos/2832630268"
+  },
   "2833447337": {
    "durationSeconds": 25830.0,
    "maps": [
