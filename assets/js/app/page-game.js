@@ -59,7 +59,7 @@
   /* ------------------------------------------------------------ header */
   function renderCrumbs() {
     document.getElementById("crumbs").innerHTML = P.breadcrumbs([
-      P.isAdmin() ? { label: "Games", href: "games.html" } : { label: "Maps", href: "index.html" },
+      P.isAdmin() ? { label: "Games", href: "games.html" } : { label: "Home", href: "index.html" },
       { label: game.title },
     ]);
   }

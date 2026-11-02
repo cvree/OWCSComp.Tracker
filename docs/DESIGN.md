@@ -232,6 +232,43 @@ erode under a headline like "What's winning right now". A tier is a
 weighted count of what teams picked and how those maps went. It is
 never a claim about what is strong.
 
+### 10. What you came for comes first
+
+*From Manifester's first minute:* "the alternative, an empty text box
+and a Start button, is the worst possible first impression of an app
+whose entire value is the words it already has". The tracker's value is
+the comps it already has, and its pages had drifted into opening with
+everything else.
+
+- **Content before provenance.** On a phone the Comps page used to show
+  four broadcast-coverage tiles, the spreadsheet's tiles, a coverage
+  table and two link blurbs before the first comp, which sat about
+  2,500px down. The comps now come straight after the heading, and the
+  coverage sits closed at the bottom under **About these numbers**.
+  Provenance is still one tap away: the ⓘ badge beside every list, and
+  the section at the foot of the page.
+- **Every page leads with its answer.** A team page opens with *what
+  they run* and a hero page with *the comps built around it*. Each comp
+  is one tap from its full record (`stats.html?…&cc=<comp>` opens it
+  expanded). The broadcast feed, which mostly says "comp not read yet",
+  comes after the record, not before it.
+- **Operators' questions stay with operators.** The dataset status strip
+  ("77 maps indexed · 1 with comps") sat above a page listing 1,306
+  comps. It, the "unmapped" registry marks and the Matches source filter
+  now show in admin mode only (`html.is-admin`).
+- **A list is a page, not the season.** Matches renders 40 at a time,
+  latest first, instead of one 73,000px page in the spreadsheet's oldest-
+  first order. The home page's broadcast feed shows the latest two
+  broadcasts and pages the rest.
+- **Filters by how often they are asked.** The comp book keeps map, hero,
+  region and sort in view. Window, stage, mode, team and the minimum fold
+  under **More filters**, which opens by itself, with a count, whenever
+  one of them is in use, so a filter is never hidden while it changes
+  the list.
+- **The nav names the questions.** Meta · Comps · Tiers · Teams ·
+  Matches. Tiers and Matches had no nav entry, so most visitors never
+  found them.
+
 ## Deliberately not borrowed
 
 - **A light theme.** Bellwether treats light as first-class, not as an

@@ -31,6 +31,8 @@
   const SORTS = [["played", "Most played"], ["win", "Best adjusted win"], ["tier", "Tier score"], ["recent", "Most recent"]];
   const MINS = [["1", "Every comp"], ["2", "Run 2+ times"], ["3", "Run 3+ times"], ["5", "Run 5+ times"], ["10", "Run 10+ times"]];
   const PAGE = 30;
+  const DEFAULTS = { cw: "season", cr: "", cs: "", cm: "", cmo: "", ct: "", ch: "", cmin: "2", csort: "played" };
+  const MORE_KEYS = ["cw", "cs", "cmo", "ct", "cmin"];
 
   const state = {
     cw: P.qs("cw") || "season", cr: P.qs("cr") || "", cs: P.qs("cs") || "", cm: P.qs("cm") || "",
@@ -57,6 +59,11 @@
       '" data-role="' + esc(h.role || "") + '">' + P.heroFace(h, px || 30) + "</a>";
   };
   const faces = (heroes, px) => '<span class="cb-faces">' + U.byRole(heroes).map((h) => face(h, px)).join("") + "</span>";
+  /* The same portraits, not links: for inside an element that is itself a link. */
+  const facesPlain = (heroes, px) => '<span class="cb-faces">' + U.byRole(heroes).map((id) => {
+    const h = P.hero(id);
+    return '<span class="cb-face" title="' + esc(h.name) + '" data-role="' + esc(h.role || "") + '">' + P.heroFace(h, px || 30) + "</span>";
+  }).join("") + "</span>";
   const teamLink = (id) => {
     const t = P.team(id);
     return '<a class="cb-team" href="team.html?id=' + encodeURIComponent(id) + '">' +
@@ -107,21 +114,37 @@
     const heroes = F.heroes.slice().sort((a, b) => heroName(a).localeCompare(heroName(b))).map((id) => [id, heroName(id)]);
     const stageOrder = ["pre-season", "stage-1", "champions-clash", "stage-2", "midseason-championship", "stage-3", "world-finals"];
     const stages = F.stages.slice().sort((a, b) => stageOrder.indexOf(a) - stageOrder.indexOf(b)).map((s) => [s, stageName(s)]);
+    /* The four questions people actually ask first — which map, which
+       hero, which region, best or most played — stay in view. The rest
+       fold away, and open by themselves when one of them is in use, so a
+       filter is never hidden while it is changing the list. */
+    const more = MORE_KEYS.filter((k) => String(state[k] || "") !== String(DEFAULTS[k] || "")).length;
     return '<form class="card mx-filters cb-filters" id="cb-filters" onsubmit="return false">' +
-      '<div class="mx-grid">' +
-      sel("cw", "Window", WINDOWS) +
-      sel("cs", "Stage", [["", "Every stage"]].concat(stages)) +
-      sel("cr", "Region", REGIONS) +
+      '<div class="cb-fgrid">' +
       sel("cm", "Map", [["", "Every map"]].concat(maps)) +
-      sel("cmo", "Mode", [["", "Every mode"]].concat(F.modes.slice().sort().map((m) => [m, m]))) +
-      sel("ct", "Team", [["", "Every team"]].concat(teams)) +
       sel("ch", "Includes hero", [["", "Any hero"]].concat(heroes)) +
-      sel("cmin", "Show", MINS) +
+      sel("cr", "Region", REGIONS) +
       sel("csort", "Sort by", SORTS) +
       "</div>" +
-      '<div class="row u-mt-4"><button type="button" class="btn btn--sm btn--ghost" id="cb-reset">Reset filters</button>' +
-      '<span class="dim small">Windows count back from the newest map in the spreadsheet. Dates are estimated ' +
-      "from the official schedule; the sheet itself records none.</span></div></form>";
+      '<details class="cb-more-filters"' + (more ? " open" : "") + '><summary class="small">More filters' +
+        (more ? ' <span class="cb-count">' + more + " on</span>" : "") + "</summary>" +
+      '<div class="cb-fgrid u-mt-3">' +
+      sel("cw", "Window", WINDOWS) +
+      sel("cs", "Stage", [["", "Every stage"]].concat(stages)) +
+      sel("cmo", "Mode", [["", "Every mode"]].concat(F.modes.slice().sort().map((m) => [m, m]))) +
+      sel("ct", "Team", [["", "Every team"]].concat(teams)) +
+      sel("cmin", "Show", MINS) +
+      "</div>" +
+      '<p class="dim small u-mt-3">Windows count back from the newest map in the spreadsheet. Dates are estimated ' +
+      "from the official schedule; the sheet itself records none.</p></details>" +
+      '<div class="row u-mt-3"><button type="button" class="btn btn--sm btn--quiet" id="cb-reset">Reset filters</button></div></form>';
+  }
+
+  function updateMore(form) {
+    const sum = form.querySelector(".cb-more-filters > summary");
+    if (!sum) return;
+    const more = MORE_KEYS.filter((k) => String(state[k] || "") !== String(DEFAULTS[k] || "")).length;
+    sum.innerHTML = "More filters" + (more ? ' <span class="cb-count">' + more + " on</span>" : "");
   }
 
   function wireFilters() {
@@ -133,13 +156,15 @@
       state[k] = e.target.value;
       P.setQs({ [k]: state[k] || null });
       shown = PAGE;
+      updateMore(form);
       draw();
       drawByMap();
     });
     document.getElementById("cb-reset").addEventListener("click", () => {
-      Object.assign(state, { cw: "season", cr: "", cs: "", cm: "", cmo: "", ct: "", ch: "", cmin: "2", csort: "played" });
+      Object.assign(state, DEFAULTS);
       P.setQs({ cw: null, cr: null, cs: null, cm: null, cmo: null, ct: null, ch: null, cmin: null, csort: null });
       form.querySelectorAll("select").forEach((s) => { s.value = state[s.dataset.k]; });
+      updateMore(form);
       shown = PAGE;
       draw();
       drawByMap();
@@ -316,14 +341,13 @@
   function mount() {
     const host = document.getElementById("comp-book");
     if (host) {
-      host.innerHTML = '<div class="sec-head u-mt-5"><h2>Every comp the pros ran</h2>' + U.sourceBadge() + "</div>" +
-        '<p class="dim small">From the community spreadsheet: the five heroes each team\'s players are listed with first, ' +
-        "on every map where all five are known. Open a comp for its maps, teams, matchups, bans, swaps and every game. " +
-        "A listed line-up is an appearance, not seconds played.</p>" +
-        filterBar() + '<div id="cb-list" class="u-mt-5"></div>';
+      host.innerHTML = '<div class="cb-top u-mt-4"><span class="dim small">Every line-up the community spreadsheet records: ' +
+        "who was listed, not seconds played. Tap a comp to open it.</span>" + U.sourceBadge() + "</div>" +
+        filterBar() + '<div id="cb-list" class="u-mt-4"></div>';
       wireFilters();
       wireDetails(host);
       draw();
+      openLinked();
     }
     const bm = document.getElementById("cb-bymap-wrap");
     if (bm) {
@@ -334,6 +358,58 @@
       drawByMap();
     }
   }
+
+  /* --------------------------------------------- deep link to a comp
+     ?cc=<comp key> opens that comp in the list (and pages far enough to
+     show it), so a comp named on a team or hero page is one tap away
+     from its full record. */
+  function openLinked() {
+    const want = P.qs("cc");
+    if (!want || !result) return;
+    const i = result.comps.findIndex((c) => c.key === want);
+    if (i < 0) return;
+    if (i >= shown) { shown = Math.ceil((i + 1) / PAGE) * PAGE; draw(); }
+    const el = document.querySelector('.cb-row[data-key="' + (window.CSS && CSS.escape ? CSS.escape(want) : want) + '"]');
+    if (!el) return;
+    el.open = true;
+    requestAnimationFrame(() => el.scrollIntoView({ block: "start" }));
+  }
+
+  /* ------------------------------------------- the short list, elsewhere
+     A compact "what they run" list for team and hero pages: the most-run
+     comps for a filter, each linking to its full record in the comp book.
+     `filter` is compbook.build's options (team, hero, …). */
+  const bookLink = (filter, key) => {
+    const q = new URLSearchParams();
+    q.set("tab", "comps");
+    if (filter.team) q.set("ct", filter.team);
+    if (filter.hero) q.set("ch", filter.hero);
+    q.set("cmin", "1");
+    if (key) q.set("cc", key);
+    return "stats.html?" + q.toString();
+  };
+  P.compBookSummary = (filter, opt) => {
+    opt = opt || {};
+    const r = CB.build(T, Object.assign({ minMaps: 1, sort: "played" }, filter));
+    if (!r.comps.length) return "";
+    const top = r.comps.slice(0, opt.limit || 6);
+    const topKeys = new Set(top.map((c) => c.key));
+    const best = r.comps.filter((c) => c.n >= 3 && c.decided >= 3 && !topKeys.has(c.key))
+      .sort((a, b) => b.adjWin - a.adjWin)[0];
+    const line = (c) => '<li><a class="cb-pick" href="' + esc(bookLink(filter, c.key)) + '" aria-label="' +
+      esc(U.byRole(c.heroes).map(heroName).join(", ") + ": " + plural(c.n, "map") + ", " + wl(c.wins, c.losses)) + '">' +
+      facesPlain(c.heroes, 30) +
+      '<span class="cb-pick__n">' + plural(c.n, "map") + "</span>" +
+      "<b>" + wl(c.wins, c.losses) + '</b><span class="cb-pick__adj">' + pct(c.adjWin) + " adj.</span>" +
+      '<span class="cb-pick__go" aria-hidden="true">→</span></a></li>';
+    return '<div class="cb-summary-box">' +
+      '<p class="cb-summary">' + plural(r.coveredMaps, "line-up") + " · <b>" + n(r.distinct) + "</b> different comps" +
+      (r.repeated ? " · " + n(r.repeated) + " run more than once" : "") + "</p>" +
+      '<ol class="cb-picks u-mt-3">' + top.map(line).join("") + "</ol>" +
+      (best ? '<p class="cb-sub cb-sub--gap">Winning most</p><ol class="cb-picks">' + line(best) + "</ol>" : "") +
+      '<p class="u-mt-4"><a class="btn btn--sm btn--ghost" href="' + esc(bookLink(filter)) + '">All ' +
+        plural(r.distinct, "comp") + " in the comp book →</a></p></div>";
+  };
 
   P.compBookPage = { mount: mount, state: state };
 })();

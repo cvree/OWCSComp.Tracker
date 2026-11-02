@@ -34,7 +34,7 @@
      map with its comps, the overall comps, and the teams. Nothing on it
      asks a fan to submit, review or label anything.
 
-         Maps · Comps · Teams
+         Meta · Comps · Tiers · Teams · Matches
 
      ADMIN_NAV is the pipeline, in the order an admin works it. It is
      shown only on the admin pages themselves (P.ADMIN_PAGES), and the
@@ -44,10 +44,18 @@
 
      RAIL is the admin overflow menu — the remaining operator tools —
      and is never a second public navigation. */
+  /* Five fan destinations, each named for the question it answers:
+     what is winning (Meta, the home page), what teams run (Comps), how
+     heroes rank (Tiers), who is who (Teams) and what happened (Matches).
+     Tiers and Matches were reachable only through links inside other
+     pages; a destination nobody can find from the header is one most
+     people never reach. */
   const NAV = [
-    { href: "index.html", label: "Maps", match: ["index.html", "", "game.html", "map.html", "series.html"] },
-    { href: "stats.html", label: "Comps", match: ["stats.html", "hero.html", "meta.html", "tiers.html"] },
+    { href: "index.html", label: "Meta", match: ["index.html", "", "game.html", "map.html"] },
+    { href: "stats.html", label: "Comps", match: ["stats.html", "meta.html"] },
+    { href: "tiers.html", label: "Tiers", match: ["tiers.html", "hero.html"] },
     { href: "teams.html", label: "Teams", match: ["teams.html", "team.html"] },
+    { href: "series.html", label: "Matches", match: ["series.html"] },
   ];
 
   const ADMIN_NAV = [
@@ -149,8 +157,13 @@
     const skip = document.querySelector(".skip-link");
     if (skip) skip.after(hdr); else document.body.prepend(hdr);
 
-    /* One quiet provenance line, not a scrolling marquee. */
-    const line = buildDataline();
+    /* One quiet provenance line, not a scrolling marquee — for admins.
+       On the public pages it read "77 maps indexed · 1 with comps" above
+       a Comps page listing 1,306 comps: the strip counts the pipeline's
+       broadcast reads, which is an operator's question. A fan's version
+       of it (where the data comes from, when it was last generated) is
+       in the footer and behind each page's ⓘ source badge. */
+    const line = P.isAdmin() || P.isAdminPage() ? buildDataline() : null;
     let tail = hdr;
     if (line) { hdr.after(line); tail = line; }
 

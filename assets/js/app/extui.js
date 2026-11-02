@@ -25,7 +25,7 @@
   const S = () => P.extSummary || null;
   const R = () => P.extSeries || null;
   const pct = (v) => P.pctHonest(v);
-  const plural = (n, w) => n + " " + w + (n === 1 ? "" : "s");
+  const plural = (n, w) => n + " " + w + (n === 1 || /s$/.test(w) ? "" : "s");
   const fmtN = (n) => (n == null ? "—" : Number(n).toLocaleString("en-US"));
 
   /* ---------------------------------------------------------- labels */
@@ -194,6 +194,11 @@
 
   /* A filterable list, its state in the URL (prefix keeps two lists on one
      page apart). */
+  /* Newest first. The sheet lists the season in playing order (stage,
+     region, week, day, game), so the reverse of it is latest first —
+     a stage's final at the top of its stage, not its first week. */
+  const groupsNewestFirst = (rows) => rows.slice().reverse();
+
   P.mountSeriesBrowser = (hostId, opt) => {
     opt = opt || {};
     const host = document.getElementById(hostId);
@@ -217,28 +222,46 @@
       sel("region", "Region", regions) +
       sel("stage", "Stage", o.stages.map((x) => [x, P.extStageName(x)])) +
       sel("event", "Event", o.events.map((x) => [x, x])) +
-      sel("source", "Source", [["sheet-only", "Spreadsheet only"], ["linked", "Also read off a VOD"],
-        ["review", "VOD candidate needs review"]]) +
+      /* Which source a series came from is a reconciliation question —
+         the admin's. A fan filters by who, where and when. */
+      (P.isAdmin() ? sel("source", "Source", [["sheet-only", "Spreadsheet only"], ["linked", "Also read off a VOD"],
+        ["review", "VOD candidate needs review"]]) : "") +
       sel("team", "Team", o.teams.map((x) => [x, P.anyTeamName(x)]).sort((a, b) => a[1].localeCompare(b[1]))) +
       '<label class="field"><span class="mx-label">Search</span><input class="input" type="search" data-k="q" value="' +
       esc(st.q) + '" placeholder="Team, player of the match…" autocomplete="off"></label>' +
-      '</div><p class="dim small u-mt-3">' + P.srcBadge("sheet") + " Ordered as the spreadsheet orders them: stage of " +
-      "the season, region, then week, day and game. The spreadsheet records no dates and no map picks, so " +
-      "neither is shown.</p></div>" +
-      '<p class="dim small u-mt-4" data-role="count" aria-live="polite"></p><div data-role="list"></div>';
+      '</div><p class="dim small u-mt-3">' + (opt.newestFirst
+        ? "Latest first: the spreadsheet's own playing order, reversed. "
+        : "Ordered as the spreadsheet orders them: stage of the season, region, then week, day and game. ") +
+      "The spreadsheet records no dates and no map picks, so neither is shown.</p></div>" +
+      '<p class="dim small u-mt-4" data-role="count" aria-live="polite"></p><div data-role="list"></div>' +
+      '<div class="row u-mt-4" data-role="more"></div>';
+    /* A page, not the whole season at once: `opt.page` rows, then a
+       button for the next page. Filters reset the page. */
+    let shown = opt.page || opt.limit || 0;
     const render = () => {
-      const rows = E.filterSeries(rs.series, Object.assign({}, st, { names: P.anyTeamName }));
+      let rows = E.filterSeries(rs.series, Object.assign({}, st, { names: P.anyTeamName }));
+      if (opt.newestFirst) rows = groupsNewestFirst(rows);
       const maps = rows.reduce((n, r) => n + (r.maps || []).length, 0);
       host.querySelector('[data-role="count"]').textContent = plural(rows.length, "series") + " · " +
         plural(maps, "map") + (rows.length !== rs.series.length ? " (of " + rs.series.length + " series)" : "");
-      host.querySelector('[data-role="list"]').innerHTML = P.extSeriesListHtml(rows, { limit: opt.limit || 0 });
+      host.querySelector('[data-role="list"]').innerHTML = P.extSeriesListHtml(rows, { limit: shown });
+      const more = host.querySelector('[data-role="more"]');
+      const left = shown ? rows.length - shown : 0;
+      more.innerHTML = opt.page && left > 0 ? '<button type="button" class="btn btn--ghost" data-more>Show ' +
+        Math.min(opt.page, left) + " more · " + left + " left</button>" : "";
     };
+    host.addEventListener("click", (e) => {
+      if (!e.target.closest || !e.target.closest("[data-more]")) return;
+      shown += opt.page;
+      render();
+    });
     let t = null;
     const update = (k, v) => {
       st[k] = v;
       const qs = {};
       qs[pre + k] = v;
       P.setQs(qs);
+      shown = opt.page || opt.limit || 0;
       render();
     };
     host.addEventListener("change", (e) => { const k = e.target.dataset.k; if (k && k !== "q") update(k, e.target.value); });
