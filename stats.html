@@ -23,6 +23,10 @@
       then open a comp for its record, matchups, bans and every game.</p>
   </div>
 
+  <!-- The site-wide time range: every tab below follows it. Directly in
+       <main> so it stays pinned under the header for the whole page. -->
+  <div id="cb-range"></div>
+
   <div role="tablist" aria-label="Comp views" class="u-mt-4">
     <button role="tab" data-tab="comps" aria-controls="p-comps" id="t-comps">Comps</button>
     <button role="tab" data-tab="bymap" aria-controls="p-bymap" id="t-bymap">By map</button>
@@ -83,6 +87,7 @@
 <script src="assets/js/app/charts.js"></script>
 <script src="assets/js/app/tierstats.js"></script>
 <script src="assets/js/app/tierui.js"></script>
+<script src="assets/js/app/timerange.js"></script>
 <script src="assets/js/app/compbook.js"></script>
 <script src="assets/js/app/page-compbook.js"></script>
 <script src="assets/js/app/page-stats.js"></script>

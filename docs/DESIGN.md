@@ -269,6 +269,25 @@ everything else.
   Matches. Tiers and Matches had no nav entry, so most visitors never
   found them.
 
+### 11. Time is the first control
+
+The question this site answers is *what is winning now*. A season average
+answers *what was winning on average since February*, which is a different
+and much less useful question. So:
+
+- **Every count of comps or heroes has a time range**, and it is the same
+  range on every page: one bar, pinned under the header, never more than a
+  tap away. The default is the **last 14 days**.
+- **The range is always visible and always editable**: presets for 7, 14,
+  30, 60 and 90 days, each stage, the whole season, and custom dates. On a
+  phone it is one row, so pinning it costs one row of the screen.
+- **It travels.** Choose 30 days on Comps and the team page you open next
+  is in 30 days too. Links carry it, so a shared view is the same view.
+- **A short window is honest about being short.** Fourteen days in a quiet
+  region can be a handful of maps. The page says so and offers the wider
+  window in one tap, rather than widening it silently. The visitor chose
+  "recent", and "recent" is what they get.
+
 ## Deliberately not borrowed
 
 - **A light theme.** Bellwether treats light as first-class, not as an

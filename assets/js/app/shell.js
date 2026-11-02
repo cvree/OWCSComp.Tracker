@@ -553,12 +553,13 @@
         "and every comp links back to the frame it came from.</p>" +
         '<p class="u-mt-3"><a href="how-it-works.html">How it works, in plain language →</a></p></div>' +
         "<div><h2>Explore</h2><ul>" +
-          '<li><a href="index.html">Every map</a></li>' +
+          '<li><a href="index.html">Meta</a></li>' +
           '<li><a href="stats.html">Comps</a></li>' +
           '<li><a href="stats.html?tab=heroes">Heroes</a></li>' +
-          '<li><a href="meta.html">Meta explorer</a></li>' +
+          '<li><a href="tiers.html">Hero tiers</a></li>' +
           '<li><a href="teams.html">Teams</a></li>' +
-          '<li><a href="series.html">Series (spreadsheet)</a></li>' +
+          '<li><a href="series.html">Matches</a></li>' +
+          '<li><a href="meta.html">Meta explorer</a></li>' +
         "</ul></div>" +
         (P.isAdmin()
           ? "<div><h2>Admin</h2><ul>" +
