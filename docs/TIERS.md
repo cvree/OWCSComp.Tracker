@@ -108,3 +108,27 @@ python3 pipeline/sheet_sync.py rebuild
 | `assets/js/app/page-home.js`, `index.html` | the home snapshot |
 | `assets/js/app/tierui.js` | shared drawing: names, hover cards, comps, source badge |
 | `pipeline/test_tier_stats.py` | dates, list order, disputed winners, Elo, upsets, as-of, shrinkage, real data |
+
+## The comp book (`stats.html`, `assets/js/app/compbook.js`)
+
+The Comps page reads the same export as a comp book: one row per distinct
+five-hero comp (the five heroes a team's players are listed with first,
+when all five are known), for any window, stage, region, map, mode, team
+and hero. Each comp carries:
+
+| Field | What |
+|---|---|
+| Played, share | Team-maps it was run on, and its share of every full line-up in view |
+| Record | W–L and win %, plus maps with no winner recorded |
+| Vs other comps | W–L with mirror maps left out. A mirror is one win and one loss for the same comp, so a comp that mostly meets itself sits near 50% whatever it is worth |
+| Adjusted win, tier | The tiers page's weighting (event × bracket × opponent power, shrunk to 50% on small samples), graded across every comp in view |
+| Maps, teams | Where it is run and who runs it, each with its own W–L |
+| Against other comps | The opponent line-ups it met, with W–L |
+| Bans around it | What the other team banned, and what its own team banned |
+| Swaps | Heroes its players are also listed with (2nd / 3rd), order-weighted |
+| Moments | Its most valuable win and costliest loss |
+| Every game | Newest first, each linked to its series |
+
+`pipeline/test_comp_book.py` holds the arithmetic on a synthetic season
+and on the real export.
+

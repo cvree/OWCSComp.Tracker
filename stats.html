@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Comps — OWCS Comp Tracker</title>
-<meta name="description" content="The most-run OWCS comps, every comp map by map, hero pick rates, map and team records and mid-map swaps — counted from line-ups read off the broadcast.">
+<meta name="description" content="Every five-hero comp OWCS teams ran in 2026: how often, W–L, weighted win rate and tier, the maps and teams, head-to-head against other comps, bans, swaps and every game — from the community spreadsheet, beside the line-ups read off the broadcast.">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/archivo-var-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/saira-condensed-700-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -19,9 +19,10 @@
   <div class="page-head page-head--tight">
     <p class="eyebrow">Overall</p>
     <h1>Comps</h1>
-    <p class="lede">What OWCS teams are running: the most-played five-hero comps, every comp
-      map by map, and hero pick rates — counted from line-ups read off the broadcast, each
-      one linked to the frame it came from.</p>
+    <p class="lede">Every five-hero comp OWCS teams ran this season: how often, how it did,
+      where and by whom, what it beat and lost to, and every game it was played in. The
+      community spreadsheet’s line-ups lead; the line-ups read off the broadcast sit beside
+      them, each linked to the frame it came from. The two are never added together.</p>
   </div>
 
   <div id="coverage" class="u-mt-5"></div>
@@ -61,6 +62,7 @@
 <script src="assets/data/discovered.v1.js"></script>
 <script src="assets/data/broadcast_maps.v1.js"></script>
 <script src="assets/data/external_summary.v1.js"></script>
+<script src="assets/data/sheet_tiers.v1.js"></script>
 <script src="assets/js/app/core.js"></script>
 <script src="assets/js/app/games.js"></script>
 <script src="assets/js/app/mapindex.js"></script>
@@ -74,6 +76,10 @@
 <script src="assets/js/app/hovercard.js" defer></script>
 <script src="assets/js/app/shell.js"></script>
 <script src="assets/js/app/charts.js"></script>
+<script src="assets/js/app/tierstats.js"></script>
+<script src="assets/js/app/tierui.js"></script>
+<script src="assets/js/app/compbook.js"></script>
+<script src="assets/js/app/page-compbook.js"></script>
 <script src="assets/js/app/page-stats.js"></script>
 </body>
 </html>
