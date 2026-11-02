@@ -34,17 +34,29 @@
       return P.empty("◇", "No maps on record for this team",
         "Neither the VOD readings nor the imported spreadsheet record a map for it yet.");
     }
+    /* "Last N" needs an order. VOD maps carry a date; the spreadsheet
+       records none, so its maps are ordered by the sheet's own stage /
+       week / day / game — and the report says which order it used. */
+    const order = r.ordering === "sheet"
+      ? " · ordered by the spreadsheet’s stage, week, day and game (it records no dates)"
+      : r.ordering === "mixed"
+        ? " · dated VOD maps first, then undated spreadsheet maps by stage, week, day and game"
+        : "";
+    const span = r.fromLabel ? " · " + esc(r.fromLabel) + " → " + esc(r.toLabel) : "";
     const head = '<p class="dim small">Last <b>' + r.window + "</b> of " + r.available + " recorded map" +
-      (r.available === 1 ? "" : "s") + (r.from ? " · " + esc(r.from) + " → " + esc(r.to) : "") + " · " +
+      (r.available === 1 ? "" : "s") + span + order + " · " +
       r.sources.vod + " with a VOD timeline " + P.srcBadge("vod") + " · " + r.sources.sheet +
       " in the spreadsheet " + P.srcBadge("sheet") + "</p>";
-    const maps = '<div class="table-wrap"><table class="tbl tbl--compact"><thead><tr><th>Date</th><th>Map</th>' +
+    const maps = '<div class="table-wrap"><table class="tbl tbl--compact"><thead><tr><th>When</th><th>Map</th>' +
       "<th>Opponent</th><th>Result</th><th>Pick</th><th>Sources</th></tr></thead><tbody>" +
       r.maps.map((e) => {
         const opp = e.teamA === team ? e.teamB : e.teamA;
         const res = e.winnerConflict ? '<span class="trust" data-trust="failed">sources disagree</span>'
           : !e.winner ? '<span class="dim">—</span>' : e.winner === team ? "<b>W</b>" : "L";
-        return "<tr><td class=\"mono small\">" + esc(e.date || "—") + '</td><td><a href="' + P.mapPageHref(e) + '">' +
+        const when = e.date ? '<span class="mono">' + esc(e.date) + "</span>"
+          : e.label ? '<span title="The spreadsheet records no date; this is its own game label">' +
+            esc(e.label) + "</span>" : "—";
+        return '<tr><td class="small">' + when + '</td><td><a href="' + P.mapPageHref(e) + '">' +
           esc(e.map ? P.mapInfo(e.map).name : (e.sheet && e.sheet.mapRaw) || "?") + "</a></td><td>" +
           P.anyTeamPlate(opp, { size: "sm" }) + "</td><td>" + res + "</td><td>" +
           (e.pickedBy ? (e.pickedBy === team ? "own pick" : "their pick") : '<span class="dim">—</span>') +

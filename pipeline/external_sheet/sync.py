@@ -29,8 +29,9 @@ from .fetch import FetchFailed, download, save_snapshot, sha256
 from .layout import Layout
 from .normalize import ImportFailed, import_workbook
 from .reconcile import reconcile
+from .summary import build_series, build_summary, render_series, render_summary
 from .store import (Paths, StoreTooLarge, check_size, empty_manifest, last_good,
-                    normalized_bytes, raw_shards, read_json, read_normalized, read_public,
+                    normalized_bytes, raw_shards, read_json, same_gzip_content, read_normalized, read_public,
                     read_raw, write_json, write_normalized, write_raw, write_text)
 from .workbook import WorkbookError, package_profile, read_xlsx, source_row_count
 
@@ -84,8 +85,11 @@ def payload_for(normalized: dict | None, manifest: dict, bundle: Bundle, fixture
 
 
 def export_files(paths: Paths, payload: dict, details: dict) -> dict[str, str]:
-    """{absolute path: exact text} for the public export and its shards."""
-    files = {paths.export: render(payload)}
+    """{absolute path: exact text} for the public export, its shards and
+    the two small derived files (summary + series index, summary.py)."""
+    files = {paths.export: render(payload),
+             paths.export_summary: render_summary(build_summary(payload)),
+             paths.export_series: render_series(build_series(payload))}
     for bucket, maps in details.items():
         files[os.path.join(paths.export_detail_dir, f"detail-{bucket}.js")] = render_detail(bucket, maps)
     for path, text in files.items():
@@ -297,12 +301,9 @@ def check(paths: Paths) -> list[str]:
     fresh = rebuild(paths, write=False)
     problems = []
     if fresh["normalized"] is not None:
-        try:
-            with open(paths.normalized, "rb") as f:
-                committed = f.read()
-        except OSError:
-            committed = None
-        if committed != normalized_bytes(fresh["normalized"]):
+        # Compare what the file HOLDS: the same JSON compressed by another
+        # zlib/Python build is not drift.
+        if not same_gzip_content(paths.normalized, normalized_bytes(fresh["normalized"])):
             problems.append("data/external/gsheet/normalized.json.gz is not what the committed raw "
                             "layer + configs produce — run: python3 pipeline/sheet_sync.py rebuild")
     expected = export_files(paths, fresh["payload"], fresh["details"])

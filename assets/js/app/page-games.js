@@ -398,12 +398,34 @@
         : "This list fills itself", body);
   }
 
+  /* VOD games and spreadsheet series are different kinds of row: one was
+     processed off a broadcast, the other was documented by the sheet's
+     editors. One page, two lists, a switch between them — never merged. */
+  function renderSources() {
+    if (P.mountSeriesBrowser) P.mountSeriesBrowser("series-browser", { prefix: "s_", limit: 200 });
+    const seg = document.getElementById("src-filter");
+    if (!seg) return;
+    const apply = (src) => {
+      seg.querySelectorAll("[data-src]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.src === src)));
+      document.getElementById("vod-games").hidden = src === "sheet";
+      document.getElementById("sheet-series").hidden = src === "vod";
+    };
+    apply(P.qs("src") || "all");
+    seg.addEventListener("click", (e) => {
+      const b = e.target.closest("[data-src]");
+      if (!b) return;
+      P.setQs({ src: b.dataset.src });
+      apply(b.dataset.src);
+    });
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     renderScanStatus();
     renderFilter();
     document.getElementById("q").value = query;
     render();
     renderUpcoming();
+    renderSources();
 
     document.getElementById("state-filter").addEventListener("click", (e) => {
       const b = e.target.closest("[data-state]");

@@ -18,7 +18,7 @@
     "corrections/external_reconciliation.json (aliasApprovals), not here, so",
     "this file stays the hand-curated base and the decisions stay auditable."
   ],
-  "version": 2,
+  "version": 3,
   "ignoreValues": ["", "-", "--", "—", "n/a", "na", "none", "?", "??", "tbd", "tba", "x", "null", "unknown", "/"],
   "heroes": {
     "cass": ["cassidy", "mccree", "cass", "cree"],
@@ -91,7 +91,8 @@
     {"id": "gibraltar", "name": "Watchpoint: Gibraltar", "mode": "Escort", "aliases": ["watchpoint gibraltar", "gibraltar"]},
     {"id": "rialto", "name": "Rialto", "mode": "Escort", "aliases": ["rialto"]},
     {"id": "numbani", "name": "Numbani", "mode": "Hybrid", "aliases": ["numbani"]},
-    {"id": "hollywood", "name": "Hollywood", "mode": "Hybrid", "aliases": ["hollywood"]}
+    {"id": "hollywood", "name": "Hollywood", "mode": "Hybrid", "aliases": ["hollywood"]},
+    {"id": "grimsvotn", "name": "Grímsvötn", "mode": "Escort", "aliases": ["grimsvotn", "grimsvoetn"]}
   ],
   "modes": {
     "Control": ["control", "koth", "king of the hill", "ctrl"],

@@ -144,7 +144,28 @@
       (!patches.size ? '<p class="dim small u-mt-3">No patch is recorded for these maps, so patches cannot be separated — ' +
         "use the date filters to compare periods.</p>" : "") +
       (state.half ? '<p class="dim small">Recency weighting is on (half-life ' + esc(state.half) +
-        " days): rates weight newer maps more. Raw counts are still shown beside them.</p>" : ""));
+        " days): rates weight newer maps more. Raw counts are still shown beside them.</p>" : "") +
+      dateNote());
+  }
+
+  /* Date filters, windows and recency weighting need a date. The
+     spreadsheet records none, so they cannot place its maps — say so,
+     with the count, instead of letting the maps vanish. */
+  function dateNote() {
+    const ranged = !!(state.from || state.to);
+    if (!ranged && !state.days && !state.half) return "";
+    const x = M.dateExclusions(all, filters(), { days: Number(state.days || 0), halfLife: Number(state.half || 0) });
+    const bits = [];
+    if (ranged && x.byRange) bits.push("the From/To dates leave out <b>" + x.byRange + "</b>");
+    if (state.days && x.byWindow) bits.push("the " + esc(state.days) + "-day window leaves out <b>" + x.byWindow + "</b>");
+    if (state.half && x.byWeighting) bits.push("recency weighting leaves out of every weighted rate <b>" +
+      x.byWeighting + "</b>");
+    if (!bits.length) return "";
+    return P.note("warn", "Undated maps are excluded, not dropped silently",
+      "<p>Because they have no date, " + bits.join("; ") + " map" + (Math.max(x.byRange, x.byWindow, x.byWeighting) === 1 ? "" : "s") +
+      " that match the other filters (" + x.sheet + " of the " + x.undated + " undated maps on record are spreadsheet maps " +
+      P.srcBadge("sheet") + "). The community spreadsheet records stage, week, day and game but no calendar date, and the tracker " +
+      "does not invent one. Clear the date filters, or use the Stage filter, to include them.</p>");
   }
 
   const minN = () => Number(state.min || 0);
@@ -337,10 +358,14 @@
     if (!list.length) { host.innerHTML = P.empty("◇", "No map matches these filters", ""); return; }
     const shown = list.slice(0, 300);
     host.innerHTML = '<p class="dim small u-mt-5">' + list.length + " map" + (list.length === 1 ? "" : "s") +
-      (list.length > shown.length ? " — showing the newest " + shown.length : "") + ".</p>" +
-      '<div class="table-wrap"><table class="tbl tbl--compact"><thead><tr><th>Date</th><th>Event</th><th>Map</th>' +
+      (list.length > shown.length ? " — showing the newest " + shown.length : "") +
+      (list.some((e) => !e.date) ? ". Spreadsheet maps have no date: they show the sheet’s own game label " +
+        "and follow the dated maps in stage, week, day and game order" : "") + ".</p>" +
+      '<div class="table-wrap"><table class="tbl tbl--compact"><thead><tr><th>When</th><th>Event</th><th>Map</th>' +
       "<th>Teams</th><th>Winner</th><th>Sources</th></tr></thead><tbody>" + shown.map((e) =>
-        '<tr><td class="mono small">' + esc(e.date || "—") + '</td><td class="small">' + esc(e.event || "—") +
+        '<tr><td class="small">' + (e.date ? '<span class="mono">' + esc(e.date) + "</span>"
+          : esc(e.label ? (e.stage ? e.stage + " · " : "") + e.label : "no date")) +
+        '</td><td class="small">' + esc(e.event || "—") +
         '</td><td><a href="' + P.mapPageHref(e) + '">' + esc(e.map ? P.mapInfo(e.map).name : (e.sheet && e.sheet.mapRaw) || "?") +
         "</a></td><td>" + esc(P.anyTeamName(e.teamA)) + " vs " + esc(P.anyTeamName(e.teamB)) + "</td><td>" +
         (e.winnerConflict ? P.srcBadge("conflict", "disagree") : esc(e.winner ? P.anyTeamName(e.winner) : "—")) +

@@ -2427,3 +2427,26 @@ a.mf-team:hover .mf-team__name { text-decoration: underline; }
   .mx-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .tbl--facts th[scope="row"] { width: auto; }
 }
+
+/* the community spreadsheet across the public site (extui.js) */
+.plain-link { text-decoration: none; color: inherit; }
+.plain-link:hover .team__name { text-decoration: underline; }
+.xs-teams { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2) var(--s-3); }
+.xs-score .score { font-size: 15px; }
+.xs-maps { display: flex; flex-wrap: wrap; gap: 4px; }
+.xs-map { font-size: 12px; padding: 2px 8px; text-decoration: none; color: var(--tx-2); white-space: nowrap; }
+.xs-map:hover { color: var(--tx); border-color: var(--gold); }
+.xs-map[data-w="draw"] { border-style: dashed; }
+.xs-map[data-w="none"] { opacity: .7; }
+.xs-map .dot[data-rec] { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--amber); }
+.xs-map .dot[data-rec="matched"] { background: var(--green, #1da875); }
+.xs-table td:first-child { min-width: 9rem; }
+.lane-grid { display: grid; gap: var(--s-4); grid-template-columns: repeat(auto-fit, minmax(min(100%, 520px), 1fr)); }
+@media (max-width: 640px) {
+  .xs-table { min-width: 0; }
+  .xs-table thead { display: none; }
+  .xs-table tr { display: grid; gap: var(--s-2); padding: var(--s-3) 0; }
+  .xs-table td { padding: 0 var(--s-3); }
+}
+table.tbl.tbl--fit { min-width: 0; }
+.tbl--fit .sample { white-space: nowrap; }

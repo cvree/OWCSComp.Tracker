@@ -68,6 +68,10 @@ PRODUCT_PAGES = {
     "map.html": "One map, scouted from both sources",
     "meta.html": "Meta explorer",
     "sheet-sync.html": "Source health (admin)",
+    # Every series the community spreadsheet documents, and one series as
+    # its match card records it (?id=). Public; spreadsheet data only,
+    # labelled, with the VOD reading beside it where a map is linked.
+    "series.html": "Spreadsheet series",
 }
 #: Reachable, but not part of the product shell: the calibration wizard
 #: (its own self-contained tool), the packaged desktop app's two screens,

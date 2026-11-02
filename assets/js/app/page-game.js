@@ -132,6 +132,36 @@
   }
 
   /* -------------------------------------------------------------- body */
+  /* The community spreadsheet's record of the same series, when the
+     reconciliation linked one of this game's maps to it (or found a
+     candidate a person still has to decide). Its own section, its own
+     badge, the verdict beside it — the VOD reading above is untouched. */
+  function sheetSection() {
+    const S = P.extSummary;
+    const m = P.match && P.match(game.id);
+    if (!S || !m) return "";
+    const ids = new Set((m.maps || []).map((x) => x.id));
+    const links = (S.links || []).filter((l) => ids.has(l.vodMapId) ||
+      (l.candidates || []).some((c) => ids.has(c)));
+    if (!links.length) return "";
+    const series = Array.from(new Set(links.map((l) => l.matchId).filter(Boolean)));
+    const rows = links.map((l) => {
+      const vod = (m.maps || []).find((x) => x.id === (l.vodMapId || (l.candidates || []).find((c) => ids.has(c))));
+      return "<li>" + (vod ? "Map " + esc(vod.order) + " · " + esc(P.mapInfo(vod.map).name) : esc(l.vodMapId || "")) + " — " +
+        P.reconBadge(l.status) + (l.vodMapId
+          ? ' <a href="map.html?id=' + encodeURIComponent(l.vodMapId) + '">both sources compared →</a>'
+          : ' <span class="dim small">a candidate only: not linked until a person decides</span>') + "</li>";
+    }).join("");
+    return '<section class="band" id="sheet"><div class="sec-head"><h2>In the community spreadsheet</h2>' +
+      P.srcBadge("sheet") + "</div>" +
+      '<p class="dim small">The community-maintained spreadsheet documents this series too. Its record — series score, ' +
+      "bans and the heroes listed for each player — is kept separate from the VOD reading above and compared field by " +
+      "field; where they disagree both claims are shown and neither is chosen.</p>" +
+      '<ul class="small u-mt-3">' + rows + "</ul>" +
+      '<div class="row u-mt-4">' + series.map((id) => '<a class="btn btn--sm btn--ghost" href="series.html?id=' +
+        encodeURIComponent(id) + '">Open the spreadsheet’s series →</a>').join("") + "</div></section>";
+  }
+
   function renderBody() {
     const parts = [];
 
@@ -144,6 +174,7 @@
        diagnostics — is admin business. */
     if (!P.isAdmin()) {
       if (published) parts.push(publishedSection());
+      parts.push(sheetSection());
       const v = game.broadcast && game.broadcast.videoId;
       if (v && P.mapIndex && P.mapIndex.entry(v)) parts.push(mapIndexSection(v));
       if (!parts.length) {
@@ -162,6 +193,7 @@
     if (vid && P.mapIndex && P.mapIndex.entry(vid)) parts.push(mapIndexSection(vid));
     if (game.broadcast) parts.push(discoverySection());
     if (published && game.state === "published") parts.push(publishedSection());
+    parts.push(sheetSection());
     parts.push(flowSection());
     if (game.state === "working") parts.push(liveSection());
     if (game.state === "review") parts.push(reviewCallSection());
