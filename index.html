@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>OWCS Comp Tracker — every map, every comp</title>
-<meta name="description" content="Every Overwatch Champions Series map, map by map: both teams, the comp each one ran, and a link that opens the VOD at the second the map starts. Plus the most-run comps and most-picked heroes overall.">
+<title>OWCS Comp Tracker — what's winning right now</title>
+<meta name="description" content="The OWCS pro meta right now: S-tier heroes by role, the most-banned heroes and the usual ban per role, the most-run comp on every map and the biggest upsets, plus every broadcast map with its VOD.">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/archivo-var-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/saira-condensed-700-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -16,35 +16,50 @@
 
 <main id="main" class="shell shell--wide">
 
-  <div class="page-head page-head--tight">
-    <p class="eyebrow eyebrow--gold">OWCS · read off the broadcast</p>
-    <h1>Every map. <span class="hl hl--gold">Every comp.</span></h1>
-    <p class="lede">Map by map: who played, what each team ran, and a link that opens the VOD
-      the second the map starts. Overall comps and hero picks up top.</p>
+  <div class="page-head page-head--tight hm-head">
+    <p class="eyebrow eyebrow--gold">OWCS pro meta</p>
+    <h1>What's winning <span class="hl hl--gold">right now</span></h1>
+    <p class="lede">The S-tier heroes, the bans, and the comp to run on every map, from every pro OWCS match.
+      Wins count for more against strong teams, at big events and deep in the bracket.</p>
+    <div id="hm-controls" class="hm-controls u-mt-5"></div>
+    <p id="hm-window" class="hm-window small u-mt-3" aria-live="polite"></p>
   </div>
 
-  <div id="counts" class="u-mt-5"></div>
-
-  <section class="band" aria-labelledby="h-overall">
+  <section class="band" aria-labelledby="h-stier">
     <div class="sec-head">
-      <h2 id="h-overall">Overall comps</h2>
-      <a class="sec-link" href="stats.html">Every comp &amp; hero →</a>
-      <a class="sec-link" href="meta.html">Meta explorer →</a>
+      <h2 id="h-stier">S tier right now</h2>
+      <a class="sec-link" href="tiers.html">Full tier list →</a>
     </div>
-    <div id="overall"></div>
+    <div id="hm-stier"></div>
   </section>
 
-  <section class="band" aria-labelledby="h-sheet">
+  <section class="band" aria-labelledby="h-bans">
     <div class="sec-head">
-      <h2 id="h-sheet">From the community spreadsheet</h2>
-      <a class="sec-link" href="series.html">Every series →</a>
+      <h2 id="h-bans">Most banned</h2>
+      <a class="sec-link" href="tiers.html?tab=bans">Bans by map →</a>
     </div>
-    <div id="sheet"></div>
+    <div id="hm-bans"></div>
+  </section>
+
+  <section class="band" aria-labelledby="h-every">
+    <div class="sec-head">
+      <h2 id="h-every">Every map</h2>
+      <span class="dim small">Hover a comp for its record, swaps and teams</span>
+    </div>
+    <div id="hm-maps"></div>
+  </section>
+
+  <section class="band" aria-labelledby="h-plays">
+    <div class="sec-head">
+      <h2 id="h-plays">Comps that made noise</h2>
+      <span class="dim small">The biggest wins: strong opponents, big stages, upsets</span>
+    </div>
+    <div id="hm-upsets"></div>
   </section>
 
   <section class="band" aria-labelledby="h-maps">
     <div class="sec-head">
-      <h2 id="h-maps">Map by map</h2>
+      <h2 id="h-maps">Broadcast VODs, map by map</h2>
       <span class="dim small" id="feed-count"></span>
     </div>
     <div class="mf-filters" id="filters" role="group" aria-label="Filter maps"></div>
@@ -63,6 +78,7 @@
 <script src="assets/data/discovered.v1.js"></script>
 <script src="assets/data/broadcast_maps.v1.js"></script>
 <script src="assets/data/external_summary.v1.js"></script>
+<script src="assets/data/sheet_tiers.v1.js"></script>
 <script src="assets/js/app/core.js"></script>
 <script src="assets/js/app/games.js"></script>
 <script src="assets/js/app/mapindex.js"></script>
@@ -70,8 +86,11 @@
 <script src="assets/js/app/sources.js"></script>
 <script src="assets/js/app/extstats.js"></script>
 <script src="assets/js/app/extui.js"></script>
+<script src="assets/js/app/tierstats.js"></script>
+<script src="assets/js/app/tierui.js"></script>
 <script src="assets/js/app/hovercard.js" defer></script>
 <script src="assets/js/app/shell.js"></script>
 <script src="assets/js/app/page-maps.js"></script>
+<script src="assets/js/app/page-home.js"></script>
 </body>
 </html>

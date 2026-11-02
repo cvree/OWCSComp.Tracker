@@ -1,5 +1,15 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
+## UPDATE (2026-11-02, nineteenth pass) — the home page is a meta snapshot
+
+Built for a GM/Champion FACEIT player, desktop first. `index.html` now opens with:
+S tier right now (per role, recent window, ▲/▼ trends), Most banned (ban rate,
+usual ban per role, ban pairs; each team bans one hero per map, never the same role),
+Every map (most-run comp with hover details, "Winning most", S tier, usual
+bans), Comps that made noise (biggest wins, UPSET accent). The VOD feed is
+below. `tiers.html` gained a Bans tab, hover cards on comps, and a one-badge
+source line. Details: `docs/TIERS.md`. Tests: `pipeline/test_tier_stats.py`.
+
 ## UPDATE (2026-11-02, eighteenth pass) — hero tiers, map by map, by date
 
 **What landed.** `tiers.html` (public, under Comps): S–D hero and comp tiers per

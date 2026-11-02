@@ -163,7 +163,7 @@
 
   function newAcc(id) {
     return { id: id, picks: 0, apps: 0, n: 0, w: 0, val: 0, imp: 0, best: null, worst: null,
-      teams: new Map(), opps: [] };
+      teams: new Map(), wins: 0, losses: 0, last: null };
   }
 
   function addResult(acc, x, res, e, imp, ctx) {
@@ -172,6 +172,7 @@
     const v = x * imp * (res - e);
     acc.val += v;
     acc.imp += x * imp;
+    if (res) acc.wins += x; else acc.losses += x;
     if (res && (!acc.best || v > acc.best.v)) acc.best = Object.assign({ v: v }, ctx);
     if (!res && (!acc.worst || v < acc.worst.v)) acc.worst = Object.assign({ v: v }, ctx);
   }
@@ -181,8 +182,9 @@
     const buckets = new Map();
     const bucket = (k, mode) => {
       if (!buckets.has(k)) {
-        buckets.set(k, { map: k, mode: mode, maps: 0, teamMaps: 0, decided: 0,
-          heroes: new Map(), comps: new Map(), bans: new Map(), heroComps: new Map(), from: null, to: null });
+        buckets.set(k, { map: k, mode: mode, maps: 0, teamMaps: 0, decided: 0, banned: 0,
+          heroes: new Map(), comps: new Map(), bans: new Map(), banBy: new Map(), banPairs: new Map(),
+          heroComps: new Map(), wins: [], from: null, to: null });
       }
       return buckets.get(k);
     };
@@ -199,16 +201,32 @@
         B.to = !B.to || m.d > B.to ? m.d : B.to;
         const banned = new Set((mp.a.bn || []).concat(mp.b.bn || []));
         banned.forEach((h) => B.bans.set(h, (B.bans.get(h) || 0) + 1));
+        if (banned.size) B.banned += 1;
+        if (banned.size === 2) {
+          const pk = Array.from(banned).sort().join("|");
+          B.banPairs.set(pk, (B.banPairs.get(pk) || 0) + 1);
+        }
         ["a", "b"].forEach((side) => {
           const sd = mp[side];
           const team = side === "a" ? m.a : m.b;
           const opp = side === "a" ? m.b : m.a;
-          if (!sd || !(sd.h || []).length) return;
-          B.teamMaps += 1;
+          if (!sd) return;
           const res = mp.w ? (mp.w === side ? 1 : 0) : null;
           const e = r ? (side === "a" ? r.ea : 1 - r.ea) : null;
           const imp = r ? r.imp : importance(m, T.weights || {});
-          const ctx = { mapId: mp.id, map: mp.map, match: mp.m, team: team, opp: opp, e: e, imp: imp };
+          const ctx = { mapId: mp.id, map: mp.map, match: mp.m, team: team, opp: opp, e: e, imp: imp, d: m.d };
+          /* this side's own ban: how did the team that took it off the board do? */
+          (sd.bn || []).forEach((h) => {
+            let acc = B.banBy.get(h);
+            if (!acc) { acc = newAcc(h); B.banBy.set(h, acc); }
+            acc.picks += 1;
+            acc.apps += 1;
+            acc.teams.set(team, (acc.teams.get(team) || 0) + 1);
+            if (!acc.last || m.d > acc.last) acc.last = m.d;
+            if (res != null && e != null) addResult(acc, 1, res, e, imp, ctx);
+          });
+          if (!(sd.h || []).length) return;
+          B.teamMaps += 1;
           sd.h.forEach((pair) => {
             const h = pair[0], x = pair[1];
             let acc = B.heroes.get(h);
@@ -221,11 +239,20 @@
           if (sd.c && sd.c.length) {
             const k = compKey(sd.c);
             let acc = B.comps.get(k);
-            if (!acc) { acc = newAcc(k); acc.heroes = sd.c.slice(); B.comps.set(k, acc); }
+            if (!acc) { acc = newAcc(k); acc.heroes = sd.c.slice(); acc.swaps = new Map(); acc.regions = new Map(); B.comps.set(k, acc); }
             acc.picks += 1;
             acc.apps += 1;
             acc.teams.set(team, (acc.teams.get(team) || 0) + 1);
+            acc.regions.set(m.r || "?", (acc.regions.get(m.r || "?") || 0) + 1);
+            if (!acc.last || m.d > acc.last) acc.last = m.d;
+            /* heroes the line-up swapped to (listed 2nd/3rd), weighted */
+            sd.h.forEach((pair) => {
+              if (sd.c.indexOf(pair[0]) < 0) acc.swaps.set(pair[0], (acc.swaps.get(pair[0]) || 0) + pair[1]);
+            });
             if (res != null && e != null) addResult(acc, 1, res, e, imp, ctx);
+            if (res === 1 && e != null && key === "*") {
+              B.wins.push(Object.assign({ v: imp * (1 - e), heroes: sd.c.slice(), oppComp: (mp[side === "a" ? "b" : "a"] || {}).c || null }, ctx));
+            }
             sd.c.forEach((h) => {
               let hc = B.heroComps.get(h);
               if (!hc) { hc = new Map(); B.heroComps.set(h, hc); }
@@ -253,7 +280,51 @@
       best: acc.best, worst: acc.worst,
       banShare: B.maps ? (B.bans.get(acc.id) || 0) / B.maps : 0,
       teams: Array.from(acc.teams.entries()).sort((a, b) => b[1] - a[1]).slice(0, 5),
+      wins: acc.wins, losses: acc.losses, last: acc.last,
+      swaps: acc.swaps ? Array.from(acc.swaps.entries()).sort((a, b) => b[1] - a[1]).slice(0, 4) : [],
+      regions: acc.regions ? Array.from(acc.regions.entries()).sort((a, b) => b[1] - a[1]) : [],
     };
+  }
+
+  /* ------------------------------------------------------------- bans */
+  /* One row per banned hero. `rate` = share of maps where either team
+     banned it (a hero is never banned by both). `after*` = how the team
+     that banned it did on that map, weighed like every other result. */
+  function banRows(B, W, roles) {
+    return Array.from(B.banBy.values()).map((acc) => {
+      const row = finishRow(acc, B, W);
+      return { id: acc.id, role: (roles && roles[acc.id]) || "", n: acc.apps,
+        rate: B.maps ? (B.bans.get(acc.id) || 0) / B.maps : 0,
+        afterWin: row.rawWin, afterAdj: row.adjWin, value: row.value, decided: row.decided,
+        teams: row.teams, last: acc.last };
+    }).sort((a, b) => b.n - a.n || a.id.localeCompare(b.id));
+  }
+
+  /* The usual ban in each role on this map, and how bans split by role.
+     Teams never ban the same hero and almost never the same role, so a
+     map's bans read naturally as "the tank ban / the damage ban / the
+     support ban". */
+  function banProfile(B, W, roles) {
+    const rows = banRows(B, W, roles);
+    const total = rows.reduce((s, r) => s + r.n, 0);
+    const byRole = {};
+    rows.forEach((r) => {
+      const k = r.role || "Other";
+      if (!byRole[k]) byRole[k] = { role: k, n: 0, top: [] };
+      byRole[k].n += r.n;
+      if (byRole[k].top.length < 3) byRole[k].top.push(r);
+    });
+    Object.values(byRole).forEach((x) => { x.share = total ? x.n / total : 0; });
+    const pairs = Array.from(B.banPairs.entries()).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+      .slice(0, 5).map((p) => ({ heroes: p[0].split("|"), n: p[1], rate: B.maps ? p[1] / B.maps : 0 }));
+    return { maps: B.maps, banned: B.banned, total: total, rows: rows, byRole: byRole, pairs: pairs };
+  }
+
+  /* The wins worth remembering: biggest importance x (1 - expected). */
+  function highlights(B, limit) {
+    const seen = new Set();
+    return B.wins.slice().sort((a, b) => b.v - a.v || String(a.mapId).localeCompare(String(b.mapId)))
+      .filter((w) => (seen.has(w.mapId) ? false : (seen.add(w.mapId), true))).slice(0, limit || 10);
   }
 
   function grade(rows, W, minPicks) {
@@ -295,6 +366,34 @@
     return grade(rows, W, W.compMinMaps != null ? W.compMinMaps : 2);
   }
 
+  /* "Recent", for the home page: the shortest of `windows` (days) that
+     holds at least `minMaps` maps up to the as-of date, else the whole
+     season. Returns { days | null, result, prev } where `prev` is the
+     window of equal length just before it (for rising / falling). */
+  function recent(T, roles, opts) {
+    opts = opts || {};
+    const wins = opts.windows || [14, 30, 60, 120];
+    const minMaps = opts.minMaps || 40;
+    /* A region that has not played lately is "recent" up to its own
+       latest map, not up to the season's. */
+    let asOf = opts.asOf || null;
+    if (!asOf && opts.region) {
+      (T.matches || []).forEach((m) => {
+        if (m.d && (opts.region === "international" ? m.r === "international" : m.r === opts.region) &&
+          (!asOf || m.d > asOf)) asOf = m.d;
+      });
+    }
+    let days = null, cur = null;
+    for (const d of wins) {
+      const r = compute(T, roles, { asOf: asOf, days: d, region: opts.region });
+      const B = r.bucket("*");
+      if (B && B.maps >= minMaps) { days = d; cur = r; break; }
+    }
+    if (!cur) cur = compute(T, roles, { asOf: asOf, region: opts.region });
+    const prev = days ? compute(T, roles, { asOf: addDays(cur.from, -1), days: days, region: opts.region }) : null;
+    return { days: days, result: cur, prev: prev };
+  }
+
   /* ----------------------------------------------------------- driver */
   /* opts: { asOf, from | days, region, team }  roles: {heroId: role} */
   function compute(T, roles, opts) {
@@ -314,6 +413,9 @@
       bucket: (key) => buckets.get(key || "*") || null,
       heroTiers: (key) => { const B = buckets.get(key || "*"); return B ? heroTiers(B, W, roles) : []; },
       compTiers: (key) => { const B = buckets.get(key || "*"); return B ? compTiers(B, W) : []; },
+      bans: (key) => { const B = buckets.get(key || "*"); return B ? banRows(B, W, roles) : []; },
+      banProfile: (key) => { const B = buckets.get(key || "*"); return B ? banProfile(B, W, roles) : null; },
+      highlights: (n) => { const B = buckets.get("*"); return B ? highlights(B, n) : []; },
     };
   }
 
@@ -321,6 +423,7 @@
     HOME: HOME, bracketWeight: bracketWeight, eventWeight: eventWeight, importance: importance,
     addDays: addDays, ordered: ordered, sweep: sweep, inScope: inScope, aggregate: aggregate,
     heroTiers: heroTiers, compTiers: compTiers, grade: grade, compute: compute,
+    banRows: banRows, banProfile: banProfile, highlights: highlights, recent: recent,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   if (root) { root.OWCS = root.OWCS || {}; root.OWCS.tierStats = api; }

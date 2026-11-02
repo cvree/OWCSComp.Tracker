@@ -135,16 +135,12 @@
     renderMaps();
     renderHeroes();
     renderComps();
+    renderBans();
     renderPower();
   }
 
   function renderProvenance() {
-    const c = T.dates.confidence || {};
-    P.mount("provenance", '<p class="small ext-line">' + P.srcBadge("sheet") +
-      "<span>Built from the community spreadsheet (" + T.counts.series + " series, " + T.counts.maps + " maps). " +
-      "The sheet has no dates, so each series is dated from the official schedule by its stage, week and day: " +
-      "<strong>dates are estimates</strong> (" + (c.window || 0) + " series inside a published stage window, " +
-      (c.estimate || 0) + " guessed). Hero listings are not timed: a player's first listed hero counts most, later swaps less.</span></p>");
+    P.mount("provenance", P.tierUI ? P.tierUI.sourceBadge() : "");
   }
 
   function renderSummary() {
@@ -259,23 +255,84 @@
     if (!B) { P.mount("p-comps", ""); return; }
     const rows = R.compTiers(state.map || "*");
     const ok = rows.filter((r) => !r.lowSample);
-    const head = '<thead><tr><th scope="col">Tier</th><th scope="col">Comp (first-listed)</th>' +
-      '<th scope="col" class="num">Maps</th><th scope="col" class="num">Pick</th><th scope="col" class="num">Win</th>' +
-      '<th scope="col" class="num">Adj. win</th><th scope="col" class="num">Value</th><th scope="col">Run by</th></tr></thead>';
-    const row = (r) => "<tr>" +
-      '<td><span class="tr-badge" data-tier="' + esc(r.tier || "") + '">' + esc(r.tier || "–") + "</span></td>" +
-      "<td>" + P.compStrip(r.heroes, { size: "xs", tight: true }) + "</td>" +
-      '<td class="num">' + r.apps + "</td><td class=\"num\">" + pct(r.pickShare, 1) + "</td>" +
-      '<td class="num">' + pct(r.rawWin) + "</td><td class=\"num\"><strong>" + pct(r.adjWin, 1) + "</strong></td>" +
-      '<td class="num">' + signed(r.value) + "</td>" +
-      '<td class="small">' + r.teams.slice(0, 3).map((t) => esc(teamName(t[0])) + " (" + t[1] + ")").join(", ") + "</td></tr>";
+    /* A list, not a table: table wrappers clip, and each comp carries a
+       hover card (record, swaps, teams). */
+    const head = '<div class="tr-crow tr-crow--hd" aria-hidden="true"><span>Tier</span><span>Comp · hover for details</span>' +
+      '<span class="num">Maps</span><span class="num">W–L</span><span class="num">Pick</span><span class="num">Adj. win</span>' +
+      '<span class="num">Value</span><span>Run by</span></div>';
+    const row = (r) => '<div class="tr-crow">' +
+      '<span><span class="tr-badge" data-tier="' + esc(r.tier || "") + '">' + esc(r.tier || "–") + "</span></span>" +
+      "<span>" + P.tierUI.comp(r, { px: 32 }) + "</span>" +
+      '<span class="num">' + r.apps + '</span><span class="num">' + Math.round(r.wins) + "–" + Math.round(r.losses) + "</span>" +
+      '<span class="num">' + pct(r.pickShare, 1) + '</span><span class="num"><strong>' + pct(r.adjWin, 1) + "</strong></span>" +
+      '<span class="num">' + signed(r.value) + "</span>" +
+      '<span class="small dim">' + r.teams.slice(0, 3).map((t) => esc(teamName(t[0])) + " (" + t[1] + ")").join(", ") + "</span></div>";
     P.mount("p-comps",
       '<h2 class="u-mt-5">' + esc(mapName(state.map)) + ' <span class="sample">' + B.teamMaps + " team-maps</span></h2>" +
       '<p class="small dim">The five heroes each team\'s players are listed with first, when all five are known. ' +
       "Comps run at least " + esc(String(W.compMinMaps)) + " times are tiered; tiers are cut across all comps on the map.</p>" +
-      (ok.length ? '<div class="table-wrap u-mt-4"><table class="tbl tbl--compact">' + head + "<tbody>" +
-        ok.slice(0, 60).map(row).join("") + "</tbody></table></div>"
+      (ok.length ? '<div class="tr-clist u-mt-4">' + head + ok.slice(0, 60).map(row).join("") + "</div>"
         : P.empty("◇", "No comp was run twice in this range", "Widen the range or pick All maps.")));
+  }
+
+  /* ------------------------------------------------------------- bans */
+  /* What pros take off the board here. Each team bans one hero a map and
+     the two teams can't ban the same role, so bans read by role. */
+  function renderBans() {
+    const key = state.map || "*";
+    const bp = R.banProfile(key);
+    if (!bp || !bp.rows.length) { P.mount("p-bans", P.empty("⊘", "No bans recorded in this range", "Widen the range.")); return; }
+    const max = bp.rows[0].rate || 1;
+    const heroLine = (r) => {
+      const h = P.hero(r.id);
+      return '<div class="tr-banrow" title="' + esc(h.name + ": banned on " + pct(r.rate) + " of maps; the team that banned it won " +
+        pct(r.afterWin) + " (" + pct(r.afterAdj, 1) + " weighed)") + '">' + P.heroFace(h, 32) +
+        '<span class="tr-banrow__name">' + esc(h.name) + "</span>" +
+        '<span class="hm-ban__bar"><span style="width:' + Math.round((r.rate / max) * 100) + '%"></span></span>' +
+        '<b class="tr-banrow__rate">' + pct(r.rate) + "</b>" +
+        '<span class="tr-banrow__after" title="How the team that banned it did">' + pct(r.afterWin) + " won</span></div>";
+    };
+    const cols = ROLE_ORDER.map((role) => {
+      const x = bp.byRole[role];
+      const list = bp.rows.filter((r) => r.role === role);
+      return '<section class="card tr-bancol"><h3 class="tr-bancol__hd">' + esc(role) + " ban" +
+        (x ? ' <span class="dim small">' + pct(x.share) + " of bans</span>" : "") + "</h3>" +
+        (list.length ? list.slice(0, 8).map(heroLine).join("") : '<p class="dim small">None in this range.</p>') + "</section>";
+    }).join("");
+    let byMap = "";
+    if (!state.map) {
+      const cell = (B, role) => {
+        const p2 = R.banProfile(B.map);
+        const r = p2 && p2.byRole[role] && p2.byRole[role].top[0];
+        return "<td>" + (r ? '<span class="tr-mban">' + P.heroFace(P.hero(r.id), 26) + esc(P.hero(r.id).name) +
+          " <b>" + pct(r.rate) + "</b></span>" : '<span class="dim">—</span>') + "</td>";
+      };
+      byMap = '<h3 class="u-mt-6">The usual bans on every map</h3>' +
+        '<p class="small dim">The most-banned hero in each role, and how often it goes. Click a map for its full ban list.</p>' +
+        '<div class="table-wrap u-mt-3"><table class="tbl tbl--compact"><thead><tr><th scope="col">Map</th>' +
+        '<th scope="col" class="num">Maps</th><th scope="col">Tank ban</th><th scope="col">Damage ban</th><th scope="col">Support ban</th>' +
+        "</tr></thead><tbody>" + R.maps.map((B) => '<tr><th scope="row"><button type="button" class="link-btn" data-map="' + esc(B.map) +
+          '">' + esc(mapName(B.map)) + '</button></th><td class="num">' + B.maps + "</td>" +
+          ROLE_ORDER.map((role) => cell(B, role)).join("") + "</tr>").join("") + "</tbody></table></div>";
+    }
+    const pairs = bp.pairs.length ? '<h3 class="u-mt-6">Most common ban pairs</h3><div class="hm-pairs u-mt-3">' +
+      bp.pairs.map((p2) => '<span class="hm-pair" title="' + esc(p2.heroes.map((h) => P.hero(h).name).join(" + ")) + '">' +
+        P.tierUI.faces(P.tierUI.byRole(p2.heroes), 26) + "<b>" + p2.n + "× · " + pct(p2.rate) + "</b></span>").join("") + "</div>" : "";
+    P.mount("p-bans",
+      '<h2 class="u-mt-5">' + esc(mapName(state.map)) + ' <span class="sample">' + bp.maps + " maps · " + bp.total + " bans</span></h2>" +
+      '<p class="small hm-rule"><b>How bans work:</b> each team bans one hero per map and the two teams can\'t ban the same role, ' +
+      "so a map loses heroes from two different roles. Bars show how often each hero is banned; \"won\" is how the team that banned it did.</p>" +
+      '<div class="tr-bancols u-mt-4">' + cols + "</div>" + byMap + pairs);
+    const el = document.getElementById("p-bans");
+    if (el && !el.dataset.bound) {
+      el.dataset.bound = "1";
+      el.addEventListener("click", (e) => {
+        const b = e.target.closest("[data-map]");
+        if (!b) return;
+        state.map = b.dataset.map;
+        update();
+      });
+    }
   }
 
   /* ------------------------------------------------------------ power */

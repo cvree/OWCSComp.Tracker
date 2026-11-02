@@ -139,18 +139,18 @@ def synthetic() -> dict:
     """Strong (korea) beats mid five times; weak (na) then upsets strong once
     at Champions Clash; one more map after the as-of date we test."""
     matches, maps = [], []
-    side = lambda heroes: {"h": [[h, 1] for h in heroes], "c": heroes, "bn": []}  # noqa: E731
+    side = lambda heroes, bn=(): {"h": [[h, 1] for h in heroes], "c": heroes, "bn": list(bn)}  # noqa: E731
     comp_a = ["winston", "tracer", "sojourn", "kiriko", "lucio"]
     comp_b = ["dva", "cass", "sym", "ana", "bap"]
     for i in range(5):
         matches.append({"id": f"m{i}", "d": f"2026-03-{20 + i}", "r": "korea", "s": "stage-1", "ev": "stage-1",
                         "f": "Round Robin", "a": "strong", "b": "mid"})
         maps.append({"m": i, "id": f"x{i}", "map": "busan", "mode": "Control", "o": 1, "w": "a",
-                     "a": side(comp_a), "b": side(comp_b)})
+                     "a": side(comp_a, ["ana"]), "b": side(comp_b, ["winston"])})
     matches.append({"id": "m5", "d": "2026-05-24", "r": "international", "s": "champions-clash",
                     "ev": "champions-clash", "f": "Grand Finals", "a": "weak", "b": "strong"})
     maps.append({"m": 5, "id": "x5", "map": "busan", "mode": "Control", "o": 1, "w": "a",
-                 "a": side(["mauga", "pharah", "echo", "mercy", "juno"]), "b": side(comp_a)})
+                 "a": side(["mauga", "pharah", "echo", "mercy", "juno"], ["kiriko"]), "b": side(comp_a, ["sym"])})
     matches.append({"id": "m6", "d": "2026-06-10", "r": "korea", "s": "stage-2", "ev": "stage-1",
                     "f": "Round Robin", "a": "mid", "b": "strong"})
     maps.append({"m": 6, "id": "x6", "map": "busan", "mode": "Control", "o": 1, "w": "a",
@@ -183,6 +183,16 @@ let buf = ""; process.stdin.on("data", (d) => buf += d); process.stdin.on("end",
     value: h.value, tier: h.tier, low: h.lowSample, picks: h.picks }]));
   out.mapsCC = atCC.bucket("*").maps;
   out.win60 = S.compute(T, roles, { asOf: "2026-06-10", days: 10 }).bucket("*").maps;
+  const bp = atCC.banProfile("*");
+  out.bans = { maps: bp.maps, total: bp.total, rows: Object.fromEntries(bp.rows.map((r) => [r.id, { rate: r.rate, n: r.n,
+    afterWin: r.afterWin, role: r.role }])), supportTop: bp.byRole.Support.top[0].id, pairs: bp.pairs };
+  out.highlights = atCC.highlights(3).map((w) => ({ mapId: w.mapId, team: w.team, e: w.e, heroes: w.heroes }));
+  const comp = atCC.compTiers("busan").find((c) => c.id === "kiriko+lucio+sojourn+tracer+winston");
+  out.comp = { apps: comp.apps, wins: comp.wins, losses: comp.losses, last: comp.last };
+  const rc = S.recent(T, roles, { windows: [10], minMaps: 1 });
+  out.recent = { days: rc.days, maps: rc.result.bucket("*").maps, prev: rc.prev.bucket("*").maps };
+  const ri = S.recent(T, roles, { windows: [10], minMaps: 1, region: "international" });
+  out.recentIntl = { days: ri.days, asOf: ri.result.asOf, maps: ri.result.bucket("*").maps };
   console.log(JSON.stringify(out));
 });
 """
@@ -247,6 +257,29 @@ class Maths(unittest.TestCase):
         self.assertTrue(h["pharah"]["low"])                  # one listing < minPicks 1.5
         self.assertIsNone(h["pharah"]["tier"])
         self.assertIsNotNone(h["winston"]["tier"])
+
+    def test_ban_profile(self):
+        b = self.out["bans"]
+        self.assertEqual(b["maps"], 6)
+        self.assertEqual(b["total"], 12)
+        self.assertAlmostEqual(b["rows"]["ana"]["rate"], 5 / 6)
+        self.assertEqual(b["rows"]["ana"]["afterWin"], 1.0)        # strong banned it and won all five
+        self.assertEqual(b["rows"]["sym"]["afterWin"], 0.0)        # strong banned it in the lost final
+        self.assertEqual(b["supportTop"], "ana")
+        self.assertEqual(b["pairs"][0], {"heroes": ["ana", "winston"], "n": 5, "rate": 5 / 6})
+
+    def test_upset_is_the_top_highlight(self):
+        top = self.out["highlights"][0]
+        self.assertEqual((top["mapId"], top["team"]), ("x5", "weak"))
+        self.assertLess(top["e"], 0.3)
+        self.assertEqual(top["heroes"], ["mauga", "pharah", "echo", "mercy", "juno"])
+
+    def test_comp_record(self):
+        self.assertEqual(self.out["comp"], {"apps": 6, "wins": 5, "losses": 1, "last": "2026-05-24"})
+
+    def test_recent_window(self):
+        self.assertEqual(self.out["recent"], {"days": 10, "maps": 1, "prev": 1})
+        self.assertEqual(self.out["recentIntl"], {"days": 10, "asOf": "2026-05-24", "maps": 1})
 
     def test_real_dataset(self):
         roles = {}
