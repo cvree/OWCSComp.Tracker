@@ -61,7 +61,7 @@
 
     const body = rows.map((r) => {
       const w = Math.max(0, Math.min(1, r.value / max));
-      const fill = opts.byRole ? C.roleFill(r.role) : "var(--gold)";
+      const fill = opts.byRole ? C.roleFill(r.role) : "var(--bar)";
       const label =
         '<span class="ch__label">' +
         (r.mark || "") +

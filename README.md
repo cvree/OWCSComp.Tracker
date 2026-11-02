@@ -277,6 +277,12 @@ python3 pipeline/label_forge.py --batch <batch> --promote     # after naming
   broadcast the scan found, 2024–2026, as a day grid: indigo = found,
   gold = published.
 
+How it looks, and the rules behind it — gold spent only on what is
+published, a 44px thumb floor, contrast measured rather than assumed — are
+in [`docs/DESIGN.md`](docs/DESIGN.md). They are borrowed from the
+designer's two other products, Manifester and Bellwether, and
+`pipeline/test_site.py` holds the parts that can be measured.
+
 ## Two sources, never blended: VOD timelines + the community spreadsheet
 
 The tracker's own data is **VOD verified**: stints read off the HUD, timed

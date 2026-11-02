@@ -81,7 +81,7 @@
         Math.round(len / 60) + ' minutes of play">' + esc(P.fmtClock(m.start)) + " · " + Math.round(len / 60) + "m</span>" +
       (check.length ? '<span class="mi-check" title="Fewer than nine in ten frames agreed on ' +
         esc(check.join(" and ")) + ' — worth a look">check</span>' : "<span></span>") +
-      (url ? '<a class="btn btn--sm btn--primary mi-map__watch" href="' + esc(vodAt(url, m.start)) +
+      (url ? '<a class="btn btn--sm btn--ghost mi-map__watch" href="' + esc(vodAt(url, m.start)) +
         '" target="_blank" rel="noopener" aria-label="Watch ' + esc(info ? info.name : "this map") +
         " from " + esc(P.fmtClock(m.start)) + '">▶ Watch</a>' : "") +
       "</li>";
@@ -159,7 +159,7 @@
           '<span class="mi-map__when mono small dim">' + esc(P.fmtClock(r.m.start)) + " · " +
             Math.round(Math.max(0, r.m.end - r.m.start) / 60) + "m</span>" +
           '<span></span>' +
-          '<a class="btn btn--sm btn--primary mi-map__watch" href="' + esc(vodAt(r.url, r.m.start)) +
+          '<a class="btn btn--sm btn--ghost mi-map__watch" href="' + esc(vodAt(r.url, r.m.start)) +
             '" target="_blank" rel="noopener">▶ Watch</a></li>';
       }).join("") + "</ol></section>").join("") + "</div>";
   }

@@ -517,7 +517,7 @@
       "</td>" +
       '<td class="dim small">' + G.airedCell(g) + "</td>" +
       '<td class="u-nowrap">' + (indexed
-        ? '<a class="btn btn--sm btn--primary" href="' + P.esc(g.href) + '#maps" title="' +
+        ? '<a class="btn btn--sm btn--ghost" href="' + P.esc(g.href) + '#maps" title="' +
           P.esc(P.mapIndex.summary(b.videoId)) + '">▶ ' + P.mapIndex.entry(b.videoId).maps.length + " maps</a>"
         : '<a class="btn btn--sm" href="' + P.esc(g.href) + '">Open</a>') + "</td>" +
       "</tr>";

@@ -345,7 +345,7 @@
     }
     const n = Number(state.scoutN || 10);
     host.innerHTML = '<div class="row u-mt-5"><span class="dim small">Window:</span>' +
-      [5, 10, 20].map((k) => '<button type="button" class="btn btn--sm ' + (k === n ? "btn--primary" : "btn--ghost") +
+      [5, 10, 20].map((k) => '<button type="button" class="btn btn--sm btn--ghost' +
         '" data-scout-n="' + k + '" aria-pressed="' + (k === n) + '">Last ' + k + " maps</button>").join("") + "</div>" +
       '<div class="u-mt-4">' + P.scoutingHtml(state.team, n, M.filterEntries(all, Object.assign({}, filters(),
         { team: "", opponent: state.opponent }))) + "</div>" +

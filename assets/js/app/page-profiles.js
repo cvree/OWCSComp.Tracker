@@ -131,8 +131,8 @@
     const parts = [];
     if (P.scoutingHtml && P.metaEntries) {
       const n = Number(P.qs("scout") || 10) === 5 ? 5 : 10;
-      const link = (k) => '<a class="btn btn--sm ' + (k === n ? "btn--primary" : "btn--ghost") +
-        '" href="team.html?id=' + encodeURIComponent(id) + "&scout=" + k + '#scout">Last ' + k + " maps</a>";
+      const link = (k) => '<a class="btn btn--sm btn--ghost" href="team.html?id=' + encodeURIComponent(id) +
+        "&scout=" + k + '#scout"' + (k === n ? ' aria-current="true"' : "") + ">Last " + k + " maps</a>";
       parts.push('<section class="band" id="scout"><div class="sec-head"><h2>Scouting report</h2>' +
         '<span class="row">' + link(5) + link(10) + "</span></div>" + P.scoutingHtml(id, n) + "</section>");
     }
@@ -195,7 +195,7 @@
        window and each source's share of it always stated. */
     if (P.scoutingHtml && P.metaEntries) {
       const n = Number(P.qs("scout") || 10) === 5 ? 5 : 10;
-      const link = (k) => '<a class="btn btn--sm ' + (k === n ? "btn--primary" : "btn--ghost") +
+      const link = (k) => '<a class="btn btn--sm btn--ghost' +
         '" href="team.html?id=' + encodeURIComponent(t.id) + "&scout=" + k + '#scout"' +
         (k === n ? ' aria-current="true"' : "") + ">Last " + k + " maps</a>";
       parts.push('<section class="band" id="scout"><div class="sec-head"><h2>Scouting report</h2>' +

@@ -61,7 +61,7 @@
       esc(l[1]) + "</p></div>").join("");
 
     document.getElementById("glossary").innerHTML = GLOSSARY.map((g) =>
-      "<dt style=\"font:600 13px/1.5 var(--f-body);color:var(--gold-hi)\">" + esc(g[0]) + "</dt>" +
+      "<dt style=\"font:600 13px/1.5 var(--f-body);color:var(--tx)\">" + esc(g[0]) + "</dt>" +
       '<dd style="margin:0;color:var(--tx-2);font-size:14px">' + esc(g[1]) + "</dd>").join("");
 
     /* Credit, from the import itself: when it ran, its hash, and any

@@ -35,7 +35,7 @@
     if (!P.extHeadline || !P.extSummary || !P.extSummary.snapshot) return "";
     return '<div class="u-mt-5"><p class="label">' + P.srcBadge("sheet") + " The community spreadsheet, counted separately</p>" +
       '<div class="u-mt-3">' + P.extHeadline() + "</div>" +
-      '<div class="u-mt-4">' + P.extCoverageCard() + "</div></div>";
+      '<div class="u-mt-4">' + P.extCoverageCard({ labelled: true }) + "</div></div>";
   }
 
   function renderSheetHeroes() {

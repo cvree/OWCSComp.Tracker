@@ -34,7 +34,7 @@
   /* ------------------------------------------------------------ list */
   function renderList() {
     set("crumbs", P.breadcrumbs([{ label: "Maps", href: "index.html" }, { label: "Series" }]));
-    set("head", '<div class="page-head page-head--tight"><p class="eyebrow eyebrow--gold">From the community spreadsheet</p>' +
+    set("head", '<div class="page-head page-head--tight"><p class="eyebrow">From the community spreadsheet</p>' +
       "<h1>Series</h1><p class=\"lede\">Every series the community-maintained OWCS spreadsheet documents: teams, " +
       "format, series score and each map's result. Open one for its bans and the heroes listed for every player. " +
       "This is the spreadsheet's record, labelled as such — the maps read off a broadcast are on " +
@@ -83,7 +83,7 @@
       (win ? '<span class="chip" data-state="evidence"><span class="dot"></span>won the series</span>' : "") + "</a>";
     const meta = [row.event, row.stageRaw, row.label, row.format].filter(Boolean)
       .filter((v, i, a) => a.indexOf(v) === i).map(esc).join(" · ");
-    set("head", '<div class="page-head page-head--tight"><p class="eyebrow eyebrow--gold">' + P.srcBadge("sheet") +
+    set("head", '<div class="page-head page-head--tight"><p class="eyebrow">' + P.srcBadge("sheet") +
       " Series from the community spreadsheet</p>" +
       '<div class="map-hd__teams u-mt-4">' + side(row.teamA, winA) +
       '<span class="map-hd__vs">' + P.scorePlate(row.scoreA, row.scoreB, winA ? "a" : winB ? "b" : null) + "</span>" +
