@@ -1,4 +1,30 @@
-# Hero tiers (`tiers.html`)
+# Hero tiers (`tiers.html`) and the home snapshot (`index.html`)
+
+## Home snapshot (`index.html`, `assets/js/app/page-home.js`)
+
+Built for a high-rank / FACEIT player who wants the highest-value picks now.
+Desktop first. Top to bottom:
+
+1. **S tier right now**: per role, big hero cards with pick %, adjusted win %, ban %
+   and a ▲/▼ pick trend against the window before. A-tier heroes are listed under
+   "Also strong".
+2. **Most banned**: ban rate bars (hover shows how the banning team did and who bans
+   it most). Also the usual tank / damage / support ban and the most common ban pairs. Each
+   team bans one hero per map and the two teams can't ban the same role. The pro data
+   agrees: no hero banned by both teams, different roles on 99% of maps.
+3. **Every map**: the most-run 5-hero comp (hover: record, swaps, teams, last seen),
+   "Winning most" when a different comp has the better adjusted win, S-tier
+   heroes, and the usual ban per role. If no line-up was run twice in the window,
+   the card falls back to the last 60 days and says so.
+4. **Comps that made noise**: the biggest wins (event × bracket × (1 − chance to
+   win)), with an **UPSET** badge when the winner had under 40% to win.
+5. The broadcast VOD feed (page-maps.js) is unchanged, at the bottom.
+
+Window: **Recent** (the shortest of 14 / 30 / 60 / 120 days holding ≥ 40 maps,
+counted back from the region's own latest map), 30 days, This stage, Season.
+Region: All, NA, EMEA, Korea, China, Japan, Pacific, LANs. Both are in the URL
+(`?w=…&region=…`). Sources and methods sit behind one small "ⓘ Pro data" badge.
+
 
 S–D hero and comp tier lists per map, built from the community
 spreadsheet, for any **viewing date** and **date range**, with the team
@@ -12,7 +38,8 @@ a separate nav slot.
 | Tab | What |
 |---|---|
 | Heroes | Per map (or all maps): Tier S → D tables, each hero with pick share, raw win, **adjusted win**, **value**, sample, and an auto-written line (biggest win, worst loss, most-run comp, teams, ban rate). Heroes under the sample floor are under "Low sample". |
-| Comps | First-listed five-hero comps per map, tiered across the map's comps. |
+| Comps | First-listed five-hero comps per map, tiered across the map's comps; hover a comp for its record, swaps and teams. |
+| Bans | Per role: every banned hero's ban rate and how the banning team did; the usual tank/damage/support ban on every map; the most common ban pairs. |
 | Power ranking | Every team's power as of the viewing date: Elo + standings, movement since the range start. |
 | How it's scored | The formulas and every weight, read live from the data file. |
 
@@ -77,5 +104,7 @@ python3 pipeline/sheet_sync.py rebuild
 | `config/tier_weights.json` | every weight and threshold above |
 | `pipeline/external_sheet/tiers.py` | builds `assets/data/sheet_tiers.v1.js` (part of every sheet export; `sheet_sync.py check` gates drift) |
 | `assets/js/app/tierstats.js` | the maths (pure; browser + Node) |
-| `assets/js/app/page-tiers.js`, `tiers.html` | the page |
+| `assets/js/app/page-tiers.js`, `tiers.html` | the tier page |
+| `assets/js/app/page-home.js`, `index.html` | the home snapshot |
+| `assets/js/app/tierui.js` | shared drawing: names, hover cards, comps, source badge |
 | `pipeline/test_tier_stats.py` | dates, list order, disputed winners, Elo, upsets, as-of, shrinkage, real data |

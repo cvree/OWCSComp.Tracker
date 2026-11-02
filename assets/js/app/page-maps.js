@@ -26,9 +26,11 @@
     mode: P.qs("mode") || "", comps: P.qs("comps") === "1" };
 
   document.addEventListener("DOMContentLoaded", () => {
-    renderCounts();
-    renderOverall();
-    renderSheet();
+    /* The snapshot (page-home.js) now heads the page; these three render
+       only where a page still carries their hosts. */
+    if (document.getElementById("counts")) renderCounts();
+    if (document.getElementById("overall")) renderOverall();
+    if (document.getElementById("sheet")) renderSheet();
     renderFilters();
     renderFeed();
   });

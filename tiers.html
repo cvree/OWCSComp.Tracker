@@ -25,7 +25,7 @@
       meta as it stood that day.</p>
   </div>
 
-  <div id="provenance"></div>
+  <div id="provenance" class="u-mt-4"></div>
 
   <form id="filters" class="mx-filters tr-filters card u-mt-5" aria-label="Choose the date, range and region" onsubmit="return false"></form>
   <div id="summary" class="u-mt-4" aria-live="polite"></div>
@@ -35,12 +35,14 @@
   <div role="tablist" aria-label="Tier views" class="u-mt-6">
     <button role="tab" data-tab="heroes" aria-controls="p-heroes" id="t-heroes">Heroes</button>
     <button role="tab" data-tab="comps" aria-controls="p-comps" id="t-comps">Comps</button>
+    <button role="tab" data-tab="bans" aria-controls="p-bans" id="t-bans">Bans</button>
     <button role="tab" data-tab="power" aria-controls="p-power" id="t-power">Power ranking</button>
     <button role="tab" data-tab="how" aria-controls="p-how" id="t-how">How it's scored</button>
   </div>
 
   <div id="p-heroes" role="tabpanel" aria-labelledby="t-heroes" tabindex="0"></div>
   <div id="p-comps" role="tabpanel" aria-labelledby="t-comps" tabindex="0" hidden></div>
+  <div id="p-bans" role="tabpanel" aria-labelledby="t-bans" tabindex="0" hidden></div>
   <div id="p-power" role="tabpanel" aria-labelledby="t-power" tabindex="0" hidden></div>
   <div id="p-how" role="tabpanel" aria-labelledby="t-how" tabindex="0" hidden></div>
 
@@ -62,6 +64,7 @@
 <script src="assets/js/app/mapindex.js"></script>
 <script src="assets/js/app/sources.js"></script>
 <script src="assets/js/app/tierstats.js"></script>
+<script src="assets/js/app/tierui.js"></script>
 <script src="assets/js/app/hovercard.js" defer></script>
 <script src="assets/js/app/shell.js"></script>
 <script src="assets/js/app/page-tiers.js"></script>
