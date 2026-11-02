@@ -26,6 +26,7 @@
     renderMaps();
     renderTeams();
     renderSwaps();
+    if (P.compBookPage) P.compBookPage.mount();
     P.initTabs(document, { key: "tab" });
   });
 
@@ -156,14 +157,19 @@
     const winRates = {};
     ((D && D.compWinRate) || []).forEach((c) => { winRates[c.id] = c; });
     const host = document.getElementById("p-comps");
+    /* The spreadsheet's comp book leads (page-compbook.js fills it); the
+       broadcast-read comps follow as their own labelled section. Two
+       sources, side by side, never added together. */
+    const vodHead = '<div class="sec-head u-mt-6"><h2>Read off the broadcast</h2>' +
+      '<span class="label">' + P.srcBadge("vod") + "</span></div>";
     if (!freq.length) {
-      host.innerHTML = P.empty("◇", "No full comp has been read yet",
+      host.innerHTML = '<div id="comp-book"></div>' + vodHead + P.empty("◇", "No full comp has been read yet",
         "A comp is five heroes on one team on one map, read off the broadcast.");
       return;
     }
-    host.innerHTML =
-      '<p class="dim small u-mt-5">Every distinct five-hero comp that has been read, ' +
-      'most-played first. <a href="?tab=bymap">See them map by map →</a></p>' +
+    host.innerHTML = '<div id="comp-book"></div>' + vodHead +
+      '<p class="dim small">Every distinct five-hero comp the tracker has read off a VOD, ' +
+      'most-played first, each linked to the frame it came from. <a href="?tab=bymap">See them map by map →</a></p>' +
       '<div class="stack u-mt-4">' + freq.slice()
         .sort((a, b) => b.appearances - a.appearances).map((c) => {
           const w = winRates[c.id];
@@ -189,8 +195,10 @@
     const host = document.getElementById("p-bymap");
     const F = P.mapFeed;
     const read = F ? F.maps().filter(F.hasComp) : [];
+    const sheetHead = '<div id="cb-bymap-wrap"></div><div class="sec-head u-mt-6"><h2>Read off the broadcast</h2>' +
+      '<span class="label">' + P.srcBadge("vod") + "</span></div>";
     if (!read.length) {
-      host.innerHTML = P.empty("◇", "No map has comps yet",
+      host.innerHTML = sheetHead + P.empty("◇", "No map has comps yet",
         'Every indexed map is on the <a href="index.html">home page</a>; comps appear ' +
         "beside each one as it is read.");
       return;
@@ -203,8 +211,8 @@
     const order = Array.from(byMap.keys())
       .sort((a, b) => byMap.get(b).length - byMap.get(a).length ||
         P.mapInfo(a).name.localeCompare(P.mapInfo(b).name));
-    host.innerHTML =
-      '<p class="dim small u-mt-5">Each map in the pool that has been read, with every ' +
+    host.innerHTML = sheetHead +
+      '<p class="dim small">Each map in the pool that has been read, with every ' +
       "comp run on it. The home page has the same maps in broadcast order.</p>" +
       '<div class="stack u-mt-4">' + order.map((id) => {
         const info = P.mapInfo(id);
