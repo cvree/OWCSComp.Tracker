@@ -67,6 +67,7 @@
   --accent: #c7e770;        /* 13.3:1 on --s1 */
   --accent-hi: #d6f290;
   --accent-ink: #0e1206;
+  --accent-line: rgba(199, 231, 112, .42);   /* the faint lime edge a card takes on hover */
   --amber: #ef8448;       /* needs a human. Was #e8a33d — the same hue
                              as the old gold accent to a fifth of a
                              degree. Now oklch hue 48: 25° from red and
@@ -545,12 +546,12 @@ main { display: block; padding-bottom: var(--s-8); }
 .eyebrow--grey   { --eyebrow-accent: var(--grey); }
 .eyebrow--indigo { --eyebrow-accent: var(--indigo); }
 
-/* The one phrase that carries a headline. Accent COLOUR, never a
-   highlighter block behind the text. */
-.hl { color: var(--hl-accent, var(--tx-2)); }
-/* .hl--gold is kept so old markup does not break, but it does not
-   spend the accent on a headline: a headline is not a published fact. */
-.hl--gold { --hl-accent: var(--tx-2); }
+/* The one phrase that carries a headline, in the lime accent — the
+   page's single brand moment. Accent COLOUR, never a highlighter block
+   behind the text. */
+.hl { color: var(--hl-accent, var(--accent-hi)); }
+/* .hl--gold is the pre-lime name; it draws the same lime phrase. */
+.hl--gold { --hl-accent: var(--accent-hi); }
 .hl--cyan { --hl-accent: var(--cyan); }
 .hl--emerald { --hl-accent: var(--emerald); }
 
@@ -689,7 +690,7 @@ input, select, textarea { min-width: 0; }
 }
 .card--hoverable:hover, .card--hoverable:focus-within,
 .press:hover, .press:focus-visible {
-  border-color: var(--line-3); background: var(--s2);
+  border-color: var(--accent-line); background: var(--s2);
 }
 
 a.card { text-decoration: none; color: inherit; display: block; }
@@ -1105,7 +1106,7 @@ a.team:hover .team__name { text-decoration: underline; }
 .hero--xs .hero__name { display: none; }
 .hero--lg { width: 84px; }
 .hero--lg .hero__face { width: 84px; height: 84px; border-radius: var(--r-3); }
-a.hero:hover .hero__face { border-color: var(--line-3); }
+a.hero:hover .hero__face { border-color: var(--accent-line); }
 a.hero:hover .hero__name { color: var(--tx); }
 html.motion-on a.hero:hover .hero__face { transform: translateY(-2px); }
 
@@ -1168,7 +1169,7 @@ html.motion-on a.hero:hover .hero__face { transform: translateY(-2px); }
               transform var(--t-2) var(--ease);
 }
 .game-card:hover, .game-card:focus-within {
-  border-color: var(--line-3); background: var(--s2); transform: translateY(-1px);
+  border-color: var(--accent-line); background: var(--s2); transform: translateY(-1px);
 }
 .game-card__top { display: flex; align-items: center; gap: var(--s-3); flex-wrap: wrap; }
 .game-card__title { font: 600 17px/1.2 var(--f-display); letter-spacing: -.015em; }
@@ -2351,7 +2352,7 @@ a.mi-team:hover .mi-team__name { text-decoration: underline; }
 .teamwall__team { display: grid; justify-items: center; gap: var(--s-2); padding: var(--s-4) var(--s-3) var(--s-3);
   border: 1px solid var(--line); border-radius: var(--r-4); background: var(--s1); text-decoration: none;
   color: var(--tx-2); transition: border-color .2s, transform .2s, background .2s; }
-.teamwall__team:hover, .teamwall__team:focus-visible { border-color: var(--line-3); background: var(--s2);
+.teamwall__team:hover, .teamwall__team:focus-visible { border-color: var(--accent-line); background: var(--s2);
   transform: translateY(-2px); color: var(--tx); }
 .teamwall__logo { display: grid; place-items: center; width: 48px; height: 48px; }
 .teamwall__logo img, .teamwall__logo svg { width: 48px; height: 48px; object-fit: contain; }
@@ -2424,6 +2425,8 @@ a.mi-team:hover .mi-team__name { text-decoration: underline; }
 .mf-map { display: grid; gap: var(--s-2); padding: var(--s-3) var(--s-4) var(--s-4);
   border: 1px solid var(--line); border-radius: var(--r-4); background: var(--s1); min-width: 0; }
 .mf-map--comp { border-color: rgba(199, 231, 112, .32); }
+.mf-map { transition: border-color var(--t-1) var(--ease); }
+.mf-map:hover, .mf-map:focus-within { border-color: var(--accent-line); }
 .mf-map__head { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2); }
 .mf-map__game { color: var(--tx-2); font-weight: 700; font-size: 13px; }
 .mf-map__name { font: 700 1.15rem/1.2 var(--f-display); letter-spacing: .01em; color: var(--tx); }
@@ -2729,7 +2732,7 @@ table.tbl.tbl--fit { min-width: 0; }
 .hm-mapgrid { display: grid; gap: var(--s-4); grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); }
 .hm-map { display: grid; gap: var(--s-3); padding: var(--s-4); border-radius: var(--r-4); background: var(--s1);
   border: 1px solid var(--line); transition: border-color var(--t-1) var(--ease); }
-.hm-map:hover { border-color: var(--line-2); }
+.hm-map:hover { border-color: var(--accent-line); }
 .hm-map__hd { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s-3); }
 .hm-map__hd h3 { margin: 0; font: 700 21px/1.1 var(--f-display); text-transform: uppercase; letter-spacing: .02em; }
 .hm-map__hd h3 a { color: var(--tx); text-decoration: none; }

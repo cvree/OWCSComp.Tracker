@@ -386,6 +386,12 @@ ACCENT_ALLOWED = (
     ".tl__mark--swap", ".tl__key-swap", ".ms-mark",       # published swaps
     ".arc-gold", '.arc-cell[data-published="true"]',      # published broadcasts
     ".mf-map--comp",                                      # a map with a published comp
+    ".hl", ".hl--gold",                                   # the headline's one brand phrase
+    # the faint lime edge a card takes on hover (--accent-line)
+    ".card--hoverable:hover", ".card--hoverable:focus-within", ".press:hover",
+    ".press:focus-visible", ".game-card:hover", ".game-card:focus-within",
+    "a.hero:hover .hero__face", ".teamwall__team:hover", ".teamwall__team:focus-visible",
+    ".hm-map:hover", ".mf-map:hover", ".mf-map:focus-within",
 )
 
 
@@ -452,19 +458,19 @@ def test_design_rules() -> None:
         sel, body = " ".join(m.group(1).split()), m.group(2)
         if re.match(r"^\d+%$", sel):
             continue  # a keyframe step belongs to its animation
-        if re.search(r"var\(--(accent|accent-hi|wash-accent)\)|199,\s*231,\s*112|214,\s*242,\s*144", body):
+        if re.search(r"var\(--(accent|accent-hi|accent-line|wash-accent)\)|199,\s*231,\s*112|214,\s*242,\s*144", body):
             if not any(part.strip().startswith(ACCENT_ALLOWED) for part in sel.split(",")):
                 spenders.append(sel)
-    check("the lime accent marks only published facts, the primary action and the brand"
+    check("the lime accent marks only published facts, the primary action, the brand, the headline phrase and card hover"
           + (f" (also: {', '.join(spenders[:4])})" if spenders else ""), not spenders)
     js_gold = [f for f in os.listdir(os.path.join(ROOT, "assets/js/app"))
                if f.endswith(".js") and re.search(r'class="btn btn--sm btn--primary[^"]*" href="\' \+ esc\(vodAt',
                                                    read("assets/js/app/" + f))]
     check("a per-row Watch link is never the screen's primary action", not js_gold)
-    deco = [f for f in os.listdir(ROOT) if f.endswith(".html") and re.search(r"eyebrow--gold|hl--gold", read(f))]
+    deco = [f for f in os.listdir(ROOT) if f.endswith(".html") and re.search(r"eyebrow--gold", read(f))]
     deco += [f for f in os.listdir(os.path.join(ROOT, "assets/js/app"))
-             if f.endswith(".js") and re.search(r"eyebrow--gold|hl--gold", read("assets/js/app/" + f))]
-    check("page headings do not spend the accent on decoration" + (f" ({', '.join(deco)})" if deco else ""), not deco)
+             if f.endswith(".js") and re.search(r"eyebrow--gold", read("assets/js/app/" + f))]
+    check("page eyebrows do not spend the accent on decoration" + (f" ({', '.join(deco)})" if deco else ""), not deco)
 
     # One name, one meaning. `.field` is the form field; the team wall
     # once reused the name and turned every labelled filter into a 132px

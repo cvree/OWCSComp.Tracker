@@ -32,7 +32,7 @@
     ["Colour must encode something",
      "State, role, provenance, evidence. Lime is published, amber needs a human, cyan is working, emerald is evidence, indigo is machine-detected, red is blocked. Colour that encodes nothing is grey."],
     ["The accent is spent, not sprinkled",
-     "The lime accent marks a published fact, the one primary action on a screen, and the brand mark. Never a link, a hover, a winner, a rank, a data bar or a selected tab — those have neutral tokens of their own. A colour that marks everything marks nothing."],
+     "The lime accent marks a published fact, the one primary action on a screen, the brand mark, the headline's one phrase and a faint edge on a hovered card. Never a link, a hover, a winner, a rank, a data bar or a selected tab — those have neutral tokens of their own. A colour that marks everything marks nothing."],
     ["Nothing is smaller than the thumb",
      "On a touch screen every target is at least 44px in both directions. Controls that can grow, grow; links whose ink must stay small take the tap on an invisible 44px box. Measured in a real browser at phone width, not assumed."],
     ["Say it once",
@@ -59,7 +59,7 @@
   set("#sg-colour",
     "<h3>Signal colours — meanings unchanged</h3>" +
     '<div class="grid grid--3 u-mt-3">' +
-      sw("--accent", "the classy lime — published, verified, the one primary action, and the brand. Nothing else.") +
+      sw("--accent", "the classy lime — published, verified, the one primary action, the brand, the headline phrase, a faint edge on hover.") +
       sw("--amber", "needs a human. Its own hue: it used to be the same colour as the old gold accent") +
       sw("--cyan", "working right now") +
       sw("--emerald", "evidence, proven") +

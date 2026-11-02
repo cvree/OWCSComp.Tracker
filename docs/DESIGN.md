@@ -27,7 +27,7 @@ wrong change.
 
 | Budget | Spent on |
 | --- | --- |
-| One accent colour | A classy lime: a published fact, the one primary action, the brand mark |
+| One accent colour | A classy lime: a published fact, the one primary action, the brand mark, the headline's phrase, a faint edge on hover |
 | One light source | The faint wash behind the header. Static. It never moves. |
 | One transition language | Content rises once as it arrives, and can never withhold itself |
 | A few micro-interactions | Button lift, the map story's playhead, a hero's ring when it swaps in |
@@ -71,6 +71,18 @@ The lime now marks three things:
   "Play the map". An action repeated on every row is not primary, by
   definition;
 - **the brand mark**: the CT tile and the favicon.
+
+And it lends the page two quieter touches, both chosen deliberately
+rather than leaked:
+
+- **the headline's one phrase** ("What's winning *right now*"), in
+  `--accent-hi`. That is the page's single brand moment, and it is a
+  phrase, never a highlighter block;
+- **a faint lime edge when you hover a card**: a map, a game, a team
+  tile or a hero portrait. It is `--accent-line`, 42% alpha, so a
+  hovered card is still told apart from the map with a published comp,
+  which carries its lime edge at rest. The S-tier hero cards keep their
+  own role-coloured glow, because that glow is the heroes' personality.
 
 Everything that used to borrow the accent now has a neutral token of
 its own:
