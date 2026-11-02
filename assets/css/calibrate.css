@@ -13,8 +13,8 @@
    ===================================================================== */
 
 :root {
-  --amber: var(--gold);
-  --amber-soft: var(--wash-gold);
+  --amber: var(--accent);
+  --amber-soft: var(--wash-accent);
   --bg-raise: var(--s1);
   --display: var(--f-display);
   --mono: var(--f-mono);
@@ -28,10 +28,10 @@
 /* generic controls the wizard markup uses */
 .btnrow { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-4); }
 .btn-primary {
-  background: var(--gold);
-  color: var(--gold-ink); border-color: transparent; font-weight: 700;
+  background: var(--accent);
+  color: var(--accent-ink); border-color: transparent; font-weight: 700;
 }
-.btn-primary:hover { background: var(--gold-hi); }
+.btn-primary:hover { background: var(--accent-hi); }
 .btn-ghost { background: transparent; color: var(--tx-2); }
 .btn-ghost:hover { background: var(--s2); color: var(--tx); }
 .field { display: grid; gap: var(--s-2); margin: var(--s-4) 0; }
@@ -70,7 +70,7 @@
 /* ------------------------------------------------- portal handoff card */
 .cal-handoff {
   display: flex; flex-direction: column; gap: 5px; margin-top: 18px;
-  border: 1px solid rgba(243, 167, 47, .34); background: var(--amber-soft);
+  border: 1px solid rgba(199, 231, 112, .34); background: var(--amber-soft);
   border-radius: 12px; padding: 13px 16px;
 }
 /* `display:flex` outranks the UA `[hidden]` rule, so without this the card
@@ -202,7 +202,7 @@ kbd {
 }
 .cal-progress > i {
   display: block; height: 100%; width: 0;
-  background: var(--gold);
+  background: var(--accent);
   transition: width .3s ease;
 }
 .cal-progress-label { color: var(--muted); font-size: .88rem; margin: 0 0 14px; }
@@ -217,7 +217,7 @@ kbd {
 
 .cal-box {
   position: absolute; box-sizing: border-box; cursor: grab;
-  border: 2px solid var(--amber); background: rgba(255,169,43,.08);
+  border: 2px solid var(--amber); background: rgba(199,231,112,.08);
 }
 .cal-box[data-side="b"] { border-color: #22d3ee; background: rgba(34,211,238,.08); }
 .cal-box:active { cursor: grabbing; }
@@ -240,7 +240,7 @@ kbd {
   display: block; width: 72px; height: 72px; image-rendering: pixelated;
   border: 2px solid var(--line); border-radius: 8px; background: var(--well);
 }
-.cal-zoom figure[data-side="a"] canvas { border-color: rgba(255,169,43,.55); }
+.cal-zoom figure[data-side="a"] canvas { border-color: rgba(199,231,112,.55); }
 .cal-zoom figure[data-side="b"] canvas { border-color: rgba(34,211,238,.55); }
 .cal-zoom figcaption {
   font: 600 .62rem var(--display); color: var(--muted); margin-top: 4px;
@@ -265,7 +265,7 @@ kbd {
 .cal-next li strong { color: var(--text); }
 .cal-honest {
   font-size: .86rem; color: var(--muted); background: var(--amber-soft);
-  border: 1px solid rgba(255,169,43,.3); border-radius: 10px; padding: 12px 14px;
+  border: 1px solid rgba(199,231,112,.3); border-radius: 10px; padding: 12px 14px;
 }
 .cal-honest strong { color: var(--amber); }
 

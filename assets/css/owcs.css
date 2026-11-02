@@ -11,13 +11,13 @@
    Rules this file holds itself to:
      * one border weight (1px), one radius scale, one shadow scale;
      * a component earns its class only if two screens use it;
-     * colour is information — gold = published, amber = needs a person,
+     * colour is information — lime = published, amber = needs a person,
        cyan = working, emerald = evidence, indigo = machine-detected,
        red = blocked. Anything decorative is a neutral grey;
-     * gold is spent, not sprinkled. It marks a published fact, the one
-       primary action on a screen, and the brand mark — never a link, a
-       hover, a winner, a rank, a data bar or a selected tab. A colour
-       that marks everything marks nothing (docs/DESIGN.md);
+     * the lime accent is spent, not sprinkled. It marks a published
+       fact, the one primary action on a screen, and the brand mark —
+       never a link, a hover, a winner, a rank, a data bar or a selected
+       tab. A colour that marks everything marks nothing (docs/DESIGN.md);
      * status is never colour alone: every state keeps a glyph or word;
      * motion is orientation and feedback, never ambient movement;
      * every interactive thing has a visible :focus-visible ring;
@@ -58,14 +58,19 @@
 
   /* Signal colours. Rare enough that when one appears it means
      something. There is no decorative colour in this system. */
-  --gold: #f3a72f;        /* the product accent — published / verified */
-  --gold-hi: #ffc061;
-  --gold-ink: #14100a;
+  /* The accent: a classy lime. Light and restrained rather than neon —
+     oklch(0.88 0.15 122) — so it reads as considered at button size and
+     still carries at 6px in a chip. It replaced the warm OWCS gold
+     (#f3a72f) and keeps gold's job exactly: published / verified, the one
+     primary action, and the brand mark. 38° of hue from emerald, so
+     "published" is never read as "evidence". */
+  --accent: #c7e770;        /* 13.3:1 on --s1 */
+  --accent-hi: #d6f290;
+  --accent-ink: #0e1206;
   --amber: #ef8448;       /* needs a human. Was #e8a33d — the same hue
-                             as gold to a tenth of a degree, so "needs a
-                             person" and "published" read as one state.
-                             Now oklch hue 48, halfway between red and
-                             gold, and lighter than red. */
+                             as the old gold accent to a fifth of a
+                             degree. Now oklch hue 48: 25° from red and
+                             lighter than it, 74° from the lime accent. */
   --cyan: #4cc6ea;        /* processing right now */
   --emerald: #35cf8d;     /* evidence, approved, proven */
   --indigo: #7f88c8;      /* machine-authored / detected, not yet human */
@@ -74,7 +79,7 @@
 
   /* Tinted washes — the only way a status colour is allowed to fill an
      area, and always under 15% so text keeps its contrast. */
-  --wash-gold: rgba(243, 167, 47, .10);
+  --wash-accent: rgba(199, 231, 112, .10);
   --amber-hi: #fdb48c;    /* amber as text on a wash — the same hue, lighter */
   --wash-amber: rgba(239, 132, 72, .10);
   --wash-cyan: rgba(76, 198, 234, .10);
@@ -83,21 +88,21 @@
   --wash-red: rgba(229, 72, 77, .10);
   --wash-grey: rgba(138, 147, 164, .10);
 
-  /* Neutral jobs that used to borrow gold. Each is light-on-dark and
+  /* Neutral jobs that used to borrow the accent. Each is light-on-dark and
      carries no state, so it can appear any number of times on a page
      without spending the signal. */
   --link: var(--tx);                          /* links read by underline */
   --link-line: rgba(244, 245, 247, .30);
   --win: var(--bone);                         /* a result, not a status */
   --bar: #b4bac5;                             /* a quantity, 9.5:1 on --s1 */
-  /* The outline: a Contenders lime. It draws every "this one" on the
-     site — the keyboard focus ring, the chosen option, the current row,
-     the playhead. Kept on the yellow side of green (oklch hue 132) so
-     it is never read as emerald (evidence, hue 160) or the Support
-     role, and so focus stops borrowing cyan, which means "working". */
-  --outline: #9bec44;                         /* 12.8:1 on --s1 */
+  /* The outline: bone. It draws every "this one" on the site — the
+     keyboard focus ring, the chosen option, the current row, the
+     playhead. Neutral on purpose: the lime accent means "published",
+     so "where you are" must not be lime, and focus no longer borrows
+     cyan, which means "working". */
+  --outline: var(--bone);
   --sel: var(--outline);                      /* chosen / current / focused row */
-  --wash-sel: rgba(155, 236, 68, .08);
+  --wash-sel: rgba(232, 234, 238, .08);
 
   /* Tier ramp — diverging around a neutral B, so the five letters own
      their colours instead of borrowing evidence / published / needs-a-
@@ -149,6 +154,20 @@
   --header-h: 60px;
 }
 
+
+/* More contrast, asked for by the operating system. Text steps up a
+   notch, hairlines become visible edges, and nothing else changes. */
+@media (prefers-contrast: more) {
+  :root {
+    --tx-2: #c9ced8;
+    --tx-3: #aab1bd;
+    --line: #3d4350;
+    --line-2: #535a69;
+    --line-3: #6b7383;
+    --link-line: rgba(244, 245, 247, .7);
+  }
+}
+
 /* ------------------------------------------------------------------ *
    2. Base
  * ------------------------------------------------------------------ */
@@ -183,7 +202,7 @@ body::before {
   pointer-events: none;
   z-index: 0;
   background:
-    radial-gradient(1200px 640px at 50% -22%, rgba(243, 167, 47, .045), transparent 62%),
+    radial-gradient(1200px 640px at 50% -22%, rgba(199, 231, 112, .045), transparent 62%),
     linear-gradient(180deg, var(--bg-deep), var(--bg) 24%);
 }
 body > * { position: relative; z-index: 1; }
@@ -236,7 +255,7 @@ img { height: auto; }
   border-radius: var(--r-1);
 }
 
-::selection { background: rgba(243, 167, 47, .26); color: #fff; }
+::selection { background: rgba(199, 231, 112, .26); color: #fff; }
 
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track { background: var(--bg-deep); }
@@ -249,7 +268,7 @@ img { height: auto; }
 }
 .skip-link {
   position: absolute; left: var(--s-4); top: -100px; z-index: 200;
-  background: var(--gold); color: var(--gold-ink); font-weight: 700;
+  background: var(--accent); color: var(--accent-ink); font-weight: 700;
   padding: var(--s-3) var(--s-4); border-radius: var(--r-2);
 }
 .skip-link:focus { top: var(--s-3); }
@@ -286,8 +305,8 @@ img { height: auto; }
 .brand__mark {
   width: 26px; height: 26px; display: grid; place-items: center;
   border-radius: var(--r-2);
-  background: linear-gradient(155deg, var(--gold-hi), #b9761a);
-  color: var(--gold-ink); font: 700 11px/1 var(--f-display); letter-spacing: .04em;
+  background: linear-gradient(155deg, var(--accent-hi), #7c9529);
+  color: var(--accent-ink); font: 700 11px/1 var(--f-display); letter-spacing: .04em;
 }
 .brand__name {
   font: 600 15.5px/1 var(--f-display); letter-spacing: -.005em;
@@ -518,7 +537,7 @@ main { display: block; padding-bottom: var(--s-8); }
   content: ""; width: 16px; height: 2px; border-radius: 2px;
   background: var(--eyebrow-accent, var(--line-3)); flex: 0 0 auto;
 }
-.eyebrow--gold   { --eyebrow-accent: var(--gold); }
+.eyebrow--accent, .eyebrow--gold { --eyebrow-accent: var(--accent); }
 .eyebrow--cyan   { --eyebrow-accent: var(--cyan); }
 .eyebrow--amber  { --eyebrow-accent: var(--amber); }
 .eyebrow--emerald{ --eyebrow-accent: var(--emerald); }
@@ -529,8 +548,8 @@ main { display: block; padding-bottom: var(--s-8); }
 /* The one phrase that carries a headline. Accent COLOUR, never a
    highlighter block behind the text. */
 .hl { color: var(--hl-accent, var(--tx-2)); }
-/* .hl--gold is kept so old markup does not break, but it no longer
-   spends the signal on a headline: a headline is not a published fact. */
+/* .hl--gold is kept so old markup does not break, but it does not
+   spend the accent on a headline: a headline is not a published fact. */
 .hl--gold { --hl-accent: var(--tx-2); }
 .hl--cyan { --hl-accent: var(--cyan); }
 .hl--emerald { --hl-accent: var(--emerald); }
@@ -608,18 +627,18 @@ input, select, textarea { min-width: 0; }
 .btn[disabled], .btn[aria-disabled="true"] { opacity: .45; pointer-events: none; }
 
 .btn--primary {
-  --btn-bg: var(--gold);
-  --btn-fg: var(--gold-ink);
+  --btn-bg: var(--accent);
+  --btn-fg: var(--accent-ink);
   --btn-line: transparent;
   font-weight: 700;
 }
-.btn--primary:hover { --btn-bg: var(--gold-hi); --btn-line: transparent; }
+.btn--primary:hover { --btn-bg: var(--accent-hi); --btn-line: transparent; }
 
 .btn--ghost { --btn-bg: transparent; --btn-line: var(--line-2); --btn-fg: var(--tx-2); }
 .btn--ghost:hover { --btn-fg: var(--tx); --btn-bg: var(--s2); }
 /* The chosen option in a row of buttons is a SELECTION, not a primary
    action, so it is drawn the way every other selection is — bone edge on
-   a faint wash — and never in gold. */
+   a faint wash — and never in the accent. */
 .btn[aria-pressed="true"], .btn[aria-current="true"], .btn[aria-current="page"] {
   --btn-bg: var(--wash-sel); --btn-line: var(--sel); --btn-fg: var(--tx);
 }
@@ -692,7 +711,7 @@ a.card { text-decoration: none; color: inherit; display: block; }
 
 /* Accent spine — a 3px edge carrying state without adding a badge. */
 .spine { border-left: 3px solid var(--spine-accent, var(--line-3)); }
-.spine--gold { --spine-accent: var(--gold); }
+.spine--accent, .spine--gold { --spine-accent: var(--accent); }
 .spine--amber { --spine-accent: var(--amber); }
 .spine--cyan { --spine-accent: var(--cyan); }
 .spine--emerald { --spine-accent: var(--emerald); }
@@ -711,7 +730,9 @@ a.card { text-decoration: none; color: inherit; display: block; }
   padding: var(--s-5);
   display: grid; gap: var(--s-3);
 }
-.slab--gold { --slab-accent: var(--gold); }
+/* `*--gold` modifiers and data-accent="gold" are the pre-lime names,
+   kept so existing markup keeps working; they draw the lime accent. */
+.slab--accent, .slab--gold { --slab-accent: var(--accent); }
 .slab--cyan { --slab-accent: var(--cyan); }
 .slab--amber { --slab-accent: var(--amber); }
 .slab--emerald { --slab-accent: var(--emerald); }
@@ -744,7 +765,7 @@ a.card { text-decoration: none; color: inherit; display: block; }
 /* state chips — one vocabulary, used identically everywhere. The dot is
    not decoration: it is the second signal so status never depends on
    colour alone (the label is the first). */
-.chip[data-state="published"] { color: var(--gold-hi); background: var(--wash-gold); }
+.chip[data-state="published"] { color: var(--accent-hi); background: var(--wash-accent); }
 .chip[data-state="review"]    { color: var(--amber-hi); background: var(--wash-amber); }
 .chip[data-state="working"]   { color: #96dcf2; background: var(--wash-cyan); }
 .chip[data-state="queued"]    { color: #b9c0cc; background: var(--wash-grey); }
@@ -774,7 +795,7 @@ a.card { text-decoration: none; color: inherit; display: block; }
   white-space: nowrap; color: var(--tx-3);
 }
 .trust::before { font-family: var(--f-body); font-weight: 700; }
-.trust[data-trust="published"] { color: var(--gold-hi); background: var(--wash-gold); }
+.trust[data-trust="published"] { color: var(--accent-hi); background: var(--wash-accent); }
 .trust[data-trust="published"]::before { content: "★"; }
 .trust[data-trust="production"] { color: #7ee2b4; background: var(--wash-emerald); }
 .trust[data-trust="production"]::before { content: "✓"; }
@@ -784,7 +805,7 @@ a.card { text-decoration: none; color: inherit; display: block; }
 .trust[data-trust="auto-high"]::before { content: "≈"; }
 .trust[data-trust="detected"] { color: #b3bbe8; background: var(--wash-indigo); }
 .trust[data-trust="detected"]::before { content: "⌾"; }
-.trust[data-trust="manual"] { color: var(--gold-hi); background: var(--wash-gold); }
+.trust[data-trust="manual"] { color: var(--accent-hi); background: var(--wash-accent); }
 .trust[data-trust="manual"]::before { content: "✎"; }
 .trust[data-trust="needs-review"] { color: var(--amber-hi); background: var(--wash-amber); }
 .trust[data-trust="needs-review"]::before { content: "!"; }
@@ -876,7 +897,7 @@ a.stat:hover { border-color: var(--line-3); background: var(--s2); transform: tr
 }
 a.stat:hover .stat__cta { color: var(--tx); }
 /* Semantic colour lands on the number, never on the whole card. */
-.stat[data-accent="gold"]    .stat__v { color: var(--gold-hi); }
+.stat[data-accent="gold"]    .stat__v { color: var(--accent-hi); }
 .stat[data-accent="amber"]   .stat__v { color: var(--amber-hi); }
 .stat[data-accent="cyan"]    .stat__v { color: #96dcf2; }
 .stat[data-accent="red"]     .stat__v { color: #ff9ea1; }
@@ -890,7 +911,7 @@ a.stat:hover .stat__cta { color: var(--tx); }
 .stat[data-alert="1"][data-accent="amber"] { border-left-color: var(--amber); }
 .stat[data-alert="1"][data-accent="red"]   { border-left-color: var(--red); }
 .stat[data-alert="1"][data-accent="cyan"]  { border-left-color: var(--cyan); }
-.stat[data-alert="1"][data-accent="gold"]  { border-left-color: var(--gold); }
+.stat[data-alert="1"][data-accent="gold"]  { border-left-color: var(--accent); }
 .stat[data-alert="1"][data-accent="indigo"] { border-left-color: var(--indigo); }
 
 /* ------------------------------------------------------------------ *
@@ -952,7 +973,7 @@ select {
   width: 16px; height: 16px; border-radius: 50%; background: var(--tx-3);
   transition: transform var(--t-2) var(--ease), background var(--t-2) var(--ease);
 }
-.switch input:checked + .switch__track { background: rgba(155, 236, 68, .22); border-color: rgba(155, 236, 68, .55); }
+.switch input:checked + .switch__track { background: rgba(232, 234, 238, .22); border-color: var(--line-3); }
 .switch input:checked + .switch__track::after { transform: translateX(16px); background: var(--outline); }
 .switch input:focus-visible + .switch__track { outline: 2px solid var(--outline); outline-offset: 2px; }
 
@@ -1352,7 +1373,7 @@ html.motion-on a.hero:hover .hero__face { transform: translateY(-2px); }
   content: ""; position: absolute; top: 0; bottom: 0; left: -1px; width: 2px;
   background: var(--emerald);
 }
-.tl__mark--swap::before { background: var(--gold); }
+.tl__mark--swap::before { background: var(--accent); }
 .tl__flag {
   position: absolute; top: 4px; left: 4px; white-space: nowrap;
   font: 500 10px/1 var(--f-mono); letter-spacing: .02em;
@@ -1360,7 +1381,7 @@ html.motion-on a.hero:hover .hero__face { transform: translateY(-2px); }
   padding: 2px 4px; border-radius: 3px;
   max-width: 132px; overflow: hidden; text-overflow: ellipsis;
 }
-.tl__mark--swap .tl__flag { color: var(--gold-hi); top: auto; bottom: 4px; }
+.tl__mark--swap .tl__flag { color: var(--accent-hi); top: auto; bottom: 4px; }
 .tl__mark--end .tl__flag { left: auto; right: 4px; }
 .tl__scale {
   display: flex; justify-content: space-between;
@@ -1370,7 +1391,7 @@ html.motion-on a.hero:hover .hero__face { transform: translateY(-2px); }
 .tl__key span { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
 .tl__key-round { background: var(--wash-indigo); border: 1px solid rgba(127, 136, 200, .45); }
 .tl__key-read { background: var(--emerald); }
-.tl__key-swap { background: var(--gold); }
+.tl__key-swap { background: var(--accent); }
 
 /* hero picker — built for speed */
 .picker { display: grid; gap: var(--s-3); }
@@ -1994,10 +2015,10 @@ a.ch__key:hover .ch__name { color: var(--tx); text-decoration: underline; }
 .ms-mark {
   position: absolute; top: 50%; z-index: 2; width: 14px; height: 14px; padding: 0;
   transform: translate(-50%, -50%) rotate(45deg); border: 2px solid var(--bg);
-  border-radius: 3px; background: var(--gold); cursor: pointer;
-  box-shadow: 0 0 14px rgba(243, 167, 47, .55);
+  border-radius: 3px; background: var(--accent); cursor: pointer;
+  box-shadow: 0 0 14px rgba(199, 231, 112, .55);
 }
-.ms-mark:hover, .ms-mark:focus-visible { background: var(--gold-hi); outline: none; box-shadow: 0 0 20px rgba(255, 192, 97, .8); }
+.ms-mark:hover, .ms-mark:focus-visible { background: var(--accent-hi); outline: none; box-shadow: 0 0 20px rgba(214, 242, 144, .8); }
 .ms-mark--swap { z-index: 3; }
 .ms-mark--rejected {
   display: none; width: 10px; height: 10px; background: transparent;
@@ -2011,7 +2032,7 @@ a.ch__key:hover .ch__name { color: var(--tx); text-decoration: underline; }
 }
 /* The playhead is where you ARE, so it is drawn as a selection (bone).
    The swap marks it passes over are published facts, so they keep the
-   gold — on this timeline, gold is the swaps and nothing else. */
+   accent — on this timeline, lime is the swaps and nothing else. */
 .ms-head__tip {
   position: absolute; top: -2px; left: 50%; transform: translateX(-50%);
   padding: 2px 7px; border-radius: var(--r-pill); background: var(--sel); color: var(--ink);
@@ -2054,7 +2075,7 @@ a.ch__key:hover .ch__name { color: var(--tx); text-decoration: underline; }
 
 /* ------------------------------------------------------------------ *
    19e. Broadcast calendar — see app/archive.js
-   Indigo = found by a machine, nobody has read it; gold = published.
+   Indigo = found by a machine, nobody has read it; lime = published.
    The two meanings the system already gives those colours.
  * ------------------------------------------------------------------ */
 .arc { --cell: 14px; --gap: 3px; overflow: hidden; }
@@ -2062,7 +2083,7 @@ a.ch__key:hover .ch__name { color: var(--tx); text-decoration: underline; }
 .arc-year { display: grid; gap: var(--s-2); }
 .arc-year__head { display: flex; align-items: baseline; gap: var(--s-3); flex-wrap: wrap; }
 .arc-year__n { font: 700 1.25rem/1 var(--f-display); color: var(--tx); }
-.arc-gold { color: var(--gold-hi); font-weight: 600; }
+.arc-gold { color: var(--accent-hi); font-weight: 600; }
 .arc-scroll { overflow-x: auto; padding-bottom: 4px; }
 .arc-grid { display: grid; gap: 4px; width: max-content; }
 .arc-months {
@@ -2083,7 +2104,7 @@ a.ch__key:hover .ch__name { color: var(--tx); text-decoration: underline; }
 .arc-cell[data-level="2"] { background: color-mix(in srgb, var(--indigo) 52%, var(--s2)); }
 .arc-cell[data-level="3"] { background: color-mix(in srgb, var(--indigo) 76%, var(--s2)); }
 .arc-cell[data-level="4"] { background: var(--indigo); }
-.arc-cell[data-published="true"] { background: var(--gold); box-shadow: 0 0 10px rgba(243, 167, 47, .55); }
+.arc-cell[data-published="true"] { background: var(--accent); box-shadow: 0 0 10px rgba(199, 231, 112, .55); }
 a.arc-cell:hover, a.arc-cell:focus-visible { outline: 2px solid var(--tx); }
 .arc-key { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
 .arc-key .arc-cell { display: inline-block; }
@@ -2262,18 +2283,6 @@ html.motion-on .rv-in { opacity: 1; transform: none; transition: opacity var(--t
 .seg[data-clip="both"]  { -webkit-mask-image: linear-gradient(90deg, transparent, #000 36px, #000 calc(100% - 36px), transparent);
                           mask-image: linear-gradient(90deg, transparent, #000 36px, #000 calc(100% - 36px), transparent); }
 
-/* More contrast, asked for by the operating system. Text steps up a
-   notch, hairlines become visible edges, and nothing else changes. */
-@media (prefers-contrast: more) {
-  :root {
-    --tx-2: #c9ced8;
-    --tx-3: #aab1bd;
-    --line: #3d4350;
-    --line-2: #535a69;
-    --line-3: #6b7383;
-    --link-line: rgba(244, 245, 247, .7);
-  }
-}
 
 /* ------------------------------------------------------------------ *
    24. Reduced motion + print
@@ -2414,7 +2423,7 @@ a.mi-team:hover .mi-team__name { text-decoration: underline; }
 .mf-maps { display: grid; gap: var(--s-3); grid-template-columns: repeat(auto-fill, minmax(min(100%, 430px), 1fr)); }
 .mf-map { display: grid; gap: var(--s-2); padding: var(--s-3) var(--s-4) var(--s-4);
   border: 1px solid var(--line); border-radius: var(--r-4); background: var(--s1); min-width: 0; }
-.mf-map--comp { border-color: rgba(243, 167, 47, .32); }
+.mf-map--comp { border-color: rgba(199, 231, 112, .32); }
 .mf-map__head { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2); }
 .mf-map__game { color: var(--tx-2); font-weight: 700; font-size: 13px; }
 .mf-map__name { font: 700 1.15rem/1.2 var(--f-display); letter-spacing: .01em; color: var(--tx); }

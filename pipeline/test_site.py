@@ -371,14 +371,15 @@ def test_accessibility_and_motion() -> None:
           "revealAll" in shell and "beforeprint" in shell and "watchdog" in shell)
 
 
-#: Every rule allowed to spend gold. Gold means a PUBLISHED fact, the one
+#: Every rule allowed to spend the lime accent (--accent, formerly gold).
+#: It means a PUBLISHED fact, the one
 #: primary action on a screen, or the brand itself — see docs/DESIGN.md.
 #: Adding a selector here is a design decision, not a lint fix: if the
 #: new thing is not published, primary or the brand, it wants --sel,
 #: --win, --bar or --link instead.
-GOLD_ALLOWED = (
+ACCENT_ALLOWED = (
     ":root", "body::before", "::selection", ".skip-link", ".brand__mark",
-    ".btn--primary", ".eyebrow--gold", ".spine--gold", ".slab--gold",
+    ".btn--primary", ".eyebrow--accent", ".spine--accent", ".slab--accent",
     '.chip[data-state="published"]', '.trust[data-trust="published"]',
     '.trust[data-trust="manual"]', '.stat[data-accent="gold"]',
     '.stat[data-alert="1"][data-accent="gold"]',
@@ -432,29 +433,29 @@ def test_design_rules() -> None:
     for ink in ("tx", "tx-2", "tx-3"):
         worst = min(_contrast(tok[ink], tok[s]) for s in surfaces)
         check(f"--{ink} clears 4.5:1 on every surface (worst {worst:.2f})", worst >= 4.5)
-    for sig in ("outline", "gold", "amber", "amber-hi", "red", "cyan", "emerald", "indigo", "bar",
+    for sig in ("accent", "amber", "amber-hi", "red", "cyan", "emerald", "indigo", "bar",
                 "tier-a", "tier-b", "tier-d"):
         c = _contrast(tok[sig], tok["s1"])
         check(f"--{sig} clears 3:1 on a card ({c:.2f})", c >= 3)
 
     # Distinct meanings need distinct colours. "Needs a person" and
     # "published" were once the same hue to a tenth of a degree.
-    for a, b in (("amber", "gold"), ("amber-hi", "gold"), ("amber", "red"),
-                 ("outline", "emerald"), ("outline", "role-support"), ("outline", "gold")):
+    for a, b in (("accent", "emerald"), ("accent", "role-support"), ("accent", "tier-a"),
+                 ("accent", "amber"), ("amber", "red")):
         d = abs(_oklch_hue(tok[a]) - _oklch_hue(tok[b]))
         d = min(d, 360 - d)
         check(f"--{a} and --{b} are told apart by hue ({d:.0f}° apart)", d >= 15)
 
-    # Gold is spent, not sprinkled.
+    # The accent is spent, not sprinkled.
     spenders = []
     for m in re.finditer(r"([^{}]+)\{([^{}]*)\}", css):
         sel, body = " ".join(m.group(1).split()), m.group(2)
         if re.match(r"^\d+%$", sel):
             continue  # a keyframe step belongs to its animation
-        if re.search(r"var\(--(gold|gold-hi|wash-gold)\)|243,\s*167,\s*47|255,\s*192,\s*97", body):
-            if not any(part.strip().startswith(GOLD_ALLOWED) for part in sel.split(",")):
+        if re.search(r"var\(--(accent|accent-hi|wash-accent)\)|199,\s*231,\s*112|214,\s*242,\s*144", body):
+            if not any(part.strip().startswith(ACCENT_ALLOWED) for part in sel.split(",")):
                 spenders.append(sel)
-    check("gold marks only published facts, the primary action and the brand"
+    check("the lime accent marks only published facts, the primary action and the brand"
           + (f" (also: {', '.join(spenders[:4])})" if spenders else ""), not spenders)
     js_gold = [f for f in os.listdir(os.path.join(ROOT, "assets/js/app"))
                if f.endswith(".js") and re.search(r'class="btn btn--sm btn--primary[^"]*" href="\' \+ esc\(vodAt',
@@ -463,7 +464,7 @@ def test_design_rules() -> None:
     deco = [f for f in os.listdir(ROOT) if f.endswith(".html") and re.search(r"eyebrow--gold|hl--gold", read(f))]
     deco += [f for f in os.listdir(os.path.join(ROOT, "assets/js/app"))
              if f.endswith(".js") and re.search(r"eyebrow--gold|hl--gold", read("assets/js/app/" + f))]
-    check("page headings do not spend gold on decoration" + (f" ({', '.join(deco)})" if deco else ""), not deco)
+    check("page headings do not spend the accent on decoration" + (f" ({', '.join(deco)})" if deco else ""), not deco)
 
     # One name, one meaning. `.field` is the form field; the team wall
     # once reused the name and turned every labelled filter into a 132px
@@ -479,6 +480,8 @@ def test_design_rules() -> None:
     check("prefers-contrast: more is honoured", "@media (prefers-contrast: more)" in css)
     check("the focus ring is the outline colour, not cyan (cyan means working)",
           not re.search(r"outline:\s*2px solid var\(--cyan\)", css) and "var(--outline)" in css)
+    check("the outline is neutral, so 'where you are' never reads as published",
+          "--outline: var(--bone)" in css)
 
     shell = read("assets/js/app/shell.js")
     check("a row that scrolls sideways says so (edge fade)",

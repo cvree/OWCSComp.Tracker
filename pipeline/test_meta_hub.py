@@ -84,8 +84,13 @@ def main() -> None:
     check("no override layer is appended after the components",
           "BRUTAL LAYER" not in css
           and "OVERRIDES" not in css.upper().replace("NO OVERRIDE", ""))
+    # The one exception is the operating system asking for more
+    # contrast: a second set of token VALUES, kept inside section 1 so
+    # the tokens still have a single home.
+    contrast = re.search(r"@media \(prefers-contrast: more\)\s*\{\s*:root \{", css)
     check("the token block comes first and nothing re-declares :root later",
-          css.count(":root {") == 1
+          css.count(":root {") == 1 + bool(contrast)
+          and (not contrast or contrast.start() < css.index("2. Base"))
           and css.index("1. Tokens") < css.index("2. Base"))
     check("radii are real, modern and scaled",
           all(t in css for t in ["--r-1: 4px", "--r-2: 6px", "--r-3: 8px",
@@ -101,15 +106,15 @@ def main() -> None:
           all(f"{c};" in css for c in
               ["--bg: #090a0d", "--s1: #111319", "--s2: #171a21",
                "--s3: #1c2028", "--line: #272b34"]))
-    check("the product accent is the warm OWCS gold",
-          "--gold: #f3a72f" in css)
+    check("the product accent is the classy lime",
+          "--accent: #c7e770" in css)
     check("the signal colours kept their meanings",
           all(f"--{c}:" in css for c in
-              ["gold", "amber", "cyan", "emerald", "indigo", "red", "grey"]))
+              ["accent", "amber", "cyan", "emerald", "indigo", "red", "grey"]))
     check("decorative colour is gone — lime and magenta are not tokens",
           "--lime:" not in css and "--magenta:" not in css)
     check("status fills are washes under 15%, so text keeps its contrast",
-          "--wash-gold:" in css and "--wash-red:" in css
+          "--wash-accent:" in css and "--wash-red:" in css
           and not re.search(r"--wash-[a-z]+:\s*rgba\([^)]*,\s*\.[2-9]", css))
 
     print("design system — typography is broadcast, not poster:")
