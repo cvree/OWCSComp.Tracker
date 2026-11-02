@@ -78,7 +78,7 @@
       "</div>";
     P.mount("head",
       '<div class="page-head page-head--tight map-hd">' +
-        '<p class="eyebrow eyebrow--gold">' + esc([entry.event, entry.stage, entry.date ? P.fmtDate(entry.date) : null]
+        '<p class="eyebrow">' + esc([entry.event, entry.stage, entry.date ? P.fmtDate(entry.date) : null]
           .filter(Boolean).join(" · ")) + "</p>" +
         "<h1>" + esc(title()) + (order ? ' <span class="dim">· map ' + esc(order) + "</span>" : "") + "</h1>" +
         '<p class="row">' + (entry.mode || info.mode ? '<span class="chip chip--outline">' + esc(entry.mode || info.mode) + "</span>" : "") +

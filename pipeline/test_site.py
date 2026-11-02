@@ -371,6 +371,133 @@ def test_accessibility_and_motion() -> None:
           "revealAll" in shell and "beforeprint" in shell and "watchdog" in shell)
 
 
+#: Every rule allowed to spend the lime accent (--accent, formerly gold).
+#: It means a PUBLISHED fact, the one
+#: primary action on a screen, or the brand itself — see docs/DESIGN.md.
+#: Adding a selector here is a design decision, not a lint fix: if the
+#: new thing is not published, primary or the brand, it wants --sel,
+#: --win, --bar or --link instead.
+ACCENT_ALLOWED = (
+    ":root", "body::before", "::selection", ".skip-link", ".brand__mark",
+    ".btn--primary", ".eyebrow--accent", ".spine--accent", ".slab--accent",
+    '.chip[data-state="published"]', '.trust[data-trust="published"]',
+    '.trust[data-trust="manual"]', '.stat[data-accent="gold"]',
+    '.stat[data-alert="1"][data-accent="gold"]',
+    ".tl__mark--swap", ".tl__key-swap", ".ms-mark",       # published swaps
+    ".arc-gold", '.arc-cell[data-published="true"]',      # published broadcasts
+    ".mf-map--comp",                                      # a map with a published comp
+    ".hl", ".hl--gold",                                   # the headline's one brand phrase
+    # the faint lime edge a card takes on hover (--accent-line)
+    ".card--hoverable:hover", ".card--hoverable:focus-within", ".press:hover",
+    ".press:focus-visible", ".game-card:hover", ".game-card:focus-within",
+    "a.hero:hover .hero__face", ".teamwall__team:hover", ".teamwall__team:focus-visible",
+    ".hm-map:hover", ".mf-map:hover", ".mf-map:focus-within",
+)
+
+
+def _hex(h: str) -> tuple:
+    h = h.lstrip("#")
+    return tuple(int(h[i:i + 2], 16) / 255 for i in (0, 2, 4))
+
+
+def _lum(h: str) -> float:
+    lin = [c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4 for c in _hex(h)]
+    return 0.2126 * lin[0] + 0.7152 * lin[1] + 0.0722 * lin[2]
+
+
+def _contrast(a: str, b: str) -> float:
+    x, y = sorted((_lum(a), _lum(b)))
+    return (y + 0.05) / (x + 0.05)
+
+
+def _oklch_hue(h: str) -> float:
+    import math
+    lin = [c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4 for c in _hex(h)]
+    r, g, b = lin
+    l = (0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b) ** (1 / 3)
+    m = (0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b) ** (1 / 3)
+    s = (0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b) ** (1 / 3)
+    a = 1.9779984951 * l - 2.4285922050 * m + 0.4505937099 * s
+    bb = 0.0259040371 * l + 0.7827717662 * m - 0.8086757660 * s
+    return math.degrees(math.atan2(bb, a)) % 360
+
+
+def test_design_rules() -> None:
+    """The rules borrowed from Manifester and Bellwether (docs/DESIGN.md),
+    held the way Bellwether holds its theme: measured, in CI, so a later
+    pass cannot quietly undo them."""
+    print("design rules:")
+    raw = read("assets/css/owcs.css")
+    css = re.sub(r"/\*.*?\*/", "", raw, flags=re.S)
+    root = re.search(r":root\s*\{(.*?)\n\}", css, re.S).group(1)
+    tok = dict(re.findall(r"--([\w-]+):\s*(#[0-9a-fA-F]{6})\b", root))
+
+    # Contrast. Three readable inks, and all three clear AA on every
+    # surface they are set on. Hierarchy comes from size and weight —
+    # which survives a contrast fix, where a lighter grey does not.
+    surfaces = ("bg", "s1", "s2", "s3", "well")
+    for ink in ("tx", "tx-2", "tx-3"):
+        worst = min(_contrast(tok[ink], tok[s]) for s in surfaces)
+        check(f"--{ink} clears 4.5:1 on every surface (worst {worst:.2f})", worst >= 4.5)
+    for sig in ("accent", "amber", "amber-hi", "red", "cyan", "emerald", "indigo", "bar",
+                "tier-a", "tier-b", "tier-d"):
+        c = _contrast(tok[sig], tok["s1"])
+        check(f"--{sig} clears 3:1 on a card ({c:.2f})", c >= 3)
+
+    # Distinct meanings need distinct colours. "Needs a person" and
+    # "published" were once the same hue to a tenth of a degree.
+    for a, b in (("accent", "emerald"), ("accent", "role-support"), ("accent", "tier-a"),
+                 ("accent", "amber"), ("amber", "red")):
+        d = abs(_oklch_hue(tok[a]) - _oklch_hue(tok[b]))
+        d = min(d, 360 - d)
+        check(f"--{a} and --{b} are told apart by hue ({d:.0f}° apart)", d >= 15)
+
+    # The accent is spent, not sprinkled.
+    spenders = []
+    for m in re.finditer(r"([^{}]+)\{([^{}]*)\}", css):
+        sel, body = " ".join(m.group(1).split()), m.group(2)
+        if re.match(r"^\d+%$", sel):
+            continue  # a keyframe step belongs to its animation
+        if re.search(r"var\(--(accent|accent-hi|accent-line|wash-accent)\)|199,\s*231,\s*112|214,\s*242,\s*144", body):
+            if not any(part.strip().startswith(ACCENT_ALLOWED) for part in sel.split(",")):
+                spenders.append(sel)
+    check("the lime accent marks only published facts, the primary action, the brand, the headline phrase and card hover"
+          + (f" (also: {', '.join(spenders[:4])})" if spenders else ""), not spenders)
+    js_gold = [f for f in os.listdir(os.path.join(ROOT, "assets/js/app"))
+               if f.endswith(".js") and re.search(r'class="btn btn--sm btn--primary[^"]*" href="\' \+ esc\(vodAt',
+                                                   read("assets/js/app/" + f))]
+    check("a per-row Watch link is never the screen's primary action", not js_gold)
+    deco = [f for f in os.listdir(ROOT) if f.endswith(".html") and re.search(r"eyebrow--gold", read(f))]
+    deco += [f for f in os.listdir(os.path.join(ROOT, "assets/js/app"))
+             if f.endswith(".js") and re.search(r"eyebrow--gold", read("assets/js/app/" + f))]
+    check("page eyebrows do not spend the accent on decoration" + (f" ({', '.join(deco)})" if deco else ""), not deco)
+
+    # One name, one meaning. `.field` is the form field; the team wall
+    # once reused the name and turned every labelled filter into a 132px
+    # grid, which on a phone left each <select> 31px wide.
+    check("`.field` is declared once, as the form field",
+          len(re.findall(r"(?m)^\.field\s*\{", css)) == 1)
+
+    # The thumb floor, both directions, on a coarse pointer.
+    coarse = re.search(r"@media \(pointer: coarse\)\s*\{(.*?)\n\}", css, re.S)
+    check("touch targets have a 44px floor on coarse pointers",
+          bool(coarse) and "min-height: 44px" in coarse.group(1)
+          and "min-width: 44px" in coarse.group(1) and "max(100%, 44px)" in coarse.group(1))
+    check("prefers-contrast: more is honoured", "@media (prefers-contrast: more)" in css)
+    check("the focus ring is the outline colour, not cyan (cyan means working)",
+          not re.search(r"outline:\s*2px solid var\(--cyan\)", css) and "var(--outline)" in css)
+    check("the outline is neutral, so 'where you are' never reads as published",
+          "--outline: var(--bone)" in css)
+
+    shell = read("assets/js/app/shell.js")
+    check("a row that scrolls sideways says so (edge fade)",
+          "data-clip" in shell and '.seg[data-clip="end"]' in css)
+    check("the tab you are on returns to the top instead of reloading",
+          "initCurrentTab" in shell)
+    check("the design principles are written down",
+          os.path.exists(os.path.join(ROOT, "docs/DESIGN.md")))
+
+
 def test_review_workspace() -> None:
     print("the review workspace is built for reviewing many games:")
     r = read("assets/js/app/page-review.js")
@@ -529,6 +656,7 @@ def main() -> None:
     test_data_integrity()
     test_the_six_steps()
     test_accessibility_and_motion()
+    test_design_rules()
     test_review_workspace()
     test_submit_flow()
     test_links_resolve()

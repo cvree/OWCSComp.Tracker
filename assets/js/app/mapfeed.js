@@ -188,7 +188,7 @@
           '<a class="btn btn--sm btn--quiet" href="game.html?id=' +
           encodeURIComponent(m.matchId) + '">Details</a>' : "") +
         (m.url && m.start != null
-          ? '<a class="btn btn--sm btn--primary" href="' + esc(vodAt(m.url, m.start)) +
+          ? '<a class="btn btn--sm btn--ghost" href="' + esc(vodAt(m.url, m.start)) +
             '" target="_blank" rel="noopener" aria-label="Watch ' + esc(info ? info.name : "this map") +
             '">▶ Watch' + (len ? '<span class="mf-len"> · ' + len + "m</span>" : "") + "</a>"
           : "") +

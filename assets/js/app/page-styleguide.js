@@ -30,7 +30,13 @@
     ["Restraint is the product's credibility",
      "This tool claims its data has been checked by a person. A screen that shouts reads like a fan site; a screen that is quiet reads like an instrument."],
     ["Colour must encode something",
-     "State, role, provenance, evidence. Gold is published, amber needs a human, cyan is working, emerald is evidence, indigo is machine-detected, red is blocked. Colour that encodes nothing is grey."],
+     "State, role, provenance, evidence. Lime is published, amber needs a human, cyan is working, emerald is evidence, indigo is machine-detected, red is blocked. Colour that encodes nothing is grey."],
+    ["The accent is spent, not sprinkled",
+     "The lime accent marks a published fact, the one primary action on a screen, the brand mark, the headline's one phrase and a faint edge on a hovered card. Never a link, a hover, a winner, a rank, a data bar or a selected tab — those have neutral tokens of their own. A colour that marks everything marks nothing."],
+    ["Nothing is smaller than the thumb",
+     "On a touch screen every target is at least 44px in both directions. Controls that can grow, grow; links whose ink must stay small take the tap on an invisible 44px box. Measured in a real browser at phone width, not assumed."],
+    ["Say it once",
+     "A label set over a group is not repeated on every member of it. The fifth identical badge is not read, and it makes the first one harder to see."],
     ["Motion is orientation and feedback",
      "A short fade-and-rise on arrival, a one-pixel lift on hover, and that is all. There is no perpetual movement anywhere in the system, and every transition stops under reduced motion."],
     ["The data supplies the personality",
@@ -53,8 +59,8 @@
   set("#sg-colour",
     "<h3>Signal colours — meanings unchanged</h3>" +
     '<div class="grid grid--3 u-mt-3">' +
-      sw("--gold", "published, verified, the product's spine") +
-      sw("--amber", "needs a human") +
+      sw("--accent", "the classy lime — published, verified, the one primary action, the brand, the headline phrase, a faint edge on hover.") +
+      sw("--amber", "needs a human. Its own hue: it used to be the same colour as the old gold accent") +
       sw("--cyan", "working right now") +
       sw("--emerald", "evidence, proven") +
       sw("--indigo", "detected, machine-authored, not yet confirmed") +
@@ -71,6 +77,19 @@
       sw("--s3", "active, selected") +
       sw("--line", "hairline border — one weight, everywhere") +
       sw("--tx-2", "secondary text") +
+      sw("--tx-3", "the quietest readable text; still 4.5:1 on every surface") +
+    "</div>" +
+    '<h3 class="u-mt-5">Neutral jobs — what used to borrow the accent</h3>' +
+    '<div class="grid grid--3 u-mt-3">' +
+      sw("--link", "a link; told apart by its underline, not by a colour") +
+      sw("--win", "a result — the winner of a map. A result is not a status") +
+      sw("--bar", "a quantity — every data bar and meter") +
+      sw("--outline", "bone — focus ring, chosen option, current row, playhead. Neutral, so it never reads as published") +
+    "</div>" +
+    '<h3 class="u-mt-5">Tiers — one diverging ramp</h3>' +
+    '<div class="grid grid--3 u-mt-3">' +
+      sw("--tier-s", "S") + sw("--tier-a", "A") + sw("--tier-b", "B — the neutral middle") +
+      sw("--tier-c", "C") + sw("--tier-d", "D") +
     "</div>" +
     '<h3 class="u-mt-5">Roles</h3>' +
     '<div class="role-key u-mt-3">' +
@@ -254,7 +273,7 @@
       P.dl([
         ["Interface roles", "--role-tank / --role-damage / --role-support — underlines, dots, text"],
         ["Chart roles", "#4a8ded / #b4303a / #1da875 — adjacent fills, worst pair ΔE 12.8 deutan"],
-        ["Magnitude", "--gold on an --s2 track; one hue, more is longer"],
+        ["Magnitude", "--accent on an --s2 track; one hue, more is longer"],
         ["Never", "a value on every mark, a second y-axis, or a generated hue for a 9th series"],
       ]) +
     "</div>");

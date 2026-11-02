@@ -140,14 +140,14 @@
          only means nobody has looked yet, and "all confirmed" is the
          genuinely finished state. */
       const note = prov
-        ? '<span style="color:var(--amber, var(--gold-hi))">' + prov + " provisional</span>"
+        ? '<span style="color:var(--amber, var(--accent-hi))">' + prov + " provisional</span>"
         : pending ? "<span>" + pending + " unaudited</span>"
           : "<span>all confirmed</span>";
       return '<button class="qitem" type="button" data-game="' + esc(g.id) + '"' +
         (current && current.id === g.id ? ' aria-current="true"' : "") + ">" +
         '<span class="qitem__t">' + esc(g.title) + "</span>" +
         '<span class="qitem__m">' + P.stateChip(g.state) + note +
-        (done ? '<span style="color:var(--gold-hi)">' + done + " decided</span>" : "") +
+        (done ? '<span style="color:var(--accent-hi)">' + done + " decided</span>" : "") +
         "</span></button>";
     }).join("");
     host.onclick = (e) => {

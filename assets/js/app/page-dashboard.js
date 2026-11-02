@@ -59,10 +59,10 @@
       .sort((a, b) => b.n - a.n || a.t.name.localeCompare(b.t.name));
     if (!teams.length) return;
     document.getElementById("field").innerHTML = teams.map(({ t, n }) =>
-      '<a class="field__team" href="team.html?id=' + encodeURIComponent(t.id) + '">' +
-        '<span class="field__logo">' + P.teamMark(t, 48) + "</span>" +
-        '<span class="field__name">' + esc(t.name) + "</span>" +
-        '<span class="field__n">' + (n ? "▶ " + n + " map" + (n === 1 ? "" : "s") : "&nbsp;") + "</span></a>"
+      '<a class="teamwall__team" href="team.html?id=' + encodeURIComponent(t.id) + '">' +
+        '<span class="teamwall__logo">' + P.teamMark(t, 48) + "</span>" +
+        '<span class="teamwall__name">' + esc(t.name) + "</span>" +
+        '<span class="teamwall__n">' + (n ? "▶ " + n + " map" + (n === 1 ? "" : "s") : "&nbsp;") + "</span></a>"
     ).join("");
     band.hidden = false;
   }

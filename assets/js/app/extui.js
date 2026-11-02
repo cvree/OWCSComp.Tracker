@@ -61,11 +61,15 @@
   P.extStat = stat;
 
   /* ------------------------------------------------------- headline */
+  /* The tiles carry no source badge of their own: the one caller sets
+     them under a heading that already names the spreadsheet, and a
+     badge on every tile beneath it is the same sentence four more times.
+     A label said once is read; a label said five times is wallpaper. */
   P.extHeadline = () => {
     const s = S();
     if (!s || !s.totals) return "";
     const t = s.totals;
-    const b = P.srcBadge("sheet", "Sheet");
+    const b = "";
     return '<div class="grid grid--4">' +
       stat("Series", fmtN(t.matches), "documented by the community spreadsheet", b) +
       stat("Maps", fmtN(t.maps), (t.linkedMaps ? t.linkedMaps + " also read off a VOD, counted once" : "none linked to a VOD yet"), b) +
@@ -87,14 +91,15 @@
       ' <a href="how-it-works.html#sources">How the two sources differ</a></p>';
   }
 
-  function syncLine(s) {
+  function syncLine(s, labelled) {
     const snap = s.snapshot;
     const la = s.lastAttempt || {};
+    const badge = labelled ? "" : P.srcBadge("sheet") + " ";
     if (!snap) {
-      return '<p class="small">' + P.srcBadge("sheet") + " Not imported yet: no spreadsheet numbers are shown " +
+      return '<p class="small">' + badge + "Not imported yet: no spreadsheet numbers are shown " +
         "anywhere on the site until the first successful sync.</p>";
     }
-    return '<p class="small">' + P.srcBadge("sheet") + " Last successful import " +
+    return '<p class="small">' + badge + "Last successful import " +
       '<b title="' + esc(snap.importedAt) + '">' + esc(P.fmtDate(snap.importedAt)) + "</b>" +
       (P.fmtRel ? ' <span class="dim">(' + esc(P.fmtRel(snap.importedAt)) + ")</span>" : "") +
       " · snapshot <code>" + esc(String(snap.sha256 || "").slice(0, 12)) + "</code>" +
@@ -106,7 +111,7 @@
     opt = opt || {};
     const s = S();
     if (!s) return "";
-    if (!s.snapshot) return '<div class="card">' + syncLine(s) + creditHtml(s) + "</div>";
+    if (!s.snapshot) return '<div class="card">' + syncLine(s, opt.labelled) + creditHtml(s) + "</div>";
     const m = E.coverageMatrix(s);
     const link = (stage, region) => "series.html?" + [stage ? "stage=" + encodeURIComponent(stage) : "",
       region ? "region=" + encodeURIComponent(region) : ""].filter(Boolean).join("&");
@@ -131,7 +136,7 @@
     return '<div class="card' + (opt.compact ? "" : "") + '">' +
       '<div class="sec-head" style="margin:0"><h3 style="margin:0">Spreadsheet coverage</h3>' +
       '<a class="sec-link" href="series.html">Every series →</a></div>' +
-      syncLine(s) + table + creditHtml(s) + "</div>";
+      syncLine(s, opt.labelled) + table + creditHtml(s) + "</div>";
   };
 
   /* --------------------------------------------------- series list */

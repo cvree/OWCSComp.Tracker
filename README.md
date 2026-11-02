@@ -275,7 +275,13 @@ python3 pipeline/label_forge.py --batch <batch> --promote     # after naming
   On every game page and on the dashboard.
 * **Broadcast calendar** (`assets/js/app/archive.js`) — every official
   broadcast the scan found, 2024–2026, as a day grid: indigo = found,
-  gold = published.
+  lime = published.
+
+How it looks, and the rules behind it — a classy lime accent spent only on what is
+published, a 44px thumb floor, contrast measured rather than assumed — are
+in [`docs/DESIGN.md`](docs/DESIGN.md). They are borrowed from the
+designer's two other products, Manifester and Bellwether, and
+`pipeline/test_site.py` holds the parts that can be measured.
 
 ## Two sources, never blended: VOD timelines + the community spreadsheet
 

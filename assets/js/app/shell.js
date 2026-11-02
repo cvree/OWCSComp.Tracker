@@ -660,12 +660,77 @@
   }
   P.observeReveals = P.observeReveals || function () {};
 
+  /* ----------------------------------------------- the tab you are on
+     Pressing the nav entry for the page you are already reading returns
+     to the top of it instead of reloading it. The home page is a very
+     long scroll on a phone, and the alternative is the status bar — the
+     one part of a phone a thumb cannot reach. Only an exact match is
+     intercepted: a link that would change the query still navigates. */
+  function initCurrentTab() {
+    document.addEventListener("click", (e) => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const a = e.target.closest && e.target.closest('.hdr a[aria-current="page"], .nav a[aria-current="page"]');
+      if (!a || a.target === "_blank") return;
+      let url;
+      try { url = new URL(a.getAttribute("href"), location.href); } catch (err) { return; }
+      if (url.pathname !== location.pathname || url.search !== location.search || url.hash) return;
+      e.preventDefault();
+      const lenis = window.OWCSMotion && window.OWCSMotion.lenis;
+      if (lenis) lenis.scrollTo(0, { immediate: reduced });
+      else window.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
+      const menu = document.querySelector(".nav-toggle[aria-expanded='true']");
+      if (menu) menu.click();
+    });
+  }
+
+  /* ------------------------------------------------ rows that scroll
+     A segmented control wider than the screen scrolls sideways. It now
+     says so — a fade on whichever end has more behind it (owcs.css,
+     `.seg[data-clip]`) — and the chosen option is always scrolled into
+     view, so "Japan" selected is never "Japan" hidden off the right
+     edge. Segs are rendered by page scripts after boot, so one observer
+     re-checks whenever the page changes, at most once a frame. */
+  function initScrollRows() {
+    const clip = (el) => {
+      const max = el.scrollWidth - el.clientWidth;
+      if (max <= 1) { el.removeAttribute("data-clip"); return; }
+      const atStart = el.scrollLeft <= 1, atEnd = el.scrollLeft >= max - 1;
+      el.setAttribute("data-clip", atStart ? "end" : atEnd ? "start" : "both");
+    };
+    const seen = new WeakSet();
+    let queued = false;
+    const scan = () => {
+      queued = false;
+      document.querySelectorAll(".seg").forEach((el) => {
+        if (!seen.has(el)) {
+          seen.add(el);
+          el.addEventListener("scroll", () => clip(el), { passive: true });
+          const on = el.querySelector('[aria-pressed="true"],[aria-selected="true"],[aria-current]');
+          if (on && el.scrollWidth > el.clientWidth) el.scrollLeft = Math.max(0, on.offsetLeft - el.clientWidth / 3);
+        }
+        clip(el);
+      });
+    };
+    const queue = () => { if (!queued) { queued = true; requestAnimationFrame(scan); } };
+    queue();
+    addEventListener("resize", queue, { passive: true });
+    if (window.MutationObserver) new MutationObserver(queue).observe(document.body, { childList: true, subtree: true });
+    document.addEventListener("click", (e) => {
+      const b = e.target.closest && e.target.closest(".seg button, .seg a");
+      if (b && b.scrollIntoView) b.scrollIntoView({ block: "nearest", inline: "nearest", behavior: reduced ? "auto" : "smooth" });
+    });
+  }
+
   /* ----------------------------------------------------------- boot */
   document.addEventListener("DOMContentLoaded", () => {
     buildHeader();
     buildSearch();
     buildFooter();
     initReveals();
+    /* Conveniences: if either throws, the page it decorates still works. */
+    [initCurrentTab, initScrollRows].forEach((fn) => {
+      try { fn(); } catch (err) { if (window.console) console.warn("[shell] " + fn.name + " skipped:", err); }
+    });
     if (window.OWCSMotion) window.OWCSMotion.boot();
     /* Probe for a local tracker on every page: the nav, the dashboard and
        the submit form all change shape depending on the answer. */
