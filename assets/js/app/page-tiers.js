@@ -24,18 +24,17 @@
   const REGIONS = [["", "All regions"], ["na", "North America"], ["emea", "EMEA"], ["korea", "Korea"],
     ["japan", "Japan"], ["china", "China"], ["pacific", "Pacific"], ["asia", "Asia championship"],
     ["international", "International LANs"]];
-  const RANGES = [["14", "Last 14 days"], ["30", "Last 30 days"], ["60", "Last 60 days"], ["90", "Last 90 days"],
-    ["180", "Last 180 days"], ["season", "Whole season"], ["custom", "Custom start date"]];
+  /* The time range is the site-wide one (app/timerange.js): the bar under
+     the header, 14 days unless changed, with the stages and custom dates
+     that this page's own "viewing date / range / jump to" used to offer. */
+  const TR = P.timeRange;
   const STAGE_NAMES = { "pre-season": "Pre-Season Bootcamp", "stage-1": "Stage 1", "stage-2": "Stage 2",
     "stage-3": "Stage 3", "champions-clash": "Champions Clash", "midseason-championship": "Midseason Championship",
     "world-finals": "World Finals" };
   const REGION_SHORT = { na: "NA", emea: "EMEA", korea: "Korea", japan: "Japan", china: "China",
     pacific: "Pacific", asia: "Asia", international: "International" };
 
-  const state = {
-    asof: P.qs("asof") || "", range: P.qs("range") || "60", from: P.qs("from") || "",
-    region: P.qs("region") || "", map: P.qs("map") || "", role: P.qs("role") || "",
-  };
+  const state = { region: P.qs("region") || "", map: P.qs("map") || "", role: P.qs("role") || "" };
   let R = null;
   let missingMap = "";
 
@@ -59,75 +58,35 @@
 
   /* --------------------------------------------------------- filters */
   function renderFilters() {
-    const min = T.dates.min, max = T.dates.max;
     const sel = (key, label, opts) => '<label class="field"><span class="mx-label">' + esc(label) +
       '</span><select class="input" data-key="' + key + '">' + opts.map((o) => '<option value="' + esc(o[0]) + '"' +
         (String(state[key]) === String(o[0]) ? " selected" : "") + ">" + esc(o[1]) + "</option>").join("") +
       "</select></label>";
-    const date = (key, label, val, hidden) => '<label class="field"' + (hidden ? " hidden" : "") +
-      ' data-field="' + key + '"><span class="mx-label">' + esc(label) +
-      '</span><input class="input" type="date" data-key="' + key + '" value="' + esc(val) + '" min="' + esc(min) +
-      '" max="' + esc(max) + '"></label>';
-    document.getElementById("filters").innerHTML =
-      '<div class="mx-grid">' +
-      date("asof", "Viewing date", state.asof || max) +
-      sel("range", "Date range", RANGES) +
-      date("from", "From", state.from || S.addDays(state.asof || max, -59), state.range !== "custom") +
+    const el = document.getElementById("filters");
+    el.innerHTML = '<div class="mx-grid">' +
       sel("region", "Region", REGIONS) +
       sel("role", "Role", [["", "All roles"]].concat(ROLE_ORDER.map((r) => [r, r]))) +
-      "</div>" +
-      '<div class="row u-mt-4 tr-quick"><span class="mx-label">Jump to</span>' +
-      '<button type="button" class="btn btn--sm btn--ghost" data-jump="latest">Latest</button>' +
-      quickStages().map((q) => '<button type="button" class="btn btn--sm btn--ghost" data-jump="' + esc(q[1]) +
-        '" data-jump-from="' + esc(q[2]) + '">' + esc(q[0]) + "</button>").join("") + "</div>";
-    document.getElementById("filters").addEventListener("change", (e) => {
-      const k = e.target.dataset.key;
-      if (!k) return;
-      state[k] = e.target.value;
-      if (k === "range") {
-        document.querySelector('[data-field="from"]').hidden = state.range !== "custom";
-        if (state.range === "custom" && !state.from) state.from = document.querySelector('[data-key="from"]').value;
-      }
-      if (k === "from") state.range = "custom";
-      update();
-    });
-    document.getElementById("filters").addEventListener("click", (e) => {
-      const b = e.target.closest("[data-jump]");
-      if (!b) return;
-      if (b.dataset.jump === "latest") { state.asof = ""; }
-      else { state.asof = b.dataset.jump; state.from = b.dataset.jumpFrom; state.range = "custom"; }
-      renderFilters();
-      update();
-    });
-  }
-
-  /* One button per stretch of the season: its first and last estimated date. */
-  function quickStages() {
-    const spans = new Map();
-    T.matches.forEach((m) => {
-      if (!m.d) return;
-      const key = m.s;
-      const s = spans.get(key) || { from: m.d, to: m.d };
-      if (m.d < s.from) s.from = m.d;
-      if (m.d > s.to) s.to = m.d;
-      spans.set(key, s);
-    });
-    return Array.from(spans.entries()).sort((a, b) => a[1].to.localeCompare(b[1].to))
-      .map((p) => [STAGE_NAMES[p[0]] || p[0], p[1].to, p[1].from]);
+      "</div>";
+    if (!el.dataset.bound) {
+      el.dataset.bound = "1";
+      el.addEventListener("change", (e) => {
+        const k = e.target.dataset.key;
+        if (!k) return;
+        state[k] = e.target.value;
+        if (k === "region") TR.setRegion("tr-range", state.region);
+        update();
+      });
+    }
   }
 
   function opts() {
-    const asOf = state.asof || T.dates.max;
-    const o = { asOf: asOf, region: state.region || null };
-    if (state.range === "custom") o.from = state.from || null;
-    else if (state.range !== "season") o.days = Number(state.range) || 60;
-    return o;
+    const w = TR.buildOpts({ region: state.region || null });
+    return { asOf: w.asOf, from: w.from || null, region: state.region || null };
   }
 
   /* ---------------------------------------------------------- render */
   function update() {
-    P.setQs({ asof: state.asof, range: state.range === "60" ? "" : state.range,
-      from: state.range === "custom" ? state.from : "", region: state.region, map: state.map, role: state.role });
+    P.setQs({ region: state.region, map: state.map, role: state.role });
     R = S.compute(T, ROLES, opts());
     missingMap = state.map && !R.bucket(state.map) ? state.map : "";
     if (missingMap) state.map = "";
@@ -151,11 +110,12 @@
       (n ? "<strong>" + n + "</strong> maps (" + B.decided + " with a recorded winner) between <strong>" +
         esc(fmtDate(B.from)) + "</strong> and <strong>" + esc(fmtDate(B.to)) + "</strong> · " + esc(region) +
         " · team power as of <strong>" + esc(fmtDate(R.asOf)) + "</strong>"
-        : "No maps in this range. Widen the range or move the viewing date.") +
-      ' <span class="dim">(estimated dates)</span></p>' +
+        : "No maps in this time range.") +
+      ' <span class="dim">(estimated dates)</span></p>' + (n < 20 ? TR.widenHtml() : "") +
       (missingMap ? '<p class="small u-mt-2" role="status">' + esc(mapName(missingMap)) +
         " wasn't played in this range (it may have been out of the map pool), so all maps are shown. " +
-        "Widen the range or move the viewing date to see it.</p>" : ""));
+        "Widen the time range to see it.</p>" + TR.widenHtml() : ""));
+    TR.note("tr-range", "<b>" + n + "</b> pro map" + (n === 1 ? "" : "s"));
   }
 
   function renderMaps() {
@@ -414,6 +374,8 @@
       return;
     }
     renderProvenance();
+    TR.mount("tr-range", { region: state.region || null });
+    TR.onChange(update);
     renderFilters();
     renderHow();
     update();

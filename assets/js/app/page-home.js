@@ -24,53 +24,27 @@
   const ROLES = U.roles();
   const pct = U.pct;
 
-  const WINDOWS = [["recent", "Recent"], ["30", "30 days"], ["stage", "This stage"], ["season", "Season"]];
+  const TR = P.timeRange;
   const REGIONS = [["", "All regions"], ["na", "NA"], ["emea", "EMEA"], ["korea", "Korea"], ["china", "China"],
     ["japan", "Japan"], ["pacific", "Pacific"], ["international", "LANs"]];
   const ROLE_ICON = { Tank: "⛨", Damage: "✦", Support: "✚" };
 
-  const state = { w: P.qs("w") || "recent", region: P.qs("region") || "" };
+  const state = { region: P.qs("region") || "" };
   let cur = null, prev = null, label = "", link = "";
 
-  /* ----------------------------------------------------------- window */
-  const inRegion = (m) => !state.region || (state.region === "international" ? m.r === "international" : m.r === state.region);
-  function latestDate() {
-    let d = null;
-    T.matches.forEach((m) => { if (m.d && inRegion(m) && (!d || m.d > d)) d = m.d; });
-    return d;
-  }
-
+  /* ----------------------------------------------------------- window
+     The site-wide time range (app/timerange.js), 14 days unless the
+     visitor picks another. Relative windows count back from the chosen
+     region's own newest map. The arrows compare with the window of the
+     same length just before — when that window is inside the season. */
   function run() {
     const region = state.region || null;
-    prev = null;
-    if (state.w === "30" || state.w === "stage" || state.w === "season") {
-      const asOf = latestDate();
-      if (state.w === "30") {
-        cur = S.compute(T, ROLES, { asOf: asOf, days: 30, region: region });
-        prev = S.compute(T, ROLES, { asOf: S.addDays(cur.from, -1), days: 30, region: region });
-        label = "Last 30 days";
-        link = "range=30";
-      } else if (state.w === "stage") {
-        const last = T.matches.filter((m) => m.d && inRegion(m) && m.d <= asOf).sort((a, b) => (a.d < b.d ? 1 : -1))[0];
-        const from = T.matches.filter((m) => m.d && inRegion(m) && last && m.s === last.s)
-          .reduce((d, m) => (!d || m.d < d ? m.d : d), null);
-        cur = S.compute(T, ROLES, { asOf: asOf, from: from, region: region });
-        label = last ? U.STAGE_NAMES[last.s] || last.s : "This stage";
-        link = "range=custom&from=" + (from || "");
-      } else {
-        cur = S.compute(T, ROLES, { asOf: asOf, region: region });
-        label = "Whole season";
-        link = "range=season";
-      }
-      if (asOf && asOf !== T.dates.max) link += "&asof=" + asOf;
-    } else {
-      const x = S.recent(T, ROLES, { region: region });
-      cur = x.result;
-      prev = x.prev;
-      label = x.days ? "Last " + x.days + " days" : "Whole season";
-      link = x.days ? "range=" + x.days : "range=season";
-      if (cur.asOf !== T.dates.max) link += "&asof=" + cur.asOf;
-    }
+    const r = TR.resolve({ region: region });
+    cur = S.compute(T, ROLES, { asOf: r.to, from: r.from || null, region: region });
+    prev = r.prev && r.prev.from >= ((T.dates || {}).min || "")
+      ? S.compute(T, ROLES, { asOf: r.prev.to, from: r.prev.from, region: region }) : null;
+    label = r.label;
+    link = "t=" + encodeURIComponent(r.key) + (r.key === "custom" ? "&tf=" + r.from + "&tt=" + r.to : "");
     if (state.region) link += "&region=" + state.region;
   }
 
@@ -78,19 +52,23 @@
 
   /* -------------------------------------------------------- controls */
   function renderControls() {
-    const seg = (key, opts) => '<div class="seg" role="group" aria-label="' + (key === "w" ? "Time window" : "Region") + '">' +
+    const seg = (key, opts) => '<div class="seg" role="group" aria-label="Region">' +
       opts.map((o) => '<button type="button" data-' + key + '="' + esc(o[0]) + '" aria-pressed="' +
         (state[key] === o[0] ? "true" : "false") + '">' + esc(o[1]) + "</button>").join("") + "</div>";
-    P.mount("hm-controls", seg("w", WINDOWS) + seg("region", REGIONS) + U.sourceBadge());
+    P.mount("hm-controls", seg("region", REGIONS) + U.sourceBadge());
   }
 
   function renderWindowLine() {
     const B = cur.bucket("*");
-    P.mount("hm-window", B
-      ? '<span class="hm-window__k">' + esc(label) + "</span> · " + esc(U.fmtDate(B.from)) + " – " + esc(U.fmtDate(B.to)) +
-        " · <b>" + B.maps + "</b> pro maps" + (state.region ? " · " + esc((REGIONS.find((r) => r[0] === state.region) || [])[1]) : "") +
-        (prev && prev.bucket("*") ? ' <span class="dim">· arrows compare with the ' + esc(label.toLowerCase().replace("last ", "")) + " before</span>" : "")
-      : "No maps in this window.");
+    const n = B ? B.maps : 0;
+    TR.note("hm-range", "<b>" + n + "</b> pro map" + (n === 1 ? "" : "s") +
+      (state.region ? " · " + esc((REGIONS.find((r) => r[0] === state.region) || [])[1]) : ""));
+    /* A short window in a quiet region can be thin; say so, and offer
+       the wider window in one tap rather than leaving a sparse page. */
+    P.mount("hm-window", !n ? "No pro maps in this window." + TR.widenHtml()
+      : (prev && prev.bucket("*") ? '<span class="dim">▲▼ compare with the ' + esc(label.toLowerCase().replace("last ", "")) +
+          " before.</span>" : "") +
+        (n < 20 ? ' <span class="dim">Only ' + n + " maps in this window — tiers on a small sample move a lot.</span>" + TR.widenHtml() : ""));
   }
 
   /* ---------------------------------------------------------- S tier */
@@ -197,7 +175,7 @@
     const cards = cur.maps.map((B) => {
       let top = topComp(cur, B.map);
       let note = "";
-      if ((!top || top.apps < 2) && state.w !== "season") {
+      if ((!top || top.apps < 2) && TR.resolve().key !== "season") {
         if (!longer) longer = S.compute(T, ROLES, { asOf: cur.asOf, days: LONG_DAYS, region: state.region || null });
         const alt = topComp(longer, B.map);
         if (alt && alt.apps >= 2 && (!top || alt.apps > top.apps)) { top = alt; note = LONG_DAYS + "d"; }
@@ -256,7 +234,8 @@
 
   /* ------------------------------------------------------------ boot */
   function update() {
-    P.setQs({ w: state.w === "recent" ? "" : state.w, region: state.region });
+    P.setQs({ region: state.region });
+    TR.setRegion("hm-range", state.region);
     run();
     renderControls();
     renderWindowLine();
@@ -268,12 +247,13 @@
 
   document.addEventListener("DOMContentLoaded", () => {
     if (!T || !T.maps || !T.maps.length) { P.mount("hm-stier", P.empty("◇", "No pro data yet", "")); return; }
+    TR.mount("hm-range", { region: state.region || null });
+    TR.onChange(update);
     update();
     document.getElementById("hm-controls").addEventListener("click", (e) => {
-      const b = e.target.closest("[data-w],[data-region]");
+      const b = e.target.closest("[data-region]");
       if (!b) return;
-      if (b.dataset.w != null) state.w = b.dataset.w;
-      if (b.dataset.region != null) state.region = b.dataset.region;
+      state.region = b.dataset.region;
       update();
     });
   });

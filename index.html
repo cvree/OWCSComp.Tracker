@@ -21,9 +21,12 @@
     <h1>What's winning <span class="hl">right now</span></h1>
     <p class="lede">The S-tier heroes, the bans, and the comp to run on every map, from every pro OWCS match.
       Wins count for more against strong teams, at big events and deep in the bracket.</p>
-    <div id="hm-controls" class="hm-controls u-mt-5"></div>
-    <p id="hm-window" class="hm-window small u-mt-3" aria-live="polite"></p>
   </div>
+  <!-- The time range sits directly in <main> so it can stay pinned under
+       the header for the whole page (sticky only works within its parent). -->
+  <div id="hm-range"></div>
+  <div id="hm-controls" class="hm-controls u-mt-3"></div>
+  <p id="hm-window" class="hm-window small u-mt-3" aria-live="polite"></p>
 
   <section class="band" aria-labelledby="h-stier">
     <div class="sec-head">
@@ -88,6 +91,7 @@
 <script src="assets/js/app/extui.js"></script>
 <script src="assets/js/app/tierstats.js"></script>
 <script src="assets/js/app/tierui.js"></script>
+<script src="assets/js/app/timerange.js"></script>
 <script src="assets/js/app/hovercard.js" defer></script>
 <script src="assets/js/app/shell.js"></script>
 <script src="assets/js/app/page-maps.js"></script>

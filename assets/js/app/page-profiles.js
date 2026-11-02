@@ -95,12 +95,26 @@
   /* What a team runs, or what a hero is run in: the comp book's short
      list, first on the page, because it is the question people open a
      team or hero page to answer. */
+  /* Both follow the site-wide time range (the bar under the header) and
+     redraw in place when it changes; the rest of the page is unaffected. */
+  let liveFilter = null;
   function compsPart(filter, title, sub) {
     const html = P.compBookSummary ? P.compBookSummary(filter) : "";
     if (!html) return "";
+    liveFilter = filter;
     return '<section class="band" id="comps"><div class="sec-head"><h2>' + esc(title) + "</h2>" +
       (P.tierUI ? P.tierUI.sourceBadge() : "") + "</div>" +
-      (sub ? '<p class="dim small">' + sub + "</p>" : "") + html + "</section>";
+      (sub ? '<p class="dim small">' + sub + "</p>" : "") + '<div id="comps-live">' + html + "</div></section>";
+  }
+  function mountRange(onChange) {
+    const TR = P.timeRange;
+    if (!TR || !document.getElementById("pf-range")) return;
+    TR.mount("pf-range");
+    TR.onChange(() => {
+      const live = document.getElementById("comps-live");
+      if (live && liveFilter && P.compBookSummary) live.innerHTML = P.compBookSummary(liveFilter);
+      if (onChange) onChange();
+    });
   }
 
   function sheetTeamParts(id) {
@@ -155,6 +169,7 @@
     }
     set("body", parts.concat(sheetTeamParts(id)).join("") ||
       P.empty("◇", "Nothing recorded for this team", "Neither source records a map for it yet."));
+    mountRange();
   }
 
   function renderTeam() {
@@ -276,6 +291,7 @@
     }
 
     set("body", parts.join(""));
+    mountRange();
   }
 
   /* ------------------------------------------------------------- hero */
@@ -294,7 +310,21 @@
 
     const rate = ((D && D.heroPickRates) || []).filter((r) => r.hero === h.id)[0];
     const art = P.heroCard(h.id);
-    const book = P.compBook && window.OWCS_SHEET_TIERS ? P.compBook.build(window.OWCS_SHEET_TIERS, { hero: h.id, minMaps: 1 }) : null;
+    /* Counted in the site-wide time range, and recounted when it changes. */
+    const bookIn = () => {
+      if (!P.compBook || !window.OWCS_SHEET_TIERS) return null;
+      const w = P.timeRange ? P.timeRange.buildOpts() : {};
+      return P.compBook.build(window.OWCS_SHEET_TIERS, { hero: h.id, minMaps: 1, asOf: w.asOf || null, from: w.from || null });
+    };
+    const bookLede = (b) => {
+      const when = P.timeRange ? P.timeRange.resolve().label.toLowerCase().replace(/^last/, "the last") : "this season";
+      return b && b.coveredMaps
+        ? "In " + b.coveredMaps.toLocaleString("en-US") + " pro line-ups in " + esc(when) + " — " +
+          pct(b.coveredMaps / Math.max(1, b.teamMaps)) + " of every full line-up in that time, across " +
+          b.distinct + " different comps."
+        : "Not in any full pro line-up in " + esc(when) + ".";
+    };
+    const book = bookIn();
     const run = compsPart({ hero: h.id }, "Comps with " + h.name,
       "The five-hero comps pros built around " + h.name + ", most-run first, and the one winning most. Tap one for its full record.");
 
@@ -305,11 +335,9 @@
       '<span class="hero__face">' + P.heroFace(h, 84) + "</span></span>" +
       "<div><h1 style=\"font-size:clamp(1.8rem,3.6vw,2.8rem)\">" + esc(h.name) + "</h1>" +
       '<p class="dim u-mt-3">' + esc(h.role || "Role not recorded") + "</p></div></div>" +
-      '<p class="lede u-mt-4">' +
-      (book && book.coveredMaps
-        ? "In " + book.coveredMaps.toLocaleString("en-US") + " pro line-ups this season — " +
-          pct(book.coveredMaps / Math.max(1, book.teamMaps)) + " of every full line-up the community spreadsheet records, across " +
-          book.distinct + " different comps."
+      '<p class="lede u-mt-4" id="hero-lede">' +
+      (book && book.teamMaps
+        ? bookLede(book)
         : rate
         ? "Seen in " + rate.picks + " approved line-up(s) — a " + pct(rate.pickRate) +
           " pick rate across everything reviewed so far, winning " + pct(rate.winRate) + " of them."
@@ -389,6 +417,11 @@
         "This page fills in as games featuring this hero are reviewed and published."));
     }
     set("body", parts.join(""));
+    mountRange(() => {
+      const el = document.getElementById("hero-lede");
+      const b = bookIn();
+      if (el && b && b.teamMaps) el.innerHTML = bookLede(b);
+    });
   }
 
   const mapKey = (mapId) => {

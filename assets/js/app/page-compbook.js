@@ -11,8 +11,10 @@
    (page-stats.js); the two sources are never added together.
 
    State lives in the URL so a view can be linked:
-     ?tab=comps&cw=season|30|60|90&cr=region&cs=stage&cm=map&cmo=mode
+     ?tab=comps&cr=region&cs=stage&cm=map&cmo=mode
        &ct=team&ch=hero&cmin=N&csort=played|win|tier|recent
+   The time window is the site-wide range (app/timerange.js: ?t=…), shown
+   in the bar pinned under the header, 14 days unless changed.
    ===================================================================== */
 (function () {
   "use strict";
@@ -27,15 +29,17 @@
   const REGIONS = [["", "All regions"], ["na", "North America"], ["emea", "EMEA"], ["korea", "Korea"],
     ["japan", "Japan"], ["china", "China"], ["pacific", "Pacific"], ["asia", "Asia championship"],
     ["international", "International LANs"]];
-  const WINDOWS = [["season", "Whole season"], ["90", "Last 90 days"], ["60", "Last 60 days"], ["30", "Last 30 days"]];
+  const TR = P.timeRange;
   const SORTS = [["played", "Most played"], ["win", "Best adjusted win"], ["tier", "Tier score"], ["recent", "Most recent"]];
   const MINS = [["1", "Every comp"], ["2", "Run 2+ times"], ["3", "Run 3+ times"], ["5", "Run 5+ times"], ["10", "Run 10+ times"]];
   const PAGE = 30;
-  const DEFAULTS = { cw: "season", cr: "", cs: "", cm: "", cmo: "", ct: "", ch: "", cmin: "2", csort: "played" };
-  const MORE_KEYS = ["cw", "cs", "cmo", "ct", "cmin"];
+  const DEFAULTS = { cr: "", cm: "", cmo: "", ct: "", ch: "", cmin: "2", csort: "played" };
+  const MORE_KEYS = ["cmo", "ct", "cmin"];
+  /* An older link's ?cs=<stage> becomes that stage's time range. */
+  if (P.qs("cs") && TR) { TR.set({ t: "stage:" + P.qs("cs") }); P.setQs({ cs: null }); }
 
   const state = {
-    cw: P.qs("cw") || "season", cr: P.qs("cr") || "", cs: P.qs("cs") || "", cm: P.qs("cm") || "",
+    cr: P.qs("cr") || "", cm: P.qs("cm") || "",
     cmo: P.qs("cmo") || "", ct: P.qs("ct") || "", ch: P.qs("ch") || "",
     cmin: P.qs("cmin") || "2", csort: P.qs("csort") || "played",
   };
@@ -44,7 +48,8 @@
 
   const opts = (over) => {
     const s = Object.assign({}, state, over || {});
-    return { days: s.cw && s.cw !== "season" ? Number(s.cw) : null, region: s.cr || null, stage: s.cs || null,
+    const w = TR ? TR.buildOpts({ region: s.cr || null }) : {};
+    return { asOf: w.asOf || null, from: w.from || null, region: s.cr || null,
       map: s.cm || null, mode: s.cmo || null, team: s.ct || null, hero: s.ch || null,
       minMaps: Number(s.cmin || 1), sort: s.csort };
   };
@@ -71,6 +76,7 @@
       "<span>" + esc(U.teamName(id)) + "</span></a>";
   };
   const wl = (w, l) => w + "–" + l;
+  const longRange = () => { const r = TR ? TR.resolve() : null; return !r || r.days == null || r.days > 30; };
   const rate = (w, l) => (w + l ? pct(w / (w + l)) : "—");
   const mapLabel = (id) => U.mapName(id);
   const stageName = (s) => U.STAGE_NAMES[s] || s;
@@ -112,8 +118,6 @@
     const teams = Array.from(F.teams.keys()).sort((a, b) => U.teamName(a).localeCompare(U.teamName(b)))
       .map((id) => [id, U.teamName(id)]);
     const heroes = F.heroes.slice().sort((a, b) => heroName(a).localeCompare(heroName(b))).map((id) => [id, heroName(id)]);
-    const stageOrder = ["pre-season", "stage-1", "champions-clash", "stage-2", "midseason-championship", "stage-3", "world-finals"];
-    const stages = F.stages.slice().sort((a, b) => stageOrder.indexOf(a) - stageOrder.indexOf(b)).map((s) => [s, stageName(s)]);
     /* The four questions people actually ask first — which map, which
        hero, which region, best or most played — stay in view. The rest
        fold away, and open by themselves when one of them is in use, so a
@@ -129,14 +133,11 @@
       '<details class="cb-more-filters"' + (more ? " open" : "") + '><summary class="small">More filters' +
         (more ? ' <span class="cb-count">' + more + " on</span>" : "") + "</summary>" +
       '<div class="cb-fgrid u-mt-3">' +
-      sel("cw", "Window", WINDOWS) +
-      sel("cs", "Stage", [["", "Every stage"]].concat(stages)) +
       sel("cmo", "Mode", [["", "Every mode"]].concat(F.modes.slice().sort().map((m) => [m, m]))) +
       sel("ct", "Team", [["", "Every team"]].concat(teams)) +
       sel("cmin", "Show", MINS) +
       "</div>" +
-      '<p class="dim small u-mt-3">Windows count back from the newest map in the spreadsheet. Dates are estimated ' +
-      "from the official schedule; the sheet itself records none.</p></details>" +
+      "</details>" +
       '<div class="row u-mt-3"><button type="button" class="btn btn--sm btn--quiet" id="cb-reset">Reset filters</button></div></form>';
   }
 
@@ -157,12 +158,14 @@
       P.setQs({ [k]: state[k] || null });
       shown = PAGE;
       updateMore(form);
+      if (k === "cr" && TR) TR.setRegion("cb-range", state.cr);
+      drawHeroes();
       draw();
       drawByMap();
     });
     document.getElementById("cb-reset").addEventListener("click", () => {
       Object.assign(state, DEFAULTS);
-      P.setQs({ cw: null, cr: null, cs: null, cm: null, cmo: null, ct: null, ch: null, cmin: null, csort: null });
+      P.setQs({ cr: null, cm: null, cmo: null, ct: null, ch: null, cmin: null, csort: null });
       form.querySelectorAll("select").forEach((s) => { s.value = state[s.dataset.k]; });
       updateMore(form);
       shown = PAGE;
@@ -193,7 +196,9 @@
       '<span class="cb-where">' + topMaps + "</span>" +
       '<span class="cb-who">' + topTeams + "</span>" +
       '<span class="cb-when small"><span>' + esc(dateLabel(c.last)) + '</span><span class="dim">' +
-        (c.recent ? c.recent + " in last 30 days" : "last seen") + "</span></span>" +
+        /* "N in the last 30 days" only says something when the range is
+           longer than that; inside a 14-day range it would contradict it. */
+        (c.recent && longRange() ? c.recent + " in last 30 days" : "last seen") + "</span></span>" +
       "</summary>" +
       '<div class="cb-detail" data-for="' + esc(c.key) + '"></div></details>';
   }
@@ -211,7 +216,7 @@
         '<span class="dim small">graded across every comp in this view, on how often it is run and its adjusted win</span>'
         : '<span class="dim">Not tiered: run fewer than ' + ((T.weights || {}).compMinMaps || 2) + " times</span>") + "</dd>" +
       "<dt>Seen</dt><dd>" + esc(dateLabel(c.first)) + " – " + esc(dateLabel(c.last)) +
-        (c.recent ? ' · <b>' + c.recent + "</b> in the last 30 days" : "") + ' <span class="dim small">(estimated dates)</span></dd>' +
+        (c.recent && longRange() ? ' · <b>' + c.recent + "</b> in the last 30 days" : "") + ' <span class="dim small">(estimated dates)</span></dd>' +
       "<dt>Regions</dt><dd>" + c.regions.map((r) => esc(U.REGION_SHORT[r[0]] || stageName(r[0])) + " " + r[1]).join(" · ") + "</dd>" +
       "</dl></section>";
 
@@ -258,13 +263,12 @@
   /* -------------------------------------------------------------- draw */
   function summary(r) {
     const scope = [];
-    if (state.cs) scope.push(stageName(state.cs));
     if (state.cr) scope.push((REGIONS.find((x) => x[0] === state.cr) || [0, state.cr])[1]);
     if (state.cm) scope.push(mapLabel(state.cm));
     if (state.cmo) scope.push(state.cmo);
     if (state.ct) scope.push(U.teamName(state.ct));
     if (state.ch) scope.push("with " + heroName(state.ch));
-    const when = r.from ? dateLabel(r.from) + " – " + dateLabel(r.asOf) : "the whole season";
+    const when = TR ? TR.resolve({ region: state.cr || null }).label.toLowerCase().replace(/^last/, "the last") : "the whole season";
     return '<p class="cb-summary"><b>' + n(r.distinct) + "</b> distinct comps across <b>" + n(r.coveredMaps) +
       "</b> team line-ups on <b>" + n(r.maps) + "</b> maps" + (scope.length ? " · " + esc(scope.join(" · ")) : "") +
       " · " + esc(when) + '. <span class="dim">' + n(r.repeated) + " were run more than once; showing " +
@@ -283,7 +287,9 @@
       ? '<div class="cb-list u-mt-4">' + head + rows.slice(0, shown).map(row).join("") + "</div>" +
         (rows.length > shown ? '<div class="row u-mt-4"><button type="button" class="btn btn--ghost" id="cb-more">Show ' +
           Math.min(PAGE, rows.length - shown) + " more · " + (rows.length - shown) + " left</button></div>" : "")
-      : P.empty("◇", "No comp matches these filters", "Widen the window, lower the minimum, or reset the filters."));
+      : P.empty("◇", "No comp matches these filters", "Widen the time range, lower the minimum, or reset the filters.") +
+        (TR ? TR.widenHtml() : ""));
+    if (TR) TR.note("cb-range", "<b>" + n(result.distinct) + "</b> comps · <b>" + n(result.maps) + "</b> maps");
     const more = document.getElementById("cb-more");
     if (more) more.addEventListener("click", () => { shown += PAGE; draw(); });
   }
@@ -320,7 +326,7 @@
       const r = CB.build(T, Object.assign({}, base, { map: id }));
       return { id: id, r: r };
     }).filter((x) => x.r.comps.length).sort((a, b) => b.r.teamMaps - a.r.teamMaps || mapLabel(a.id).localeCompare(mapLabel(b.id)));
-    if (!cards.length) { host.innerHTML = P.empty("◇", "No comp matches these filters", "Reset the filters on the Comps tab."); return; }
+    if (!cards.length) { host.innerHTML = P.empty("◇", "No comp matches these filters", "Widen the time range or reset the filters on the Comps tab.") + (TR ? TR.widenHtml() : ""); return; }
     const line = (c) => '<li class="cb-mline">' + faces(c.heroes, 26) + '<span class="cb-mline__n">' + plural(c.n, "map") + "</span>" +
       "<b>" + wl(c.wins, c.losses) + '</b><span class="dim small">' + pct(c.adjWin) + " adj.</span></li>";
     host.innerHTML = '<div class="cb-mapgrid">' + cards.map((x) => {
@@ -348,6 +354,16 @@
       wireDetails(host);
       draw();
       openLinked();
+      const heroes = document.getElementById("p-heroes");
+      if (heroes && P.tierStats) {
+        heroes.insertAdjacentHTML("afterbegin", '<div class="sec-head u-mt-5"><h2>Heroes in this time range</h2>' +
+          U.sourceBadge() + '</div><div id="cb-heroes"></div>');
+        drawHeroes();
+      }
+      if (TR) {
+        TR.mount("cb-range", { region: state.cr || null });
+        TR.onChange(() => { shown = PAGE; draw(); drawByMap(); drawHeroes(); });
+      }
     }
     const bm = document.getElementById("cb-bymap-wrap");
     if (bm) {
@@ -357,6 +373,55 @@
         '<div id="cb-bymap" class="u-mt-4"></div>';
       drawByMap();
     }
+  }
+
+  /* ------------------------------------------------------ heroes tab
+     Every hero in the time range, by role: tier, pick share, adjusted win,
+     W–L, ban rate, and the arrow against the window of the same length
+     just before. Same maths as the home page and Hero tiers (tierstats). */
+  function drawHeroes() {
+    const host = document.getElementById("cb-heroes");
+    const S = P.tierStats;
+    if (!host || !S || !TR) return;
+    const roles = U.roles();
+    const r = TR.resolve({ region: state.cr || null });
+    const cur = S.compute(T, roles, { asOf: r.to, from: r.from || null, region: state.cr || null });
+    const prev = r.prev && r.prev.from >= ((T.dates || {}).min || "")
+      ? S.compute(T, roles, { asOf: r.prev.to, from: r.prev.from, region: state.cr || null }) : null;
+    const before = new Map(prev ? prev.heroTiers("*").map((x) => [x.id, x.pickShare]) : []);
+    const B = cur.bucket("*");
+    if (!B || !B.maps) {
+      host.innerHTML = P.empty("◇", "No pro maps in this time range", "Widen it to see heroes.") + TR.widenHtml();
+      return;
+    }
+    const rows = cur.heroTiers("*");
+    const arrow = (x) => {
+      if (!prev) return "";
+      const b = before.get(x.id);
+      if (b == null) return '<span class="trend" data-dir="new" title="Not picked in the window before">NEW</span>';
+      const d = Math.round((x.pickShare - b) * 100);
+      if (Math.abs(d) < 2) return '<span class="trend" data-dir="flat">±' + Math.abs(d) + "</span>";
+      return '<span class="trend" data-dir="' + (d > 0 ? "up" : "down") + '">' + (d > 0 ? "▲" : "▼") + " " + Math.abs(d) + "</span>";
+    };
+    const table = (role) => {
+      const list = rows.filter((x) => x.role === role).sort((a, b) => (a.lowSample ? 1 : 0) - (b.lowSample ? 1 : 0) || (b.score || 0) - (a.score || 0));
+      return '<section class="cb-box"><h3>' + esc(role) + "</h3>" +
+        '<table class="tbl tbl--compact cb-tbl cb-htbl"><thead><tr><th>Hero</th><th>Tier</th><th class="num">Pick</th>' +
+        '<th class="num">Adj. win</th><th class="num">Ban</th><th class="num" aria-label="Pick change">±</th></tr></thead><tbody>' +
+        list.map((x) => {
+          const h = P.hero(x.id);
+          return '<tr><td><a class="cb-team" href="hero.html?id=' + encodeURIComponent(h.id) + '">' + P.heroFace(h, 24) +
+            "<span>" + esc(h.name) + '</span></a></td><td><span class="tr-badge" data-tier="' + esc(x.tier || "") + '">' +
+            esc(x.tier || "–") + '</span></td><td class="num">' + pct(x.pickShare) + '</td><td class="num">' +
+            (x.decided ? pct(x.adjWin, 1) : "—") + '</td><td class="num">' + pct(x.banShare) + '</td><td class="num">' + arrow(x) + "</td></tr>";
+        }).join("") + "</tbody></table></section>";
+    };
+    host.innerHTML = '<p class="cb-summary">Every hero in <b>' + n(B.maps) + "</b> pro maps · " +
+      esc(r.label.toLowerCase().replace(/^last/, "the last")) + (state.cr ? " · " + esc((REGIONS.find((x) => x[0] === state.cr) || [0, state.cr])[1]) : "") +
+      '. <span class="dim">Pick = share of team line-ups listing the hero; adj. win weighs each map by event, bracket and the ' +
+      'opponent\'s power; ± is pick change against the window before. <a href="tiers.html">Map by map on Hero tiers →</a></span></p>' +
+      (B.maps < 20 ? '<p class="dim small">Only ' + B.maps + " maps — a small sample moves a lot." + TR.widenHtml() + "</p>" : "") +
+      '<div class="cb-grid cb-grid--heroes u-mt-4">' + ["Tank", "Damage", "Support"].map(table).join("") + "</div>";
   }
 
   /* --------------------------------------------- deep link to a comp
@@ -386,12 +451,17 @@
     if (filter.hero) q.set("ch", filter.hero);
     q.set("cmin", "1");
     if (key) q.set("cc", key);
+    if (TR) { const t = TR.get(); if (t.t !== TR.DEFAULT) { q.set("t", t.t); if (t.tf) { q.set("tf", t.tf); q.set("tt", t.tt); } } }
     return "stats.html?" + q.toString();
   };
   P.compBookSummary = (filter, opt) => {
     opt = opt || {};
-    const r = CB.build(T, Object.assign({ minMaps: 1, sort: "played" }, filter));
-    if (!r.comps.length) return "";
+    const w = TR ? TR.buildOpts() : {};
+    const r = CB.build(T, Object.assign({ minMaps: 1, sort: "played", asOf: w.asOf || null, from: w.from || null }, filter));
+    if (!r.comps.length) {
+      return P.empty("◇", "Nothing in this time range", "No full line-up is recorded " +
+        (TR ? TR.resolve().label.toLowerCase().replace(/^last/, "in the last") : "here") + ".") + (TR ? TR.widenHtml() : "");
+    }
     const top = r.comps.slice(0, opt.limit || 6);
     const topKeys = new Set(top.map((c) => c.key));
     const best = r.comps.filter((c) => c.n >= 3 && c.decided >= 3 && !topKeys.has(c.key))

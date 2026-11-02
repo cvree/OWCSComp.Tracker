@@ -20,10 +20,10 @@ Desktop first. Top to bottom:
    win)), with an **UPSET** badge when the winner had under 40% to win.
 5. The broadcast VOD feed (page-maps.js) is unchanged, at the bottom.
 
-Window: **Recent** (the shortest of 14 / 30 / 60 / 120 days holding ≥ 40 maps,
-counted back from the region's own latest map), 30 days, This stage, Season.
-Region: All, NA, EMEA, Korea, China, Japan, Pacific, LANs. Both are in the URL
-(`?w=…&region=…`). Sources and methods sit behind one small "ⓘ Pro data" badge.
+Window: the site-wide **time range** (see below), the last 14 days unless the
+visitor picks another. The ▲▼ arrows compare with the window of the same length
+just before. Region: All, NA, EMEA, Korea, China, Japan, Pacific, LANs (`?region=`).
+Sources and methods sit behind one small "ⓘ Pro data" badge.
 
 
 S–D hero and comp tier lists per map, built from the community
@@ -43,9 +43,11 @@ a separate nav slot.
 | Power ranking | Every team's power as of the viewing date: Elo + standings, movement since the range start. |
 | How it's scored | The formulas and every weight, read live from the data file. |
 
-Controls (all kept in the URL): viewing date (`asof`), range (`range` = 14/30/60/90/180/season/custom,
-`from`), region, role, map, tab. "Jump to" buttons set the range to one stretch of the
-season (Stage 1, Champions Clash, …).
+Controls (all kept in the URL): the site-wide time range (`t`, below), region, role,
+map, tab. The page's old viewing date / range / from fields and its "Jump to" stage
+buttons are folded into the time range: a stage is one of its presets, and any
+viewing date is a custom range ending on that day. Old `?range=` / `?asof=` /
+`?from=` links still open the window they meant.
 
 ## Dates are estimates
 
@@ -131,4 +133,35 @@ and hero. Each comp carries:
 
 `pipeline/test_comp_book.py` holds the arithmetic on a synthetic season
 and on the real export.
+
+## The time range (`assets/js/app/timerange.js`)
+
+One time range for the whole site. Every page that counts comps or heroes
+(home, Comps and all its tabs, Hero tiers, team pages, hero pages) reads the
+same range, shows the same bar pinned under the header, and redraws when it
+changes. On a phone the bar is one row: a single menu holding every option.
+
+| Preset | `?t=` | Window |
+|---|---|---|
+| **Last 14 days** (default) | *(none)* | the 14 days up to the newest map |
+| Last 7 / 30 / 60 / 90 days | `7` … `90` | likewise |
+| A stage | `stage:<id>` | the stage's first to last estimated day |
+| Whole season | `season` | everything |
+| Custom dates | `custom&tf=…&tt=…` | any from / to |
+
+* **Relative windows count back from the newest map in view.** With a region
+  chosen, that is the region's own newest map, so a region that has not played
+  this week still shows its last 14 days of play rather than nothing.
+* **The URL wins**, so a shared link shows what its sender saw. Otherwise the
+  last range this browser chose is remembered (localStorage); a blocked store
+  only means the default.
+* **A thin window says so.** Under 20 maps, the page says the sample is small and
+  offers the next wider windows in one tap. An empty window offers them in
+  place of an empty table.
+* **Dates are estimated** from the official schedule (above), and the bar says
+  so beside the dates.
+
+`pipeline/test_time_range.py` holds the rules: the default, each preset's dates,
+region scoping, URL over memory over default, the old links, and that every
+comp or hero page loads the module and pins the bar directly in `<main>`.
 

@@ -21,13 +21,15 @@
     <h1>Hero tiers, <span class="hl">map by map</span></h1>
     <p class="lede">Every hero ranked S to D on each map by how often pros pick it and how much its wins
       are worth. A win counts for more at a bigger event, deeper in the bracket and against a
-      higher-ranked team. A loss to a weaker team counts against it. Pick a viewing date to see the
-      meta as it stood that day.</p>
+      higher-ranked team. A loss to a weaker team counts against it. The last 14 days by default:
+      change the time range to any number of days, a stage, or your own dates.</p>
   </div>
 
   <div id="provenance" class="u-mt-4"></div>
 
-  <form id="filters" class="mx-filters tr-filters card u-mt-5" aria-label="Choose the date, range and region" onsubmit="return false"></form>
+  <!-- The site-wide time range, pinned under the header. -->
+  <div id="tr-range"></div>
+  <form id="filters" class="mx-filters tr-filters card u-mt-4" aria-label="Choose the region and role" onsubmit="return false"></form>
   <div id="summary" class="u-mt-4" aria-live="polite"></div>
 
   <nav id="maps" class="tr-maps u-mt-5" aria-label="Choose a map"></nav>
@@ -65,6 +67,7 @@
 <script src="assets/js/app/sources.js"></script>
 <script src="assets/js/app/tierstats.js"></script>
 <script src="assets/js/app/tierui.js"></script>
+<script src="assets/js/app/timerange.js"></script>
 <script src="assets/js/app/hovercard.js" defer></script>
 <script src="assets/js/app/shell.js"></script>
 <script src="assets/js/app/page-tiers.js"></script>

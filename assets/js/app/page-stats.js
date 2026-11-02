@@ -42,7 +42,12 @@
   function renderSheetHeroes() {
     const host = document.getElementById("p-heroes");
     if (!host || !P.mountExtHeroesBlock) return;
-    host.insertAdjacentHTML("beforeend", '<div class="u-mt-6" id="sheet-heroes"></div>');
+    /* Whole-season counts by stage and region: undated, so they cannot
+       follow the time range; kept, closed, for anyone who wants them. */
+    host.insertAdjacentHTML("beforeend", '<details class="about-data card u-mt-6"><summary>' +
+      '<span class="about-data__title">Whole-season appearances and bans</span>' +
+      '<span class="dim small">by stage and region, ignoring the time range</span></summary>' +
+      '<div class="about-data__body"><div class="u-mt-4" id="sheet-heroes"></div></div></details>');
     P.mountExtHeroesBlock("sheet-heroes");
   }
 
