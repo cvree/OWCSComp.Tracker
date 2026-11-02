@@ -432,14 +432,15 @@ def test_design_rules() -> None:
     for ink in ("tx", "tx-2", "tx-3"):
         worst = min(_contrast(tok[ink], tok[s]) for s in surfaces)
         check(f"--{ink} clears 4.5:1 on every surface (worst {worst:.2f})", worst >= 4.5)
-    for sig in ("gold", "amber", "amber-hi", "red", "cyan", "emerald", "indigo", "bar",
+    for sig in ("outline", "gold", "amber", "amber-hi", "red", "cyan", "emerald", "indigo", "bar",
                 "tier-a", "tier-b", "tier-d"):
         c = _contrast(tok[sig], tok["s1"])
         check(f"--{sig} clears 3:1 on a card ({c:.2f})", c >= 3)
 
     # Distinct meanings need distinct colours. "Needs a person" and
     # "published" were once the same hue to a tenth of a degree.
-    for a, b in (("amber", "gold"), ("amber-hi", "gold"), ("amber", "red")):
+    for a, b in (("amber", "gold"), ("amber-hi", "gold"), ("amber", "red"),
+                 ("outline", "emerald"), ("outline", "role-support"), ("outline", "gold")):
         d = abs(_oklch_hue(tok[a]) - _oklch_hue(tok[b]))
         d = min(d, 360 - d)
         check(f"--{a} and --{b} are told apart by hue ({d:.0f}° apart)", d >= 15)
@@ -476,6 +477,8 @@ def test_design_rules() -> None:
           bool(coarse) and "min-height: 44px" in coarse.group(1)
           and "min-width: 44px" in coarse.group(1) and "max(100%, 44px)" in coarse.group(1))
     check("prefers-contrast: more is honoured", "@media (prefers-contrast: more)" in css)
+    check("the focus ring is the outline colour, not cyan (cyan means working)",
+          not re.search(r"outline:\s*2px solid var\(--cyan\)", css) and "var(--outline)" in css)
 
     shell = read("assets/js/app/shell.js")
     check("a row that scrolls sideways says so (edge fade)",

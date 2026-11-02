@@ -90,8 +90,14 @@
   --link-line: rgba(244, 245, 247, .30);
   --win: var(--bone);                         /* a result, not a status */
   --bar: #b4bac5;                             /* a quantity, 9.5:1 on --s1 */
-  --sel: var(--bone);                         /* chosen / current / focused row */
-  --wash-sel: rgba(232, 234, 238, .08);
+  /* The outline: a Contenders lime. It draws every "this one" on the
+     site — the keyboard focus ring, the chosen option, the current row,
+     the playhead. Kept on the yellow side of green (oklch hue 132) so
+     it is never read as emerald (evidence, hue 160) or the Support
+     role, and so focus stops borrowing cyan, which means "working". */
+  --outline: #9bec44;                         /* 12.8:1 on --s1 */
+  --sel: var(--outline);                      /* chosen / current / focused row */
+  --wash-sel: rgba(155, 236, 68, .08);
 
   /* Tier ramp — diverging around a neutral B, so the five letters own
      their colours instead of borrowing evidence / published / needs-a-
@@ -225,7 +231,7 @@ img, svg, video { max-width: 100%; }
 img { height: auto; }
 
 :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
-  outline: 2px solid var(--cyan);
+  outline: 2px solid var(--outline);
   outline-offset: 2px;
   border-radius: var(--r-1);
 }
@@ -946,9 +952,9 @@ select {
   width: 16px; height: 16px; border-radius: 50%; background: var(--tx-3);
   transition: transform var(--t-2) var(--ease), background var(--t-2) var(--ease);
 }
-.switch input:checked + .switch__track { background: rgba(232, 234, 238, .22); border-color: var(--line-3); }
-.switch input:checked + .switch__track::after { transform: translateX(16px); background: var(--bone); }
-.switch input:focus-visible + .switch__track { outline: 2px solid var(--cyan); outline-offset: 2px; }
+.switch input:checked + .switch__track { background: rgba(155, 236, 68, .22); border-color: rgba(155, 236, 68, .55); }
+.switch input:checked + .switch__track::after { transform: translateX(16px); background: var(--outline); }
+.switch input:focus-visible + .switch__track { outline: 2px solid var(--outline); outline-offset: 2px; }
 
 /* segmented control — filters, view switches */
 .seg {
@@ -1955,7 +1961,7 @@ a.ch__key:hover .ch__name { color: var(--tx); text-decoration: underline; }
   position: relative; display: grid; gap: 4px; padding-top: 24px;
   cursor: ew-resize; user-select: none; touch-action: pan-y; border-radius: var(--r-2);
 }
-.ms-river:focus-visible { outline: 2px solid var(--cyan); outline-offset: 6px; }
+.ms-river:focus-visible { outline: 2px solid var(--outline); outline-offset: 6px; }
 .ms-rounds {
   position: absolute; top: 0; bottom: 0; right: 0;
   left: calc(var(--ms-label) + var(--ms-gap)); pointer-events: none;
@@ -2386,7 +2392,7 @@ a.mi-team:hover .mi-team__name { text-decoration: underline; }
 .mf-filters { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2) var(--s-3); }
 .mf-select { width: auto; min-width: 11rem; max-width: 100%; }
 .mf-toggle { display: inline-flex; align-items: center; gap: var(--s-2); font-size: 13.5px; color: var(--tx-2); cursor: pointer; }
-.mf-toggle input { width: 16px; height: 16px; accent-color: var(--bone); }
+.mf-toggle input { width: 16px; height: 16px; accent-color: var(--outline); }
 
 .mf-bcast { margin-top: var(--s-6, 32px); }
 .mf-bcast:first-child { margin-top: 0; }
@@ -2612,7 +2618,7 @@ table.tbl.tbl--fit { min-width: 0; }
 .tip:hover .tip__card, .tip:focus-within .tip__card { display: grid; animation: tip-in var(--t-1) var(--ease); }
 @keyframes tip-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .tip:hover .tip__card, .tip:focus-within .tip__card { animation: none; } }
-.tip:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; border-radius: var(--r-1); }
+.tip:focus-visible { outline: 2px solid var(--outline); outline-offset: 3px; border-radius: var(--r-1); }
 .tip__title { color: var(--tx); font-size: 13px; }
 .tip__line { display: block; }
 .tip__line .faces { vertical-align: middle; margin-left: 4px; }

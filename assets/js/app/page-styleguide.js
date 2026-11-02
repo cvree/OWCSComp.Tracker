@@ -84,7 +84,7 @@
       sw("--link", "a link; told apart by its underline, not by a colour") +
       sw("--win", "a result — the winner of a map. A result is not a status") +
       sw("--bar", "a quantity — every data bar and meter") +
-      sw("--sel", "the chosen option, the current row, the playhead") +
+      sw("--outline", "the Contenders lime — focus ring, chosen option, current row, playhead") +
     "</div>" +
     '<h3 class="u-mt-5">Tiers — one diverging ramp</h3>' +
     '<div class="grid grid--3 u-mt-3">' +

@@ -64,11 +64,22 @@ Everything that used to borrow gold now has a neutral token of its own:
 | `--link` | A link. Told apart by its underline, not by colour. |
 | `--win` | A result. The winner of a map is bright, not gold. A result is not a status. |
 | `--bar` | A quantity. Every meter, every data bar. |
-| `--sel` / `--wash-sel` | The chosen option, the current row, the playhead. |
+| `--outline` (`--sel`, `--wash-sel`) | **The Contenders lime**, `#9bec44`. Every "this one": the keyboard focus ring, the chosen option, the current row, the playhead. |
 | `--tier-s` … `--tier-d` | Tiers, as one diverging ramp around a neutral B. |
 
 `GOLD_ALLOWED` in the test is the list of selectors allowed to spend
 gold. Adding to it is a design decision, not a lint fix.
+
+### 1b. The outline is the site's own colour
+
+Gold is the brand's signal, and lime is the brand's hand: an original
+green in the spirit of Overwatch Contenders that marks wherever the
+reader *is*. Focus used to be cyan, which already meant "processing
+right now", and selection was plain white, which said nothing. One
+lime outline now does both jobs. It sits at OKLCH hue 132, on the
+yellow side of green, so it is never read as emerald (evidence, hue
+160) or as the Support role. The test requires it to stay 15° from
+both and from gold.
 
 ### 2. Distinct meanings get distinct colours, by measurement
 
