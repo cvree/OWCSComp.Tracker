@@ -409,7 +409,7 @@ jobs:
           # The imported-spreadsheet export reconciles against the published
           # VOD maps, so export_data.py --public refreshes it too; stage it
           # with the export it follows from.
-          for f in $GENERATED_FILES assets/data/external_sheet.v1.js assets/data/external_summary.v1.js assets/data/external_series.v1.js; do
+          for f in $GENERATED_FILES assets/data/external_sheet.v1.js assets/data/external_summary.v1.js assets/data/external_series.v1.js assets/data/sheet_tiers.v1.js; do
             if [ -e "$f" ]; then git add "$f"; fi
           done
           if git diff --cached --quiet; then

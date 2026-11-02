@@ -1,5 +1,26 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
+## UPDATE (2026-11-02, eighteenth pass) — hero tiers, map by map, by date
+
+**What landed.** `tiers.html` (public, under Comps): S–D hero and comp tiers per
+map from the community spreadsheet, for any viewing date + range, region and
+role, plus the team power ranking. Contract and formulas: `docs/TIERS.md`.
+
+* A win's **value** = event weight × bracket weight × (result − expected), with
+  `expected` from both teams' power just before the map. Power = Elo seeded by
+  region tier + current-stage standings bonus. Adjusted win = 50% + value
+  shrunk toward 50% on small samples. All knobs: `config/tier_weights.json`.
+* **Dates are estimated.** The sheet has none; `config/external/sheet_schedule.json`
+  maps region/stage/week/day to a date (sources per stage; Pacific Stage 2 and
+  the Pre-Season Bootcamp are guesses). Only `sheet_tiers.v1.js` carries them.
+* `pipeline/external_sheet/tiers.py` writes `assets/data/sheet_tiers.v1.js` as
+  part of every sheet export (`sheet_sync.py check` gates it); every workflow
+  that stages the external exports now stages it too.
+* Tests: `pipeline/test_tier_stats.py`.
+
+**Next.** Confirm the estimated stage dates (Liquipedia was not reachable from
+the build environment) and tune the weights once people have used the page.
+
 ## UPDATE (2026-10-31, seventeenth pass, follow-up) — the real workbook is over 50 MB
 
 The first real `sheet-sync` run (2026-10-31 18:39 UTC) downloaded the sheet

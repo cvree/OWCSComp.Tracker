@@ -46,7 +46,7 @@
      and is never a second public navigation. */
   const NAV = [
     { href: "index.html", label: "Maps", match: ["index.html", "", "game.html", "map.html", "series.html"] },
-    { href: "stats.html", label: "Comps", match: ["stats.html", "hero.html", "meta.html"] },
+    { href: "stats.html", label: "Comps", match: ["stats.html", "hero.html", "meta.html", "tiers.html"] },
     { href: "teams.html", label: "Teams", match: ["teams.html", "team.html"] },
   ];
 
@@ -345,6 +345,7 @@
       ["Maps", "index.html", "Every map, map by map, with both comps"],
       ["Comps", "stats.html", "Most-run comps and hero picks"],
       ["Heroes", "stats.html?tab=heroes", "Pick rates by hero"],
+      ["Hero tiers", "tiers.html", "S–D hero and comp tiers map by map, by date, with team power"],
       ["Meta explorer", "meta.html", "Filter time-weighted VOD usage and spreadsheet history"],
       ["Scout a team", "meta.html?tab=scout", "Last 5 or 10 maps: comfort, bans, heroes, comps"],
       ["Teams", "teams.html", "Every org, with its mark"],

@@ -73,6 +73,8 @@ class Paths:
     @property
     def export_series(self) -> str: return self.p("assets", "data", "external_series.v1.js")
     @property
+    def export_tiers(self) -> str: return self.p("assets", "data", "sheet_tiers.v1.js")
+    @property
     def public(self) -> str: return self.p("assets", "data", "public_data.v1.js")
     @property
     def cache(self) -> str: return self.p("work", "gsheet")
