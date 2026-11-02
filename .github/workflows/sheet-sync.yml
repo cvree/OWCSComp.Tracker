@@ -129,7 +129,7 @@ jobs:
             } >> "$GITHUB_STEP_SUMMARY"
             exit 0
           fi
-          if git status --porcelain -- data/external reports/external assets/data/external_sheet.v1.js assets/data/external_summary.v1.js assets/data/external_series.v1.js assets/data/external_sheet | grep -q .; then
+          if git status --porcelain -- data/external reports/external assets/data/external_sheet.v1.js assets/data/external_summary.v1.js assets/data/external_series.v1.js assets/data/sheet_tiers.v1.js assets/data/external_sheet | grep -q .; then
             echo "changed=true" >> "$GITHUB_OUTPUT"
           else
             echo "changed=false" >> "$GITHUB_OUTPUT"
@@ -164,6 +164,7 @@ jobs:
           python pipeline/test_external_summary.py
           python pipeline/test_time_weighting.py
           python pipeline/test_meta_stats_js.py
+          python pipeline/test_tier_stats.py
           python pipeline/test_public_export_contracts.py
           python pipeline/test_site.py
 
@@ -177,7 +178,7 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
           git checkout -B "$BR"
           # -A also stages deletions (a tab or detail shard that no longer exists).
-          git add -A data/external reports/external assets/data/external_sheet.v1.js assets/data/external_summary.v1.js assets/data/external_series.v1.js
+          git add -A data/external reports/external assets/data/external_sheet.v1.js assets/data/external_summary.v1.js assets/data/external_series.v1.js assets/data/sheet_tiers.v1.js
           if [ -d assets/data/external_sheet ]; then git add -A assets/data/external_sheet; fi
           SHA=$(python -c "import json;print(json.load(open('data/external/gsheet/manifest.json'))['lastGood'][:12])")
           git commit -m "data: community spreadsheet import (workbook $SHA)"

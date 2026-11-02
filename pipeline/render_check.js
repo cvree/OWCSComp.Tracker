@@ -41,7 +41,7 @@ const PAGES = [
   "index.html", "admin.html", "games.html", "game.html", "submit.html", "review.html",
   "stats.html", "teams.html", "team.html", "hero.html", "tools.html",
   "how-it-works.html", "guide.html", "styleguide.html", "label.html",
-  "map.html", "meta.html", "sheet-sync.html",
+  "map.html", "meta.html", "sheet-sync.html", "tiers.html",
 ];
 /* 404.html is deliberately standalone — it must render with no data and
    no shell, because the thing that failed may be the shell. */

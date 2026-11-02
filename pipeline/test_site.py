@@ -72,6 +72,10 @@ PRODUCT_PAGES = {
     # its match card records it (?id=). Public; spreadsheet data only,
     # labelled, with the VOD reading beside it where a map is linked.
     "series.html": "Spreadsheet series",
+    # S–D hero and comp tiers map by map from the spreadsheet, for any
+    # viewing date and range, with the team power ranking that weighs each
+    # win. Public, reached from Comps (stats.html, meta.html), not a nav slot.
+    "tiers.html": "Hero tiers",
 }
 #: Reachable, but not part of the product shell: the calibration wizard
 #: (its own self-contained tool), the packaged desktop app's two screens,
