@@ -19,21 +19,11 @@
   <div class="page-head page-head--tight">
     <p class="eyebrow">Overall</p>
     <h1>Comps</h1>
-    <p class="lede">Every five-hero comp OWCS teams ran this season: how often, how it did,
-      where and by whom, what it beat and lost to, and every game it was played in. The
-      community spreadsheet’s line-ups lead; the line-ups read off the broadcast sit beside
-      them, each linked to the frame it came from. The two are never added together.</p>
+    <p class="lede">Every five-hero comp OWCS teams ran this season. Pick a map or a hero,
+      then open a comp for its record, matchups, bans and every game.</p>
   </div>
 
-  <div id="coverage" class="u-mt-5"></div>
-  <p class="u-mt-4"><a class="btn btn--sm btn--ghost" href="meta.html">Meta explorer →</a>
-    <span class="dim small">Filter by event, region, date, map, team, hero and source: seconds on each
-      hero from VOD timelines beside the community spreadsheet’s longer history — never blended.</span></p>
-  <p class="u-mt-3"><a class="btn btn--sm btn--ghost" href="tiers.html">Hero tiers →</a>
-    <span class="dim small">S to D, map by map, for any date: pick share and a win rate weighted by
-      event, bracket stage and the opponent’s power ranking.</span></p>
-
-  <div role="tablist" aria-label="Comp views" class="u-mt-6">
+  <div role="tablist" aria-label="Comp views" class="u-mt-4">
     <button role="tab" data-tab="comps" aria-controls="p-comps" id="t-comps">Comps</button>
     <button role="tab" data-tab="bymap" aria-controls="p-bymap" id="t-bymap">By map</button>
     <button role="tab" data-tab="heroes" aria-controls="p-heroes" id="t-heroes">Heroes</button>
@@ -48,6 +38,21 @@
   <div id="p-maps" role="tabpanel" aria-labelledby="t-maps" tabindex="0" hidden></div>
   <div id="p-teams" role="tabpanel" aria-labelledby="t-teams" tabindex="0" hidden></div>
   <div id="p-swaps" role="tabpanel" aria-labelledby="t-swaps" tabindex="0" hidden></div>
+
+  <!-- Where the numbers come from: useful, but not what anyone opens the
+       page for, so it sits after the content, closed. -->
+  <details class="about-data card u-mt-6" id="about-data">
+    <summary><span class="about-data__title">About these numbers</span>
+      <span class="dim small">sources, coverage, and the other ways to slice them</span></summary>
+    <div class="about-data__body">
+      <div class="row u-mt-4">
+        <a class="btn btn--sm btn--ghost" href="tiers.html">Hero tiers →</a>
+        <a class="btn btn--sm btn--ghost" href="meta.html">Meta explorer →</a>
+        <a class="btn btn--sm btn--ghost" href="series.html">Every series →</a>
+      </div>
+      <div id="coverage" class="u-mt-5"></div>
+    </div>
+  </details>
 
 </main>
 

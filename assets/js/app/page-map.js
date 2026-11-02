@@ -33,7 +33,7 @@
     entry = all.filter((e) => (id && (e.vodId === id || e.id === id)) ||
       (ext && (e.extId === ext || e.id === ext)))[0] || null;
     if (!entry) {
-      P.mount("crumbs", P.breadcrumbs([{ label: "Maps", href: "index.html" }, { label: "Map" }]));
+      P.mount("crumbs", P.breadcrumbs([{ label: "Home", href: "index.html" }, { label: "Map" }]));
       P.mount("head", '<div class="page-head page-head--tight"><h1>Map not found</h1></div>');
       P.mount("body", P.empty("◇", "No map with that id",
         'It may have been renamed by a newer import. <a href="meta.html?tab=maps">Browse every map →</a>'));
@@ -57,7 +57,7 @@
     document.title = title() + " — " + P.anyTeamName(entry.teamA) + " vs " +
       P.anyTeamName(entry.teamB) + " — OWCS Comp Tracker";
     P.mount("crumbs", P.breadcrumbs([
-      { label: "Maps", href: "index.html" },
+      { label: "Home", href: "index.html" },
       entry.vodId ? { label: "Game", href: "game.html?id=" + encodeURIComponent(entry.vodId.replace(/-m\d+$/, "")) }
         : { label: "Meta", href: "meta.html?tab=maps" },
       { label: title() },

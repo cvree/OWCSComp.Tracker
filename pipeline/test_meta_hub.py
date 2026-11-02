@@ -177,8 +177,8 @@ def main() -> None:
     check("the admin nav is still the five things an admin does here",
           all(f'label: "{n}"' in shell for n in
               ["Dashboard", "Games", "Submit", "Review", "Stats"]))
-    check("the public nav is maps, comps and teams",
-          all(f'label: "{n}"' in shell for n in ["Maps", "Comps", "Teams"]))
+    check("the public nav is meta, comps, tiers, teams and matches",
+          all(f'label: "{n}"' in shell for n in ["Meta", "Comps", "Tiers", "Teams", "Matches"]))
     check("secondary destinations live in an overflow menu, not a second row",
           "RAIL" in shell and "more__panel" in shell and "subnav" not in shell)
     check("the overflow menu closes on Escape and on an outside click",

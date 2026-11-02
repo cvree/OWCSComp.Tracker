@@ -16,7 +16,7 @@ What it guards, in order of how much it would hurt to lose:
      detection it corrects; every published claim resolves to an evidence
      file that exists on disk.
   2. THE INFORMATION ARCHITECTURE. Two audiences: a three-entry public
-     nav (Maps · Comps · Teams) that never asks a fan to submit or review,
+     nav (Meta · Comps · Tiers · Teams · Matches) that never asks a fan to submit or review,
      and the five-entry admin nav on the admin pages only. One page per
      job, no dead links, no orphan pages, no deleted page coming back.
   3. NO DEMO DATA CAN REACH A PAGE. The fixture is a test asset now.
@@ -133,8 +133,8 @@ def test_navigation() -> None:
     if not nav or not admin:
         return
     labels = re.findall(r'label: "([^"]+)"', nav.group(1))
-    check(f"the public nav is maps and comps first ({labels})",
-          labels == ["Maps", "Comps", "Teams"])
+    check(f"the public nav names the fan's questions, meta and comps first ({labels})",
+          labels == ["Meta", "Comps", "Tiers", "Teams", "Matches"])
     hrefs = re.findall(r'href: "([^"]+)"', nav.group(1))
     check("nothing on the public nav asks a fan to submit, review or label",
           not set(hrefs) & {"submit.html", "review.html", "label.html", "games.html",
@@ -391,7 +391,7 @@ ACCENT_ALLOWED = (
     ".card--hoverable:hover", ".card--hoverable:focus-within", ".press:hover",
     ".press:focus-visible", ".game-card:hover", ".game-card:focus-within",
     "a.hero:hover .hero__face", ".teamwall__team:hover", ".teamwall__team:focus-visible",
-    ".hm-map:hover", ".mf-map:hover", ".mf-map:focus-within",
+    ".hm-map:hover", ".mf-map:hover", ".mf-map:focus-within", ".cb-pick:hover", ".cb-pick:focus-visible",
 )
 
 

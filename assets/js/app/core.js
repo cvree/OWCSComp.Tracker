@@ -321,6 +321,10 @@
     } catch (err) {
       on = P.ADMIN_PAGES.indexOf(location.pathname.split("/").pop()) >= 0;
     }
+    /* Mark the page, so admin-only detail (the "unmapped" registry
+       marks, for one) can be shown by a stylesheet rule instead of an
+       if in every renderer. */
+    if (on) document.documentElement.classList.add("is-admin");
     return () => on;
   })();
 

@@ -33,15 +33,16 @@
 
   /* ------------------------------------------------------------ list */
   function renderList() {
-    set("crumbs", P.breadcrumbs([{ label: "Maps", href: "index.html" }, { label: "Series" }]));
+    set("crumbs", P.breadcrumbs([{ label: "Home", href: "index.html" }, { label: "Matches" }]));
     set("head", '<div class="page-head page-head--tight"><p class="eyebrow">From the community spreadsheet</p>' +
-      "<h1>Series</h1><p class=\"lede\">Every series the community-maintained OWCS spreadsheet documents: teams, " +
-      "format, series score and each map's result. Open one for its bans and the heroes listed for every player. " +
-      "This is the spreadsheet's record, labelled as such — the maps read off a broadcast are on " +
-      '<a href="index.html">the home page</a>.</p></div>' +
-      '<div class="u-mt-4">' + P.extProvenanceLine() + "</div>");
-    set("body", '<div id="browser"></div><div class="u-mt-6">' + P.extCoverageCard() + "</div>");
-    P.mountSeriesBrowser("browser", { limit: 400 });
+      "<h1>Matches</h1><p class=\"lede\">Every OWCS series this season, latest first: who played, the score and " +
+      "each map's result. Open one for its bans and every player's heroes.</p></div>");
+    set("body", '<div id="browser"></div>' +
+      '<details class="about-data card u-mt-6"><summary><span class="about-data__title">About these numbers</span>' +
+      '<span class="dim small">where the spreadsheet comes from, and how much of the season it covers</span></summary>' +
+      '<div class="about-data__body"><div class="u-mt-4">' + P.extProvenanceLine() + "</div>" +
+      '<div class="u-mt-4">' + P.extCoverageCard() + "</div></div></details>");
+    P.mountSeriesBrowser("browser", { page: 40, newestFirst: true });
   }
 
   /* ---------------------------------------------------------- series */
@@ -63,7 +64,7 @@
     const rs = P.extSeries;
     const row = rs && (rs.series || []).find((s) => s.id === id);
     if (!row) {
-      set("crumbs", P.breadcrumbs([{ label: "Maps", href: "index.html" }, { label: "Series", href: "series.html" },
+      set("crumbs", P.breadcrumbs([{ label: "Home", href: "index.html" }, { label: "Matches", href: "series.html" },
         { label: "Not found" }]));
       set("head", '<div class="page-head"><h1>That series is not in the spreadsheet import</h1>' +
         '<p class="lede">The link points at a series id the current import does not have. Ids are keyed on ' +
@@ -73,7 +74,7 @@
     }
     const nameA = P.anyTeamName(row.teamA), nameB = P.anyTeamName(row.teamB);
     document.title = nameA + " vs " + nameB + " · " + (row.stageRaw || "") + " — OWCS Comp Tracker";
-    set("crumbs", P.breadcrumbs([{ label: "Maps", href: "index.html" }, { label: "Series", href: "series.html" },
+    set("crumbs", P.breadcrumbs([{ label: "Home", href: "index.html" }, { label: "Matches", href: "series.html" },
       { label: row.stageRaw || P.extStageName(row.stage), href: "series.html?stage=" + encodeURIComponent(row.stage || "") +
         (row.region ? "&region=" + encodeURIComponent(row.region) : "") },
       { label: nameA + " vs " + nameB }]));
@@ -85,6 +86,7 @@
       .filter((v, i, a) => a.indexOf(v) === i).map(esc).join(" · ");
     set("head", '<div class="page-head page-head--tight"><p class="eyebrow">' + P.srcBadge("sheet") +
       " Series from the community spreadsheet</p>" +
+      '<h1 class="visually-hidden">' + esc(nameA) + " vs " + esc(nameB) + "</h1>" +
       '<div class="map-hd__teams u-mt-4">' + side(row.teamA, winA) +
       '<span class="map-hd__vs">' + P.scorePlate(row.scoreA, row.scoreB, winA ? "a" : winB ? "b" : null) + "</span>" +
       side(row.teamB, winB) + "</div>" +

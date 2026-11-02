@@ -2495,7 +2495,13 @@ a.mf-team:hover .mf-team__name { text-decoration: underline; }
 .src-badge[data-src="vod"]::before { content: "▶"; }
 .src-badge[data-src="both"]::before { content: "="; }
 .src-badge[data-src="conflict"]::before { content: "≠"; }
-.unmapped-mark { color: var(--amber); font-weight: 500; }
+/* "Not in the tracker's registry" is a to-do for whoever keeps the
+   registry, not something a fan can act on, so it shows in admin mode
+   only. The name itself is always shown, as the sheet wrote it. */
+.unmapped-mark { display: none; color: var(--amber); font-weight: 500; }
+html.is-admin .unmapped-mark { display: inline; }
+.admin-only { display: none; }
+html.is-admin .admin-only { display: block; }
 .unresolved { text-decoration: line-through; text-decoration-color: var(--amber); }
 .ext-line { display: flex; flex-wrap: wrap; gap: var(--s-2); align-items: center; }
 .sample { font: 500 11.5px/1.4 var(--f-mono); color: var(--tx-3); white-space: nowrap; }
@@ -2930,3 +2936,42 @@ table.tbl.cb-tbl { width: 100%; min-width: 0; font-size: 13px; }
   .cb-detail { padding: 0 var(--s-3) var(--s-3); }
 }
 @media (prefers-reduced-motion: reduce) { .cb-row { transition: none; } }
+
+/* Comps page: what you came for first, the data notes last. */
+.cb-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--s-2) var(--s-3); }
+.cb-fgrid { display: grid; gap: var(--s-3) var(--s-4); grid-template-columns: repeat(auto-fill, minmax(min(100%, 170px), 1fr)); }
+.cb-fgrid .input { width: 100%; min-width: 0; }
+.cb-more-filters { margin-top: var(--s-3); }
+.cb-more-filters > summary { cursor: pointer; color: var(--tx-2); display: inline-flex; align-items: center; gap: var(--s-2); min-height: 32px; }
+.cb-count { font: 600 11px/1 var(--f-mono); padding: 3px 7px; border-radius: var(--r-pill); background: var(--wash-sel); color: var(--tx); }
+.cb-filters { padding: var(--s-4) var(--s-5); }
+@media (max-width: 640px) {
+  .cb-fgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-2) var(--s-3); }
+  .cb-filters { padding: var(--s-3) var(--s-4); }
+}
+.about-data { padding: 0; }
+.about-data > summary { cursor: pointer; list-style: none; display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s-2) var(--s-3);
+  padding: var(--s-4) var(--s-5); min-height: 44px; }
+.about-data > summary::-webkit-details-marker { display: none; }
+.about-data > summary::before { content: "+"; font: 600 15px/1 var(--f-mono); color: var(--tx-3); width: 1ch; }
+.about-data[open] > summary::before { content: "−"; }
+.about-data__title { font: 600 1rem/1.2 var(--f-display); color: var(--tx); }
+.about-data__body { padding: 0 var(--s-5) var(--s-5); }
+@media (pointer: coarse) { .cb-more-filters > summary { min-height: 44px; } }
+
+/* The short comp list on team and hero pages: each line is one tap
+   to that comp's full record in the comp book. */
+.cb-picks { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.cb-pick { display: grid; grid-template-columns: auto minmax(4.5rem, auto) minmax(3rem, auto) auto 1fr; align-items: center; gap: var(--s-4);
+  padding: var(--s-2) var(--s-3); border: 1px solid var(--line); border-radius: var(--r-3); background: var(--s1);
+  color: var(--tx); text-decoration: none; min-height: 48px; transition: border-color var(--t-1) var(--ease); }
+.cb-pick:hover, .cb-pick:focus-visible { border-color: var(--accent-line); }
+.cb-pick__n, .cb-pick__adj { color: var(--tx-3); font-size: 12.5px; }
+.cb-pick b { font: 600 14px/1 var(--f-mono); }
+.cb-pick__go { color: var(--tx-3); justify-self: end; }
+@media (max-width: 640px) {
+  .cb-pick { grid-template-columns: auto 1fr auto; row-gap: 4px; }
+  .cb-pick__n { grid-column: 2; grid-row: 1; justify-self: end; }
+  .cb-pick b { grid-column: 3; grid-row: 1; }
+  .cb-pick__adj, .cb-pick__go { display: none; }
+}

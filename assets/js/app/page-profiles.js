@@ -30,7 +30,7 @@
   /* -------------------------------------------------------- directory */
   function renderDirectory() {
     document.title = "Teams — OWCS Comp Tracker";
-    set("crumbs", P.breadcrumbs([{ label: "Maps", href: "index.html" }, { label: "Teams" }]));
+    set("crumbs", P.breadcrumbs([{ label: "Home", href: "index.html" }, { label: "Teams" }]));
     set("head",
       '<div class="page-head page-head--tight"><p class="eyebrow">Directory</p>' +
       "<h1>Teams</h1><p class=\"lede\">Every org seen on an OWCS broadcast, with its mark, " +
@@ -92,6 +92,17 @@
 
   /* ------------------------------------------------------------- team */
   /* The community spreadsheet's record of a team: profile + series. */
+  /* What a team runs, or what a hero is run in: the comp book's short
+     list, first on the page, because it is the question people open a
+     team or hero page to answer. */
+  function compsPart(filter, title, sub) {
+    const html = P.compBookSummary ? P.compBookSummary(filter) : "";
+    if (!html) return "";
+    return '<section class="band" id="comps"><div class="sec-head"><h2>' + esc(title) + "</h2>" +
+      (P.tierUI ? P.tierUI.sourceBadge() : "") + "</div>" +
+      (sub ? '<p class="dim small">' + sub + "</p>" : "") + html + "</section>";
+  }
+
   function sheetTeamParts(id) {
     const out = [];
     const panel = P.extTeamPanel ? P.extTeamPanel(id) : "";
@@ -103,10 +114,13 @@
     if (rs && P.extStats) {
       const rows = P.extStats.filterSeries(rs.series, { team: id });
       if (rows.length) {
-        out.push('<section class="band" id="series"><div class="sec-head"><h2>Series in the spreadsheet</h2>' +
-          '<span class="dim small">' + rows.length + " · in the sheet’s order (no dates)</span>" +
-          '<a class="sec-link" href="series.html?team=' + encodeURIComponent(id) + '">Filter them →</a></div>' +
-          P.extSeriesListHtml(rows) + "</section>");
+        /* Latest ten; the rest are one tap away on Matches. */
+        const latest = rows.slice().reverse();
+        out.push('<section class="band" id="series"><div class="sec-head"><h2>Matches</h2>' +
+          '<span class="dim small">' + rows.length + " in the spreadsheet · latest first</span>" +
+          '<a class="sec-link" href="series.html?team=' + encodeURIComponent(id) + '">' +
+          (rows.length > 10 ? "All " + rows.length + " →" : "Filter them →") + "</a></div>" +
+          P.extSeriesListHtml(latest, { limit: 10 }) + "</section>");
       }
     }
     return out;
@@ -119,16 +133,19 @@
     const name = P.anyTeamName(id);
     document.title = name + " — OWCS Comp Tracker";
     set("crumbs", P.breadcrumbs([
-      { label: "Maps", href: "index.html" },
+      { label: "Home", href: "index.html" },
       { label: "Teams", href: "teams.html" },
       { label: name }]));
-    set("head", '<div class="page-head page-head--tight"><div class="u-flex u-center u-gap-4 u-wrap">' +
+    set("head", '<div class="page-head page-head--tight"><h1 class="visually-hidden">' + esc(name) + "</h1>" +
+      '<div class="u-flex u-center u-gap-4 u-wrap">' +
       P.anyTeamPlate(id, { size: "lg" }) + P.srcBadge("sheet") + "</div>" +
-      '<p class="lede u-mt-4">' + (P.extTeamKnown(id) && /^x-/.test(id)
-        ? "Named by the community spreadsheet only. The tracker’s team registry does not know this team, so it " +
-          "keeps the sheet’s spelling, has no mark of its own and is not matched to any broadcast."
-        : "Recorded by the community spreadsheet.") + "</p></div>");
+      '<p class="lede u-mt-4">What they run, how it goes and who they have played, from the community spreadsheet.</p>' +
+      (P.extTeamKnown(id) && /^x-/.test(id)
+        ? '<p class="admin-only dim small u-mt-3">Not in the tracker’s team registry: the sheet’s spelling is kept, there is ' +
+          "no mark of its own and it is not matched to any broadcast.</p>" : "") + "</div>");
     const parts = [];
+    const run = compsPart({ team: id }, "What they run", "Their most-run five-hero comps, and the one winning most. Tap one for its full record.");
+    if (run) parts.push(run);
     if (P.scoutingHtml && P.metaEntries) {
       const n = Number(P.qs("scout") || 10) === 5 ? 5 : 10;
       const link = (k) => '<a class="btn btn--sm btn--ghost" href="team.html?id=' + encodeURIComponent(id) +
@@ -136,7 +153,7 @@
       parts.push('<section class="band" id="scout"><div class="sec-head"><h2>Scouting report</h2>' +
         '<span class="row">' + link(5) + link(10) + "</span></div>" + P.scoutingHtml(id, n) + "</section>");
     }
-    set("body", sheetTeamParts(id).concat(parts).join("") ||
+    set("body", parts.concat(sheetTeamParts(id)).join("") ||
       P.empty("◇", "Nothing recorded for this team", "Neither source records a map for it yet."));
   }
 
@@ -149,11 +166,12 @@
     }
     document.title = t.name + " — OWCS Comp Tracker";
     set("crumbs", P.breadcrumbs([
-      { label: "Maps", href: "index.html" },
+      { label: "Home", href: "index.html" },
       { label: "Teams", href: "teams.html" },
       { label: t.name }]));
 
     const games = P.games.all().filter((g) => g.teamA === t.id || g.teamB === t.id);
+    const run = compsPart({ team: t.id }, "What they run", "Their most-run five-hero comps, and the one winning most. Tap one for its full record.");
     const seen = P.mapIndex ? P.mapIndex.forTeam(t.id) : [];
     const pool = ((D && D.teamHeroPools) || []).filter((p) => p.teamId === t.id)[0];
     const rec = ((D && D.teamMapRecords) || []).filter((r) => r.teamId === t.id)[0];
@@ -169,24 +187,28 @@
       (t.status ? '<span class="chip chip--outline">' + esc(t.status) + "</span>" : "") +
       "</div>" +
       '<p class="lede u-mt-4">' +
-      (pool
-        ? "Seen playing " + pool.poolSize + " different hero(es) across " + pool.appearances +
-          " map(s) with comps read."
-        : seen.length
-          ? "On " + seen.length + " indexed map" + (seen.length === 1 ? "" : "s") +
-            " — every one a click from playing. Compositions follow once the tracker reads them."
-          : "No map of this team has been indexed or read yet.") + "</p></div>");
+      (run
+        ? "What they run, how it goes, who they have played — and every broadcast map, ready to watch."
+        : pool
+          ? "Seen playing " + pool.poolSize + " different hero(es) across " + pool.appearances +
+            " map(s) with comps read."
+          : seen.length
+            ? "On " + seen.length + " indexed map" + (seen.length === 1 ? "" : "s") +
+              " — every one a click from playing."
+            : "No map of this team has been indexed or read yet.") + "</p></div>");
 
     const parts = [];
+    if (run) parts.push(run);
+    const feedParts = [];
     const feed = P.mapFeed ? P.mapFeed.filter((m) => P.mapFeed.plays(m, t.id)) : [];
     if (feed.length) {
       const n = feed.reduce((a, g) => a + g.maps.length, 0);
-      parts.push('<section class="band" id="maps"><div class="sec-head"><h2>Map by map</h2>' +
+      feedParts.push('<section class="band" id="maps"><div class="sec-head"><h2>Broadcast maps</h2>' +
         '<span class="dim small">' + n + " map" + (n === 1 ? "" : "s") +
         " · both comps where read · ▶ opens the VOD at the map</span></div>" +
         P.mapFeed.html(feed) + "</section>");
     } else if (seen.length) {
-      parts.push('<section class="band" id="maps"><div class="sec-head"><h2>Every map, ready to watch</h2>' +
+      feedParts.push('<section class="band" id="maps"><div class="sec-head"><h2>Every map, ready to watch</h2>' +
         '<span class="dim small">read off the broadcast, nobody involved</span></div>' +
         P.mapIndex.teamHtml(t.id) + "</section>");
     }
@@ -205,6 +227,10 @@
     }
 
     sheetTeamParts(t.id).forEach((x) => parts.push(x));
+    /* The broadcast feed follows the spreadsheet's record: most of its
+       maps say "comp not read yet", which is the least useful thing to
+       lead a team page with. */
+    feedParts.forEach((x) => parts.push(x));
 
     if (pool) {
       parts.push('<section class="band"><div class="sec-head"><h2>Hero pool</h2>' +
@@ -268,6 +294,9 @@
 
     const rate = ((D && D.heroPickRates) || []).filter((r) => r.hero === h.id)[0];
     const art = P.heroCard(h.id);
+    const book = P.compBook && window.OWCS_SHEET_TIERS ? P.compBook.build(window.OWCS_SHEET_TIERS, { hero: h.id, minMaps: 1 }) : null;
+    const run = compsPart({ hero: h.id }, "Comps with " + h.name,
+      "The five-hero comps pros built around " + h.name + ", most-run first, and the one winning most. Tap one for its full record.");
 
     set("head",
       '<div class="page-head page-head--tight">' +
@@ -277,13 +306,18 @@
       "<div><h1 style=\"font-size:clamp(1.8rem,3.6vw,2.8rem)\">" + esc(h.name) + "</h1>" +
       '<p class="dim u-mt-3">' + esc(h.role || "Role not recorded") + "</p></div></div>" +
       '<p class="lede u-mt-4">' +
-      (rate
+      (book && book.coveredMaps
+        ? "In " + book.coveredMaps.toLocaleString("en-US") + " pro line-ups this season — " +
+          pct(book.coveredMaps / Math.max(1, book.teamMaps)) + " of every full line-up the community spreadsheet records, across " +
+          book.distinct + " different comps."
+        : rate
         ? "Seen in " + rate.picks + " approved line-up(s) — a " + pct(rate.pickRate) +
           " pick rate across everything reviewed so far, winning " + pct(rate.winRate) + " of them."
         : "This hero has not appeared in an approved line-up yet. That means nobody has " +
           "confirmed a frame showing it — not that it was never played.") + "</p></div>");
 
     const parts = [];
+    if (run) parts.push(run);
     if (art) {
       parts.push('<section class="band"><img src="' + esc(art) + '" alt="" loading="lazy" ' +
         'width="640" height="427" ' +

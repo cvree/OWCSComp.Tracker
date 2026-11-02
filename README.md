@@ -42,7 +42,7 @@ and `review.html` (every confirmed/rejected change point with crops).
 
 Two audiences, one site.
 
-**Fans** — nearly everyone — get three pages: **Maps · Comps · Teams**.
+**Fans** — nearly everyone — get five destinations: **Meta · Comps · Tiers · Teams · Matches**.
 The home page is every OWCS map, map by map (newest broadcast first), with
 both teams' logos, the comp each team ran where it has been read, and a
 ▶ Watch link that opens the VOD at the second the map starts; above it,

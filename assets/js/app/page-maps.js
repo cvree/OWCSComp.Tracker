@@ -187,8 +187,16 @@
   function sync() {
     P.setQs({ team: state.team || null, map: state.map || null, mode: state.mode || null,
       comps: state.comps ? "1" : null });
+    feedShown = FEED_PAGE;
     renderFeed();
   }
+
+  /* The feed is every broadcast map the scan found — 77 cards, nearly
+     20,000px on a phone, most of them still waiting for a read. It shows
+     the latest broadcasts and pages the rest, so the home page ends
+     where its content does; the filters above still reach every map. */
+  const FEED_PAGE = 2;
+  let feedShown = FEED_PAGE;
 
   /* -------------------------------------------------------------- feed */
   function renderFeed() {
@@ -205,8 +213,16 @@
         "Maps appear here as broadcasts are indexed.");
       return;
     }
-    host.innerHTML = groups.length ? F.html(groups)
+    const shownGroups = groups.slice(0, feedShown);
+    const left = groups.length - shownGroups.length;
+    const leftMaps = groups.slice(feedShown).reduce((s, g) => s + g.maps.length, 0);
+    host.innerHTML = groups.length ? F.html(shownGroups) +
+      (left > 0 ? '<div class="row u-mt-5"><button type="button" class="btn btn--ghost" id="feed-more">Show ' +
+        Math.min(FEED_PAGE, left) + " more broadcast" + (Math.min(FEED_PAGE, left) === 1 ? "" : "s") + " · " +
+        leftMaps + " map" + (leftMaps === 1 ? "" : "s") + " left</button></div>" : "")
       : P.empty("◇", "No map matches those filters", "Clear a filter to see more.");
+    const more = document.getElementById("feed-more");
+    if (more) more.addEventListener("click", () => { feedShown += FEED_PAGE; renderFeed(); });
     if (P.observeReveals) P.observeReveals(host);
   }
 })();
