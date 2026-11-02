@@ -220,9 +220,14 @@
   const ART = new Set(window.OWCS_HERO_ART || []);
   const ROLE_HUE = { Tank: 210, Damage: 4, Support: 145 };
   P.roleHue = (role) => (role in ROLE_HUE ? ROLE_HUE[role] : 265);
-  P.heroInitials = (h) =>
-    String((h && h.name) || "?").replace(/[^A-Za-z0-9. ]/g, "")
-      .split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+  /* Two letters, so two artless heroes never share a monogram:
+     "Junker Queen" -> JQ, "D.Mon" -> DM, "Doctrine" -> DO. */
+  P.heroInitials = (h) => {
+    const name = String((h && h.name) || "?").replace(/[^A-Za-z0-9. ]/g, "");
+    const words = name.split(/\s+/).filter(Boolean);
+    const two = words.length > 1 ? words.map((w) => w[0]).join("") : name.replace(/[^A-Za-z0-9]/g, "");
+    return (two || "?").slice(0, 2).toUpperCase();
+  };
 
   /* The face inside a portrait cell. Official presentation art when we
      have it (so an operator recognises a hero instantly), otherwise a

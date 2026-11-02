@@ -6,6 +6,16 @@
    "role": "Damage"
   },
   {
+   "id": "dmon",
+   "name": "D.Mon",
+   "role": "Tank"
+  },
+  {
+   "id": "doctrine",
+   "name": "Doctrine",
+   "role": "Support"
+  },
+  {
    "id": "domina",
    "name": "Domina",
    "role": "Tank"

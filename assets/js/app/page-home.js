@@ -24,74 +24,22 @@
   const ROLES = U.roles();
   const pct = U.pct;
 
-  const WINDOWS = [["recent", "Recent"], ["30", "30 days"], ["stage", "This stage"], ["season", "Season"]];
-  const REGIONS = [["", "All regions"], ["na", "NA"], ["emea", "EMEA"], ["korea", "Korea"], ["china", "China"],
-    ["japan", "Japan"], ["pacific", "Pacific"], ["international", "LANs"]];
   const ROLE_ICON = { Tank: "⛨", Damage: "✦", Support: "✚" };
 
   const state = { w: P.qs("w") || "recent", region: P.qs("region") || "" };
   let cur = null, prev = null, label = "", link = "";
 
   /* ----------------------------------------------------------- window */
-  const inRegion = (m) => !state.region || (state.region === "international" ? m.r === "international" : m.r === state.region);
-  function latestDate() {
-    let d = null;
-    T.matches.forEach((m) => { if (m.d && inRegion(m) && (!d || m.d > d)) d = m.d; });
-    return d;
-  }
-
   function run() {
-    const region = state.region || null;
-    prev = null;
-    if (state.w === "30" || state.w === "stage" || state.w === "season") {
-      const asOf = latestDate();
-      if (state.w === "30") {
-        cur = S.compute(T, ROLES, { asOf: asOf, days: 30, region: region });
-        prev = S.compute(T, ROLES, { asOf: S.addDays(cur.from, -1), days: 30, region: region });
-        label = "Last 30 days";
-        link = "range=30";
-      } else if (state.w === "stage") {
-        const last = T.matches.filter((m) => m.d && inRegion(m) && m.d <= asOf).sort((a, b) => (a.d < b.d ? 1 : -1))[0];
-        const from = T.matches.filter((m) => m.d && inRegion(m) && last && m.s === last.s)
-          .reduce((d, m) => (!d || m.d < d ? m.d : d), null);
-        cur = S.compute(T, ROLES, { asOf: asOf, from: from, region: region });
-        label = last ? U.STAGE_NAMES[last.s] || last.s : "This stage";
-        link = "range=custom&from=" + (from || "");
-      } else {
-        cur = S.compute(T, ROLES, { asOf: asOf, region: region });
-        label = "Whole season";
-        link = "range=season";
-      }
-      if (asOf && asOf !== T.dates.max) link += "&asof=" + asOf;
-    } else {
-      const x = S.recent(T, ROLES, { region: region });
-      cur = x.result;
-      prev = x.prev;
-      label = x.days ? "Last " + x.days + " days" : "Whole season";
-      link = x.days ? "range=" + x.days : "range=season";
-      if (cur.asOf !== T.dates.max) link += "&asof=" + cur.asOf;
-    }
-    if (state.region) link += "&region=" + state.region;
+    const win = U.runWindow(state, ROLES);
+    cur = win.cur; prev = win.prev; label = win.label; link = win.link;
   }
 
   const tiersHref = (extra) => "tiers.html?" + link + (extra ? "&" + extra : "");
 
   /* -------------------------------------------------------- controls */
-  function renderControls() {
-    const seg = (key, opts) => '<div class="seg" role="group" aria-label="' + (key === "w" ? "Time window" : "Region") + '">' +
-      opts.map((o) => '<button type="button" data-' + key + '="' + esc(o[0]) + '" aria-pressed="' +
-        (state[key] === o[0] ? "true" : "false") + '">' + esc(o[1]) + "</button>").join("") + "</div>";
-    P.mount("hm-controls", seg("w", WINDOWS) + seg("region", REGIONS) + U.sourceBadge());
-  }
-
-  function renderWindowLine() {
-    const B = cur.bucket("*");
-    P.mount("hm-window", B
-      ? '<span class="hm-window__k">' + esc(label) + "</span> · " + esc(U.fmtDate(B.from)) + " – " + esc(U.fmtDate(B.to)) +
-        " · <b>" + B.maps + "</b> pro maps" + (state.region ? " · " + esc((REGIONS.find((r) => r[0] === state.region) || [])[1]) : "") +
-        (prev && prev.bucket("*") ? ' <span class="dim">· arrows compare with the ' + esc(label.toLowerCase().replace("last ", "")) + " before</span>" : "")
-      : "No maps in this window.");
-  }
+  function renderControls() { P.mount("hm-controls", U.controlsHtml(state)); }
+  function renderWindowLine() { P.mount("hm-window", U.windowLineHtml({ cur: cur, prev: prev, label: label }, state)); }
 
   /* ---------------------------------------------------------- S tier */
   function trendChip(now, before) {
@@ -110,7 +58,8 @@
       const h = P.hero(r.id);
       return '<a class="hm-hero" data-tier="' + esc(r.tier) + '" style="--role-h:' + P.roleHue(h.role) + '" href="' +
         esc(tiersHref("role=" + encodeURIComponent(h.role))) + '" data-hero="' + esc(r.id) + '">' +
-        (art ? '<img class="hm-hero__art" src="' + esc(art) + '" alt="" loading="lazy" decoding="async">' : "") +
+        (art ? '<img class="hm-hero__art" src="' + esc(art) + '" alt="" loading="lazy" decoding="async">'
+          : '<span class="hm-hero__mono" aria-hidden="true">' + esc(P.heroInitials(h)) + "</span>") +
         '<span class="hm-hero__shade"></span>' +
         '<span class="hm-hero__tier">' + esc(r.tier) + "</span>" +
         (prev ? '<span class="hm-hero__trend">' + trendChip(r.pickShare, before.get(r.id)) + "</span>" : "") +
@@ -216,7 +165,7 @@
       };
       return '<article class="hm-map">' +
         '<header class="hm-map__hd"><h3><a href="' + esc(tiersHref("map=" + encodeURIComponent(B.map))) + '">' + esc(U.mapName(B.map)) +
-        '</a></h3><span class="hm-map__meta">' + esc(B.mode || "") + " · " + B.maps + " map" + (B.maps === 1 ? "" : "s") + "</span></header>" +
+        '</a></h3><span class="hm-map__meta">' + (B.mode ? esc(B.mode) + " · " : "") + B.maps + " map" + (B.maps === 1 ? "" : "s") + "</span></header>" +
         '<div class="hm-map__row"><span class="hm-map__k">Most-run comp</span>' +
         (top ? U.comp(top, { px: 32 }) + '<span class="hm-map__n"' + (note ? ' title="Most-run over the last ' + LONG_DAYS +
           ' days: no line-up was run twice on this map in the current window"' : "") + ">" + top.apps + "× · " +

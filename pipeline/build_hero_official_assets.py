@@ -88,6 +88,11 @@ HERO_SLUGS: dict[str, str] = {
     "lw": "lifeweaver", "lucio": "lucio", "mercy": "mercy",
     "mizuki": "mizuki", "moira": "moira", "wuyang": "wuyang", "zen": "zenyatta",
     "dva": "dva", "domina": "domina", "doomfist": "doomfist",
+    # Added 2026-11-02 for the Stage 3 heroes the community sheet lists.
+    # Slugs follow Blizzard's pattern (D.Va -> "dva") but were NOT checked
+    # against the live site (unreachable from the build environment); a
+    # wrong one only leaves that hero on its monogram until corrected.
+    "dmon": "dmon", "doctrine": "doctrine",
     "hazard": "hazard", "jq": "junker-queen", "mauga": "mauga",
     "orisa": "orisa", "ram": "ramattra", "rein": "reinhardt",
     "hog": "roadhog", "sigma": "sigma", "winston": "winston",

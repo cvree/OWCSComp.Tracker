@@ -1,5 +1,24 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
+## UPDATE (2026-11-02, twentieth pass) — Stage 3 heroes resolved; Comps page led by the sheet
+
+* **D.Mon (Tank) and Doctrine (Support) added to the hero catalog**
+  (`pipeline/sample_data.json` + `data/owcs.sqlite`, re-exported). The sheet listed
+  them 1,518 times and the importer could not resolve them, so most Stage 3
+  line-ups were incomplete (last 30 days: 21% complete comps). After
+  `sheet_sync.py rebuild`, 4,141 / 4,150 first-listed comps are complete (99.8%).
+  Both now top their roles' tiers. **When a new hero ships, add it to
+  `sample_data.json` and the `heroes` table, then run `export_data.py --public`
+  and `sheet_sync.py rebuild`**; the sheet inventory's `unmapped.hero` lists any
+  name it can't resolve.
+* No official art yet for either (Blizzard's site is unreachable from the build
+  environment). The asset manifest records them as intentional monogram
+  fallbacks; their slugs are in `build_hero_official_assets.py` (unverified),
+  so a networked run of that script picks the art up.
+* `stats.html` (Comps) now leads with the sheet: window + region control, Top
+  comps (most run / winning most), By map, Heroes by role. The VOD views moved
+  to a "Read off the broadcast" section with their own tabs (`?vtab=`).
+
 ## UPDATE (2026-11-02, nineteenth pass) — the home page is a meta snapshot
 
 Built for a GM/Champion FACEIT player, desktop first. `index.html` now opens with:

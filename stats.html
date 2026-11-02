@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Comps — OWCS Comp Tracker</title>
-<meta name="description" content="The most-run OWCS comps, every comp map by map, hero pick rates, map and team records and mid-map swaps — counted from line-ups read off the broadcast.">
+<meta name="description" content="Every five-hero comp from every pro OWCS map: the most-run and best-winning comps, comps map by map, and hero pick, win and ban rates by role, for a recent window or the whole season. Plus line-ups read off broadcast VODs.">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/archivo-var-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/saira-condensed-700-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -17,36 +17,51 @@
 <main id="main" class="shell shell--wide">
 
   <div class="page-head page-head--tight">
-    <p class="eyebrow eyebrow--gold">Overall</p>
-    <h1>Comps</h1>
-    <p class="lede">What OWCS teams are running: the most-played five-hero comps, every comp
-      map by map, and hero pick rates — counted from line-ups read off the broadcast, each
-      one linked to the frame it came from.</p>
+    <p class="eyebrow eyebrow--gold">Pro comps</p>
+    <h1>The comps <span class="hl hl--gold">pros are running</span></h1>
+    <p class="lede">Every five-hero line-up from every pro OWCS map: what gets run most, what wins,
+      map by map, and how each hero is doing. Hover any comp for its record, swaps and the teams that ran it.</p>
+    <div id="cx-controls" class="hm-controls u-mt-5"></div>
+    <p id="cx-window" class="hm-window small u-mt-3" aria-live="polite"></p>
   </div>
 
-  <div id="coverage" class="u-mt-5"></div>
-  <p class="u-mt-4"><a class="btn btn--sm btn--ghost" href="meta.html">Meta explorer →</a>
-    <span class="dim small">Filter by event, region, date, map, team, hero and source: seconds on each
-      hero from VOD timelines beside the community spreadsheet’s longer history — never blended.</span></p>
-  <p class="u-mt-3"><a class="btn btn--sm btn--ghost" href="tiers.html">Hero tiers →</a>
-    <span class="dim small">S to D, map by map, for any date: pick share and a win rate weighted by
-      event, bracket stage and the opponent’s power ranking.</span></p>
+  <div id="cx-tiles" class="u-mt-5"></div>
+  <p class="small u-mt-4"><a href="tiers.html">Hero tiers, map by map →</a> <span class="dim">·</span>
+    <a href="tiers.html?tab=bans">Bans by map →</a> <span class="dim">·</span>
+    <a href="meta.html">Meta explorer (filter by team, hero, event) →</a></p>
 
-  <div role="tablist" aria-label="Comp views" class="u-mt-6">
-    <button role="tab" data-tab="comps" aria-controls="p-comps" id="t-comps">Comps</button>
-    <button role="tab" data-tab="bymap" aria-controls="p-bymap" id="t-bymap">By map</button>
-    <button role="tab" data-tab="heroes" aria-controls="p-heroes" id="t-heroes">Heroes</button>
-    <button role="tab" data-tab="maps" aria-controls="p-maps" id="t-maps">Maps</button>
-    <button role="tab" data-tab="teams" aria-controls="p-teams" id="t-teams">Teams</button>
-    <button role="tab" data-tab="swaps" aria-controls="p-swaps" id="t-swaps">Swaps</button>
-  </div>
+  <section id="cx" class="u-mt-6" aria-label="Spreadsheet comps">
+    <div role="tablist" aria-label="Comp views">
+      <button role="tab" data-tab="top" aria-controls="p-top" id="t-top">Top comps</button>
+      <button role="tab" data-tab="bymap" aria-controls="p-cxmap" id="t-cxmap">By map</button>
+      <button role="tab" data-tab="heroes" aria-controls="p-cxheroes" id="t-cxheroes">Heroes</button>
+    </div>
+    <div id="p-top" role="tabpanel" aria-labelledby="t-top" tabindex="0"></div>
+    <div id="p-cxmap" role="tabpanel" aria-labelledby="t-cxmap" tabindex="0" hidden></div>
+    <div id="p-cxheroes" role="tabpanel" aria-labelledby="t-cxheroes" tabindex="0" hidden></div>
+  </section>
 
-  <div id="p-comps" role="tabpanel" aria-labelledby="t-comps" tabindex="0"></div>
-  <div id="p-bymap" role="tabpanel" aria-labelledby="t-bymap" tabindex="0" hidden></div>
-  <div id="p-heroes" role="tabpanel" aria-labelledby="t-heroes" tabindex="0" hidden></div>
-  <div id="p-maps" role="tabpanel" aria-labelledby="t-maps" tabindex="0" hidden></div>
-  <div id="p-teams" role="tabpanel" aria-labelledby="t-teams" tabindex="0" hidden></div>
-  <div id="p-swaps" role="tabpanel" aria-labelledby="t-swaps" tabindex="0" hidden></div>
+  <section id="vod" class="band" aria-labelledby="h-vod">
+    <div class="sec-head">
+      <h2 id="h-vod">Read off the broadcast</h2>
+      <span class="dim small">Line-ups the tracker read from VODs itself: timed, each linked to its frame. A smaller set.</span>
+    </div>
+    <div id="coverage" class="u-mt-4"></div>
+    <div role="tablist" aria-label="Broadcast views" class="u-mt-5">
+      <button role="tab" data-tab="comps" aria-controls="p-comps" id="t-comps">Comps</button>
+      <button role="tab" data-tab="bymap" aria-controls="p-bymap" id="t-bymap">By map</button>
+      <button role="tab" data-tab="heroes" aria-controls="p-heroes" id="t-heroes">Heroes</button>
+      <button role="tab" data-tab="maps" aria-controls="p-maps" id="t-maps">Maps</button>
+      <button role="tab" data-tab="teams" aria-controls="p-teams" id="t-teams">Teams</button>
+      <button role="tab" data-tab="swaps" aria-controls="p-swaps" id="t-swaps">Swaps</button>
+    </div>
+    <div id="p-comps" role="tabpanel" aria-labelledby="t-comps" tabindex="0"></div>
+    <div id="p-bymap" role="tabpanel" aria-labelledby="t-bymap" tabindex="0" hidden></div>
+    <div id="p-heroes" role="tabpanel" aria-labelledby="t-heroes" tabindex="0" hidden></div>
+    <div id="p-maps" role="tabpanel" aria-labelledby="t-maps" tabindex="0" hidden></div>
+    <div id="p-teams" role="tabpanel" aria-labelledby="t-teams" tabindex="0" hidden></div>
+    <div id="p-swaps" role="tabpanel" aria-labelledby="t-swaps" tabindex="0" hidden></div>
+  </section>
 
 </main>
 
@@ -61,6 +76,7 @@
 <script src="assets/data/discovered.v1.js"></script>
 <script src="assets/data/broadcast_maps.v1.js"></script>
 <script src="assets/data/external_summary.v1.js"></script>
+<script src="assets/data/sheet_tiers.v1.js"></script>
 <script src="assets/js/app/core.js"></script>
 <script src="assets/js/app/games.js"></script>
 <script src="assets/js/app/mapindex.js"></script>
@@ -68,6 +84,8 @@
 <script src="assets/js/app/sources.js"></script>
 <script src="assets/js/app/extstats.js"></script>
 <script src="assets/js/app/extui.js"></script>
+<script src="assets/js/app/tierstats.js"></script>
+<script src="assets/js/app/tierui.js"></script>
 <script src="assets/js/app/api.js"></script>
 <script src="assets/vendor/panzoom.min.js"></script>
 <script src="assets/js/app/evidence.js"></script>
@@ -75,5 +93,6 @@
 <script src="assets/js/app/shell.js"></script>
 <script src="assets/js/app/charts.js"></script>
 <script src="assets/js/app/page-stats.js"></script>
+<script src="assets/js/app/page-comps.js"></script>
 </body>
 </html>

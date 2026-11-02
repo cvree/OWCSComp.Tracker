@@ -26,7 +26,9 @@
     renderMaps();
     renderTeams();
     renderSwaps();
-    P.initTabs(document, { key: "tab" });
+    /* The broadcast (VOD) views now sit in their own section under the
+       spreadsheet comps (page-comps.js), with their own tab key. */
+    P.initTabs(document.getElementById("vod") || document, { key: "vtab" });
   });
 
   /* The spreadsheet's headline numbers and coverage, as their own labelled
@@ -40,7 +42,8 @@
 
   function renderSheetHeroes() {
     const host = document.getElementById("p-heroes");
-    if (!host || !P.mountExtHeroesBlock) return;
+    /* the spreadsheet's heroes now lead the page (page-comps.js) */
+    if (!host || !P.mountExtHeroesBlock || document.getElementById("p-cxheroes")) return;
     host.insertAdjacentHTML("beforeend", '<div class="u-mt-6" id="sheet-heroes"></div>');
     P.mountExtHeroesBlock("sheet-heroes");
   }
@@ -60,7 +63,7 @@
         P.isAdmin()
           ? '<a class="btn btn--sm btn--primary" href="submit.html">Submit a game</a>' +
             '<a class="btn btn--sm btn--ghost" href="review.html">Open the review queue</a>'
-          : "") + sheetCoverage();
+          : "") + (document.getElementById("cx-tiles") ? "" : sheetCoverage());
       return;
     }
     const tile = (k, v, note) =>
@@ -73,7 +76,7 @@
       tile("Maps with comps", maps.size, "both teams read hero by hero") +
       tile("Series", games.size, "with at least one map read") +
       tile("Teams", teams.size, "seen in a read line-up") +
-      "</div>" + sheetCoverage();
+      "</div>" + (document.getElementById("cx-tiles") ? "" : sheetCoverage());
   }
 
   /* ----------------------------------------------------------- heroes */

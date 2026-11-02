@@ -49,8 +49,9 @@
   /* Icons only (no per-hero hover card, so the comp's own card wins). */
   U.faces = (heroes, px) => '<span class="faces">' + (heroes || []).map((id) => {
     const h = P.hero(id);
-    return '<span class="faces__one" title="' + esc(h.name) + '" data-role="' + esc(h.role || "") + '">' +
-      P.heroFace(h, px || 32) + "</span>";
+    const size = px || 32;
+    return '<span class="faces__one" title="' + esc(h.name) + '" data-role="' + esc(h.role || "") +
+      '" style="width:' + size + "px;height:" + size + 'px">' + P.heroFace(h, size) + "</span>";
   }).join("") + "</span>";
 
   const roleRank = (id) => { const i = ROLE_ORDER.indexOf(P.hero(id).role); return i < 0 ? 9 : i; };
@@ -88,6 +89,70 @@
       "week and day (" + (c.window || 0) + " inside a published window, " + (c.estimate || 0) + " estimated).</span>" +
       '<span class="tip__line">Line-ups are listed heroes, not time played: a player\'s first hero counts most.</span>' +
       '<a class="tip__line" href="how-it-works.html#sources">Credits and method →</a>', { cls: "tip--src" });
+  };
+
+  /* ---------------------------------------------- window + region
+     The one time window / region control the snapshot pages share
+     (home, Comps). state = { w: recent|30|stage|season, region }.
+     Returns { cur, prev, label, link } — `link` is the matching
+     tiers.html query, `prev` the equal window before (or null). */
+  U.WINDOWS = [["recent", "Recent"], ["30", "30 days"], ["stage", "This stage"], ["season", "Season"]];
+  U.REGIONS = [["", "All regions"], ["na", "NA"], ["emea", "EMEA"], ["korea", "Korea"], ["china", "China"],
+    ["japan", "Japan"], ["pacific", "Pacific"], ["international", "LANs"]];
+  U.runWindow = (state, roles) => {
+    const S = P.tierStats;
+    const region = state.region || null;
+    const inRegion = (m) => !region || (region === "international" ? m.r === "international" : m.r === region);
+    let asOf = null;
+    T.matches.forEach((m) => { if (m.d && inRegion(m) && (!asOf || m.d > asOf)) asOf = m.d; });
+    let cur, prev = null, label, link;
+    if (state.w === "30") {
+      cur = S.compute(T, roles, { asOf: asOf, days: 30, region: region });
+      prev = S.compute(T, roles, { asOf: S.addDays(cur.from, -1), days: 30, region: region });
+      label = "Last 30 days";
+      link = "range=30";
+    } else if (state.w === "stage") {
+      const last = T.matches.filter((m) => m.d && inRegion(m) && m.d <= asOf).sort((a, b) => (a.d < b.d ? 1 : -1))[0];
+      const from = T.matches.filter((m) => m.d && inRegion(m) && last && m.s === last.s)
+        .reduce((d, m) => (!d || m.d < d ? m.d : d), null);
+      cur = S.compute(T, roles, { asOf: asOf, from: from, region: region });
+      label = last ? STAGE_NAMES[last.s] || last.s : "This stage";
+      link = "range=custom&from=" + (from || "");
+    } else if (state.w === "season") {
+      cur = S.compute(T, roles, { asOf: asOf, region: region });
+      label = "Whole season";
+      link = "range=season";
+    } else {
+      const x = S.recent(T, roles, { region: region });
+      cur = x.result;
+      prev = x.prev;
+      label = x.days ? "Last " + x.days + " days" : "Whole season";
+      link = x.days ? "range=" + x.days : "range=season";
+    }
+    if (cur.asOf && cur.asOf !== T.dates.max) link += "&asof=" + cur.asOf;
+    if (region) link += "&region=" + region;
+    return { cur: cur, prev: prev, label: label, link: link };
+  };
+  U.controlsHtml = (state) => {
+    const seg = (key, opts) => '<div class="seg" role="group" aria-label="' + (key === "w" ? "Time window" : "Region") + '">' +
+      opts.map((o) => '<button type="button" data-' + key + '="' + esc(o[0]) + '" aria-pressed="' +
+        (state[key] === o[0] ? "true" : "false") + '">' + esc(o[1]) + "</button>").join("") + "</div>";
+    return seg("w", U.WINDOWS) + seg("region", U.REGIONS) + U.sourceBadge();
+  };
+  U.windowLineHtml = (win, state) => {
+    const B = win.cur.bucket("*");
+    if (!B) return "No maps in this window.";
+    return '<span class="hm-window__k">' + esc(win.label) + "</span> · " + esc(U.fmtDate(B.from)) + " – " + esc(U.fmtDate(B.to)) +
+      " · <b>" + B.maps + "</b> pro maps" + (state.region ? " · " + esc((U.REGIONS.find((r) => r[0] === state.region) || [])[1]) : "") +
+      (win.prev && win.prev.bucket("*") ? ' <span class="dim">· arrows compare with the ' +
+        esc(win.label.toLowerCase().replace("last ", "")) + " before</span>" : "");
+  };
+  U.trendChip = (now, before, what) => {
+    if (before == null) return '<span class="trend" data-dir="new" title="Not seen in the previous window">NEW</span>';
+    const d = Math.round((now - before) * 100);
+    if (Math.abs(d) < 2) return '<span class="trend" data-dir="flat" title="About the same as the previous window">±' + Math.abs(d) + "</span>";
+    return '<span class="trend" data-dir="' + (d > 0 ? "up" : "down") + '" title="' + esc(what || "Share") +
+      ' vs the previous window, in points">' + (d > 0 ? "▲ " : "▼ ") + Math.abs(d) + "</span>";
   };
 
   P.tierUI = U;
