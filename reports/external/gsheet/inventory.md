@@ -2,13 +2,13 @@
 
 - Source: https://docs.google.com/spreadsheets/d/1OaU5O7lVDZbked5FZAvgfR9MnJIdGhTdnIdu4DsL9PQ/edit?usp=sharing
 - Spreadsheet id: `1OaU5O7lVDZbked5FZAvgfR9MnJIdGhTdnIdu4DsL9PQ`
-- Snapshot: `1804dc38617563f24cdc6256d299d561ec89a918102b14a266af296bf877b3b8` imported 2026-11-01T20:00:17+00:00
+- Snapshot: `ebad45a7280aa4f09be41d2d8fb3fbf0ac8f5d9af416f0eabe6ecf905487df8d` imported 2026-11-03T18:00:51+00:00
 - Parser gsheet-parser-2 · layout v2 · aliases v3
-- Tabs: 41 (23 recognised as data) · source rows: 9415
-- Workbook package: 52.8 MB zipped, 134.9 MB unzipped, 398 parts; embedded media: 229 files, 45.6 MB
+- Tabs: 41 (23 recognised as data) · source rows: 9438
+- Workbook package: 52.8 MB zipped, 135.1 MB unzipped, 398 parts; embedded media: 229 files, 45.6 MB
 - Largest parts: `xl/worksheets/sheet7.xml` 3.9 MB, `xl/worksheets/sheet8.xml` 3.8 MB, `xl/worksheets/sheet6.xml` 3.8 MB, `xl/drawings/drawing7.xml` 3.2 MB, `xl/drawings/drawing6.xml` 3.1 MB, `xl/drawings/drawing8.xml` 2.8 MB
 
-**Imported:** 577 matches · 2098 maps · 4127 hero bans · 34206 player-hero appearances · 7987 composition observations · 0 ignored rows · 419 unmapped values · 0 identical duplicates · 0 conflicting duplicates
+**Imported:** 579 matches · 2108 maps · 4149 hero bans · 34387 player-hero appearances · 8030 composition observations · 0 ignored rows · 419 unmapped values · 0 identical duplicates · 0 conflicting duplicates
 
 | # | tab | rows | purpose | header row | maps | bans | appearances | ignored |
 |---|---|---|---|---|---|---|---|---|
@@ -25,14 +25,14 @@
 | 11 | China - Stage 3 | 438 | match_cards | — | 117 | 234 | 1867 | 0 |
 | 12 | EMEA - Stage 1 | 294 | match_cards | — | 78 | 156 | 1172 | 0 |
 | 13 | EMEA - Stage 2 | 296 | match_cards | — | 88 | 172 | 1424 | 0 |
-| 14 | EMEA - Stage 3 | 294 | match_cards | — | 84 | 164 | 1291 | 0 |
+| 14 | EMEA - Stage 3 | 295 | match_cards | — | 87 | 172 | 1345 | 0 |
 | 15 | Hero Index | 9 | reference | — | 0 | 0 | 0 | 0 |
 | 16 | North America - Stage 1 | 298 | match_cards | — | 82 | 164 | 1329 | 0 |
 | 17 | North America - Stage 2 | 296 | match_cards | — | 75 | 148 | 1349 | 0 |
-| 18 | North America - Stage 3 | 276 | match_cards | — | 68 | 136 | 1085 | 0 |
+| 18 | North America - Stage 3 | 295 | match_cards | — | 75 | 150 | 1212 | 0 |
 | 19 | Pacific - Stage 1 | 266 | match_cards | — | 66 | 132 | 1082 | 0 |
 | 20 | Pacific - Stage 2 | 268 | match_cards | — | 72 | 140 | 1195 | 0 |
-| 21 | Pacific - Stage 3 | 57 | match_cards | — | 0 | 0 | 0 | 0 |
+| 21 | Pacific - Stage 3 | 60 | match_cards | — | 0 | 0 | 0 | 0 |
 | 22 | Asia - Stage 1 | 251 | match_cards | — | 52 | 100 | 803 | 0 |
 | 23 | Asia - Stage 3 | 54 | match_cards | — | 0 | 0 | 0 | 0 |
 | 24 | Champions Clash Tokyo | 198 | match_cards | — | 48 | 92 | 783 | 0 |
@@ -58,12 +58,12 @@
 
 - Season year: 2026 (Landing Page!B1)
 - Hero pictures named by `Hero Index`: 54 heroes, 6 role icons
-- Cards: 629 found · 577 imported · 51 scheduled (no teams or no maps yet) · 0 incomplete (panels filled, map list empty) · 1 forfeited · 0 could not be read
+- Cards: 629 found · 579 imported · 49 scheduled (no teams or no maps yet) · 0 incomplete (panels filled, map list empty) · 1 forfeited · 0 could not be read
 - The sheet records no calendar dates and no map picks: neither is imported.
 
 ## Self-Check (`Self-Check`) — the sheet's own counts vs the importer's
 
-21 rows compared · 3 disagree · 0 without a single tab to compare
+21 rows compared · 1 disagree · 0 without a single tab to compare
 
 | stage | region | tab | matches (sheet / parsed) | maps (sheet / parsed) | |
 |---|---|---|---|---|---|
@@ -86,8 +86,8 @@
 | Stage 3 | JP | Japan - Stage 3 | 32 / 32 | 118 / 118 | agree |
 | Stage 3 | KR | Korea - Stage 3 | 45 / 45 | 160 / 160 | agree |
 | Stage 3 | CN | China - Stage 3 | 30 / 30 | 117 / 117 | agree |
-| Stage 3 | EMEA | EMEA - Stage 3 | 20 / 21 | 84 / 84 | **DISAGREE** |
-| Stage 3 | NA | North America - Stage 3 | 17 / 19 | 68 / 68 | **DISAGREE** |
+| Stage 3 | EMEA | EMEA - Stage 3 | 21 / 21 | 87 / 87 | agree |
+| Stage 3 | NA | North America - Stage 3 | 21 / 21 | 75 / 75 | agree |
 
 ## Landing Page — Credits / about text
 
@@ -139,7 +139,7 @@ Cards: 21 found · 21 imported · 0 scheduled · 0 incomplete · 0 forfeited · 
 Cards: 21 found · 21 imported · 0 scheduled · 0 incomplete · 0 forfeited · 0 could not be read · 21 matches
 
 ## North America - Stage 3 — Match cards — one fixed-size card per series, heroes shown as pictures
-Cards: 21 found · 19 imported · 2 scheduled · 0 incomplete · 0 forfeited · 0 could not be read · 19 matches
+Cards: 21 found · 21 imported · 0 scheduled · 0 incomplete · 0 forfeited · 0 could not be read · 21 matches
 
 ## Pacific - Stage 1 — Match cards — one fixed-size card per series, heroes shown as pictures
 Cards: 19 found · 19 imported · 0 scheduled · 0 incomplete · 0 forfeited · 0 could not be read · 19 matches
@@ -232,5 +232,3 @@ Twitter | Discord
 - [warning] CARD_LABEL_REPEATED: tab 'Korea - Stage 3' has more than one card labelled ['Week 6 | Day 1 | Game 1']
 - [warning] CARD_LABEL_REPEATED: tab 'China - Stage 3' has more than one card labelled ['Week 4 | Day 2 | Game 1', 'Week 4 | Day 2 | Game 2', 'Week 5 | Day 1 | Game 1', 'Week 5 | Day 1 | Game 2', 'Week 5 | Day 1 | Game 3']
 - [warning] SELF_CHECK_MISMATCH: Self-Check Stage 1 CC: the sheet counts 13 matches / 48 maps, the importer parsed 14 / 48 from 'Champions Clash Tokyo'
-- [warning] SELF_CHECK_MISMATCH: Self-Check Stage 3 EMEA: the sheet counts 20 matches / 84 maps, the importer parsed 21 / 84 from 'EMEA - Stage 3'
-- [warning] SELF_CHECK_MISMATCH: Self-Check Stage 3 NA: the sheet counts 17 matches / 68 maps, the importer parsed 19 / 68 from 'North America - Stage 3'

@@ -1,85 +1,85 @@
 {
  "format": "gsheet-raw.v2",
- "importedAt": "2026-11-01T20:00:17+00:00",
+ "importedAt": "2026-11-03T18:00:51+00:00",
  "package": {
-  "bytes": 55395255,
+  "bytes": 55394881,
   "largestMembers": [
    {
-    "bytes": 4047640,
+    "bytes": 4047531,
     "path": "xl/worksheets/sheet7.xml"
    },
    {
-    "bytes": 4035264,
+    "bytes": 4035257,
     "path": "xl/worksheets/sheet8.xml"
    },
    {
-    "bytes": 3995319,
+    "bytes": 3995267,
     "path": "xl/worksheets/sheet6.xml"
    },
    {
-    "bytes": 3401564,
+    "bytes": 3401045,
     "path": "xl/drawings/drawing7.xml"
    },
    {
-    "bytes": 3229136,
+    "bytes": 3228732,
     "path": "xl/drawings/drawing6.xml"
    },
    {
-    "bytes": 2885859,
+    "bytes": 2885688,
     "path": "xl/drawings/drawing8.xml"
    },
    {
-    "bytes": 2866778,
+    "bytes": 2866768,
     "path": "xl/worksheets/sheet11.xml"
    },
    {
-    "bytes": 2789980,
+    "bytes": 2789939,
     "path": "xl/worksheets/sheet9.xml"
    }
   ],
   "mediaBytes": 47856008,
   "mediaFiles": 229,
   "members": 398,
-  "uncompressedBytes": 141489517,
+  "uncompressedBytes": 141674132,
   "worksheetXml": [
    {
-    "bytes": 4047640,
+    "bytes": 4047531,
     "path": "xl/worksheets/sheet7.xml"
    },
    {
-    "bytes": 4035264,
+    "bytes": 4035257,
     "path": "xl/worksheets/sheet8.xml"
    },
    {
-    "bytes": 3995319,
+    "bytes": 3995267,
     "path": "xl/worksheets/sheet6.xml"
    },
    {
-    "bytes": 2866778,
+    "bytes": 2866768,
     "path": "xl/worksheets/sheet11.xml"
    },
    {
-    "bytes": 2789980,
+    "bytes": 2789939,
     "path": "xl/worksheets/sheet9.xml"
    },
    {
-    "bytes": 2764596,
+    "bytes": 2764516,
     "path": "xl/worksheets/sheet10.xml"
    },
    {
-    "bytes": 2509984,
+    "bytes": 2509931,
     "path": "xl/worksheets/sheet5.xml"
    },
    {
-    "bytes": 2483491,
+    "bytes": 2483547,
     "path": "xl/worksheets/sheet3.xml"
    },
    {
-    "bytes": 2471232,
+    "bytes": 2471114,
     "path": "xl/worksheets/sheet4.xml"
    },
    {
-    "bytes": 2173158,
+    "bytes": 2173152,
     "path": "xl/worksheets/sheet25.xml"
    },
    {
@@ -87,43 +87,43 @@
     "path": "xl/worksheets/sheet26.xml"
    },
    {
-    "bytes": 1650125,
+    "bytes": 1651490,
     "path": "xl/worksheets/sheet14.xml"
    },
    {
-    "bytes": 1648238,
-    "path": "xl/worksheets/sheet17.xml"
-   },
-   {
-    "bytes": 1646188,
+    "bytes": 1649682,
     "path": "xl/worksheets/sheet18.xml"
    },
    {
-    "bytes": 1632358,
+    "bytes": 1648216,
+    "path": "xl/worksheets/sheet17.xml"
+   },
+   {
+    "bytes": 1632318,
     "path": "xl/worksheets/sheet16.xml"
    },
    {
-    "bytes": 1630340,
+    "bytes": 1630288,
     "path": "xl/worksheets/sheet13.xml"
    },
    {
-    "bytes": 1625936,
+    "bytes": 1625991,
     "path": "xl/worksheets/sheet12.xml"
    },
    {
-    "bytes": 1493913,
+    "bytes": 1493887,
     "path": "xl/worksheets/sheet20.xml"
    },
    {
-    "bytes": 1477521,
+    "bytes": 1477503,
     "path": "xl/worksheets/sheet19.xml"
    },
    {
-    "bytes": 1404101,
+    "bytes": 1404299,
     "path": "xl/worksheets/sheet21.xml"
    },
    {
-    "bytes": 1393833,
+    "bytes": 1393827,
     "path": "xl/worksheets/sheet22.xml"
    },
    {
@@ -131,11 +131,11 @@
     "path": "xl/worksheets/sheet23.xml"
    },
    {
-    "bytes": 1077676,
+    "bytes": 1077652,
     "path": "xl/worksheets/sheet24.xml"
    },
    {
-    "bytes": 851357,
+    "bytes": 851407,
     "path": "xl/worksheets/sheet2.xml"
    },
    {
@@ -143,11 +143,11 @@
     "path": "xl/worksheets/sheet39.xml"
    },
    {
-    "bytes": 502496,
+    "bytes": 502889,
     "path": "xl/worksheets/sheet38.xml"
    },
    {
-    "bytes": 178894,
+    "bytes": 178898,
     "path": "xl/worksheets/sheet37.xml"
    },
    {
@@ -155,7 +155,7 @@
     "path": "xl/worksheets/sheet27.xml"
    },
    {
-    "bytes": 154114,
+    "bytes": 154115,
     "path": "xl/worksheets/sheet29.xml"
    },
    {
@@ -163,35 +163,35 @@
     "path": "xl/worksheets/sheet28.xml"
    },
    {
-    "bytes": 108099,
+    "bytes": 108083,
     "path": "xl/worksheets/sheet30.xml"
    },
    {
-    "bytes": 95919,
+    "bytes": 95912,
     "path": "xl/worksheets/sheet32.xml"
    },
    {
-    "bytes": 92889,
+    "bytes": 92868,
     "path": "xl/worksheets/sheet31.xml"
    },
    {
-    "bytes": 71247,
+    "bytes": 71235,
     "path": "xl/worksheets/sheet34.xml"
    },
    {
-    "bytes": 63157,
+    "bytes": 63154,
     "path": "xl/worksheets/sheet41.xml"
    },
    {
-    "bytes": 53985,
+    "bytes": 53981,
     "path": "xl/worksheets/sheet33.xml"
    },
    {
-    "bytes": 27060,
+    "bytes": 27057,
     "path": "xl/worksheets/sheet35.xml"
    },
    {
-    "bytes": 24232,
+    "bytes": 24250,
     "path": "xl/worksheets/sheet40.xml"
    },
    {
@@ -199,13 +199,13 @@
     "path": "xl/worksheets/sheet1.xml"
    },
    {
-    "bytes": 15838,
+    "bytes": 15837,
     "path": "xl/worksheets/sheet36.xml"
    }
   ]
  },
  "parserVersion": "gsheet-parser-2",
- "sha256": "1804dc38617563f24cdc6256d299d561ec89a918102b14a266af296bf877b3b8",
+ "sha256": "ebad45a7280aa4f09be41d2d8fb3fbf0ac8f5d9af416f0eabe6ecf905487df8d",
  "sheets": [
   {
    "bytes": 1621,
@@ -325,12 +325,12 @@
    "state": "visible"
   },
   {
-   "bytes": 42238,
+   "bytes": 43492,
    "file": "sheets/013-emea-stage-3.json.gz",
    "index": 13,
    "name": "EMEA - Stage 3",
-   "rows": 294,
-   "sha256": "484c85caa20a8e7b4ce4ca42d6c422756f5744c3859a125209a60e4f73f8c141",
+   "rows": 295,
+   "sha256": "28073f45da25fe84d17a58c56f3a59415d858617f6eb2c833c1a6e9b43dcf340",
    "state": "visible"
   },
   {
@@ -361,12 +361,12 @@
    "state": "visible"
   },
   {
-   "bytes": 36052,
+   "bytes": 38856,
    "file": "sheets/017-north-america-stage-3.json.gz",
    "index": 17,
    "name": "North America - Stage 3",
-   "rows": 276,
-   "sha256": "eada6dc9bb7b0e998188ae4704eb34b1bbed573655b2223dda663ea554036ab6",
+   "rows": 295,
+   "sha256": "39f9e1d025b86b273af81430cc8ea1ab18040357ce9dd8627f5db49e6e524696",
    "state": "visible"
   },
   {
@@ -388,12 +388,12 @@
    "state": "visible"
   },
   {
-   "bytes": 4444,
+   "bytes": 4495,
    "file": "sheets/020-pacific-stage-3.json.gz",
    "index": 20,
    "name": "Pacific - Stage 3",
-   "rows": 57,
-   "sha256": "f74818c561d264826b7a9e76140f0091032e403515fec44d9ea5b01e34c951ef",
+   "rows": 60,
+   "sha256": "2de4e8ccfb5bc8ff076c95b79ff423dfbf3295ac14b66a39c0971fd824209b6c",
    "state": "visible"
   },
   {
@@ -460,12 +460,12 @@
    "state": "visible"
   },
   {
-   "bytes": 6443,
+   "bytes": 6440,
    "file": "sheets/028-stage-3-hero-bans.json.gz",
    "index": 28,
    "name": "Stage 3 Hero Bans",
    "rows": 90,
-   "sha256": "1d3c1c41d90aba57d923b34b125c52a9116604df2358b5c3c54dd72b47765ebf",
+   "sha256": "656fddcbf94074a809b393bfb3a116102c0a903ac673b88f82a552270af753b5",
    "state": "visible"
   },
   {
@@ -505,12 +505,12 @@
    "state": "visible"
   },
   {
-   "bytes": 2894,
+   "bytes": 2872,
    "file": "sheets/033-stage-3-regional-maps-season-5.json.gz",
    "index": 33,
    "name": "Stage 3 Regional Maps (Season 5",
    "rows": 90,
-   "sha256": "0656828e04786c27bffd26179fdf157ba0198b078906b4b6997fd7ed0af58aee",
+   "sha256": "b962995dfce224728d746453a7e0e6713b93c48c49c7bcc1b9032639c75e39ba",
    "state": "visible"
   },
   {
@@ -541,12 +541,12 @@
    "state": "visible"
   },
   {
-   "bytes": 12836,
+   "bytes": 13271,
    "file": "sheets/037-non-partner-team-index.json.gz",
    "index": 37,
    "name": "Non-Partner Team Index",
    "rows": 48,
-   "sha256": "1d274958e4072aeef4a37b5463d74da2eff154a53185c0aa7c73bd2aa568adb4",
+   "sha256": "e8454520797a723d95d3187ffa4c90793834f4d17acabbcdff540e6fb9372291",
    "state": "visible"
   },
   {
@@ -559,12 +559,12 @@
    "state": "visible"
   },
   {
-   "bytes": 837,
+   "bytes": 828,
    "file": "sheets/039-self-check.json.gz",
    "index": 39,
    "name": "Self-Check",
    "rows": 26,
-   "sha256": "e4bef8fa6cf558ed43b336b957844bc12d6a7d929515150f6e5877980affaf16",
+   "sha256": "ef9e59ae6dd0847eb1ec90ac58b30cba5f4ce117a27454ddb19f71dfe438c970",
    "state": "visible"
   },
   {
