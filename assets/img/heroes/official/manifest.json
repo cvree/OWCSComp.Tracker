@@ -1,6 +1,6 @@
 {
  "note": "Official Blizzard hero presentation art (portrait/artwork/icon), distinct from the broadcast-crop evidence portraits in assets/img/heroes/manifest.json. Source: overwatch.blizzard.com, Blizzard's own official hero pages. Non-commercial fan use per Blizzard's Fan Content Policy; Overwatch and its heroes are trademarks of Blizzard Entertainment, Inc.",
- "generatedAt": "2026-08-15T20:49:41+00:00",
+ "generatedAt": "2026-11-03T16:37:06+00:00",
  "heroes": {
   "ana": {
    "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/ana/",
@@ -2081,6 +2081,84 @@
     "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
    },
    "recroppedAt": "2026-08-15T20:49:41+00:00"
+  },
+  "dmon": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/dmon/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt7ebd74c6809c3fd3/6a73d8a4a736253d5fc8a644/960_Dmon.png",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-11-03T16:37:06+00:00",
+   "role": "Tank",
+   "artwork": {
+    "path": "assets/img/heroes/official/dmon/artwork.jpg",
+    "webp": "assets/img/heroes/official/dmon/artwork.webp",
+    "width": 1920,
+    "height": 1332,
+    "hash": "8ea365f5f8041453",
+    "avif": null
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/dmon/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/dmon/portrait.png",
+    "webp": "assets/img/heroes/official/dmon/portrait.webp",
+    "width": 320,
+    "height": 320,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/dmon/icon.png",
+    "webp": "assets/img/heroes/official/dmon/icon.webp",
+    "width": 96,
+    "height": 96,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   }
+  },
+  "doctrine": {
+   "sourceUrl": "https://overwatch.blizzard.com/en-us/heroes/doctrine/",
+   "imageUrl": "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/bltf2009430b552e546/6abad4e232e6028d85c0e018/960_Doctrine.png",
+   "matchedAsCodename": null,
+   "retrievedAt": "2026-11-03T16:37:06+00:00",
+   "role": "Support",
+   "artwork": {
+    "path": "assets/img/heroes/official/doctrine/artwork.jpg",
+    "webp": "assets/img/heroes/official/doctrine/artwork.webp",
+    "width": 1920,
+    "height": 1332,
+    "hash": "ac5eb48f0923f5b3",
+    "avif": null
+   },
+   "card": {
+    "webp": "assets/img/heroes/official/doctrine/card.webp",
+    "width": 640,
+    "height": 427,
+    "avif": null
+   },
+   "portrait": {
+    "path": "assets/img/heroes/official/doctrine/portrait.png",
+    "webp": "assets/img/heroes/official/doctrine/portrait.webp",
+    "width": 320,
+    "height": 320,
+    "avif": null
+   },
+   "icon": {
+    "path": "assets/img/heroes/official/doctrine/icon.png",
+    "webp": "assets/img/heroes/official/doctrine/icon.webp",
+    "width": 96,
+    "height": 96,
+    "avif": null
+   },
+   "framing": {
+    "method": "pipeline/hero_crop.py — subject-aware",
+    "note": "Crops are framed on the hero found in the splash, not on the middle of the frame."
+   }
   }
  },
  "unresolved": []
