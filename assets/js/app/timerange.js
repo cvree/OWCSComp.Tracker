@@ -179,7 +179,7 @@
       esc(q[1]) + "</button>").join("") + "</div>";
     const more = '<label class="trange__more"><span class="visually-hidden">More ranges</span>' +
       '<select class="input" data-t-select>' +
-      '<option value="">' + (QUICK.some((q) => q[0] === state.t) ? "More…" : esc(r.short)) + "</option>" +
+      '<option value="">' + (QUICK.some((q) => q[0] === state.t) ? "Stage or dates…" : esc(r.short)) + "</option>" +
       '<option value="60"' + (state.t === "60" ? " selected" : "") + ">Last 60 days</option>" +
       '<optgroup label="A stage">' + st.map((s) => '<option value="stage:' + esc(s.id) + '"' +
         (state.t === "stage:" + s.id ? " selected" : "") + ">" + esc(s.name) + "</option>").join("") + "</optgroup>" +

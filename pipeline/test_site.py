@@ -77,7 +77,8 @@ PRODUCT_PAGES = {
     # win. Public, reached from Comps (stats.html, meta.html), not a nav slot.
     "tiers.html": "Hero tiers",
     # The tools (app/lab.js): build a line-up from pro results, and any two
-    # teams head to head. Public; Draft has a nav slot, Versus sits under Teams.
+    # teams head to head. Versus sits under Teams; Draft is parked (reachable
+    # by URL, linked from nowhere) until it is ready.
     "draft.html": "Draft Lab",
     "versus.html": "Versus",
 }
@@ -138,7 +139,11 @@ def test_navigation() -> None:
         return
     labels = re.findall(r'label: "([^"]+)"', nav.group(1))
     check(f"the public nav names the fan's questions, meta and comps first ({labels})",
-          labels == ["Meta", "Comps", "Tiers", "Draft", "Teams", "Matches"])
+          labels == ["Meta", "Comps", "Tiers", "Teams", "Matches"])
+    check("Draft is parked: no public page links to it yet",
+          not any("draft.html" in read(f) for f in
+                  ["index.html"] + ["assets/js/app/" + j for j in os.listdir(os.path.join(ROOT, "assets/js/app"))
+                                    if j.endswith(".js") and j != "page-draft.js"]))
     hrefs = re.findall(r'href: "([^"]+)"', nav.group(1))
     check("nothing on the public nav asks a fan to submit, review or label",
           not set(hrefs) & {"submit.html", "review.html", "label.html", "games.html",

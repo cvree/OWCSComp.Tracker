@@ -1,5 +1,39 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
+## UPDATE (2026-11-03, twentieth pass) — every hero has a picture; the site explains itself
+
+**Art.** D.Mon and Doctrine were the only heroes without official art, and they are the
+most-picked tank and support, so a blank "D" sat in nearly every comp. `hero-art.yml` (push /
+weekly / dispatch) runs `build_hero_official_assets.py --missing` on a GitHub runner, which can
+reach overwatch.blizzard.com when the dev container cannot. First run fetched `960_Dmon.png` and
+`960_Doctrine.png` from the heroes' own pages: **54/54 heroes now have art.** The fetcher also
+reads a new hero's slug off Blizzard's hero index and logs the page's image names when nothing
+matches, so a codename can be added by hand.
+
+**Fallback tile.** If art is ever missing again, the monogram is the same size as the picture it
+replaces (it used to collapse to a sliver in comp strips) and uses two letters (DM, DO, DV).
+
+**Draft parked (2026-11-03).** Draft is off the nav, search, footer, home welcome card, team,
+hero and Versus pages. `draft.html` still works by URL; `test_site.py` now fails if a public page
+links to it, so bringing it back is a deliberate change.
+
+**Tier list.** Each tier on `tiers.html` is a band with a big letter and a name (Meta-defining,
+Strong, Solid, Situational, Avoid for now). Heroes are picture cards ordered best first, and
+everything steps down from S to D: letter size, glow, card size, art (S/A only), saturation
+(D greyed). The full numbers table sits in "See the numbers" under each tier. `--tier-a` moved
+from pale mint to sky blue so S and A no longer read as the same green.
+
+**Usability.**
+* Header: **Help** button (or `?`) opens "How to read this site": what each page is for, a
+  glossary of every stat (pick, adj. win, value, tiers, bans, trends, upsets, est. dates), and
+  the shortcuts. `P.term(key, text)` makes any jargon word open its definition.
+* Nav items carry a one-line description (tooltip on desktop, shown in the phone menu).
+* Home: first-visit welcome card with three ways in (dismissed per browser), a "Jump to" bar, a
+  plain-language key above the S tier, bans shortened to top 5 (expandable), maps shortened to the
+  8 most played with search + mode filter and "Show all".
+* Back-to-top button on every page; the range select reads "Stage or dates…" instead of "More…".
+* New colours stay neutral: the lime accent is reserved (`test_site.py` enforces it).
+
 ## UPDATE (2026-11-02, nineteenth pass) — the home page is a meta snapshot
 
 Built for a GM/Champion FACEIT player, desktop first. `index.html` now opens with:

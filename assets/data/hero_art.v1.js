@@ -6,4 +6,4 @@
    conventional (assets/img/heroes/official/<id>/{icon,portrait,artwork}
    .webp), so the ids are the whole index.
    ===================================================================== */
-window.OWCS_HERO_ART = ["ana","anran","ashe","ball","bap","bastion","brig","cass","domina","doomfist","dva","echo","emre","freja","genji","hanzo","hazard","hog","illari","jetcat","jq","junkrat","juno","kiriko","lucio","lw","mauga","mei","mercy","mizuki","moira","orisa","pharah","ram","reaper","rein","shion","sierra","sigma","sojourn","soldier","sombra","sym","torb","tracer","vendetta","venture","widow","winston","wuyang","zarya","zen"];
+window.OWCS_HERO_ART = ["ana","anran","ashe","ball","bap","bastion","brig","cass","dmon","doctrine","domina","doomfist","dva","echo","emre","freja","genji","hanzo","hazard","hog","illari","jetcat","jq","junkrat","juno","kiriko","lucio","lw","mauga","mei","mercy","mizuki","moira","orisa","pharah","ram","reaper","rein","shion","sierra","sigma","sojourn","soldier","sombra","sym","torb","tracer","vendetta","venture","widow","winston","wuyang","zarya","zen"];
