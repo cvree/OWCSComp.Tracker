@@ -52,13 +52,20 @@
      pages; a destination nobody can find from the header is one most
      people never reach. */
   const NAV = [
-    { href: "index.html", label: "Meta", match: ["index.html", "", "game.html", "map.html"] },
-    { href: "stats.html", label: "Comps", match: ["stats.html", "meta.html"] },
-    { href: "tiers.html", label: "Tiers", match: ["tiers.html", "hero.html"] },
-    { href: "draft.html", label: "Draft", match: ["draft.html"] },
-    { href: "teams.html", label: "Teams", match: ["teams.html", "team.html", "versus.html"] },
-    { href: "series.html", label: "Matches", match: ["series.html"] },
+    { href: "index.html", label: "Meta", note: "What's winning right now: top heroes, bans, best comp per map",
+      match: ["index.html", "", "game.html", "map.html"] },
+    { href: "stats.html", label: "Comps", note: "Every five-hero line-up pros ran, with its record",
+      match: ["stats.html", "meta.html"] },
+    { href: "tiers.html", label: "Tiers", note: "Heroes and comps ranked S to D, map by map",
+      match: ["tiers.html", "hero.html"] },
+    { href: "draft.html", label: "Draft", note: "Pick a map and bans, get line-up suggestions",
+      match: ["draft.html"] },
+    { href: "teams.html", label: "Teams", note: "Every team, what they run, and head-to-head",
+      match: ["teams.html", "team.html", "versus.html"] },
+    { href: "series.html", label: "Matches", note: "Results, series by series",
+      match: ["series.html"] },
   ];
+  P.PUBLIC_NAV = NAV;
 
   const ADMIN_NAV = [
     { href: "admin.html", label: "Dashboard", match: ["admin.html"] },
@@ -98,8 +105,9 @@
         ? '<span class="pip" aria-hidden="true">' + counts.review + "</span>" +
           '<span class="visually-hidden">' + counts.review + " waiting</span>"
         : "";
-      return '<a href="' + n.href + '"' + (cur ? ' aria-current="page"' : "") + ">" +
-        esc(n.label) + pip + "</a>";
+      return '<a href="' + n.href + '"' + (cur ? ' aria-current="page"' : "") +
+        (n.note ? ' title="' + esc(n.note) + '"' : "") + ">" +
+        esc(n.label) + pip + (n.note ? '<small class="nav__note">' + esc(n.note) + "</small>" : "") + "</a>";
     };
 
     const rail = adminPage
@@ -151,6 +159,9 @@
             '<circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 4.5 4.5"/></svg>' +
             '<span class="u-nowrap">Search</span>' +
             '<kbd aria-hidden="true">/</kbd></button>' +
+          (adminPage ? "" : '<button class="btn btn--ghost btn--sm help-btn" id="help-btn" aria-haspopup="dialog" ' +
+            'aria-label="How to read this site" title="How to read this site (press ?)">' +
+            '<span aria-hidden="true" class="help-btn__q">?</span><span class="u-nowrap help-btn__w">Help</span></button>') +
           '<button class="btn btn--ghost btn--sm nav-toggle" id="nav-toggle" ' +
             'aria-expanded="false" aria-controls="nav">Menu</button>' +
         "</div>" +
@@ -741,11 +752,133 @@
     });
   }
 
+  /* ------------------------------------------------------------- help
+     One place that answers "what is this page for" and "what does that
+     number mean". Every stat on the site is one of a dozen ideas; they
+     were explained in a different paragraph on every page, or not at all. */
+  const GLOSSARY = [
+    ["pick", "Pick %", "How often teams ran this hero: the share of team-maps (each map counts once per team) where it was in the line-up."],
+    ["win", "Win %", "The plain share of those maps that were won."],
+    ["adj", "Adj. win", "Win rate weighed for who it was against and what was at stake: a win over a strong team, at a big event or deep in the bracket counts for more. Small samples are pulled toward 50%. 50% is average; above 55% is very good."],
+    ["value", "Value", "Wins above what the matchups predicted. +2.0 means about two more wins than expected; negative means it lost more than it should have."],
+    ["tier", "Tier S–D", "S defines the meta (picked a lot and winning), A is strong, B is solid, C is situational, D is rarely worth it right now. Tiers mix how often a hero is picked with how much its wins are worth."],
+    ["ban", "Ban %", "The share of maps where a team banned this hero. Each team bans one hero per map, and the two bans are always from different roles."],
+    ["trend", "▲ ▼ trend", "Change in pick % against the window of the same length just before, in percentage points. NEW means not picked in the previous window."],
+    ["comp", "Comp / line-up", "The five heroes a team started a map with (1 tank, 2 damage, 2 support). Mid-map swaps are shown separately."],
+    ["mostrun", "Most-run vs winning most", "Most-run is the comp played most often on that map. Winning most is the comp (run at least twice) with the best adjusted win, shown when it differs."],
+    ["vsothers", "Vs others", "A comp's record against different comps only; mirror matches (same comp on both sides) are left out."],
+    ["upset", "Upset / underdog", "A win where the model gave the winner under a 40% chance beforehand, from both teams' strength just before the map."],
+    ["power", "Team power", "An Elo-style rating for every team, seeded by region and updated after every map. It is what \"expected\" and \"underdog\" are measured against."],
+    ["dates", "est. dates", "The match spreadsheet has no dates, so each match is dated from the official schedule by its stage, week and day. Some are estimates."],
+    ["source", "Pro data", "Results, line-ups and bans from every OWCS 2026 series in the community match spreadsheet, plus broadcast VODs where the tracker read them."],
+  ];
+  P.GLOSSARY = GLOSSARY;
+
+  function buildHelp() {
+    if (P.isAdminPage()) return;
+    const btn = document.getElementById("help-btn");
+    if (!btn) return;
+    const wrap = document.createElement("div");
+    wrap.className = "palette help";
+    wrap.hidden = true;
+    wrap.innerHTML =
+      '<div class="palette__scrim" data-close></div>' +
+      '<div class="palette__box help__box" role="dialog" aria-modal="true" aria-labelledby="help-title" tabindex="-1">' +
+        '<div class="help__hd"><h2 id="help-title">How to read this site</h2>' +
+          '<button type="button" class="btn btn--ghost btn--sm" data-close aria-label="Close help">Close <kbd aria-hidden="true">Esc</kbd></button></div>' +
+        '<div class="help__body">' +
+          '<p class="help__lede">Pro Overwatch (OWCS) results turned into answers: which heroes are winning, what to run on each map, and what to ban. ' +
+          "Every page uses the same time range at the top (14 days by default), and you can change it anywhere.</p>" +
+          '<h3 class="help__h">Where to go</h3><ul class="help__pages">' +
+          NAV.map((n) => '<li><a href="' + n.href + '"><b>' + esc(n.label) + "</b><span>" + esc(n.note) + "</span></a></li>").join("") +
+          "</ul>" +
+          '<h3 class="help__h">What the numbers mean</h3><dl class="help__terms">' +
+          GLOSSARY.map((g) => '<div id="term-' + g[0] + '"><dt>' + esc(g[1]) + "</dt><dd>" + esc(g[2]) + "</dd></div>").join("") +
+          "</dl>" +
+          '<h3 class="help__h">Shortcuts</h3><p class="help__keys"><kbd>/</kbd> search heroes, teams and maps · <kbd>?</kbd> this help · ' +
+          '<kbd>Esc</kbd> close. Hover or tap any hero picture to see who it is; hover a comp for its full record.</p>' +
+          '<p class="help__more"><a href="how-it-works.html">How the data is collected →</a></p>' +
+        "</div>" +
+      "</div>";
+    document.body.appendChild(wrap);
+    const box = wrap.querySelector(".help__box");
+    let last = null;
+    const open = (term) => {
+      last = document.activeElement;
+      wrap.hidden = false;
+      document.documentElement.classList.add("palette-open");
+      wrap.querySelectorAll(".is-hit").forEach((el) => el.classList.remove("is-hit"));
+      const hit = term && wrap.querySelector("#term-" + term);
+      if (hit) {
+        hit.classList.add("is-hit");
+        hit.scrollIntoView({ block: "center" });
+      } else {
+        wrap.querySelector(".help__body").scrollTop = 0;
+      }
+      box.focus();
+    };
+    const close = () => {
+      if (wrap.hidden) return;
+      wrap.hidden = true;
+      document.documentElement.classList.remove("palette-open");
+      if (last && last.focus) last.focus();
+    };
+    P.openHelp = open;
+    btn.addEventListener("click", () => open());
+    wrap.addEventListener("click", (e) => { if (e.target.closest("[data-close]")) close(); });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !wrap.hidden) { e.stopPropagation(); close(); return; }
+      if (e.key !== "?" || e.ctrlKey || e.metaKey || e.altKey) return;
+      const t = e.target;
+      if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+      e.preventDefault();
+      if (wrap.hidden) open(); else close();
+    }, true);
+    /* Any `.term[data-term]` on a page opens its definition. */
+    document.addEventListener("click", (e) => {
+      const t = e.target.closest(".term[data-term]");
+      if (!t) return;
+      e.preventDefault();
+      open(t.dataset.term);
+    });
+  }
+
+  /* A labelled jargon word: dotted underline, the definition on hover,
+     the full glossary on click. */
+  P.term = (key, text) => {
+    const g = GLOSSARY.find((x) => x[0] === key);
+    return '<button type="button" class="term" data-term="' + esc(key) + '"' +
+      (g ? ' title="' + esc(g[2]) + '"' : "") + ">" + esc(text || (g ? g[1] : key)) + "</button>";
+  };
+
+  /* Long pages (the home page is several screens on a phone) get a way
+     back up that does not depend on finding the header. */
+  function buildToTop() {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "to-top";
+    b.setAttribute("aria-label", "Back to top");
+    b.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" ' +
+      'stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>';
+    document.body.appendChild(b);
+    let shown = false;
+    const sync = () => {
+      const want = window.scrollY > window.innerHeight * 1.5;
+      if (want !== shown) { shown = want; b.classList.toggle("is-on", want); }
+    };
+    window.addEventListener("scroll", sync, { passive: true });
+    b.addEventListener("click", () => window.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" }));
+    sync();
+  }
+
   /* ----------------------------------------------------------- boot */
   document.addEventListener("DOMContentLoaded", () => {
     buildHeader();
     buildSearch();
     buildFooter();
+    [buildHelp, buildToTop].forEach((fn) => {
+      try { fn(); } catch (err) { if (window.console) console.warn("[shell] " + fn.name + " skipped:", err); }
+    });
     initReveals();
     /* Conveniences: if either throws, the page it decorates still works. */
     [initCurrentTab, initScrollRows].forEach((fn) => {

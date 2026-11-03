@@ -28,11 +28,23 @@
   <div id="hm-controls" class="hm-controls u-mt-3"></div>
   <p id="hm-window" class="hm-window small u-mt-3" aria-live="polite"></p>
 
+  <div id="hm-welcome"></div>
+
+  <nav class="jump" aria-label="On this page">
+    <span class="jump__k">Jump to</span>
+    <a href="#h-stier">Top heroes</a>
+    <a href="#h-bans">Bans</a>
+    <a href="#h-every">Best comp per map</a>
+    <a href="#h-plays">Upsets</a>
+    <a href="#h-maps">VODs</a>
+  </nav>
+
   <section class="band" aria-labelledby="h-stier">
     <div class="sec-head">
       <h2 id="h-stier">S tier right now</h2>
       <a class="sec-link" href="tiers.html">Full tier list →</a>
     </div>
+    <p class="key small" id="hm-key"></p>
     <div id="hm-stier"></div>
   </section>
 
@@ -46,15 +58,16 @@
 
   <section class="band" aria-labelledby="h-every">
     <div class="sec-head">
-      <h2 id="h-every">Every map</h2>
-      <span class="dim small">Hover a comp for its record, swaps and teams</span>
+      <h2 id="h-every">Best comp per map</h2>
+      <span class="dim small">Hover or tap a comp for its record, swaps and teams</span>
     </div>
+    <div class="hm-mapbar" id="hm-mapbar"></div>
     <div id="hm-maps"></div>
   </section>
 
   <section class="band" aria-labelledby="h-plays">
     <div class="sec-head">
-      <h2 id="h-plays">Comps that made noise</h2>
+      <h2 id="h-plays">Upsets and big wins</h2>
       <span class="dim small">The biggest wins: strong opponents, big stages, upsets</span>
     </div>
     <div id="hm-upsets"></div>

@@ -220,9 +220,15 @@
   const ART = new Set(window.OWCS_HERO_ART || []);
   const ROLE_HUE = { Tank: 210, Damage: 4, Support: 145 };
   P.roleHue = (role) => (role in ROLE_HUE ? ROLE_HUE[role] : 265);
-  P.heroInitials = (h) =>
-    String((h && h.name) || "?").replace(/[^A-Za-z0-9. ]/g, "")
-      .split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+  /* Two letters that tell heroes apart: "D.Mon" -> DM, "D.Va" -> DV,
+     "Junker Queen" -> JQ, "Doctrine" -> DO. One letter made D.Mon,
+     D.Va, Doctrine and Doomfist the same "D". */
+  P.heroInitials = (h) => {
+    const words = String((h && h.name) || "?").normalize("NFKD").replace(/[^A-Za-z0-9.: -]/g, "")
+      .split(/[\s.:-]+/).filter(Boolean);
+    const s = words.length > 1 ? words[0][0] + words[1][0] : (words[0] || "?").slice(0, 2);
+    return s.toUpperCase();
+  };
 
   /* The face inside a portrait cell. Official presentation art when we
      have it (so an operator recognises a hero instantly), otherwise a
@@ -230,14 +236,25 @@
      never a guess at who this is. */
   P.heroFace = (hero, px) => {
     px = px || 62;
+    const name = (hero && hero.name) || "";
     if (hero && ART.has(hero.id)) {
       const base = "assets/img/heroes/official/" + encodeURIComponent(hero.id) + "/";
       const file = px <= 40 ? "icon.webp" : "portrait.webp";
-      return '<img src="' + base + file + '" alt="" loading="lazy" decoding="async"' +
-        ' width="' + px + '" height="' + px + '" data-fallback="' + esc(P.heroInitials(hero)) + '">';
+      return '<img src="' + base + file + '" alt="" title="' + esc(name) + '" loading="lazy" decoding="async"' +
+        ' width="' + px + '" height="' + px + '" data-fallback="' + esc(P.heroInitials(hero)) +
+        '" data-px="' + px + '" data-mono-h="' + P.roleHue(hero && hero.role) + '">';
     }
-    return '<span class="hero-mono" style="--mono-h:' + P.roleHue(hero && hero.role) + '"' +
-      ' aria-hidden="true">' + esc(P.heroInitials(hero)) + "</span>";
+    return P.heroMono(hero, px);
+  };
+  /* The designed stand-in: a role-tinted tile the SAME size as the
+     picture it replaces. It used to be width:100% of a wrapper that had
+     no size of its own, so in a comp strip it collapsed to a sliver. */
+  P.heroMono = (hero, px, initials, hue) => {
+    px = px || 62;
+    const name = (hero && hero.name) || "";
+    return '<span class="hero-mono" title="' + esc(name) + '" style="--mono-h:' +
+      (hue != null ? hue : P.roleHue(hero && hero.role)) + ";--mono-px:" + px + 'px"' +
+      ' aria-hidden="true">' + esc(initials || P.heroInitials(hero)) + "</span>";
   };
   P.heroArtwork = (heroId) =>
     ART.has(heroId) ? "assets/img/heroes/official/" + encodeURIComponent(heroId) + "/artwork.webp" : null;
@@ -494,10 +511,10 @@
   document.addEventListener("error", (e) => {
     const img = e.target;
     if (!(img instanceof HTMLImageElement) || !img.dataset.fallback) return;
-    const span = document.createElement("span");
-    span.className = "hero-mono";
-    span.textContent = img.dataset.fallback;
-    img.replaceWith(span);
+    const holder = document.createElement("span");
+    holder.innerHTML = P.heroMono({ name: img.title || "" }, Number(img.dataset.px) || img.width || 32,
+      img.dataset.fallback, img.dataset.monoH);
+    img.replaceWith(holder.firstChild);
   }, true);
 
   /* -------------------------------------------------------------- tabs */

@@ -29,7 +29,12 @@
     ["japan", "Japan"], ["pacific", "Pacific"], ["international", "LANs"]];
   const ROLE_ICON = { Tank: "⛨", Damage: "✦", Support: "✚" };
 
-  const state = { region: P.qs("region") || "" };
+  const state = { region: P.qs("region") || "", mapQ: "", mode: "", allMaps: false, allBans: false };
+  const MAPS_SHOWN = 8, BANS_SHOWN = 5;
+  const store = {
+    get: (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) { /* private mode */ } },
+  };
   let cur = null, prev = null, label = "", link = "";
 
   /* ----------------------------------------------------------- window
@@ -71,6 +76,34 @@
         (n < 20 ? ' <span class="dim">Only ' + n + " maps in this window — tiers on a small sample move a lot.</span>" + TR.widenHtml() : ""));
   }
 
+  /* --------------------------------------------------------- welcome
+     A first visit gets three ways in, in plain words. Dismissed once,
+     it stays gone (per browser). */
+  function renderWelcome() {
+    if (store.get("owcs.welcome") === "0") { P.mount("hm-welcome", ""); return; }
+    P.mount("hm-welcome",
+      '<aside class="welcome" aria-labelledby="welcome-h">' +
+        '<div class="welcome__txt"><h2 id="welcome-h">New here? Start with one of these</h2>' +
+        "<p>Everything comes from pro OWCS matches in the time range above (14 days unless you change it).</p></div>" +
+        '<ol class="welcome__steps">' +
+          '<li><a href="#h-stier"><b>See the top heroes</b><span>The S tier for each role, and what\'s rising</span></a></li>' +
+          '<li><a href="#h-every"><b>Find your map</b><span>The comp pros run on it and what they ban</span></a></li>' +
+          '<li><a href="draft.html"><b>Draft a line-up</b><span>Pick a map and bans, get suggestions</span></a></li>' +
+        "</ol>" +
+        '<div class="welcome__end"><button type="button" class="btn btn--ghost btn--sm" data-help>What do the numbers mean?</button>' +
+        '<button type="button" class="btn btn--ghost btn--sm" data-dismiss aria-label="Hide this introduction">Got it</button></div>' +
+      "</aside>");
+  }
+
+  function renderKey() {
+    if (!P.term) return;
+    P.mount("hm-key", '<span class="dim">How to read the cards:</span> ' +
+      "<b>pick</b> = " + P.term("pick", "how often teams run it") + " · " +
+      "<b>adj. win</b> = " + P.term("adj", "win rate weighed for opponent and stakes (50% is average)") + " · " +
+      "<b>ban</b> = " + P.term("ban", "share of maps it was banned") + " · " +
+      "<b>▲▼</b> = " + P.term("trend", "change since the period before"));
+  }
+
   /* ---------------------------------------------------------- S tier */
   function trendChip(now, before) {
     if (before == null) return '<span class="trend" data-dir="new" title="Not picked in the previous window">NEW</span>';
@@ -88,7 +121,8 @@
       const h = P.hero(r.id);
       return '<a class="hm-hero" data-tier="' + esc(r.tier) + '" style="--role-h:' + P.roleHue(h.role) + '" href="' +
         esc(tiersHref("role=" + encodeURIComponent(h.role))) + '" data-hero="' + esc(r.id) + '">' +
-        (art ? '<img class="hm-hero__art" src="' + esc(art) + '" alt="" loading="lazy" decoding="async">' : "") +
+        (art ? '<img class="hm-hero__art" src="' + esc(art) + '" alt="" loading="lazy" decoding="async">'
+          : '<span class="hm-hero__mono" aria-hidden="true">' + esc(P.heroInitials(h)) + "</span>") +
         '<span class="hm-hero__shade"></span>' +
         '<span class="hm-hero__tier">' + esc(r.tier) + "</span>" +
         (prev ? '<span class="hm-hero__trend">' + trendChip(r.pickShare, before.get(r.id)) + "</span>" : "") +
@@ -118,7 +152,8 @@
     const bp = cur.banProfile("*");
     if (!bp || !bp.rows.length) { P.mount("hm-bans", P.empty("⊘", "No bans recorded in this window", "")); return; }
     const before = new Map(prev && prev.banProfile("*") ? prev.banProfile("*").rows.map((r) => [r.id, r.rate]) : []);
-    const top = bp.rows.slice(0, 10);
+    const all10 = bp.rows.slice(0, 10);
+    const top = state.allBans ? all10 : all10.slice(0, BANS_SHOWN);
     const max = top[0].rate || 1;
     const trend = (r) => {
       if (!prev) return "";
@@ -151,7 +186,10 @@
     };
     P.mount("hm-bans",
       '<div class="hm-bans">' +
-      '<ol class="hm-banlist" aria-label="Most banned heroes">' + top.map(row).join("") + "</ol>" +
+      '<div><ol class="hm-banlist" aria-label="Most banned heroes">' + top.map(row).join("") + "</ol>" +
+      (all10.length > BANS_SHOWN ? '<button type="button" class="btn btn--ghost btn--sm more-btn" data-more-bans aria-expanded="' +
+        state.allBans + '">' + (state.allBans ? "Show top " + BANS_SHOWN + " only" : "Show top " + all10.length) + "</button>" : "") +
+      "</div>" +
       '<div class="hm-banside">' +
       '<p class="small hm-rule"><b>How bans work:</b> each team bans one hero per map, and the two teams can\'t ban the same role. ' +
       "So every map loses heroes from two different roles. Here is the usual pick in each:</p>" +
@@ -170,9 +208,29 @@
   const topComp = (res, map) => res.compTiers(map).slice()
     .sort((a, b) => b.apps - a.apps || (b.adjWin - a.adjWin) || a.id.localeCompare(b.id))[0] || null;
 
+  const fold = (x) => String(x || "").normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+  function renderMapBar() {
+    const modes = Array.from(new Set(cur.maps.map((B) => B.mode).filter(Boolean))).sort();
+    P.mount("hm-mapbar",
+      '<label class="hm-mapbar__q"><span class="visually-hidden">Find a map</span>' +
+        '<svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">' +
+        '<circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 4.5 4.5"/></svg>' +
+        '<input class="input" type="search" id="hm-mapq" placeholder="Find a map…" autocomplete="off" value="' + esc(state.mapQ) + '"></label>' +
+      '<div class="seg" role="group" aria-label="Game mode">' +
+        [["", "All modes"]].concat(modes.map((m) => [m, m])).map((o) =>
+          '<button type="button" data-mode="' + esc(o[0]) + '" aria-pressed="' + (state.mode === o[0]) + '">' + esc(o[1]) + "</button>").join("") +
+      "</div>");
+  }
+
   function renderMaps() {
     longer = null;
-    const cards = cur.maps.map((B) => {
+    const q = fold(state.mapQ).trim();
+    const shown = cur.maps.filter((B) => (!state.mode || B.mode === state.mode) &&
+      (!q || fold(U.mapName(B.map)).indexOf(q) >= 0 || fold(B.mode).indexOf(q) >= 0));
+    const filtered = q || state.mode;
+    const list = filtered || state.allMaps ? shown : shown.slice(0, MAPS_SHOWN);
+    const cards = list.map((B) => {
       let top = topComp(cur, B.map);
       let note = "";
       if ((!top || top.apps < 2) && TR.resolve().key !== "season") {
@@ -209,7 +267,11 @@
         U.ROLE_ORDER.map(banCell).join("") + "</span></div>" +
         '<a class="hm-map__go" href="' + esc(tiersHref("map=" + encodeURIComponent(B.map))) + '">Full tier list →</a></article>';
     });
-    P.mount("hm-maps", cards.length ? '<div class="hm-mapgrid">' + cards.join("") + "</div>"
+    const more = !filtered && shown.length > MAPS_SHOWN
+      ? '<button type="button" class="btn btn--ghost more-btn" data-more-maps aria-expanded="' + state.allMaps + '">' +
+        (state.allMaps ? "Show the " + MAPS_SHOWN + " most-played maps only" : "Show all " + shown.length + " maps") + "</button>" : "";
+    P.mount("hm-maps", cards.length ? '<div class="hm-mapgrid">' + cards.join("") + "</div>" + more
+      : cur.maps.length ? P.empty("◇", "No map matches \u201c" + (state.mapQ || state.mode) + "\u201d", "Clear the search to see every map.")
       : P.empty("◇", "No maps in this window", "Pick a longer window."));
   }
 
@@ -239,8 +301,11 @@
     run();
     renderControls();
     renderWindowLine();
+    renderWelcome();
+    renderKey();
     renderSTier();
     renderBans();
+    renderMapBar();
     renderMaps();
     renderUpsets();
   }
@@ -250,6 +315,34 @@
     TR.mount("hm-range", { region: state.region || null });
     TR.onChange(update);
     update();
+    document.getElementById("hm-welcome").addEventListener("click", (e) => {
+      if (e.target.closest("[data-dismiss]")) { store.set("owcs.welcome", "0"); renderWelcome(); return; }
+      if (e.target.closest("[data-help]") && P.openHelp) P.openHelp();
+    });
+    document.getElementById("hm-bans").addEventListener("click", (e) => {
+      if (!e.target.closest("[data-more-bans]")) return;
+      state.allBans = !state.allBans;
+      renderBans();
+    });
+    const bar = document.getElementById("hm-mapbar");
+    bar.addEventListener("input", (e) => {
+      if (e.target.id !== "hm-mapq") return;
+      state.mapQ = e.target.value;
+      renderMaps();
+    });
+    bar.addEventListener("click", (e) => {
+      const b = e.target.closest("[data-mode]");
+      if (!b) return;
+      state.mode = b.dataset.mode;
+      bar.querySelectorAll("[data-mode]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+      renderMaps();
+    });
+    document.getElementById("hm-maps").addEventListener("click", (e) => {
+      if (!e.target.closest("[data-more-maps]")) return;
+      state.allMaps = !state.allMaps;
+      renderMaps();
+      if (!state.allMaps) document.getElementById("h-every").scrollIntoView({ block: "start" });
+    });
     document.getElementById("hm-controls").addEventListener("click", (e) => {
       const b = e.target.closest("[data-region]");
       if (!b) return;

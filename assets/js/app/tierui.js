@@ -49,7 +49,8 @@
   /* Icons only (no per-hero hover card, so the comp's own card wins). */
   U.faces = (heroes, px) => '<span class="faces">' + (heroes || []).map((id) => {
     const h = P.hero(id);
-    return '<span class="faces__one" title="' + esc(h.name) + '" data-role="' + esc(h.role || "") + '">' +
+    return '<span class="faces__one" title="' + esc(h.name) + '" data-role="' + esc(h.role || "") +
+      '" style="--px:' + (px || 32) + 'px">' +
       P.heroFace(h, px || 32) + "</span>";
   }).join("") + "</span>";
 
