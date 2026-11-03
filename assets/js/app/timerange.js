@@ -202,7 +202,13 @@
     host.innerHTML = controlHtml(host);
     const res = host.querySelector("[data-tr-res]");
     if (res) {
-      res.innerHTML = (r.from && r.from !== r.to ? esc(fmt(r.from)) + " – " : "") + esc(fmt(r.to)) +
+      /* The hour windows count back from the newest match, not from now
+         (on a day with no matches "the last 24 hours" would be empty), so
+         the bar says which day that is. */
+      const latestNote = isHours(r.key) ? ' <span class="dim" title="Counted back from the newest match' +
+        (host.dataset.region ? " in this region" : "") + ', not from right now.">(latest match day' +
+        (r.days > 1 ? "s" : "") + ")</span>" : "";
+      res.innerHTML = (r.from && r.from !== r.to ? esc(fmt(r.from)) + " – " : "") + esc(fmt(r.to)) + latestNote +
         (host._note ? ' · <span class="trange__note">' + host._note + "</span>" : "") +
         ' <span class="dim" title="The spreadsheet records no dates; each match is dated from the official schedule by its stage, week and day.">· est. dates</span>';
     }

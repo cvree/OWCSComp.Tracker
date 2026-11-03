@@ -787,7 +787,8 @@
           '<button type="button" class="btn btn--ghost btn--sm" data-close aria-label="Close help">Close <kbd aria-hidden="true">Esc</kbd></button></div>' +
         '<div class="help__body">' +
           '<p class="help__lede">Pro Overwatch (OWCS) results turned into answers: which heroes are winning, what to run on each map, and what to ban. ' +
-          "Every page uses the same time range at the top (14 days by default), and you can change it anywhere.</p>" +
+          "Every page uses the same time range at the top (14 days by default), and you can change it anywhere: " +
+          "7, 14, 30 or 90 days, or under Custom… the last 24, 48 or 72 hours (counted back from the newest match), 60 days or your own dates.</p>" +
           '<h3 class="help__h">Where to go</h3><ul class="help__pages">' +
           NAV.map((n) => '<li><a href="' + n.href + '"><b>' + esc(n.label) + "</b><span>" + esc(n.note) + "</span></a></li>").join("") +
           "</ul>" +
