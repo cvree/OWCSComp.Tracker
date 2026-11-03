@@ -11,6 +11,11 @@
    "role": "Tank"
   },
   {
+   "id": "dmon",
+   "name": "D.Mon",
+   "role": "Tank"
+  },
+  {
    "id": "emre",
    "name": "Emre",
    "role": "Damage"
@@ -258,6 +263,11 @@
   {
    "id": "wuyang",
    "name": "Wuyang",
+   "role": "Support"
+  },
+  {
+   "id": "doctrine",
+   "name": "Doctrine",
    "role": "Support"
   }
  ],

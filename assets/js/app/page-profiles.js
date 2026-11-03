@@ -117,6 +117,38 @@
     });
   }
 
+  /* A hero's teammates and opponents (app/lab.js), in the time range. */
+  function pairsHtml(h) {
+    const w = P.timeRange ? P.timeRange.buildOpts() : {};
+    const t = P.lab.heroTables(window.OWCS_SHEET_TIERS, h.id, { asOf: w.asOf, from: w.from, min: 4, top: 6 });
+    if (!t.maps) {
+      return P.empty("◇", "Not played in this time range", "Widen it to see " + h.name + "'s partners and counters.") +
+        (P.timeRange ? P.timeRange.widenHtml() : "");
+    }
+    const row = (r) => {
+      const x = P.hero(r.id);
+      return '<li><a class="cb-team" href="hero.html?id=' + encodeURIComponent(x.id) + '">' + P.heroFace(x, 26) +
+        "<span>" + esc(x.name) + "</span></a><b>" + r.w + "–" + r.l + '</b><span class="dim small">' + pct(r.win) + "</span></li>";
+    };
+    const col = (title, sub, rows) => '<section class="cb-box"><h3>' + esc(title) + "</h3>" +
+      '<p class="dim small">' + sub + "</p>" + (rows.length ? '<ul class="pair-list">' + rows.map(row).join("") + "</ul>"
+        : '<p class="dim small">Not enough maps together yet.</p>') + "</section>";
+    return '<p class="cb-summary">' + esc(h.name) + "'s team: <b>" + t.base.w + "–" + t.base.l + "</b> over " + t.maps +
+      " map" + (t.maps === 1 ? "" : "s") + ".</p>" +
+      '<div class="cb-grid cb-grid--heroes u-mt-3">' +
+      col("Best with", "Teammates with the best record alongside.", t.bestWith) +
+      col("Played most with", "The usual partners.", t.mostWith) +
+      col("Hardest against", "Enemy heroes it does worst into.", t.hardestAgainst) +
+      col("Best against", "Enemy heroes it does best into.", t.bestAgainst) + "</div>";
+  }
+
+  /* The tools, one tap from any team. */
+  function teamTools(id) {
+    return '<div class="row u-mt-4">' +
+      '<a class="btn btn--sm btn--ghost" href="versus.html?a=' + encodeURIComponent(id) + '">⇄ Compare with another team</a>' +
+      '<a class="btn btn--sm btn--ghost" href="draft.html?opp=' + encodeURIComponent(id) + '">Draft against them →</a></div>';
+  }
+
   function sheetTeamParts(id) {
     const out = [];
     const panel = P.extTeamPanel ? P.extTeamPanel(id) : "";
@@ -156,7 +188,7 @@
       '<p class="lede u-mt-4">What they run, how it goes and who they have played, from the community spreadsheet.</p>' +
       (P.extTeamKnown(id) && /^x-/.test(id)
         ? '<p class="admin-only dim small u-mt-3">Not in the tracker’s team registry: the sheet’s spelling is kept, there is ' +
-          "no mark of its own and it is not matched to any broadcast.</p>" : "") + "</div>");
+          "no mark of its own and it is not matched to any broadcast.</p>" : "") + teamTools(id) + "</div>");
     const parts = [];
     const run = compsPart({ team: id }, "What they run", "Their most-run five-hero comps, and the one winning most. Tap one for its full record.");
     if (run) parts.push(run);
@@ -210,7 +242,7 @@
           : seen.length
             ? "On " + seen.length + " indexed map" + (seen.length === 1 ? "" : "s") +
               " — every one a click from playing."
-            : "No map of this team has been indexed or read yet.") + "</p></div>");
+            : "No map of this team has been indexed or read yet.") + "</p>" + teamTools(t.id) + "</div>");
 
     const parts = [];
     if (run) parts.push(run);
@@ -317,7 +349,7 @@
       return P.compBook.build(window.OWCS_SHEET_TIERS, { hero: h.id, minMaps: 1, asOf: w.asOf || null, from: w.from || null });
     };
     const bookLede = (b) => {
-      const when = P.timeRange ? P.timeRange.resolve().label.toLowerCase().replace(/^last/, "the last") : "this season";
+      const when = P.timeRange ? P.timeRange.phrase() : "this season";
       return b && b.coveredMaps
         ? "In " + b.coveredMaps.toLocaleString("en-US") + " pro line-ups in " + esc(when) + " — " +
           pct(b.coveredMaps / Math.max(1, b.teamMaps)) + " of every full line-up in that time, across " +
@@ -346,6 +378,14 @@
 
     const parts = [];
     if (run) parts.push(run);
+    if (P.lab && window.OWCS_SHEET_TIERS) {
+      parts.push('<section class="band" id="pairs"><div class="sec-head"><h2>Best with, hardest against</h2>' +
+        (P.tierUI ? P.tierUI.sourceBadge() : "") + "</div>" +
+        '<p class="dim small">How ' + esc(h.name) + "'s team did with each teammate, and against each hero on the other side. " +
+        "Small samples are pulled toward 50%; every row keeps its real W–L. " +
+        '<a href="draft.html?us=' + encodeURIComponent(h.id) + '">Draft with ' + esc(h.name) + " →</a></p>" +
+        '<div id="pairs-live">' + pairsHtml(h) + "</div></section>");
+    }
     if (art) {
       parts.push('<section class="band"><img src="' + esc(art) + '" alt="" loading="lazy" ' +
         'width="640" height="427" ' +
@@ -418,6 +458,8 @@
     }
     set("body", parts.join(""));
     mountRange(() => {
+      const live = document.getElementById("pairs-live");
+      if (live) live.innerHTML = pairsHtml(h);
       const el = document.getElementById("hero-lede");
       const b = bookIn();
       if (el && b && b.teamMaps) el.innerHTML = bookLede(b);

@@ -16,7 +16,7 @@ What it guards, in order of how much it would hurt to lose:
      detection it corrects; every published claim resolves to an evidence
      file that exists on disk.
   2. THE INFORMATION ARCHITECTURE. Two audiences: a three-entry public
-     nav (Meta · Comps · Tiers · Teams · Matches) that never asks a fan to submit or review,
+     nav (Meta · Comps · Tiers · Draft · Teams · Matches) that never asks a fan to submit or review,
      and the five-entry admin nav on the admin pages only. One page per
      job, no dead links, no orphan pages, no deleted page coming back.
   3. NO DEMO DATA CAN REACH A PAGE. The fixture is a test asset now.
@@ -76,6 +76,10 @@ PRODUCT_PAGES = {
     # viewing date and range, with the team power ranking that weighs each
     # win. Public, reached from Comps (stats.html, meta.html), not a nav slot.
     "tiers.html": "Hero tiers",
+    # The tools (app/lab.js): build a line-up from pro results, and any two
+    # teams head to head. Public; Draft has a nav slot, Versus sits under Teams.
+    "draft.html": "Draft Lab",
+    "versus.html": "Versus",
 }
 #: Reachable, but not part of the product shell: the calibration wizard
 #: (its own self-contained tool), the packaged desktop app's two screens,
@@ -134,7 +138,7 @@ def test_navigation() -> None:
         return
     labels = re.findall(r'label: "([^"]+)"', nav.group(1))
     check(f"the public nav names the fan's questions, meta and comps first ({labels})",
-          labels == ["Meta", "Comps", "Tiers", "Teams", "Matches"])
+          labels == ["Meta", "Comps", "Tiers", "Draft", "Teams", "Matches"])
     hrefs = re.findall(r'href: "([^"]+)"', nav.group(1))
     check("nothing on the public nav asks a fan to submit, review or label",
           not set(hrefs) & {"submit.html", "review.html", "label.html", "games.html",
@@ -392,6 +396,7 @@ ACCENT_ALLOWED = (
     ".press:focus-visible", ".game-card:hover", ".game-card:focus-within",
     "a.hero:hover .hero__face", ".teamwall__team:hover", ".teamwall__team:focus-visible",
     ".hm-map:hover", ".mf-map:hover", ".mf-map:focus-within", ".cb-pick:hover", ".cb-pick:focus-visible",
+    ".dl-team.is-active", ".dl-hero:hover:not([disabled])", ".dl-chip:hover",   # Draft Lab: the side you are picking for, hover
 )
 
 

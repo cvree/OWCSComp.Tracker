@@ -268,7 +268,7 @@
     if (state.cmo) scope.push(state.cmo);
     if (state.ct) scope.push(U.teamName(state.ct));
     if (state.ch) scope.push("with " + heroName(state.ch));
-    const when = TR ? TR.resolve({ region: state.cr || null }).label.toLowerCase().replace(/^last/, "the last") : "the whole season";
+    const when = TR ? TR.phrase({ region: state.cr || null }) : "the whole season";
     return '<p class="cb-summary"><b>' + n(r.distinct) + "</b> distinct comps across <b>" + n(r.coveredMaps) +
       "</b> team line-ups on <b>" + n(r.maps) + "</b> maps" + (scope.length ? " · " + esc(scope.join(" · ")) : "") +
       " · " + esc(when) + '. <span class="dim">' + n(r.repeated) + " were run more than once; showing " +
@@ -417,7 +417,7 @@
         }).join("") + "</tbody></table></section>";
     };
     host.innerHTML = '<p class="cb-summary">Every hero in <b>' + n(B.maps) + "</b> pro maps · " +
-      esc(r.label.toLowerCase().replace(/^last/, "the last")) + (state.cr ? " · " + esc((REGIONS.find((x) => x[0] === state.cr) || [0, state.cr])[1]) : "") +
+      esc(TR.phrase({ region: state.cr || null })) + (state.cr ? " · " + esc((REGIONS.find((x) => x[0] === state.cr) || [0, state.cr])[1]) : "") +
       '. <span class="dim">Pick = share of team line-ups listing the hero; adj. win weighs each map by event, bracket and the ' +
       'opponent\'s power; ± is pick change against the window before. <a href="tiers.html">Map by map on Hero tiers →</a></span></p>' +
       (B.maps < 20 ? '<p class="dim small">Only ' + B.maps + " maps — a small sample moves a lot." + TR.widenHtml() + "</p>" : "") +
@@ -460,7 +460,7 @@
     const r = CB.build(T, Object.assign({ minMaps: 1, sort: "played", asOf: w.asOf || null, from: w.from || null }, filter));
     if (!r.comps.length) {
       return P.empty("◇", "Nothing in this time range", "No full line-up is recorded " +
-        (TR ? TR.resolve().label.toLowerCase().replace(/^last/, "in the last") : "here") + ".") + (TR ? TR.widenHtml() : "");
+        (TR ? "in " + TR.phrase() : "here") + ".") + (TR ? TR.widenHtml() : "");
     }
     const top = r.comps.slice(0, opt.limit || 6);
     const topKeys = new Set(top.map((c) => c.key));

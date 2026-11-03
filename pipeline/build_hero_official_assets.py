@@ -92,6 +92,11 @@ HERO_SLUGS: dict[str, str] = {
     "orisa": "orisa", "ram": "ramattra", "rein": "reinhardt",
     "hog": "roadhog", "sigma": "sigma", "winston": "winston",
     "ball": "wrecking-ball", "zarya": "zarya",
+    # Added with the heroes (2026-11). Blizzard's slugs drop punctuation
+    # ("D.Va" -> "dva"), so "D.Mon" -> "dmon". Not yet checked against the
+    # live hero pages, which were unreachable when these were added: a
+    # wrong slug only means no art is found and the monogram stays.
+    "dmon": "dmon", "doctrine": "doctrine",
 }
 
 # Pre-release development codenames Blizzard's own CMS asset filenames

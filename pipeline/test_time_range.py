@@ -180,6 +180,8 @@ class EveryCompAndHeroPageHasTheBar(unittest.TestCase):
         "tiers.html": ("page-tiers.js", "tr-range"),
         "team.html": ("page-profiles.js", "pf-range"),
         "hero.html": ("page-profiles.js", "pf-range"),
+        "draft.html": ("page-draft.js", "dl-range"),
+        "versus.html": ("page-versus.js", "vs-range"),
     }
 
     def test_module_loads_before_the_page_and_the_bar_sits_in_main(self):
@@ -196,7 +198,7 @@ class EveryCompAndHeroPageHasTheBar(unittest.TestCase):
             self.assertRegex(main, r'\n  <div id="' + mount + r'"></div>', page)
 
     def test_pages_read_the_shared_range_and_redraw_on_change(self):
-        for script in ("page-home.js", "page-compbook.js", "page-tiers.js", "page-profiles.js"):
+        for script in ("page-home.js", "page-compbook.js", "page-tiers.js", "page-profiles.js", "page-draft.js", "page-versus.js"):
             with open(os.path.join(ROOT, "assets", "js", "app", script), encoding="utf-8") as f:
                 js = f.read()
             self.assertIn("timeRange", js, script)

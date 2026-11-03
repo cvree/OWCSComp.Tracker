@@ -413,14 +413,19 @@ After that it runs daily on its own; you only merge the PR it opens.
   2. Download the merged `corrections/external_reconciliation.json` and commit it.
   3. Run `sheet_sync.py rebuild`.
   4. Commit the result.
-* **A hero the catalog does not have yet** (the sheet lists **D.Mon** and
-  **Doctrine**; both stay unmapped, shown as the sheet wrote them and never
-  counted):
+* **A hero the catalog does not have yet** (D.Mon and Doctrine were the
+  last two: until they were added, 1,518 listings were dropped, and most
+  line-ups after their release counted as incomplete, so the recent meta
+  was missing its two most-played heroes):
   1. Add `{"id": "dmon", "name": "D.Mon", "role": "…"}` (and the same for
      Doctrine) to `heroes` in `pipeline/sample_data.json`, with the role the
      game gives it. Do not guess a role.
-  2. Re-seed the reference tables (`python3 pipeline/init_db.py`, which
-     upserts heroes) and re-export: `python3 pipeline/export_data.py --public`.
+  2. Add the hero row to the database and re-export:
+     `INSERT OR REPLACE INTO heroes (id, name, role) VALUES (…)` on
+     `data/owcs.sqlite`, then `python3 pipeline/export_data.py --public`.
+     Do **not** re-run `init_db.py` on the committed database: it also
+     re-seeds `teams` from `sample_data.json`, which wipes the logo paths
+     the team-logos workflow has filled in.
   3. Only if the sheet's spelling differs from the name after normalisation
      (`D.Mon` already normalises to `dmon`), add it under `heroes` in
      `config/external/aliases.json` and bump `version`.

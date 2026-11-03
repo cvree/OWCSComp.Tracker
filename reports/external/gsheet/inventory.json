@@ -10,7 +10,7 @@
   "maps": 2098,
   "matches": 577,
   "tournaments": 10,
-  "unmappedValues": 421
+  "unmappedValues": 419
  },
  "credits": [
   {
@@ -1872,28 +1872,6 @@
  ],
  "unmapped": {
   "hero": [
-   {
-    "count": 778,
-    "raw": "Doctrine",
-    "refs": [
-     "Japan - Stage 3!U485",
-     "Japan - Stage 3!U478",
-     "Japan - Stage 3!AO472",
-     "Japan - Stage 3!AO489",
-     "Japan - Stage 3!BW472"
-    ]
-   },
-   {
-    "count": 740,
-    "raw": "D.Mon",
-    "refs": [
-     "Japan - Stage 3!U4",
-     "Japan - Stage 3!U21",
-     "Japan - Stage 3!AL4",
-     "Japan - Stage 3!AN21",
-     "Japan - Stage 3!BC4"
-    ]
-   },
    {
     "count": 1,
     "raw": "picture:4451f92648",
