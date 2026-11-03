@@ -24,6 +24,8 @@ import unittest
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
+sys.path.insert(0, HERE)
+import proc_text  # noqa: E402  (UTF-8 subprocess decoding)
 
 
 def generator():
@@ -45,7 +47,7 @@ class Brand(unittest.TestCase):
 
     def test_every_brand_file_matches_the_generator(self):
         r = subprocess.run([sys.executable, os.path.join(ROOT, "desktop", "build_icon.py"), "--check"],
-                           capture_output=True, text=True, cwd=ROOT)
+                           capture_output=True, cwd=ROOT, **proc_text.PIPE_TEXT)
         self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
 
     def test_the_header_mark_is_the_generators_mark(self):
