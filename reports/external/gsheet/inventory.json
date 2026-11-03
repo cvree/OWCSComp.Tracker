@@ -1,14 +1,14 @@
 {
  "aliasesVersion": 3,
  "counts": {
-  "appearances": 34206,
-  "bans": 4127,
-  "compositions": 7987,
+  "appearances": 34387,
+  "bans": 4149,
+  "compositions": 8030,
   "duplicateConflicts": 0,
   "duplicates": 0,
   "ignoredRows": 0,
-  "maps": 2098,
-  "matches": 577,
+  "maps": 2108,
+  "matches": 579,
   "tournaments": 10,
   "unmappedValues": 419
  },
@@ -96,20 +96,6 @@
    "message": "Self-Check Stage 1 CC: the sheet counts 13 matches / 48 maps, the importer parsed 14 / 48 from 'Champions Clash Tokyo'",
    "row": 11,
    "sheet": "Self-Check"
-  },
-  {
-   "code": "SELF_CHECK_MISMATCH",
-   "level": "warning",
-   "message": "Self-Check Stage 3 EMEA: the sheet counts 20 matches / 84 maps, the importer parsed 21 / 84 from 'EMEA - Stage 3'",
-   "row": 22,
-   "sheet": "Self-Check"
-  },
-  {
-   "code": "SELF_CHECK_MISMATCH",
-   "level": "warning",
-   "message": "Self-Check Stage 3 NA: the sheet counts 17 matches / 68 maps, the importer parsed 19 / 68 from 'North America - Stage 3'",
-   "row": 23,
-   "sheet": "Self-Check"
   }
  ],
  "layoutVersion": 2,
@@ -122,91 +108,91 @@
   "heroPictures": 54,
   "incomplete": 0,
   "pictureSuggestions": [],
-  "played": 577,
+  "played": 579,
   "rolePictures": 6,
-  "scheduled": 51,
+  "scheduled": 49,
   "year": 2026,
   "yearCell": "Landing Page!B1"
  },
  "package": {
-  "bytes": 55395255,
+  "bytes": 55394881,
   "largestMembers": [
    {
-    "bytes": 4047640,
+    "bytes": 4047531,
     "path": "xl/worksheets/sheet7.xml"
    },
    {
-    "bytes": 4035264,
+    "bytes": 4035257,
     "path": "xl/worksheets/sheet8.xml"
    },
    {
-    "bytes": 3995319,
+    "bytes": 3995267,
     "path": "xl/worksheets/sheet6.xml"
    },
    {
-    "bytes": 3401564,
+    "bytes": 3401045,
     "path": "xl/drawings/drawing7.xml"
    },
    {
-    "bytes": 3229136,
+    "bytes": 3228732,
     "path": "xl/drawings/drawing6.xml"
    },
    {
-    "bytes": 2885859,
+    "bytes": 2885688,
     "path": "xl/drawings/drawing8.xml"
    },
    {
-    "bytes": 2866778,
+    "bytes": 2866768,
     "path": "xl/worksheets/sheet11.xml"
    },
    {
-    "bytes": 2789980,
+    "bytes": 2789939,
     "path": "xl/worksheets/sheet9.xml"
    }
   ],
   "mediaBytes": 47856008,
   "mediaFiles": 229,
   "members": 398,
-  "uncompressedBytes": 141489517,
+  "uncompressedBytes": 141674132,
   "worksheetXml": [
    {
-    "bytes": 4047640,
+    "bytes": 4047531,
     "path": "xl/worksheets/sheet7.xml"
    },
    {
-    "bytes": 4035264,
+    "bytes": 4035257,
     "path": "xl/worksheets/sheet8.xml"
    },
    {
-    "bytes": 3995319,
+    "bytes": 3995267,
     "path": "xl/worksheets/sheet6.xml"
    },
    {
-    "bytes": 2866778,
+    "bytes": 2866768,
     "path": "xl/worksheets/sheet11.xml"
    },
    {
-    "bytes": 2789980,
+    "bytes": 2789939,
     "path": "xl/worksheets/sheet9.xml"
    },
    {
-    "bytes": 2764596,
+    "bytes": 2764516,
     "path": "xl/worksheets/sheet10.xml"
    },
    {
-    "bytes": 2509984,
+    "bytes": 2509931,
     "path": "xl/worksheets/sheet5.xml"
    },
    {
-    "bytes": 2483491,
+    "bytes": 2483547,
     "path": "xl/worksheets/sheet3.xml"
    },
    {
-    "bytes": 2471232,
+    "bytes": 2471114,
     "path": "xl/worksheets/sheet4.xml"
    },
    {
-    "bytes": 2173158,
+    "bytes": 2173152,
     "path": "xl/worksheets/sheet25.xml"
    },
    {
@@ -214,43 +200,43 @@
     "path": "xl/worksheets/sheet26.xml"
    },
    {
-    "bytes": 1650125,
+    "bytes": 1651490,
     "path": "xl/worksheets/sheet14.xml"
    },
    {
-    "bytes": 1648238,
-    "path": "xl/worksheets/sheet17.xml"
-   },
-   {
-    "bytes": 1646188,
+    "bytes": 1649682,
     "path": "xl/worksheets/sheet18.xml"
    },
    {
-    "bytes": 1632358,
+    "bytes": 1648216,
+    "path": "xl/worksheets/sheet17.xml"
+   },
+   {
+    "bytes": 1632318,
     "path": "xl/worksheets/sheet16.xml"
    },
    {
-    "bytes": 1630340,
+    "bytes": 1630288,
     "path": "xl/worksheets/sheet13.xml"
    },
    {
-    "bytes": 1625936,
+    "bytes": 1625991,
     "path": "xl/worksheets/sheet12.xml"
    },
    {
-    "bytes": 1493913,
+    "bytes": 1493887,
     "path": "xl/worksheets/sheet20.xml"
    },
    {
-    "bytes": 1477521,
+    "bytes": 1477503,
     "path": "xl/worksheets/sheet19.xml"
    },
    {
-    "bytes": 1404101,
+    "bytes": 1404299,
     "path": "xl/worksheets/sheet21.xml"
    },
    {
-    "bytes": 1393833,
+    "bytes": 1393827,
     "path": "xl/worksheets/sheet22.xml"
    },
    {
@@ -258,11 +244,11 @@
     "path": "xl/worksheets/sheet23.xml"
    },
    {
-    "bytes": 1077676,
+    "bytes": 1077652,
     "path": "xl/worksheets/sheet24.xml"
    },
    {
-    "bytes": 851357,
+    "bytes": 851407,
     "path": "xl/worksheets/sheet2.xml"
    },
    {
@@ -270,11 +256,11 @@
     "path": "xl/worksheets/sheet39.xml"
    },
    {
-    "bytes": 502496,
+    "bytes": 502889,
     "path": "xl/worksheets/sheet38.xml"
    },
    {
-    "bytes": 178894,
+    "bytes": 178898,
     "path": "xl/worksheets/sheet37.xml"
    },
    {
@@ -282,7 +268,7 @@
     "path": "xl/worksheets/sheet27.xml"
    },
    {
-    "bytes": 154114,
+    "bytes": 154115,
     "path": "xl/worksheets/sheet29.xml"
    },
    {
@@ -290,35 +276,35 @@
     "path": "xl/worksheets/sheet28.xml"
    },
    {
-    "bytes": 108099,
+    "bytes": 108083,
     "path": "xl/worksheets/sheet30.xml"
    },
    {
-    "bytes": 95919,
+    "bytes": 95912,
     "path": "xl/worksheets/sheet32.xml"
    },
    {
-    "bytes": 92889,
+    "bytes": 92868,
     "path": "xl/worksheets/sheet31.xml"
    },
    {
-    "bytes": 71247,
+    "bytes": 71235,
     "path": "xl/worksheets/sheet34.xml"
    },
    {
-    "bytes": 63157,
+    "bytes": 63154,
     "path": "xl/worksheets/sheet41.xml"
    },
    {
-    "bytes": 53985,
+    "bytes": 53981,
     "path": "xl/worksheets/sheet33.xml"
    },
    {
-    "bytes": 27060,
+    "bytes": 27057,
     "path": "xl/worksheets/sheet35.xml"
    },
    {
-    "bytes": 24232,
+    "bytes": 24250,
     "path": "xl/worksheets/sheet40.xml"
    },
    {
@@ -326,7 +312,7 @@
     "path": "xl/worksheets/sheet1.xml"
    },
    {
-    "bytes": 15838,
+    "bytes": 15837,
     "path": "xl/worksheets/sheet36.xml"
    }
   ]
@@ -335,7 +321,7 @@
  "selfCheck": {
   "compared": 21,
   "headerRow": 2,
-  "mismatches": 3,
+  "mismatches": 1,
   "rows": [
    {
     "agree": true,
@@ -661,16 +647,16 @@
     ]
    },
    {
-    "agree": false,
+    "agree": true,
     "parsed": {
-     "maps": 84,
+     "maps": 87,
      "matches": 21
     },
     "region": "EMEA",
     "row": 22,
     "sheet": {
-     "maps": 84,
-     "matches": 20
+     "maps": 87,
+     "matches": 21
     },
     "stage": "Stage 3",
     "tabs": [
@@ -678,16 +664,16 @@
     ]
    },
    {
-    "agree": false,
+    "agree": true,
     "parsed": {
-     "maps": 68,
-     "matches": 19
+     "maps": 75,
+     "matches": 21
     },
     "region": "NA",
     "row": 23,
     "sheet": {
-     "maps": 68,
-     "matches": 17
+     "maps": 75,
+     "matches": 21
     },
     "stage": "Stage 3",
     "tabs": [
@@ -698,7 +684,7 @@
   "tab": "Self-Check",
   "unpaired": 0
  },
- "sourceRowCount": 9415,
+ "sourceRowCount": 9438,
  "tabCount": 41,
  "tabs": [
   {
@@ -1123,21 +1109,21 @@
    "headerRow": null,
    "ignoredCount": 0,
    "ignoredRows": [],
-   "images": 2707,
+   "images": 2796,
    "index": 13,
    "mappedColumns": [],
    "name": "EMEA - Stage 3",
    "parsed": {
-    "appearances": 1291,
-    "bans": 164,
-    "compositions": 313,
+    "appearances": 1345,
+    "bans": 172,
+    "compositions": 328,
     "duplicates": 0,
-    "maps": 84,
+    "maps": 87,
     "matches": 21
    },
    "purpose": "match_cards",
    "purposeLabel": "Match cards — one fixed-size card per series, heroes shown as pictures",
-   "rows": 294,
+   "rows": 295,
    "state": "visible",
    "unmappedColumns": []
   },
@@ -1235,29 +1221,29 @@
     "failed": 0,
     "forfeited": 0,
     "incomplete": 0,
-    "played": 19,
-    "scheduled": 2
+    "played": 21,
+    "scheduled": 0
    },
    "columns": 96,
-   "dataRows": 19,
+   "dataRows": 21,
    "headerRow": null,
    "ignoredCount": 0,
    "ignoredRows": [],
-   "images": 2243,
+   "images": 2474,
    "index": 17,
    "mappedColumns": [],
    "name": "North America - Stage 3",
    "parsed": {
-    "appearances": 1085,
-    "bans": 136,
-    "compositions": 269,
+    "appearances": 1212,
+    "bans": 150,
+    "compositions": 297,
     "duplicates": 0,
-    "maps": 68,
-    "matches": 19
+    "maps": 75,
+    "matches": 21
    },
    "purpose": "match_cards",
    "purposeLabel": "Match cards — one fixed-size card per series, heroes shown as pictures",
-   "rows": 276,
+   "rows": 295,
    "state": "visible",
    "unmappedColumns": []
   },
@@ -1334,7 +1320,7 @@
     "played": 0,
     "scheduled": 19
    },
-   "columns": 3,
+   "columns": 10,
    "dataRows": 0,
    "headerRow": null,
    "ignoredCount": 0,
@@ -1353,7 +1339,7 @@
    },
    "purpose": "match_cards",
    "purposeLabel": "Match cards — one fixed-size card per series, heroes shown as pictures",
-   "rows": 57,
+   "rows": 60,
    "state": "visible",
    "unmappedColumns": []
   },
@@ -1779,7 +1765,7 @@
    "headerRow": null,
    "ignoredCount": 0,
    "ignoredRows": [],
-   "images": 672,
+   "images": 695,
    "index": 37,
    "mappedColumns": [],
    "name": "Non-Partner Team Index",
@@ -2267,6 +2253,17 @@
     ]
    },
    {
+    "count": 116,
+    "raw": "UltraViolet",
+    "refs": [
+     "North America - Stage 1!AB29",
+     "North America - Stage 1!AS29",
+     "North America - Stage 1!BJ29",
+     "North America - Stage 1!AB81",
+     "North America - Stage 1!AS81"
+    ]
+   },
+   {
     "count": 115,
     "raw": "eisgnom",
     "refs": [
@@ -2322,7 +2319,7 @@
     ]
    },
    {
-    "count": 110,
+    "count": 114,
     "raw": "Cjay",
     "refs": [
      "Pre-Season Bootcamp!Y55",
@@ -2333,7 +2330,7 @@
     ]
    },
    {
-    "count": 110,
+    "count": 114,
     "raw": "Kellan",
     "refs": [
      "Pre-Season Bootcamp!V55",
@@ -2344,7 +2341,7 @@
     ]
    },
    {
-    "count": 110,
+    "count": 114,
     "raw": "Kronik",
     "refs": [
      "Pre-Season Bootcamp!O55",
@@ -2355,7 +2352,7 @@
     ]
    },
    {
-    "count": 110,
+    "count": 114,
     "raw": "Lukemino",
     "refs": [
      "Pre-Season Bootcamp!AB55",
@@ -2363,6 +2360,61 @@
      "Pre-Season Bootcamp!BG55",
      "Pre-Season Bootcamp!BX55",
      "North America - Stage 1!Y3"
+    ]
+   },
+   {
+    "count": 114,
+    "raw": "Seonjun",
+    "refs": [
+     "Pre-Season Bootcamp!R55",
+     "Pre-Season Bootcamp!AI55",
+     "Pre-Season Bootcamp!AZ55",
+     "Pre-Season Bootcamp!BQ55",
+     "North America - Stage 1!R3"
+    ]
+   },
+   {
+    "count": 112,
+    "raw": "Admiral",
+    "refs": [
+     "North America - Stage 1!Y29",
+     "North America - Stage 1!AP29",
+     "North America - Stage 1!BG29",
+     "North America - Stage 1!Y81",
+     "North America - Stage 1!AP81"
+    ]
+   },
+   {
+    "count": 112,
+    "raw": "Lethal",
+    "refs": [
+     "North America - Stage 1!O29",
+     "North America - Stage 1!AF29",
+     "North America - Stage 1!AW29",
+     "North America - Stage 1!R81",
+     "North America - Stage 1!AI81"
+    ]
+   },
+   {
+    "count": 112,
+    "raw": "Sugarfree",
+    "refs": [
+     "North America - Stage 1!R29",
+     "North America - Stage 1!AI29",
+     "North America - Stage 1!AZ29",
+     "North America - Stage 1!O81",
+     "North America - Stage 1!AF81"
+    ]
+   },
+   {
+    "count": 110,
+    "raw": "Hawk",
+    "refs": [
+     "North America - Stage 1!V29",
+     "North America - Stage 1!AM29",
+     "North America - Stage 1!BD29",
+     "North America - Stage 1!V81",
+     "North America - Stage 1!AM81"
     ]
    },
    {
@@ -2377,58 +2429,36 @@
     ]
    },
    {
-    "count": 110,
-    "raw": "Seonjun",
+    "count": 108,
+    "raw": "TR33",
     "refs": [
-     "Pre-Season Bootcamp!R55",
-     "Pre-Season Bootcamp!AI55",
-     "Pre-Season Bootcamp!AZ55",
-     "Pre-Season Bootcamp!BQ55",
-     "North America - Stage 1!R3"
+     "Pre-Season Bootcamp!R185",
+     "Pre-Season Bootcamp!AI185",
+     "Pre-Season Bootcamp!AZ185",
+     "Pre-Season Bootcamp!BQ185",
+     "Pre-Season Bootcamp!R259"
     ]
    },
    {
-    "count": 109,
-    "raw": "Admiral",
+    "count": 108,
+    "raw": "Vega",
     "refs": [
-     "North America - Stage 1!Y29",
-     "North America - Stage 1!AP29",
-     "North America - Stage 1!BG29",
-     "North America - Stage 1!Y81",
-     "North America - Stage 1!AP81"
+     "Pre-Season Bootcamp!Y185",
+     "Pre-Season Bootcamp!AP185",
+     "Pre-Season Bootcamp!BG185",
+     "Pre-Season Bootcamp!BX185",
+     "Pre-Season Bootcamp!Y259"
     ]
    },
    {
-    "count": 109,
-    "raw": "Lethal",
+    "count": 108,
+    "raw": "Zeruhh",
     "refs": [
-     "North America - Stage 1!O29",
-     "North America - Stage 1!AF29",
-     "North America - Stage 1!AW29",
-     "North America - Stage 1!R81",
-     "North America - Stage 1!AI81"
-    ]
-   },
-   {
-    "count": 109,
-    "raw": "Sugarfree",
-    "refs": [
-     "North America - Stage 1!R29",
-     "North America - Stage 1!AI29",
-     "North America - Stage 1!AZ29",
-     "North America - Stage 1!O81",
-     "North America - Stage 1!AF81"
-    ]
-   },
-   {
-    "count": 109,
-    "raw": "UltraViolet",
-    "refs": [
-     "North America - Stage 1!AB29",
-     "North America - Stage 1!AS29",
-     "North America - Stage 1!BJ29",
-     "North America - Stage 1!AB81",
-     "North America - Stage 1!AS81"
+     "Pre-Season Bootcamp!O185",
+     "Pre-Season Bootcamp!AF185",
+     "Pre-Season Bootcamp!AW185",
+     "Pre-Season Bootcamp!BN185",
+     "Pre-Season Bootcamp!O259"
     ]
    },
    {
@@ -2440,17 +2470,6 @@
      "China - Stage 1!AW103",
      "China - Stage 1!BN103",
      "China - Stage 1!O155"
-    ]
-   },
-   {
-    "count": 107,
-    "raw": "Hawk",
-    "refs": [
-     "North America - Stage 1!V29",
-     "North America - Stage 1!AM29",
-     "North America - Stage 1!BD29",
-     "North America - Stage 1!V81",
-     "North America - Stage 1!AM81"
     ]
    },
    {
@@ -2564,6 +2583,17 @@
     ]
    },
    {
+    "count": 103,
+    "raw": "JaeWoo",
+    "refs": [
+     "Pre-Season Bootcamp!O159",
+     "Pre-Season Bootcamp!AF159",
+     "Pre-Season Bootcamp!AW159",
+     "Pre-Season Bootcamp!O237",
+     "Pre-Season Bootcamp!AF237"
+    ]
+   },
+   {
     "count": 101,
     "raw": "Alphari",
     "refs": [
@@ -2597,36 +2627,14 @@
     ]
    },
    {
-    "count": 101,
-    "raw": "TR33",
+    "count": 100,
+    "raw": "ATTACK",
     "refs": [
-     "Pre-Season Bootcamp!R185",
-     "Pre-Season Bootcamp!AI185",
-     "Pre-Season Bootcamp!AZ185",
-     "Pre-Season Bootcamp!BQ185",
-     "Pre-Season Bootcamp!R259"
-    ]
-   },
-   {
-    "count": 101,
-    "raw": "Vega",
-    "refs": [
-     "Pre-Season Bootcamp!Y185",
-     "Pre-Season Bootcamp!AP185",
-     "Pre-Season Bootcamp!BG185",
-     "Pre-Season Bootcamp!BX185",
-     "Pre-Season Bootcamp!Y259"
-    ]
-   },
-   {
-    "count": 101,
-    "raw": "Zeruhh",
-    "refs": [
-     "Pre-Season Bootcamp!O185",
-     "Pre-Season Bootcamp!AF185",
-     "Pre-Season Bootcamp!AW185",
-     "Pre-Season Bootcamp!BN185",
-     "Pre-Season Bootcamp!O259"
+     "Korea - Stage 1!V77",
+     "Korea - Stage 1!AM77",
+     "Korea - Stage 1!BD77",
+     "Korea - Stage 1!BU77",
+     "Korea - Stage 1!CL77"
     ]
    },
    {
@@ -2660,17 +2668,6 @@
      "Korea - Stage 1!AZ25",
      "Korea - Stage 1!R159",
      "Korea - Stage 1!AI159"
-    ]
-   },
-   {
-    "count": 99,
-    "raw": "JaeWoo",
-    "refs": [
-     "Pre-Season Bootcamp!O159",
-     "Pre-Season Bootcamp!AF159",
-     "Pre-Season Bootcamp!AW159",
-     "Pre-Season Bootcamp!O237",
-     "Pre-Season Bootcamp!AF237"
     ]
    },
    {
@@ -2759,17 +2756,6 @@
      "Korea - Stage 3!BD3",
      "Korea - Stage 3!V81",
      "Korea - Stage 3!AM81"
-    ]
-   },
-   {
-    "count": 93,
-    "raw": "ATTACK",
-    "refs": [
-     "Korea - Stage 1!V77",
-     "Korea - Stage 1!AM77",
-     "Korea - Stage 1!BD77",
-     "Korea - Stage 1!BU77",
-     "Korea - Stage 1!CL77"
     ]
    },
    {
@@ -3225,6 +3211,17 @@
    },
    {
     "count": 63,
+    "raw": "FDGod",
+    "refs": [
+     "Pre-Season Bootcamp!Y25",
+     "Pre-Season Bootcamp!AP25",
+     "Pre-Season Bootcamp!BG25",
+     "Pre-Season Bootcamp!BX25",
+     "Pre-Season Bootcamp!CO25"
+    ]
+   },
+   {
+    "count": 63,
     "raw": "Misin",
     "refs": [
      "Korea - Stage 2!Y3",
@@ -3232,6 +3229,17 @@
      "Korea - Stage 2!BG3",
      "Korea - Stage 2!Y181",
      "Korea - Stage 2!AP181"
+    ]
+   },
+   {
+    "count": 63,
+    "raw": "Xerion",
+    "refs": [
+     "Pre-Season Bootcamp!AB25",
+     "Pre-Season Bootcamp!AS25",
+     "Pre-Season Bootcamp!BJ25",
+     "Pre-Season Bootcamp!CA25",
+     "Pre-Season Bootcamp!CR25"
     ]
    },
    {
@@ -3313,17 +3321,6 @@
    },
    {
     "count": 59,
-    "raw": "FDGod",
-    "refs": [
-     "Pre-Season Bootcamp!Y25",
-     "Pre-Season Bootcamp!AP25",
-     "Pre-Season Bootcamp!BG25",
-     "Pre-Season Bootcamp!BX25",
-     "Pre-Season Bootcamp!CO25"
-    ]
-   },
-   {
-    "count": 59,
     "raw": "homerunball",
     "refs": [
      "Japan - Stage 1!V3",
@@ -3353,17 +3350,6 @@
      "Pre-Season Bootcamp!BG3",
      "Pre-Season Bootcamp!BX3",
      "Pre-Season Bootcamp!CO3"
-    ]
-   },
-   {
-    "count": 59,
-    "raw": "Xerion",
-    "refs": [
-     "Pre-Season Bootcamp!AB25",
-     "Pre-Season Bootcamp!AS25",
-     "Pre-Season Bootcamp!BJ25",
-     "Pre-Season Bootcamp!CA25",
-     "Pre-Season Bootcamp!CR25"
     ]
    },
    {
@@ -4104,6 +4090,28 @@
     ]
    },
    {
+    "count": 35,
+    "raw": "Rav",
+    "refs": [
+     "EMEA - Stage 3!O25",
+     "EMEA - Stage 3!AI25",
+     "EMEA - Stage 3!AZ25",
+     "EMEA - Stage 3!BQ25",
+     "EMEA - Stage 3!R129"
+    ]
+   },
+   {
+    "count": 35,
+    "raw": "Xzodyal",
+    "refs": [
+     "EMEA - Stage 3!R25",
+     "EMEA - Stage 3!AF25",
+     "EMEA - Stage 3!AW25",
+     "EMEA - Stage 3!BN25",
+     "EMEA - Stage 3!O129"
+    ]
+   },
+   {
     "count": 34,
     "raw": "Eileen",
     "refs": [
@@ -4336,17 +4344,6 @@
    },
    {
     "count": 31,
-    "raw": "Rav",
-    "refs": [
-     "EMEA - Stage 3!O25",
-     "EMEA - Stage 3!AI25",
-     "EMEA - Stage 3!AZ25",
-     "EMEA - Stage 3!BQ25",
-     "EMEA - Stage 3!R129"
-    ]
-   },
-   {
-    "count": 31,
     "raw": "Remaker",
     "refs": [
      "China - Stage 2!R25",
@@ -4354,17 +4351,6 @@
      "China - Stage 2!AZ25",
      "China - Stage 2!BQ25",
      "China - Stage 2!CH25"
-    ]
-   },
-   {
-    "count": 31,
-    "raw": "Xzodyal",
-    "refs": [
-     "EMEA - Stage 3!R25",
-     "EMEA - Stage 3!AF25",
-     "EMEA - Stage 3!AW25",
-     "EMEA - Stage 3!BN25",
-     "EMEA - Stage 3!O129"
     ]
    },
    {
@@ -4622,6 +4608,17 @@
    },
    {
     "count": 25,
+    "raw": "KroxZ",
+    "refs": [
+     "EMEA - Stage 3!AM25",
+     "EMEA - Stage 3!BD25",
+     "EMEA - Stage 3!V129",
+     "EMEA - Stage 3!AM129",
+     "EMEA - Stage 3!BD129"
+    ]
+   },
+   {
+    "count": 25,
     "raw": "Pugz",
     "refs": [
      "Pacific - Stage 1!AB55",
@@ -4849,17 +4846,6 @@
      "Korea - Stage 2!AP159",
      "Korea - Stage 2!Y259",
      "Korea - Stage 2!AP259"
-    ]
-   },
-   {
-    "count": 21,
-    "raw": "KroxZ",
-    "refs": [
-     "EMEA - Stage 3!AM25",
-     "EMEA - Stage 3!BD25",
-     "EMEA - Stage 3!V129",
-     "EMEA - Stage 3!AM129",
-     "EMEA - Stage 3!BD129"
     ]
    },
    {
