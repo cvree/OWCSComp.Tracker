@@ -94,10 +94,14 @@ HERO_SLUGS: dict[str, str] = {
     "ball": "wrecking-ball", "zarya": "zarya",
     # Added with the heroes (2026-11). Blizzard's slugs drop punctuation
     # ("D.Va" -> "dva"), so "D.Mon" -> "dmon". Not yet checked against the
-    # live hero pages, which were unreachable when these were added: a
-    # wrong slug only means no art is found and the monogram stays.
+    # live hero pages, which were unreachable when these were added. A wrong
+    # guess here is not fatal: candidate_slugs() also reads the slug off
+    # Blizzard's own hero index and tries the hyphenated spelling.
     "dmon": "dmon", "doctrine": "doctrine",
 }
+
+HEROES_INDEX_URL = "https://overwatch.blizzard.com/en-us/heroes/"
+_HERO_LINK_RE = re.compile(r'/en-us/heroes/([a-z0-9-]+)/?["\'#?]')
 
 # Pre-release development codenames Blizzard's own CMS asset filenames
 # still use post-launch, evidenced by independent reporting at reveal time
@@ -168,31 +172,128 @@ def find_splash_url(html: str, hero_name: str) -> str | None:
     return None
 
 
+_ANY_ASSET_RE = re.compile(
+    r'https://blz-contentstack-images\.akamaized\.net/v3/assets/[a-z0-9]+/'
+    r'[a-z0-9]+/[a-z0-9]+/([A-Za-z0-9_\-]+)\.(jpg|png|webp)')
+
+
+def splash_candidates(html: str) -> list[str]:
+    """Every distinct 960px image name on a hero page — printed when no
+    name matches, so the one that is this hero (often a codename) can be
+    added to KNOWN_CODENAMES by a person, never picked automatically."""
+    seen: list[str] = []
+    for m in _SPLASH_RE.finditer(html):
+        if m.group(1) not in seen:
+            seen.append(m.group(1))
+    return seen
+
+
+def find_named_asset_url(html: str, hero_name: str) -> str | None:
+    """Second pass for a brand-new hero page, which may not carry the 960_
+    splash yet: any CMS image whose own file name *is* the hero's name, or
+    the name plus a plain descriptor (\"Doctrine_Splash\", \"DMon-Hero\").
+    Still matched by name, never by position on the page."""
+    target = _normalize(hero_name)
+    if len(target) < 3:
+        return None
+    best = None
+    for m in _ANY_ASSET_RE.finditer(html):
+        parts = [p for p in re.split(r"[_\-]+", m.group(1)) if p]
+        if not parts:
+            continue
+        # The name may span the first one or two parts ("D_Mon").
+        for k in (1, 2):
+            if _normalize("".join(parts[:k])) == target:
+                rest = {_normalize(p) for p in parts[k:]}
+                if rest <= {"", "splash", "hero", "portrait", "art", "key", "keyart",
+                            "header", "bg", "background", "full", "v2", "960", "1920",
+                            "2560", "desktop"} | {str(i) for i in range(10)}:
+                    # Prefer the largest rendition the page offers.
+                    if best is None or len(m.group(0)) > len(best):
+                        best = m.group(0)
+                break
+    return best
+
+
+def candidate_slugs(hero_id: str, hero_name: str,
+                    index_html: str | None = None) -> list[str]:
+    """Slugs to try, best first: the one on record, the one Blizzard's own
+    hero index links to for this name, then the plain spellings of the
+    name (\"d.mon\" -> \"dmon\", \"d-mon\"). Never an unrelated slug: every
+    candidate is derived from this hero's own id or name."""
+    out: list[str] = []
+
+    def add(s):
+        if s and s not in out:
+            out.append(s)
+
+    add(HERO_SLUGS.get(hero_id))
+    target = _normalize(hero_name)
+    if index_html:
+        for m in _HERO_LINK_RE.finditer(index_html):
+            if _normalize(m.group(1)) == target:
+                add(m.group(1))
+    nfkd = unicodedata.normalize("NFKD", hero_name).encode("ascii", "ignore").decode("ascii").lower()
+    add(target)
+    add(re.sub(r"[^a-z0-9]+", "-", nfkd).strip("-"))
+    add(hero_id)
+    return out
+
+
 def _staged_path(hero_id: str, url: str) -> str:
     ext = os.path.splitext(url.split("?")[0])[1] or ".jpg"
     digest = hashlib.sha256(url.encode()).hexdigest()[:16]
     return os.path.join(STAGING_DIR, f"{hero_id}-{digest}{ext}")
 
 
-def fetch_hero_splash(hero_id: str, slug: str, hero_name: str, *,
+_INDEX_CACHE: dict[str, str | None] = {}
+
+
+def _heroes_index_html() -> str | None:
+    if "html" not in _INDEX_CACHE:
+        try:
+            _INDEX_CACHE["html"] = fetch_url(HEROES_INDEX_URL).decode("utf-8", errors="replace")
+        except (urllib.error.URLError, TimeoutError, OSError):
+            _INDEX_CACHE["html"] = None
+    return _INDEX_CACHE["html"]
+
+
+def fetch_hero_splash(hero_id: str, slug: str | None, hero_name: str, *,
                       force: bool = False) -> dict:
     """Resolve + cache-fetch one hero's splash art. Returns a dict with
-    either {'ok': True, 'path', 'url', 'sourceUrl'} or {'ok': False, 'reason'}."""
-    page_url = hero_page_url(slug)
-    try:
-        html = fetch_url(page_url).decode("utf-8", errors="replace")
-    except (urllib.error.URLError, TimeoutError, OSError) as e:
-        return {"ok": False, "reason": f"could not fetch {page_url}: {e}"}
+    either {'ok': True, 'path', 'url', 'sourceUrl'} or {'ok': False, 'reason'}.
 
-    matched_as = None
-    img_url = find_splash_url(html, hero_name)
-    if not img_url and hero_id in KNOWN_CODENAMES:
-        matched_as = KNOWN_CODENAMES[hero_id]
-        img_url = find_splash_url(html, matched_as)
+    Tries each candidate slug in turn (see candidate_slugs); the first page
+    that loads AND carries an image named for this hero wins."""
+    slugs = [slug] if slug else []
+    for s in candidate_slugs(hero_id, hero_name, _heroes_index_html()):
+        if s not in slugs:
+            slugs.append(s)
+
+    reasons: list[str] = []
+    img_url = page_url = matched_as = None
+    for s in slugs:
+        page_url = hero_page_url(s)
+        try:
+            html = fetch_url(page_url).decode("utf-8", errors="replace")
+        except (urllib.error.URLError, TimeoutError, OSError) as e:
+            reasons.append(f"{page_url}: {e}")
+            continue
+        matched_as = None
+        img_url = find_splash_url(html, hero_name)
+        if not img_url and hero_id in KNOWN_CODENAMES:
+            matched_as = KNOWN_CODENAMES[hero_id]
+            img_url = find_splash_url(html, matched_as)
+        if not img_url:
+            img_url = find_named_asset_url(html, hero_name)
+        if img_url:
+            break
+        names = ", ".join(splash_candidates(html)[:12]) or "none"
+        reasons.append(f"{page_url}: no image named for {hero_name!r} "
+                       f"(960px images on the page: {names})")
     if not img_url:
         return {"ok": False, "reason": (
-            f"no hero-specific splash image matched on {page_url} "
-            f"(never guessed from a generic/shared page image)")}
+            "; ".join(reasons) + " — never guessed from a generic/shared page image")}
 
     staged = _staged_path(hero_id, img_url)
     if force or not os.path.exists(staged):
@@ -310,8 +411,17 @@ def recrop(only_hero_id: str | None = None) -> dict:
     return {"recropped": done, "missing": missing}
 
 
+def missing_ids() -> list[str]:
+    """Heroes in the roster with no official art committed yet."""
+    con = db.connect()
+    ids = [r["id"] for r in con.execute("SELECT id FROM heroes")]
+    con.close()
+    return sorted(i for i in ids
+                  if not os.path.exists(os.path.join(OUT_DIR, i, "artwork.jpg")))
+
+
 def build(dry_run: bool = False, only_hero_id: str | None = None,
-         force: bool = False) -> dict:
+         force: bool = False, only_missing: bool = False) -> dict:
     import cv2
 
     con = db.connect()
@@ -330,13 +440,15 @@ def build(dry_run: bool = False, only_hero_id: str | None = None,
     unresolved: list[dict] = []
     this_run: list[str] = []
 
-    ids = [only_hero_id] if only_hero_id else sorted(HERO_SLUGS)
+    if only_hero_id:
+        ids = [only_hero_id]
+    elif only_missing:
+        ids = missing_ids()
+    else:
+        ids = sorted(set(HERO_SLUGS) | set(heroes))
     for hero_id in ids:
-        if hero_id not in HERO_SLUGS:
-            unresolved.append({"id": hero_id, "reason": "no known Blizzard slug for this hero id"})
-            continue
         hero_name = heroes.get(hero_id, {}).get("name", hero_id)
-        slug = HERO_SLUGS[hero_id]
+        slug = HERO_SLUGS.get(hero_id)
         result = fetch_hero_splash(hero_id, slug, hero_name, force=force)
         if not result["ok"]:
             unresolved.append({"id": hero_id, "reason": result["reason"]})
@@ -389,6 +501,8 @@ def main() -> None:
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--hero-id", default=None, help="limit to one hero id")
     ap.add_argument("--force", action="store_true", help="re-download even if cached")
+    ap.add_argument("--missing", action="store_true",
+                    help="only heroes with no official art committed yet")
     ap.add_argument("--recrop", action="store_true",
                     help="re-derive crops from committed artwork; no network")
     args = ap.parse_args()
@@ -402,7 +516,8 @@ def main() -> None:
         print(f"recropped {len(out['recropped'])} hero(es), {len(out['missing'])} skipped")
         return
 
-    result = build(dry_run=args.dry_run, only_hero_id=args.hero_id, force=args.force)
+    result = build(dry_run=args.dry_run, only_hero_id=args.hero_id, force=args.force,
+                   only_missing=args.missing)
     verb = "would resolve" if args.dry_run else "resolved"
     for hero_id in sorted(result["thisRun"]):
         print(f"  {hero_id:<10s} {verb}  <- {result['resolved'][hero_id]['sourceUrl']}")

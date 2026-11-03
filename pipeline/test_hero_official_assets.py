@@ -100,6 +100,35 @@ class TestFindSplashUrl(unittest.TestCase):
         self.assertIsNone(hoa.find_splash_url(html, "Zarya"))
 
 
+class TestNewHeroDiscovery(unittest.TestCase):
+    """A hero added before its page was ever checked (D.Mon, Doctrine)."""
+
+    def test_slug_read_off_the_hero_index_by_name(self):
+        index = '<a href="/en-us/heroes/d-mon/">D.Mon</a><a href="/en-us/heroes/dva/">'
+        self.assertIn("d-mon", hoa.candidate_slugs("dmon", "D.Mon", index))
+        self.assertEqual(hoa.candidate_slugs("dmon", "D.Mon", index)[0], "dmon")
+
+    def test_index_never_offers_another_heroes_slug(self):
+        index = '<a href="/en-us/heroes/dva/">'
+        self.assertNotIn("dva", hoa.candidate_slugs("dmon", "D.Mon", index))
+
+    def test_named_asset_matches_name_plus_descriptor(self):
+        url = _hero_url("Doctrine_Splash").replace("960_", "")
+        self.assertEqual(hoa.find_named_asset_url(_fake_page([url, GENERIC_URL]), "Doctrine"), url)
+
+    def test_named_asset_split_across_two_parts(self):
+        url = _hero_url("D_Mon").replace("960_", "")
+        self.assertEqual(hoa.find_named_asset_url(_fake_page([url]), "D.Mon"), url)
+
+    def test_named_asset_refuses_a_name_inside_something_else(self):
+        url = _hero_url("Doctrine_Ability_Overview").replace("960_", "")
+        self.assertIsNone(hoa.find_named_asset_url(_fake_page([url]), "Doctrine"))
+
+    def test_named_asset_refuses_another_hero(self):
+        url = _hero_url("DVa_Splash").replace("960_", "")
+        self.assertIsNone(hoa.find_named_asset_url(_fake_page([url]), "D.Mon"))
+
+
 class TestHeroSlugCoverage(unittest.TestCase):
     def test_every_db_hero_has_a_known_slug_mapping(self):
         con = db.connect()
