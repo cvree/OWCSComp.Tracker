@@ -60,8 +60,7 @@
         "</optgroup>").join("") + "</select></label>";
     document.getElementById("vs-pick").innerHTML = '<div class="vs-pick__row">' + sel("a") +
       '<button type="button" class="btn btn--ghost vs-swap" data-act="swap" title="Swap the two teams" aria-label="Swap the two teams">⇄</button>' +
-      sel("b") + '<div class="vs-pick__go"><a class="btn btn--sm btn--ghost" id="vs-draft" href="#">Draft against ' +
-      "them →</a></div></div>";
+      sel("b") + "</div>";
   }
 
   /* ----------------------------------------------------------- output */
@@ -84,8 +83,6 @@
     const nameA = U.teamName(state.a), nameB = U.teamName(state.b);
     const range = TR.phrase();
     TR.note("vs-range", "<b>" + (A.maps.n + B.maps.n) + "</b> maps between them");
-    document.getElementById("vs-draft").href = "draft.html?opp=" + encodeURIComponent(state.b);
-    document.getElementById("vs-draft").textContent = "Draft against " + nameB + " →";
 
     const side = (t, X) => '<div class="vs-side">' + mark(t, 56) + '<div><h2><a href="team.html?id=' + encodeURIComponent(t) + '">' +
       esc(U.teamName(t)) + "</a></h2>" + (X.power ? '<p class="dim small">Power #' + X.power.rank + " · " + Math.round(X.power.power) +

@@ -175,6 +175,33 @@
         P.compStrip(comp.heroes, { size: "xs", tight: true }) + "</div>" : "") + "</td></tr>";
   }
 
+  /* The tier list itself: one picture card per hero, and the card gets
+     smaller, quieter and greyer from S down to D, so the gap between
+     tiers reads before a single number does. */
+  const TIER_NAME = { S: "Meta-defining", A: "Strong", B: "Solid", C: "Situational", D: "Avoid for now" };
+  function heroCard(r, tier, i) {
+    const h = P.hero(r.id);
+    const big = tier === "S" || tier === "A";
+    const art = big ? (P.heroCard(r.id) || P.heroArtwork(r.id)) : null;
+    const px = tier === "B" ? 64 : tier === "C" ? 52 : 44;
+    const v = r.value;
+    return '<li><a class="tr-card" href="hero.html?id=' + encodeURIComponent(r.id) + '" data-hero="' + esc(r.id) +
+      '" style="--role-h:' + P.roleHue(h.role) + '" title="' + esc(h.name + " — " + pct(r.pickShare) + " pick, " +
+        pct(r.adjWin, 1) + " adj. win, value " + signed(v)) + '">' +
+      (big ? '<span class="tr-card__art">' + (art ? '<img src="' + esc(art) + '" alt="" loading="lazy" decoding="async">'
+        : '<span class="tr-card__mono" aria-hidden="true">' + esc(P.heroInitials(h)) + "</span>") + "</span>"
+        : '<span class="tr-card__face">' + P.heroFace(h, px) + "</span>") +
+      '<span class="tr-card__body">' +
+        '<span class="tr-card__pos">#' + (i + 1) + "</span>" +
+        '<span class="tr-card__name">' + esc(h.name) + "</span>" +
+        '<span class="tr-card__role">' + esc(h.role || "") + "</span>" +
+        '<span class="tr-card__stats"><span><b>' + pct(r.adjWin, 1) + "</b> adj. win</span>" +
+          "<span><b>" + pct(r.pickShare) + "</b> pick</span></span>" +
+        (big ? '<span class="tr-card__val" data-dir="' + (v > 0.05 ? "up" : v < -0.05 ? "down" : "flat") + '">' +
+          signed(v) + ' <span class="tr-card__valw">wins </span>vs expected</span>' : "") +
+      "</span></a></li>";
+  }
+
   const HERO_HEAD = '<thead><tr><th scope="col">Hero</th><th scope="col">Role</th>' +
     '<th scope="col" class="num" title="Order-weighted share of team-maps listing this hero">Pick</th>' +
     '<th scope="col" class="num" title="Raw share of decided maps won">Win</th>' +
@@ -190,13 +217,25 @@
     if (state.role) rows = rows.filter((r) => r.role === state.role);
     const roleRank = (r) => { const i = ROLE_ORDER.indexOf(r.role); return i < 0 ? 9 : i; };
     const html = (W.tiers || []).map((t) => {
-      const list = rows.filter((r) => r.tier === t.id).sort((a, b) => roleRank(a) - roleRank(b) || b.score - a.score);
+      /* Best first inside a tier: the order IS the ranking. Role is shown
+         on each card, so it no longer needs to drive the order. */
+      const list = rows.filter((r) => r.tier === t.id).sort((a, b) => b.score - a.score);
       if (!list.length) return "";
-      return '<section class="card tr-tier u-mt-5" data-tier="' + esc(t.id) + '">' +
-        '<header class="tr-tier__hd"><h2 class="tr-tier__name">Tier – ' + esc(t.id) + "</h2>" +
-        '<p class="small dim">' + esc(t.blurb || "") + "</p></header>" +
-        '<div class="table-wrap"><table class="tbl tbl--compact tr-tbl">' + HERO_HEAD + "<tbody>" +
-        list.map((r) => heroRow(r, B)).join("") + "</tbody></table></div></section>";
+      return '<section class="tr-tier u-mt-5" data-tier="' + esc(t.id) + '" aria-labelledby="tier-' + esc(t.id) + '">' +
+        '<header class="tr-tier__rank">' +
+          '<span class="tr-tier__letter" aria-hidden="true">' + esc(t.id) + "</span>" +
+          '<h2 class="tr-tier__title" id="tier-' + esc(t.id) + '"><span class="visually-hidden">Tier ' + esc(t.id) + ": </span>" +
+            esc(TIER_NAME[t.id] || "Tier " + t.id) + "</h2>" +
+          '<span class="tr-tier__count">' + list.length + " hero" + (list.length === 1 ? "" : "es") + "</span>" +
+        "</header>" +
+        '<div class="tr-tier__main">' +
+          '<p class="tr-tier__blurb">' + esc(t.blurb || "") + "</p>" +
+          '<ol class="tr-roster">' + list.map((r, i) => heroCard(r, t.id, i)).join("") + "</ol>" +
+          '<details class="tr-tier__more"><summary>See the numbers for tier ' + esc(t.id) +
+            " <span class=\"dim\">· pick, win, adj. win, value, and why</span></summary>" +
+            '<div class="table-wrap u-mt-3"><table class="tbl tbl--compact tr-tbl">' + HERO_HEAD + "<tbody>" +
+            list.map((r) => heroRow(r, B)).join("") + "</tbody></table></div></details>" +
+        "</div></section>";
     }).join("");
     const low = rows.filter((r) => r.lowSample);
     P.mount("p-heroes",

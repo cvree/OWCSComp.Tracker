@@ -88,7 +88,7 @@
         '<ol class="welcome__steps">' +
           '<li><a href="#h-stier"><b>See the top heroes</b><span>The S tier for each role, and what\'s rising</span></a></li>' +
           '<li><a href="#h-every"><b>Find your map</b><span>The comp pros run on it and what they ban</span></a></li>' +
-          '<li><a href="draft.html"><b>Draft a line-up</b><span>Pick a map and bans, get suggestions</span></a></li>' +
+          '<li><a href="tiers.html"><b>Check the tier list</b><span>Every hero ranked S to D, map by map</span></a></li>' +
         "</ol>" +
         '<div class="welcome__end"><button type="button" class="btn btn--ghost btn--sm" data-help>What do the numbers mean?</button>' +
         '<button type="button" class="btn btn--ghost btn--sm" data-dismiss aria-label="Hide this introduction">Got it</button></div>' +

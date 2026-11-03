@@ -34,7 +34,10 @@
      map with its comps, the overall comps, and the teams. Nothing on it
      asks a fan to submit, review or label anything.
 
-         Meta · Comps · Tiers · Draft · Teams · Matches
+         Meta · Comps · Tiers · Teams · Matches
+
+     The Draft Lab page is parked: it still works by URL, but
+     nothing links to it until it is ready to come back.
 
      ADMIN_NAV is the pipeline, in the order an admin works it. It is
      shown only on the admin pages themselves (P.ADMIN_PAGES), and the
@@ -58,8 +61,6 @@
       match: ["stats.html", "meta.html"] },
     { href: "tiers.html", label: "Tiers", note: "Heroes and comps ranked S to D, map by map",
       match: ["tiers.html", "hero.html"] },
-    { href: "draft.html", label: "Draft", note: "Pick a map and bans, get line-up suggestions",
-      match: ["draft.html"] },
     { href: "teams.html", label: "Teams", note: "Every team, what they run, and head-to-head",
       match: ["teams.html", "team.html", "versus.html"] },
     { href: "series.html", label: "Matches", note: "Results, series by series",
@@ -372,7 +373,6 @@
       ["Comps", "stats.html", "Most-run comps and hero picks"],
       ["Heroes", "stats.html?tab=heroes", "Pick rates by hero"],
       ["Hero tiers", "tiers.html", "S–D hero and comp tiers map by map, by date, with team power"],
-      ["Draft Lab", "draft.html", "Pick a map, set bans, build a line-up from pro results"],
       ["Versus", "versus.html", "Any two teams head to head: odds, maps, form, meetings"],
       ["Meta explorer", "meta.html", "Filter time-weighted VOD usage and spreadsheet history"],
       ["Scout a team", "meta.html?tab=scout", "Last 5 or 10 maps: comfort, bans, heroes, comps"],
@@ -572,7 +572,6 @@
           '<li><a href="stats.html">Comps</a></li>' +
           '<li><a href="stats.html?tab=heroes">Heroes</a></li>' +
           '<li><a href="tiers.html">Hero tiers</a></li>' +
-          '<li><a href="draft.html">Draft Lab</a></li>' +
           '<li><a href="versus.html">Versus</a></li>' +
           '<li><a href="teams.html">Teams</a></li>' +
           '<li><a href="series.html">Matches</a></li>' +

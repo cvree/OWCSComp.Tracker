@@ -145,8 +145,7 @@
   /* The tools, one tap from any team. */
   function teamTools(id) {
     return '<div class="row u-mt-4">' +
-      '<a class="btn btn--sm btn--ghost" href="versus.html?a=' + encodeURIComponent(id) + '">⇄ Compare with another team</a>' +
-      '<a class="btn btn--sm btn--ghost" href="draft.html?opp=' + encodeURIComponent(id) + '">Draft against them →</a></div>';
+      '<a class="btn btn--sm btn--ghost" href="versus.html?a=' + encodeURIComponent(id) + '">⇄ Compare with another team</a></div>';
   }
 
   function sheetTeamParts(id) {
@@ -382,8 +381,7 @@
       parts.push('<section class="band" id="pairs"><div class="sec-head"><h2>Best with, hardest against</h2>' +
         (P.tierUI ? P.tierUI.sourceBadge() : "") + "</div>" +
         '<p class="dim small">How ' + esc(h.name) + "'s team did with each teammate, and against each hero on the other side. " +
-        "Small samples are pulled toward 50%; every row keeps its real W–L. " +
-        '<a href="draft.html?us=' + encodeURIComponent(h.id) + '">Draft with ' + esc(h.name) + " →</a></p>" +
+        "Small samples are pulled toward 50%; every row keeps its real W–L.</p>" +
         '<div id="pairs-live">' + pairsHtml(h) + "</div></section>");
     }
     if (art) {
