@@ -35,8 +35,9 @@
   const PAGE = 30;
   const DEFAULTS = { cr: "", cm: "", cmo: "", ct: "", ch: "", cmin: "2", csort: "played" };
   const MORE_KEYS = ["cmo", "ct", "cmin"];
-  /* An older link's ?cs=<stage> becomes that stage's time range. */
-  if (P.qs("cs") && TR) { TR.set({ t: "stage:" + P.qs("cs") }); P.setQs({ cs: null }); }
+  /* An older link's ?cs=<stage>: stages are no longer a time range, so
+     it opens the current window. */
+  if (P.qs("cs")) P.setQs({ cs: null });
 
   const state = {
     cr: P.qs("cr") || "", cm: P.qs("cm") || "",

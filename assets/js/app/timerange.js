@@ -15,16 +15,23 @@
                              map in view (the region's own newest map when
                              a region is chosen, so a region that has not
                              played this week is not simply empty)
-     stage:<id>              one stretch of the season, first to last day
-     season                  everything
+     1 · 2 · 3               the last 24 / 48 / 72 hours: the newest match
+                             day, two days or three (dates are per day)
      custom                  any from / to, by date
 
-   State: ?t=14 | ?t=stage:stage-3 | ?t=season | ?t=custom&tf=…&tt=…
+   No "whole season" and no per-stage presets: what people want is what is
+   winning now, so the choice is a recent window or their own dates.
+
+   Region: a page can put a region menu in the bar (opt.regions), so the
+   region sits beside the dates however far down the page someone is.
+
+   State: ?t=14 | ?t=1 | ?t=custom&tf=…&tt=…
    The URL wins, so a shared link shows what its sender saw; otherwise the
    last range this browser chose is remembered (localStorage, a per-viewer
    convenience — a missing or blocked store simply means the default).
    Older links (?range= / ?asof= / ?from= on tiers, ?w= on home, ?cw= on
-   comps) are read once and translated.
+   comps) are read once and translated; an old season or stage link opens
+   the default window.
 
    Dates in the spreadsheet are ESTIMATED from the official schedule
    (config/external/sheet_schedule.json); the control says so.
@@ -37,12 +44,14 @@
   const esc = P.esc;
 
   const DEFAULT = "14";
-  const DAYS = ["7", "14", "30", "60", "90"];
-  const QUICK = [["7", "7 days"], ["14", "14 days"], ["30", "30 days"], ["90", "90 days"], ["season", "Season"]];
+  const HOURS = ["1", "2", "3"];
+  const DAYS = HOURS.concat(["7", "14", "30", "60", "90"]);
+  const QUICK = [["7", "7 days"], ["14", "14 days"], ["30", "30 days"], ["90", "90 days"]];
   const STORE = "owcs.range.v1";
-  const STAGE_NAMES = { "pre-season": "Pre-Season Bootcamp", "stage-1": "Stage 1", "champions-clash": "Champions Clash",
-    "stage-2": "Stage 2", "midseason-championship": "Midseason Championship", "stage-3": "Stage 3",
-    "world-finals": "World Finals" };
+  /* "Last 24 hours" for 1–3 days, "Last 30 days" otherwise. */
+  const isHours = (t) => HOURS.indexOf(String(t)) >= 0;
+  const longLabel = (t) => (isHours(t) ? "Last " + Number(t) * 24 + " hours" : "Last " + t + " days");
+  const shortLabel = (t) => (isHours(t) ? Number(t) * 24 + " hours" : t + " days");
 
   const DAY = 86400000;
   const addDays = (iso, n) => new Date(Date.parse(iso + "T00:00:00Z") + n * DAY).toISOString().slice(0, 10);
@@ -53,24 +62,6 @@
   /* ------------------------------------------------------------ data */
   const maxDate = () => ((T && T.dates) || {}).max || null;
   const minDate = () => ((T && T.dates) || {}).min || null;
-
-  /* Each stage's first and last estimated day, in season order. */
-  function stages() {
-    if (!T) return [];
-    if (T._trStages) return T._trStages;
-    const m = new Map();
-    (T.matches || []).forEach((x) => {
-      if (!x.d || !x.s) return;
-      const s = m.get(x.s) || { id: x.s, from: x.d, to: x.d };
-      if (x.d < s.from) s.from = x.d;
-      if (x.d > s.to) s.to = x.d;
-      m.set(x.s, s);
-    });
-    const list = Array.from(m.values()).sort((a, b) => a.to.localeCompare(b.to))
-      .map((s) => Object.assign(s, { name: STAGE_NAMES[s.id] || s.id }));
-    Object.defineProperty(T, "_trStages", { value: list, enumerable: false });
-    return list;
-  }
 
   /* The newest map in a region (or overall). */
   function latest(region) {
@@ -97,10 +88,8 @@
     if (range === "custom" || (asof && valid(asof))) {
       const to = valid(asof) ? asof : maxDate();
       const f = range === "custom" && valid(from) ? from : (DAYS.indexOf(range) >= 0 ? addDays(to, -(Number(range) - 1)) : null);
-      if (range === "season" && !valid(asof)) return { t: "season" };
-      return f ? { t: "custom", tf: f, tt: to } : { t: "custom", tf: minDate(), tt: to };
+      return f ? { t: "custom", tf: f, tt: to } : null;
     }
-    if (range === "season" || w === "season" || cw === "season") return { t: "season" };
     if (DAYS.indexOf(range) >= 0) return { t: range };
     if (w === "30" || cw === "30" || cw === "60" || cw === "90") return { t: w === "30" ? "30" : cw };
     return null;
@@ -108,8 +97,7 @@
 
   function clean(v) {
     if (!v || !v.t) return null;
-    if (DAYS.indexOf(String(v.t)) >= 0 || v.t === "season") return { t: String(v.t) };
-    if (/^stage:/.test(v.t) && stages().some((s) => "stage:" + s.id === v.t)) return { t: v.t };
+    if (DAYS.indexOf(String(v.t)) >= 0) return { t: String(v.t) };
     if (v.t === "custom" && valid(v.tf) && valid(v.tt) && v.tf <= v.tt) return { t: "custom", tf: v.tf, tt: v.tt };
     return null;
   }
@@ -121,7 +109,7 @@
   /* opt.region: count relative windows back from that region's newest map.
      Returns { key, from, to, days, label, short, prev } — `from` null means
      "from the start"; `prev` is the window of equal length just before,
-     for rising / falling arrows (null for a stage or the whole season). */
+     for rising / falling arrows. */
   function resolve(opt) {
     opt = opt || {};
     const max = latest(opt.region) || maxDate();
@@ -129,27 +117,25 @@
     if (DAYS.indexOf(t) >= 0) {
       const n = Number(t);
       const from = addDays(max, -(n - 1));
-      return { key: t, from: from, to: max, days: n, label: "Last " + n + " days", short: n + " days",
+      return { key: t, from: from, to: max, days: n, label: longLabel(t), short: shortLabel(t),
         prev: { from: addDays(from, -n), to: addDays(from, -1), days: n } };
-    }
-    if (/^stage:/.test(t)) {
-      const s = stages().find((x) => "stage:" + x.id === t);
-      if (s) return { key: t, from: s.from, to: s.to, days: span(s.from, s.to), label: s.name, short: s.name, prev: null };
     }
     if (t === "custom") {
       const n = span(state.tf, state.tt);
       return { key: t, from: state.tf, to: state.tt, days: n, label: fmt(state.tf) + " – " + fmt(state.tt), short: "Custom",
         prev: { from: addDays(state.tf, -n), to: addDays(state.tf, -1), days: n } };
     }
-    return { key: "season", from: null, to: maxDate(), days: null, label: "Whole season", short: "Season", prev: null };
+    /* Unreachable (clean() only lets the presets above through), kept so
+       a caller never gets undefined. */
+    state = { t: DEFAULT };
+    return resolve(opt);
   }
 
   /* The range as words that fit inside a sentence: "the last 14 days",
-     "the whole season", "Stage 3", "Oct 1 – Oct 14". */
+     "the last 24 hours", "Oct 1 – Oct 14". */
   const phrase = (opt) => {
     const r = resolve(opt);
-    if (r.key === "season") return "the whole season";
-    if (DAYS.indexOf(r.key) >= 0) return "the last " + r.days + " days";
+    if (DAYS.indexOf(r.key) >= 0) return longLabel(r.key).replace(/^Last/, "the last");
     return r.label;
   };
 
@@ -171,19 +157,21 @@
   const onChange = (fn) => { listeners.push(fn); };
 
   /* ---------------------------------------------------------- control */
-  function controlHtml() {
-    const r = resolve();
-    const st = stages();
+  function controlHtml(host) {
+    const r = resolve({ region: (host && host.dataset.region) || null });
+    const sel = (v) => (state.t === v ? " selected" : "");
     const quick = '<div class="seg trange__seg" role="group" aria-label="Time range">' + QUICK.map((q) =>
       '<button type="button" data-t="' + q[0] + '" aria-pressed="' + (state.t === q[0] ? "true" : "false") + '">' +
       esc(q[1]) + "</button>").join("") + "</div>";
-    const more = '<label class="trange__more"><span class="visually-hidden">More ranges</span>' +
+    /* "Custom…": the short windows (24 / 48 / 72 hours), 60 days, and
+       your own dates. */
+    const hours = HOURS.map((h) => '<option value="' + h + '"' + sel(h) + ">" + esc(longLabel(h)) + "</option>").join("");
+    const more = '<label class="trange__more"><span class="visually-hidden">Custom range</span>' +
       '<select class="input" data-t-select>' +
-      '<option value="">' + (QUICK.some((q) => q[0] === state.t) ? "Stage or dates…" : esc(r.short)) + "</option>" +
-      '<option value="60"' + (state.t === "60" ? " selected" : "") + ">Last 60 days</option>" +
-      '<optgroup label="A stage">' + st.map((s) => '<option value="stage:' + esc(s.id) + '"' +
-        (state.t === "stage:" + s.id ? " selected" : "") + ">" + esc(s.name) + "</option>").join("") + "</optgroup>" +
-      '<option value="custom"' + (state.t === "custom" ? " selected" : "") + ">Custom dates…</option>" +
+      '<option value="">' + (QUICK.some((q) => q[0] === state.t) ? "Custom…" : esc(r.short)) + "</option>" +
+      hours +
+      '<option value="60"' + sel("60") + ">Last 60 days</option>" +
+      '<option value="custom"' + sel("custom") + ">Pick dates…</option>" +
       "</select></label>";
     const custom = '<span class="trange__custom"' + (state.t === "custom" ? "" : " hidden") + ">" +
       '<label><span class="visually-hidden">From</span><input class="input" type="date" data-tf value="' +
@@ -192,33 +180,38 @@
       '<label><span class="visually-hidden">To</span><input class="input" type="date" data-tt value="' +
         esc(state.tt || r.to || maxDate() || "") + '" min="' + esc(minDate() || "") + '" max="' + esc(maxDate() || "") + '"></label></span>';
     /* On a phone the whole choice is one menu, so the pinned bar is one
-       row high: every preset, every stage, and custom dates. */
+       row high: every window and custom dates. */
     const all = '<label class="trange__all"><span class="visually-hidden">Time range</span>' +
       '<select class="input" data-t-select>' +
-      ["7", "14", "30", "60", "90"].map((d) => '<option value="' + d + '"' + (state.t === d ? " selected" : "") + ">Last " + d + " days</option>").join("") +
-      '<option value="season"' + (state.t === "season" ? " selected" : "") + ">Whole season</option>" +
-      '<optgroup label="A stage">' + st.map((x) => '<option value="stage:' + esc(x.id) + '"' +
-        (state.t === "stage:" + x.id ? " selected" : "") + ">" + esc(x.name) + "</option>").join("") + "</optgroup>" +
-      '<option value="custom"' + (state.t === "custom" ? " selected" : "") + ">Custom dates…</option>" +
+      DAYS.map((d) => '<option value="' + d + '"' + sel(d) + ">" + esc(longLabel(d)) + "</option>").join("") +
+      '<option value="custom"' + sel("custom") + ">Pick dates…</option>" +
       "</select></label>";
+    /* The region menu, when the page asked for one (opt.regions). */
+    const regs = host && host._regions;
+    const cur = (host && host.dataset.region) || "";
+    const region = regs && regs.length ? '<label class="trange__region"><span class="visually-hidden">Region</span>' +
+      '<select class="input" data-t-region aria-label="Region">' + regs.map((x) => '<option value="' + esc(x[0]) + '"' +
+        (String(x[0]) === cur ? " selected" : "") + ">" + esc(x[1]) + "</option>").join("") + "</select></label>" : "";
     return '<div class="trange__in">' +
-      '<span class="trange__k" aria-hidden="true">◷</span>' + quick + more + all + custom +
+      '<span class="trange__k" aria-hidden="true">◷</span>' + region + quick + more + all + custom +
       '<span class="trange__res" data-tr-res aria-live="polite"></span></div>';
   }
 
   function paint(host) {
     const r = resolve({ region: host.dataset.region || null });
-    host.innerHTML = controlHtml();
+    host.innerHTML = controlHtml(host);
     const res = host.querySelector("[data-tr-res]");
     if (res) {
-      res.innerHTML = (r.from ? esc(fmt(r.from)) + " – " : "Season to ") + esc(fmt(r.to)) +
+      res.innerHTML = (r.from && r.from !== r.to ? esc(fmt(r.from)) + " – " : "") + esc(fmt(r.to)) +
         (host._note ? ' · <span class="trange__note">' + host._note + "</span>" : "") +
         ' <span class="dim" title="The spreadsheet records no dates; each match is dated from the official schedule by its stage, week and day.">· est. dates</span>';
     }
   }
 
   /* Mount the bar into `host` (an element or id). opt.region scopes the
-     relative windows; opt.sticky (default true) pins it under the header. */
+     relative windows; opt.sticky (default true) pins it under the header.
+     opt.regions ([[id, label], …], "" = all) puts a region menu in the
+     bar; opt.onRegion(id) hears when it changes (the bar rescopes itself). */
   function mount(host, opt) {
     opt = opt || {};
     const el = typeof host === "string" ? document.getElementById(host) : host;
@@ -227,6 +220,8 @@
     el.classList.add("trange");
     if (opt.sticky !== false) el.classList.add("trange--sticky");
     if (opt.region) el.dataset.region = opt.region;
+    if (opt.regions) el._regions = opt.regions;
+    if (opt.onRegion) el._onRegion = opt.onRegion;
     paint(el);
     if (!el._wired) {
       el._wired = true;
@@ -236,6 +231,11 @@
       });
       el.addEventListener("change", (e) => {
         const t = e.target;
+        if (t.matches("[data-t-region]")) {
+          setRegion(el, t.value);
+          if (el._onRegion) el._onRegion(t.value);
+          return;
+        }
         if (t.matches("[data-t-select]")) {
           if (!t.value) return;
           if (t.value === "custom" && state.t === "custom") return;
@@ -277,11 +277,10 @@
 
   /* For an empty or thin result: one tap to a wider window. */
   function widenHtml() {
-    const order = ["7", "14", "30", "60", "90", "season"];
-    const i = order.indexOf(state.t);
-    const next = i >= 0 && i < order.length - 1 ? order.slice(i + 1, i + 3) : ["30", "season"];
+    const i = DAYS.indexOf(state.t);
+    const next = i >= 0 && i < DAYS.length - 2 ? DAYS.slice(i + 1, i + 3) : i === DAYS.length - 2 ? ["90"] : ["30", "90"];
     return '<span class="row trange__widen">' + next.map((t) => '<button type="button" class="btn btn--sm btn--ghost" data-t-widen="' +
-      t + '">' + (t === "season" ? "Whole season" : "Last " + t + " days") + "</button>").join("") + "</span>";
+      t + '">' + esc(longLabel(t)) + "</button>").join("") + "</span>";
   }
   document.addEventListener("click", (e) => {
     const b = e.target.closest && e.target.closest("[data-t-widen]");
@@ -289,5 +288,5 @@
   });
 
   P.timeRange = { DEFAULT: DEFAULT, get: () => Object.assign({}, state), resolve: resolve, phrase: phrase, buildOpts: buildOpts, set: set,
-    onChange: onChange, mount: mount, note: note, setRegion: setRegion, widenHtml: widenHtml, stages: stages, addDays: addDays };
+    onChange: onChange, mount: mount, note: note, setRegion: setRegion, widenHtml: widenHtml, addDays: addDays, longLabel: longLabel };
 })();

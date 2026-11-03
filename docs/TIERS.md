@@ -43,11 +43,12 @@ a separate nav slot.
 | Power ranking | Every team's power as of the viewing date: Elo + standings, movement since the range start. |
 | How it's scored | The formulas and every weight, read live from the data file. |
 
-Controls (all kept in the URL): the site-wide time range (`t`, below), region, role,
-map, tab. The page's old viewing date / range / from fields and its "Jump to" stage
-buttons are folded into the time range: a stage is one of its presets, and any
-viewing date is a custom range ending on that day. Old `?range=` / `?asof=` /
-`?from=` links still open the window they meant.
+Controls (all kept in the URL): the site-wide time range (`t`: 7 / 14 / 30 / 90 days,
+or under "Custom…" the last 24 / 48 / 72 hours, 60 days or your own dates), region
+(in the pinned range bar, beside the dates), role, map, tab. There is no whole-season
+or per-stage range; old `?t=season`, `?t=stage:…` and `?range=season` links open the
+default 14 days. Old `?range=` / `?asof=` / `?from=` links still open the window they
+meant. The dates are per day, so "24 hours" is the newest match day in view.
 
 ## Dates are estimates
 

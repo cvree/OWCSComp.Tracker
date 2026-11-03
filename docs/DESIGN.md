@@ -278,9 +278,13 @@ and much less useful question. So:
 - **Every count of comps or heroes has a time range**, and it is the same
   range on every page: one bar, pinned under the header, never more than a
   tap away. The default is the **last 14 days**.
-- **The range is always visible and always editable**: presets for 7, 14,
-  30, 60 and 90 days, each stage, the whole season, and custom dates. On a
-  phone it is one row, so pinning it costs one row of the screen.
+- **The range is always visible and always editable**: buttons for 7, 14,
+  30 and 90 days, and a "Custom…" menu with the last 24, 48 and 72 hours,
+  60 days and your own dates. There is no whole-season or per-stage range:
+  nobody opens the site for February's meta. On a phone it is one row, so
+  pinning it costs one row of the screen.
+- **Region sits beside the dates** where a page filters by region (Hero
+  tiers), so it stays in reach all the way down a tier list.
 - **It travels.** Choose 30 days on Comps and the team page you open next
   is in 30 days too. Links carry it, so a shared view is the same view.
 - **A short window is honest about being short.** Fourteen days in a quiet

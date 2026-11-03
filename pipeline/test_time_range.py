@@ -7,10 +7,12 @@ held here:
 
   * the default is the last 14 days, counted back from the newest map —
     and, with a region chosen, from that region's own newest map;
-  * presets resolve to the dates they say (7 / 14 / 30 / 60 / 90 days, a
-    stage's first to last day, the whole season, custom from / to), and a
-    relative window carries the window of equal length before it, for the
-    rising / falling arrows;
+  * presets resolve to the dates they say (24 / 48 / 72 hours, 7 / 14 / 30 /
+    60 / 90 days, custom from / to), and a relative window carries the
+    window of equal length before it, for the rising / falling arrows;
+  * there is no whole-season or per-stage range any more: the control does
+    not offer one, and an old ?t=season / ?t=stage:… link opens the default;
+  * a page can put a region menu in the bar;
   * the URL wins over the remembered choice, the remembered choice over
     the default, and anything malformed falls back rather than breaking;
   * older links (tiers' ?range= / ?asof= / ?from=, home's ?w=, comps'
@@ -69,13 +71,16 @@ let buf = ""; process.stdin.on("data", (d) => buf += d); process.stdin.on("end",
     const regions = [...new Set(T.matches.map((m) => m.r).filter(Boolean))];
     return regions.map((r) => ({ r, to: TR.resolve({ region: r }).to, latest: latest(r) }));
   });
-  run("presets", "", null, (TR) => ["7", "30", "60", "90", "season"].map((t) => { TR.set({ t }); return pick(TR.resolve()); }));
-  run("stage", "", null, (TR, ctx) => {
-    const st = TR.stages();
-    TR.set({ t: "stage:" + st[1].id });
-    const T = ctx.OWCS_SHEET_TIERS;
-    const ds = T.matches.filter((m) => m.s === st[1].id && m.d).map((m) => m.d).sort();
-    return { r: pick(TR.resolve()), first: ds[0], last: ds[ds.length - 1], order: st.map((s) => s.id) };
+  run("presets", "", null, (TR) => ["7", "30", "60", "90"].map((t) => { TR.set({ t }); return pick(TR.resolve()); }));
+  run("hours", "", null, (TR) => ["1", "2", "3"].map((t) => { TR.set({ t }); const r = TR.resolve();
+    return { r: pick(r), label: r.label, phrase: TR.phrase() }; }));
+  run("noSeason", "?t=season", null, (TR) => { TR.set({ t: "season" }); return TR.get().t; });
+  run("noStage", "?t=stage:stage-3", { t: "season" }, (TR) => TR.get().t);
+  run("control", "", null, (TR) => {
+    const el = { dataset: {}, classList: { add: () => {} }, setAttribute: () => {}, addEventListener: () => {},
+      querySelector: () => null, innerHTML: "" };
+    TR.mount(el, { regions: [["", "All regions"], ["na", "North America"], ["emea", "EMEA"]], region: "emea" });
+    return el.innerHTML;
   });
   run("custom", "?t=custom&tf=2026-06-01&tt=2026-06-14", null, (TR) => pick(TR.resolve()));
   run("urlBeatsStore", "?t=7", { t: "90" }, (TR) => TR.get().t);
@@ -84,6 +89,7 @@ let buf = ""; process.stdin.on("data", (d) => buf += d); process.stdin.on("end",
   run("badCustom", "?t=custom&tf=2026-06-14&tt=2026-06-01", null, (TR) => TR.get().t);
   run("legacyRange", "?range=60", null, (TR) => TR.get().t);
   run("legacySeason", "?range=season", null, (TR) => TR.get().t);
+  run("legacyStage", "?cs=stage-3", null, (TR) => TR.get().t);
   run("legacyAsof", "?range=30&asof=2026-06-30", null, (TR) => pick(TR.resolve()));
   run("legacyHome", "?w=season", null, (TR) => TR.get().t);
   run("legacyComps", "?cw=90", null, (TR) => TR.get().t);
@@ -131,14 +137,36 @@ class TimeRange(unittest.TestCase):
         max_ = self.o["default"]["max"]
         for r, n in zip(self.o["presets"][:4], (7, 30, 60, 90)):
             self.assertEqual((r["key"], r["to"], r["from"], r["days"]), (str(n), max_, add_days(max_, -(n - 1)), n))
-        season = self.o["presets"][4]
-        self.assertEqual((season["key"], season["from"], season["prev"]), ("season", None, None))
 
-    def test_a_stage_is_its_first_to_last_day(self):
-        s = self.o["stage"]
-        self.assertEqual((s["r"]["from"], s["r"]["to"]), (s["first"], s["last"]))
-        self.assertIsNone(s["r"]["prev"])
-        self.assertEqual(s["order"][0], "pre-season")
+    def test_24_48_72_hours_are_the_newest_one_two_three_match_days(self):
+        max_ = self.o["default"]["max"]
+        for row, n, h in zip(self.o["hours"], (1, 2, 3), (24, 48, 72)):
+            r = row["r"]
+            self.assertEqual((r["key"], r["to"], r["from"], r["days"]), (str(n), max_, add_days(max_, -(n - 1)), n))
+            self.assertEqual(r["prev"], {"from": add_days(max_, -(2 * n - 1)), "to": add_days(max_, -n), "days": n})
+            self.assertEqual(row["label"], "Last %d hours" % h)
+            self.assertEqual(row["phrase"], "the last %d hours" % h)
+
+    def test_no_season_or_stage_range(self):
+        self.assertEqual(self.o["noSeason"], "14")
+        self.assertEqual(self.o["noStage"], "14")
+        html = self.o["control"]
+        self.assertNotIn("season", html.lower())
+        self.assertNotIn("stage", html.lower())
+        self.assertNotIn("optgroup", html)
+
+    def test_the_custom_menu_offers_24_48_72_hours(self):
+        html = self.o["control"]
+        more = re.search(r'class="trange__more".*?</select>', html, re.S).group(0)
+        for label in ("Custom…", "Last 24 hours", "Last 48 hours", "Last 72 hours", "Last 60 days", "Pick dates…"):
+            self.assertIn(label, more)
+        self.assertLess(more.find("Last 24 hours"), more.find("Last 72 hours"))
+
+    def test_a_page_can_put_a_region_menu_in_the_bar(self):
+        html = self.o["control"]
+        reg = re.search(r'<select[^>]*data-t-region.*?</select>', html, re.S).group(0)
+        self.assertIn('value="na"', reg)
+        self.assertRegex(reg, r'value="emea" selected')
 
     def test_custom_dates(self):
         c = self.o["custom"]
@@ -153,10 +181,12 @@ class TimeRange(unittest.TestCase):
 
     def test_older_links_still_open_their_window(self):
         self.assertEqual(self.o["legacyRange"], "60")
-        self.assertEqual(self.o["legacySeason"], "season")
+        # season and stage links no longer have a window of their own
+        self.assertEqual(self.o["legacySeason"], "14")
+        self.assertEqual(self.o["legacyStage"], "14")
         a = self.o["legacyAsof"]
         self.assertEqual((a["key"], a["from"], a["to"]), ("custom", "2026-06-01", "2026-06-30"))
-        self.assertEqual(self.o["legacyHome"], "season")
+        self.assertEqual(self.o["legacyHome"], "14")
         self.assertEqual(self.o["legacyComps"], "90")
 
     def test_a_change_is_written_to_the_url_and_remembered(self):

@@ -233,7 +233,7 @@
     const cards = list.map((B) => {
       let top = topComp(cur, B.map);
       let note = "";
-      if ((!top || top.apps < 2) && TR.resolve().key !== "season") {
+      if ((!top || top.apps < 2) && (TR.resolve().days || 0) < LONG_DAYS) {
         if (!longer) longer = S.compute(T, ROLES, { asOf: cur.asOf, days: LONG_DAYS, region: state.region || null });
         const alt = topComp(longer, B.map);
         if (alt && alt.apps >= 2 && (!top || alt.apps > top.apps)) { top = alt; note = LONG_DAYS + "d"; }

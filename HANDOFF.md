@@ -1,5 +1,25 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
+## UPDATE (2026-11-03, twenty-first pass) — recent windows only, region beside the dates, fresh sheet
+
+**Time range.** No "Season" button and no stage presets anywhere (bar, phone menu, widen
+buttons). The bar's dropdown is now "Custom…": Last 24 / 48 / 72 hours, Last 60 days, Pick
+dates…. Dates are per day, so 24 h = the newest match day in view (region-scoped), 48 h = two
+days, 72 h = three. Old `?t=season`, `?t=stage:…`, `?range=season`, `?w=season` and comps'
+`?cs=` links open the default 14 days. `pipeline/test_time_range.py` holds all of it.
+
+**Region in the bar.** `P.timeRange.mount(host, { regions, onRegion })` puts a region menu in
+the pinned bar. Hero tiers uses it: region sits beside the dates and stays in reach down the
+whole tier list; the filter card below keeps Role only. Phone: region + range side by side.
+
+**Spreadsheet.** Merged the 2026-11-03 18:00 UTC import (workbook `ebad45a7280a`): 2,108 maps
+(+10: NA and EMEA Stage 3 playoffs). Every match from the last month is imported and dated
+(newest Nov 1). Still not in it, because nothing was played yet: Korea and China Stage 3
+playoffs (6 cards each, scheduled), Pacific and Asia Stage 3 (all cards scheduled), World Finals
+(tab not filled in). One listing is unmapped: picture `4451f92648` at `EMEA - Stage 3!AG472`
+(Quartz's swap on Grímsvötn, TM vs PEPS upper final), not named by the Hero Index. Look at the
+picture in the sync artifact and add it to `config/external/aliases.json` → `pictures`.
+
 ## UPDATE (2026-11-03, twentieth pass) — every hero has a picture; the site explains itself
 
 **Art.** D.Mon and Doctrine were the only heroes without official art, and they are the

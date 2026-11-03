@@ -7,7 +7,7 @@
    Data: window.OWCS_SHEET_TIERS (spreadsheet imported; dates ESTIMATED
    from the official schedule, config/external/sheet_schedule.json).
    State lives in the URL so a view can be linked:
-     ?asof=YYYY-MM-DD&range=30|60|…|season|custom&from=…&region=…&map=…&role=…&tab=…
+     ?t=1|2|3|7|14|30|60|90|custom&tf=…&tt=…&region=…&map=…&role=…&tab=…
    ===================================================================== */
 (function () {
   "use strict";
@@ -63,8 +63,9 @@
         (String(state[key]) === String(o[0]) ? " selected" : "") + ">" + esc(o[1]) + "</option>").join("") +
       "</select></label>";
     const el = document.getElementById("filters");
+    /* Region lives in the pinned time-range bar (beside the dates, in
+       view all the way down the tier list); role stays here. */
     el.innerHTML = '<div class="mx-grid">' +
-      sel("region", "Region", REGIONS) +
       sel("role", "Role", [["", "All roles"]].concat(ROLE_ORDER.map((r) => [r, r]))) +
       "</div>";
     if (!el.dataset.bound) {
@@ -107,8 +108,10 @@
     const n = B ? B.maps : 0;
     const region = (REGIONS.find((r) => r[0] === (state.region || "")) || REGIONS[0])[1];
     P.mount("summary", '<p class="small">' +
-      (n ? "<strong>" + n + "</strong> maps (" + B.decided + " with a recorded winner) between <strong>" +
-        esc(fmtDate(B.from)) + "</strong> and <strong>" + esc(fmtDate(B.to)) + "</strong> · " + esc(region) +
+      (n ? "<strong>" + n + "</strong> maps (" + B.decided + " with a recorded winner) " +
+        (B.from === B.to ? "on <strong>" + esc(fmtDate(B.to)) + "</strong>"
+          : "between <strong>" + esc(fmtDate(B.from)) + "</strong> and <strong>" + esc(fmtDate(B.to)) + "</strong>") +
+        " · " + esc(region) +
         " · team power as of <strong>" + esc(fmtDate(R.asOf)) + "</strong>"
         : "No maps in this time range.") +
       ' <span class="dim">(estimated dates)</span></p>' + (n < 20 ? TR.widenHtml() : "") +
@@ -413,7 +416,8 @@
       return;
     }
     renderProvenance();
-    TR.mount("tr-range", { region: state.region || null });
+    TR.mount("tr-range", { region: state.region || null, regions: REGIONS,
+      onRegion: (v) => { state.region = v; update(); } });
     TR.onChange(update);
     renderFilters();
     renderHow();
