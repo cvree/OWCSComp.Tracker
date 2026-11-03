@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Versus — OWCS Comp Tracker</title>
+<meta name="description" content="Any two OWCS teams head to head: the model's chance per map and for a Bo3, Bo5 or Bo7, map-by-map records, recent form, every past meeting, the comps each runs and the bans each makes — for any time range.">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/archivo-var-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/saira-condensed-700-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/fonts.css">
+<link rel="stylesheet" href="assets/css/owcs.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<main id="main" class="shell shell--wide">
+
+  <div class="page-head page-head--tight">
+    <p class="eyebrow">Tools · Versus</p>
+    <h1>Who wins? <span class="hl">Head to head</span></h1>
+    <p class="lede">Any two teams side by side: the model's odds, every map, recent form, past
+      meetings, and what each one runs and bans.</p>
+  </div>
+
+  <!-- The site-wide time range, pinned under the header. -->
+  <div id="vs-range"></div>
+
+  <div id="vs-pick" class="vs-pick card u-mt-4"></div>
+  <div id="vs-out" class="vs-out u-mt-4" aria-live="polite"></div>
+
+</main>
+
+<script src="assets/vendor/fuse.basic.min.js" defer></script>
+<script src="assets/vendor/lenis.min.js" defer></script>
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="assets/js/app/motion.js" defer></script>
+<script src="assets/data/hero_art.v1.js"></script>
+<script src="assets/data/public_data.v1.js"></script>
+<script src="assets/data/discovered.v1.js"></script>
+<script src="assets/data/broadcast_maps.v1.js"></script>
+<script src="assets/data/external_summary.v1.js"></script>
+<script src="assets/data/sheet_tiers.v1.js"></script>
+<script src="assets/js/app/core.js"></script>
+<script src="assets/js/app/games.js"></script>
+<script src="assets/js/app/mapindex.js"></script>
+<script src="assets/js/app/sources.js"></script>
+<script src="assets/js/app/tierstats.js"></script>
+<script src="assets/js/app/tierui.js"></script>
+<script src="assets/js/app/timerange.js"></script>
+<script src="assets/js/app/compbook.js"></script>
+<script src="assets/js/app/page-compbook.js"></script>
+<script src="assets/js/app/lab.js"></script>
+<script src="assets/js/app/hovercard.js" defer></script>
+<script src="assets/js/app/shell.js"></script>
+<script src="assets/js/app/page-versus.js"></script>
+</body>
+</html>

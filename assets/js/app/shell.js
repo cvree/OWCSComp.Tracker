@@ -34,7 +34,7 @@
      map with its comps, the overall comps, and the teams. Nothing on it
      asks a fan to submit, review or label anything.
 
-         Meta · Comps · Tiers · Teams · Matches
+         Meta · Comps · Tiers · Draft · Teams · Matches
 
      ADMIN_NAV is the pipeline, in the order an admin works it. It is
      shown only on the admin pages themselves (P.ADMIN_PAGES), and the
@@ -46,7 +46,8 @@
      and is never a second public navigation. */
   /* Five fan destinations, each named for the question it answers:
      what is winning (Meta, the home page), what teams run (Comps), how
-     heroes rank (Tiers), who is who (Teams) and what happened (Matches).
+     heroes rank (Tiers), what to play (Draft — and Versus, under Teams),
+     who is who (Teams) and what happened (Matches).
      Tiers and Matches were reachable only through links inside other
      pages; a destination nobody can find from the header is one most
      people never reach. */
@@ -54,7 +55,8 @@
     { href: "index.html", label: "Meta", match: ["index.html", "", "game.html", "map.html"] },
     { href: "stats.html", label: "Comps", match: ["stats.html", "meta.html"] },
     { href: "tiers.html", label: "Tiers", match: ["tiers.html", "hero.html"] },
-    { href: "teams.html", label: "Teams", match: ["teams.html", "team.html"] },
+    { href: "draft.html", label: "Draft", match: ["draft.html"] },
+    { href: "teams.html", label: "Teams", match: ["teams.html", "team.html", "versus.html"] },
     { href: "series.html", label: "Matches", match: ["series.html"] },
   ];
 
@@ -359,6 +361,8 @@
       ["Comps", "stats.html", "Most-run comps and hero picks"],
       ["Heroes", "stats.html?tab=heroes", "Pick rates by hero"],
       ["Hero tiers", "tiers.html", "S–D hero and comp tiers map by map, by date, with team power"],
+      ["Draft Lab", "draft.html", "Pick a map, set bans, build a line-up from pro results"],
+      ["Versus", "versus.html", "Any two teams head to head: odds, maps, form, meetings"],
       ["Meta explorer", "meta.html", "Filter time-weighted VOD usage and spreadsheet history"],
       ["Scout a team", "meta.html?tab=scout", "Last 5 or 10 maps: comfort, bans, heroes, comps"],
       ["Teams", "teams.html", "Every org, with its mark"],
@@ -557,6 +561,8 @@
           '<li><a href="stats.html">Comps</a></li>' +
           '<li><a href="stats.html?tab=heroes">Heroes</a></li>' +
           '<li><a href="tiers.html">Hero tiers</a></li>' +
+          '<li><a href="draft.html">Draft Lab</a></li>' +
+          '<li><a href="versus.html">Versus</a></li>' +
           '<li><a href="teams.html">Teams</a></li>' +
           '<li><a href="series.html">Matches</a></li>' +
           '<li><a href="meta.html">Meta explorer</a></li>' +

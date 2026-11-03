@@ -42,7 +42,7 @@ and `review.html` (every confirmed/rejected change point with crops).
 
 Two audiences, one site.
 
-**Fans** — nearly everyone — get five destinations: **Meta · Comps · Tiers · Teams · Matches**.
+**Fans** — nearly everyone — get six destinations: **Meta · Comps · Tiers · Draft · Teams · Matches**, plus **Versus** (any two teams head to head) under Teams.
 The home page is every OWCS map, map by map (newest broadcast first), with
 both teams' logos, the comp each team ran where it has been read, and a
 ▶ Watch link that opens the VOD at the second the map starts; above it,

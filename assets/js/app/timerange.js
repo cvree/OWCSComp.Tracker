@@ -144,6 +144,15 @@
     return { key: "season", from: null, to: maxDate(), days: null, label: "Whole season", short: "Season", prev: null };
   }
 
+  /* The range as words that fit inside a sentence: "the last 14 days",
+     "the whole season", "Stage 3", "Oct 1 – Oct 14". */
+  const phrase = (opt) => {
+    const r = resolve(opt);
+    if (r.key === "season") return "the whole season";
+    if (DAYS.indexOf(r.key) >= 0) return "the last " + r.days + " days";
+    return r.label;
+  };
+
   /* Options for app/compbook.js and app/tierstats.js. */
   const buildOpts = (opt) => { const r = resolve(opt); return { asOf: r.to, from: r.from || null }; };
 
@@ -279,6 +288,6 @@
     if (b) set({ t: b.dataset.tWiden });
   });
 
-  P.timeRange = { DEFAULT: DEFAULT, get: () => Object.assign({}, state), resolve: resolve, buildOpts: buildOpts, set: set,
+  P.timeRange = { DEFAULT: DEFAULT, get: () => Object.assign({}, state), resolve: resolve, phrase: phrase, buildOpts: buildOpts, set: set,
     onChange: onChange, mount: mount, note: note, setRegion: setRegion, widenHtml: widenHtml, stages: stages, addDays: addDays };
 })();

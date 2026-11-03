@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Draft Lab — OWCS Comp Tracker</title>
+<meta name="description" content="Draft like a pro: pick a map, set the bans, start a line-up and get the five-hero comps OWCS teams actually won with, the best hero for every open slot, the bans worth making and what has beaten the other team's line-up — for any time range.">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/archivo-var-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/saira-condensed-700-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/fonts.css">
+<link rel="stylesheet" href="assets/css/owcs.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<main id="main" class="shell shell--wide">
+
+  <div class="page-head page-head--tight">
+    <p class="eyebrow">Tools · Draft Lab</p>
+    <h1>Draft like <span class="hl">a pro</span></h1>
+    <p class="lede">Pick a map, set the bans and start your line-up. Every suggestion is what OWCS
+      teams actually ran and how it went, in the time range you choose.</p>
+  </div>
+
+  <!-- The site-wide time range, pinned under the header. -->
+  <div id="dl-range"></div>
+
+  <div id="dl-setup" class="dl-setup card u-mt-4"></div>
+  <div id="dl-board" class="dl-board u-mt-4"></div>
+  <div id="dl-picker" class="dl-picker card u-mt-4"></div>
+  <div id="dl-out" class="dl-out u-mt-5" aria-live="polite"></div>
+
+</main>
+
+<script src="assets/vendor/fuse.basic.min.js" defer></script>
+<script src="assets/vendor/lenis.min.js" defer></script>
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="assets/js/app/motion.js" defer></script>
+<script src="assets/data/hero_art.v1.js"></script>
+<script src="assets/data/public_data.v1.js"></script>
+<script src="assets/data/discovered.v1.js"></script>
+<script src="assets/data/broadcast_maps.v1.js"></script>
+<script src="assets/data/external_summary.v1.js"></script>
+<script src="assets/data/sheet_tiers.v1.js"></script>
+<script src="assets/js/app/core.js"></script>
+<script src="assets/js/app/games.js"></script>
+<script src="assets/js/app/mapindex.js"></script>
+<script src="assets/js/app/sources.js"></script>
+<script src="assets/js/app/tierstats.js"></script>
+<script src="assets/js/app/tierui.js"></script>
+<script src="assets/js/app/timerange.js"></script>
+<script src="assets/js/app/lab.js"></script>
+<script src="assets/js/app/hovercard.js" defer></script>
+<script src="assets/js/app/shell.js"></script>
+<script src="assets/js/app/page-draft.js"></script>
+</body>
+</html>
