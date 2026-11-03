@@ -21,6 +21,11 @@
 (function () {
   "use strict";
 
+  /* The brand mark's five slots (desktop/build_icon.py → svg_slots). The
+     lime tile behind them is CSS (.brand__mark), drawn from the tokens. */
+  const BRAND_MARK = '<svg viewBox="0 0 32 32" width="100%" height="100%" focusable="false">' +
+    '<rect x="12.7" y="4.08" width="6.6" height="6.6" rx="1.8" fill="currentColor"/><rect x="3.95" y="10.44" width="6.6" height="6.6" rx="1.8" fill="currentColor"/><rect x="21.45" y="10.44" width="6.6" height="6.6" rx="1.8" fill="currentColor"/><rect x="7.29" y="20.72" width="6.6" height="6.6" rx="1.8" fill="currentColor"/><rect x="18.11" y="20.72" width="6.6" height="6.6" rx="1.8" fill="currentColor"/>' + "</svg>";
+
   const P = window.OWCS;
   const esc = P.esc;
   /* Guarded. An unguarded matchMedia call here threw on every renderer
@@ -139,8 +144,11 @@
     hdr.innerHTML =
       '<div class="hdr__in">' +
         '<a class="brand" href="' + (adminPage ? "admin.html" : "index.html") + '">' +
-          '<span class="brand__mark" aria-hidden="true">CT</span>' +
-          '<span class="brand__name">OWCS Comp Tracker' +
+          /* The mark: five portrait slots on a pentagon, the 1-2-2 comp.
+             Drawn by desktop/build_icon.py, which also writes the favicon
+             and the app icons; test_brand.py holds this copy to it. */
+          '<span class="brand__mark" aria-hidden="true">' + BRAND_MARK + "</span>" +
+          '<span class="brand__name"><span class="brand__word"><span class="brand__org">OWCS</span> Comp Tracker</span>' +
             "<small>" + (adminPage ? "admin" : "every map · every comp") + "</small></span>" +
         "</a>" +
         /* On a phone the overflow destinations join the same sheet;
@@ -562,7 +570,8 @@
     f.className = "ftr";
     f.innerHTML =
       '<div class="ftr__in">' +
-        "<div><h2>OWCS Comp Tracker</h2>" +
+        '<div><h2 class="ftr__brand"><span class="brand__mark" aria-hidden="true">' + BRAND_MARK + "</span>" +
+          '<span class="brand__word"><span class="brand__org">OWCS</span> Comp Tracker</span></h2>' +
         "<p>Every OWCS map, map by map, with the comp each team ran — read off the " +
         "broadcast itself. A hero the tracker cannot read stays unknown, never a guess, " +
         "and every comp links back to the frame it came from.</p>" +

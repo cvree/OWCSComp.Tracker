@@ -32,8 +32,13 @@
   border-bottom: 1px solid var(--line);
 }
 .app-brand img { width: 30px; height: 30px; border-radius: 8px; }
-.app-brand b { font-family: var(--display); font-size: .96rem; line-height: 1.15; }
-.app-brand span { display: block; font-size: .68rem; color: var(--muted); font-weight: 500; }
+/* The same lockup as the public header: mark, then OWCS a shade back and
+   COMP TRACKER in condensed caps (docs/BRAND.md). */
+.app-brand b { font-family: var(--display); line-height: 1.15;
+  text-transform: uppercase; letter-spacing: .04em; font-weight: 700; white-space: nowrap; font-size: .86rem; }
+.app-brand b i { font-style: normal; font-weight: 600; color: var(--muted); }
+.app-brand span { display: block; font-size: .68rem; color: var(--muted); font-weight: 500;
+  text-transform: none; letter-spacing: normal; }
 
 .app-nav { display: flex; flex-direction: column; gap: 2px; }
 .app-nav button {

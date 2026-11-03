@@ -1,5 +1,16 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
+## UPDATE (2026-11-03, twenty-second pass) — one brand mark
+
+Four unrelated marks (header "CT" text tile, lime target favicon, violet/cyan bar
+desktop icon, a dead gold hexagon in appliance.css) are now one: **five portrait
+slots on a pentagon, ink on a lime tile**, the 1-2-2 comp. `desktop/build_icon.py`
+draws it and writes every surface (favicon, `assets/img/brand/*`, the home-screen
+icon, `owcs.ico`, `owcs.png`); `--check` and `pipeline/test_brand.py` fail on drift.
+Header and footer use the lockup (mark + OWCS in `--tx-2` + COMP TRACKER in Saira
+caps); the control room matches. Every page links the favicon and the apple-touch
+icon. Reasoning and construction: `docs/BRAND.md`; styleguide section 00.
+
 ## UPDATE (2026-11-03, twenty-first pass) — recent windows only, region beside the dates, fresh sheet
 
 **Time range.** No "Season" button and no stage presets anywhere (bar, phone menu, widen

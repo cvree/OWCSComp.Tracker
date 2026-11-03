@@ -21,6 +21,39 @@
   const D = P.pub, esc = P.esc, $ = P.$;
   const set = (sel, html) => { const el = $(sel); if (el) el.innerHTML = html; };
 
+  /* ------------------------------------------------------------ brand */
+  /* The real files (desktop/build_icon.py writes them), shown at the
+     sizes they are used at, so this cannot drift from the product. */
+  const img = (src, px, bg) => '<span style="display:inline-grid;place-items:center;padding:var(--s-3);' +
+    "border-radius:var(--r-3);background:" + (bg || "var(--s1)") + ';border:1px solid var(--line)">' +
+    '<img src="' + src + '" width="' + px + '" height="' + px + '" alt=""></span>';
+  set("#sg-brand",
+    '<div class="grid grid--3">' +
+      '<div class="card" style="padding:var(--s-5)"><h3>The mark</h3>' +
+        '<div class="row u-mt-3" style="gap:var(--s-3);align-items:end">' +
+          img("assets/img/brand/mark.svg", 96) + img("assets/img/brand/mark.svg", 32) +
+          img("assets/img/brand/mark.svg", 16) + "</div>" +
+        '<p class="small dim u-mt-3">Five portrait slots on the corners of a pentagon: a team\'s five heroes in the ' +
+        "1-2-2 lineup, read top down in the site's role order, Tank, Damage, Support. The pentagon is never drawn; " +
+        "the eye closes it, so the mark stays five shapes and still reads as one comp.</p></div>" +
+      '<div class="card" style="padding:var(--s-5)"><h3>On any ground</h3>' +
+        '<div class="row u-mt-3" style="gap:var(--s-3);align-items:end">' +
+          img("assets/img/brand/mark-lime.svg", 56, "var(--bg-deep)") +
+          img("assets/img/brand/mark-ink.svg", 56, "#f4f5f7") +
+          img("assets/img/brand/apple-touch-icon.png", 56) + "</div>" +
+        '<p class="small dim u-mt-3">Lime slots on a dark ground, ink slots on a light one, and the full-bleed ' +
+        "home-screen icon. One colour is enough: the mark never depends on the gradient.</p></div>" +
+      '<div class="card" style="padding:var(--s-5)"><h3>Construction</h3>' +
+        '<ul class="small dim u-mt-3" style="margin:0;padding-left:1.1em;display:grid;gap:4px">' +
+          "<li>32-unit grid; tile corners 22.5%, the app-icon proportion</li>" +
+          "<li>Slots 6.6 square, corners 27%, the rounding of the hero tiles</li>" +
+          "<li>Slot centres on a pentagon of radius 9.2: every neighbour 10.8 apart, one rhythm</li>" +
+          "<li>Centred, then lifted 0.3 to the optical centre</li>" +
+          "<li>At 16, 24 and 32 px every edge snaps to a whole pixel, mirrored about one axis</li>" +
+          "<li>Lockup: mark, then <b>OWCS</b> a shade back and <b>COMP TRACKER</b> in Saira Condensed caps</li>" +
+        "</ul></div>" +
+    "</div>");
+
   /* ------------------------------------------------------------ rules */
   set("#sg-rules", [
     ["Hierarchy from surface, not ornament",

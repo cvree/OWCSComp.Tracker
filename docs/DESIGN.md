@@ -70,7 +70,7 @@ The lime now marks three things:
 - **the one primary action on a screen**, such as "Submit a game" or
   "Play the map". An action repeated on every row is not primary, by
   definition;
-- **the brand mark**: the CT tile and the favicon.
+- **the brand mark**: the five-slot tile in the header, the footer, the favicon and the app icons (docs/BRAND.md).
 
 And it lends the page two quieter touches, both chosen deliberately
 rather than leaked:

@@ -121,22 +121,6 @@ a:hover { text-decoration: underline; }
   display: flex; align-items: center; gap: 22px;
   height: 60px;
 }
-.brand {
-  font-family: var(--display); font-weight: 700; font-size: 1.05rem;
-  color: var(--text); display: flex; align-items: center; gap: 9px;
-  white-space: nowrap; flex: none; min-width: 0;
-}
-.brand-word, .brand-tag { white-space: nowrap; }
-.brand:hover { text-decoration: none; }
-.brand-mark {
-  width: 22px; height: 22px; border-radius: 6px;
-  background: linear-gradient(135deg, #d6f290, #7c9529);
-  display: inline-block; position: relative;
-}
-.brand-mark::after {
-  content: ""; position: absolute; inset: 6px;
-  border-radius: 3px; background: var(--bg);
-}
 .nav-links { display: flex; gap: 4px; margin-left: auto; flex: 0 1 auto; min-width: 0; }
 /* Without nowrap every masthead item wrapped mid-phrase at 1440px —
    "OWCS Comp / Tracker", "operator / portal", "How it / works". Flex
@@ -1247,11 +1231,10 @@ html.motion-on .console-body > div { animation: m-log-in .16s ease both; }
   .btn::after { display: none; }
 }
 
-/* landing nav: clean wrap on phones (brand one line, links own row) */
+/* landing nav: clean wrap on phones (links own row) */
 @media (max-width: 640px) {
   .nav-inner { flex-wrap: wrap; height: auto;
     padding-top: 10px; padding-bottom: 10px; gap: 8px 14px; }
-  .brand { white-space: nowrap; font-size: 1rem; }
   .nav-status { display: none; }
   .nav-links { order: 3; width: 100%; margin-left: 0;
     justify-content: flex-start; overflow-x: auto; }
@@ -1275,31 +1258,6 @@ body[data-page="landing"] {
     #04050a;
 }
 body[data-page="landing"] .nav { background: rgba(4,5,10,.8); }
-
-/* Brand mark matched to the public header (.pub-brand) so the logo is
-   identical from the homepage to every other page: hexagonal lime "CT"
-   badge + uppercase wordmark + tagline. Scoped to the landing shell so
-   the control-room tool pages keep their own compact mark. */
-body[data-page="landing"] .brand--pub {
-  text-transform: uppercase; letter-spacing: .05em; font-size: 18px; gap: 10px;
-}
-body[data-page="landing"] .brand--pub .brand-mark {
-  width: 27px; height: 27px; border-radius: 0;
-  background: linear-gradient(135deg, #f0c473, #a87a26);
-  clip-path: polygon(50% 0, 100% 26%, 100% 74%, 50% 100%, 0 74%, 0 26%);
-  display: grid; place-items: center;
-  color: #201503; font-size: 12px; font-weight: 800; line-height: 1;
-}
-body[data-page="landing"] .brand--pub .brand-mark::after { content: none; }
-body[data-page="landing"] .brand--pub .brand-word { white-space: nowrap; }
-/* tagline matches .pub-brand__tag exactly: uppercase (inherited), muted,
-   and only shown at >=1560px so the header is identical to every other
-   page at every width */
-body[data-page="landing"] .brand--pub .brand-tag {
-  color: var(--muted); font-weight: 400; font-size: 11.5px;
-  letter-spacing: .14em; white-space: nowrap; display: none;
-}
-@media (min-width: 1560px) { body[data-page="landing"] .brand--pub .brand-tag { display: inline; } }
 
 /* ---- det-hero: the real detection story ----------------------------- */
 .det-hero { padding: 56px 0 24px; position: relative; overflow: hidden; }

@@ -1,79 +1,164 @@
 #!/usr/bin/env python3
 """
-build_icon.py — generate the application icon with no image library.
+build_icon.py — the brand mark, drawn once, written everywhere.
 
-The installer, the executable and the tray all need a real multi-resolution
-.ico. Pulling in Pillow just to draw six squares would put an image library on
-the critical path of the build, so this writes the ICO container and its
-32-bit BGRA bitmaps directly. Pure stdlib, deterministic output — running it
-twice produces byte-identical files, which is what lets the packaging test
-assert the committed icon matches its generator.
+THE MARK: five portrait slots on the corners of a regular pentagon, ink on
+a lime tile. Five slots are a team's five heroes; the pentagon's order from
+the top (one, two, two) is the 1-2-2 lineup the site reads in its own role
+order, Tank, Damage, Support. The pentagon itself is never drawn: the eye
+closes it (Gestalt closure), so the mark stays five simple shapes and still
+reads as one unit, the comp.
 
-The mark: a dark rounded tile with five ascending bars — the five HUD portrait
-slots the tracker reads — under a single accent sweep.
+Construction (on a 32-unit grid; docs/BRAND.md has the reasoning):
 
-    python3 desktop/build_icon.py            # rewrite desktop/assets/owcs.ico
-    python3 desktop/build_icon.py --check     # verify the committed file
+  tile    32 x 32, corner radius 7.2 (22.5%, the app-icon proportion);
+          lime, --accent-hi at the top left to --accent at the bottom right
+  slots   6.6 square, corner radius 1.8 (27%, the hero tiles' rounding);
+          ink, --accent-ink
+  layout  slot centres on a regular pentagon of circumradius 9.2 centred
+          at (16, 16.58): the slot group is centred, then lifted 0.3 so it
+          sits on the optical centre, not the geometric one. Neighbouring
+          slots are all 10.8 apart, so the gaps share one rhythm.
+  margin  >= 3.9 on every side (12%), clear space for the tile's own edge
+
+One generator, every surface, so they can never drift apart:
+
+  assets/img/favicon.svg                 the browser tab, every page
+  assets/img/brand/mark.svg              the tile, for anywhere an <img> is wanted
+  assets/img/brand/mark-lime.svg         slots only, lime, for dark grounds
+  assets/img/brand/mark-ink.svg          slots only, ink, for light grounds
+  assets/img/brand/apple-touch-icon.png  180 x 180, full bleed (iOS rounds it)
+  desktop/assets/owcs.ico                installer, executable (16 … 256)
+  desktop/assets/owcs.png                tray, control room, setup
+
+Raster sizes at or below 32 px snap every slot edge to whole pixels, so the
+16 px icon is five crisp squares rather than five smudges. Pure stdlib and
+deterministic: running it twice writes byte-identical files, which is what
+lets the tests assert the committed files match.
+
+    python3 desktop/build_icon.py            # write every file above
+    python3 desktop/build_icon.py --check    # verify the committed files
 """
 from __future__ import annotations
 
 import argparse
+import math
 import os
 import struct
 import sys
 
 SIZES = (16, 24, 32, 48, 64, 128, 256)
 
-# Palette — the site's own dark surface plus its violet/cyan accents.
-BG = (0x0B, 0x0D, 0x14)          # near-black tile
-BG_EDGE = (0x1A, 0x1F, 0x2E)     # subtle rim
-BAR = (0x8B, 0x5C, 0xF6)         # violet
-BAR_HI = (0x22, 0xD3, 0xEE)      # cyan, for the tallest bar
+# The site's own tokens (assets/css/owcs.css).
+ACCENT_HI = (0xD6, 0xF2, 0x90)   # --accent-hi, tile top left
+ACCENT = (0xC7, 0xE7, 0x70)      # --accent, tile bottom right
+INK = (0x0E, 0x12, 0x06)         # --accent-ink, the slots
 TRANSPARENT = (0, 0, 0, 0)
 
+GRID = 32.0
+TILE_RADIUS = 7.2
+SLOT = 6.6
+SLOT_RADIUS = 1.8
+PENTAGON_R = 9.2
+CENTRE = (16.0, 16.58)
+#: Tank at the top, then Damage, then Support: vertices at -90°, -18°, 54°,
+#: 126° and 198°, listed top first, then left to right down the pentagon.
+ANGLES = (-90.0, 198.0, -18.0, 126.0, 54.0)
 
-def _rounded(x: float, y: float, size: float, radius: float) -> bool:
-    """Inside a rounded square occupying the whole tile?"""
-    lo, hi = radius, size - radius
-    cx = lo if x < lo else (hi if x > hi else x)
-    cy = lo if y < lo else (hi if y > hi else y)
+
+def slot_centres() -> list[tuple[float, float]]:
+    cx, cy = CENTRE
+    return [(round(cx + PENTAGON_R * math.cos(math.radians(a)), 3),
+             round(cy + PENTAGON_R * math.sin(math.radians(a)), 3)) for a in ANGLES]
+
+
+# ------------------------------------------------------------------- SVG
+def _num(v: float) -> str:
+    return ("%.2f" % v).rstrip("0").rstrip(".")
+
+
+def _slots_svg(fill: str) -> str:
+    h = SLOT / 2
+    return "".join('<rect x="%s" y="%s" width="%s" height="%s" rx="%s" fill="%s"/>' % (
+        _num(x - h), _num(y - h), _num(SLOT), _num(SLOT), _num(SLOT_RADIUS), fill) for x, y in slot_centres())
+
+
+def _hex(c: tuple[int, int, int]) -> str:
+    return "#%02x%02x%02x" % c
+
+
+def svg_tile(title: str = "OWCS Comp Tracker") -> str:
+    return ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="%s">'
+            '<defs><linearGradient id="t" x1="0" y1="0" x2="1" y2="1">'
+            '<stop offset="0" stop-color="%s"/><stop offset="1" stop-color="%s"/></linearGradient></defs>'
+            '<rect width="32" height="32" rx="%s" fill="url(#t)"/>%s</svg>\n') % (
+        title, _hex(ACCENT_HI), _hex(ACCENT), _num(TILE_RADIUS), _slots_svg(_hex(INK)))
+
+
+def svg_slots(fill: tuple[int, int, int]) -> str:
+    return ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" '
+            'aria-label="OWCS Comp Tracker">%s</svg>\n') % _slots_svg(_hex(fill))
+
+
+# ---------------------------------------------------------------- raster
+def _in_rrect(x: float, y: float, x0: float, y0: float, x1: float, y1: float, r: float) -> bool:
+    if x < x0 or x > x1 or y < y0 or y > y1:
+        return False
+    cx = x0 + r if x < x0 + r else (x1 - r if x > x1 - r else x)
+    cy = y0 + r if y < y0 + r else (y1 - r if y > y1 - r else y)
     dx, dy = x - cx, y - cy
-    return dx * dx + dy * dy <= radius * radius
+    return dx * dx + dy * dy <= r * r
 
 
-def render(size: int) -> list[list[tuple[int, int, int, int]]]:
-    """One RGBA image, top row first."""
-    pixels = [[TRANSPARENT] * size for _ in range(size)]
-    radius = max(2.0, size * 0.22)
-    inset = max(0.5, size * 0.02)
-
-    # Five bars, ascending, with the tallest picked out in cyan.
-    n = 5
-    margin = size * 0.18
-    span = size - 2 * margin
-    gap = span * 0.16 / (n - 1)
-    bar_w = (span - gap * (n - 1)) / n
-    base = size - margin * 0.95
-    heights = [0.28, 0.44, 0.60, 0.86, 0.52]
-
+def render(size: int, full_bleed: bool = False) -> list[list[tuple[int, int, int, int]]]:
+    """One RGBA image, top row first, 4 x 4 samples a pixel."""
+    k = size / GRID
+    snap = size <= 32
+    boxes = []
+    h = SLOT / 2
+    w = max(2, round(SLOT * k - 0.3))       # 16 → 3, 24 → 5, 32 → 6: gaps stay open
+    # Snapped, the five slots must stay a mirror image: an odd slot width
+    # cannot centre on an even canvas, so the axis moves half a pixel left
+    # rather than the top slot alone sitting off it.
+    axis = size / 2 - (0.5 if (w % 2) != (size % 2) else 0.0)
+    radius = SLOT_RADIUS * k if not snap or size >= 24 else 0.6
+    for i, (cx, cy) in enumerate(slot_centres()):
+        x0, y0 = (cx - h) * k, (cy - h) * k
+        if snap:
+            y0 = round(y0)
+            if i == 0:
+                x0 = axis - w / 2
+            elif i % 2:                        # left of the pair
+                x0 = round(axis + (cx * k - size / 2) - w / 2)
+            else:                              # right: mirror its partner
+                x0 = 2 * axis - (boxes[i - 1][0] + w)
+            boxes.append((x0, y0, x0 + w, y0 + w, radius))
+        else:
+            boxes.append((x0, y0, x0 + SLOT * k, y0 + SLOT * k, radius))
+    tr = 0.0 if full_bleed else TILE_RADIUS * k
+    n = 4
+    pixels = []
     for py in range(size):
+        row = []
         for px in range(size):
-            x, y = px + 0.5, py + 0.5
-            if not _rounded(x - inset, y - inset, size - 2 * inset, radius):
+            tile_hits = ink_hits = 0
+            for sy in range(n):
+                for sx in range(n):
+                    x, y = px + (sx + 0.5) / n, py + (sy + 0.5) / n
+                    if tr and not _in_rrect(x, y, 0, 0, size, size, tr):
+                        continue
+                    tile_hits += 1
+                    if any(_in_rrect(x, y, *b) for b in boxes):
+                        ink_hits += 1
+            if not tile_hits:
+                row.append(TRANSPARENT)
                 continue
-            # Rim: the outermost ring of the tile is a touch lighter.
-            edge = not _rounded(x - inset - 1, y - inset - 1,
-                                size - 2 * inset - 2, radius)
-            r, g, b = BG_EDGE if edge else BG
-
-            for i in range(n):
-                left = margin + i * (bar_w + gap)
-                if left <= x <= left + bar_w:
-                    top = base - span * heights[i]
-                    if y >= top:
-                        r, g, b = BAR_HI if heights[i] == max(heights) else BAR
-                    break
-            pixels[py][px] = (r, g, b, 255)
+            t = (px + py + 1) / (2 * size)            # the diagonal gradient
+            bg = tuple(round(a + (b - a) * t) for a, b in zip(ACCENT_HI, ACCENT))
+            f = ink_hits / tile_hits
+            rgb = tuple(round(c * (1 - f) + i * f) for c, i in zip(bg, INK))
+            row.append(rgb + (round(255 * tile_hits / (n * n)),))
+        pixels.append(row)
     return pixels
 
 
@@ -126,11 +211,11 @@ def build_ico(sizes: tuple[int, ...] = SIZES) -> bytes:
     return bytes(out)
 
 
-def build_png(size: int = 128) -> bytes:
+def build_png(size: int = 128, full_bleed: bool = False) -> bytes:
     """A PNG of the same mark, for the tray (pystray wants a bitmap) and for
     anywhere a .ico is not accepted. Written with zlib, no image library."""
     import zlib
-    pixels = render(size)
+    pixels = render(size, full_bleed)
     raw = bytearray()
     for row in pixels:
         raw.append(0)                      # filter type 0
@@ -148,8 +233,23 @@ def build_png(size: int = 128) -> bytes:
 
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+REPO = os.path.dirname(HERE)
 ICO_PATH = os.path.join(HERE, "assets", "owcs.ico")
 PNG_PATH = os.path.join(HERE, "assets", "owcs.png")
+BRAND = os.path.join(REPO, "assets", "img", "brand")
+
+
+def outputs() -> dict[str, bytes]:
+    """Every file the generator owns: {absolute path: bytes}."""
+    return {
+        ICO_PATH: build_ico(),
+        PNG_PATH: build_png(),
+        os.path.join(REPO, "assets", "img", "favicon.svg"): svg_tile().encode(),
+        os.path.join(BRAND, "mark.svg"): svg_tile().encode(),
+        os.path.join(BRAND, "mark-lime.svg"): svg_slots(ACCENT).encode(),
+        os.path.join(BRAND, "mark-ink.svg"): svg_slots(INK).encode(),
+        os.path.join(BRAND, "apple-touch-icon.png"): build_png(180, full_bleed=True),
+    }
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -158,10 +258,10 @@ def main(argv: list[str] | None = None) -> int:
                         help="verify the committed files match this generator")
     args = parser.parse_args(argv)
 
-    ico, png = build_ico(), build_png()
+    files = outputs()
     if args.check:
         problems = []
-        for path, expected in ((ICO_PATH, ico), (PNG_PATH, png)):
+        for path, expected in files.items():
             try:
                 with open(path, "rb") as f:
                     actual = f.read()
@@ -177,13 +277,11 @@ def main(argv: list[str] | None = None) -> int:
         print("OK icon files match their generator" if not problems else "")
         return 1 if problems else 0
 
-    os.makedirs(os.path.dirname(ICO_PATH), exist_ok=True)
-    with open(ICO_PATH, "wb") as f:
-        f.write(ico)
-    with open(PNG_PATH, "wb") as f:
-        f.write(png)
-    print(f"wrote {ICO_PATH} ({len(ico)} bytes, sizes {', '.join(map(str, SIZES))})")
-    print(f"wrote {PNG_PATH} ({len(png)} bytes)")
+    for path, data in files.items():
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "wb") as f:
+            f.write(data)
+        print(f"wrote {os.path.relpath(path, REPO)} ({len(data)} bytes)")
     return 0
 
 
