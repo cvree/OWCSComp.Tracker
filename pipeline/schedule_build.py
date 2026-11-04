@@ -413,32 +413,19 @@ def build(now: dt.datetime | None = None) -> dict:
                             "window": list(x.get("window") or [None, None]), "windowFrom": "config",
                             "source": x.get("source"), "dateConfidence": "window"}
 
+    # Dates, before Liquipedia is joined on: a slot's published day is how a
+    # Liquipedia match finds the slot it belongs to, and how it is kept out
+    # of a slot on another day.
+    assign_dates(matches, events, cfg, sched)
+
     # Liquipedia: times, teams, streams; new matches for events with no cards.
     lp_meta = merge_liquipedia(lp, matches, events, teams) if lp else None
 
     # Hand overrides.
     apply_overrides(cfg.get("matches") or [], matches, events, teams)
 
-    # Dates.
-    for m in matches:
-        ev = events[m["event"]]
-        if m.get("startsAt"):
-            m["date"] = local_date(m["startsAt"])
-            m["dateFrom"] = m.get("dateFrom") or "liquipedia"
-            continue
-        if m.get("date"):
-            m.setdefault("dateFrom", "liquipedia-day")
-            continue
-        pd = (((cfg.get("stages") or {}).get(m["event"]) or {}).get("phaseDates") or {}).get(m["phase"]) or {}
-        if m.get("day") is not None and str(m["day"]) in pd:
-            m["date"], m["dateFrom"] = pd[str(m["day"])], "published-day"
-            continue
-        if ev.get("windowFrom") == "config" and ev["window"][0] is None and m["state"] == "scheduled":
-            m["date"], m["dateFrom"] = None, None    # the stage's days are not published
-            continue
-        d, conf = estimate_date(ev.get("region"), ev.get("stage"), m.get("week"), m.get("day"), sched)
-        m["date"] = d
-        m["dateFrom"] = None if d is None else ("published-day" if conf == "window" else "estimate")
+    # Dates again, for what the join and the overrides gave a time.
+    assign_dates(matches, events, cfg, sched)
 
     # Events: windows, phases, brackets, standings, champion.
     by_event: dict[str, list[dict]] = {}
@@ -486,6 +473,31 @@ def build(now: dt.datetime | None = None) -> dict:
         "matches": matches,
         "sources": sources(lp_meta),
     }
+
+
+def assign_dates(matches: list[dict], events: dict, cfg: dict, sched: dict) -> None:
+    """Give every match its date: its start time's day, a day a source gave,
+    the stage's published day for its slot, or an estimate that says so.
+    Safe to run twice: a dated match keeps its date and where it came from."""
+    for m in matches:
+        ev = events[m["event"]]
+        if m.get("startsAt"):
+            m["date"] = local_date(m["startsAt"])
+            m["dateFrom"] = m.get("dateFrom") or "liquipedia"
+            continue
+        if m.get("date"):
+            m.setdefault("dateFrom", "liquipedia-day")
+            continue
+        pd = (((cfg.get("stages") or {}).get(m["event"]) or {}).get("phaseDates") or {}).get(m["phase"]) or {}
+        if m.get("day") is not None and str(m["day"]) in pd:
+            m["date"], m["dateFrom"] = pd[str(m["day"])], "published-day"
+            continue
+        if ev.get("windowFrom") == "config" and ev["window"][0] is None and m["state"] == "scheduled":
+            m["date"], m["dateFrom"] = None, None    # the stage's days are not published
+            continue
+        d, conf = estimate_date(ev.get("region"), ev.get("stage"), m.get("week"), m.get("day"), sched)
+        m["date"] = d
+        m["dateFrom"] = None if d is None else ("published-day" if conf == "window" else "estimate")
 
 
 def order_key(m: dict):
@@ -599,14 +611,37 @@ def _norm(s: str | None) -> str:
     return re.sub(r"[^a-z0-9]+", "", (s or "").lower())
 
 
+#: A Liquipedia section header that names a day, not a round: regular
+#: seasons are listed under "October 3rd", "Week 2", "Day 1". Read as a
+#: round, "October 3rd" is a third-place match.
+DATEISH_RE = re.compile(r"(?i)^\s*(?:(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?\s+\d{1,2}"
+                        r"(?:st|nd|rd|th)?\b|(?:day|week)\s*\d+\b|\d{4}-\d{2}-\d{2})")
+
+
+def lp_round(x: dict) -> str | None:
+    r = (x.get("round") or "").strip()
+    return None if not r or DATEISH_RE.match(r) else r
+
+
+def lp_day(x: dict) -> str | None:
+    return x.get("date") or (local_date(x["startsAt"]) if x.get("startsAt") else None)
+
+
 def merge_liquipedia(lp: dict, matches: list[dict], events: dict, teams: Teams) -> dict:
-    """Join Liquipedia's matches onto the sheet's. A Liquipedia match with
-    both teams joins the sheet series of the same stage and pair; one whose
-    round matches a TBD slot fills that slot in order; anything left, in an
-    event the sheet does not cover, becomes its own match."""
+    """Join Liquipedia's matches onto the sheet's.
+
+    In an event the sheet has cards for, Liquipedia only fills them in — it
+    never adds a match there, because the sheet is the record of the stage
+    and a Liquipedia page also lists every series already played (often
+    without a finished flag the parser can read). A match joins, in order:
+    the sheet series of the same pair; else the TBD slot of the same round;
+    else the first TBD slot on the same day. A slot with a day only takes a
+    match on that day. In an event the sheet does not cover, Liquipedia's
+    matches become the event's matches."""
     used = set()
     added = 0
     joined = 0
+    dropped = 0
     by_event: dict[str, list[dict]] = {}
     for m in matches:
         by_event.setdefault(m["event"], []).append(m)
@@ -616,9 +651,15 @@ def merge_liquipedia(lp: dict, matches: list[dict], events: dict, teams: Teams) 
             continue
         ta, na = teams.resolve(x.get("teamA"))
         tb, nb = teams.resolve(x.get("teamB"))
-        cl = classify(x.get("round") or x.get("section") or "")
+        rnd = lp_round(x)
+        day = lp_day(x)
+        cl = classify(rnd or x.get("section") or "")
         pool = by_event.get(key, [])
+        covered = any(m.get("source") == "sheet" for m in pool)
         hit = None
+
+        def same_day(m: dict) -> bool:
+            return not m.get("date") or not day or m["date"] == day
         if (ta or na) and (tb or nb):
             # The same pair, in the same round when Liquipedia names one —
             # two teams can meet three times in a stage. A series Liquipedia
@@ -627,14 +668,21 @@ def merge_liquipedia(lp: dict, matches: list[dict], events: dict, teams: Teams) 
             same = [m for m in pool if m["id"] not in used and
                     {m["teamA"] or _norm(m.get("nameA")), m["teamB"] or _norm(m.get("nameB"))} == want
                     and (x.get("finished") or m["state"] != "done")]
-            if x.get("round"):
+            if rnd:
                 same = [m for m in same if m["round"] == cl["round"]] or \
                        [m for m in same if m["phase"] == cl["phase"]]
             hit = same[0] if same else None
-        if hit is None and x.get("round"):
+        if hit is None and rnd:
             hit = next((m for m in sorted(pool, key=order_key) if m["id"] not in used and m["state"] != "done"
-                        and m["round"] == cl["round"] and m["phase"] == cl["phase"]
+                        and m["round"] == cl["round"] and m["phase"] == cl["phase"] and same_day(m)
                         and not (m["teamA"] or m.get("nameA"))), None)
+        if hit is None and covered and day and not x.get("finished"):
+            # Its round says nothing the sheet knows ("Regional Playoffs"):
+            # the first empty slot on its day, in the sheet's order. Matches
+            # are taken in start order, so a day's slots fill in order.
+            hit = next((m for m in sorted(pool, key=order_key) if m["id"] not in used and m["state"] != "done"
+                        and m.get("date") == day and m["dateFrom"] in ("published-day", "official")
+                        and not (m["teamA"] or m.get("nameA") or m["teamB"] or m.get("nameB"))), None)
         if hit is not None:
             used.add(hit["id"])
             joined += 1
@@ -658,8 +706,9 @@ def merge_liquipedia(lp: dict, matches: list[dict], events: dict, teams: Teams) 
             continue
         if key not in events:
             continue          # an event this site does not track
-        if events[key].get("tab") and x.get("finished"):
-            continue          # the sheet is the record of what was played
+        if covered:
+            dropped += 1      # the sheet is the record of this stage
+            continue
         added += 1
         mid = "xl-" + _h(key, x.get("startsAt"), x.get("teamA"), x.get("teamB"), x.get("order"))
         done = bool(x.get("finished") and x.get("scoreA") is not None)
@@ -679,7 +728,8 @@ def merge_liquipedia(lp: dict, matches: list[dict], events: dict, teams: Teams) 
         matches.append(m)
         by_event.setdefault(key, []).append(m)
     return {"fetchedAt": lp.get("fetchedAt"), "pages": len(lp.get("pages") or []),
-            "matches": len(lp.get("matches") or []), "joined": joined, "added": added}
+            "matches": len(lp.get("matches") or []), "joined": joined, "added": added,
+            "unjoined": dropped}
 
 
 def apply_overrides(rows: list[dict], matches: list[dict], events: dict, teams: Teams) -> None:

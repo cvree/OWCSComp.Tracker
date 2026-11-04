@@ -161,6 +161,8 @@ def split_params(body: str) -> tuple[str, list[str], dict[str, str]]:
 def strip_markup(v: str | None) -> str:
     v = re.sub(r"<!--.*?-->", "", v or "", flags=re.S)
     v = re.sub(r"<ref[^>]*/>|<ref[^>]*>.*?</ref>", "", v, flags=re.S)
+    # A label wrapped in a template, {{Stage|Regional Playoffs}}: its text.
+    v = re.sub(r"\{\{\s*(?:Stage|Abbr|Small|Nowrap|Bold)\s*\|([^{}|]*)\}\}", r"\1", v, flags=re.I)
     return v.strip()
 
 

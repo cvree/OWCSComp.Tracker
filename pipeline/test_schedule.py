@@ -212,6 +212,57 @@ def test_merge() -> None:
     check("the sources credit Liquipedia when it is used", any(s["id"] == "liquipedia" for s in doc["sources"]))
 
 
+def test_merge_real_pages() -> None:
+    """The shapes the first live fetch (2026-11-04) brought, which the join
+    used to turn into ~500 phantom series: a stage page that also lists the
+    regular season under date headers with no finished flag, and playoff
+    matches whose header is {{Stage|Regional Playoffs}}."""
+    print("joining a whole live stage page:")
+    def lpm(ev, rnd, a, b, starts, order):
+        return {"event": ev, "round": rnd, "teamA": a, "teamB": b, "startsAt": starts,
+                "date": starts[:10], "finished": False, "order": order}
+    rows = [
+        lpm("korea/stage-3", "October 3rd", "Crazy Raccoon", "O2 Blast", "2026-10-03T18:35:00+09:00", 1),
+        lpm("korea/stage-3", "October 2nd", "Team Falcons", "ZETA DIVISION", "2026-10-02T18:45:00+09:00", 2),
+        lpm("korea/stage-3", "October 17th", "T1", None, "2026-11-06T15:00:00+09:00", 3),
+        lpm("korea/stage-3", "Regional Playoffs", "Cheeseburger", "Team Falcons", "2026-11-06T17:00:00+09:00", 4),
+        lpm("korea/stage-3", "Regional Playoffs", "ZETA DIVISION", None, "2026-11-07T15:00:00+09:00", 5),
+        lpm("korea/stage-3", "Regional Playoffs", "Crazy Raccoon", None, "2026-11-07T17:00:00+09:00", 6),
+        lpm("korea/stage-3", "Third Place Match", None, None, "2026-11-08T15:00:00+09:00", 7),
+        lpm("korea/stage-3", "Regional Playoffs", None, None, "2026-11-08T17:00:00+09:00", 8),
+        lpm("asia/stage-3", "Day 1", None, "VARREL", "2026-11-11T17:00:00+09:00", 9),
+    ]
+    real = SB.LIQUIPEDIA
+    tmp = os.path.join(os.environ.get("TMPDIR", "/tmp"), "owcs-test-liquipedia-live.json")
+    with open(tmp, "w", encoding="utf-8") as f:
+        json.dump({"fetchedAt": "2026-11-04T18:00:00+00:00", "pages": [{"title": "x"}], "matches": rows}, f)
+    SB.LIQUIPEDIA = tmp
+    try:
+        doc = SB.build()
+    finally:
+        SB.LIQUIPEDIA = real
+        os.remove(tmp)
+    kr = sorted([m for m in doc["matches"] if m["event"] == "korea/stage-3" and m["phase"] == "playoffs"],
+                key=SB.order_key)
+    check("a date header is not a round, so October's series add nothing",
+          len(kr) == 6 and all(m["id"].startswith("xs-") for m in kr))
+    third = [m for m in kr if m["side"] == "third"]
+    check("…and 'October 3rd' does not take the third-place slot",
+          len(third) == 1 and third[0]["date"] == "2026-11-08")
+    qf = [m for m in kr if m["round"] == "Quarterfinals"]
+    check("a playoff match with no usable round fills the empty slot on its day",
+          [m["startsAt"] for m in qf] == ["2026-11-06T15:00:00+09:00", "2026-11-06T17:00:00+09:00"])
+    check("…in start order, with the teams Liquipedia knows",
+          qf[0]["teamA"] == "t1" and qf[1]["teamA"] is not None)
+    gf = [m for m in kr if m["side"] == "final"]
+    check("the last match of the final day is the final", gf and gf[0]["startsAt"] == "2026-11-08T17:00:00+09:00")
+    asia = [m for m in doc["matches"] if m["event"] == "asia/stage-3"]
+    check("a stage the sheet covers gains no Liquipedia-only series",
+          not any(m["id"].startswith("xl-") for m in asia + kr))
+    lpm_meta = doc["meta"]["generatedFrom"]["liquipedia"]
+    check("…and the run says how many it could not place", lpm_meta["unjoined"] >= 2 and lpm_meta["added"] == 0)
+
+
 def test_reproducible() -> None:
     print("reproducibility:")
     with open(SB.OUT, encoding="utf-8") as f:
@@ -224,6 +275,7 @@ def main() -> int:
     test_export()
     test_liquipedia_parser()
     test_merge()
+    test_merge_real_pages()
     test_reproducible()
     print(f"\n{'OK' if not FAILS else str(FAILS) + ' FAILED'}")
     return 1 if FAILS else 0
