@@ -1,5 +1,42 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
+## UPDATE (2026-11-04, twenty-third pass) — Matches: upcoming, schedule, brackets
+
+`series.html` (Matches) is now four tabs (`?view=`): **Upcoming · Schedule · Brackets · Results**.
+
+**Data: `assets/data/schedule.v1.js`** (`pipeline/schedule_build.py`, `--check` in CI). Every event,
+every series played or still to play, every bracket and standings table. Inputs, joined only there:
+* played series: `external_series.v1.js`;
+* **scheduled series: the spreadsheet's own unplayed cards** (read from the committed raw layer). The
+  importer counted and dropped them; they carry the round, Bo format and order of every future series
+  (Korea S3 playoffs ×6, China S3 playoffs ×6, Pacific S3 ×19, Asia S3 ×18), teams TBD until filled in;
+* days: `config/external/sheet_schedule.json`, refined by **`config/schedule.json`** (`phaseDates`:
+  Korea playoffs Nov 6–8, China Nov 7–8; `window`; `extraEvents`: World Finals Dec 2–6, Guangzhou;
+  `matches`: hand overrides by stage + label for a start time, teams or a stream);
+* **Liquipedia** (`pipeline/liquipedia_schedule.py` → `data/external/liquipedia/matches.json`): start
+  times with time zones, teams of TBD slots, streams. Liquipedia is blocked from the dev container, so
+  it runs on a GitHub runner: **`liquipedia.yml`** twice daily + dispatch (`dry_run` prints what it
+  reads). It keeps the API terms (UA, gzip, ≥2.5 s between requests, `prop=revisions` not `parse`).
+  **Not yet run against the live wiki** — the parser is tested on a synthetic Match2 page
+  (`pipeline/fixtures/liquipedia/`). First thing to do: dispatch it with `dry_run` and read the log;
+  page titles that map to no event are listed, add a rule in `config/liquipedia.json` if one is missed.
+
+Every date carries `dateFrom` (official · liquipedia · liquipedia-day · published-day · estimate); the
+page shows a time only for the first two, "TBA" otherwise, and "Dates TBA" for Pacific/Asia S3, whose
+days are not published. A past slot with no result reads "Awaiting result".
+
+**Page: `assets/js/app/schedule.js`.** Upcoming: next-up spotlight (event, days, countdown once a time
+exists, final league standings while slots are TBD), event cards, day-by-day agenda in the viewer's
+time zone, awaiting results, undated series per event, latest results. Follow teams (☆, localStorage
+`owcs.follow`) + "Only teams I follow"; region filter; .ics per series / event / everything ahead.
+Schedule: season timeline per region with a Today line, events by month (status, champion,
+expandable match days). Brackets: event picker + quick chips, phase switcher, brackets drawn so each
+winner sits beside the series it advanced to, standings (W–L, maps, diff), hover a team to trace it.
+Old `?stage=/?team=` links open Results as before. No accent spent (live = red, finished = emerald).
+
+Tests: `pipeline/test_schedule.py` (round naming, the real export, the Liquipedia parser and merge,
+reproducibility). sheet-sync rebuilds the schedule with each import.
+
 ## UPDATE (2026-11-03, twenty-second pass) — one brand mark
 
 Four unrelated marks (header "CT" text tile, lime target favicon, violet/cyan bar

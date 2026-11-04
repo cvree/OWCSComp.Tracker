@@ -1,0 +1,39 @@
+{
+  "_readme": [
+    "Liquipedia, as the schedule's source of start times (pipeline/liquipedia_schedule.py,",
+    ".github/workflows/liquipedia.yml). Liquipedia is the community wiki every OWCS",
+    "fan already uses for brackets; its match pages carry the start time and time",
+    "zone of every series, the teams of slots the spreadsheet still reads TBD, and",
+    "the stream. Its text is CC BY-SA 3.0: the Matches page credits it and links",
+    "back to the page each match came from.",
+    "",
+    "Liquipedia's API terms (https://liquipedia.net/api-terms-of-use), all kept:",
+    "  * a User-Agent naming this project and where to reach it;",
+    "  * gzip;",
+    "  * at most one request every 2 seconds (`minIntervalSeconds`), and never",
+    "    action=parse (rate-limited to one per 30 s) — page text is read with",
+    "    action=query&prop=revisions, up to 50 pages per request;",
+    "  * once a day, plus on demand; only pages under `prefixes`.",
+    "",
+    "A page title maps to one of the schedule's event keys (the sheet_schedule.json",
+    "keys): first by the `events` rules below (the first regex that matches wins),",
+    "otherwise by reading the title itself — a regional word (North America/NA,",
+    "EMEA, Korea, Japan, China, Pacific) plus 'Stage N' is that region's stage, and",
+    "'Asia' with no regional word is the Asia championship. A page that maps to",
+    "nothing is skipped and listed in the run log, so a renamed Liquipedia page",
+    "shows up as an unmapped title instead of silently dropping a stage. Pages",
+    "matching `skip` (qualifiers, opens, statistics) are never read."
+  ],
+  "version": 1,
+  "api": "https://liquipedia.net/overwatch/api.php",
+  "wiki": "https://liquipedia.net/overwatch/",
+  "userAgent": "OWCSCompTracker/1.0 (https://github.com/cvree/OWCSComp.Tracker; schedule importer, once daily)",
+  "minIntervalSeconds": 2.5,
+  "prefixes": ["Overwatch Champions Series/2026"],
+  "skip": "(?i)qualifier|open|promotion|relegation|/statistics|/results|/broadcast|/team|/player|/map",
+  "events": [
+    {"match": "(?i)champions[ _]clash", "event": "international/champions-clash"},
+    {"match": "(?i)midseason", "event": "international/midseason-championship"},
+    {"match": "(?i)world[ _]finals", "event": "international/world-finals"}
+  ]
+}
