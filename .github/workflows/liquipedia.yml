@@ -65,6 +65,36 @@ jobs:
           python pipeline/schedule_build.py
           python pipeline/test_schedule.py
 
+      # A red test means nothing is committed, and the runner (which holds
+      # the only copy of the fresh fetch) is thrown away. Keep the fetch and
+      # print what the schedule made of the events the tests pin, so the
+      # failure can be read from the log alone.
+      - name: Explain a failed rebuild
+        if: failure() && github.event.inputs.dry_run != 'true'
+        run: |
+          python - <<'PY' || true
+          import sys
+          sys.path.insert(0, "pipeline")
+          import schedule_build as SB
+          doc = SB.read_js_object(SB.OUT) or {}
+          for ev in ("korea/stage-3", "china/stage-3", "asia/stage-3"):
+              ms = [m for m in doc.get("matches", []) if m.get("event") == ev and m.get("state") != "done"]
+              print(f"== {ev}: {len(ms)} still to play")
+              for m in ms:
+                  print("  ", m.get("phase"), m.get("round"), m.get("bestOf"), m.get("date"),
+                        m.get("dateFrom"), m.get("startsAt"), m.get("teamA"), m.get("teamB"), m.get("id"))
+          PY
+      - name: Keep the fetch
+        if: failure() && github.event.inputs.dry_run != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: liquipedia-${{ github.run_id }}
+          path: |
+            data/external/liquipedia/
+            assets/data/schedule.v1.js
+          if-no-files-found: ignore
+          retention-days: 14
+
       - name: Publish
         id: publish
         if: github.event.inputs.dry_run != 'true'
