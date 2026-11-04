@@ -64,7 +64,8 @@ field by field, and labelled on every page.
                 ─► reports/external/gsheet/{inventory,reconciliation,last_failure}.{json,md}
                 ─► data/external/gsheet/manifest.json (snapshot ledger)
                 ▼
-   PR on branch auto/sheet-sync  ──(a person merges)──►  GitHub Pages
+   gates + tests green ──► commit to main ──► GitHub Pages redeploy
+   (repo variable SHEET_SYNC_REVIEW=true: a review PR on auto/sheet-sync instead)
 
    Browser:  public_data.v1.js ┐
                                ├─ app/metastats.js (one entry per real map; lanes kept apart)
@@ -395,10 +396,12 @@ After that it runs daily on its own; you only merge the PR it opens.
 
 ## Operator runbook
 
-* **Daily:** `sheet-sync.yml` runs at 10:41 UTC. It does nothing if the
-  workbook hash is unchanged. Otherwise it opens or updates the PR on
-  `auto/sheet-sync`, with the inventory and reconciliation summary in the body.
-  **Review it and merge it.** It never auto-merges.
+* **Every 6 hours:** `sheet-sync.yml` runs at :41 past 00/06/12/18 UTC. It
+  does nothing if the workbook hash is unchanged. Otherwise, once every gate
+  and test passes, it commits the import to `main` and redeploys Pages; the
+  inventory is in the job summary. With the repository variable
+  `SHEET_SYNC_REVIEW=true` it opens or updates a review PR on
+  `auto/sheet-sync` instead, for a person to merge.
 * **Sync failed:** the job is red and the job summary shows
   `reports/external/gsheet/last_failure.md`. Nothing was committed and the
   site keeps the last good import. If the layout changed:

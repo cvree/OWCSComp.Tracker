@@ -175,8 +175,9 @@ runbook and limits: `docs/EXTERNAL-SHEET.md`.
 * Pages: `map.html`, `meta.html` (public, reached from Maps/Comps — nav
   unchanged), team scouting report, `sheet-sync.html` (admin rail),
   methodology + credit at `how-it-works.html#sources`.
-* Automation: `sheet-sync.yml` daily → review PR on `auto/sheet-sync`
-  (never auto-merged). `ci.yml` runs `sheet_sync.py check`.
+* Automation: `sheet-sync.yml` every 6 h → gates green → commits to `main`
+  and redeploys Pages (repo variable `SHEET_SYNC_REVIEW=true` restores the
+  review PR on `auto/sheet-sync`). `ci.yml` runs `sheet_sync.py check`.
   `export_data.py --public` refreshes the external export (reconciliation
   depends on published VOD maps); the five workflows that run it now stage
   `assets/data/external_sheet.v1.js` too.

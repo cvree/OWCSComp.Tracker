@@ -312,10 +312,11 @@ labelled **external layer** (`pipeline/sheet_sync.py` →
   team/opponent/hero/role/source/coverage/sample, recency weighting,
   scouting), a scouting report on every team page, and the admin
   `sheet-sync.html` (Source health + review queue).
-* **Automation:** `.github/workflows/sheet-sync.yml` runs daily, skips an
-  unchanged workbook by SHA-256, fails loudly on a layout change while
-  keeping the last good import, and opens a review PR — it never publishes
-  external data on its own.
+* **Automation:** `.github/workflows/sheet-sync.yml` runs every 6 hours,
+  skips an unchanged workbook by SHA-256, fails loudly on a layout change
+  while keeping the last good import, and — when every gate and test is
+  green — commits the import to `main` and redeploys Pages. Set the
+  repository variable `SHEET_SYNC_REVIEW=true` to go back to a review PR.
 
 ```bash
 python3 pipeline/sheet_sync.py sync      # download + import + reconcile + export

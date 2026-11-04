@@ -11,24 +11,30 @@
 #   3. parse every tab, validate (a changed layout FAILS loudly), build the
 #      source inventory and reconciliation reports;
 #   4. run the exporter gates and the relevant offline test suites;
-#   5. push the changes to ONE review branch (auto/sheet-sync) and open or
-#      update a pull request. It is never merged automatically: external
-#      data reaches the site only after a person merges it.
+#   5. every gate green? commit the import straight to the branch it ran on
+#      and redeploy Pages, so new results reach the Matches page without
+#      anyone touching GitHub. (It used to stop at a review pull request on
+#      auto/sheet-sync, which meant the site only moved when a person
+#      remembered to merge it.) Set the repository variable
+#      SHEET_SYNC_REVIEW=true to get the review-PR behaviour back.
 #
-# On failure (download refused, not an xlsx, layout changed) nothing is
-# committed — the last good import stays live — and the failure report is
-# put in the job summary and uploaded as an artifact.
+# On failure (download refused, not an xlsx, layout changed, any gate or
+# test red) nothing is committed — the last good import stays live — and the
+# failure report is put in the job summary and uploaded as an artifact.
 #
-# The pull request is opened with BOT_PAT when that secret exists (so
-# ci.yml runs on it, as for the discovery PRs), else with GITHUB_TOKEN.
+# The review pull request (review mode only) is opened with BOT_PAT when
+# that secret exists (so ci.yml runs on it), else with GITHUB_TOKEN.
 # =====================================================================
 name: sheet-sync
 
 on:
   schedule:
-    # Daily at 10:41 UTC — OWCS regions play across every time zone, so
-    # there is no quiet hour; this avoids the top-of-hour runner crush.
-    - cron: "41 10 * * *"
+    # Every 6 hours at :41 — OWCS regions play across every time zone, so
+    # there is no quiet hour; off the top of the hour to dodge the runner
+    # crush. GitHub delays and sometimes drops scheduled runs, so a single
+    # daily slot could leave results a day or two behind. An unchanged
+    # workbook stops at the hash check and commits nothing.
+    - cron: "41 */6 * * *"
   workflow_dispatch:
     inputs:
       force:
@@ -65,6 +71,7 @@ concurrency:
 permissions:
   contents: write
   pull-requests: write
+  actions: write   # dispatch pages.yml after publishing
 
 jobs:
   sync:
@@ -171,8 +178,49 @@ jobs:
           python pipeline/test_public_export_contracts.py
           python pipeline/test_site.py
 
+      - name: Publish the import
+        id: publish
+        if: steps.sync.outputs.changed == 'true' && vars.SHEET_SYNC_REVIEW != 'true'
+        run: |
+          set -euo pipefail
+          git config user.name  "owcs-sheet-sync[bot]"
+          git config user.email "actions@users.noreply.github.com"
+          PATHS=(data/external reports/external assets/data/external_sheet.v1.js assets/data/external_summary.v1.js assets/data/external_series.v1.js assets/data/sheet_tiers.v1.js assets/data/schedule.v1.js)
+          git add -A "${PATHS[@]}"
+          if [ -d assets/data/external_sheet ]; then git add -A assets/data/external_sheet; fi
+          SHA=$(python -c "import json;print(json.load(open('data/external/gsheet/manifest.json'))['lastGood'][:12])")
+          git commit -m "data: community spreadsheet import (workbook $SHA)"
+          # Bounded rebase-retry, as the other data workflows do. The schedule
+          # export also reads Liquipedia's file, so rebuild it after each
+          # rebase in case the liquipedia job landed in between.
+          pushed=false
+          for attempt in 1 2 3; do
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
+            python pipeline/schedule_build.py
+            git add assets/data/schedule.v1.js
+            git diff --cached --quiet || git commit -m "schedule: rebuild after rebase"
+            if git push origin "HEAD:${GITHUB_REF_NAME}"; then pushed=true; break; fi
+            echo "::warning::push attempt ${attempt} rejected — rebasing and retrying"
+            sleep $((attempt * 5))
+          done
+          [ "$pushed" = "true" ] || { echo "::error::could not push the spreadsheet import"; exit 1; }
+          echo "committed=true" >> "$GITHUB_OUTPUT"
+          {
+            echo "## Spreadsheet import published (workbook \`$SHA\`)"
+            echo
+            sed -n '1,14p' reports/external/gsheet/inventory.md
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      # A push made with GITHUB_TOKEN does not trigger other workflows, so
+      # Pages has to be asked explicitly or the commit never reaches the site.
+      - name: Redeploy the site
+        if: steps.publish.outputs.committed == 'true' && github.ref_name == 'main'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run pages.yml --ref "${GITHUB_REF_NAME}"
+
       - name: Open or update the review pull request
-        if: steps.sync.outputs.changed == 'true'
+        if: steps.sync.outputs.changed == 'true' && vars.SHEET_SYNC_REVIEW == 'true'
         env:
           GH_TOKEN: ${{ secrets.BOT_PAT || secrets.GITHUB_TOKEN }}
         run: |
