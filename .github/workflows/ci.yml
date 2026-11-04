@@ -81,6 +81,12 @@ jobs:
       - name: External spreadsheet layer must match a fresh rebuild
         run: python pipeline/sheet_sync.py check
 
+      # The Matches page's schedule is derived from the spreadsheet import,
+      # the stage dates and the Liquipedia file; a stale export shows a
+      # bracket or a start time no input says.
+      - name: Season schedule must match a fresh build
+        run: python pipeline/schedule_build.py --check
+
       - name: Hero-card index must match the committed batches
         run: python pipeline/label_batch.py --index --check
 

@@ -1,0 +1,81 @@
+{
+  "_readme": [
+    "The season schedule: what the Matches page (series.html) shows as Upcoming,",
+    "Schedule and Brackets. pipeline/schedule_build.py reads it together with:",
+    "",
+    "  * the community spreadsheet's match cards, played AND scheduled (a card",
+    "    with no maps yet is a slot: its round, Bo format and order are known even",
+    "    while its teams read TBD);",
+    "  * config/external/sheet_schedule.json, the per-week dates of every stage;",
+    "  * data/external/liquipedia/matches.json, written by",
+    "    pipeline/liquipedia_schedule.py on a GitHub runner (liquipedia.yml), which",
+    "    gives exact start times, team names for TBD slots, and stream links.",
+    "",
+    "Precedence for a match's date, most trusted first:",
+    "  1. `matches` below (a person typed it in, from the official schedule);",
+    "  2. Liquipedia's start time;",
+    "  3. `stages[key].phaseDates` below (the day of a phase is published, the",
+    "     time is not);",
+    "  4. the week/day estimate from sheet_schedule.json.",
+    "Every date carries which of these it came from (`dateFrom`), and the page",
+    "says 'time TBA' or 'estimated' instead of inventing a time.",
+    "",
+    "`stages`: keyed region/stage (the sheet_schedule.json keys). `phaseDates`",
+    "maps a phase (regular, seeding, lcq, playoffs, or a group bracket id such",
+    "as group-a) to {sheet day number: ISO date}. `window` is the stage's first",
+    "and last day when the cards alone would place it wrongly.",
+    "",
+    "`extraEvents`: events the spreadsheet has no cards for yet (its World",
+    "Finals tab is empty). They show on the Schedule with their window and,",
+    "once Liquipedia lists matches for them, on Upcoming and Brackets.",
+    "",
+    "`matches`: hand overrides. Address a card by stage + label (+ `nth` when a",
+    "tab repeats a label, 1-based) and set any of startsAt (ISO with offset or",
+    "Z), teamA, teamB (team ids or the name as printed), stream, vod. Run",
+    "`python3 pipeline/schedule_build.py` afterwards."
+  ],
+  "version": 1,
+  "stages": {
+    "korea/stage-3": {
+      "location": "WDG Studio Hongdae, Seoul",
+      "window": ["2026-10-02", "2026-11-08"],
+      "phaseDates": {"playoffs": {"1": "2026-11-06", "2": "2026-11-07", "3": "2026-11-08"}},
+      "format": "Regional playoffs: single elimination, every series Bo7.",
+      "source": "Strafe / Liquipedia via search: Oct 2 - Nov 8, playoffs Nov 6-8 in Seoul"
+    },
+    "china/stage-3": {
+      "window": ["2026-10-03", "2026-11-08"],
+      "phaseDates": {"playoffs": {"1": "2026-11-07", "2": "2026-11-08"}},
+      "format": "Regional playoffs: four-team double elimination, Bo5; the Grand Final is Bo7.",
+      "source": "Strafe / Global Game Guide via search: Swiss Oct 3-11, round robin Oct 17 - Nov 1, playoffs Nov 7-8"
+    },
+    "pacific/stage-3": {
+      "window": [null, null],
+      "format": "Round robin, then a four-team playoff (Bo5; Grand Final Bo7).",
+      "source": "No published 2026 Pacific Stage 3 dates were found; the cards are scheduled, the days are not"
+    },
+    "asia/stage-3": {
+      "window": [null, null],
+      "format": "Group stage (Bo3), then a double-elimination playoff (Bo5; Grand Final Bo7).",
+      "source": "No published dates for the Asia Stage 3 championship were found; it falls between the regional playoffs and the World Finals"
+    },
+    "international/world-finals": {
+      "location": "Guangzhou, China",
+      "window": ["2026-12-02", "2026-12-06"],
+      "source": "Blizzard 2026 season schedule (via ycwb.com and Liquipedia search results): Dec 2-6, Guangzhou"
+    }
+  },
+  "extraEvents": [
+    {
+      "key": "international/world-finals",
+      "name": "World Finals",
+      "region": "international",
+      "stage": "world-finals",
+      "location": "Guangzhou, China",
+      "window": ["2026-12-02", "2026-12-06"],
+      "format": "The season's last event: every region's qualifiers. The bracket fills in as the regional playoffs finish.",
+      "source": "Blizzard 2026 season schedule: Dec 2-6"
+    }
+  ],
+  "matches": []
+}

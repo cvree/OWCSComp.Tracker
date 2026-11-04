@@ -1,0 +1,50 @@
+{{Infobox league
+|name=OWCS 2026 Korea Stage 3
+|sdate=2026-10-02
+|edate=2026-11-08
+}}
+==Playoffs==
+<!-- Synthetic test page in Liquipedia's Match2 markup. Team names and times are made up for the parser tests. -->
+{{Bracket|Bracket/6-2Q|id=OWCSKR26S3
+|R1M1header=Quarterfinals
+|R1M1={{Match|bestof=7
+    |opponent1={{TeamOpponent|t1}}
+    |opponent2={{TeamOpponent|team falcons}}
+    |date=November 6, 2026 - 18:00 {{Abbr/KST}}
+    |twitch=ow_esports_kr
+    |youtube=@OverwatchEsportsKR
+}}
+|R1M2={{Match|bestof=7
+    |opponent1={{TeamOpponent|template=cheeseburger}}
+    |opponent2={{TeamOpponent|røde zanside gaming}}
+    |date=2026-11-06 - 21:30 {{abbr/KST}}
+    |finished=true
+    |map1={{Map|map=Busan|winner=1}}
+    |map2={{Map|map=King's Row|winner=1}}
+    |map3={{Map|map=Suravasa|winner=2}}
+    |map4={{Map|map=New Junk City|winner=1}}
+    |map5={{Map|map=Lijiang Tower|winner=1}}
+}}
+|R2M1header=Semifinals
+|R2M1={{Match|bestof=7
+    |opponent1={{TeamOpponent|zeta division}}
+    |opponent2={{TBDOpponent}}
+    |date=November 7, 2026 - 18:00 {{Abbr/KST}}
+}}
+|R2M2={{Match|bestof=7
+    |opponent1={{TeamOpponent|crazy raccoon}}
+    |opponent2={{TeamOpponent|tbd}}
+    |date=November 7, 2026
+}}
+|R3M1header=Grand Final
+|R3M1={{Match|bestof=7
+    |opponent1={{TeamOpponent|tbd}}
+    |opponent2={{LiteralOpponent|TBD}}
+    |date=November 8, 2026 - 19:00 {{Abbr/KST}}
+}}
+|RxMTP={{Match|bestof=7
+    |opponent1={{TeamOpponent|tbd}}
+    |opponent2={{TeamOpponent|tbd}}
+    |date=November 8, 2026 - 16:00 {{Abbr/KST}}
+}}
+}}

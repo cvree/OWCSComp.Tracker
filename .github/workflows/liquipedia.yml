@@ -1,0 +1,96 @@
+# =====================================================================
+# OWCS Comp Tracker — start times from Liquipedia (liquipedia)
+# ---------------------------------------------------------------------
+# The Matches page shows every series still to play. The community
+# spreadsheet gives each one its round, format and order; it does not give
+# a start time, and it reads TBD until its editors fill a card in. This job
+# reads Liquipedia's OWCS pages (pipeline/liquipedia_schedule.py — the API
+# terms it keeps are in config/liquipedia.json), writes
+# data/external/liquipedia/matches.json, rebuilds the schedule export
+# (pipeline/schedule_build.py), runs the schedule tests, and commits the two
+# files back to the branch it ran on when they changed.
+#
+# Twice a day on match weeks is plenty: Liquipedia's editors fill a bracket
+# in after each series, and the page converts every time to the viewer's
+# own zone. A failed fetch commits nothing; the last good file stays.
+#
+# $0, no secrets beyond the default GITHUB_TOKEN.
+# =====================================================================
+name: liquipedia
+
+on:
+  schedule:
+    - cron: "17 3,15 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Fetch and print what Liquipedia lists, commit nothing"
+        type: boolean
+        default: false
+
+concurrency:
+  group: owcs-generated-data
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  actions: write   # dispatch pages.yml after publishing
+
+jobs:
+  schedule:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install --quiet -r requirements.txt
+
+      - name: Dry run (prints, writes nothing)
+        if: github.event.inputs.dry_run == 'true'
+        run: python pipeline/liquipedia_schedule.py --dry-run
+
+      - name: Fetch, rebuild, test
+        if: github.event.inputs.dry_run != 'true'
+        run: |
+          set -euo pipefail
+          python pipeline/liquipedia_schedule.py
+          python pipeline/schedule_build.py
+          python pipeline/test_schedule.py
+
+      - name: Publish
+        id: publish
+        if: github.event.inputs.dry_run != 'true'
+        run: |
+          set -euo pipefail
+          if [ -z "$(git status --porcelain data/external/liquipedia assets/data/schedule.v1.js)" ]; then
+            echo "Schedule unchanged."; echo "committed=false" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          git config user.name  "owcs-schedule[bot]"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/external/liquipedia assets/data/schedule.v1.js
+          git commit -m "schedule: Liquipedia start times ($(date -u +'%Y-%m-%d %H:%M') UTC)"
+          pushed=false
+          for attempt in 1 2 3; do
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
+            python pipeline/schedule_build.py
+            git add assets/data/schedule.v1.js
+            git diff --cached --quiet || git commit -m "schedule: rebuild after rebase"
+            if git push origin "HEAD:${GITHUB_REF_NAME}"; then pushed=true; break; fi
+            sleep $((attempt * 5))
+          done
+          [ "$pushed" = "true" ] || { echo "::error::could not push"; exit 1; }
+          echo "committed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Redeploy the site
+        if: steps.publish.outputs.committed == 'true' && github.ref_name == 'main'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run pages.yml --ref "${GITHUB_REF_NAME}"

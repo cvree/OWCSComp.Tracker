@@ -1,9 +1,11 @@
 /* =====================================================================
    OWCS Comp Tracker — app/page-series.js
-   series.html: the community spreadsheet's series, as its own record.
+   series.html: the Matches page — the season's schedule (app/schedule.js)
+   and the community spreadsheet's series, as its own record.
 
-     series.html              every series, filterable by region, stage,
-                              event, source and team, in the sheet's order
+     series.html              Upcoming · Schedule · Brackets · Results
+                              (?view=); Results is every series,
+                              filterable by region, stage, event and team
      series.html?id=xm-…      one series, the way the sheet's match card
                               records it: teams, format, series score, and
                               per map the winner, map score, bans and each
@@ -23,7 +25,7 @@
   const E = P.extStats;
   const esc = P.esc;
   const set = (id, html) => { const el = document.getElementById(id); if (el) el.innerHTML = html; };
-  const plural = (n, w) => n + " " + w + (n === 1 ? "" : "s");
+  const plural = (n, w) => n + " " + w + (n === 1 || /s$/.test(w) ? "" : "s");
 
   document.addEventListener("DOMContentLoaded", () => {
     const id = P.qs("id");
@@ -31,18 +33,58 @@
     else renderList();
   });
 
-  /* ------------------------------------------------------------ list */
+  /* ------------------------------------------------------------ list
+     The Matches hub: four views of one season.
+       Upcoming  — what is on next, day by day, in the viewer's time zone
+       Schedule  — the season at a glance, event by event
+       Brackets  — any event's bracket, standings and series lists
+       Results   — every played series (the spreadsheet's record)
+     ?view= picks one; the old filter links (?stage=, ?region=, ?team=…)
+     still open Results, filtered, as they always did. */
+  const VIEWS = [["upcoming", "Upcoming"], ["schedule", "Schedule"], ["brackets", "Brackets"], ["results", "Results"]];
   function renderList() {
     set("crumbs", P.breadcrumbs([{ label: "Home", href: "index.html" }, { label: "Matches" }]));
-    set("head", '<div class="page-head page-head--tight"><p class="eyebrow">From the community spreadsheet</p>' +
-      "<h1>Matches</h1><p class=\"lede\">Every OWCS series this season, latest first: who played, the score and " +
-      "each map's result. Open one for its bans and every player's heroes.</p></div>");
-    set("body", '<div id="browser"></div>' +
-      '<details class="about-data card u-mt-6"><summary><span class="about-data__title">About these numbers</span>' +
-      '<span class="dim small">where the spreadsheet comes from, and how much of the season it covers</span></summary>' +
-      '<div class="about-data__body"><div class="u-mt-4">' + P.extProvenanceLine() + "</div>" +
-      '<div class="u-mt-4">' + P.extCoverageCard() + "</div></div></details>");
-    P.mountSeriesBrowser("browser", { page: 40, newestFirst: true });
+    const sched = P.sched && P.sched.data;
+    const next = sched ? P.sched.next() : [];
+    const live = sched ? (sched.events || []).filter((e) => P.sched.eventStatus(e) === "live").length : 0;
+    set("head", '<div class="page-head page-head--tight"><p class="eyebrow">OWCS ' +
+      esc(((sched && sched.events && sched.events[0] && sched.events[0].window[0]) || "2026").slice(0, 4)) + " season</p>" +
+      "<h1>Matches</h1><p class=\"lede\">What's on next and when, in your time zone; the whole season at a glance; " +
+      "every bracket and standings table; and every result, series by series.</p>" +
+      (next.length || live ? '<p class="small u-mt-3 dim">' + (live ? "<b>" + plural(live, "event") + " on now</b> · " : "") +
+        (next.length ? plural(next.length, "dated series") + " ahead" : "") + "</p>" : "") + "</div>");
+    const legacy = ["stage", "event", "source", "team", "q"].some((k) => P.qs(k));
+    const want = P.qs("view") || (legacy ? "results" : "upcoming");
+    if (!P.qs("view") && legacy) P.setQs({ view: "results" });
+    set("body", '<div role="tablist" aria-label="Matches" class="sx-tabs">' + VIEWS.map((v) =>
+      '<button type="button" role="tab" id="tab-' + v[0] + '" data-tab="' + v[0] + '" aria-controls="view-' + v[0] + '" aria-selected="' +
+      (v[0] === want ? "true" : "false") + '">' + v[1] + "</button>").join("") + "</div>" +
+      VIEWS.map((v) => '<div role="tabpanel" id="view-' + v[0] + '" aria-labelledby="tab-' + v[0] + '"' + (v[0] === want ? "" : " hidden") +
+        "></div>").join(""));
+    const mounted = {};
+    const mount = (name) => {
+      if (mounted[name]) return;
+      mounted[name] = true;
+      const host = document.getElementById("view-" + name);
+      if (name === "results") {
+        host.innerHTML = '<div id="browser"></div>' +
+          '<details class="about-data card u-mt-6"><summary><span class="about-data__title">About these numbers</span>' +
+          '<span class="dim small">where the spreadsheet comes from, and how much of the season it covers</span></summary>' +
+          '<div class="about-data__body"><div class="u-mt-4">' + P.extProvenanceLine() + "</div>" +
+          '<div class="u-mt-4">' + P.extCoverageCard() + "</div></div></details>";
+        P.mountSeriesBrowser("browser", { page: 40, newestFirst: true });
+        return;
+      }
+      if (!P.sched) {
+        host.innerHTML = P.note("info", "The schedule could not load", "<p>Results are still on the Results tab.</p>");
+        return;
+      }
+      if (name === "upcoming") P.sched.mountUpcoming(host);
+      if (name === "schedule") P.sched.mountSchedule(host);
+      if (name === "brackets") P.sched.mountBrackets(host);
+    };
+    P.initTabs(document.getElementById("body"), { key: "view", onChange: mount });
+    mount(want);
   }
 
   /* ---------------------------------------------------------- series */
@@ -91,6 +133,9 @@
       '<span class="map-hd__vs">' + P.scorePlate(row.scoreA, row.scoreB, winA ? "a" : winB ? "b" : null) + "</span>" +
       side(row.teamB, winB) + "</div>" +
       '<p class="dim u-mt-4">' + meta + "</p>" +
+      (P.sched && P.sched.eventOfSeries(row.id) ? '<p class="small u-mt-3"><a href="series.html?view=brackets&amp;event=' +
+        encodeURIComponent(P.sched.eventOfSeries(row.id).id) + '">See it in the ' + esc(P.sched.eventOfSeries(row.id).name) +
+        " bracket →</a></p>" : "") +
       (row.complete === false ? P.note("info", "Series not complete in the sheet",
         "<p>The card's series score does not reach a winner for its format yet. Maps listed so far are shown.</p>") : "") +
       '<p class="dim small u-mt-3">The spreadsheet records no date and no map picks for this series, so neither is ' +
