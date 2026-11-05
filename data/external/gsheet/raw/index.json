@@ -1,31 +1,31 @@
 {
  "format": "gsheet-raw.v2",
- "importedAt": "2026-11-05T18:55:11+00:00",
+ "importedAt": "2026-11-05T20:15:21+00:00",
  "package": {
-  "bytes": 56618951,
+  "bytes": 56619172,
   "largestMembers": [
    {
-    "bytes": 4047504,
+    "bytes": 4047509,
     "path": "xl/worksheets/sheet7.xml"
    },
    {
-    "bytes": 4035237,
+    "bytes": 4035278,
     "path": "xl/worksheets/sheet8.xml"
    },
    {
-    "bytes": 3995326,
+    "bytes": 3995261,
     "path": "xl/worksheets/sheet6.xml"
    },
    {
-    "bytes": 3401075,
+    "bytes": 3401222,
     "path": "xl/drawings/drawing7.xml"
    },
    {
-    "bytes": 3228727,
+    "bytes": 3228815,
     "path": "xl/drawings/drawing6.xml"
    },
    {
-    "bytes": 2885557,
+    "bytes": 2885559,
     "path": "xl/drawings/drawing8.xml"
    },
    {
@@ -33,25 +33,25 @@
     "path": "xl/worksheets/sheet11.xml"
    },
    {
-    "bytes": 2789987,
+    "bytes": 2790032,
     "path": "xl/worksheets/sheet9.xml"
    }
   ],
   "mediaBytes": 49039605,
   "mediaFiles": 234,
   "members": 404,
-  "uncompressedBytes": 143563737,
+  "uncompressedBytes": 143563869,
   "worksheetXml": [
    {
-    "bytes": 4047504,
+    "bytes": 4047509,
     "path": "xl/worksheets/sheet7.xml"
    },
    {
-    "bytes": 4035237,
+    "bytes": 4035278,
     "path": "xl/worksheets/sheet8.xml"
    },
    {
-    "bytes": 3995326,
+    "bytes": 3995261,
     "path": "xl/worksheets/sheet6.xml"
    },
    {
@@ -59,27 +59,27 @@
     "path": "xl/worksheets/sheet11.xml"
    },
    {
-    "bytes": 2789987,
+    "bytes": 2790032,
     "path": "xl/worksheets/sheet9.xml"
    },
    {
-    "bytes": 2764794,
+    "bytes": 2764387,
     "path": "xl/worksheets/sheet10.xml"
    },
    {
-    "bytes": 2509928,
+    "bytes": 2509938,
     "path": "xl/worksheets/sheet5.xml"
    },
    {
-    "bytes": 2483490,
+    "bytes": 2483563,
     "path": "xl/worksheets/sheet3.xml"
    },
    {
-    "bytes": 2471103,
+    "bytes": 2471123,
     "path": "xl/worksheets/sheet4.xml"
    },
    {
-    "bytes": 2173158,
+    "bytes": 2173160,
     "path": "xl/worksheets/sheet25.xml"
    },
    {
@@ -87,7 +87,7 @@
     "path": "xl/worksheets/sheet26.xml"
    },
    {
-    "bytes": 1651490,
+    "bytes": 1651463,
     "path": "xl/worksheets/sheet14.xml"
    },
    {
@@ -107,15 +107,15 @@
     "path": "xl/worksheets/sheet13.xml"
    },
    {
-    "bytes": 1625991,
+    "bytes": 1625953,
     "path": "xl/worksheets/sheet12.xml"
    },
    {
-    "bytes": 1493887,
+    "bytes": 1493886,
     "path": "xl/worksheets/sheet20.xml"
    },
    {
-    "bytes": 1477503,
+    "bytes": 1477502,
     "path": "xl/worksheets/sheet19.xml"
    },
    {
@@ -123,7 +123,7 @@
     "path": "xl/worksheets/sheet21.xml"
    },
    {
-    "bytes": 1393806,
+    "bytes": 1393820,
     "path": "xl/worksheets/sheet22.xml"
    },
    {
@@ -131,19 +131,19 @@
     "path": "xl/worksheets/sheet23.xml"
    },
    {
-    "bytes": 1077650,
+    "bytes": 1077652,
     "path": "xl/worksheets/sheet24.xml"
    },
    {
-    "bytes": 851408,
+    "bytes": 851387,
     "path": "xl/worksheets/sheet2.xml"
    },
    {
-    "bytes": 721647,
+    "bytes": 721595,
     "path": "xl/worksheets/sheet39.xml"
    },
    {
-    "bytes": 502435,
+    "bytes": 502436,
     "path": "xl/worksheets/sheet38.xml"
    },
    {
@@ -151,27 +151,27 @@
     "path": "xl/worksheets/sheet37.xml"
    },
    {
-    "bytes": 168154,
+    "bytes": 168164,
     "path": "xl/worksheets/sheet27.xml"
    },
    {
-    "bytes": 154107,
+    "bytes": 154116,
     "path": "xl/worksheets/sheet29.xml"
    },
    {
-    "bytes": 134803,
+    "bytes": 134811,
     "path": "xl/worksheets/sheet28.xml"
    },
    {
-    "bytes": 108083,
+    "bytes": 108162,
     "path": "xl/worksheets/sheet30.xml"
    },
    {
-    "bytes": 95912,
+    "bytes": 95979,
     "path": "xl/worksheets/sheet32.xml"
    },
    {
-    "bytes": 92868,
+    "bytes": 92939,
     "path": "xl/worksheets/sheet31.xml"
    },
    {
@@ -179,15 +179,15 @@
     "path": "xl/worksheets/sheet34.xml"
    },
    {
-    "bytes": 63154,
+    "bytes": 63200,
     "path": "xl/worksheets/sheet41.xml"
    },
    {
-    "bytes": 53981,
+    "bytes": 54008,
     "path": "xl/worksheets/sheet33.xml"
    },
    {
-    "bytes": 27057,
+    "bytes": 27096,
     "path": "xl/worksheets/sheet35.xml"
    },
    {
@@ -199,13 +199,13 @@
     "path": "xl/worksheets/sheet1.xml"
    },
    {
-    "bytes": 15837,
+    "bytes": 15890,
     "path": "xl/worksheets/sheet36.xml"
    }
   ]
  },
  "parserVersion": "gsheet-parser-2",
- "sha256": "08af4edf5430d46bef085b733b7e93a011b364d48d58c7b049b2260936c8b27b",
+ "sha256": "7099504f31c116c85bccc5303940741ffe5aa600d77f2d076b2b01484a4ac837",
  "sheets": [
   {
    "bytes": 1621,
