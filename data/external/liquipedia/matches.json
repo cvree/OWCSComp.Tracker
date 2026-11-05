@@ -1,6 +1,6 @@
 {
  "_readme": "Written by pipeline/liquipedia_schedule.py from Liquipedia (CC BY-SA 3.0). Do not hand-edit; put corrections in config/schedule.json `matches`.",
- "fetchedAt": "2026-11-04T18:22:41+00:00",
+ "fetchedAt": "2026-11-05T10:54:39+00:00",
  "matches": [
   {
    "bestOf": 3,
@@ -15381,7 +15381,7 @@
   {
    "event": "na/stage-3",
    "matches": 15,
-   "revid": 1152196,
+   "revid": 1153520,
    "title": "Overwatch Champions Series/2026/NA/Stage 3/Regular Season"
   },
   {
