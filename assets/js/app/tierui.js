@@ -85,8 +85,9 @@
       '<strong class="tip__title">Where this comes from</strong>' +
       '<span class="tip__line">Every OWCS 2026 series in the community-maintained match spreadsheet: ' +
       T.counts.series + " series, " + T.counts.maps + " maps, line-ups, results and bans.</span>" +
-      '<span class="tip__line">The sheet has no dates, so each match is dated from the official schedule by its stage, ' +
-      "week and day (" + (c.window || 0) + " inside a published window, " + (c.estimate || 0) + " estimated).</span>" +
+      '<span class="tip__line">The sheet has no dates. ' + (c.liquipedia || 0) + " played series take the day Liquipedia lists them on " +
+      "(same teams, same score); the rest are placed from the official schedule by stage, week and day (" +
+      (c.window || 0) + " inside a published window, " + (c.estimate || 0) + " estimated).</span>" +
       '<span class="tip__line">Line-ups are listed heroes, not time played: a player\'s first hero counts most.</span>' +
       '<a class="tip__line" href="how-it-works.html#sources">Credits and method →</a>', { cls: "tip--src" });
   };

@@ -103,7 +103,8 @@ python3 pipeline/sheet_sync.py rebuild
 
 | path | what |
 |---|---|
-| `config/external/sheet_schedule.json` | stage/week/day → estimated date, with sources |
+| `pipeline/external_sheet/lp_dates.py` | a played series takes the day Liquipedia lists it on (same event, same pair, same score; `dc: "liquipedia"`); shared with `schedule_build.py` so Matches agrees |
+| `config/external/sheet_schedule.json` | stage/week/day → estimated date, with sources, for series Liquipedia does not date |
 | `config/tier_weights.json` | every weight and threshold above |
 | `pipeline/external_sheet/tiers.py` | builds `assets/data/sheet_tiers.v1.js` (part of every sheet export; `sheet_sync.py check` gates drift) |
 | `assets/js/app/tierstats.js` | the maths (pure; browser + Node) |

@@ -1,5 +1,29 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
+## UPDATE (2026-11-05, twenty-fourth pass) — played series dated by Liquipedia
+
+**Symptom.** Recent big matches were missing from the 24/48/72-hour and 14-day views even though
+they were imported. Every played series was in the data; their **dates** were wrong:
+* Pacific Stage 3 (Day 1, Nov 4) had **no date** (no published days in `sheet_schedule.json`), so it
+  fell out of every window;
+* China Stage 3's Nov 1 cards carry a copied label ("Week 4 | Day 2") and were dated **Oct 25**;
+* Korea Stage 1 weeks 2–4 were estimated a week early.
+
+**Cause.** `liquipedia_schedule.py` cannot read a "finished" flag (it is `false` on all 622 rows), and
+`merge_liquipedia` only joined a Liquipedia match onto a *played* sheet series when it was finished. So
+Liquipedia's exact days never reached played series, and the Tiers/Home export never read Liquipedia.
+
+**Fix.** `pipeline/external_sheet/lp_dates.py`: a played series takes Liquipedia's day when event, pair
+(alias book, card codes like "jdg", or a unique name match within the event) and **score** agree; a
+Liquipedia score counts as played when decisive for its Bo (no Bo given: a winner with ≥2 maps).
+Used by `tiers.py` (`dc: "liquipedia"`) and `schedule_build.py` (`dateFrom: "liquipedia"`, plus
+streams/wiki) — 538 of 582 series, the two exports agree on every date. `liquipedia.yml` now runs
+`sheet_sync.py rebuild` + `check` and commits `sheet_tiers.v1.js`; `sheet-sync.yml` rebuilds tiers
+after its rebase. Tests: `test_schedule.py` → "played series take Liquipedia's day".
+
+**Also.** GitHub dropped the 13:41 and 18:41 UTC scheduled sheet-sync runs on Nov 5, leaving Pacific
+Day 2 out for ~12 h; it was dispatched by hand. If the site looks behind, dispatch `sheet-sync`.
+
 ## UPDATE (2026-11-04, twenty-third pass) — Matches: upcoming, schedule, brackets
 
 `series.html` (Matches) is now four tabs (`?view=`): **Upcoming · Schedule · Brackets · Results**.

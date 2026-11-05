@@ -777,7 +777,7 @@
     ["vsothers", "Vs others", "A comp's record against different comps only; mirror matches (same comp on both sides) are left out."],
     ["upset", "Upset / underdog", "A win where the model gave the winner under a 40% chance beforehand, from both teams' strength just before the map."],
     ["power", "Team power", "An Elo-style rating for every team, seeded by region and updated after every map. It is what \"expected\" and \"underdog\" are measured against."],
-    ["dates", "est. dates", "The match spreadsheet has no dates, so each match is dated from the official schedule by its stage, week and day. Some are estimates."],
+    ["dates", "est. dates", "The match spreadsheet has no dates. A played match takes the day Liquipedia lists it on (same teams, same score); the rest are dated from the official schedule by their stage, week and day, and some of those are estimates."],
     ["source", "Pro data", "Results, line-ups and bans from every OWCS 2026 series in the community match spreadsheet, plus broadcast VODs where the tracker read them."],
   ];
   P.GLOSSARY = GLOSSARY;

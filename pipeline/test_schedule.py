@@ -263,6 +263,83 @@ def test_merge_real_pages() -> None:
     check("…and the run says how many it could not place", lpm_meta["unjoined"] >= 2 and lpm_meta["added"] == 0)
 
 
+def test_played_dates() -> None:
+    """The day a PLAYED sheet series was played comes from Liquipedia when
+    the pair and the score agree (external_sheet/lp_dates.py)."""
+    print("played series take Liquipedia's day:")
+    from external_sheet.lp_dates import lp_played, series_dates
+    check("a Bo5 at 2-1 is not played yet; 3-1 is", not lp_played({"scoreA": 2, "scoreB": 1, "bestOf": 5})
+          and lp_played({"scoreA": 3, "scoreB": 1, "bestOf": 5}))
+    check("no format: a winner with two maps counts, 0-0 and 1-0 do not",
+          lp_played({"scoreA": 0, "scoreB": 3}) and not lp_played({"scoreA": 0, "scoreB": 0})
+          and not lp_played({"scoreA": 1, "scoreB": 0}))
+    lp = {"matches": [
+        {"event": "china/stage-3", "teamA": "All Gamers", "teamB": "Solus Victorem", "scoreA": 3, "scoreB": 0,
+         "startsAt": "2026-11-01T17:00:00+08:00"},
+        {"event": "china/stage-3", "teamA": "Weibo Gaming", "teamB": "jdg", "scoreA": 3, "scoreB": 0,
+         "startsAt": "2026-10-25T18:30:00+08:00"},
+        {"event": "china/stage-3", "teamA": "Weibo Gaming", "teamB": "jdg", "scoreA": 3, "scoreB": 0,
+         "startsAt": "2026-11-01T18:30:00+08:00"},
+        {"event": "na/stage-3", "teamA": "Dallas Fuel", "teamB": "Team Liquid", "scoreA": 4, "scoreB": 0,
+         "startsAt": "2026-11-01T18:00:00-05:00"},
+        {"event": "na/stage-3", "teamA": "Team Liquid", "teamB": "SSG", "scoreA": 3, "scoreB": 1,
+         "startsAt": "2026-10-31T18:00:00-05:00"},
+    ]}
+    codes = {"JDG": "jd-gaming", "SSG": "ssg"}
+    series = [
+        # the editors' copied label: 'Week 4 | Day 2' for a Nov 1 series
+        {"id": "s1", "event": "china/stage-3", "teamA": "x-all-gamers", "teamB": "x-solus-victorem-crush",
+         "scoreA": 3, "scoreB": 0, "order": (4, 2, 1)},
+        {"id": "s2", "event": "china/stage-3", "teamA": "weibo-gaming", "teamB": "jd-gaming",
+         "scoreA": 3, "scoreB": 0, "order": (4, 2, 2)},
+        {"id": "s3", "event": "china/stage-3", "teamA": "jd-gaming", "teamB": "weibo-gaming",
+         "scoreA": 0, "scoreB": 3, "order": (5, 2, 2)},
+        {"id": "s4", "event": "na/stage-3", "teamA": "team-liquid", "teamB": "dallas-fuel",
+         "scoreA": 0, "scoreB": 4, "order": (4, 3, 2)},
+        # same pair, different score: not this series
+        {"id": "s5", "event": "na/stage-3", "teamA": "team-liquid", "teamB": "ssg",
+         "scoreA": 3, "scoreB": 0, "order": (4, 3, 1)},
+    ]
+    resolve = {"Dallas Fuel": "dallas-fuel", "Team Liquid": "team-liquid",
+               "Weibo Gaming": "weibo-gaming", "All Gamers": "x-all-gamers"}
+    got, used = series_dates(series, lp, lambda n: codes.get(n.upper()) or resolve.get(n))
+    check("a name Liquipedia shortens ('Solus Victorem') still finds the event's team",
+          got.get("s1", {}).get("date") == "2026-11-01")
+    check("two series of one pair and score pair up in order, sides swapped or not",
+          got.get("s2", {}).get("date") == "2026-10-25" and got.get("s3", {}).get("date") == "2026-11-01")
+    check("the day is the local day of the start time", got.get("s4", {}).get("date") == "2026-11-01")
+    check("a different score never lends its date", "s5" not in got and 4 not in used)
+    open_lp = {"matches": [
+        {"event": "pacific/stage-3", "teamA": "Gatos", "teamB": "Benxxn", "scoreA": None, "scoreB": None,
+         "startsAt": "2026-11-05T18:00:00+07:00"},
+        {"event": "pacific/stage-3", "teamA": "Gatos", "teamB": "Benxxn", "scoreA": None, "scoreB": None,
+         "startsAt": "2026-11-12T18:00:00+07:00"}]}
+    open_lp["matches"].append({"event": "pacific/stage-3", "teamA": "Seiji", "teamB": "Benxxn", "scoreA": 3,
+                               "scoreB": 0, "startsAt": "2026-11-04T21:00:00+07:00"})
+    pac = [{"id": "p0", "event": "pacific/stage-3", "teamA": "s", "teamB": "b", "scoreA": 3, "scoreB": 0,
+            "order": (1, 1, 3)},
+           {"id": "p1", "event": "pacific/stage-3", "teamA": "g", "teamB": "b", "scoreA": 3, "scoreB": 0,
+            "order": (1, 2, 1)}]
+    res = {"Gatos": "g", "Benxxn": "b", "Seiji": "s"}.get
+    check("a result the sheet has before Liquipedia does takes the pair's first open slot",
+          series_dates(pac, open_lp, res, "2026-11-05T18:55:00+00:00")[0].get("p1", {}).get("date") == "2026-11-05")
+    check("…never one after the import, and none without an import time",
+          "p1" not in series_dates(pac, open_lp, res, "2026-11-01T00:00:00+00:00")[0]
+          and "p1" not in series_dates(pac, open_lp, res)[0])
+    check("…nor without an earlier series of the stage already dated",
+          series_dates(pac[1:], open_lp, res, "2026-11-05T18:55:00+00:00")[0] == {})
+    check("another event's series is never used", series_dates(
+        [dict(series[3], event="emea/stage-3")], lp, lambda n: resolve.get(n))[0] == {})
+
+    doc = load_export()
+    cn = {m["id"]: m for m in doc["matches"] if m["event"] == "china/stage-3" and m["state"] == "done"}
+    if any(m.get("dateFrom") == "liquipedia" for m in cn.values()):
+        late = [m for m in cn.values() if m.get("label") == "Week 4 | Day 2 | Game 1"
+                and {m["teamA"], m["teamB"]} == {"x-all-gamers", "x-solus-victorem-crush"}]
+        check("the real export: China's copied-label series sits on Nov 1, not Oct 25",
+              late and late[0]["date"] == "2026-11-01")
+
+
 def test_reproducible() -> None:
     print("reproducibility:")
     with open(SB.OUT, encoding="utf-8") as f:
@@ -276,6 +353,7 @@ def main() -> int:
     test_liquipedia_parser()
     test_merge()
     test_merge_real_pages()
+    test_played_dates()
     test_reproducible()
     print(f"\n{'OK' if not FAILS else str(FAILS) + ' FAILED'}")
     return 1 if FAILS else 0

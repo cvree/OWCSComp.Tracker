@@ -418,8 +418,13 @@ def build(now: dt.datetime | None = None) -> dict:
     # of a slot on another day.
     assign_dates(matches, events, cfg, sched)
 
+    # Played series: the day (and time) Liquipedia lists them on — same
+    # event, same pair, same score (external_sheet/lp_dates.py, shared with
+    # the Tiers export so both pages put a series on the same day).
+    lp_used = date_played(lp, matches, teams, (series_doc.get("meta") or {}).get("importedAt")) if lp else set()
+
     # Liquipedia: times, teams, streams; new matches for events with no cards.
-    lp_meta = merge_liquipedia(lp, matches, events, teams) if lp else None
+    lp_meta = merge_liquipedia(lp, matches, events, teams, skip=lp_used) if lp else None
 
     # Hand overrides.
     apply_overrides(cfg.get("matches") or [], matches, events, teams)
@@ -627,7 +632,36 @@ def lp_day(x: dict) -> str | None:
     return x.get("date") or (local_date(x["startsAt"]) if x.get("startsAt") else None)
 
 
-def merge_liquipedia(lp: dict, matches: list[dict], events: dict, teams: Teams) -> dict:
+def date_played(lp: dict, matches: list[dict], teams: Teams, imported_at: str | None = None) -> set:
+    """Give the sheet's played series Liquipedia's start time; returns the
+    Liquipedia matches used, which merge_liquipedia then leaves alone."""
+    from external_sheet.lp_dates import series_dates
+
+    def resolve(name):
+        return teams.resolve(name)[0]
+    rows = [{"id": m["id"], "event": m["event"], "teamA": m["teamA"], "teamB": m["teamB"],
+             "scoreA": m["scoreA"], "scoreB": m["scoreB"],
+             "order": (m.get("week") or 0, m.get("day") or 0, m.get("game") or 0)}
+            for m in matches if m["source"] == "sheet" and m["state"] == "done" and m.get("series")]
+    found, used = series_dates(rows, lp, resolve, imported_at)
+    for m in matches:
+        hit = found.get(m["id"])
+        if not hit:
+            continue
+        if hit["startsAt"]:
+            m["startsAt"], m["dateFrom"] = hit["startsAt"], "liquipedia"
+            m["date"] = local_date(hit["startsAt"])
+        else:
+            m["date"], m["dateFrom"] = hit["date"], "liquipedia-day"
+        if hit.get("streams"):
+            m["streams"] = hit["streams"]
+        if hit.get("url"):
+            m["wiki"] = hit["url"]
+    return used
+
+
+def merge_liquipedia(lp: dict, matches: list[dict], events: dict, teams: Teams,
+                     skip: set | None = None) -> dict:
     """Join Liquipedia's matches onto the sheet's.
 
     In an event the sheet has cards for, Liquipedia only fills them in — it
@@ -641,11 +675,17 @@ def merge_liquipedia(lp: dict, matches: list[dict], events: dict, teams: Teams) 
     used = set()
     added = 0
     joined = 0
+    used_lp = 0
     dropped = 0
     by_event: dict[str, list[dict]] = {}
     for m in matches:
         by_event.setdefault(m["event"], []).append(m)
-    for x in sorted(lp.get("matches") or [], key=lambda x: (x.get("startsAt") or "9999", x.get("order") or 0)):
+    skip = skip or set()
+    for i, x in sorted(enumerate(lp.get("matches") or []),
+                       key=lambda ix: (ix[1].get("startsAt") or "9999", ix[1].get("order") or 0)):
+        if i in skip:
+            used_lp += 1
+            continue
         key = x.get("event")
         if not key:
             continue
@@ -728,7 +768,8 @@ def merge_liquipedia(lp: dict, matches: list[dict], events: dict, teams: Teams) 
         matches.append(m)
         by_event.setdefault(key, []).append(m)
     return {"fetchedAt": lp.get("fetchedAt"), "pages": len(lp.get("pages") or []),
-            "matches": len(lp.get("matches") or []), "joined": joined, "added": added,
+            "matches": len(lp.get("matches") or []), "joined": joined, "datedPlayed": used_lp,
+            "added": added,
             "unjoined": dropped}
 
 

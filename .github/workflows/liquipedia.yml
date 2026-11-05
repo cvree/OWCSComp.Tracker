@@ -63,6 +63,9 @@ jobs:
           set -euo pipefail
           python pipeline/liquipedia_schedule.py
           python pipeline/schedule_build.py
+          # The Home / Tiers export dates played series by Liquipedia's days too.
+          python pipeline/sheet_sync.py rebuild
+          python pipeline/sheet_sync.py check
           python pipeline/test_schedule.py
 
       # A red test means nothing is committed, and the runner (which holds
@@ -100,18 +103,19 @@ jobs:
         if: github.event.inputs.dry_run != 'true'
         run: |
           set -euo pipefail
-          if [ -z "$(git status --porcelain data/external/liquipedia assets/data/schedule.v1.js)" ]; then
+          if [ -z "$(git status --porcelain data/external/liquipedia assets/data/schedule.v1.js assets/data/sheet_tiers.v1.js)" ]; then
             echo "Schedule unchanged."; echo "committed=false" >> "$GITHUB_OUTPUT"; exit 0
           fi
           git config user.name  "owcs-schedule[bot]"
           git config user.email "actions@users.noreply.github.com"
-          git add data/external/liquipedia assets/data/schedule.v1.js
+          git add data/external/liquipedia assets/data/schedule.v1.js assets/data/sheet_tiers.v1.js
           git commit -m "schedule: Liquipedia start times ($(date -u +'%Y-%m-%d %H:%M') UTC)"
           pushed=false
           for attempt in 1 2 3; do
             git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
             python pipeline/schedule_build.py
-            git add assets/data/schedule.v1.js
+            python pipeline/sheet_sync.py rebuild
+            git add assets/data/schedule.v1.js assets/data/sheet_tiers.v1.js
             git diff --cached --quiet || git commit -m "schedule: rebuild after rebase"
             if git push origin "HEAD:${GITHUB_REF_NAME}"; then pushed=true; break; fi
             sleep $((attempt * 5))

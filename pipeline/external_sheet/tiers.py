@@ -6,11 +6,12 @@ tiers.py — the compact input of the Tiers page (tiers.html).
 One row per spreadsheet series and one per map, holding only what the
 tier maths needs:
 
-  * an ESTIMATED calendar date per series, from the sheet's own position
-    (region + stage + Week N | Day N) and config/external/sheet_schedule.json.
-    The sheet has no dates; these are published with method
-    'schedule-estimate' and the page labels them "estimated". They are
-    never written back into the imported records.
+  * a calendar date per series. The sheet has none: a played series takes
+    the day Liquipedia lists it on (same event, same two teams, same score;
+    lp_dates.py, confidence 'liquipedia'), else an ESTIMATE from the sheet's
+    own position (region + stage + Week N | Day N) and
+    config/external/sheet_schedule.json. Never written back into the
+    imported records.
   * the event key and bracket round (the card's format text), which set a
     map's importance;
   * per side: order-weighted hero shares (a player's 1st-listed hero counts
@@ -24,8 +25,8 @@ tier maths needs:
 config/tier_weights.json is copied in whole so the browser computes power
 ratings, win value and tiers for any as-of date and range
 (assets/js/app/tierstats.js). Pure function of the payload + details +
-the two configs; `sheet_sync.py check` fails on drift like every other
-export file.
+the two configs + the committed Liquipedia file; `sheet_sync.py check`
+fails on drift like every other export file.
 """
 from __future__ import annotations
 
@@ -34,6 +35,7 @@ import json
 import os
 from collections import Counter, defaultdict
 
+from .lp_dates import read_liquipedia, series_dates
 from .summary import _disputed, series_key
 
 TIERS_SCHEMA = "sheet-tiers.v1"
@@ -126,7 +128,8 @@ def first_comp(team_detail: dict) -> list | None:
     return None
 
 
-def build_tiers(payload: dict, details: dict, schedule: dict, weights: dict) -> dict:
+def build_tiers(payload: dict, details: dict, schedule: dict, weights: dict,
+                lp: dict | None = None, resolve=None) -> dict:
     detail = {}
     for maps in (details or {}).values():
         detail.update(maps)
@@ -135,12 +138,21 @@ def build_tiers(payload: dict, details: dict, schedule: dict, weights: dict) -> 
     list_weights = weights.get("listWeights") or {}
 
     matches = sorted(payload.get("matches") or [], key=series_key)
+    played = [{"id": m["id"], "event": schedule_key(m), "teamA": m.get("teamA"), "teamB": m.get("teamB"),
+               "scoreA": m.get("seriesScoreA"), "scoreB": m.get("seriesScoreB"),
+               "order": (m.get("week") or 0, m.get("day") or 0, m.get("game") or 0)}
+              for m in matches]
+    known_days, _ = series_dates(played, lp, resolve,
+                                 imported_at=(payload.get("snapshot") or {}).get("importedAt"))
     idx = {}
     m_rows = []
     home = defaultdict(Counter)
     conf_count = Counter()
     for m in matches:
-        date, conf = estimate_date(m, schedule)
+        if m["id"] in known_days:
+            date, conf = known_days[m["id"]]["date"], "liquipedia"
+        else:
+            date, conf = estimate_date(m, schedule)
         conf_count[conf or "none"] += 1
         idx[m["id"]] = len(m_rows)
         m_rows.append({"id": m["id"], "d": date, "dc": conf, "r": m.get("region"),
@@ -187,7 +199,7 @@ def build_tiers(payload: dict, details: dict, schedule: dict, weights: dict) -> 
     return {
         "schema": TIERS_SCHEMA,
         "snapshot": ((payload.get("snapshot") or {}).get("sha256") or None),
-        "dates": {"method": "schedule-estimate", "min": min(dates) if dates else None,
+        "dates": {"method": "liquipedia-or-schedule-estimate", "min": min(dates) if dates else None,
                   "max": max(dates) if dates else None, "confidence": dict(sorted(conf_count.items())),
                   "stages": stages_meta},
         "counts": {"series": len(m_rows), "maps": len(map_rows), "disputedWinners": disputed},
