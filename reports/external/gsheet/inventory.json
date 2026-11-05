@@ -1,16 +1,16 @@
 {
  "aliasesVersion": 3,
  "counts": {
-  "appearances": 34560,
-  "bans": 4171,
-  "compositions": 8072,
+  "appearances": 34722,
+  "bans": 4189,
+  "compositions": 8111,
   "duplicateConflicts": 0,
   "duplicates": 0,
   "ignoredRows": 0,
-  "maps": 2119,
-  "matches": 582,
+  "maps": 2130,
+  "matches": 585,
   "tournaments": 10,
-  "unmappedValues": 437
+  "unmappedValues": 441
  },
  "credits": [
   {
@@ -136,91 +136,91 @@
   "heroPictures": 54,
   "incomplete": 4,
   "pictureSuggestions": [],
-  "played": 582,
+  "played": 585,
   "rolePictures": 6,
-  "scheduled": 42,
+  "scheduled": 39,
   "year": 2026,
   "yearCell": "Landing Page!B1"
  },
  "package": {
-  "bytes": 56616035,
+  "bytes": 56618951,
   "largestMembers": [
    {
-    "bytes": 4047648,
+    "bytes": 4047504,
     "path": "xl/worksheets/sheet7.xml"
    },
    {
-    "bytes": 4035289,
+    "bytes": 4035237,
     "path": "xl/worksheets/sheet8.xml"
    },
    {
-    "bytes": 3995411,
+    "bytes": 3995326,
     "path": "xl/worksheets/sheet6.xml"
    },
    {
-    "bytes": 3401501,
+    "bytes": 3401075,
     "path": "xl/drawings/drawing7.xml"
    },
    {
-    "bytes": 3229306,
+    "bytes": 3228727,
     "path": "xl/drawings/drawing6.xml"
    },
    {
-    "bytes": 2885787,
+    "bytes": 2885557,
     "path": "xl/drawings/drawing8.xml"
    },
    {
-    "bytes": 2866820,
+    "bytes": 2866796,
     "path": "xl/worksheets/sheet11.xml"
    },
    {
-    "bytes": 2790145,
+    "bytes": 2789987,
     "path": "xl/worksheets/sheet9.xml"
    }
   ],
   "mediaBytes": 49039605,
   "mediaFiles": 234,
   "members": 404,
-  "uncompressedBytes": 143416315,
+  "uncompressedBytes": 143563737,
   "worksheetXml": [
    {
-    "bytes": 4047648,
+    "bytes": 4047504,
     "path": "xl/worksheets/sheet7.xml"
    },
    {
-    "bytes": 4035289,
+    "bytes": 4035237,
     "path": "xl/worksheets/sheet8.xml"
    },
    {
-    "bytes": 3995411,
+    "bytes": 3995326,
     "path": "xl/worksheets/sheet6.xml"
    },
    {
-    "bytes": 2866820,
+    "bytes": 2866796,
     "path": "xl/worksheets/sheet11.xml"
    },
    {
-    "bytes": 2790145,
+    "bytes": 2789987,
     "path": "xl/worksheets/sheet9.xml"
    },
    {
-    "bytes": 2764469,
+    "bytes": 2764794,
     "path": "xl/worksheets/sheet10.xml"
    },
    {
-    "bytes": 2509828,
+    "bytes": 2509928,
     "path": "xl/worksheets/sheet5.xml"
    },
    {
-    "bytes": 2483461,
+    "bytes": 2483490,
     "path": "xl/worksheets/sheet3.xml"
    },
    {
-    "bytes": 2471109,
+    "bytes": 2471103,
     "path": "xl/worksheets/sheet4.xml"
    },
    {
-    "bytes": 2173164,
+    "bytes": 2173158,
     "path": "xl/worksheets/sheet25.xml"
    },
    {
@@ -228,43 +228,43 @@
     "path": "xl/worksheets/sheet26.xml"
    },
    {
-    "bytes": 1651429,
+    "bytes": 1651490,
     "path": "xl/worksheets/sheet14.xml"
    },
    {
-    "bytes": 1649716,
+    "bytes": 1649682,
     "path": "xl/worksheets/sheet17.xml"
    },
    {
-    "bytes": 1648246,
+    "bytes": 1648216,
     "path": "xl/worksheets/sheet16.xml"
    },
    {
-    "bytes": 1632392,
+    "bytes": 1632318,
     "path": "xl/worksheets/sheet15.xml"
    },
    {
-    "bytes": 1630352,
+    "bytes": 1630288,
     "path": "xl/worksheets/sheet13.xml"
    },
    {
-    "bytes": 1625966,
+    "bytes": 1625991,
     "path": "xl/worksheets/sheet12.xml"
    },
    {
-    "bytes": 1493925,
+    "bytes": 1493887,
     "path": "xl/worksheets/sheet20.xml"
    },
    {
-    "bytes": 1477547,
+    "bytes": 1477503,
     "path": "xl/worksheets/sheet19.xml"
    },
    {
-    "bytes": 1425444,
+    "bytes": 1431754,
     "path": "xl/worksheets/sheet21.xml"
    },
    {
-    "bytes": 1393801,
+    "bytes": 1393806,
     "path": "xl/worksheets/sheet22.xml"
    },
    {
@@ -272,63 +272,63 @@
     "path": "xl/worksheets/sheet23.xml"
    },
    {
-    "bytes": 1077691,
+    "bytes": 1077650,
     "path": "xl/worksheets/sheet24.xml"
    },
    {
-    "bytes": 851353,
+    "bytes": 851408,
     "path": "xl/worksheets/sheet2.xml"
    },
    {
-    "bytes": 721591,
+    "bytes": 721647,
     "path": "xl/worksheets/sheet39.xml"
    },
    {
-    "bytes": 502426,
+    "bytes": 502435,
     "path": "xl/worksheets/sheet38.xml"
    },
    {
-    "bytes": 178894,
+    "bytes": 178898,
     "path": "xl/worksheets/sheet37.xml"
    },
    {
-    "bytes": 168164,
+    "bytes": 168154,
     "path": "xl/worksheets/sheet27.xml"
    },
    {
-    "bytes": 154116,
+    "bytes": 154107,
     "path": "xl/worksheets/sheet29.xml"
    },
    {
-    "bytes": 134811,
+    "bytes": 134803,
     "path": "xl/worksheets/sheet28.xml"
    },
    {
-    "bytes": 108234,
+    "bytes": 108083,
     "path": "xl/worksheets/sheet30.xml"
    },
    {
-    "bytes": 96026,
+    "bytes": 95912,
     "path": "xl/worksheets/sheet32.xml"
    },
    {
-    "bytes": 92994,
+    "bytes": 92868,
     "path": "xl/worksheets/sheet31.xml"
    },
    {
-    "bytes": 71145,
+    "bytes": 71086,
     "path": "xl/worksheets/sheet34.xml"
    },
    {
-    "bytes": 63223,
+    "bytes": 63154,
     "path": "xl/worksheets/sheet41.xml"
    },
    {
-    "bytes": 54024,
+    "bytes": 53981,
     "path": "xl/worksheets/sheet33.xml"
    },
    {
-    "bytes": 27110,
+    "bytes": 27057,
     "path": "xl/worksheets/sheet35.xml"
    },
    {
@@ -340,7 +340,7 @@
     "path": "xl/worksheets/sheet1.xml"
    },
    {
-    "bytes": 15894,
+    "bytes": 15837,
     "path": "xl/worksheets/sheet36.xml"
    }
   ]
@@ -712,7 +712,7 @@
   "tab": "Self-Check",
   "unpaired": 0
  },
- "sourceRowCount": 9562,
+ "sourceRowCount": 9574,
  "tabCount": 41,
  "tabs": [
   {
@@ -1345,29 +1345,29 @@
     "failed": 0,
     "forfeited": 0,
     "incomplete": 4,
-    "played": 3,
-    "scheduled": 12
+    "played": 6,
+    "scheduled": 9
    },
    "columns": 96,
-   "dataRows": 3,
+   "dataRows": 6,
    "headerRow": null,
    "ignoredCount": 0,
    "ignoredRows": [],
-   "images": 730,
+   "images": 999,
    "index": 20,
    "mappedColumns": [],
    "name": "Pacific - Stage 3",
    "parsed": {
-    "appearances": 173,
-    "bans": 22,
-    "compositions": 42,
+    "appearances": 335,
+    "bans": 40,
+    "compositions": 81,
     "duplicates": 0,
-    "maps": 11,
-    "matches": 3
+    "maps": 22,
+    "matches": 6
    },
    "purpose": "match_cards",
    "purposeLabel": "Match cards — one fixed-size card per series, heroes shown as pictures",
-   "rows": 184,
+   "rows": 196,
    "state": "visible",
    "unmappedColumns": []
   },
@@ -1886,6 +1886,13 @@
  ],
  "unmapped": {
   "hero": [
+   {
+    "count": 1,
+    "raw": "Junkerqueem",
+    "refs": [
+     "Pacific - Stage 3!U95"
+    ]
+   },
    {
     "count": 1,
     "raw": "picture:4451f92648",
@@ -3293,6 +3300,17 @@
     ]
    },
    {
+    "count": 62,
+    "raw": "sgy",
+    "refs": [
+     "Pacific - Stage 1!R51",
+     "Pacific - Stage 1!AI51",
+     "Pacific - Stage 1!AZ51",
+     "Pacific - Stage 1!R103",
+     "Pacific - Stage 1!AI103"
+    ]
+   },
+   {
     "count": 61,
     "raw": "ALTHOUGH",
     "refs": [
@@ -3327,6 +3345,17 @@
    },
    {
     "count": 60,
+    "raw": "FEI",
+    "refs": [
+     "Pacific - Stage 1!AB25",
+     "Pacific - Stage 1!AS25",
+     "Pacific - Stage 1!BJ25",
+     "Pacific - Stage 1!AB155",
+     "Pacific - Stage 1!AS155"
+    ]
+   },
+   {
+    "count": 60,
     "raw": "Guxue",
     "refs": [
      "Pre-Season Bootcamp!V133",
@@ -3348,6 +3377,28 @@
     ]
    },
    {
+    "count": 60,
+    "raw": "Zephyr",
+    "refs": [
+     "Pacific - Stage 1!R25",
+     "Pacific - Stage 1!AI25",
+     "Pacific - Stage 1!AZ25",
+     "Pacific - Stage 1!R155",
+     "Pacific - Stage 1!AI155"
+    ]
+   },
+   {
+    "count": 59,
+    "raw": "Colourhex",
+    "refs": [
+     "Pacific - Stage 1!O51",
+     "Pacific - Stage 1!AF51",
+     "Pacific - Stage 1!AW51",
+     "Pacific - Stage 1!O103",
+     "Pacific - Stage 1!AF103"
+    ]
+   },
+   {
     "count": 59,
     "raw": "homerunball",
     "refs": [
@@ -3356,6 +3407,17 @@
      "Japan - Stage 1!BD3",
      "Japan - Stage 1!BU3",
      "Japan - Stage 1!V107"
+    ]
+   },
+   {
+    "count": 59,
+    "raw": "PaLee",
+    "refs": [
+     "Pacific - Stage 1!Y3",
+     "Pacific - Stage 1!AP3",
+     "Pacific - Stage 1!BG3",
+     "Pacific - Stage 1!Y107",
+     "Pacific - Stage 1!AP107"
     ]
    },
    {
@@ -3381,14 +3443,14 @@
     ]
    },
    {
-    "count": 59,
-    "raw": "sgy",
+    "count": 58,
+    "raw": "brysonbtw",
     "refs": [
-     "Pacific - Stage 1!R51",
-     "Pacific - Stage 1!AI51",
-     "Pacific - Stage 1!AZ51",
-     "Pacific - Stage 1!R103",
-     "Pacific - Stage 1!AI103"
+     "Pacific - Stage 1!O25",
+     "Pacific - Stage 1!AF25",
+     "Pacific - Stage 1!AW25",
+     "Pacific - Stage 1!O155",
+     "Pacific - Stage 1!AF155"
     ]
    },
    {
@@ -3415,17 +3477,6 @@
    },
    {
     "count": 57,
-    "raw": "FEI",
-    "refs": [
-     "Pacific - Stage 1!AB25",
-     "Pacific - Stage 1!AS25",
-     "Pacific - Stage 1!BJ25",
-     "Pacific - Stage 1!AB155",
-     "Pacific - Stage 1!AS155"
-    ]
-   },
-   {
-    "count": 57,
     "raw": "Gur3um",
     "refs": [
      "Korea - Stage 1!V25",
@@ -3433,17 +3484,6 @@
      "Korea - Stage 1!BD25",
      "Korea - Stage 1!V159",
      "Korea - Stage 1!AM159"
-    ]
-   },
-   {
-    "count": 57,
-    "raw": "Zephyr",
-    "refs": [
-     "Pacific - Stage 1!R25",
-     "Pacific - Stage 1!AI25",
-     "Pacific - Stage 1!AZ25",
-     "Pacific - Stage 1!R155",
-     "Pacific - Stage 1!AI155"
     ]
    },
    {
@@ -3459,17 +3499,6 @@
    },
    {
     "count": 56,
-    "raw": "brysonbtw",
-    "refs": [
-     "Pacific - Stage 1!O25",
-     "Pacific - Stage 1!AF25",
-     "Pacific - Stage 1!AW25",
-     "Pacific - Stage 1!O155",
-     "Pacific - Stage 1!AF155"
-    ]
-   },
-   {
-    "count": 56,
     "raw": "CARU",
     "refs": [
      "Korea - Stage 1!Y25",
@@ -3477,28 +3506,6 @@
      "Korea - Stage 1!BG25",
      "Korea - Stage 1!Y159",
      "Korea - Stage 1!AP159"
-    ]
-   },
-   {
-    "count": 56,
-    "raw": "Colourhex",
-    "refs": [
-     "Pacific - Stage 1!O51",
-     "Pacific - Stage 1!AF51",
-     "Pacific - Stage 1!AW51",
-     "Pacific - Stage 1!O103",
-     "Pacific - Stage 1!AF103"
-    ]
-   },
-   {
-    "count": 56,
-    "raw": "PaLee",
-    "refs": [
-     "Pacific - Stage 1!Y3",
-     "Pacific - Stage 1!AP3",
-     "Pacific - Stage 1!BG3",
-     "Pacific - Stage 1!Y107",
-     "Pacific - Stage 1!AP107"
     ]
    },
    {
@@ -3733,6 +3740,17 @@
     ]
    },
    {
+    "count": 47,
+    "raw": "Regr3t",
+    "refs": [
+     "Pacific - Stage 1!R55",
+     "Pacific - Stage 1!AI55",
+     "Pacific - Stage 1!AZ55",
+     "Pacific - Stage 1!BQ55",
+     "Pacific - Stage 1!R81"
+    ]
+   },
+   {
     "count": 46,
     "raw": "Fate",
     "refs": [
@@ -3755,7 +3773,7 @@
     ]
    },
    {
-    "count": 44,
+    "count": 45,
     "raw": "Despair",
     "refs": [
      "Pacific - Stage 1!V25",
@@ -3789,13 +3807,24 @@
    },
    {
     "count": 44,
-    "raw": "Regr3t",
+    "raw": "Setsuna",
     "refs": [
-     "Pacific - Stage 1!R55",
-     "Pacific - Stage 1!AI55",
-     "Pacific - Stage 1!AZ55",
-     "Pacific - Stage 1!BQ55",
-     "Pacific - Stage 1!R81"
+     "Japan - Stage 1!O81",
+     "Japan - Stage 1!AF81",
+     "Japan - Stage 1!AW81",
+     "Japan - Stage 1!O181",
+     "Japan - Stage 1!AF181"
+    ]
+   },
+   {
+    "count": 43,
+    "raw": "jamorant",
+    "refs": [
+     "Pacific - Stage 1!V133",
+     "Pacific - Stage 1!AM133",
+     "Pacific - Stage 1!AM233",
+     "Pacific - Stage 1!BD233",
+     "Pacific - Stage 1!BU233"
     ]
    },
    {
@@ -3854,17 +3883,6 @@
     ]
    },
    {
-    "count": 41,
-    "raw": "Setsuna",
-    "refs": [
-     "Japan - Stage 1!O81",
-     "Japan - Stage 1!AF81",
-     "Japan - Stage 1!AW81",
-     "Japan - Stage 1!O181",
-     "Japan - Stage 1!AF181"
-    ]
-   },
-   {
     "count": 40,
     "raw": "Lep",
     "refs": [
@@ -3888,17 +3906,6 @@
    },
    {
     "count": 39,
-    "raw": "jamorant",
-    "refs": [
-     "Pacific - Stage 1!V133",
-     "Pacific - Stage 1!AM133",
-     "Pacific - Stage 1!AM233",
-     "Pacific - Stage 1!BD233",
-     "Pacific - Stage 1!BU233"
-    ]
-   },
-   {
-    "count": 39,
     "raw": "SWOO",
     "refs": [
      "Korea - Stage 3!BD233",
@@ -3906,6 +3913,17 @@
      "Korea - Stage 3!BD445",
      "Korea - Stage 3!AM675",
      "China - Stage 2!V25"
+    ]
+   },
+   {
+    "count": 39,
+    "raw": "TKL",
+    "refs": [
+     "Pacific - Stage 1!O77",
+     "Pacific - Stage 1!AF77",
+     "Pacific - Stage 1!AW77",
+     "Pacific - Stage 1!BN77",
+     "Pacific - Stage 1!O133"
     ]
    },
    {
@@ -3987,17 +4005,6 @@
    },
    {
     "count": 37,
-    "raw": "TKL",
-    "refs": [
-     "Pacific - Stage 1!O77",
-     "Pacific - Stage 1!AF77",
-     "Pacific - Stage 1!AW77",
-     "Pacific - Stage 1!BN77",
-     "Pacific - Stage 1!O133"
-    ]
-   },
-   {
-    "count": 37,
     "raw": "Trest",
     "refs": [
      "Korea - Stage 3!Y3",
@@ -4053,6 +4060,17 @@
    },
    {
     "count": 36,
+    "raw": "Sp1nel",
+    "refs": [
+     "Korea - Stage 1!AS25",
+     "Korea - Stage 1!AS705",
+     "Korea - Stage 2!AB81",
+     "Korea - Stage 2!AS81",
+     "Korea - Stage 2!BJ81"
+    ]
+   },
+   {
+    "count": 36,
     "raw": "Vosa1q",
     "refs": [
      "Japan - Stage 1!V237",
@@ -4082,6 +4100,17 @@
      "China - Stage 1!BJ103",
      "China - Stage 1!CA103",
      "China - Stage 1!Y155"
+    ]
+   },
+   {
+    "count": 35,
+    "raw": "Huntin",
+    "refs": [
+     "Pacific - Stage 1!Y77",
+     "Pacific - Stage 1!AP77",
+     "Pacific - Stage 1!BG77",
+     "Pacific - Stage 1!BX77",
+     "Pacific - Stage 1!Y133"
     ]
    },
    {
@@ -4360,17 +4389,6 @@
     ]
    },
    {
-    "count": 32,
-    "raw": "Sp1nel",
-    "refs": [
-     "Korea - Stage 1!AS25",
-     "Korea - Stage 1!AS705",
-     "Korea - Stage 2!AB81",
-     "Korea - Stage 2!AS81",
-     "Korea - Stage 2!BJ81"
-    ]
-   },
-   {
     "count": 31,
     "raw": "Escanor",
     "refs": [
@@ -4379,17 +4397,6 @@
      "North America - Stage 1!BJ55",
      "North America - Stage 1!CA55",
      "North America - Stage 1!CR55"
-    ]
-   },
-   {
-    "count": 31,
-    "raw": "Huntin",
-    "refs": [
-     "Pacific - Stage 1!Y77",
-     "Pacific - Stage 1!AP77",
-     "Pacific - Stage 1!BG77",
-     "Pacific - Stage 1!BX77",
-     "Pacific - Stage 1!Y133"
     ]
    },
    {
@@ -4445,6 +4452,17 @@
      "Pacific - Stage 2!AW55",
      "Pacific - Stage 2!BN55",
      "Pacific - Stage 2!O107"
+    ]
+   },
+   {
+    "count": 30,
+    "raw": "Hyvision",
+    "refs": [
+     "Pacific - Stage 1!O3",
+     "Pacific - Stage 1!AF3",
+     "Pacific - Stage 1!AW3",
+     "Pacific - Stage 1!O107",
+     "Pacific - Stage 1!AF107"
     ]
    },
    {
@@ -4592,6 +4610,17 @@
    },
    {
     "count": 26,
+    "raw": "Bertlog",
+    "refs": [
+     "Pacific - Stage 2!AB3",
+     "Pacific - Stage 2!AS3",
+     "Pacific - Stage 2!BJ3",
+     "Pacific - Stage 2!AB129",
+     "Pacific - Stage 2!AS129"
+    ]
+   },
+   {
+    "count": 26,
     "raw": "H0YA",
     "refs": [
      "Pacific - Stage 2!R25",
@@ -4603,13 +4632,13 @@
    },
    {
     "count": 26,
-    "raw": "Hyvision",
+    "raw": "Lumi",
     "refs": [
-     "Pacific - Stage 1!O3",
-     "Pacific - Stage 1!AF3",
-     "Pacific - Stage 1!AW3",
-     "Pacific - Stage 1!O107",
-     "Pacific - Stage 1!AF107"
+     "Pacific - Stage 1!V77",
+     "Pacific - Stage 1!AM77",
+     "Pacific - Stage 1!BD77",
+     "Pacific - Stage 1!BU77",
+     "Pacific - Stage 1!BD133"
     ]
    },
    {
@@ -4779,6 +4808,17 @@
    },
    {
     "count": 23,
+    "raw": "hamster",
+    "refs": [
+     "Pacific - Stage 2!Y3",
+     "Pacific - Stage 2!AP3",
+     "Pacific - Stage 2!BG3",
+     "Pacific - Stage 2!Y129",
+     "Pacific - Stage 2!AP129"
+    ]
+   },
+   {
+    "count": 23,
     "raw": "HESTY",
     "refs": [
      "Japan - Stage 2!AB25",
@@ -4812,17 +4852,6 @@
    },
    {
     "count": 23,
-    "raw": "Lumi",
-    "refs": [
-     "Pacific - Stage 1!V77",
-     "Pacific - Stage 1!AM77",
-     "Pacific - Stage 1!BD77",
-     "Pacific - Stage 1!BU77",
-     "Pacific - Stage 1!BD133"
-    ]
-   },
-   {
-    "count": 23,
     "raw": "Yoshinori2k",
     "refs": [
      "Pacific - Stage 1!R3",
@@ -4841,17 +4870,6 @@
      "Pacific - Stage 1!BJ3",
      "Pacific - Stage 1!AB107",
      "Pacific - Stage 1!AS107"
-    ]
-   },
-   {
-    "count": 22,
-    "raw": "Bertlog",
-    "refs": [
-     "Pacific - Stage 2!AB3",
-     "Pacific - Stage 2!AS3",
-     "Pacific - Stage 2!BJ3",
-     "Pacific - Stage 2!AB129",
-     "Pacific - Stage 2!AS129"
     ]
    },
    {
@@ -4899,14 +4917,25 @@
     ]
    },
    {
-    "count": 20,
-    "raw": "hamster",
+    "count": 21,
+    "raw": "Kairen",
     "refs": [
-     "Pacific - Stage 2!Y3",
-     "Pacific - Stage 2!AP3",
-     "Pacific - Stage 2!BG3",
-     "Pacific - Stage 2!Y129",
-     "Pacific - Stage 2!AP129"
+     "Pacific - Stage 1!V29",
+     "Pacific - Stage 1!AM29",
+     "Pacific - Stage 1!BD29",
+     "Pacific - Stage 1!V129",
+     "Pacific - Stage 1!AM129"
+    ]
+   },
+   {
+    "count": 20,
+    "raw": "Scorch",
+    "refs": [
+     "Pacific - Stage 1!V55",
+     "Pacific - Stage 1!AM55",
+     "Pacific - Stage 1!BD55",
+     "Pacific - Stage 1!BU55",
+     "Pacific - Stage 1!V81"
     ]
    },
    {
@@ -4940,17 +4969,6 @@
      "EMEA - Stage 2!BJ103",
      "EMEA - Stage 2!CA103",
      "EMEA - Stage 2!AB155"
-    ]
-   },
-   {
-    "count": 18,
-    "raw": "Kairen",
-    "refs": [
-     "Pacific - Stage 1!V29",
-     "Pacific - Stage 1!AM29",
-     "Pacific - Stage 1!BD29",
-     "Pacific - Stage 1!V129",
-     "Pacific - Stage 1!AM129"
     ]
    },
    {
@@ -5076,17 +5094,6 @@
    },
    {
     "count": 16,
-    "raw": "Scorch",
-    "refs": [
-     "Pacific - Stage 1!V55",
-     "Pacific - Stage 1!AM55",
-     "Pacific - Stage 1!BD55",
-     "Pacific - Stage 1!BU55",
-     "Pacific - Stage 1!V81"
-    ]
-   },
-   {
-    "count": 16,
     "raw": "smurf",
     "refs": [
      "North America - Stage 3!V51",
@@ -5164,6 +5171,17 @@
    },
    {
     "count": 14,
+    "raw": "fedfs",
+    "refs": [
+     "Pacific - Stage 2!R3",
+     "Pacific - Stage 2!AI3",
+     "Pacific - Stage 2!AW3",
+     "Pacific - Stage 2!O129",
+     "Pacific - Stage 2!R159"
+    ]
+   },
+   {
+    "count": 14,
     "raw": "Remedy",
     "refs": [
      "China - Stage 1!AB25",
@@ -5182,17 +5200,6 @@
      "Pacific - Stage 1!BJ81",
      "Pacific - Stage 1!AB159",
      "Pacific - Stage 1!AS159"
-    ]
-   },
-   {
-    "count": 12,
-    "raw": "fedfs",
-    "refs": [
-     "Pacific - Stage 2!R3",
-     "Pacific - Stage 2!AI3",
-     "Pacific - Stage 2!AW3",
-     "Pacific - Stage 2!O129",
-     "Pacific - Stage 2!R159"
     ]
    },
    {
@@ -5395,6 +5402,17 @@
    },
    {
     "count": 9,
+    "raw": "Nanda",
+    "refs": [
+     "Pacific - Stage 3!R3",
+     "Pacific - Stage 3!AI3",
+     "Pacific - Stage 3!AZ3",
+     "Pacific - Stage 3!BQ3",
+     "Pacific - Stage 3!CH3"
+    ]
+   },
+   {
+    "count": 9,
     "raw": "Ringleader",
     "refs": [
      "China - Stage 2!V77",
@@ -5461,6 +5479,28 @@
    },
    {
     "count": 8,
+    "raw": "Hope",
+    "refs": [
+     "Pacific - Stage 3!O25",
+     "Pacific - Stage 3!AF25",
+     "Pacific - Stage 3!AW25",
+     "Pacific - Stage 3!BN25",
+     "Pacific - Stage 3!CE25"
+    ]
+   },
+   {
+    "count": 8,
+    "raw": "Jae",
+    "refs": [
+     "Pacific - Stage 3!AB25",
+     "Pacific - Stage 3!AS25",
+     "Pacific - Stage 3!BJ25",
+     "Pacific - Stage 3!CA25",
+     "Pacific - Stage 3!CR25"
+    ]
+   },
+   {
+    "count": 8,
     "raw": "KORZ",
     "refs": [
      "EMEA - Stage 2!R25",
@@ -5504,6 +5544,28 @@
     ]
    },
    {
+    "count": 7,
+    "raw": "BPB",
+    "refs": [
+     "Pacific - Stage 3!Y55",
+     "Pacific - Stage 3!AP55",
+     "Pacific - Stage 3!BG55",
+     "Pacific - Stage 3!Y107",
+     "Pacific - Stage 3!AP107"
+    ]
+   },
+   {
+    "count": 7,
+    "raw": "Kamo",
+    "refs": [
+     "Pacific - Stage 3!R55",
+     "Pacific - Stage 3!AI55",
+     "Pacific - Stage 3!AZ55",
+     "Pacific - Stage 3!R107",
+     "Pacific - Stage 3!AI107"
+    ]
+   },
+   {
     "count": 6,
     "raw": "Coluge",
     "refs": [
@@ -5512,6 +5574,17 @@
      "North America - Stage 1!BD133",
      "North America - Stage 1!V259",
      "North America - Stage 1!AM259"
+    ]
+   },
+   {
+    "count": 6,
+    "raw": "kame",
+    "refs": [
+     "Pacific - Stage 3!AB51",
+     "Pacific - Stage 3!AS51",
+     "Pacific - Stage 3!BJ51",
+     "Pacific - Stage 3!AB81",
+     "Pacific - Stage 3!AS81"
     ]
    },
    {
@@ -5548,6 +5621,39 @@
     ]
    },
    {
+    "count": 6,
+    "raw": "oPuTo",
+    "refs": [
+     "Pacific - Stage 3!R29",
+     "Pacific - Stage 3!AI29",
+     "Pacific - Stage 3!AZ29",
+     "Pacific - Stage 3!R133",
+     "Pacific - Stage 3!AI133"
+    ]
+   },
+   {
+    "count": 6,
+    "raw": "petrichor",
+    "refs": [
+     "Pacific - Stage 3!O29",
+     "Pacific - Stage 3!AF29",
+     "Pacific - Stage 3!AW29",
+     "Pacific - Stage 3!O133",
+     "Pacific - Stage 3!AF133"
+    ]
+   },
+   {
+    "count": 6,
+    "raw": "RoundCat",
+    "refs": [
+     "Pacific - Stage 3!AB77",
+     "Pacific - Stage 3!AS77",
+     "Pacific - Stage 3!BJ77",
+     "Pacific - Stage 3!AB103",
+     "Pacific - Stage 3!AS103"
+    ]
+   },
+   {
     "count": 5,
     "raw": "GhostShadow",
     "refs": [
@@ -5556,17 +5662,6 @@
      "China - Stage 2!AW315",
      "China - Stage 2!AF519",
      "China - Stage 2!AW519"
-    ]
-   },
-   {
-    "count": 5,
-    "raw": "Hope",
-    "refs": [
-     "Pacific - Stage 3!O25",
-     "Pacific - Stage 3!AF25",
-     "Pacific - Stage 3!AW25",
-     "Pacific - Stage 3!BN25",
-     "Pacific - Stage 3!CE25"
     ]
    },
    {
@@ -5582,24 +5677,13 @@
    },
    {
     "count": 5,
-    "raw": "Jae",
+    "raw": "KarsonLo",
     "refs": [
-     "Pacific - Stage 3!AB25",
-     "Pacific - Stage 3!AS25",
-     "Pacific - Stage 3!BJ25",
-     "Pacific - Stage 3!CA25",
-     "Pacific - Stage 3!CR25"
-    ]
-   },
-   {
-    "count": 5,
-    "raw": "Nanda",
-    "refs": [
-     "Pacific - Stage 3!R3",
-     "Pacific - Stage 3!AI3",
-     "Pacific - Stage 3!AZ3",
-     "Pacific - Stage 3!BQ3",
-     "Pacific - Stage 3!CH3"
+     "Pacific - Stage 3!V77",
+     "Pacific - Stage 3!AM77",
+     "Pacific - Stage 3!V103",
+     "Pacific - Stage 3!AM103",
+     "Pacific - Stage 3!BD103"
     ]
    },
    {
@@ -5754,15 +5838,6 @@
    },
    {
     "count": 3,
-    "raw": "BPB",
-    "refs": [
-     "Pacific - Stage 3!Y55",
-     "Pacific - Stage 3!AP55",
-     "Pacific - Stage 3!BG55"
-    ]
-   },
-   {
-    "count": 3,
     "raw": "Chatchai",
     "refs": [
      "Pacific - Stage 3!AB29",
@@ -5790,38 +5865,11 @@
    },
    {
     "count": 3,
-    "raw": "kame",
+    "raw": "mush2oom",
     "refs": [
-     "Pacific - Stage 3!AB51",
-     "Pacific - Stage 3!AS51",
-     "Pacific - Stage 3!BJ51"
-    ]
-   },
-   {
-    "count": 3,
-    "raw": "Kamo",
-    "refs": [
-     "Pacific - Stage 3!R55",
-     "Pacific - Stage 3!AI55",
-     "Pacific - Stage 3!AZ55"
-    ]
-   },
-   {
-    "count": 3,
-    "raw": "oPuTo",
-    "refs": [
-     "Pacific - Stage 3!R29",
-     "Pacific - Stage 3!AI29",
-     "Pacific - Stage 3!AZ29"
-    ]
-   },
-   {
-    "count": 3,
-    "raw": "petrichor",
-    "refs": [
-     "Pacific - Stage 3!O29",
-     "Pacific - Stage 3!AF29",
-     "Pacific - Stage 3!AW29"
+     "Pacific - Stage 3!Y133",
+     "Pacific - Stage 3!AP133",
+     "Pacific - Stage 3!BG133"
     ]
    },
    {
@@ -5835,11 +5883,11 @@
    },
    {
     "count": 3,
-    "raw": "RoundCat",
+    "raw": "Yunko",
     "refs": [
-     "Pacific - Stage 3!AB77",
-     "Pacific - Stage 3!AS77",
-     "Pacific - Stage 3!BJ77"
+     "Pacific - Stage 3!V155",
+     "Pacific - Stage 3!AM155",
+     "Pacific - Stage 3!BD155"
     ]
    },
    {
@@ -5848,14 +5896,6 @@
     "refs": [
      "North America - Stage 1!AS363",
      "North America - Stage 1!BJ363"
-    ]
-   },
-   {
-    "count": 2,
-    "raw": "KarsonLo",
-    "refs": [
-     "Pacific - Stage 3!V77",
-     "Pacific - Stage 3!AM77"
     ]
    },
    {
@@ -6156,6 +6196,17 @@
    },
    {
     "count": 11,
+    "raw": "The Gatos Guapos",
+    "refs": [
+     "Pacific - Stage 1!J33",
+     "Pacific - Stage 1!J85",
+     "Pacific - Stage 1!C189",
+     "Pacific - Stage 1!J267",
+     "Pacific - Stage 1!C371"
+    ]
+   },
+   {
+    "count": 11,
     "raw": "ZAN Esports",
     "refs": [
      "Korea - Stage 1!C59",
@@ -6218,17 +6269,6 @@
      "China - Stage 3!J319",
      "Pacific - Stage 2!J7",
      "Pacific - Stage 2!J137"
-    ]
-   },
-   {
-    "count": 10,
-    "raw": "The Gatos Guapos",
-    "refs": [
-     "Pacific - Stage 1!J33",
-     "Pacific - Stage 1!J85",
-     "Pacific - Stage 1!C189",
-     "Pacific - Stage 1!J267",
-     "Pacific - Stage 1!C371"
     ]
    },
    {
@@ -6506,38 +6546,43 @@
     ]
    },
    {
-    "count": 1,
+    "count": 2,
     "raw": "CantHear",
     "refs": [
-     "Pacific - Stage 3!C33"
+     "Pacific - Stage 3!C33",
+     "Pacific - Stage 3!C137"
     ]
    },
    {
-    "count": 1,
+    "count": 2,
     "raw": "junjilopzfx0764",
     "refs": [
-     "Pacific - Stage 3!C7"
+     "Pacific - Stage 3!C7",
+     "Pacific - Stage 3!J111"
     ]
    },
    {
-    "count": 1,
+    "count": 2,
     "raw": "SeijiKING",
     "refs": [
-     "Pacific - Stage 3!C59"
+     "Pacific - Stage 3!C59",
+     "Pacific - Stage 3!C111"
     ]
    },
    {
-    "count": 1,
+    "count": 2,
     "raw": "Stronghold",
     "refs": [
-     "Pacific - Stage 3!J7"
+     "Pacific - Stage 3!J7",
+     "Pacific - Stage 3!J137"
     ]
    },
    {
-    "count": 1,
+    "count": 2,
     "raw": "Team Benxxn",
     "refs": [
-     "Pacific - Stage 3!J59"
+     "Pacific - Stage 3!J59",
+     "Pacific - Stage 3!J85"
     ]
    }
   ],
@@ -6560,6 +6605,15 @@
      "Pacific - Stage 2!X328",
      "Pacific - Stage 2!AO328",
      "Pacific - Stage 2!BF328"
+    ]
+   },
+   {
+    "count": 3,
+    "raw": "Gatos Guapos Wins!",
+    "refs": [
+     "Pacific - Stage 3!X94",
+     "Pacific - Stage 3!AO94",
+     "Pacific - Stage 3!BF94"
     ]
    },
    {
