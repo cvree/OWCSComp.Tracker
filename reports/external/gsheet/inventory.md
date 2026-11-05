@@ -2,10 +2,10 @@
 
 - Source: https://docs.google.com/spreadsheets/d/1OaU5O7lVDZbked5FZAvgfR9MnJIdGhTdnIdu4DsL9PQ/edit?usp=sharing
 - Spreadsheet id: `1OaU5O7lVDZbked5FZAvgfR9MnJIdGhTdnIdu4DsL9PQ`
-- Snapshot: `466954bd4ef5defa5252df3b6eeffe53fd1c3bf697b6174947cfc110e23215fb` imported 2026-11-04T23:55:07+00:00
+- Snapshot: `9864fff5c37a36fce71abc693f2769e6e03faae95effd4fe57fdb71dbc98c1f9` imported 2026-11-05T07:22:12+00:00
 - Parser gsheet-parser-2 · layout v2 · aliases v3
-- Tabs: 41 (23 recognised as data) · source rows: 9541
-- Workbook package: 54.0 MB zipped, 136.7 MB unzipped, 404 parts; embedded media: 234 files, 46.8 MB
+- Tabs: 41 (23 recognised as data) · source rows: 9562
+- Workbook package: 54.0 MB zipped, 136.8 MB unzipped, 404 parts; embedded media: 234 files, 46.8 MB
 - Largest parts: `xl/worksheets/sheet7.xml` 3.9 MB, `xl/worksheets/sheet8.xml` 3.8 MB, `xl/worksheets/sheet6.xml` 3.8 MB, `xl/drawings/drawing7.xml` 3.2 MB, `xl/drawings/drawing6.xml` 3.1 MB, `xl/drawings/drawing8.xml` 2.8 MB
 
 **Imported:** 582 matches · 2119 maps · 4171 hero bans · 34560 player-hero appearances · 8072 composition observations · 0 ignored rows · 437 unmapped values · 0 identical duplicates · 0 conflicting duplicates
@@ -32,7 +32,7 @@
 | 18 | Hero Index | 9 | reference | — | 0 | 0 | 0 | 0 |
 | 19 | Pacific - Stage 1 | 266 | match_cards | — | 66 | 132 | 1082 | 0 |
 | 20 | Pacific - Stage 2 | 268 | match_cards | — | 72 | 140 | 1195 | 0 |
-| 21 | Pacific - Stage 3 | 163 | match_cards | — | 11 | 22 | 173 | 0 |
+| 21 | Pacific - Stage 3 | 184 | match_cards | — | 11 | 22 | 173 | 0 |
 | 22 | Asia - Stage 1 | 251 | match_cards | — | 52 | 100 | 803 | 0 |
 | 23 | Asia - Stage 3 | 54 | match_cards | — | 0 | 0 | 0 | 0 |
 | 24 | Champions Clash Tokyo | 198 | match_cards | — | 48 | 92 | 783 | 0 |
@@ -58,7 +58,7 @@
 
 - Season year: 2026 (Landing Page!B1)
 - Hero pictures named by `Hero Index`: 54 heroes, 6 role icons
-- Cards: 629 found · 582 imported · 45 scheduled (no teams or no maps yet) · 1 incomplete (panels filled, map list empty) · 1 forfeited · 0 could not be read
+- Cards: 629 found · 582 imported · 42 scheduled (no teams or no maps yet) · 4 incomplete (panels filled, map list empty) · 1 forfeited · 0 could not be read
 - The sheet records no calendar dates and no map picks: neither is imported.
 
 ## Self-Check (`Self-Check`) — the sheet's own counts vs the importer's
@@ -148,7 +148,7 @@ Cards: 19 found · 19 imported · 0 scheduled · 0 incomplete · 0 forfeited · 
 Cards: 19 found · 19 imported · 0 scheduled · 0 incomplete · 0 forfeited · 0 could not be read · 19 matches
 
 ## Pacific - Stage 3 — Match cards — one fixed-size card per series, heroes shown as pictures
-Cards: 19 found · 3 imported · 15 scheduled · 1 incomplete · 0 forfeited · 0 could not be read · 3 matches
+Cards: 19 found · 3 imported · 12 scheduled · 4 incomplete · 0 forfeited · 0 could not be read · 3 matches
 
 ## Asia - Stage 1 — Match cards — one fixed-size card per series, heroes shown as pictures
 Cards: 18 found · 17 imported · 0 scheduled · 0 incomplete · 1 forfeited · 0 could not be read · 17 matches
@@ -232,4 +232,7 @@ Twitter | Discord
 - [warning] CARD_LABEL_REPEATED: tab 'Korea - Stage 3' has more than one card labelled ['Week 6 | Day 1 | Game 1']
 - [warning] CARD_LABEL_REPEATED: tab 'China - Stage 3' has more than one card labelled ['Week 4 | Day 2 | Game 1', 'Week 4 | Day 2 | Game 2', 'Week 5 | Day 1 | Game 1', 'Week 5 | Day 1 | Game 2', 'Week 5 | Day 1 | Game 3']
 - [warning] CARD_INCOMPLETE: 'Pacific - Stage 3' Week 1 | Day 3 | Game 2 (row 185): 1 map panel(s) filled in but the card's map list is empty — not imported until the editors finish the card
+- [warning] CARD_INCOMPLETE: 'Pacific - Stage 3' Week 2 | Day 1 | Game 2 (row 419): 1 map panel(s) filled in but the card's map list is empty — not imported until the editors finish the card
+- [warning] CARD_INCOMPLETE: 'Pacific - Stage 3' Week 2 | Day 1 | Game 3 (row 445): 1 map panel(s) filled in but the card's map list is empty — not imported until the editors finish the card
+- [warning] CARD_INCOMPLETE: 'Pacific - Stage 3' Week 2 | Day 1 | Game 4 (row 471): 1 map panel(s) filled in but the card's map list is empty — not imported until the editors finish the card
 - [warning] SELF_CHECK_MISMATCH: Self-Check Stage 1 CC: the sheet counts 13 matches / 48 maps, the importer parsed 14 / 48 from 'Champions Clash Tokyo'

@@ -98,6 +98,27 @@
    "sheet": "Pacific - Stage 3"
   },
   {
+   "code": "CARD_INCOMPLETE",
+   "level": "warning",
+   "message": "'Pacific - Stage 3' Week 2 | Day 1 | Game 2 (row 419): 1 map panel(s) filled in but the card's map list is empty — not imported until the editors finish the card",
+   "row": 419,
+   "sheet": "Pacific - Stage 3"
+  },
+  {
+   "code": "CARD_INCOMPLETE",
+   "level": "warning",
+   "message": "'Pacific - Stage 3' Week 2 | Day 1 | Game 3 (row 445): 1 map panel(s) filled in but the card's map list is empty — not imported until the editors finish the card",
+   "row": 445,
+   "sheet": "Pacific - Stage 3"
+  },
+  {
+   "code": "CARD_INCOMPLETE",
+   "level": "warning",
+   "message": "'Pacific - Stage 3' Week 2 | Day 1 | Game 4 (row 471): 1 map panel(s) filled in but the card's map list is empty — not imported until the editors finish the card",
+   "row": 471,
+   "sheet": "Pacific - Stage 3"
+  },
+  {
    "code": "SELF_CHECK_MISMATCH",
    "level": "warning",
    "message": "Self-Check Stage 1 CC: the sheet counts 13 matches / 48 maps, the importer parsed 14 / 48 from 'Champions Clash Tokyo'",
@@ -113,93 +134,93 @@
   "heroIndexConflicts": [],
   "heroIndexTab": "Hero Index",
   "heroPictures": 54,
-  "incomplete": 1,
+  "incomplete": 4,
   "pictureSuggestions": [],
   "played": 582,
   "rolePictures": 6,
-  "scheduled": 45,
+  "scheduled": 42,
   "year": 2026,
   "yearCell": "Landing Page!B1"
  },
  "package": {
-  "bytes": 56612273,
+  "bytes": 56616035,
   "largestMembers": [
    {
-    "bytes": 4047625,
+    "bytes": 4047648,
     "path": "xl/worksheets/sheet7.xml"
    },
    {
-    "bytes": 4035287,
+    "bytes": 4035289,
     "path": "xl/worksheets/sheet8.xml"
    },
    {
-    "bytes": 3995317,
+    "bytes": 3995411,
     "path": "xl/worksheets/sheet6.xml"
    },
    {
-    "bytes": 3400548,
+    "bytes": 3401501,
     "path": "xl/drawings/drawing7.xml"
    },
    {
-    "bytes": 3228273,
+    "bytes": 3229306,
     "path": "xl/drawings/drawing6.xml"
    },
    {
-    "bytes": 2885343,
+    "bytes": 2885787,
     "path": "xl/drawings/drawing8.xml"
    },
    {
-    "bytes": 2864479,
+    "bytes": 2866820,
     "path": "xl/worksheets/sheet11.xml"
    },
    {
-    "bytes": 2789980,
+    "bytes": 2790145,
     "path": "xl/worksheets/sheet9.xml"
    }
   ],
   "mediaBytes": 49039605,
   "mediaFiles": 234,
   "members": 404,
-  "uncompressedBytes": 143357724,
+  "uncompressedBytes": 143416315,
   "worksheetXml": [
    {
-    "bytes": 4047625,
+    "bytes": 4047648,
     "path": "xl/worksheets/sheet7.xml"
    },
    {
-    "bytes": 4035287,
+    "bytes": 4035289,
     "path": "xl/worksheets/sheet8.xml"
    },
    {
-    "bytes": 3995317,
+    "bytes": 3995411,
     "path": "xl/worksheets/sheet6.xml"
    },
    {
-    "bytes": 2864479,
+    "bytes": 2866820,
     "path": "xl/worksheets/sheet11.xml"
    },
    {
-    "bytes": 2789980,
+    "bytes": 2790145,
     "path": "xl/worksheets/sheet9.xml"
    },
    {
-    "bytes": 2764594,
+    "bytes": 2764469,
     "path": "xl/worksheets/sheet10.xml"
    },
    {
-    "bytes": 2509959,
+    "bytes": 2509828,
     "path": "xl/worksheets/sheet5.xml"
    },
    {
-    "bytes": 2483477,
+    "bytes": 2483461,
     "path": "xl/worksheets/sheet3.xml"
    },
    {
-    "bytes": 2471210,
+    "bytes": 2471109,
     "path": "xl/worksheets/sheet4.xml"
    },
    {
-    "bytes": 2173158,
+    "bytes": 2173164,
     "path": "xl/worksheets/sheet25.xml"
    },
    {
@@ -207,43 +228,43 @@
     "path": "xl/worksheets/sheet26.xml"
    },
    {
-    "bytes": 1651412,
+    "bytes": 1651429,
     "path": "xl/worksheets/sheet14.xml"
    },
    {
-    "bytes": 1649702,
+    "bytes": 1649716,
     "path": "xl/worksheets/sheet17.xml"
    },
    {
-    "bytes": 1648238,
+    "bytes": 1648246,
     "path": "xl/worksheets/sheet16.xml"
    },
    {
-    "bytes": 1632358,
+    "bytes": 1632392,
     "path": "xl/worksheets/sheet15.xml"
    },
    {
-    "bytes": 1630340,
+    "bytes": 1630352,
     "path": "xl/worksheets/sheet13.xml"
    },
    {
-    "bytes": 1625936,
+    "bytes": 1625966,
     "path": "xl/worksheets/sheet12.xml"
    },
    {
-    "bytes": 1493913,
+    "bytes": 1493925,
     "path": "xl/worksheets/sheet20.xml"
    },
    {
-    "bytes": 1477521,
+    "bytes": 1477547,
     "path": "xl/worksheets/sheet19.xml"
    },
    {
-    "bytes": 1423177,
+    "bytes": 1425444,
     "path": "xl/worksheets/sheet21.xml"
    },
    {
-    "bytes": 1393827,
+    "bytes": 1393801,
     "path": "xl/worksheets/sheet22.xml"
    },
    {
@@ -251,19 +272,19 @@
     "path": "xl/worksheets/sheet23.xml"
    },
    {
-    "bytes": 1077676,
+    "bytes": 1077691,
     "path": "xl/worksheets/sheet24.xml"
    },
    {
-    "bytes": 851357,
+    "bytes": 851353,
     "path": "xl/worksheets/sheet2.xml"
    },
    {
-    "bytes": 721590,
+    "bytes": 721591,
     "path": "xl/worksheets/sheet39.xml"
    },
    {
-    "bytes": 502436,
+    "bytes": 502426,
     "path": "xl/worksheets/sheet38.xml"
    },
    {
@@ -275,7 +296,7 @@
     "path": "xl/worksheets/sheet27.xml"
    },
    {
-    "bytes": 154115,
+    "bytes": 154116,
     "path": "xl/worksheets/sheet29.xml"
    },
    {
@@ -283,31 +304,31 @@
     "path": "xl/worksheets/sheet28.xml"
    },
    {
-    "bytes": 108099,
+    "bytes": 108234,
     "path": "xl/worksheets/sheet30.xml"
    },
    {
-    "bytes": 95919,
+    "bytes": 96026,
     "path": "xl/worksheets/sheet32.xml"
    },
    {
-    "bytes": 92889,
+    "bytes": 92994,
     "path": "xl/worksheets/sheet31.xml"
    },
    {
-    "bytes": 71135,
+    "bytes": 71145,
     "path": "xl/worksheets/sheet34.xml"
    },
    {
-    "bytes": 63157,
+    "bytes": 63223,
     "path": "xl/worksheets/sheet41.xml"
    },
    {
-    "bytes": 53985,
+    "bytes": 54024,
     "path": "xl/worksheets/sheet33.xml"
    },
    {
-    "bytes": 27060,
+    "bytes": 27110,
     "path": "xl/worksheets/sheet35.xml"
    },
    {
@@ -319,7 +340,7 @@
     "path": "xl/worksheets/sheet1.xml"
    },
    {
-    "bytes": 15838,
+    "bytes": 15894,
     "path": "xl/worksheets/sheet36.xml"
    }
   ]
@@ -691,7 +712,7 @@
   "tab": "Self-Check",
   "unpaired": 0
  },
- "sourceRowCount": 9541,
+ "sourceRowCount": 9562,
  "tabCount": 41,
  "tabs": [
   {
@@ -1323,16 +1344,16 @@
     "blocks": 19,
     "failed": 0,
     "forfeited": 0,
-    "incomplete": 1,
+    "incomplete": 4,
     "played": 3,
-    "scheduled": 15
+    "scheduled": 12
    },
    "columns": 96,
    "dataRows": 3,
    "headerRow": null,
    "ignoredCount": 0,
    "ignoredRows": [],
-   "images": 644,
+   "images": 730,
    "index": 20,
    "mappedColumns": [],
    "name": "Pacific - Stage 3",
@@ -1346,7 +1367,7 @@
    },
    "purpose": "match_cards",
    "purposeLabel": "Match cards — one fixed-size card per series, heroes shown as pictures",
-   "rows": 163,
+   "rows": 184,
    "state": "visible",
    "unmappedColumns": []
   },
