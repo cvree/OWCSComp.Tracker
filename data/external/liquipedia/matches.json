@@ -1,6 +1,6 @@
 {
  "_readme": "Written by pipeline/liquipedia_schedule.py from Liquipedia (CC BY-SA 3.0). Do not hand-edit; put corrections in config/schedule.json `matches`.",
- "fetchedAt": "2026-11-06T01:13:27+00:00",
+ "fetchedAt": "2026-11-06T10:51:30+00:00",
  "matches": [
   {
    "bestOf": 3,
@@ -7208,10 +7208,10 @@
    "order": 10,
    "page": "Overwatch Champions Series/2026/Asia/Stage 3/Korea",
    "round": null,
-   "scoreA": null,
-   "scoreB": null,
+   "scoreA": 4,
+   "scoreB": 1,
    "section": "{{Stage|Regional Playoffs}}",
-   "startsAt": "2026-11-06T15:00:00+09:00",
+   "startsAt": "2026-11-06T17:15:00+09:00",
    "streams": [
     {
      "kind": "afreeca",
@@ -7234,7 +7234,7 @@
    "scoreA": null,
    "scoreB": null,
    "section": "{{Stage|Regional Playoffs}}",
-   "startsAt": "2026-11-06T17:00:00+09:00",
+   "startsAt": "2026-11-06T19:40:00+09:00",
    "streams": [
     {
      "kind": "afreeca",
@@ -15237,7 +15237,7 @@
   {
    "event": "korea/stage-3",
    "matches": 15,
-   "revid": 1153177,
+   "revid": 1153687,
    "title": "Overwatch Champions Series/2026/Asia/Stage 3/Korea"
   },
   {
@@ -15249,7 +15249,7 @@
   {
    "event": "pacific/stage-3",
    "matches": 4,
-   "revid": 1153540,
+   "revid": 1153675,
    "title": "Overwatch Champions Series/2026/Asia/Stage 3/Pacific"
   },
   {
