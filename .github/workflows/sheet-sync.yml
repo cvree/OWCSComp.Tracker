@@ -196,7 +196,10 @@ jobs:
           # case the liquipedia job landed in between.
           pushed=false
           for attempt in 1 2 3; do
-            git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
+            # The only files both data jobs write are generated exports
+            # (schedule, tiers), rebuilt just below, so a clash on them
+            # takes this commit's side instead of stopping the push.
+            git pull --rebase -X theirs --autostash origin "${GITHUB_REF_NAME}"
             python pipeline/sheet_sync.py rebuild
             python pipeline/schedule_build.py
             git add assets/data/schedule.v1.js assets/data/sheet_tiers.v1.js
