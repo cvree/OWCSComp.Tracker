@@ -1,6 +1,6 @@
 {
  "_readme": "Written by pipeline/liquipedia_schedule.py from Liquipedia (CC BY-SA 3.0). Do not hand-edit; put corrections in config/schedule.json `matches`.",
- "fetchedAt": "2026-11-06T10:51:30+00:00",
+ "fetchedAt": "2026-11-06T20:54:28+00:00",
  "matches": [
   {
    "bestOf": 3,
@@ -7208,6 +7208,29 @@
    "order": 10,
    "page": "Overwatch Champions Series/2026/Asia/Stage 3/Korea",
    "round": null,
+   "scoreA": 0,
+   "scoreB": 4,
+   "section": "{{Stage|Regional Playoffs}}",
+   "startsAt": "2026-11-06T19:40:00+09:00",
+   "streams": [
+    {
+     "kind": "afreeca",
+     "url": "https://play.afreecatv.com/owesports"
+    }
+   ],
+   "teamA": "Cheeseburger",
+   "teamB": "Team Falcons",
+   "url": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Asia/Stage_3/Korea"
+  },
+  {
+   "bestOf": null,
+   "date": "2026-11-06",
+   "event": "korea/stage-3",
+   "finished": false,
+   "key": "R1M2",
+   "order": 11,
+   "page": "Overwatch Champions Series/2026/Asia/Stage 3/Korea",
+   "round": null,
    "scoreA": 4,
    "scoreB": 1,
    "section": "{{Stage|Regional Playoffs}}",
@@ -7220,29 +7243,6 @@
    ],
    "teamA": "T1",
    "teamB": "Zanside Gaming",
-   "url": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Asia/Stage_3/Korea"
-  },
-  {
-   "bestOf": null,
-   "date": "2026-11-06",
-   "event": "korea/stage-3",
-   "finished": false,
-   "key": "R1M2",
-   "order": 11,
-   "page": "Overwatch Champions Series/2026/Asia/Stage 3/Korea",
-   "round": null,
-   "scoreA": null,
-   "scoreB": null,
-   "section": "{{Stage|Regional Playoffs}}",
-   "startsAt": "2026-11-06T19:40:00+09:00",
-   "streams": [
-    {
-     "kind": "afreeca",
-     "url": "https://play.afreecatv.com/owesports"
-    }
-   ],
-   "teamA": "Cheeseburger",
-   "teamB": "Team Falcons",
    "url": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Asia/Stage_3/Korea"
   },
   {
@@ -7265,7 +7265,7 @@
     }
    ],
    "teamA": "ZETA Division",
-   "teamB": null,
+   "teamB": "Team Falcons",
    "url": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Asia/Stage_3/Korea"
   },
   {
@@ -7288,7 +7288,7 @@
     }
    ],
    "teamA": "Crazy Raccoon",
-   "teamB": null,
+   "teamB": "T1",
    "url": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Asia/Stage_3/Korea"
   },
   {
@@ -8404,10 +8404,10 @@
    "order": 7,
    "page": "Overwatch Champions Series/2026/Asia/Stage 3/Pacific/Regular Season",
    "round": "Day 3",
-   "scoreA": null,
-   "scoreB": null,
+   "scoreA": 1,
+   "scoreB": 3,
    "section": "{{HiddenSort|Day 3}}",
-   "startsAt": "2026-11-06T18:00:00+07:00",
+   "startsAt": "2026-11-06T18:10:00+07:00",
    "streams": [
     {
      "kind": "twitch",
@@ -8427,8 +8427,8 @@
    "order": 8,
    "page": "Overwatch Champions Series/2026/Asia/Stage 3/Pacific/Regular Season",
    "round": "Day 3",
-   "scoreA": null,
-   "scoreB": null,
+   "scoreA": 1,
+   "scoreB": 3,
    "section": "{{HiddenSort|Day 3}}",
    "startsAt": "2026-11-06T19:30:00+07:00",
    "streams": [
@@ -8450,8 +8450,8 @@
    "order": 9,
    "page": "Overwatch Champions Series/2026/Asia/Stage 3/Pacific/Regular Season",
    "round": "Day 3",
-   "scoreA": null,
-   "scoreB": null,
+   "scoreA": 0,
+   "scoreB": 3,
    "section": "{{HiddenSort|Day 3}}",
    "startsAt": "2026-11-06T21:00:00+07:00",
    "streams": [
@@ -15237,7 +15237,7 @@
   {
    "event": "korea/stage-3",
    "matches": 15,
-   "revid": 1153687,
+   "revid": 1153716,
    "title": "Overwatch Champions Series/2026/Asia/Stage 3/Korea"
   },
   {
@@ -15249,13 +15249,13 @@
   {
    "event": "pacific/stage-3",
    "matches": 4,
-   "revid": 1153675,
+   "revid": 1153826,
    "title": "Overwatch Champions Series/2026/Asia/Stage 3/Pacific"
   },
   {
    "event": "pacific/stage-3",
    "matches": 15,
-   "revid": 1153548,
+   "revid": 1153729,
    "title": "Overwatch Champions Series/2026/Asia/Stage 3/Pacific/Regular Season"
   },
   {
@@ -15387,7 +15387,7 @@
   {
    "event": "international/world-finals",
    "matches": 0,
-   "revid": 1153108,
+   "revid": 1153717,
    "title": "Overwatch Champions Series/2026/World Finals"
   }
  ],
