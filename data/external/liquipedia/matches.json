@@ -1,6 +1,6 @@
 {
  "_readme": "Written by pipeline/liquipedia_schedule.py from Liquipedia (CC BY-SA 3.0). Do not hand-edit; put corrections in config/schedule.json `matches`.",
- "fetchedAt": "2026-11-05T10:54:39+00:00",
+ "fetchedAt": "2026-11-06T01:13:27+00:00",
  "matches": [
   {
    "bestOf": 3,
@@ -8335,10 +8335,10 @@
    "order": 4,
    "page": "Overwatch Champions Series/2026/Asia/Stage 3/Pacific/Regular Season",
    "round": "Day 2",
-   "scoreA": null,
-   "scoreB": null,
+   "scoreA": 3,
+   "scoreB": 0,
    "section": "{{HiddenSort|Day 2}}",
-   "startsAt": "2026-11-05T18:00:00+07:00",
+   "startsAt": "2026-11-05T18:10:00+07:00",
    "streams": [
     {
      "kind": "twitch",
@@ -8358,10 +8358,10 @@
    "order": 5,
    "page": "Overwatch Champions Series/2026/Asia/Stage 3/Pacific/Regular Season",
    "round": "Day 2",
-   "scoreA": null,
-   "scoreB": null,
+   "scoreA": 3,
+   "scoreB": 2,
    "section": "{{HiddenSort|Day 2}}",
-   "startsAt": "2026-11-05T19:30:00+07:00",
+   "startsAt": "2026-11-05T19:05:00+07:00",
    "streams": [
     {
      "kind": "twitch",
@@ -8381,8 +8381,8 @@
    "order": 6,
    "page": "Overwatch Champions Series/2026/Asia/Stage 3/Pacific/Regular Season",
    "round": "Day 2",
-   "scoreA": null,
-   "scoreB": null,
+   "scoreA": 0,
+   "scoreB": 3,
    "section": "{{HiddenSort|Day 2}}",
    "startsAt": "2026-11-05T21:00:00+07:00",
    "streams": [
@@ -15249,13 +15249,13 @@
   {
    "event": "pacific/stage-3",
    "matches": 4,
-   "revid": 1153435,
+   "revid": 1153540,
    "title": "Overwatch Champions Series/2026/Asia/Stage 3/Pacific"
   },
   {
    "event": "pacific/stage-3",
    "matches": 15,
-   "revid": 1153424,
+   "revid": 1153548,
    "title": "Overwatch Champions Series/2026/Asia/Stage 3/Pacific/Regular Season"
   },
   {
