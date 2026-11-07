@@ -1,6 +1,6 @@
 {
  "_readme": "Written by pipeline/liquipedia_schedule.py from Liquipedia (CC BY-SA 3.0). Do not hand-edit; put corrections in config/schedule.json `matches`.",
- "fetchedAt": "2026-11-06T20:54:28+00:00",
+ "fetchedAt": "2026-11-07T10:06:04+00:00",
  "matches": [
   {
    "bestOf": 3,
@@ -7254,10 +7254,10 @@
    "order": 12,
    "page": "Overwatch Champions Series/2026/Asia/Stage 3/Korea",
    "round": null,
-   "scoreA": null,
-   "scoreB": null,
+   "scoreA": 4,
+   "scoreB": 1,
    "section": "{{Stage|Regional Playoffs}}",
-   "startsAt": "2026-11-07T15:00:00+09:00",
+   "startsAt": "2026-11-07T15:15:00+09:00",
    "streams": [
     {
      "kind": "afreeca",
@@ -7277,10 +7277,10 @@
    "order": 13,
    "page": "Overwatch Champions Series/2026/Asia/Stage 3/Korea",
    "round": null,
-   "scoreA": null,
-   "scoreB": null,
+   "scoreA": 2,
+   "scoreB": 1,
    "section": "{{Stage|Regional Playoffs}}",
-   "startsAt": "2026-11-07T17:00:00+09:00",
+   "startsAt": "2026-11-07T17:25:00+09:00",
    "streams": [
     {
      "kind": "afreeca",
@@ -7310,7 +7310,7 @@
      "url": "https://play.afreecatv.com/owesports"
     }
    ],
-   "teamA": null,
+   "teamA": "ZETA Division",
    "teamB": null,
    "url": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Asia/Stage_3/Korea"
   },
@@ -7333,7 +7333,7 @@
      "url": "https://play.afreecatv.com/owesports"
     }
    ],
-   "teamA": null,
+   "teamA": "Team Falcons",
    "teamB": null,
    "url": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Asia/Stage_3/Korea"
   },
@@ -10339,8 +10339,8 @@
    "order": 1,
    "page": "Overwatch Champions Series/2026/China/Stage 3",
    "round": null,
-   "scoreA": null,
-   "scoreB": null,
+   "scoreA": 1,
+   "scoreB": 2,
    "section": "{{Stage|Regional Playoffs}}",
    "startsAt": "2026-11-07T17:00:00+08:00",
    "streams": null,
@@ -15219,7 +15219,7 @@
   {
    "event": "asia/stage-3",
    "matches": 20,
-   "revid": 1153077,
+   "revid": 1153925,
    "title": "Overwatch Champions Series/2026/Asia/Stage 3"
   },
   {
@@ -15237,13 +15237,13 @@
   {
    "event": "korea/stage-3",
    "matches": 15,
-   "revid": 1153716,
+   "revid": 1153943,
    "title": "Overwatch Champions Series/2026/Asia/Stage 3/Korea"
   },
   {
    "event": "korea/stage-3",
    "matches": 36,
-   "revid": 1152085,
+   "revid": 1153867,
    "title": "Overwatch Champions Series/2026/Asia/Stage 3/Korea/Regular Season"
   },
   {
@@ -15255,7 +15255,7 @@
   {
    "event": "pacific/stage-3",
    "matches": 15,
-   "revid": 1153729,
+   "revid": 1153920,
    "title": "Overwatch Champions Series/2026/Asia/Stage 3/Pacific/Regular Season"
   },
   {
@@ -15291,7 +15291,7 @@
   {
    "event": "china/stage-3",
    "matches": 6,
-   "revid": 1153165,
+   "revid": 1153946,
    "title": "Overwatch Champions Series/2026/China/Stage 3"
   },
   {
