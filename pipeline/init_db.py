@@ -28,12 +28,16 @@ def load_sample() -> dict:
 
 
 def seed_reference(con, data) -> None:
+    # Upsert, not INSERT OR REPLACE: REPLACE deletes the old row first, and
+    # with foreign keys on that cascades into everything referencing it.
     con.executemany(
-        """INSERT OR REPLACE INTO heroes (id, name, role) VALUES (?,?,?)""",
+        """INSERT INTO heroes (id, name, role) VALUES (?,?,?)
+           ON CONFLICT(id) DO UPDATE SET name=excluded.name, role=excluded.role""",
         [(h["id"], h["name"], h["role"]) for h in data["heroes"]],
     )
     con.executemany(
-        """INSERT OR REPLACE INTO game_maps (id, name, mode) VALUES (?,?,?)""",
+        """INSERT INTO game_maps (id, name, mode) VALUES (?,?,?)
+           ON CONFLICT(id) DO UPDATE SET name=excluded.name, mode=excluded.mode""",
         [(m["id"], m["name"], m["mode"]) for m in data["maps"]],
     )
     con.executemany(

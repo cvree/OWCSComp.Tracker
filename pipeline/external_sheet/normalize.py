@@ -690,7 +690,7 @@ def _row_heroes(ctx: Ctx, row: Row, map_id: str, match_id: str,
                 "playerRaw": pres.raw if pres else None,
                 "playerMethod": pres.method if pres else None,
                 "listOrder": n, "hero": res.id, "heroRaw": res.raw, "heroMethod": res.method,
-                "role": ctx.aliases.role_of(res.id) or pos.get("role"),
+                "role": ctx.aliases.role_of(res.id, pos.get("role"), date) or pos.get("role"),
                 "src": {"sheet": sheet, "cell": cell}})
     for c in row.header.group("comp"):
         v, cell = row.cell(c.col)
@@ -904,7 +904,7 @@ def _player_row(ctx: Ctx, row: Row, filled: dict, tab: dict, inv: dict) -> str |
             "teamId": team.id, "position": position, "player": pres.id,
             "playerRaw": pres.raw, "playerMethod": pres.method, "listOrder": n,
             "hero": res.id, "heroRaw": res.raw, "heroMethod": res.method,
-            "role": ctx.aliases.role_of(res.id) or (str(role_v) if role_v else None),
+            "role": ctx.aliases.role_of(res.id, role_v, m.get("date")) or (str(role_v) if role_v else None),
             "src": {"sheet": sheet, "cell": cell}})
         inv["parsed"]["appearances"] += 1
     # rebuild derived comps for this map side

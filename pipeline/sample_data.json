@@ -178,7 +178,14 @@
   {
    "id": "sombra",
    "name": "Sombra",
-   "role": "Damage"
+   "role": "Support",
+   "pastRoles": [
+    {
+     "role": "Damage",
+     "until": "2026-10-06",
+     "note": "Reworked from Damage to Support in Season 5 (2026-10-06)."
+    }
+   ]
   },
   {
    "id": "sym",
@@ -333,6 +340,11 @@
    "mode": "Escort"
   },
   {
+   "id": "grimsvotn",
+   "name": "Watchpoint: Grímsvötn",
+   "mode": "Escort"
+  },
+  {
    "id": "shambali",
    "name": "Shambali Monastery",
    "mode": "Escort"
@@ -360,6 +372,11 @@
   {
    "id": "paraiso",
    "name": "Paraíso",
+   "mode": "Hybrid"
+  },
+  {
+   "id": "neonjunction",
+   "name": "Neon Junction",
    "mode": "Hybrid"
   },
   {

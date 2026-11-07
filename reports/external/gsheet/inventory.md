@@ -3,7 +3,7 @@
 - Source: https://docs.google.com/spreadsheets/d/1OaU5O7lVDZbked5FZAvgfR9MnJIdGhTdnIdu4DsL9PQ/edit?usp=sharing
 - Spreadsheet id: `1OaU5O7lVDZbked5FZAvgfR9MnJIdGhTdnIdu4DsL9PQ`
 - Snapshot: `537ace6626874b625684b4f83126f9e0b9df84c74a01b7a0010c03c0a3bf56f5` imported 2026-11-06T07:22:29+00:00
-- Parser gsheet-parser-2 · layout v2 · aliases v3
+- Parser gsheet-parser-2 · layout v2 · aliases v4
 - Tabs: 41 (23 recognised as data) · source rows: 9574
 - Workbook package: 54.0 MB zipped, 136.9 MB unzipped, 404 parts; embedded media: 234 files, 46.8 MB
 - Largest parts: `xl/worksheets/sheet7.xml` 3.9 MB, `xl/worksheets/sheet8.xml` 3.8 MB, `xl/worksheets/sheet6.xml` 3.8 MB, `xl/drawings/drawing7.xml` 3.2 MB, `xl/drawings/drawing6.xml` 3.1 MB, `xl/drawings/drawing8.xml` 2.8 MB

@@ -49,6 +49,8 @@ NAME_TO_ID = {
     "new queen street": "nqs", "runasapi": "runasapi",
     # 2026 season maps (added as they appear in schedules)
     "neon junction": "neonjunction",
+    "watchpoint: grímsvötn": "grimsvotn", "watchpoint: grimsvotn": "grimsvotn",
+    "grímsvötn": "grimsvotn", "grimsvotn": "grimsvotn",
 }
 
 

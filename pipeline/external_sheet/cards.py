@@ -626,7 +626,7 @@ def _card_map(ctx, N, name: str, card: dict, m: dict, order: int, entry: dict | 
                         "playerRaw": pres.raw if pres else None,
                         "playerMethod": pres.method if pres else None,
                         "listOrder": n, "hero": res.id, "heroRaw": res.raw, "heroMethod": res.method,
-                        "role": ctx.aliases.role_of(res.id) or icon_role,
+                        "role": ctx.aliases.role_of(res.id, icon_role) or icon_role,
                         "src": {"sheet": name, "cell": hcell, "picture": h}})
     N._store_map(ctx, rec, bans, apps, [], inv, m)
 

@@ -36,6 +36,9 @@ import json
 import os
 import sys
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import hero_roles as hero_roles_mod  # noqa: E402
+
 ROLES = ("Tank", "Damage", "Support")
 DEFAULT_TARGET = {"Tank": 1, "Damage": 2, "Support": 2}
 
@@ -68,7 +71,10 @@ def _slot_candidates(slot: dict, hero_roles: dict, role: str,
         h = slot.get("hero")
         scores = {h: slot.get("score", 0.0)} if h and h != "UNKNOWN" else {}
     ranked = sorted(
-        ((h, s) for h, s in scores.items() if hero_roles.get(h) == role),
+        # a reworked hero (Sombra, Damage -> Support in Season 5) competes
+        # in every role it has held, so old and new VODs both resolve
+        ((h, s) for h, s in scores.items()
+         if hero_roles_mod.can_play(h, role, hero_roles.get(h))),
         key=lambda hs: -hs[1])
     return ranked[:limit]
 

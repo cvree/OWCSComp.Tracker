@@ -18,7 +18,7 @@
     "corrections/external_reconciliation.json (aliasApprovals), not here, so",
     "this file stays the hand-curated base and the decisions stay auditable."
   ],
-  "version": 3,
+  "version": 4,
   "ignoreValues": ["", "-", "--", "—", "n/a", "na", "none", "?", "??", "tbd", "tba", "x", "null", "unknown", "/"],
   "heroes": {
     "cass": ["cassidy", "mccree", "cass", "cree"],
@@ -37,6 +37,8 @@
     "hog": ["roadhog", "road hog", "hog"],
     "ram": ["ramattra", "ram"],
     "doomfist": ["doomfist", "doom"],
+    "jetcat": ["jetpack cat", "jetcat", "jet cat"],
+    "dmon": ["d.mon", "dmon", "d mon"],
     "dva": ["d.va", "dva", "d va"],
     "sojourn": ["sojourn", "soj"],
     "kiriko": ["kiriko", "kiri"],
@@ -80,7 +82,8 @@
     "blizzworld": ["blizzard world", "blizzworld", "bw"],
     "eich": ["eichenwalde", "eich"],
     "anubis": ["throne of anubis", "anubis"],
-    "neonjunction": ["neon junction"],
+    "neonjunction": ["neon junction", "neon jct"],
+    "grimsvotn": ["watchpoint grimsvotn", "watchpoint: grímsvötn", "grimsvotn", "grímsvötn", "grimsvoetn"],
     "colosseo": ["colosseo", "colosseum"],
     "runasapi": ["runasapi"],
     "suravasa": ["suravasa"],
@@ -91,8 +94,7 @@
     {"id": "gibraltar", "name": "Watchpoint: Gibraltar", "mode": "Escort", "aliases": ["watchpoint gibraltar", "gibraltar"]},
     {"id": "rialto", "name": "Rialto", "mode": "Escort", "aliases": ["rialto"]},
     {"id": "numbani", "name": "Numbani", "mode": "Hybrid", "aliases": ["numbani"]},
-    {"id": "hollywood", "name": "Hollywood", "mode": "Hybrid", "aliases": ["hollywood"]},
-    {"id": "grimsvotn", "name": "Grímsvötn", "mode": "Escort", "aliases": ["grimsvotn", "grimsvoetn"]}
+    {"id": "hollywood", "name": "Hollywood", "mode": "Hybrid", "aliases": ["hollywood"]}
   ],
   "modes": {
     "Control": ["control", "koth", "king of the hill", "ctrl"],

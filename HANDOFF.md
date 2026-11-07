@@ -1,5 +1,31 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
+## UPDATE (2026-11-07, twenty-fifth pass) — Season 5 maps and roles
+
+**Catalog (`pipeline/sample_data.json`, seeded into `game_maps` / `heroes`).**
+* **Watchpoint: Grímsvötn** (`grimsvotn`, Escort) added — the Season 5 map (2026-10-06), already in
+  the NA/EMEA Stage 3 pools. It was only an alias-file "extra map" before, so VOD map identification
+  (`map_identify.py` reads `game_maps`) could never name it. Aliases moved into `maps`.
+* **Neon Junction** (`neonjunction`) is **Hybrid**; it had been auto-added with mode `Unknown`.
+* `faceit_parser.MAP_MODES` and `obssojourn_source.NAME_TO_ID` know both maps.
+
+**Sombra is Support** (Season 5 rework). A hero keeps ONE role in the DB — today's — and the
+catalog records the old one under `pastRoles` (`[{"role": "Damage", "until": "2026-10-06"}]`).
+`pipeline/hero_roles.py` reads it:
+* `detect.lib_for_slot` and `comp_solver` let a reworked hero compete in **every role it has held**,
+  so a pre-Season-5 VOD (Sombra in a damage slot) and a current one (support slot) both resolve;
+* the sheet importer (`AliasBook.role_of(hero, hint, date)`) takes the sheet's own role for the
+  position (column header / role icon) for such heroes, else the role on the map's date. Every
+  Sombra appearance now matches its slot: Damage in Stages 1–2, Support from Stage 3's rework on.
+* Pages (draft, tiers by role) show today's role.
+
+**Also fixed:** `init_db.seed_reference` upserts heroes and maps instead of `INSERT OR REPLACE`
+(REPLACE deletes first, cascading through foreign keys). **Teams are still `INSERT OR REPLACE`** —
+running `init_db.py` on the committed DB clears the seeded teams' `logo_url` and unlinks their
+players (`players.team_id`). Not changed here; worth fixing before `pipeline.yml` next runs it.
+
+Tests: `pipeline/test_hero_roles.py`.
+
 ## UPDATE (2026-11-05, twenty-fourth pass) — played series dated by Liquipedia
 
 **Symptom.** Recent big matches were missing from the 24/48/72-hour and 14-day views even though
