@@ -1,6 +1,6 @@
 {
  "_readme": "Written by pipeline/liquipedia_schedule.py from Liquipedia (CC BY-SA 3.0). Do not hand-edit; put corrections in config/schedule.json `matches`.",
- "fetchedAt": "2026-11-08T19:41:09+00:00",
+ "fetchedAt": "2026-11-09T11:29:51+00:00",
  "matches": [
   {
    "bestOf": 3,
@@ -8185,7 +8185,7 @@
     }
    ],
    "teamA": "The Gatos Guapos",
-   "teamB": null,
+   "teamB": "Stronghold",
    "url": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Asia/Stage_3/Pacific"
   },
   {
@@ -8208,7 +8208,7 @@
     }
    ],
    "teamA": "SeijiKING",
-   "teamB": null,
+   "teamB": "Team Benxxn",
    "url": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Asia/Stage_3/Pacific"
   },
   {
@@ -8223,7 +8223,7 @@
    "scoreA": null,
    "scoreB": null,
    "section": "{{Stage|Regional Playoffs}}",
-   "startsAt": "2026-11-09T23:30:00+07:00",
+   "startsAt": "2026-11-09T22:30:00+07:00",
    "streams": [
     {
      "kind": "twitch",
@@ -8246,7 +8246,7 @@
    "scoreA": null,
    "scoreB": null,
    "section": "{{Stage|Regional Playoffs}}",
-   "startsAt": "2026-11-09T21:30:00+07:00",
+   "startsAt": "2026-11-09T21:00:00+07:00",
    "streams": [
     {
      "kind": "twitch",
@@ -15234,7 +15234,7 @@
   {
    "event": "asia/stage-3",
    "matches": 20,
-   "revid": 1154228,
+   "revid": 1154449,
    "title": "Overwatch Champions Series/2026/Asia/Stage 3"
   },
   {
@@ -15264,7 +15264,7 @@
   {
    "event": "pacific/stage-3",
    "matches": 4,
-   "revid": 1154320,
+   "revid": 1154501,
    "title": "Overwatch Champions Series/2026/Asia/Stage 3/Pacific"
   },
   {
@@ -15276,7 +15276,7 @@
   {
    "event": "international/champions-clash",
    "matches": 16,
-   "revid": 1152986,
+   "revid": 1154450,
    "title": "Overwatch Champions Series/2026/Champions Clash"
   },
   {
@@ -15354,7 +15354,7 @@
   {
    "event": "international/midseason-championship",
    "matches": 8,
-   "revid": 1146813,
+   "revid": 1154451,
    "title": "Overwatch Champions Series/2026/Midseason Championship"
   },
   {
