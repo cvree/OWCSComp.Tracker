@@ -1,6 +1,6 @@
 {
  "_readme": "Written by pipeline/liquipedia_schedule.py from Liquipedia (CC BY-SA 3.0). Do not hand-edit; put corrections in config/schedule.json `matches`.",
- "fetchedAt": "2026-11-09T11:29:51+00:00",
+ "fetchedAt": "2026-11-09T23:46:57+00:00",
  "matches": [
   {
    "bestOf": 3,
@@ -5536,7 +5536,7 @@
     }
    ],
    "teamA": "T1",
-   "teamB": "Pacific #1",
+   "teamB": "The Gatos Guapos",
    "url": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Asia/Stage_3"
   },
   {
@@ -5660,7 +5660,7 @@
     }
    ],
    "teamA": "Team Falcons",
-   "teamB": "Pacific #1",
+   "teamB": "The Gatos Guapos",
    "url": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Asia/Stage_3"
   },
   {
@@ -5784,7 +5784,7 @@
     }
    ],
    "teamA": "MURASH GAMING",
-   "teamB": "Pacific #1",
+   "teamB": "The Gatos Guapos",
    "url": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Asia/Stage_3"
   },
   {
@@ -8174,8 +8174,8 @@
    "order": 1,
    "page": "Overwatch Champions Series/2026/Asia/Stage 3/Pacific",
    "round": null,
-   "scoreA": null,
-   "scoreB": null,
+   "scoreA": 3,
+   "scoreB": 0,
    "section": "{{Stage|Regional Playoffs}}",
    "startsAt": "2026-11-09T18:00:00+07:00",
    "streams": [
@@ -8197,8 +8197,8 @@
    "order": 2,
    "page": "Overwatch Champions Series/2026/Asia/Stage 3/Pacific",
    "round": null,
-   "scoreA": null,
-   "scoreB": null,
+   "scoreA": 3,
+   "scoreB": 2,
    "section": "{{Stage|Regional Playoffs}}",
    "startsAt": "2026-11-09T19:30:00+07:00",
    "streams": [
@@ -8220,18 +8220,18 @@
    "order": 3,
    "page": "Overwatch Champions Series/2026/Asia/Stage 3/Pacific",
    "round": null,
-   "scoreA": null,
-   "scoreB": null,
+   "scoreA": 4,
+   "scoreB": 0,
    "section": "{{Stage|Regional Playoffs}}",
-   "startsAt": "2026-11-09T22:30:00+07:00",
+   "startsAt": "2026-11-09T23:10:00+07:00",
    "streams": [
     {
      "kind": "twitch",
      "url": "https://www.twitch.tv/ow_esports_th"
     }
    ],
-   "teamA": null,
-   "teamB": null,
+   "teamA": "The Gatos Guapos",
+   "teamB": "SeijiKING",
    "url": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Asia/Stage_3/Pacific"
   },
   {
@@ -8243,18 +8243,18 @@
    "order": 4,
    "page": "Overwatch Champions Series/2026/Asia/Stage 3/Pacific",
    "round": "Third Place Match",
-   "scoreA": null,
-   "scoreB": null,
+   "scoreA": 1,
+   "scoreB": 3,
    "section": "{{Stage|Regional Playoffs}}",
-   "startsAt": "2026-11-09T21:00:00+07:00",
+   "startsAt": "2026-11-09T21:35:00+07:00",
    "streams": [
     {
      "kind": "twitch",
      "url": "https://www.twitch.tv/ow_esports_th"
     }
    ],
-   "teamA": null,
-   "teamB": null,
+   "teamA": "Stronghold",
+   "teamB": "Team Benxxn",
    "url": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Asia/Stage_3/Pacific"
   },
   {
@@ -15234,7 +15234,7 @@
   {
    "event": "asia/stage-3",
    "matches": 20,
-   "revid": 1154449,
+   "revid": 1154552,
    "title": "Overwatch Champions Series/2026/Asia/Stage 3"
   },
   {
@@ -15264,7 +15264,7 @@
   {
    "event": "pacific/stage-3",
    "matches": 4,
-   "revid": 1154501,
+   "revid": 1154549,
    "title": "Overwatch Champions Series/2026/Asia/Stage 3/Pacific"
   },
   {
