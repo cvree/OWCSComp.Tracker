@@ -17,6 +17,10 @@
                              played this week is not simply empty)
      1 · 2 · 3               the last 24 / 48 / 72 hours: the newest match
                              day, two days or three (dates are per day)
+     patch                   since the newest balance patch
+                             (assets/data/patches.v1.js), up to the newest
+                             map; its "previous window" is the patch before
+                             it, so the arrows show how the meta moved
      custom                  any from / to, by date
 
    No "whole season" and no per-stage presets: what people want is what is
@@ -25,7 +29,7 @@
    Region: a page can put a region menu in the bar (opt.regions), so the
    region sits beside the dates however far down the page someone is.
 
-   State: ?t=14 | ?t=1 | ?t=custom&tf=…&tt=…
+   State: ?t=14 | ?t=1 | ?t=patch | ?t=custom&tf=…&tt=…
    The URL wins, so a shared link shows what its sender saw; otherwise the
    last range this browser chose is remembered (localStorage, a per-viewer
    convenience — a missing or blocked store simply means the default).
@@ -40,6 +44,7 @@
   "use strict";
   const P = window.OWCS;
   const T = window.OWCS_SHEET_TIERS;
+  const PATCHES = window.OWCS_PATCHES;
   if (!P) return;
   const esc = P.esc;
 
@@ -47,11 +52,15 @@
   const HOURS = ["1", "2", "3"];
   const DAYS = HOURS.concat(["7", "14", "30", "60", "90"]);
   const QUICK = [["7", "7 days"], ["14", "14 days"], ["30", "30 days"], ["90", "90 days"]];
+  /* "Since patch" joins the quick buttons when a patch is on record. */
+  const quickList = () => (latestPatch() ? QUICK.concat([[PATCH, "Since patch"]]) : QUICK);
   const STORE = "owcs.range.v1";
   /* "Last 24 hours" for 1–3 days, "Last 30 days" otherwise. */
   const isHours = (t) => HOURS.indexOf(String(t)) >= 0;
-  const longLabel = (t) => (isHours(t) ? "Last " + Number(t) * 24 + " hours" : "Last " + t + " days");
-  const shortLabel = (t) => (isHours(t) ? Number(t) * 24 + " hours" : t + " days");
+  const PATCH = "patch";
+  const longLabel = (t) => (t === PATCH ? "Since patch day" :
+    isHours(t) ? "Last " + Number(t) * 24 + " hours" : "Last " + t + " days");
+  const shortLabel = (t) => (t === PATCH ? "Since patch" : isHours(t) ? Number(t) * 24 + " hours" : t + " days");
 
   const DAY = 86400000;
   const addDays = (iso, n) => new Date(Date.parse(iso + "T00:00:00Z") + n * DAY).toISOString().slice(0, 10);
@@ -74,6 +83,15 @@
     });
     return d || maxDate();
   }
+
+  /* Balance patches, newest first, each with `from`: the first day its
+     window counts (owcsFrom when the tournament lagged the live game). */
+  function patchList() {
+    const list = ((PATCHES && PATCHES.patches) || []).filter((p) => p && valid(p.owcsFrom || p.date))
+      .map((p) => Object.assign({}, p, { from: p.owcsFrom || p.date }));
+    return list.sort((a, b) => (a.from < b.from ? 1 : a.from > b.from ? -1 : 0));
+  }
+  const latestPatch = () => patchList()[0] || null;
 
   /* ----------------------------------------------------------- state */
   function readStore() {
@@ -98,6 +116,7 @@
   function clean(v) {
     if (!v || !v.t) return null;
     if (DAYS.indexOf(String(v.t)) >= 0) return { t: String(v.t) };
+    if (v.t === PATCH && latestPatch()) return { t: PATCH };
     if (v.t === "custom" && valid(v.tf) && valid(v.tt) && v.tf <= v.tt) return { t: "custom", tf: v.tf, tt: v.tt };
     return null;
   }
@@ -120,6 +139,16 @@
       return { key: t, from: from, to: max, days: n, label: longLabel(t), short: shortLabel(t),
         prev: { from: addDays(from, -n), to: addDays(from, -1), days: n } };
     }
+    if (t === PATCH && latestPatch()) {
+      const p = latestPatch(), before = patchList()[1];
+      const from = p.from, to = max && max >= from ? max : from, n = span(from, to);
+      const pto = addDays(from, -1);
+      return { key: t, from: from, to: to, days: n, patch: p, label: "Since patch day · " + fmt(from), short: "Since patch",
+        /* The window before is the previous patch, whatever its length:
+           "before the patch" is the comparison people want. */
+        prev: before ? { from: before.from, to: pto, days: span(before.from, pto), patch: before }
+          : { from: addDays(from, -n), to: pto, days: n } };
+    }
     if (t === "custom") {
       const n = span(state.tf, state.tt);
       return { key: t, from: state.tf, to: state.tt, days: n, label: fmt(state.tf) + " – " + fmt(state.tt), short: "Custom",
@@ -136,8 +165,11 @@
   const phrase = (opt) => {
     const r = resolve(opt);
     if (DAYS.indexOf(r.key) >= 0) return longLabel(r.key).replace(/^Last/, "the last");
+    if (r.key === PATCH) return "since the " + fmt(r.from) + " patch";
     return r.label;
   };
+  /* What the rising / falling arrows compare against, in words. */
+  const prevPhrase = () => (state.t === PATCH && latestPatch() ? "the previous patch" : "the previous window");
 
   /* Options for app/compbook.js and app/tierstats.js. */
   const buildOpts = (opt) => { const r = resolve(opt); return { asOf: r.to, from: r.from || null }; };
@@ -160,16 +192,19 @@
   function controlHtml(host) {
     const r = resolve({ region: (host && host.dataset.region) || null });
     const sel = (v) => (state.t === v ? " selected" : "");
-    const quick = '<div class="seg trange__seg" role="group" aria-label="Time range">' + QUICK.map((q) =>
-      '<button type="button" data-t="' + q[0] + '" aria-pressed="' + (state.t === q[0] ? "true" : "false") + '">' +
+    const patch = latestPatch();
+    const patchOpt = patch ? '<option value="' + PATCH + '"' + sel(PATCH) + ">Since patch day (" + esc(fmt(patch.from)) + ")</option>" : "";
+    const quick = '<div class="seg trange__seg" role="group" aria-label="Time range">' + quickList().map((q) =>
+      '<button type="button" data-t="' + q[0] + '" aria-pressed="' + (state.t === q[0] ? "true" : "false") + '"' +
+      (q[0] === PATCH ? ' title="Every map since the ' + esc(fmt(patch.from)) + ' balance patch"' : "") + ">" +
       esc(q[1]) + "</button>").join("") + "</div>";
     /* "Custom…": the short windows (24 / 48 / 72 hours), 60 days, and
        your own dates. */
     const hours = HOURS.map((h) => '<option value="' + h + '"' + sel(h) + ">" + esc(longLabel(h)) + "</option>").join("");
     const more = '<label class="trange__more"><span class="visually-hidden">Custom range</span>' +
       '<select class="input" data-t-select>' +
-      '<option value="">' + (QUICK.some((q) => q[0] === state.t) ? "Custom…" : esc(r.short)) + "</option>" +
-      hours +
+      '<option value="">' + (quickList().some((q) => q[0] === state.t) ? "Custom…" : esc(r.short)) + "</option>" +
+      hours + patchOpt +
       '<option value="60"' + sel("60") + ">Last 60 days</option>" +
       '<option value="custom"' + sel("custom") + ">Pick dates…</option>" +
       "</select></label>";
@@ -183,7 +218,7 @@
        row high: every window and custom dates. */
     const all = '<label class="trange__all"><span class="visually-hidden">Time range</span>' +
       '<select class="input" data-t-select>' +
-      DAYS.map((d) => '<option value="' + d + '"' + sel(d) + ">" + esc(longLabel(d)) + "</option>").join("") +
+      DAYS.map((d) => '<option value="' + d + '"' + sel(d) + ">" + esc(longLabel(d)) + "</option>").join("") + patchOpt +
       '<option value="custom"' + sel("custom") + ">Pick dates…</option>" +
       "</select></label>";
     /* The region menu, when the page asked for one (opt.regions). */
@@ -208,7 +243,10 @@
       const latestNote = isHours(r.key) ? ' <span class="dim" title="Counted back from the newest match' +
         (host.dataset.region ? " in this region" : "") + ', not from right now.">(latest match day' +
         (r.days > 1 ? "s" : "") + ")</span>" : "";
-      res.innerHTML = (r.from && r.from !== r.to ? esc(fmt(r.from)) + " – " : "") + esc(fmt(r.to)) + latestNote +
+      const patchNote = r.patch ? ' <span class="dim">(' + (r.patch.url ? '<a href="' + esc(r.patch.url) +
+        '" target="_blank" rel="noopener">' + esc(r.patch.name || "patch") + "</a>" : esc(r.patch.name || "patch")) +
+        (r.prev && r.prev.patch ? ", vs " + esc(r.prev.patch.name || "the patch before") : "") + ")</span>" : "";
+      res.innerHTML = (r.from && r.from !== r.to ? esc(fmt(r.from)) + " – " : "") + esc(fmt(r.to)) + latestNote + patchNote +
         (host._note ? ' · <span class="trange__note">' + host._note + "</span>" : "") +
         ' <span class="dim" title="The spreadsheet records no dates; each match is dated from the official schedule by its stage, week and day.">· est. dates</span>';
     }
@@ -293,6 +331,7 @@
     if (b) set({ t: b.dataset.tWiden });
   });
 
-  P.timeRange = { DEFAULT: DEFAULT, get: () => Object.assign({}, state), resolve: resolve, phrase: phrase, buildOpts: buildOpts, set: set,
+  P.timeRange = { DEFAULT: DEFAULT, get: () => Object.assign({}, state), resolve: resolve, phrase: phrase, prevPhrase: prevPhrase,
+    patches: patchList, latestPatch: latestPatch, buildOpts: buildOpts, set: set,
     onChange: onChange, mount: mount, note: note, setRegion: setRegion, widenHtml: widenHtml, addDays: addDays, longLabel: longLabel };
 })();

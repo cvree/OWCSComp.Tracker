@@ -65,14 +65,16 @@
 
   function renderWindowLine() {
     const B = cur.bucket("*");
+    const rw = TR.resolve({ region: state.region || null });
     const n = B ? B.maps : 0;
     TR.note("hm-range", "<b>" + n + "</b> pro map" + (n === 1 ? "" : "s") +
       (state.region ? " · " + esc((REGIONS.find((r) => r[0] === state.region) || [])[1]) : ""));
     /* A short window in a quiet region can be thin; say so, and offer
        the wider window in one tap rather than leaving a sparse page. */
     P.mount("hm-window", !n ? "No pro maps in this window." + TR.widenHtml()
-      : (prev && prev.bucket("*") ? '<span class="dim">▲▼ compare with the ' + esc(label.toLowerCase().replace("last ", "")) +
-          " before.</span>" : "") +
+      : (prev && prev.bucket("*") ? '<span class="dim">▲▼ compare with ' + (rw.key === "patch"
+          ? "the patch before (" + esc((rw.prev.patch && rw.prev.patch.name) || "the window before") + ")."
+          : "the " + esc(label.toLowerCase().replace("last ", "")) + " before.") + "</span>" : "") +
         (n < 20 ? ' <span class="dim">Only ' + n + " maps in this window — tiers on a small sample move a lot.</span>" + TR.widenHtml() : ""));
   }
 
@@ -106,10 +108,11 @@
 
   /* ---------------------------------------------------------- S tier */
   function trendChip(now, before) {
-    if (before == null) return '<span class="trend" data-dir="new" title="Not picked in the previous window">NEW</span>';
+    const vs = P.timeRange && P.timeRange.prevPhrase ? P.timeRange.prevPhrase() : "the previous window";
+    if (before == null) return '<span class="trend" data-dir="new" title="Not picked in ' + vs + '">NEW</span>';
     const d = Math.round((now - before) * 100);
-    if (Math.abs(d) < 2) return '<span class="trend" data-dir="flat" title="Pick share about the same as the previous window">±' + Math.abs(d) + "</span>";
-    return '<span class="trend" data-dir="' + (d > 0 ? "up" : "down") + '" title="Pick share vs the previous window, in points">' +
+    if (Math.abs(d) < 2) return '<span class="trend" data-dir="flat" title="Pick share about the same as ' + vs + '">±' + Math.abs(d) + "</span>";
+    return '<span class="trend" data-dir="' + (d > 0 ? "up" : "down") + '" title="Pick share vs ' + vs + ', in points">' +
       (d > 0 ? "▲ " : "▼ ") + Math.abs(d) + "</span>";
   }
 
