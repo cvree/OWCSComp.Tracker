@@ -1,6 +1,6 @@
 {
  "_readme": "Written by pipeline/liquipedia_schedule.py from Liquipedia (CC BY-SA 3.0). Do not hand-edit; put corrections in config/schedule.json `matches`.",
- "fetchedAt": "2026-11-10T11:10:44+00:00",
+ "fetchedAt": "2026-11-10T21:17:59+00:00",
  "matches": [
   {
    "bestOf": 3,
@@ -15402,7 +15402,7 @@
   {
    "event": "international/world-finals",
    "matches": 0,
-   "revid": 1155025,
+   "revid": 1155104,
    "title": "Overwatch Champions Series/2026/World Finals"
   }
  ],
