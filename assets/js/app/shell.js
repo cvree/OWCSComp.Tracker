@@ -277,7 +277,8 @@
     }
 
     /* current patch: newest entry in the exported patch list, or nothing */
-    const patches = (D.patches || []).slice()
+    const patches = ((D.patches && D.patches.length) ? D.patches
+      : ((window.OWCS_PATCHES || {}).patches || []).map((x) => ({ id: x.id, name: x.name, from: x.owcsFrom || x.date }))).slice()
       .sort((a, b) => String(b.from || "").localeCompare(String(a.from || "")));
     if (patches[0]) push("Patch " + (patches[0].name || patches[0].id), { dot: false });
 

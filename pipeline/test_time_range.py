@@ -39,10 +39,11 @@ ROOT = os.path.dirname(HERE)
 NODE = shutil.which("node")
 MODULE = os.path.join(ROOT, "assets", "js", "app", "timerange.js")
 EXPORT = os.path.join(ROOT, "assets", "data", "sheet_tiers.v1.js")
+PATCHES = os.path.join(ROOT, "assets", "data", "patches.v1.js")
 
 DRIVER = r"""
 const fs = require("fs"), vm = require("vm");
-const [modPath, exportPath] = process.argv.slice(1);
+const [modPath, exportPath, patchesPath] = process.argv.slice(1);
 let buf = ""; process.stdin.on("data", (d) => buf += d); process.stdin.on("end", () => {
   const cases = JSON.parse(buf);
   const out = {};
@@ -59,6 +60,7 @@ let buf = ""; process.stdin.on("data", (d) => buf += d); process.stdin.on("end",
       setQs: (kv) => { Object.keys(kv).forEach((k) => { if (kv[k] == null || kv[k] === "") url.searchParams.delete(k); else url.searchParams.set(k, kv[k]); }); } };
     vm.createContext(ctx);
     vm.runInContext(fs.readFileSync(exportPath, "utf8"), ctx);
+    if (!/^noPatch/.test(name)) vm.runInContext(fs.readFileSync(patchesPath, "utf8"), ctx);
     vm.runInContext(fs.readFileSync(modPath, "utf8"), ctx);
     out[name] = fn(ctx.OWCS.timeRange, ctx, url, store);
   };
@@ -100,6 +102,21 @@ let buf = ""; process.stdin.on("data", (d) => buf += d); process.stdin.on("end",
   run("setDefaultClearsUrl", "?t=30", null, (TR, ctx, url) => { TR.set({ t: "14" }); return url.search; });
   run("buildOpts", "", null, (TR) => TR.buildOpts());
   run("widen", "", null, (TR) => (TR.widenHtml().match(/data-t-widen="([^"]+)"/g) || []).map((m) => m.split('"')[1]));
+  run("patch", "?t=patch", null, (TR, ctx) => {
+    const r = TR.resolve();
+    const el = { dataset: {}, classList: { add: () => {} }, setAttribute: () => {}, addEventListener: () => {},
+      querySelector: () => null, innerHTML: "" };
+    TR.mount(el, {});
+    return { r: pick(r), patch: r.patch && r.patch.id, phrase: TR.phrase(), vs: TR.prevPhrase(),
+      patches: ctx.OWCS_PATCHES.patches, max: ctx.OWCS_SHEET_TIERS.dates.max, html: el.innerHTML };
+  });
+  run("patchRemembered", "", { t: "patch" }, (TR) => TR.get().t);
+  run("noPatchFile", "?t=patch", null, (TR) => {
+    const el = { dataset: {}, classList: { add: () => {} }, setAttribute: () => {}, addEventListener: () => {},
+      querySelector: () => null, innerHTML: "" };
+    TR.mount(el, {});
+    return { t: TR.get().t, vs: TR.prevPhrase(), offered: /value="patch"|data-t="patch"/.test(el.innerHTML) };
+  });
   run("listeners", "", null, (TR) => { let seen = null; TR.onChange((r) => { seen = r.key; }); TR.set({ t: "90" }); return seen; });
   console.log(JSON.stringify(out));
 });
@@ -115,7 +132,7 @@ def add_days(iso: str, n: int) -> str:
 class TimeRange(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        out = subprocess.run([NODE, "-e", DRIVER, MODULE, EXPORT], input="{}", capture_output=True,
+        out = subprocess.run([NODE, "-e", DRIVER, MODULE, EXPORT, PATCHES], input="{}", capture_output=True,
                              text=True, encoding="utf-8", timeout=120)
         if out.returncode != 0:
             raise AssertionError(out.stderr)
@@ -201,6 +218,33 @@ class TimeRange(unittest.TestCase):
         self.assertEqual(b["asOf"], self.o["default"]["max"])
         self.assertEqual(b["from"], add_days(self.o["default"]["max"], -13))
         self.assertEqual(self.o["widen"], ["30", "60"])
+
+
+    def test_since_patch_day(self):
+        o = self.o["patch"]
+        newest = max(o["patches"], key=lambda p: p.get("owcsFrom") or p["date"])
+        start = newest.get("owcsFrom") or newest["date"]
+        self.assertEqual(o["r"]["key"], "patch")
+        self.assertEqual(o["patch"], newest["id"])
+        self.assertEqual(o["r"]["from"], start)
+        # up to the newest map; a patch newer than every map is an empty window, never a negative one
+        self.assertEqual(o["r"]["to"], max(o["max"], start))
+        # the arrows compare against the patch before (or an equal window when there is none)
+        self.assertEqual(o["r"]["prev"]["to"], add_days(start, -1))
+        older = sorted((p.get("owcsFrom") or p["date"] for p in o["patches"]), reverse=True)
+        if len(older) > 1:
+            self.assertEqual(o["r"]["prev"]["from"], older[1])
+        self.assertIn(start, o["phrase"])
+        self.assertEqual(o["vs"], "the previous patch")
+        self.assertIn('data-t="patch"', o["html"])
+        self.assertIn('<option value="patch" selected>', o["html"])
+        self.assertEqual(self.o["patchRemembered"], "patch")
+
+    def test_no_patch_on_record_means_no_patch_option(self):
+        o = self.o["noPatchFile"]
+        self.assertEqual(o["t"], "14")
+        self.assertEqual(o["vs"], "the previous window")
+        self.assertFalse(o["offered"])
 
 
 class EveryCompAndHeroPageHasTheBar(unittest.TestCase):
