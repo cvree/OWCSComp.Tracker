@@ -1,6 +1,6 @@
 {
  "_readme": "Written by pipeline/liquipedia_schedule.py from Liquipedia (CC BY-SA 3.0). Do not hand-edit; put corrections in config/schedule.json `matches`.",
- "fetchedAt": "2026-11-11T10:56:45+00:00",
+ "fetchedAt": "2026-11-11T21:57:11+00:00",
  "matches": [
   {
    "bestOf": 3,
@@ -5579,10 +5579,10 @@
    "order": 3,
    "page": "Overwatch Champions Series/2026/Asia/Stage 3",
    "round": "Day 1",
-   "scoreA": null,
-   "scoreB": null,
+   "scoreA": 3,
+   "scoreB": 0,
    "section": "{{HiddenSort|Day 1}}",
-   "startsAt": "2026-11-11T20:30:00+09:00",
+   "startsAt": "2026-11-11T20:05:00+09:00",
    "streams": [
     {
      "kind": "afreeca",
@@ -5610,10 +5610,10 @@
    "order": 4,
    "page": "Overwatch Champions Series/2026/Asia/Stage 3",
    "round": "Day 1",
-   "scoreA": null,
-   "scoreB": null,
+   "scoreA": 3,
+   "scoreB": 0,
    "section": "{{HiddenSort|Day 1}}",
-   "startsAt": "2026-11-11T22:15:00+09:00",
+   "startsAt": "2026-11-11T21:15:00+09:00",
    "streams": [
     {
      "kind": "afreeca",
@@ -15234,7 +15234,7 @@
   {
    "event": "asia/stage-3",
    "matches": 20,
-   "revid": 1155143,
+   "revid": 1155178,
    "title": "Overwatch Champions Series/2026/Asia/Stage 3"
   },
   {
