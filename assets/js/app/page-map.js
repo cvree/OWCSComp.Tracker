@@ -26,6 +26,7 @@
   const secs = (n) => (n == null ? "—" : P.fmtClock(n));
 
   let entry = null;
+  let log = null;     /* this map in app/maplog.js: day, start time, match, series */
 
   document.addEventListener("DOMContentLoaded", () => {
     const id = P.qs("id"), ext = P.qs("ext");
@@ -39,6 +40,8 @@
         'It may have been renamed by a newer import. <a href="meta.html?tab=maps">Browse every map →</a>'));
       return;
     }
+    const L = P.mapLog;
+    log = L ? L.byId(entry.extId || (entry.sheet && entry.sheet.id) || ext) : null;
     render();
     loadSheetDetail();
     if (P.evidence) P.evidence.wire(document);
@@ -78,8 +81,8 @@
       "</div>";
     P.mount("head",
       '<div class="page-head page-head--tight map-hd">' +
-        '<p class="eyebrow">' + esc([entry.event, entry.stage, entry.date ? P.fmtDate(entry.date) : null]
-          .filter(Boolean).join(" · ")) + "</p>" +
+        '<p class="eyebrow">' + esc((log ? [P.mapLog.eventLabel(log), P.mapLog.when(log).date]
+          : [entry.event, entry.stage, entry.date ? P.fmtDate(entry.date) : null]).filter(Boolean).join(" · ")) + "</p>" +
         "<h1>" + esc(title()) + (order ? ' <span class="dim">· map ' + esc(order) + "</span>" : "") + "</h1>" +
         '<p class="row">' + (entry.mode || info.mode ? '<span class="chip chip--outline">' + esc(entry.mode || info.mode) + "</span>" : "") +
           (entry.region ? '<span class="chip chip--outline">' + esc(P.regionName(entry.region)) + "</span>" : "") +
@@ -93,9 +96,94 @@
         '<div class="row u-mt-4">' + watch + "</div>" +
       "</div>");
 
-    const parts = [P.extIsFixture() ? P.extProvenanceLine() : "", factsSection(), vodSection(), sheetSection()];
+    const parts = [P.extIsFixture() ? P.extProvenanceLine() : "", matchSection(), compsSection(),
+      /* With the match and comps above, the source-by-source facts table
+         only earns its place when a broadcast reading can disagree. */
+      log && !entry.vod ? "" : factsSection(), seriesSection(), vodSection(), sheetSection()];
     if (entry.sheet) parts.push(reconSection());
     document.getElementById("body").innerHTML = parts.filter(Boolean).join("");
+  }
+
+  /* ------------------------------------------------------- the match */
+  /* When, which event and round, the series score, which map of how many,
+     who won and who picked — the facts that place the map. */
+  function matchSection() {
+    if (!log) return "";
+    const L = P.mapLog;
+    const w = L.when(log);
+    const all = L.series(log);
+    const sc = L.seriesScore(log);
+    const m = log.match || {};
+    const s = entry.sheet || {};
+    const winner = L.winner(log);
+    const seriesWinner = sc[0] > sc[1] ? log.teamA : sc[1] > sc[0] ? log.teamB : null;
+    const row = (k, v) => "<div><dt>" + esc(k) + "</dt><dd>" + v + "</dd></div>";
+    return '<section class="band" aria-labelledby="h-match"><div class="sec-head"><h2 id="h-match">The match</h2>' +
+      '<a class="sec-link" href="' + esc(L.seriesHref(log)) + '">Whole series →</a></div>' +
+      '<dl class="mp-match card">' +
+        row("When", esc(w.date) + (w.time ? ' <span class="mono small">' + esc(w.time) + "</span>" : "") +
+          '<div class="dim small">' + esc(w.time ? "series start, in your time zone" : w.est ? "estimated day" : "time not listed") + "</div>") +
+        row("Event", esc(L.eventLabel(log)) + (m.lbl ? '<div class="dim small">' + esc(m.lbl) + "</div>" : "")) +
+        row("Series", esc(L.teamName(log.teamA)) + ' <b class="mono">' + sc[0] + "–" + sc[1] + "</b> " + esc(L.teamName(log.teamB)) +
+          (seriesWinner ? '<div class="dim small">' + esc(L.teamName(seriesWinner)) + " won the series</div>" : "")) +
+        row("This map", "Map " + esc(log.n || "?") + " of " + all.length + " · " + esc(L.mapName(log)) +
+          (log.mode ? " (" + esc(log.mode) + ")" : "") + (s.scoreRaw ? '<div class="dim small">' + esc(s.scoreRaw) + "</div>" : "")) +
+        row("Map winner", winner ? esc(L.teamName(winner)) : '<span class="dim">not recorded</span>') +
+        row("Map pick", s.pickedBy ? esc(L.teamName(s.pickedBy)) : s.pickNote ? "“" + esc(s.pickNote) + "”" : '<span class="dim">not recorded</span>') +
+      "</dl></section>";
+  }
+
+  /* Both teams' comps side by side: the five each was listed with first,
+     every other hero listed (swaps), and the bans — with names. */
+  function compsSection() {
+    if (!log) return "";
+    const L = P.mapLog;
+    const U = P.tierUI;
+    /* A hero with its name under it, linking to the hero's page. */
+    const named = (id, px) => {
+      const h = P.hero(id);
+      return '<a class="mp-hero" href="hero.html?id=' + encodeURIComponent(h.id) + '" data-role="' + esc(h.role || "") +
+        '" title="' + esc(h.name + (h.role ? " — " + h.role : "")) + '">' + P.heroFace(h, px) +
+        '<span class="mp-hero__n">' + esc(h.name) + "</span></a>";
+    };
+    const card = (side) => {
+      const x = L.side(log, side);
+      const comp = U ? U.byRole(x.comp || []) : (x.comp || []);
+      const extra = x.heroes.filter((h) => comp.indexOf(h) < 0);
+      return '<div class="mp-comp' + (x.won ? " is-win" : "") + '"><div class="mp-comp__hd">' +
+        (x.team ? '<a class="plain-link" href="team.html?id=' + encodeURIComponent(x.team) + '">' +
+          P.anyTeamPlate(x.team, { size: "sm" }) + "</a>" : P.anyTeamPlate(null, { size: "sm" })) + (x.won === true ? '<span class="chip" data-state="evidence"><span class="dot"></span>Won</span>'
+          : x.won === false ? '<span class="chip chip--outline">Lost</span>' : "") + "</div>" +
+        (comp.length ? '<div class="mp-comp__heroes">' + comp.map((h) => named(h, 52)).join("") + "</div>"
+          : '<p class="dim small u-mt-3">' + (x.heroes.length ? "No full five-hero comp listed." : "No heroes listed.") + "</p>") +
+        (extra.length ? '<div class="mp-comp__more"><p class="label">Also played <span class="dim small">(swaps — listed after a player’s first hero)</span></p>' +
+          '<div class="row">' + extra.map((h) => named(h, 36)).join("") + "</div></div>" : "") +
+        '<div class="mp-comp__more"><p class="label">Banned</p>' + (x.bans.length
+          ? '<div class="row">' + x.bans.map((h) => named(h, 36)).join("") + "</div>"
+          : '<p class="dim small">No ban recorded.</p>') + "</div></div>";
+    };
+    return '<section class="band" aria-labelledby="h-comps"><div class="sec-head"><h2 id="h-comps">Comps &amp; bans</h2>' +
+      P.srcBadge("sheet") + "</div>" +
+      '<div class="mp-comps">' + card("a") + card("b") + "</div>" +
+      '<p class="dim small u-mt-3">The comp is the five heroes the players are listed with first; the sheet lists heroes, it does not time them. ' +
+      'Every player’s full listing is under <a href="#h-sheet">Spreadsheet record</a>.</p></section>';
+  }
+
+  /* Every map of the series, this one marked, with previous / next. */
+  function seriesSection() {
+    if (!log) return "";
+    const L = P.mapLog;
+    const all = L.series(log);
+    const i = all.indexOf(log);
+    const prev = all[i - 1], next = all[i + 1];
+    const nav = '<div class="mp-nav">' +
+      (prev ? '<a class="btn btn--sm btn--ghost" href="' + esc(L.href(prev)) + '">← Map ' + esc(prev.n) + ": " + esc(L.mapName(prev)) + "</a>" : "<span></span>") +
+      (next ? '<a class="btn btn--sm btn--ghost" href="' + esc(L.href(next)) + '">Map ' + esc(next.n) + ": " + esc(L.mapName(next)) + " →</a>" : "") +
+      "</div>";
+    return '<section class="band" aria-labelledby="h-series"><div class="sec-head"><h2 id="h-series">Every map of this series</h2>' +
+      '<a class="sec-link" href="' + esc(L.seriesHref(log)) + '">Series page →</a></div>' +
+      '<ol class="ml-list">' + all.map((x) => L.rowHtml(x).replace('class="ml-row"', 'class="ml-row' + (x === log ? ' is-here" aria-current="page' : "") + '"')).join("") +
+      "</ol>" + nav + "</section>";
   }
 
   /* ---------------------------------------------------- result/draft */
@@ -133,6 +221,10 @@
 
   /* -------------------------------------------------- VOD lane */
   function vodSection() {
+    if (!entry.vod && log) {
+      return '<p class="dim small u-mt-5">' + P.srcBadge("vod") + " Not read off the broadcast yet, so there are no timed " +
+        "hero stints or swap timings for this map; everything here comes from the spreadsheet.</p>";
+    }
     if (!entry.vod) {
       return '<section class="band" aria-labelledby="h-vod"><div class="sec-head"><h2 id="h-vod">VOD-verified timeline</h2>' +
         P.srcBadge("vod") + "</div>" + P.note("info", "Not read from the broadcast",

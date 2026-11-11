@@ -190,6 +190,8 @@
           "no mark of its own and it is not matched to any broadcast.</p>" : "") + teamTools(id) + "</div>");
     const parts = [];
     const run = compsPart({ team: id }, "What they run", "Their most-run five-hero comps, and the one winning most. Tap one for its full record.");
+    const tmaps = teamMapsSection(id);
+    if (tmaps) parts.push(tmaps);
     if (run) parts.push(run);
     if (P.scoutingHtml && P.metaEntries) {
       const n = Number(P.qs("scout") || 10) === 5 ? 5 : 10;
@@ -200,7 +202,7 @@
     }
     set("body", parts.concat(sheetTeamParts(id)).join("") ||
       P.empty("◇", "Nothing recorded for this team", "Neither source records a map for it yet."));
-    mountRange();
+    mountRange(() => { if (mapScope === "range") paintMapLog(); });
   }
 
   function renderTeam() {
@@ -244,6 +246,8 @@
             : "No map of this team has been indexed or read yet.") + "</p>" + teamTools(t.id) + "</div>");
 
     const parts = [];
+    const tmaps = teamMapsSection(t.id);
+    if (tmaps) parts.push(tmaps);
     if (run) parts.push(run);
     const feedParts = [];
     const feed = P.mapFeed ? P.mapFeed.filter((m) => P.mapFeed.plays(m, t.id)) : [];
@@ -322,7 +326,7 @@
     }
 
     set("body", parts.join(""));
-    mountRange();
+    mountRange(() => { if (mapScope === "range") paintMapLog(); });
   }
 
   /* ------------------------------------------------------------- hero */
@@ -376,6 +380,8 @@
           "confirmed a frame showing it — not that it was never played.") + "</p></div>");
 
     const parts = [];
+    const maps = heroMapsSection(h);
+    if (maps) parts.push(maps);
     if (run) parts.push(run);
     if (P.lab && window.OWCS_SHEET_TIERS) {
       parts.push('<section class="band" id="pairs"><div class="sec-head"><h2>Best with, hardest against</h2>' +
@@ -461,6 +467,104 @@
       const el = document.getElementById("hero-lede");
       const b = bookIn();
       if (el && b && b.teamMaps) el.innerHTML = bookLede(b);
+      if (mapScope === "range") paintMapLog();
+    });
+  }
+
+  /* ------------------------------------------------- map history */
+  /* Every map a hero (or team) was on, newest first (app/maplog.js), each
+     row opening the map's own page. "Every map" by default; the time
+     range above narrows it when the visitor asks. */
+  let mapScope = "all";
+  let paintMapLog = () => {};
+  const rangeOpts = () => {
+    if (mapScope !== "range" || !P.timeRange) return {};
+    const r = P.timeRange.resolve();
+    return { from: r.from || null, to: r.to || null };
+  };
+  function mapLogSection(o) {
+    const L = P.mapLog;
+    if (!L || !L.all().length) return "";
+    const id = "maplog";
+    const get = () => o.items(rangeOpts());
+    L.page(id, get, { size: 25, hero: o.hero });
+    paintMapLog = () => {
+      const items = get();
+      const sum = document.getElementById(id + "-sum");
+      if (sum) sum.innerHTML = o.summary(items);
+      const host = document.getElementById(id + "-host");
+      if (host) host.innerHTML = items.length ? L.listHtml(id, items, { size: 25, hero: o.hero })
+        : '<p class="dim">' + esc(o.empty) + "</p>";
+      L.page(id, get, { size: 25, hero: o.hero });
+    };
+    const first = o.items({});
+    if (!first.length) return "";
+    return '<section class="band" id="maps"><div class="sec-head"><h2>' + esc(o.title) + "</h2>" +
+      '<div class="seg" role="group" aria-label="Which maps">' +
+      '<button type="button" data-ml-scope="all" aria-pressed="true">Every map</button>' +
+      '<button type="button" data-ml-scope="range" aria-pressed="false">In the time range</button></div></div>' +
+      '<p class="dim small">' + o.sub + "</p>" +
+      '<div class="ml-summary" id="' + id + '-sum">' + o.summary(first) + "</div>" +
+      '<div id="' + id + '-host">' + L.listHtml(id, first, { size: 25, hero: o.hero }) + "</div></section>";
+  }
+  document.addEventListener("click", (ev) => {
+    const b = ev.target.closest && ev.target.closest("[data-ml-scope]");
+    if (!b) return;
+    mapScope = b.dataset.mlScope;
+    document.querySelectorAll("[data-ml-scope]").forEach((x) =>
+      x.setAttribute("aria-pressed", x.dataset.mlScope === mapScope ? "true" : "false"));
+    paintMapLog();
+  });
+  const wl = (items, won) => {
+    let w = 0, l = 0;
+    items.forEach((it) => { const r = won(it); if (r === true) w++; else if (r === false) l++; });
+    return w + "–" + l;
+  };
+
+  function teamMapsSection(id) {
+    const L = P.mapLog;
+    if (!L) return "";
+    const name = P.anyTeamName(id);
+    return mapLogSection({
+      title: "Every map " + name + " played",
+      sub: "Newest first. The date and time are when the series started (in your time zone); the spreadsheet " +
+        "does not time each map. " + esc(name) + " comes first, with the five heroes each team is listed with " +
+        "first and the bans. Tap a map for every hero listed and the whole match.",
+      empty: "No maps in this time range.",
+      items: (opt) => L.forTeam(id, opt),
+      summary: (items) => {
+        const last = items[0];
+        return "<span><b>" + items.length.toLocaleString("en-US") + "</b> map" + (items.length === 1 ? "" : "s") + "</span>" +
+          '<span title="Map wins and losses">' + wl(items, (it) => L.side(it.e, it.side).won) + " W–L</span>" +
+          (last ? '<span class="dim small">last played ' + esc(L.when(last.e).date) + "</span>" : "");
+      },
+    });
+  }
+
+  function heroMapsSection(h) {
+    const L = P.mapLog;
+    if (!L) return "";
+    return mapLogSection({
+      title: "Every map " + h.name + " was played on",
+      sub: "Newest first. The date and time are when the series started (in your time zone); the spreadsheet " +
+        "does not time each map. " + esc(h.name) + "’s team comes first and " + esc(h.name) + " is outlined; " +
+        "<b>Started, swapped off</b> and <b>Swapped in</b> follow the order the sheet lists each player’s heroes. " +
+        "Tap a map for both comps, the bans and the match.",
+      hero: h.id,
+      empty: "Not played on any map in this time range.",
+      items: (opt) => L.forHero(h.id, opt),
+      summary: (items) => {
+        const c = { whole: 0, started: 0, swapped: 0 };
+        let mirrors = 0;
+        items.forEach((it) => { it.hows.forEach((x) => { c[x]++; }); if (it.both) mirrors++; });
+        const last = items[0];
+        return "<span><b>" + items.length.toLocaleString("en-US") + "</b> map" + (items.length === 1 ? "" : "s") + "</span>" +
+          '<span title="Map wins and losses for ' + esc(h.name) + '’s team, mirrors (both teams on it) left out">' +
+            wl(items, (it) => (it.both ? null : L.side(it.e, it.side).won)) + " W–L</span>" +
+          '<span class="dim small">' + mirrors + " mirror" + (mirrors === 1 ? "" : "s") + " · " + c.whole + " whole map · " +
+            c.started + " started, swapped off · " + c.swapped + " swapped in</span>" +
+          (last ? '<span class="dim small">last played ' + esc(L.when(last.e).date) + "</span>" : "");
+      },
     });
   }
 
