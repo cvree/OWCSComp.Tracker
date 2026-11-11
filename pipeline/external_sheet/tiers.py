@@ -6,7 +6,8 @@ tiers.py — the compact input of the Tiers page (tiers.html).
 One row per spreadsheet series and one per map, holding only what the
 tier maths needs:
 
-  * a calendar date per series. The sheet has none: a played series takes
+  * a calendar date per series (and, from Liquipedia, its start time "t").
+    The sheet has none: a played series takes
     the day Liquipedia lists it on (same event, same two teams, same score;
     lp_dates.py, confidence 'liquipedia'), else an ESTIMATE from the sheet's
     own position (region + stage + Week N | Day N) and
@@ -149,8 +150,10 @@ def build_tiers(payload: dict, details: dict, schedule: dict, weights: dict,
     home = defaultdict(Counter)
     conf_count = Counter()
     for m in matches:
+        starts = None
         if m["id"] in known_days:
             date, conf = known_days[m["id"]]["date"], "liquipedia"
+            starts = known_days[m["id"]].get("startsAt")
         else:
             date, conf = estimate_date(m, schedule)
         conf_count[conf or "none"] += 1
@@ -160,6 +163,10 @@ def build_tiers(payload: dict, details: dict, schedule: dict, weights: dict,
                        "f": (m.get("format") or "").split(" [")[0] or None, "bo": m.get("bestOf"),
                        "a": m.get("teamA"), "b": m.get("teamB"), "lbl": m.get("gameLabel"),
                        "sl": m.get("slug")})
+        if starts:
+            # The series' start time as Liquipedia lists it (ISO, with the
+            # event's own UTC offset); only ever from a source, never a guess.
+            m_rows[-1]["t"] = starts
         if m.get("region") in HOME_REGIONS:
             for t in (m.get("teamA"), m.get("teamB")):
                 if t:

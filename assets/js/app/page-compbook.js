@@ -88,10 +88,12 @@
       : '<b class="cb-res">–</b>';
     return '<li class="cb-game">' + res +
       '<span class="cb-game__who">' + esc(U.teamName(g.team)) + ' <span class="dim">vs</span> ' + esc(U.teamName(g.opp)) + "</span>" +
-      '<span class="cb-game__map">' + esc(mapLabel(g.map)) + "</span>" +
+      '<span class="cb-game__map">' + (g.mapId ? '<a href="map.html?ext=' + encodeURIComponent(g.mapId) +
+        '" title="Both comps, the bans and the match">' + esc(mapLabel(g.map)) + "</a>" : esc(mapLabel(g.map))) + "</span>" +
       '<span class="cb-game__when dim small">' + esc(U.matchLabel(m)) + " · " + esc(dateLabel(g.d)) + "</span>" +
       (g.oppComp ? '<span class="cb-game__opp" title="What the other team ran">' + faces(g.oppComp, 20) + "</span>" : '<span></span>') +
-      '<a class="cb-game__go small" href="series.html?id=' + encodeURIComponent(g.series) + '">Series →</a></li>';
+      (g.mapId ? '<a class="cb-game__go small" href="map.html?ext=' + encodeURIComponent(g.mapId) + '">Map →</a>'
+        : '<a class="cb-game__go small" href="series.html?id=' + encodeURIComponent(g.series) + '">Series →</a>') + "</li>";
   };
   const momentLine = (g, word) => {
     if (!g) return "";
@@ -100,7 +102,8 @@
       esc(U.teamName(g.team)) + (g.res === 1 ? " beat " : " lost to ") + esc(U.teamName(g.opp)) + " on " +
       esc(mapLabel(g.map)) + ' <span class="dim">— ' + esc(U.matchLabel(m)) + ", " + esc(dateLabel(g.d)) +
       (g.e != null ? ", " + pct(g.e) + " to win going in" : "") + "</span> " +
-      '<a class="small" href="series.html?id=' + encodeURIComponent(g.series) + '">Series →</a></p>';
+      (g.mapId ? '<a class="small" href="map.html?ext=' + encodeURIComponent(g.mapId) + '">Map →</a>'
+        : '<a class="small" href="series.html?id=' + encodeURIComponent(g.series) + '">Series →</a>') + "</p>";
   };
   const heroCounts = (pairs, unit) => pairs.length
     ? '<ul class="cb-hcounts">' + pairs.map((p) => '<li>' + face(p[0], 26) + '<span>' + esc(heroName(p[0])) +
@@ -472,6 +475,13 @@
       facesPlain(c.heroes, 30) +
       '<span class="cb-pick__n">' + plural(c.n, "map") + "</span>" +
       "<b>" + wl(c.wins, c.losses) + '</b><span class="cb-pick__adj">' + pct(c.adjWin) + " adj.</span>" +
+      /* When it was run: the day for a one-off, else the last day and the
+         span since the first. */
+      (c.last ? '<span class="cb-pick__when" title="' + esc(c.first && c.first !== c.last
+        ? "First run " + U.fmtDate(c.first) + ", last run " + U.fmtDate(c.last) : "Run on " + U.fmtDate(c.last)) + '">' +
+        (c.n > 1 ? '<span class="dim">last</span> ' : "") + esc(U.fmtDate(c.last)) +
+        (c.first && c.first !== c.last ? ' <span class="dim">· since ' + esc(U.fmtDate(c.first)) + "</span>" : "") + "</span>"
+        : '<span class="cb-pick__when dim">date unknown</span>') +
       '<span class="cb-pick__go" aria-hidden="true">→</span></a></li>';
     return '<div class="cb-summary-box">' +
       '<p class="cb-summary">' + plural(r.coveredMaps, "line-up") + " · <b>" + n(r.distinct) + "</b> different comps" +

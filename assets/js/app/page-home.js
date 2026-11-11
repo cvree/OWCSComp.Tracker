@@ -123,7 +123,8 @@
       const art = P.heroCard(r.id) || P.heroArtwork(r.id);
       const h = P.hero(r.id);
       return '<a class="hm-hero" data-tier="' + esc(r.tier) + '" style="--role-h:' + P.roleHue(h.role) + '" href="' +
-        esc(tiersHref("role=" + encodeURIComponent(h.role))) + '" data-hero="' + esc(r.id) + '">' +
+        "hero.html?id=" + encodeURIComponent(r.id) + '" data-hero="' + esc(r.id) + '" title="' + esc(h.name) +
+        ': every map it was played on">' +
         (art ? '<img class="hm-hero__art" src="' + esc(art) + '" alt="" loading="lazy" decoding="async">'
           : '<span class="hm-hero__mono" aria-hidden="true">' + esc(P.heroInitials(h)) + "</span>") +
         '<span class="hm-hero__shade"></span>' +
@@ -288,7 +289,8 @@
         '<div class="hm-play__tag">' + (upset ? '<span class="hm-upset">Upset</span> <span>won as a ' + pct(w.e) + " underdog</span>"
           : "<span>" + pct(w.e) + " to win</span>") + '<span class="hm-play__ev">' + esc(U.matchLabel(m)) + "</span></div>" +
         '<p class="hm-play__who"><b>' + esc(U.teamName(w.team)) + "</b> beat " + esc(U.teamName(w.opp)) + " on " +
-        esc(U.mapName(w.map)) + ' <span class="dim">· ' + esc(U.fmtDate(m && m.d)) + "</span></p>" +
+        (w.mapId ? '<a href="map.html?ext=' + encodeURIComponent(w.mapId) + '">' + esc(U.mapName(w.map)) + "</a>" : esc(U.mapName(w.map))) +
+        ' <span class="dim">· ' + esc(U.fmtDate(m && m.d)) + "</span></p>" +
         '<div class="hm-play__comps"><span class="hm-play__k">Ran</span>' + U.faces(U.byRole(w.heroes), 34) +
         (w.oppComp ? '<span class="hm-play__k">vs</span>' + U.faces(U.byRole(w.oppComp), 26) : "") + "</div>" +
         '<p class="hm-play__v" title="Event weight × bracket weight × (1 − chance to win)">Win value <b>' + U.signed(w.v, 2) + "</b></p></article>";
