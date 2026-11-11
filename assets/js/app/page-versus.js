@@ -108,13 +108,13 @@
     const maps = v.maps.filter((m) => m.a.n || m.b.n);
     const mapTable = '<section class="dl-box dl-box--wide"><h3>Map by map</h3><p class="dim small">Each team\'s record on the map in ' +
       esc(range) + ", and the model's chance there for " + esc(nameA) + ".</p>" +
-      (maps.length ? '<table class="tbl tbl--compact cb-tbl vs-maps"><thead><tr><th>Map</th><th class="num">' + esc(nameA) + "</th><th class=\"num\">" +
+      (maps.length ? '<div class="table-wrap vs-maps-wrap"><table class="tbl tbl--compact cb-tbl vs-maps"><thead><tr><th>Map</th><th class="num">' + esc(nameA) + "</th><th class=\"num\">" +
         esc(nameB) + '</th><th>Chance for ' + esc(nameA) + "</th></tr></thead><tbody>" + maps.map((m) =>
           "<tr><td>" + esc(P.mapInfo(m.map).name || m.map) + (m.mode ? ' <span class="dim small">' + esc(m.mode) + "</span>" : "") + "</td>" +
           '<td class="num">' + (m.a.n ? wl(m.a) + ' <span class="dim">' + rate(m.a) + "</span>" : "—") + '</td><td class="num">' +
           (m.b.n ? wl(m.b) + ' <span class="dim">' + rate(m.b) + "</span>" : "—") + "</td><td>" +
           (m.p == null ? "—" : '<span class="vs-mini"><span style="width:' + Math.round(m.p * 100) + '%"></span></span> <b>' + pct(m.p) + "</b>") +
-          "</td></tr>").join("") + "</tbody></table>"
+          "</td></tr>").join("") + "</tbody></table></div>"
         : '<p class="dim small">Neither team played a map in this time range.</p>' + TR.widenHtml()) + "</section>";
 
     const pips = (X) => X.form.length ? '<ol class="vs-form">' + X.form.map((f) => '<li class="vs-pip ' + (f.res === 1 ? "is-w" : f.res === 0 ? "is-l" : "") +

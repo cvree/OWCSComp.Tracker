@@ -2233,10 +2233,14 @@ html.motion-on .rv-in { opacity: 1; transform: none; transition: opacity var(--t
 .u-gap-4 { gap: var(--s-4); }
 .u-gap-5 { gap: var(--s-5); }
 .u-mt-0 { margin-top: 0; }
+.u-mt-2 { margin-top: var(--s-2); }
 .u-mt-3 { margin-top: var(--s-3); }
 .u-mt-4 { margin-top: var(--s-4); }
 .u-mt-5 { margin-top: var(--s-5); }
 .u-mt-6 { margin-top: var(--s-6); }
+/* Used by the Matches page and never defined, so its sections sat flush
+   against the block above them. */
+.u-mt-7 { margin-top: var(--s-7); }
 .u-nowrap { white-space: nowrap; }
 .u-trunc { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 [hidden] { display: none !important; }
@@ -3498,6 +3502,8 @@ table.tbl.cb-tbl { width: 100%; min-width: 0; font-size: 13px; }
 .sx-spot__when { margin-top: var(--s-3); font-size: 16px; color: var(--tx-2); }
 .sx-spot__when b { color: var(--tx); }
 .sx-spot__count { margin-top: var(--s-2); font-size: 15px; color: var(--tx-2); }
+.sx-spot__pending { margin-top: var(--s-3); max-width: 62ch; font-size: 14px; line-height: 1.55; color: var(--tx-2); }
+.sx-spot__pending .chip { margin-right: var(--s-2); vertical-align: 1px; }
 .sx-spot__count b { font: 700 22px/1 var(--f-mono); color: var(--tx); font-variant-numeric: tabular-nums; }
 .sx-spot__facts { list-style: none; margin: var(--s-4) 0 0; padding: 0; display: grid; gap: 6px; font-size: 14px; color: var(--tx-2); }
 .sx-spot__facts b { display: inline-block; min-width: 64px; color: var(--tx-3); font: 600 11px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; margin-right: var(--s-2); }
@@ -3780,3 +3786,96 @@ a.bx:hover, a.bx:focus-visible { border-color: var(--line-3); background: var(--
 .mp-hero__n { font-size: 12px; line-height: 1.2; text-align: center; overflow-wrap: anywhere; }
 .mp-hero:hover .mp-hero__n { text-decoration: underline; }
 .mp-comp__more .row { gap: var(--s-2); }
+
+/* ------------------------------------------------------------------ *
+   Teams directory: find / filter / sort the spreadsheet's team table,
+   and the names the HUD printed that no team could be tied to.
+ * ------------------------------------------------------------------ */
+.tt-bar { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3); }
+.tt-find { flex: 1 1 220px; max-width: 340px; }
+.tt-find .input, .tt-region .input { width: 100%; }
+.tt-region { flex: 0 1 190px; }
+.tt-bar #tt-count { margin-left: auto; font-family: var(--f-mono); }
+.tbl--sortable thead th { padding: 0; }
+.tbl--sortable thead th:last-child { padding: var(--s-3) var(--s-4); }
+.th-sort {
+  display: inline-flex; align-items: center; gap: 6px; width: 100%; min-height: 40px;
+  padding: var(--s-3) var(--s-4); border: 0; background: none; cursor: pointer;
+  font: inherit; letter-spacing: inherit; text-transform: inherit; color: inherit; text-align: left;
+}
+th.num .th-sort { justify-content: flex-end; }
+.th-sort:hover { color: var(--tx); }
+.th-sort:focus-visible { outline: 2px solid var(--outline); outline-offset: -2px; }
+.th-sort__ic { flex: 0 0 auto; font: 400 11px/1 var(--f-mono); opacity: .4; }
+.th-sort__ic::before { content: "↕"; }
+th[aria-sort] .th-sort { color: var(--tx); }
+th[aria-sort] .th-sort__ic { opacity: 1; }
+th[aria-sort="ascending"] .th-sort__ic::before { content: "↑"; }
+th[aria-sort="descending"] .th-sort__ic::before { content: "↓"; }
+.tt-doubt { list-style: none; margin: 0; padding: 0; border: 1px solid var(--line); border-radius: var(--r-3); background: var(--s1); }
+.tt-doubt li { display: grid; grid-template-columns: minmax(120px, 190px) 70px 1fr; gap: var(--s-2) var(--s-4); align-items: baseline;
+  padding: var(--s-3) var(--s-4); border-top: 1px solid var(--line); }
+.tt-doubt li:first-child { border-top: 0; }
+.tt-doubt__name { font-weight: 600; color: var(--tx); overflow-wrap: anywhere; }
+.tt-doubt__why { color: var(--tx-2); }
+@media (max-width: 640px) {
+  .tt-doubt li { grid-template-columns: 1fr auto; }
+  .tt-doubt__why { grid-column: 1 / -1; }
+  .tt-bar #tt-count { margin-left: 0; flex-basis: 100%; }
+  .tt-find { max-width: none; }
+}
+
+/* Footer: one line per data source the page actually used, with its age. */
+.ftr__fresh { flex: 1 1 100%; display: flex !important; flex-wrap: wrap; gap: var(--s-1) var(--s-5) !important; }
+.ftr__fresh li { white-space: normal; }
+.ftr__fresh .ftr__src { color: var(--tx-2); }
+.ftr__fresh time { font-variant-numeric: tabular-nums; }
+.ftr__stale { font-weight: 500; color: var(--amber); }
+
+/* The map story's "now" strip held ten fixed 84px portraits beside a clock,
+   which is 1,037px of content: wider than a 1024px laptop, where it pushed
+   the whole dashboard sideways. Between the phone layout and a full desktop
+   the portraits share the row instead of holding their size. */
+@media (min-width: 901px) and (max-width: 1180px) {
+  .ms-now { gap: var(--s-4); }
+  .ms-now__heroes { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; width: 100%; }
+  .ms-now__slot { width: auto; min-height: 0; }
+  .ms-now__slot .hero--lg, .ms-now__slot .hero--lg .hero__face { width: 100%; height: auto; aspect-ratio: 1; }
+  .ms-now__gap { width: 100%; height: auto; aspect-ratio: 1; }
+  .ms-now__team, .ms-now__team[data-side="b"] { justify-items: stretch; }
+}
+
+/* ------------------------------------------------------------------ *
+   Target sizes (WCAG 2.2, 2.5.8). Measured in Chrome: these stood
+   15 to 23px tall with another control inside their 24px circle. They
+   keep their look; the box a finger or pointer can hit grows to 24px or
+   more. The follow star sits beside a team name on every schedule row
+   and gets a full 40px on touch screens.
+ * ------------------------------------------------------------------ */
+.sec-link, .hm-map__go, .sx-evlink, .mi-team, .plain-link, .breadcrumbs a {
+  display: inline-flex; align-items: center; min-height: 28px;
+}
+.plain-link { max-width: 100%; }
+.ftr li a, .ftr p a { display: inline-block; padding-block: 5px; }
+.ftr ul { gap: 0; }
+.vs-meet a { display: inline-block; padding-block: 6px; }
+.term { min-height: 24px; padding-block: 2px; }
+.sx-star { min-width: 28px; min-height: 28px; }
+@media (pointer: coarse) {
+  .sx-star { min-width: 40px; min-height: 40px; }
+  .sec-link, .hm-map__go, .sx-evlink, .breadcrumbs a { min-height: 36px; }
+}
+/* A link that is a table cell's content: 15px tall as inline text, with
+   the next row's link inside its 24px circle. */
+.tbl td > a, .tbl th > a { display: inline-block; padding-block: 5px; }
+/* In a table the row already gives a link its height: keep the hit box at
+   24px without doubling the row. A team name is capped so one long org
+   cannot push every number off the side of a phone; it ends in an
+   ellipsis and the full name is on the team's page. */
+.tbl td > a.plain-link { min-height: 24px; padding-block: 0; }
+.tbl--sortable td:first-child { max-width: min(48vw, 280px); }
+.tbl--sortable td:first-child .team, .tbl--sortable td:first-child .plain-link { max-width: 100%; }
+.tbl--sortable td:first-child .team__name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* Five hero tiles wrapped to two lines inside a scrolling table, which made
+   every row on a phone 77px tall for no gain: the table scrolls sideways. */
+.tbl--sortable .comp--tight { flex-wrap: nowrap; }

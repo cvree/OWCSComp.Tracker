@@ -46,6 +46,7 @@
       : "";
     if (!teams.length && sheetLane) {
       set("body", sheetLane);
+      if (P.extTeamsMount) P.extTeamsMount(document.getElementById("body"));
       return;
     }
     if (!teams.length) {
@@ -63,8 +64,13 @@
     const mapsOf = (t) => (P.mapFeed ? P.mapFeed.maps().filter((m) => P.mapFeed.plays(m, t.id)) : []);
     const rows = teams.map((t) => ({ t: t, maps: mapsOf(t) }))
       .sort((a, b) => b.maps.length - a.maps.length || a.t.name.localeCompare(b.t.name));
-    const active = rows.filter((r) => r.maps.length);
-    const quiet = rows.filter((r) => !r.maps.length);
+    /* A name the broadcast HUD printed that nobody has been able to tie to
+       an org (pipeline/broadcast_teams.py flags it and says why) is not a
+       team card among the teams. It is listed once, below them, with the
+       reason, and its maps stay a click away. */
+    const doubtful = rows.filter((r) => r.t.needsReview);
+    const active = rows.filter((r) => r.maps.length && !r.t.needsReview);
+    const quiet = rows.filter((r) => !r.maps.length && !r.t.needsReview);
     const card = (r) => {
       const t = r.t;
       const pool = pools[t.id];
@@ -87,7 +93,19 @@
         ? '<div class="u-mt-6">' + P.diag("Also on record, no maps yet (" + quiet.length + ")",
           '<div class="row">' + quiet.map((r) =>
             P.teamPlate(r.t.id, { link: true, size: "sm" })).join("") + "</div>") + "</div>"
+        : "") +
+      (doubtful.length
+        ? '<section class="band" id="unconfirmed" aria-labelledby="h-unconfirmed"><div class="sec-head">' +
+          '<h2 id="h-unconfirmed">Names the broadcast printed that are not confirmed</h2>' +
+          '<span class="chip" data-state="review"><span class="dot"></span>' + doubtful.length + " to check</span></div>" +
+          '<p class="dim small">Team names are read off the broadcast’s on-screen bar by machine. These readings could not be tied to a team, ' +
+          "so they are kept apart instead of being counted as orgs. Their maps are real and still listed.</p>" +
+          '<ul class="tt-doubt u-mt-4">' + doubtful.map((r) =>
+            '<li><a class="tt-doubt__name" href="team.html?id=' + encodeURIComponent(r.t.id) + '">' + esc(r.t.name) + "</a>" +
+            '<span class="mono small dim">' + r.maps.length + " map" + (r.maps.length === 1 ? "" : "s") + "</span>" +
+            '<span class="small tt-doubt__why">' + esc(r.t.reviewReason || "Not confirmed.") + "</span></li>").join("") + "</ul></section>"
         : "") + sheetLane);
+    if (P.extTeamsMount) P.extTeamsMount(document.getElementById("body"));
   }
 
   /* ------------------------------------------------------------- team */
@@ -233,7 +251,11 @@
       (t.region && !/^(unknown|all)$/i.test(t.region)
         ? '<span class="chip chip--outline">' + esc(P.regionName(t.region)) + "</span>" : "") +
       (t.status ? '<span class="chip chip--outline">' + esc(t.status) + "</span>" : "") +
+      (t.needsReview ? '<span class="chip" data-state="review"><span class="dot"></span>Name not confirmed</span>' : "") +
       "</div>" +
+      (t.needsReview ? '<div class="u-mt-4">' + P.note("warn", "This name is a machine reading, not a confirmed team",
+        "<p>" + esc(t.reviewReason || "The broadcast printed this name and it has not been tied to a team.") +
+        " The maps below are real; who played them under this name is what is unconfirmed.</p>") + "</div>" : "") +
       '<p class="lede u-mt-4">' +
       (run
         ? "What they run, how it goes, who they have played — and every broadcast map, ready to watch."
