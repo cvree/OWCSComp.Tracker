@@ -106,6 +106,23 @@ def test_export() -> None:
           all(m["dateFrom"] in (None, "estimate", "published-day", "liquipedia", "liquipedia-day", "official")
               for m in doc["matches"]))
 
+    # An editor's "Copy of <tab>" working copy is not an event, and reading it
+    # counted its series (and their maps) a second time.
+    check("no event comes from a copied tab",
+          not [e["name"] for e in doc["events"] if "copy of" in (e["name"] + " " + (e.get("tab") or "")).lower()])
+    check("every event outside the pre-season has a region",
+          all(e.get("region") for e in doc["events"] if e.get("stage") != "pre-season"))
+    series_keys = [(s.get("stageRaw"), s.get("label"), s.get("teamA"), s.get("teamB")) for s in series]
+    check("no played series was imported from a copied tab",
+          not [k for k in series_keys if "copy of" in (k[0] or "").lower()])
+    # A score the stated best-of cannot produce: the label is the typo.
+    done = [m for m in doc["matches"] if m["state"] == "done" and m.get("bestOf") and m.get("scoreA") is not None]
+    check("no side has more wins than its best-of allows (three China finals are labelled Bo5 and scored 4-x)",
+          all(max(m["scoreA"], m["scoreB"]) <= m["bestOf"] // 2 + 1 for m in done))
+    check("…and those finals keep the label as written beside the corrected best-of",
+          all(m["bestOf"] == 7 and "Bo5" in (m.get("format") or "")
+              for m in done if m["event"].startswith("china/") and m.get("round") == "Grand Final"))
+
     cc = ev["international/champions-clash"]
     b = cc["phases"][-1]["bracket"]
     check("Champions Clash: double elimination with a final", b["type"] == "double" and len(b["final"]) == 1)

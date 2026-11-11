@@ -1,14 +1,14 @@
 {
  "aliasesVersion": 3,
  "counts": {
-  "appearances": 36343,
-  "bans": 4367,
-  "compositions": 8454,
+  "appearances": 36246,
+  "bans": 4357,
+  "compositions": 8434,
   "duplicateConflicts": 0,
   "duplicates": 0,
   "ignoredRows": 0,
-  "maps": 2227,
-  "matches": 610,
+  "maps": 2222,
+  "matches": 609,
   "tournaments": 10,
   "unmappedValues": 446
  },
@@ -44,7 +44,7 @@
    "text": "OWTV Contacts:\nhttps://owtv.gg/\nTwitter | Discord"
   }
  ],
- "dataTabs": 24,
+ "dataTabs": 23,
  "duplicates": [],
  "errors": [],
  "issues": [
@@ -112,13 +112,6 @@
    "sheet": "Pacific - Stage 3"
   },
   {
-   "code": "CARD_INCOMPLETE",
-   "level": "warning",
-   "message": "'Copy of Pacific - Stage 3' Week 2 | Day 1 | Game 4 (row 29): 1 map panel(s) filled in but the card's map list is empty — not imported until the editors finish the card",
-   "row": 29,
-   "sheet": "Copy of Pacific - Stage 3"
-  },
-  {
    "code": "SELF_CHECK_MISMATCH",
    "level": "warning",
    "message": "Self-Check Stage 1 CC: the sheet counts 13 matches / 48 maps, the importer parsed 14 / 48 from 'Champions Clash Tokyo'",
@@ -135,15 +128,15 @@
  ],
  "layoutVersion": 2,
  "matchCards": {
-  "blocks": 631,
+  "blocks": 629,
   "failed": 0,
   "forfeited": 1,
   "heroIndexConflicts": [],
   "heroIndexTab": "Hero Index",
   "heroPictures": 54,
-  "incomplete": 1,
+  "incomplete": 0,
   "pictureSuggestions": [],
-  "played": 610,
+  "played": 609,
   "rolePictures": 6,
   "scheduled": 19,
   "year": 2026,
@@ -1379,16 +1372,8 @@
    "unmappedColumns": []
   },
   {
-   "cards": {
-    "blocks": 2,
-    "failed": 0,
-    "forfeited": 0,
-    "incomplete": 1,
-    "played": 1,
-    "scheduled": 0
-   },
    "columns": 96,
-   "dataRows": 1,
+   "dataRows": 0,
    "headerRow": null,
    "ignoredCount": 0,
    "ignoredRows": [],
@@ -1397,15 +1382,15 @@
    "mappedColumns": [],
    "name": "Copy of Pacific - Stage 3",
    "parsed": {
-    "appearances": 97,
-    "bans": 10,
-    "compositions": 20,
+    "appearances": 0,
+    "bans": 0,
+    "compositions": 0,
     "duplicates": 0,
-    "maps": 5,
-    "matches": 1
+    "maps": 0,
+    "matches": 0
    },
-   "purpose": "match_cards",
-   "purposeLabel": "Match cards — one fixed-size card per series, heroes shown as pictures",
+   "purpose": "duplicate",
+   "purposeLabel": "An editor's working copy of another tab — not imported, so its series are not counted twice",
    "rows": 25,
    "state": "visible",
    "unmappedColumns": []
@@ -3514,17 +3499,6 @@
    },
    {
     "count": 60,
-    "raw": "Setsuna",
-    "refs": [
-     "Japan - Stage 1!O81",
-     "Japan - Stage 1!AF81",
-     "Japan - Stage 1!AW81",
-     "Japan - Stage 1!O181",
-     "Japan - Stage 1!AF181"
-    ]
-   },
-   {
-    "count": 60,
     "raw": "Yot1y",
     "refs": [
      "Japan - Stage 1!R81",
@@ -3656,6 +3630,17 @@
     ]
    },
    {
+    "count": 55,
+    "raw": "Setsuna",
+    "refs": [
+     "Japan - Stage 1!O81",
+     "Japan - Stage 1!AF81",
+     "Japan - Stage 1!AW81",
+     "Japan - Stage 1!O181",
+     "Japan - Stage 1!AF181"
+    ]
+   },
+   {
     "count": 54,
     "raw": "Develop",
     "refs": [
@@ -3679,17 +3664,6 @@
    },
    {
     "count": 54,
-    "raw": "TKL",
-    "refs": [
-     "Pacific - Stage 1!O77",
-     "Pacific - Stage 1!AF77",
-     "Pacific - Stage 1!AW77",
-     "Pacific - Stage 1!BN77",
-     "Pacific - Stage 1!O133"
-    ]
-   },
-   {
-    "count": 54,
     "raw": "yumilalan",
     "refs": [
      "Japan - Stage 2!V51",
@@ -3708,17 +3682,6 @@
      "China - Stage 1!BG25",
      "China - Stage 1!BX25",
      "China - Stage 1!CO25"
-    ]
-   },
-   {
-    "count": 52,
-    "raw": "Huntin",
-    "refs": [
-     "Pacific - Stage 1!Y77",
-     "Pacific - Stage 1!AP77",
-     "Pacific - Stage 1!BG77",
-     "Pacific - Stage 1!BX77",
-     "Pacific - Stage 1!Y133"
     ]
    },
    {
@@ -3899,6 +3862,17 @@
    },
    {
     "count": 49,
+    "raw": "TKL",
+    "refs": [
+     "Pacific - Stage 1!O77",
+     "Pacific - Stage 1!AF77",
+     "Pacific - Stage 1!AW77",
+     "Pacific - Stage 1!BN77",
+     "Pacific - Stage 1!O133"
+    ]
+   },
+   {
+    "count": 49,
     "raw": "Upan",
     "refs": [
      "China - Stage 3!O51",
@@ -3928,6 +3902,17 @@
      "Pacific - Stage 1!BD51",
      "Pacific - Stage 1!V103",
      "Pacific - Stage 1!AM103"
+    ]
+   },
+   {
+    "count": 47,
+    "raw": "Huntin",
+    "refs": [
+     "Pacific - Stage 1!Y77",
+     "Pacific - Stage 1!AP77",
+     "Pacific - Stage 1!BG77",
+     "Pacific - Stage 1!BX77",
+     "Pacific - Stage 1!Y133"
     ]
    },
    {
@@ -4016,17 +4001,6 @@
      "Pacific - Stage 1!AW3",
      "Pacific - Stage 1!O107",
      "Pacific - Stage 1!AF107"
-    ]
-   },
-   {
-    "count": 43,
-    "raw": "Bertlog",
-    "refs": [
-     "Pacific - Stage 2!AB3",
-     "Pacific - Stage 2!AS3",
-     "Pacific - Stage 2!BJ3",
-     "Pacific - Stage 2!AB129",
-     "Pacific - Stage 2!AS129"
     ]
    },
    {
@@ -4130,6 +4104,17 @@
    },
    {
     "count": 38,
+    "raw": "Bertlog",
+    "refs": [
+     "Pacific - Stage 2!AB3",
+     "Pacific - Stage 2!AS3",
+     "Pacific - Stage 2!BJ3",
+     "Pacific - Stage 2!AB129",
+     "Pacific - Stage 2!AS129"
+    ]
+   },
+   {
+    "count": 38,
     "raw": "SoLA",
     "refs": [
      "Korea - Stage 1!V81",
@@ -4159,17 +4144,6 @@
      "Pacific - Stage 2!BG3",
      "Pacific - Stage 2!Y129",
      "Pacific - Stage 2!AP129"
-    ]
-   },
-   {
-    "count": 37,
-    "raw": "Pugz",
-    "refs": [
-     "Pacific - Stage 1!AB55",
-     "Pacific - Stage 1!AS55",
-     "Pacific - Stage 1!BJ55",
-     "Pacific - Stage 1!CA55",
-     "Pacific - Stage 1!Y81"
     ]
    },
    {
@@ -4515,6 +4489,17 @@
    },
    {
     "count": 32,
+    "raw": "Pugz",
+    "refs": [
+     "Pacific - Stage 1!AB55",
+     "Pacific - Stage 1!AS55",
+     "Pacific - Stage 1!BJ55",
+     "Pacific - Stage 1!CA55",
+     "Pacific - Stage 1!Y81"
+    ]
+   },
+   {
+    "count": 32,
     "raw": "scuffed",
     "refs": [
      "North America - Stage 1!AB77",
@@ -4544,17 +4529,6 @@
      "China - Stage 2!AZ25",
      "China - Stage 2!BQ25",
      "China - Stage 2!CH25"
-    ]
-   },
-   {
-    "count": 30,
-    "raw": "bnji",
-    "refs": [
-     "Pacific - Stage 2!V3",
-     "Pacific - Stage 2!AM3",
-     "Pacific - Stage 2!BD3",
-     "Pacific - Stage 2!V129",
-     "Pacific - Stage 2!AM129"
     ]
    },
    {
@@ -4823,6 +4797,17 @@
    },
    {
     "count": 25,
+    "raw": "bnji",
+    "refs": [
+     "Pacific - Stage 2!V3",
+     "Pacific - Stage 2!AM3",
+     "Pacific - Stage 2!BD3",
+     "Pacific - Stage 2!V129",
+     "Pacific - Stage 2!AM129"
+    ]
+   },
+   {
+    "count": 25,
     "raw": "KroxZ",
     "refs": [
      "EMEA - Stage 3!AM25",
@@ -4896,17 +4881,6 @@
      "Japan - Stage 2!AZ103",
      "Japan - Stage 2!BQ103",
      "Japan - Stage 2!CH103"
-    ]
-   },
-   {
-    "count": 24,
-    "raw": "Hope",
-    "refs": [
-     "Pacific - Stage 3!O25",
-     "Pacific - Stage 3!AF25",
-     "Pacific - Stage 3!AW25",
-     "Pacific - Stage 3!BN25",
-     "Pacific - Stage 3!CE25"
     ]
    },
    {
@@ -4988,17 +4962,6 @@
    },
    {
     "count": 23,
-    "raw": "Nanda",
-    "refs": [
-     "Pacific - Stage 3!R3",
-     "Pacific - Stage 3!AI3",
-     "Pacific - Stage 3!AZ3",
-     "Pacific - Stage 3!BQ3",
-     "Pacific - Stage 3!CH3"
-    ]
-   },
-   {
-    "count": 23,
     "raw": "Yoshinori2k",
     "refs": [
      "Pacific - Stage 1!R3",
@@ -5054,17 +5017,6 @@
    },
    {
     "count": 21,
-    "raw": "Jae",
-    "refs": [
-     "Pacific - Stage 3!AB25",
-     "Pacific - Stage 3!AS25",
-     "Pacific - Stage 3!BJ25",
-     "Pacific - Stage 3!CA25",
-     "Pacific - Stage 3!CR25"
-    ]
-   },
-   {
-    "count": 21,
     "raw": "Kamo",
     "refs": [
      "Pacific - Stage 3!R55",
@@ -5108,14 +5060,14 @@
     ]
    },
    {
-    "count": 20,
-    "raw": "Yunko",
+    "count": 19,
+    "raw": "Hope",
     "refs": [
-     "Pacific - Stage 3!V25",
-     "Pacific - Stage 3!AM25",
-     "Pacific - Stage 3!BD25",
-     "Pacific - Stage 3!CL25",
-     "Pacific - Stage 3!V155"
+     "Pacific - Stage 3!O25",
+     "Pacific - Stage 3!AF25",
+     "Pacific - Stage 3!AW25",
+     "Pacific - Stage 3!BN25",
+     "Pacific - Stage 3!CE25"
     ]
    },
    {
@@ -5182,6 +5134,17 @@
      "Pacific - Stage 1!BG29",
      "Pacific - Stage 1!AB129",
      "Pacific - Stage 1!AS129"
+    ]
+   },
+   {
+    "count": 18,
+    "raw": "Nanda",
+    "refs": [
+     "Pacific - Stage 3!R3",
+     "Pacific - Stage 3!AI3",
+     "Pacific - Stage 3!AZ3",
+     "Pacific - Stage 3!BQ3",
+     "Pacific - Stage 3!CH3"
     ]
    },
    {
@@ -5263,6 +5226,17 @@
    },
    {
     "count": 16,
+    "raw": "Jae",
+    "refs": [
+     "Pacific - Stage 3!AB25",
+     "Pacific - Stage 3!AS25",
+     "Pacific - Stage 3!BJ25",
+     "Pacific - Stage 3!CA25",
+     "Pacific - Stage 3!CR25"
+    ]
+   },
+   {
+    "count": 16,
     "raw": "Moon1ightT",
     "refs": [
      "China - Stage 2!Y77",
@@ -5292,6 +5266,17 @@
      "North America - Stage 3!BD51",
      "North America - Stage 3!BU51",
      "North America - Stage 3!V103"
+    ]
+   },
+   {
+    "count": 16,
+    "raw": "Yunko",
+    "refs": [
+     "Pacific - Stage 3!V25",
+     "Pacific - Stage 3!AM25",
+     "Pacific - Stage 3!BD25",
+     "Pacific - Stage 3!CL25",
+     "Pacific - Stage 3!V155"
     ]
    },
    {
@@ -6003,14 +5988,6 @@
     ]
    },
    {
-    "count": 2,
-    "raw": "Yuno",
-    "refs": [
-     "Pacific - Stage 3!BU25",
-     "Copy of Pacific - Stage 3!BU25"
-    ]
-   },
-   {
     "count": 1,
     "raw": "1",
     "refs": [
@@ -6085,6 +6062,13 @@
     "raw": "Soe",
     "refs": [
      "Korea - Stage 3!AP835"
+    ]
+   },
+   {
+    "count": 1,
+    "raw": "Yuno",
+    "refs": [
+     "Pacific - Stage 3!BU25"
     ]
    }
   ],
@@ -6420,17 +6404,6 @@
     ]
    },
    {
-    "count": 8,
-    "raw": "Stronghold",
-    "refs": [
-     "Pacific - Stage 3!J7",
-     "Pacific - Stage 3!J137",
-     "Pacific - Stage 3!C189",
-     "Pacific - Stage 3!J241",
-     "Pacific - Stage 3!C371"
-    ]
-   },
-   {
     "count": 7,
     "raw": "Najdorf Esports",
     "refs": [
@@ -6472,6 +6445,17 @@
      "Pacific - Stage 1!J163",
      "Pacific - Stage 1!J293",
      "Pacific - Stage 1!J371"
+    ]
+   },
+   {
+    "count": 7,
+    "raw": "Stronghold",
+    "refs": [
+     "Pacific - Stage 3!J7",
+     "Pacific - Stage 3!J137",
+     "Pacific - Stage 3!C189",
+     "Pacific - Stage 3!J241",
+     "Pacific - Stage 3!C371"
     ]
    },
    {
@@ -6527,17 +6511,6 @@
      "Pacific - Stage 2!J163",
      "Pacific - Stage 2!C241",
      "Pacific - Stage 2!J345"
-    ]
-   },
-   {
-    "count": 6,
-    "raw": "junjilopzfx0764",
-    "refs": [
-     "Pacific - Stage 3!C7",
-     "Pacific - Stage 3!J111",
-     "Pacific - Stage 3!C163",
-     "Pacific - Stage 3!C267",
-     "Pacific - Stage 3!J319"
     ]
    },
    {
@@ -6604,6 +6577,17 @@
      "Pacific - Stage 1!C163",
      "Pacific - Stage 1!J241",
      "Pacific - Stage 1!C345"
+    ]
+   },
+   {
+    "count": 5,
+    "raw": "junjilopzfx0764",
+    "refs": [
+     "Pacific - Stage 3!C7",
+     "Pacific - Stage 3!J111",
+     "Pacific - Stage 3!C163",
+     "Pacific - Stage 3!C267",
+     "Pacific - Stage 3!J319"
     ]
    },
    {

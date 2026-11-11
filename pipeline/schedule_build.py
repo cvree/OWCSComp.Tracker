@@ -219,10 +219,19 @@ def scheduled_cards(aliases) -> dict[str, list[dict]]:
     from external_sheet.workbook import grid
     layout = read_json(LAYOUT, {}) or {}
     L = C.CardLayout(layout.get("matchCards") or {})
+    # The same name rules the importer applies (gsheet_layout.json,
+    # tabPurposes): a tab the importer will not read as match cards (an
+    # editor's "Copy of ..." working copy, an index, a totals tab) is not a
+    # source of scheduled series either. Reading the raw tabs without them
+    # put "Copy of Pacific - Stage 3" on the Matches page as its own event.
+    tab_rules = [re.compile(t["pattern"], re.I)
+                 for t in layout.get("tabPurposes") or [] if t.get("pattern") and t.get("purpose")]
     out: dict[str, list[dict]] = {}
     for f in sorted(glob.glob(os.path.join(RAW_SHEETS, "*.json.gz"))):
         with gzip.open(f, "rt", encoding="utf-8") as fh:
             sheet = json.load(fh)
+        if any(rx.search((sheet.get("name") or "").strip()) for rx in tab_rules):
+            continue
         g, origin = grid(sheet)
         blocks = C.find_blocks(g, L)
         if not blocks:

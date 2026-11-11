@@ -117,9 +117,14 @@
     "Tabs whose PURPOSE is decided by name, before anything else is tried (first match wins,",
     "case-insensitive regex on the tab name). 'summary' = the sheet's own totals, which are",
     "re-derived from the match cards and never imported; 'reference' = index tabs (hero / map",
-    "pictures, team rosters) and the Self-Check tab, read as lookups, never as matches."
+    "pictures, team rosters) and the Self-Check tab, read as lookups, never as matches.",
+    "'duplicate' = a tab Google Sheets names 'Copy of <tab>' when an editor duplicates one to",
+    "work in. It repeats series the original tab already records, so importing it counted",
+    "those maps twice and showed a second, undated event. It is listed in the inventory with",
+    "its reason and never parsed."
   ],
   "tabPurposes": [
+    {"pattern": "^copy of ", "purpose": "duplicate"},
     {"pattern": "^self[- ]?check$", "purpose": "reference"},
     {"pattern": "index$", "purpose": "reference"},
     {"pattern": "^stage \\d+ (hero bans|regional maps|lan maps)", "purpose": "summary"},

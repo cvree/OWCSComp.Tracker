@@ -241,6 +241,7 @@ class Layout:
             "summary": "The sheet's own totals — re-derived from the match cards, never imported",
             "reference": "Reference tab (hero / map pictures, rosters, self-check) — read as a lookup, not imported",
             "credits": "Credits / about text",
+            "duplicate": "An editor's working copy of another tab — not imported, so its series are not counted twice",
             "empty": "Empty",
         }.get(name, name)
 

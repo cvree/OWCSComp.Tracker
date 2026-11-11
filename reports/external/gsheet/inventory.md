@@ -4,11 +4,11 @@
 - Spreadsheet id: `1OaU5O7lVDZbked5FZAvgfR9MnJIdGhTdnIdu4DsL9PQ`
 - Snapshot: `80641f6df8e46744c997eb225ed256b833c2ab752e4d4ec9dd8f29faf851c1a4` imported 2026-11-10T22:03:11+00:00
 - Parser gsheet-parser-2 · layout v2 · aliases v3
-- Tabs: 43 (24 recognised as data) · source rows: 9789
+- Tabs: 43 (23 recognised as data) · source rows: 9789
 - Workbook package: 54.1 MB zipped, 138.7 MB unzipped, 411 parts; embedded media: 234 files, 46.8 MB
 - Largest parts: `xl/worksheets/sheet8.xml` 3.9 MB, `xl/worksheets/sheet7.xml` 3.9 MB, `xl/worksheets/sheet6.xml` 3.8 MB, `xl/drawings/drawing8.xml` 3.3 MB, `xl/drawings/drawing7.xml` 3.2 MB, `xl/drawings/drawing6.xml` 3.1 MB
 
-**Imported:** 610 matches · 2227 maps · 4367 hero bans · 36343 player-hero appearances · 8454 composition observations · 0 ignored rows · 446 unmapped values · 0 identical duplicates · 0 conflicting duplicates
+**Imported:** 609 matches · 2222 maps · 4357 hero bans · 36246 player-hero appearances · 8434 composition observations · 0 ignored rows · 446 unmapped values · 0 identical duplicates · 0 conflicting duplicates
 
 | # | tab | rows | purpose | header row | maps | bans | appearances | ignored |
 |---|---|---|---|---|---|---|---|---|
@@ -33,7 +33,7 @@
 | 19 | Pacific - Stage 1 | 266 | match_cards | — | 66 | 132 | 1082 | 0 |
 | 20 | Pacific - Stage 2 | 268 | match_cards | — | 72 | 140 | 1195 | 0 |
 | 21 | Pacific - Stage 3 | 251 | match_cards | — | 61 | 110 | 926 | 0 |
-| 22 | Copy of Pacific - Stage 3 | 25 | match_cards | — | 5 | 10 | 97 | 0 |
+| 22 | Copy of Pacific - Stage 3 | 25 | duplicate | — | 0 | 0 | 0 | 0 |
 | 23 | Hero Index | 9 | reference | — | 0 | 0 | 0 | 0 |
 | 24 | Asia - Stage 1 | 251 | match_cards | — | 52 | 100 | 803 | 0 |
 | 25 | Asia - Stage 3 | 54 | match_cards | — | 0 | 0 | 0 | 0 |
@@ -60,7 +60,7 @@
 
 - Season year: 2026 (Landing Page!B1)
 - Hero pictures named by `Hero Index`: 54 heroes, 6 role icons
-- Cards: 631 found · 610 imported · 19 scheduled (no teams or no maps yet) · 1 incomplete (panels filled, map list empty) · 1 forfeited · 0 could not be read
+- Cards: 629 found · 609 imported · 19 scheduled (no teams or no maps yet) · 0 incomplete (panels filled, map list empty) · 1 forfeited · 0 could not be read
 - The sheet records no calendar dates and no map picks: neither is imported.
 
 ## Self-Check (`Self-Check`) — the sheet's own counts vs the importer's
@@ -152,8 +152,7 @@ Cards: 19 found · 19 imported · 0 scheduled · 0 incomplete · 0 forfeited · 
 ## Pacific - Stage 3 — Match cards — one fixed-size card per series, heroes shown as pictures
 Cards: 19 found · 18 imported · 1 scheduled · 0 incomplete · 0 forfeited · 0 could not be read · 18 matches
 
-## Copy of Pacific - Stage 3 — Match cards — one fixed-size card per series, heroes shown as pictures
-Cards: 2 found · 1 imported · 0 scheduled · 1 incomplete · 0 forfeited · 0 could not be read · 1 matches
+## Copy of Pacific - Stage 3 — An editor's working copy of another tab — not imported, so its series are not counted twice
 
 ## Hero Index — Reference tab (hero / map pictures, rosters, self-check) — read as a lookup, not imported
 
@@ -241,6 +240,5 @@ Twitter | Discord
 - [warning] CARD_SHAPE: 'Pacific - Stage 3' Week 1 | Day 4 | Game 3 (row 289): the map list names 3 maps but 4 map panels are filled in; the unlisted panel(s) ['Suravasa'] are not imported
 - [warning] CARD_SHAPE: 'Pacific - Stage 3' Week 1 | Day 5 | Game 2 (row 341): the map list names 3 maps but 4 map panels are filled in; the unlisted panel(s) ['Neon Junction'] are not imported
 - [warning] CARD_SHAPE: 'Pacific - Stage 3' Week 1 | Day 5 | Game 3 (row 367): the map list names 2 maps but 2 map panels are filled in; the unlisted panel(s) ['Paraíso'] are not imported
-- [warning] CARD_INCOMPLETE: 'Copy of Pacific - Stage 3' Week 2 | Day 1 | Game 4 (row 29): 1 map panel(s) filled in but the card's map list is empty — not imported until the editors finish the card
 - [warning] SELF_CHECK_MISMATCH: Self-Check Stage 1 CC: the sheet counts 13 matches / 48 maps, the importer parsed 14 / 48 from 'Champions Clash Tokyo'
 - [warning] SELF_CHECK_MISMATCH: Self-Check Stage 3 CN: the sheet counts 35 matches / 138 maps, the importer parsed 36 / 139 from 'China - Stage 3'

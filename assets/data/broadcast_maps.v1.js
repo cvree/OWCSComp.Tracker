@@ -397,7 +397,7 @@ window.OWCS_BROADCAST_MAPS = {
       "name": "TEAM FALCONS"
      },
      "team_b": {
-      "id": "whibo-gaming",
+      "id": "weibo-gaming",
       "name": "WHIBO GAMING"
      }
     },
@@ -964,7 +964,7 @@ window.OWCS_BROADCAST_MAPS = {
       "name": "SPACESTATION GAMING"
      },
      "team_b": {
-      "id": "who-gaming",
+      "id": "weibo-gaming",
       "name": "WHO GAMING"
      }
     },
