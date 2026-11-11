@@ -1,202 +1,202 @@
 {
  "format": "gsheet-raw.v2",
- "importedAt": "2026-11-10T22:03:11+00:00",
+ "importedAt": "2026-11-11T19:51:15+00:00",
  "package": {
-  "bytes": 56720515,
+  "bytes": 56724760,
   "largestMembers": [
    {
-    "bytes": 4048933,
+    "bytes": 4048869,
     "path": "xl/worksheets/sheet8.xml"
    },
    {
-    "bytes": 4047668,
+    "bytes": 4047592,
     "path": "xl/worksheets/sheet7.xml"
    },
    {
-    "bytes": 3995392,
+    "bytes": 3995313,
     "path": "xl/worksheets/sheet6.xml"
    },
    {
-    "bytes": 3484487,
+    "bytes": 3487843,
     "path": "xl/drawings/drawing8.xml"
    },
    {
-    "bytes": 3400175,
+    "bytes": 3400272,
     "path": "xl/drawings/drawing7.xml"
    },
    {
-    "bytes": 3228073,
+    "bytes": 3228144,
     "path": "xl/drawings/drawing6.xml"
    },
    {
-    "bytes": 2867501,
-    "path": "xl/worksheets/sheet12.xml"
+    "bytes": 2867546,
+    "path": "xl/worksheets/sheet11.xml"
    },
    {
-    "bytes": 2790007,
-    "path": "xl/worksheets/sheet10.xml"
+    "bytes": 2790144,
+    "path": "xl/worksheets/sheet9.xml"
    }
   ],
   "mediaBytes": 49039605,
   "mediaFiles": 234,
-  "members": 411,
-  "uncompressedBytes": 145431564,
+  "members": 409,
+  "uncompressedBytes": 145659762,
   "worksheetXml": [
    {
-    "bytes": 4048933,
+    "bytes": 4048869,
     "path": "xl/worksheets/sheet8.xml"
    },
    {
-    "bytes": 4047668,
+    "bytes": 4047592,
     "path": "xl/worksheets/sheet7.xml"
    },
    {
-    "bytes": 3995392,
+    "bytes": 3995313,
     "path": "xl/worksheets/sheet6.xml"
    },
    {
-    "bytes": 2867501,
-    "path": "xl/worksheets/sheet12.xml"
-   },
-   {
-    "bytes": 2790007,
-    "path": "xl/worksheets/sheet10.xml"
-   },
-   {
-    "bytes": 2764698,
+    "bytes": 2867546,
     "path": "xl/worksheets/sheet11.xml"
    },
    {
-    "bytes": 2509793,
+    "bytes": 2790144,
+    "path": "xl/worksheets/sheet9.xml"
+   },
+   {
+    "bytes": 2764471,
+    "path": "xl/worksheets/sheet10.xml"
+   },
+   {
+    "bytes": 2509984,
     "path": "xl/worksheets/sheet5.xml"
    },
    {
-    "bytes": 2483351,
+    "bytes": 2483491,
     "path": "xl/worksheets/sheet3.xml"
    },
    {
-    "bytes": 2471098,
+    "bytes": 2471232,
     "path": "xl/worksheets/sheet4.xml"
    },
    {
-    "bytes": 2173161,
-    "path": "xl/worksheets/sheet27.xml"
-   },
-   {
-    "bytes": 2068362,
-    "path": "xl/worksheets/sheet28.xml"
-   },
-   {
-    "bytes": 1651526,
-    "path": "xl/worksheets/sheet15.xml"
-   },
-   {
-    "bytes": 1648505,
-    "path": "xl/worksheets/sheet18.xml"
-   },
-   {
-    "bytes": 1648247,
-    "path": "xl/worksheets/sheet17.xml"
-   },
-   {
-    "bytes": 1632361,
-    "path": "xl/worksheets/sheet16.xml"
-   },
-   {
-    "bytes": 1630362,
-    "path": "xl/worksheets/sheet14.xml"
-   },
-   {
-    "bytes": 1626041,
-    "path": "xl/worksheets/sheet13.xml"
-   },
-   {
-    "bytes": 1493923,
-    "path": "xl/worksheets/sheet20.xml"
-   },
-   {
-    "bytes": 1477518,
-    "path": "xl/worksheets/sheet19.xml"
-   },
-   {
-    "bytes": 1460792,
-    "path": "xl/worksheets/sheet21.xml"
-   },
-   {
-    "bytes": 1393793,
-    "path": "xl/worksheets/sheet24.xml"
-   },
-   {
-    "bytes": 1330004,
-    "path": "xl/worksheets/sheet25.xml"
-   },
-   {
-    "bytes": 1077681,
+    "bytes": 2173164,
     "path": "xl/worksheets/sheet26.xml"
    },
    {
-    "bytes": 851405,
-    "path": "xl/worksheets/sheet2.xml"
+    "bytes": 2068362,
+    "path": "xl/worksheets/sheet27.xml"
    },
    {
-    "bytes": 721621,
-    "path": "xl/worksheets/sheet41.xml"
+    "bytes": 1651408,
+    "path": "xl/worksheets/sheet14.xml"
    },
    {
-    "bytes": 502428,
-    "path": "xl/worksheets/sheet40.xml"
+    "bytes": 1648512,
+    "path": "xl/worksheets/sheet17.xml"
    },
    {
-    "bytes": 178898,
-    "path": "xl/worksheets/sheet39.xml"
+    "bytes": 1648238,
+    "path": "xl/worksheets/sheet16.xml"
    },
    {
-    "bytes": 168164,
-    "path": "xl/worksheets/sheet29.xml"
+    "bytes": 1632358,
+    "path": "xl/worksheets/sheet15.xml"
    },
    {
-    "bytes": 155153,
+    "bytes": 1630340,
+    "path": "xl/worksheets/sheet13.xml"
+   },
+   {
+    "bytes": 1625937,
+    "path": "xl/worksheets/sheet12.xml"
+   },
+   {
+    "bytes": 1493912,
+    "path": "xl/worksheets/sheet19.xml"
+   },
+   {
+    "bytes": 1477520,
+    "path": "xl/worksheets/sheet18.xml"
+   },
+   {
+    "bytes": 1460816,
+    "path": "xl/worksheets/sheet20.xml"
+   },
+   {
+    "bytes": 1393821,
     "path": "xl/worksheets/sheet22.xml"
    },
    {
-    "bytes": 154124,
-    "path": "xl/worksheets/sheet31.xml"
+    "bytes": 1339402,
+    "path": "xl/worksheets/sheet24.xml"
    },
    {
-    "bytes": 134811,
+    "bytes": 1077674,
+    "path": "xl/worksheets/sheet25.xml"
+   },
+   {
+    "bytes": 851357,
+    "path": "xl/worksheets/sheet2.xml"
+   },
+   {
+    "bytes": 721596,
+    "path": "xl/worksheets/sheet40.xml"
+   },
+   {
+    "bytes": 502434,
+    "path": "xl/worksheets/sheet39.xml"
+   },
+   {
+    "bytes": 178894,
+    "path": "xl/worksheets/sheet38.xml"
+   },
+   {
+    "bytes": 168154,
+    "path": "xl/worksheets/sheet28.xml"
+   },
+   {
+    "bytes": 155152,
+    "path": "xl/worksheets/sheet21.xml"
+   },
+   {
+    "bytes": 154118,
     "path": "xl/worksheets/sheet30.xml"
    },
    {
-    "bytes": 108091,
-    "path": "xl/worksheets/sheet32.xml"
+    "bytes": 134803,
+    "path": "xl/worksheets/sheet29.xml"
    },
    {
-    "bytes": 95919,
-    "path": "xl/worksheets/sheet34.xml"
+    "bytes": 108210,
+    "path": "xl/worksheets/sheet31.xml"
    },
    {
-    "bytes": 92889,
+    "bytes": 96019,
     "path": "xl/worksheets/sheet33.xml"
    },
    {
-    "bytes": 71128,
-    "path": "xl/worksheets/sheet36.xml"
+    "bytes": 92987,
+    "path": "xl/worksheets/sheet32.xml"
    },
    {
-    "bytes": 63155,
-    "path": "xl/worksheets/sheet43.xml"
-   },
-   {
-    "bytes": 54004,
+    "bytes": 71030,
     "path": "xl/worksheets/sheet35.xml"
    },
    {
-    "bytes": 27058,
-    "path": "xl/worksheets/sheet37.xml"
+    "bytes": 63220,
+    "path": "xl/worksheets/sheet42.xml"
+   },
+   {
+    "bytes": 54047,
+    "path": "xl/worksheets/sheet34.xml"
+   },
+   {
+    "bytes": 27107,
+    "path": "xl/worksheets/sheet36.xml"
    },
    {
     "bytes": 24270,
-    "path": "xl/worksheets/sheet42.xml"
+    "path": "xl/worksheets/sheet41.xml"
    },
    {
     "bytes": 21166,
@@ -205,7 +205,7 @@
   ]
  },
  "parserVersion": "gsheet-parser-2",
- "sha256": "80641f6df8e46744c997eb225ed256b833c2ab752e4d4ec9dd8f29faf851c1a4",
+ "sha256": "829c62c56d24e682c0d58a4170953c704ff64caa841d6ff78b73418d52c40bc9",
  "sheets": [
   {
    "bytes": 1621,
@@ -249,7 +249,7 @@
    "index": 4,
    "name": "Japan - Stage 3",
    "rows": 467,
-   "sha256": "4496bac74ebe6eaf72a23e181e2ed044ad7ee538da666329677c0e20379a2f0a",
+   "sha256": "38898563ae66868948e92c394607f7e6423b921dcc6d23cf305c856ac423a1dc",
    "state": "visible"
   },
   {
@@ -271,138 +271,138 @@
    "state": "visible"
   },
   {
-   "bytes": 98554,
+   "bytes": 98560,
    "file": "sheets/007-korea-stage-3.json.gz",
    "index": 7,
    "name": "Korea - Stage 3",
    "rows": 717,
-   "sha256": "2a3250ee7ba61cb5ac4419141cc43e7c23e9df9f702c12933bd1788c0ffd0b98",
+   "sha256": "cbbd1ebc1bc633838b31c030b40bcd9adb789b1b4182eef159d1c2b048ecc543",
    "state": "visible"
   },
   {
-   "bytes": 232,
-   "file": "sheets/008-calabasas.json.gz",
+   "bytes": 66708,
+   "file": "sheets/008-china-stage-1.json.gz",
    "index": 8,
-   "name": "calabasas",
-   "rows": 2,
-   "sha256": "b054149ca665d52fc9e62728018b1d70c7191973ec45e39ff384ece29b62ff6a",
-   "state": "visible"
-  },
-  {
-   "bytes": 66706,
-   "file": "sheets/009-china-stage-1.json.gz",
-   "index": 9,
    "name": "China - Stage 1",
    "rows": 505,
-   "sha256": "c2a4506029a540a1855a6b3b0f99a82a2d6d273dabc27f294549b5303e0fbd49",
+   "sha256": "d01659c86497cd935739f7046cc63b0c1b49dc4b9b981fffc39207e05700067e",
    "state": "visible"
   },
   {
-   "bytes": 64397,
-   "file": "sheets/010-china-stage-2.json.gz",
-   "index": 10,
+   "bytes": 64394,
+   "file": "sheets/009-china-stage-2.json.gz",
+   "index": 9,
    "name": "China - Stage 2",
    "rows": 504,
-   "sha256": "5cfc410933e73da014705289b0dcec537b2a98d333e5328637b290a2406e27f5",
+   "sha256": "8ebec8f1db11e26020f2de4cc8804ba735e78f43dd3fdc3282161f7190b13cc9",
    "state": "visible"
   },
   {
    "bytes": 69445,
-   "file": "sheets/011-china-stage-3.json.gz",
-   "index": 11,
+   "file": "sheets/010-china-stage-3.json.gz",
+   "index": 10,
    "name": "China - Stage 3",
    "rows": 503,
-   "sha256": "ac0155abbb787dd51a517ffffc4858b4d24d384084445d2fc2276592d404312f",
+   "sha256": "19422c3008f24fb9d30295b4021d668eddfa72e9138f9369a06e9191331eeac4",
    "state": "visible"
   },
   {
    "bytes": 39769,
-   "file": "sheets/012-emea-stage-1.json.gz",
-   "index": 12,
+   "file": "sheets/011-emea-stage-1.json.gz",
+   "index": 11,
    "name": "EMEA - Stage 1",
    "rows": 294,
-   "sha256": "b42f6c4851893d9080e76caf2a544113e8b3e0831da3b6e4f713d3e0dccd8700",
+   "sha256": "a941b7d56b6467fdc5d99d5840dd65b2f2ff2d52b75b026a9c37206ec78b9193",
    "state": "visible"
   },
   {
-   "bytes": 44549,
-   "file": "sheets/013-emea-stage-2.json.gz",
-   "index": 13,
+   "bytes": 44550,
+   "file": "sheets/012-emea-stage-2.json.gz",
+   "index": 12,
    "name": "EMEA - Stage 2",
    "rows": 296,
-   "sha256": "36f1434601166e174b3316e788b8b9258ba20713a3b9d62e2136854a63605f77",
+   "sha256": "5bb774585b6bfb2df80fd3f0bbc98d533faf180491465b5c6a3a269ece159bd5",
    "state": "visible"
   },
   {
-   "bytes": 43491,
-   "file": "sheets/014-emea-stage-3.json.gz",
-   "index": 14,
+   "bytes": 43492,
+   "file": "sheets/013-emea-stage-3.json.gz",
+   "index": 13,
    "name": "EMEA - Stage 3",
    "rows": 295,
-   "sha256": "c7b9e3a160c60029dea92bebd022632d394b412e346aac5cd8590d7062d0fa5c",
+   "sha256": "7c685bdf71d2b795ae10eba39c90e5794e40b8e784d2a790c1ab69c244475953",
    "state": "visible"
   },
   {
    "bytes": 41932,
-   "file": "sheets/015-north-america-stage-1.json.gz",
-   "index": 15,
+   "file": "sheets/014-north-america-stage-1.json.gz",
+   "index": 14,
    "name": "North America - Stage 1",
    "rows": 298,
-   "sha256": "def5788d464cdf7d1cd8d22d1b6a5f4717aac30a8dd63d0881b13118ea404dec",
+   "sha256": "818f33de3b6a0ee39d129d91e86cb622112381368c4688b7aa11d4e48bcbc9d5",
    "state": "visible"
   },
   {
    "bytes": 39657,
-   "file": "sheets/016-north-america-stage-2.json.gz",
-   "index": 16,
+   "file": "sheets/015-north-america-stage-2.json.gz",
+   "index": 15,
    "name": "North America - Stage 2",
    "rows": 296,
-   "sha256": "7e4d5794f59c712e0acd6817a2efcb847b00cca648554e84c134bf2ebee21a42",
+   "sha256": "682361d9d182517696f1a73f9cf7ba2fa38908bff185a12ac7310df65ed3aeec",
    "state": "visible"
   },
   {
    "bytes": 38592,
-   "file": "sheets/017-north-america-stage-3.json.gz",
-   "index": 17,
+   "file": "sheets/016-north-america-stage-3.json.gz",
+   "index": 16,
    "name": "North America - Stage 3",
    "rows": 295,
-   "sha256": "2b47a3b0dedc9e9f007aebf5f8a0d8c6ebdf5c59f02d9c766c5490f16b2441b8",
+   "sha256": "9685cbcc288c6d7dd091c92b4e1f60b70fe00170280bcc89ce4bac1e76bc4b3c",
    "state": "visible"
   },
   {
    "bytes": 34545,
-   "file": "sheets/018-pacific-stage-1.json.gz",
-   "index": 18,
+   "file": "sheets/017-pacific-stage-1.json.gz",
+   "index": 17,
    "name": "Pacific - Stage 1",
    "rows": 266,
-   "sha256": "24d0290907a5ef47354bddc1b3fb2ded3231bb68319e3a023e86fefb59268fc4",
+   "sha256": "1b5f740d008bc0cd8b4f8efbd6253956688dcaf3a657bd6f51e9f1830aba90ea",
    "state": "visible"
   },
   {
    "bytes": 37427,
-   "file": "sheets/019-pacific-stage-2.json.gz",
-   "index": 19,
+   "file": "sheets/018-pacific-stage-2.json.gz",
+   "index": 18,
    "name": "Pacific - Stage 2",
    "rows": 268,
-   "sha256": "bbfab9978cf7c068562469063d22c44ffb97ac42c4bb2c787e4192b88a8ee6f1",
+   "sha256": "0685f6b46b8cb3895aabb74dbbc9aaae3f3ef22864cd1a104b4d561626a4bdeb",
    "state": "visible"
   },
   {
-   "bytes": 33778,
-   "file": "sheets/020-pacific-stage-3.json.gz",
-   "index": 20,
+   "bytes": 33781,
+   "file": "sheets/019-pacific-stage-3.json.gz",
+   "index": 19,
    "name": "Pacific - Stage 3",
-   "rows": 251,
-   "sha256": "21cc35d386e892650bbe2633b259b3a5a22a624ba54e01644572438ff15664c7",
+   "rows": 252,
+   "sha256": "4a1330f3c3566e0edfb53f625afd1408598b3355d96d6a6e5ab211d1c3e72900",
    "state": "visible"
   },
   {
    "bytes": 3995,
-   "file": "sheets/021-copy-of-pacific-stage-3.json.gz",
-   "index": 21,
+   "file": "sheets/020-copy-of-pacific-stage-3.json.gz",
+   "index": 20,
    "name": "Copy of Pacific - Stage 3",
    "rows": 25,
-   "sha256": "424ecf95f191ddd409a10f00874e3d84b2c0c4f4774868429e07e840f1967e8d",
+   "sha256": "ab15f8223250690efab55add914a7732d51f960f16c484ba3f08997cde22567f",
+   "state": "visible"
+  },
+  {
+   "bytes": 29171,
+   "file": "sheets/021-asia-stage-1.json.gz",
+   "index": 21,
+   "name": "Asia - Stage 1",
+   "rows": 251,
+   "sha256": "ddda95da6b6d3ce4b7e29d9f98efaca16d94c6f8f0b9459f9f023242abda5ce0",
    "state": "visible"
   },
   {
@@ -415,183 +415,174 @@
    "state": "visible"
   },
   {
-   "bytes": 29171,
-   "file": "sheets/023-asia-stage-1.json.gz",
+   "bytes": 10535,
+   "file": "sheets/023-asia-stage-3.json.gz",
    "index": 23,
-   "name": "Asia - Stage 1",
-   "rows": 251,
-   "sha256": "18d9f5217e6a6849ef916acb43e18eed9c4dbb3c7636fff8087062b9879bcf17",
-   "state": "visible"
-  },
-  {
-   "bytes": 4181,
-   "file": "sheets/024-asia-stage-3.json.gz",
-   "index": 24,
    "name": "Asia - Stage 3",
-   "rows": 54,
-   "sha256": "7c19d3910587db3e40466c300acc238d9130c9e9b49c57b6df0922a7082c9d68",
+   "rows": 98,
+   "sha256": "2e16679d6db0583ef235c4bf2ac92232430ef886c287446f8a45987fd80c6ef5",
    "state": "visible"
   },
   {
-   "bytes": 26010,
-   "file": "sheets/025-champions-clash-tokyo.json.gz",
-   "index": 25,
+   "bytes": 26011,
+   "file": "sheets/024-champions-clash-tokyo.json.gz",
+   "index": 24,
    "name": "Champions Clash Tokyo",
    "rows": 198,
-   "sha256": "4ea07605e4e2fef24686dced092bf055ad2316669a81cf7607892405b508b012",
+   "sha256": "cf0f3395503d127bedf753262869ac9762500be265fc98d88588546d2f405856",
    "state": "visible"
   },
   {
    "bytes": 44791,
-   "file": "sheets/026-midseason-championship-paris.json.gz",
-   "index": 26,
+   "file": "sheets/025-midseason-championship-paris.json.gz",
+   "index": 25,
    "name": "Midseason Championship Paris",
    "rows": 393,
-   "sha256": "b2d9fdb364928f03377737563d43a071c3e0f8dc5edcb727de8666e2b537628b",
+   "sha256": "2e1df447dea741dd1f0eb1a3fe2d4327b0df53b9d9348a5ab7c683dd582cb34a",
    "state": "visible"
   },
   {
-   "bytes": 6254,
-   "file": "sheets/027-world-finals-guangzhou.json.gz",
-   "index": 27,
+   "bytes": 6253,
+   "file": "sheets/026-world-finals-guangzhou.json.gz",
+   "index": 26,
    "name": "World Finals Guangzhou",
    "rows": 28,
-   "sha256": "d71a7575b3bc3d3c1cbfbd65fc59ff874c14a779b83f916e3bbe81238ad81ea7",
+   "sha256": "859c16128586ead06ff2ae9d3abd4a6087dc1f6f81f359e03d49ea01a502155b",
    "state": "visible"
   },
   {
    "bytes": 6908,
-   "file": "sheets/028-stage-1-hero-bans.json.gz",
-   "index": 28,
+   "file": "sheets/027-stage-1-hero-bans.json.gz",
+   "index": 27,
    "name": "Stage 1 Hero Bans",
    "rows": 100,
-   "sha256": "fe1848cac569ade97c3aca19bc17902aa7e60e9c33d3e655ea36018684c0617a",
+   "sha256": "9f11438208248c74c2794d2ccd16b6ebc940c54b8e214eef609238c9aa422400",
    "state": "visible"
   },
   {
    "bytes": 5948,
-   "file": "sheets/029-stage-2-hero-bans.json.gz",
-   "index": 29,
+   "file": "sheets/028-stage-2-hero-bans.json.gz",
+   "index": 28,
    "name": "Stage 2 Hero Bans",
    "rows": 80,
-   "sha256": "8f28754b3e34cbc8fa68c9d0eced12aa5744ca0819e73a3f99f3b542900d30c0",
+   "sha256": "1057dffb913b52205b9431a8c727578d271f37ec0c8ed2c3aafadb015ad9fa68",
    "state": "visible"
   },
   {
-   "bytes": 6518,
-   "file": "sheets/030-stage-3-hero-bans.json.gz",
-   "index": 30,
+   "bytes": 6564,
+   "file": "sheets/029-stage-3-hero-bans.json.gz",
+   "index": 29,
    "name": "Stage 3 Hero Bans",
    "rows": 90,
-   "sha256": "51707b0e41b7d39c18f8f0da8a8ab21b6d0f7aa7fdce3b9a96e6f84f36a5d643",
+   "sha256": "18a38eea2de25f9d621ce39bc7e44303ef09fb66ba96e0e4aa21f72dd7aff16e",
    "state": "visible"
   },
   {
    "bytes": 4245,
-   "file": "sheets/031-stage-1-regional-maps.json.gz",
-   "index": 31,
+   "file": "sheets/030-stage-1-regional-maps.json.gz",
+   "index": 30,
    "name": "Stage 1 Regional Maps",
    "rows": 144,
-   "sha256": "fa07a5a9ac9797e06eb2d6894e50a36ae7bb8c028a017cdd0ea36630278a79f0",
+   "sha256": "480ba35b78d0cc2729e6e7cf3e1e3ccb7a62782753e3153c7f9244cbe46928b7",
    "state": "visible"
   },
   {
    "bytes": 3789,
-   "file": "sheets/032-stage-2-regional-maps-regular.json.gz",
-   "index": 32,
+   "file": "sheets/031-stage-2-regional-maps-regular.json.gz",
+   "index": 31,
    "name": "Stage 2 Regional Maps - Regular",
    "rows": 126,
-   "sha256": "11c543d6a4b945dad8d219bc9d33b65c09a217d149f92f0bc39cbb7f3fe3057c",
+   "sha256": "1298816e0c276f0f91f1b4c7188debd823fe2b9d80d168fa8366c8b065cdfc01",
    "state": "visible"
   },
   {
-   "bytes": 3577,
-   "file": "sheets/033-stage-2-regional-maps-playoff.json.gz",
-   "index": 33,
+   "bytes": 3576,
+   "file": "sheets/032-stage-2-regional-maps-playoff.json.gz",
+   "index": 32,
    "name": "Stage 2 Regional Maps - Playoff",
    "rows": 126,
-   "sha256": "becca446c6980ecbfdac7c805aef67374552147f46f6c3618aa0df8aecd86aaf",
+   "sha256": "55332c01cfd36b2bde9a26d973cf0de242d7a8eaa73345efc84212c52b99c1ae",
    "state": "visible"
   },
   {
    "bytes": 2579,
-   "file": "sheets/034-stage-3-regional-maps-season-4.json.gz",
-   "index": 34,
+   "file": "sheets/033-stage-3-regional-maps-season-4.json.gz",
+   "index": 33,
    "name": "Stage 3 Regional Maps (Season 4",
    "rows": 72,
-   "sha256": "380201c30279a142eac51d55ebdba8a87bf003380dc609e78b7eade485d40e42",
+   "sha256": "85860e6833122d0424478e547e51a48e8b23c912d23e0068e967da968f165e2d",
    "state": "visible"
   },
   {
-   "bytes": 2969,
-   "file": "sheets/035-stage-3-regional-maps-season-5.json.gz",
-   "index": 35,
+   "bytes": 2991,
+   "file": "sheets/034-stage-3-regional-maps-season-5.json.gz",
+   "index": 34,
    "name": "Stage 3 Regional Maps (Season 5",
    "rows": 90,
-   "sha256": "8ff8f0a9a68f16cc24451623e56c48d56b6c22bc7200bc75944296292520ba44",
+   "sha256": "b2117b0ff5a3b15088d24cc4c1846a17b88c91f94d46861b38a335a6894a15d6",
    "state": "visible"
   },
   {
    "bytes": 1541,
-   "file": "sheets/036-stage-1-lan-maps.json.gz",
-   "index": 36,
+   "file": "sheets/035-stage-1-lan-maps.json.gz",
+   "index": 35,
    "name": "Stage 1 LAN Maps",
    "rows": 36,
-   "sha256": "233cffb101e387a54bf5203b4bfa2eb3c608d56af6bbed292d902625ad7f45cb",
+   "sha256": "eba11588af159ff3bf271debbbff2dbfd05e42744452438718a52787c16cf1d5",
    "state": "visible"
   },
   {
    "bytes": 949,
-   "file": "sheets/037-stage-2-lan-maps.json.gz",
-   "index": 37,
+   "file": "sheets/036-stage-2-lan-maps.json.gz",
+   "index": 36,
    "name": "Stage 2 LAN Maps",
    "rows": 18,
-   "sha256": "cc4391e3d2a2c81db0bea85699175b8f6159ec71394c0a02aacf3f2ee541e43c",
+   "sha256": "75a592b1618688a9433d6266615732eca3499d175fb42b98376dc8db5aa5f8c6",
    "state": "visible"
   },
   {
    "bytes": 6174,
-   "file": "sheets/038-partner-team-index.json.gz",
-   "index": 38,
+   "file": "sheets/037-partner-team-index.json.gz",
+   "index": 37,
    "name": "Partner Team Index",
    "rows": 32,
-   "sha256": "a91270b87065539efe7a24587e8a847b749b0736921ab68756acac70e60b75c8",
+   "sha256": "e2994c5aaf1fb8d9c8bf9e57ec46b24994cd86a150b565d6ca29918227661c4a",
    "state": "visible"
   },
   {
    "bytes": 12881,
-   "file": "sheets/039-non-partner-team-index.json.gz",
-   "index": 39,
+   "file": "sheets/038-non-partner-team-index.json.gz",
+   "index": 38,
    "name": "Non-Partner Team Index",
    "rows": 48,
-   "sha256": "20a2f31dd6345280ab762a02ec950f65a80e2359f056743a5ab7f3fd3cfa4645",
+   "sha256": "3549ef33f7d10881f6f3f542e1bc4a937795f4578fbf5f3c1f6f2f5101033504",
    "state": "visible"
   },
   {
    "bytes": 15067,
-   "file": "sheets/040-old-team-index.json.gz",
-   "index": 40,
+   "file": "sheets/039-old-team-index.json.gz",
+   "index": 39,
    "name": "Old Team Index",
    "rows": 56,
-   "sha256": "528743913853fbdb77fec8e1579e509161db4143d7f7723de7b1602408da9a77",
+   "sha256": "ab27db6d0c50aa22606bfd12bac6f2fddc494340b6787a3d62547f110ef86d15",
    "state": "visible"
   },
   {
    "bytes": 865,
-   "file": "sheets/041-self-check.json.gz",
-   "index": 41,
+   "file": "sheets/040-self-check.json.gz",
+   "index": 40,
    "name": "Self-Check",
    "rows": 26,
-   "sha256": "adfddb4327c777bae65cee696389d7e8b71eaf4aa25660b9309c5ebf53da5b92",
+   "sha256": "101d25e361b07b517f9a5f5f8a17df48a47764bc98d2105d0528cf511c6d8a88",
    "state": "visible"
   },
   {
-   "bytes": 1357,
-   "file": "sheets/042-map-index.json.gz",
-   "index": 42,
+   "bytes": 1358,
+   "file": "sheets/041-map-index.json.gz",
+   "index": 41,
    "name": "Map Index",
    "rows": 7,
-   "sha256": "85a5454586cea65c85074abcd016c4b870228e056d7cad165411219825fd0eaf",
+   "sha256": "86b3984dc38685a9034aa931bc9519c04e21a0631688cf62d616d0b7919a26ed",
    "state": "visible"
   }
  ],

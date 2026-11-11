@@ -2,13 +2,13 @@
 
 - Source: https://docs.google.com/spreadsheets/d/1OaU5O7lVDZbked5FZAvgfR9MnJIdGhTdnIdu4DsL9PQ/edit?usp=sharing
 - Spreadsheet id: `1OaU5O7lVDZbked5FZAvgfR9MnJIdGhTdnIdu4DsL9PQ`
-- Snapshot: `80641f6df8e46744c997eb225ed256b833c2ab752e4d4ec9dd8f29faf851c1a4` imported 2026-11-10T22:03:11+00:00
+- Snapshot: `829c62c56d24e682c0d58a4170953c704ff64caa841d6ff78b73418d52c40bc9` imported 2026-11-11T19:51:15+00:00
 - Parser gsheet-parser-2 · layout v2 · aliases v3
-- Tabs: 43 (24 recognised as data) · source rows: 9789
-- Workbook package: 54.1 MB zipped, 138.7 MB unzipped, 411 parts; embedded media: 234 files, 46.8 MB
+- Tabs: 42 (24 recognised as data) · source rows: 9832
+- Workbook package: 54.1 MB zipped, 138.9 MB unzipped, 409 parts; embedded media: 234 files, 46.8 MB
 - Largest parts: `xl/worksheets/sheet8.xml` 3.9 MB, `xl/worksheets/sheet7.xml` 3.9 MB, `xl/worksheets/sheet6.xml` 3.8 MB, `xl/drawings/drawing8.xml` 3.3 MB, `xl/drawings/drawing7.xml` 3.2 MB, `xl/drawings/drawing6.xml` 3.1 MB
 
-**Imported:** 610 matches · 2227 maps · 4367 hero bans · 36343 player-hero appearances · 8454 composition observations · 0 ignored rows · 446 unmapped values · 0 identical duplicates · 0 conflicting duplicates
+**Imported:** 614 matches · 2239 maps · 4391 hero bans · 36539 player-hero appearances · 8500 composition observations · 0 ignored rows · 445 unmapped values · 0 identical duplicates · 0 conflicting duplicates
 
 | # | tab | rows | purpose | header row | maps | bans | appearances | ignored |
 |---|---|---|---|---|---|---|---|---|
@@ -19,48 +19,47 @@
 | 5 | Japan - Stage 3 | 467 | match_cards | — | 118 | 230 | 1750 | 0 |
 | 6 | Korea - Stage 1 | 716 | match_cards | — | 186 | 370 | 2961 | 0 |
 | 7 | Korea - Stage 2 | 717 | match_cards | — | 188 | 372 | 3220 | 0 |
-| 8 | Korea - Stage 3 | 717 | match_cards | — | 191 | 378 | 3337 | 0 |
-| 9 | calabasas | 2 | unrecognised | — | 0 | 0 | 0 | 0 |
-| 10 | China - Stage 1 | 505 | match_cards | — | 129 | 258 | 2100 | 0 |
-| 11 | China - Stage 2 | 504 | match_cards | — | 126 | 252 | 2084 | 0 |
-| 12 | China - Stage 3 | 503 | match_cards | — | 139 | 274 | 2222 | 0 |
-| 13 | EMEA - Stage 1 | 294 | match_cards | — | 78 | 156 | 1172 | 0 |
-| 14 | EMEA - Stage 2 | 296 | match_cards | — | 88 | 172 | 1424 | 0 |
-| 15 | EMEA - Stage 3 | 295 | match_cards | — | 87 | 172 | 1345 | 0 |
-| 16 | North America - Stage 1 | 298 | match_cards | — | 82 | 164 | 1329 | 0 |
-| 17 | North America - Stage 2 | 296 | match_cards | — | 75 | 148 | 1349 | 0 |
-| 18 | North America - Stage 3 | 295 | match_cards | — | 75 | 150 | 1213 | 0 |
-| 19 | Pacific - Stage 1 | 266 | match_cards | — | 66 | 132 | 1082 | 0 |
-| 20 | Pacific - Stage 2 | 268 | match_cards | — | 72 | 140 | 1195 | 0 |
-| 21 | Pacific - Stage 3 | 251 | match_cards | — | 61 | 110 | 926 | 0 |
-| 22 | Copy of Pacific - Stage 3 | 25 | match_cards | — | 5 | 10 | 97 | 0 |
+| 8 | Korea - Stage 3 | 717 | match_cards | — | 191 | 378 | 3340 | 0 |
+| 9 | China - Stage 1 | 505 | match_cards | — | 129 | 258 | 2100 | 0 |
+| 10 | China - Stage 2 | 504 | match_cards | — | 126 | 252 | 2084 | 0 |
+| 11 | China - Stage 3 | 503 | match_cards | — | 139 | 274 | 2222 | 0 |
+| 12 | EMEA - Stage 1 | 294 | match_cards | — | 78 | 156 | 1172 | 0 |
+| 13 | EMEA - Stage 2 | 296 | match_cards | — | 88 | 172 | 1424 | 0 |
+| 14 | EMEA - Stage 3 | 295 | match_cards | — | 87 | 172 | 1345 | 0 |
+| 15 | North America - Stage 1 | 298 | match_cards | — | 82 | 164 | 1329 | 0 |
+| 16 | North America - Stage 2 | 296 | match_cards | — | 75 | 148 | 1349 | 0 |
+| 17 | North America - Stage 3 | 295 | match_cards | — | 75 | 150 | 1213 | 0 |
+| 18 | Pacific - Stage 1 | 266 | match_cards | — | 66 | 132 | 1082 | 0 |
+| 19 | Pacific - Stage 2 | 268 | match_cards | — | 72 | 140 | 1195 | 0 |
+| 20 | Pacific - Stage 3 | 252 | match_cards | — | 61 | 110 | 926 | 0 |
+| 21 | Copy of Pacific - Stage 3 | 25 | match_cards | — | 5 | 10 | 97 | 0 |
+| 22 | Asia - Stage 1 | 251 | match_cards | — | 52 | 100 | 803 | 0 |
 | 23 | Hero Index | 9 | reference | — | 0 | 0 | 0 | 0 |
-| 24 | Asia - Stage 1 | 251 | match_cards | — | 52 | 100 | 803 | 0 |
-| 25 | Asia - Stage 3 | 54 | match_cards | — | 0 | 0 | 0 | 0 |
-| 26 | Champions Clash Tokyo | 198 | match_cards | — | 48 | 92 | 783 | 0 |
-| 27 | Midseason Championship Paris | 393 | match_cards | — | 78 | 154 | 1450 | 0 |
-| 28 | World Finals Guangzhou | 28 | unrecognised | — | 0 | 0 | 0 | 0 |
-| 29 | Stage 1 Hero Bans | 100 | summary | — | 0 | 0 | 0 | 0 |
-| 30 | Stage 2 Hero Bans | 80 | summary | — | 0 | 0 | 0 | 0 |
-| 31 | Stage 3 Hero Bans | 90 | summary | — | 0 | 0 | 0 | 0 |
-| 32 | Stage 1 Regional Maps | 144 | summary | — | 0 | 0 | 0 | 0 |
-| 33 | Stage 2 Regional Maps - Regular | 126 | summary | — | 0 | 0 | 0 | 0 |
-| 34 | Stage 2 Regional Maps - Playoff | 126 | summary | — | 0 | 0 | 0 | 0 |
-| 35 | Stage 3 Regional Maps (Season 4 | 72 | summary | — | 0 | 0 | 0 | 0 |
-| 36 | Stage 3 Regional Maps (Season 5 | 90 | summary | — | 0 | 0 | 0 | 0 |
-| 37 | Stage 1 LAN Maps | 36 | summary | — | 0 | 0 | 0 | 0 |
-| 38 | Stage 2 LAN Maps | 18 | summary | — | 0 | 0 | 0 | 0 |
-| 39 | Partner Team Index | 32 | reference | — | 0 | 0 | 0 | 0 |
-| 40 | Non-Partner Team Index | 48 | reference | — | 0 | 0 | 0 | 0 |
-| 41 | Old Team Index | 56 | reference | — | 0 | 0 | 0 | 0 |
-| 42 | Self-Check | 26 | reference | — | 0 | 0 | 0 | 0 |
-| 43 | Map Index | 7 | reference | — | 0 | 0 | 0 | 0 |
+| 24 | Asia - Stage 3 | 98 | match_cards | — | 12 | 24 | 193 | 0 |
+| 25 | Champions Clash Tokyo | 198 | match_cards | — | 48 | 92 | 783 | 0 |
+| 26 | Midseason Championship Paris | 393 | match_cards | — | 78 | 154 | 1450 | 0 |
+| 27 | World Finals Guangzhou | 28 | unrecognised | — | 0 | 0 | 0 | 0 |
+| 28 | Stage 1 Hero Bans | 100 | summary | — | 0 | 0 | 0 | 0 |
+| 29 | Stage 2 Hero Bans | 80 | summary | — | 0 | 0 | 0 | 0 |
+| 30 | Stage 3 Hero Bans | 90 | summary | — | 0 | 0 | 0 | 0 |
+| 31 | Stage 1 Regional Maps | 144 | summary | — | 0 | 0 | 0 | 0 |
+| 32 | Stage 2 Regional Maps - Regular | 126 | summary | — | 0 | 0 | 0 | 0 |
+| 33 | Stage 2 Regional Maps - Playoff | 126 | summary | — | 0 | 0 | 0 | 0 |
+| 34 | Stage 3 Regional Maps (Season 4 | 72 | summary | — | 0 | 0 | 0 | 0 |
+| 35 | Stage 3 Regional Maps (Season 5 | 90 | summary | — | 0 | 0 | 0 | 0 |
+| 36 | Stage 1 LAN Maps | 36 | summary | — | 0 | 0 | 0 | 0 |
+| 37 | Stage 2 LAN Maps | 18 | summary | — | 0 | 0 | 0 | 0 |
+| 38 | Partner Team Index | 32 | reference | — | 0 | 0 | 0 | 0 |
+| 39 | Non-Partner Team Index | 48 | reference | — | 0 | 0 | 0 | 0 |
+| 40 | Old Team Index | 56 | reference | — | 0 | 0 | 0 | 0 |
+| 41 | Self-Check | 26 | reference | — | 0 | 0 | 0 | 0 |
+| 42 | Map Index | 7 | reference | — | 0 | 0 | 0 | 0 |
 
 ## Match cards
 
 - Season year: 2026 (Landing Page!B1)
 - Hero pictures named by `Hero Index`: 54 heroes, 6 role icons
-- Cards: 631 found · 610 imported · 19 scheduled (no teams or no maps yet) · 1 incomplete (panels filled, map list empty) · 1 forfeited · 0 could not be read
+- Cards: 631 found · 614 imported · 15 scheduled (no teams or no maps yet) · 1 incomplete (panels filled, map list empty) · 1 forfeited · 0 could not be read
 - The sheet records no calendar dates and no map picks: neither is imported.
 
 ## Self-Check (`Self-Check`) — the sheet's own counts vs the importer's
@@ -114,8 +113,6 @@ Cards: 51 found · 51 imported · 0 scheduled · 0 incomplete · 0 forfeited · 
 ## Korea - Stage 3 — Match cards — one fixed-size card per series, heroes shown as pictures
 Cards: 51 found · 51 imported · 0 scheduled · 0 incomplete · 0 forfeited · 0 could not be read · 51 matches
 
-## calabasas — Not recognised — preserved in the raw layer only
-
 ## China - Stage 1 — Match cards — one fixed-size card per series, heroes shown as pictures
 Cards: 36 found · 36 imported · 0 scheduled · 0 incomplete · 0 forfeited · 0 could not be read · 36 matches
 
@@ -155,13 +152,13 @@ Cards: 19 found · 18 imported · 1 scheduled · 0 incomplete · 0 forfeited · 
 ## Copy of Pacific - Stage 3 — Match cards — one fixed-size card per series, heroes shown as pictures
 Cards: 2 found · 1 imported · 0 scheduled · 1 incomplete · 0 forfeited · 0 could not be read · 1 matches
 
-## Hero Index — Reference tab (hero / map pictures, rosters, self-check) — read as a lookup, not imported
-
 ## Asia - Stage 1 — Match cards — one fixed-size card per series, heroes shown as pictures
 Cards: 18 found · 17 imported · 0 scheduled · 0 incomplete · 1 forfeited · 0 could not be read · 17 matches
 
+## Hero Index — Reference tab (hero / map pictures, rosters, self-check) — read as a lookup, not imported
+
 ## Asia - Stage 3 — Match cards — one fixed-size card per series, heroes shown as pictures
-Cards: 18 found · 0 imported · 18 scheduled · 0 incomplete · 0 forfeited · 0 could not be read · 0 matches
+Cards: 18 found · 4 imported · 14 scheduled · 0 incomplete · 0 forfeited · 0 could not be read · 4 matches
 
 ## Champions Clash Tokyo — Match cards — one fixed-size card per series, heroes shown as pictures
 Cards: 14 found · 14 imported · 0 scheduled · 0 incomplete · 0 forfeited · 0 could not be read · 14 matches
@@ -203,9 +200,9 @@ Cards: 28 found · 28 imported · 0 scheduled · 0 incomplete · 0 forfeited · 
 
 ## Unmapped values
 
-- **hero**: “Rammatra” ×2 (Pacific - Stage 3!BC277, Pacific - Stage 3!BC407), “Junker Queem” ×1 (Pacific - Stage 3!U95), “Junkerqueem” ×1 (Pacific - Stage 3!Q173), “picture:4451f92648” ×1 (EMEA - Stage 3!AG472), “Route 66” ×1 (Korea - Stage 3!AL1317), “Sokourn” ×1 (Pacific - Stage 3!BC433)
-- **player**: “Ch0r0ng” ×207 (Pre-Season Bootcamp!Y107, Pre-Season Bootcamp!AP107), “knife” ×207 (Korea - Stage 1!R51, Korea - Stage 1!AI51), “Proper” ×207 (Korea - Stage 1!O51, Korea - Stage 1!AF51), “shu” ×207 (Korea - Stage 1!Y51, Korea - Stage 1!AP51), “Viol2t” ×207 (Korea - Stage 1!AB51, Korea - Stage 1!AS51), “HeeSang” ×196 (Pre-Season Bootcamp!O107, Pre-Season Bootcamp!AF107), “Proud” ×187 (Pre-Season Bootcamp!O77, Pre-Season Bootcamp!AF77), “skewed” ×187 (Pre-Season Bootcamp!Y77, Pre-Season Bootcamp!AP77), “Zest” ×187 (Pre-Season Bootcamp!R77, Pre-Season Bootcamp!AI77), “Bliss” ×186 (Pre-Season Bootcamp!AB77, Pre-Season Bootcamp!AS77), “Vigilante” ×185 (Pre-Season Bootcamp!AB107, Pre-Season Bootcamp!AS107), “STALK3R” ×174 (Korea - Stage 1!R29, Korea - Stage 1!AI29), “ChiYo” ×166 (Pre-Season Bootcamp!AB51, Pre-Season Bootcamp!AS51), “Fielder” ×166 (Pre-Season Bootcamp!Y51, Pre-Season Bootcamp!AP51), “Lengsa” ×157 (Pre-Season Bootcamp!AB103, Pre-Season Bootcamp!AS103), “Ezhan” ×154 (China - Stage 1!O29, China - Stage 1!AF29), “Recall” ×154 (China - Stage 1!Y29, China - Stage 1!AP29), “BERNAR” ×153 (Korea - Stage 1!V51, Korea - Stage 1!AM51), “Leave” ×153 (Pre-Season Bootcamp!R133, Pre-Season Bootcamp!AI133), “LeeSooMin” ×153 (Pre-Season Bootcamp!Y133, Pre-Season Bootcamp!AP133), “MAKA” ×153 (Pre-Season Bootcamp!AB133, Pre-Season Bootcamp!AS133), “Shy” ×153 (Pre-Season Bootcamp!O133, Pre-Season Bootcamp!AF133), “MER1T” ×149 (Pre-Season Bootcamp!O51, Pre-Season Bootcamp!AF51), “iRONY” ×138 (Korea - Stage 1!AB77, Korea - Stage 1!AS77), “OPENER” ×135 (Korea - Stage 1!Y77, Korea - Stage 1!AP77)
-- **team**: “All Gamers” ×41 (Pre-Season Bootcamp!J85, China - Stage 1!C33), “Cheeseburger” ×32 (Korea - Stage 1!C7, Korea - Stage 1!C111), “ENTER FORCE.36” ×30 (Japan - Stage 1!C33, Japan - Stage 1!J215), “Please Not Hero Ban” ×28 (Japan - Stage 1!C7, Japan - Stage 1!C111), “99DIVINE” ×25 (Japan - Stage 1!J85, Japan - Stage 1!J189), “Poker Face” ×25 (Korea - Stage 1!J7, Korea - Stage 1!C163), “HUNENG Gaming” ×23 (China - Stage 2!J7, China - Stage 2!J163), “RØDE ZANSIDE GAMING” ×23 (Korea - Stage 2!J7, Korea - Stage 2!C137), “Solus Victorem” ×22 (China - Stage 1!J85, China - Stage 1!J137), “Lazuli” ×21 (Japan - Stage 1!C85, Japan - Stage 1!J163), “O2 Blast” ×20 (Korea - Stage 2!C7, Korea - Stage 2!J163), “MURASH GAMING” ×18 (Japan - Stage 2!C7, Japan - Stage 2!C137), “Disguised” ×16 (Pre-Season Bootcamp!C7, North America - Stage 1!J7), “The Gatos Guapos” ×15 (Pacific - Stage 1!J33, Pacific - Stage 1!J85), “LuneX Gaming” ×14 (North America - Stage 1!J33, North America - Stage 1!C111), “REVATI” ×14 (Japan - Stage 2!J7, Japan - Stage 2!C241), “Uwinks” ×14 (Japan - Stage 2!J33, Japan - Stage 2!J111), “1234” ×13 (EMEA - Stage 2!J59, EMEA - Stage 2!J163), “OU Gaming” ×12 (China - Stage 3!J7, China - Stage 3!C111), “RØDE ONSIDE GAMING” ×12 (Korea - Stage 1!J59, Korea - Stage 1!C189), “The Kafe” ×12 (North America - Stage 2!J59, North America - Stage 2!J85), “ZAN Esports” ×11 (Korea - Stage 1!C59, Korea - Stage 1!C137), “Four Angry Men” ×10 (China - Stage 2!J33, China - Stage 2!C137), “Naive Piggy” ×10 (China - Stage 1!J59, China - Stage 1!J111), “SEIJI ESPORTS” ×10 (Korea - Stage 3!C59, Korea - Stage 3!J163)
+- **hero**: “Rammatra” ×3 (Pacific - Stage 3!BC277, Pacific - Stage 3!BC407), “Junker Queem” ×1 (Pacific - Stage 3!U95), “picture:4451f92648” ×1 (EMEA - Stage 3!AG472), “Route 66” ×1 (Korea - Stage 3!AL1317), “Sokourn” ×1 (Pacific - Stage 3!BC433)
+- **player**: “Ch0r0ng” ×210 (Pre-Season Bootcamp!Y107, Pre-Season Bootcamp!AP107), “knife” ×210 (Korea - Stage 1!R51, Korea - Stage 1!AI51), “Proper” ×210 (Korea - Stage 1!O51, Korea - Stage 1!AF51), “shu” ×210 (Korea - Stage 1!Y51, Korea - Stage 1!AP51), “Viol2t” ×210 (Korea - Stage 1!AB51, Korea - Stage 1!AS51), “HeeSang” ×199 (Pre-Season Bootcamp!O107, Pre-Season Bootcamp!AF107), “Proud” ×190 (Pre-Season Bootcamp!O77, Pre-Season Bootcamp!AF77), “skewed” ×190 (Pre-Season Bootcamp!Y77, Pre-Season Bootcamp!AP77), “Zest” ×190 (Pre-Season Bootcamp!R77, Pre-Season Bootcamp!AI77), “Bliss” ×189 (Pre-Season Bootcamp!AB77, Pre-Season Bootcamp!AS77), “Vigilante” ×188 (Pre-Season Bootcamp!AB107, Pre-Season Bootcamp!AS107), “STALK3R” ×177 (Korea - Stage 1!R29, Korea - Stage 1!AI29), “ChiYo” ×169 (Pre-Season Bootcamp!AB51, Pre-Season Bootcamp!AS51), “Fielder” ×169 (Pre-Season Bootcamp!Y51, Pre-Season Bootcamp!AP51), “Lengsa” ×157 (Pre-Season Bootcamp!AB103, Pre-Season Bootcamp!AS103), “BERNAR” ×156 (Korea - Stage 1!V51, Korea - Stage 1!AM51), “Ezhan” ×154 (China - Stage 1!O29, China - Stage 1!AF29), “Recall” ×154 (China - Stage 1!Y29, China - Stage 1!AP29), “Leave” ×153 (Pre-Season Bootcamp!R133, Pre-Season Bootcamp!AI133), “LeeSooMin” ×153 (Pre-Season Bootcamp!Y133, Pre-Season Bootcamp!AP133), “MAKA” ×153 (Pre-Season Bootcamp!AB133, Pre-Season Bootcamp!AS133), “Shy” ×153 (Pre-Season Bootcamp!O133, Pre-Season Bootcamp!AF133), “MER1T” ×152 (Pre-Season Bootcamp!O51, Pre-Season Bootcamp!AF51), “iRONY” ×138 (Korea - Stage 1!AB77, Korea - Stage 1!AS77), “DONGHAK” ×137 (Pre-Season Bootcamp!V77, Pre-Season Bootcamp!V181)
+- **team**: “All Gamers” ×41 (Pre-Season Bootcamp!J85, China - Stage 1!C33), “Cheeseburger” ×32 (Korea - Stage 1!C7, Korea - Stage 1!C111), “ENTER FORCE.36” ×31 (Japan - Stage 1!C33, Japan - Stage 1!J215), “Please Not Hero Ban” ×28 (Japan - Stage 1!C7, Japan - Stage 1!C111), “99DIVINE” ×25 (Japan - Stage 1!J85, Japan - Stage 1!J189), “Poker Face” ×25 (Korea - Stage 1!J7, Korea - Stage 1!C163), “HUNENG Gaming” ×23 (China - Stage 2!J7, China - Stage 2!J163), “RØDE ZANSIDE GAMING” ×23 (Korea - Stage 2!J7, Korea - Stage 2!C137), “Solus Victorem” ×22 (China - Stage 1!J85, China - Stage 1!J137), “Lazuli” ×21 (Japan - Stage 1!C85, Japan - Stage 1!J163), “O2 Blast” ×20 (Korea - Stage 2!C7, Korea - Stage 2!J163), “MURASH GAMING” ×19 (Japan - Stage 2!C7, Japan - Stage 2!C137), “Disguised” ×16 (Pre-Season Bootcamp!C7, North America - Stage 1!J7), “The Gatos Guapos” ×16 (Pacific - Stage 1!J33, Pacific - Stage 1!J85), “LuneX Gaming” ×14 (North America - Stage 1!J33, North America - Stage 1!C111), “REVATI” ×14 (Japan - Stage 2!J7, Japan - Stage 2!C241), “Uwinks” ×14 (Japan - Stage 2!J33, Japan - Stage 2!J111), “1234” ×13 (EMEA - Stage 2!J59, EMEA - Stage 2!J163), “OU Gaming” ×12 (China - Stage 3!J7, China - Stage 3!C111), “RØDE ONSIDE GAMING” ×12 (Korea - Stage 1!J59, Korea - Stage 1!C189), “The Kafe” ×12 (North America - Stage 2!J59, North America - Stage 2!J85), “ZAN Esports” ×11 (Korea - Stage 1!C59, Korea - Stage 1!C137), “Four Angry Men” ×10 (China - Stage 2!J33, China - Stage 2!C137), “Naive Piggy” ×10 (China - Stage 1!J59, China - Stage 1!J111), “SEIJI ESPORTS” ×10 (Korea - Stage 3!C59, Korea - Stage 3!J163)
 - **winner**: “Gatos Guapos Wins!” ×13 (Pacific - Stage 3!X94, Pacific - Stage 3!AO94), “TOKYO TA1YOs Wins!” ×9 (Japan - Stage 1!X458, Japan - Stage 1!AO458), “Elemntal Wins!” ×3 (Pacific - Stage 2!X328, Pacific - Stage 2!AO328), “Spacesation Gaming Wins!” ×3 (Midseason Championship Paris!AO458, Midseason Championship Paris!BF458)
 
 ## Credit text found in the workbook
