@@ -123,3 +123,50 @@ jobs:
             echo "- Packaging check + export reproducibility gate + full"
             echo "  offline test suite ran on ubuntu-latest / Python 3.12."
           } >> "$GITHUB_STEP_SUMMARY"
+
+  # The site, opened in real Google Chrome (docs/BROWSER-TESTS.md). The
+  # Python suite checks what the pipeline writes; this checks what a person
+  # sees: every public page at four widths with no console error, failed
+  # request, sideways scroll or undersized touch target, and the workflows
+  # people use (filters, sorting, search, the schedule, the failure states)
+  # asserted against the DOM. ubuntu-latest ships Google Chrome, and
+  # OWCS_REQUIRE_CHROME makes a silent fall back to Chromium a failure.
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v6
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: tests/browser/package-lock.json
+
+      - name: Install Playwright (the library only; Chrome is on the runner)
+        working-directory: tests/browser
+        run: npm ci
+
+      - name: Chrome verification
+        env:
+          OWCS_REQUIRE_CHROME: "1"
+        run: node tests/browser/run.mjs
+
+      - name: Report
+        if: always()
+        run: |
+          if [ -f tests/browser/output/report.md ]; then
+            cat tests/browser/output/report.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Keep the screenshots, traces and report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: chrome-verification
+          path: tests/browser/output
+          retention-days: 14
+          if-no-files-found: ignore
+
