@@ -475,6 +475,13 @@
       facesPlain(c.heroes, 30) +
       '<span class="cb-pick__n">' + plural(c.n, "map") + "</span>" +
       "<b>" + wl(c.wins, c.losses) + '</b><span class="cb-pick__adj">' + pct(c.adjWin) + " adj.</span>" +
+      /* When it was run: the day for a one-off, else the last day and the
+         span since the first. */
+      (c.last ? '<span class="cb-pick__when" title="' + esc(c.first && c.first !== c.last
+        ? "First run " + U.fmtDate(c.first) + ", last run " + U.fmtDate(c.last) : "Run on " + U.fmtDate(c.last)) + '">' +
+        (c.n > 1 ? '<span class="dim">last</span> ' : "") + esc(U.fmtDate(c.last)) +
+        (c.first && c.first !== c.last ? ' <span class="dim">· since ' + esc(U.fmtDate(c.first)) + "</span>" : "") + "</span>"
+        : '<span class="cb-pick__when dim">date unknown</span>') +
       '<span class="cb-pick__go" aria-hidden="true">→</span></a></li>';
     return '<div class="cb-summary-box">' +
       '<p class="cb-summary">' + plural(r.coveredMaps, "line-up") + " · <b>" + n(r.distinct) + "</b> different comps" +

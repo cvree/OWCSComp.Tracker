@@ -3120,18 +3120,20 @@ table.tbl.cb-tbl { width: 100%; min-width: 0; font-size: 13px; }
 /* The short comp list on team and hero pages: each line is one tap
    to that comp's full record in the comp book. */
 .cb-picks { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
-.cb-pick { display: grid; grid-template-columns: auto minmax(4.5rem, auto) minmax(3rem, auto) auto 1fr; align-items: center; gap: var(--s-4);
+.cb-pick { display: grid; grid-template-columns: auto minmax(4.5rem, auto) minmax(3rem, auto) auto minmax(0, 1fr) auto; align-items: center; gap: var(--s-4);
   padding: var(--s-2) var(--s-3); border: 1px solid var(--line); border-radius: var(--r-3); background: var(--s1);
   color: var(--tx); text-decoration: none; min-height: 48px; transition: border-color var(--t-1) var(--ease); }
 .cb-pick:hover, .cb-pick:focus-visible { border-color: var(--accent-line); }
 .cb-pick__n, .cb-pick__adj { color: var(--tx-3); font-size: 12.5px; }
 .cb-pick b { font: 600 14px/1 var(--f-mono); }
 .cb-pick__go { color: var(--tx-3); justify-self: end; }
+.cb-pick__when { font-size: 12.5px; color: var(--tx-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 @media (max-width: 640px) {
   .cb-pick { grid-template-columns: auto 1fr auto; row-gap: 4px; }
   .cb-pick__n { grid-column: 2; grid-row: 1; justify-self: end; }
   .cb-pick b { grid-column: 3; grid-row: 1; }
   .cb-pick__adj, .cb-pick__go { display: none; }
+  .cb-pick__when { grid-column: 1 / -1; grid-row: 2; }
 }
 
 /* ------------------------------------------------------------------ *
