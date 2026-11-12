@@ -43,6 +43,9 @@ import urllib.request
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
+sys.path.insert(0, HERE)
+
+import proc_text   # noqa: E402  (subprocess text is UTF-8, never the locale's)
 
 SERIES_JS = "assets/data/external_series.v1.js"
 TIERS_JS = "assets/data/sheet_tiers.v1.js"
@@ -78,7 +81,7 @@ def read(path: str) -> str | None:
 def read_at(rev: str, path: str) -> str | None:
     try:
         return subprocess.run(["git", "show", f"{rev}:{path}"], cwd=ROOT, check=True,
-                              capture_output=True, text=True).stdout
+                              capture_output=True, text=True, **proc_text.PIPE_TEXT).stdout
     except (subprocess.CalledProcessError, OSError):
         return None
 
