@@ -72,6 +72,7 @@ permissions:
   contents: write
   pull-requests: write
   actions: write   # dispatch pages.yml after publishing
+  issues: write    # the failure alert (.github/scripts/sync-alert.sh)
 
 jobs:
   sync:
@@ -119,6 +120,9 @@ jobs:
         if: github.event.inputs.probe != 'true' && github.event.inputs.inventory != 'true'
         id: sync
         run: |
+          # Where this import started: the Discord post lists the series
+          # that are new since this commit.
+          echo "base=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
           args=""
           if [ "${{ github.event.inputs.force }}" = "true" ]; then args="$args --force"; fi
           if [ "${{ github.event.inputs.accept_structure_change }}" = "true" ]; then
@@ -164,9 +168,19 @@ jobs:
           echo "::error::Spreadsheet sync failed; nothing was committed. See the job summary."
           exit 1
 
+      # The gates decide whether the DATA is sound. A check that only pins
+      # what the live season looked like when it was written is a warning
+      # here, not a stop (OWCS_DATA_RUN, see test_schedule.py): those blocked
+      # every import for days, twice. Warnings are published with the
+      # import and raised as an alert below.
       - name: Gates and offline tests
         if: steps.sync.outputs.changed == 'true'
+        env:
+          OWCS_DATA_RUN: "1"
+          OWCS_GATE_WARNINGS: gate_warnings.md
         run: |
+          set -o pipefail
+          exec > >(tee gate.log) 2>&1
           python pipeline/sheet_sync.py check
           python pipeline/export_data.py --check --public
           python pipeline/test_external_sheet.py
@@ -223,6 +237,60 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh workflow run pages.yml --ref "${GITHUB_REF_NAME}"
+
+      # ---- telling people -------------------------------------------------
+      # New results and the meta since the patch, to Discord. Only from main
+      # (what the site shows) and only when DISCORD_WEBHOOK_URL is set.
+      - name: Post the new results to Discord
+        if: steps.publish.outputs.committed == 'true' && github.ref_name == 'main'
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: python pipeline/discord_notify.py results --base "${{ steps.sync.outputs.base }}"
+
+      - name: Raise checks that no longer hold on the new data
+        if: steps.publish.outputs.committed == 'true' && hashFiles('gate_warnings.md') != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          DISCORD_ALERT_WEBHOOK_URL: ${{ secrets.DISCORD_ALERT_WEBHOOK_URL }}
+        run: |
+          {
+            echo "The import was **published** — the site is up to date. These checks describe"
+            echo "the season as it was when they were written and are no longer true of the"
+            echo "new data. Update or retire them (they would fail the next code change's CI):"
+            echo
+            cat gate_warnings.md
+          } > alert.md
+          .github/scripts/sync-alert.sh open "Spreadsheet sync: checks out of date with the live season" alert.md
+
+      - name: Alert on failure
+        if: failure() && github.event.inputs.probe != 'true' && github.event.inputs.inventory != 'true' && github.ref_name == 'main'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          DISCORD_ALERT_WEBHOOK_URL: ${{ secrets.DISCORD_ALERT_WEBHOOK_URL }}
+        run: |
+          {
+            echo "The spreadsheet sync failed, so **new results are not reaching the site**."
+            echo "The last good import is still live. It retries every 6 hours; this issue"
+            echo "closes itself when a run succeeds."
+            echo
+            if [ "${{ steps.sync.outputs.exit }}" != "0" ] && [ -f reports/external/gsheet/last_failure.md ]; then
+              echo "**Import failed:**"; echo; head -c 3000 reports/external/gsheet/last_failure.md
+            elif grep -q "FAIL\|Error\|error" gate.log 2>/dev/null; then
+              echo "**The import was fine; a gate rejected it:**"; echo; echo '```'
+              grep -n "FAIL\|FAILED\|Error\|error\|Traceback" gate.log | head -40; echo '```'
+            else
+              echo "No report was written — read the run log."
+            fi
+          } > alert.md
+          .github/scripts/sync-alert.sh open "Spreadsheet sync is failing" alert.md
+
+      - name: Clear the failure alert
+        if: success() && github.event.inputs.probe != 'true' && github.event.inputs.inventory != 'true' && github.ref_name == 'main'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: .github/scripts/sync-alert.sh close "Spreadsheet sync is failing" "The sync succeeded."
 
       - name: Open or update the review pull request
         if: steps.sync.outputs.changed == 'true' && vars.SHEET_SYNC_REVIEW == 'true'

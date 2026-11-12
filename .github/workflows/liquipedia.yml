@@ -35,6 +35,7 @@ concurrency:
 permissions:
   contents: write
   actions: write   # dispatch pages.yml after publishing
+  issues: write    # the failure alert (.github/scripts/sync-alert.sh)
 
 jobs:
   schedule:
@@ -59,6 +60,10 @@ jobs:
 
       - name: Fetch, rebuild, test
         if: github.event.inputs.dry_run != 'true'
+        env:
+          # A check that pins what the live season looked like is a warning
+          # in a data run, not a stop (see test_schedule.py).
+          OWCS_DATA_RUN: "1"
         run: |
           set -euo pipefail
           python pipeline/liquipedia_schedule.py
@@ -131,3 +136,23 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh workflow run pages.yml --ref "${GITHUB_REF_NAME}"
+
+      - name: Alert on failure
+        if: failure() && github.event.inputs.dry_run != 'true' && github.ref_name == 'main'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          DISCORD_ALERT_WEBHOOK_URL: ${{ secrets.DISCORD_ALERT_WEBHOOK_URL }}
+        run: |
+          {
+            echo "The Liquipedia schedule refresh failed, so start times and the days of"
+            echo "played series are not updating. The last good schedule is still live."
+            echo "This issue closes itself when a run succeeds."
+          } > alert.md
+          .github/scripts/sync-alert.sh open "Liquipedia schedule refresh is failing" alert.md
+
+      - name: Clear the failure alert
+        if: success() && github.event.inputs.dry_run != 'true' && github.ref_name == 'main'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: .github/scripts/sync-alert.sh close "Liquipedia schedule refresh is failing" "The refresh succeeded."

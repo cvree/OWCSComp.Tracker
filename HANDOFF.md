@@ -1,5 +1,29 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
+## UPDATE (2026-11-12, twenty-fifth pass) — the sync can no longer be stopped by the season, and it tells you
+
+**Symptom.** Results stuck at the Nov 11 import. Every sheet-sync after it failed `test_schedule.py`:
+it required Asia Stage 3's unplayed slots to have no date; the stage began and Liquipedia gave them days.
+Same class as Nov 6-10 (Korea's playoffs being played).
+
+**Fix, for the class.** In a data workflow (`OWCS_DATA_RUN=1`, set by `sheet-sync.yml` and
+`liquipedia.yml`) the code is what CI passed and only the season changed. `test_schedule.py` now has
+`fact()` (a check on what a named live event looks like) and `season_dependent()` (the join tests, whose
+fixture is the live import): in a data run they print WARN and the import is published; integrity checks
+(`check`) still stop it. CI and local runs fail on all of them as before. When you write a check that
+names an event, a date or a team in the live export, use `fact`.
+
+**Alerts** (`.github/scripts/sync-alert.sh`): a failed sheet-sync or liquipedia run on `main` opens the
+issue "Spreadsheet sync is failing" / "Liquipedia schedule refresh is failing" (GitHub emails the owner),
+comments on it while it lasts, and closes it on the next green run. Published-with-warnings opens
+"Spreadsheet sync: checks out of date with the live season". `match-finder.yml` starts sheet-sync when
+none has started on `main` for 8 h (GitHub drops scheduled runs).
+
+**Discord** (`pipeline/discord_notify.py`, `test_discord_notify.py`): with the repository secret
+`DISCORD_WEBHOOK_URL` set, each published import posts the new series and the meta since the newest
+patch (top picks per role, risers/fallers vs the patch before, most banned); alerts go to the same
+channel, or to `DISCORD_ALERT_WEBHOOK_URL` if set. No secret: nothing is sent. `--dry-run` prints it.
+
 ## UPDATE (2026-11-05, twenty-fourth pass) — played series dated by Liquipedia
 
 **Symptom.** Recent big matches were missing from the 24/48/72-hour and 14-day views even though
