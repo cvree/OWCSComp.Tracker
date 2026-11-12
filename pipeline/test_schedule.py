@@ -95,8 +95,14 @@ def test_export() -> None:
     check("China Stage 3 playoffs: a double-elimination bracket on Nov 7-8",
           len(cn) == 6 and {m["date"] for m in cn} == {"2026-11-07", "2026-11-08"}
           and next(p for p in ev["china/stage-3"]["phases"] if p["id"] == "playoffs")["bracket"]["type"] == "double")
-    check("a stage with unpublished days gives its slots no date (never a guess)",
-          all(m["date"] is None for m in doc["matches"] if m["event"] == "asia/stage-3" and m["state"] != "done"))
+    # Asia Stage 3's days are not in the config (window [null, null]). Its
+    # slots may still be dated, but only by a source that gave the day
+    # (Liquipedia, an official override), never by an estimate. This used
+    # to demand date=None outright, which failed every import once the
+    # stage began and Liquipedia published its days (Nov 11).
+    check("a stage with unpublished days gives its slots no guessed date",
+          all(m["date"] is None or m["dateFrom"] in ("liquipedia", "liquipedia-day", "official")
+              for m in doc["matches"] if m["event"] == "asia/stage-3" and m["state"] != "done"))
     check("the World Finals are on the schedule with their window",
           ev.get("international/world-finals", {}).get("window") == ["2026-12-02", "2026-12-06"])
     check("nothing still to play carries a start time no source gave",
