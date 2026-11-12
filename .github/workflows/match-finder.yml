@@ -247,6 +247,26 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh workflow run pages.yml --ref "${GITHUB_REF_NAME}"
 
+      # GitHub delays and sometimes silently drops scheduled runs (it dropped
+      # two sheet-sync slots in a row on Nov 5, leaving a match day out for
+      # 12 hours). This workflow runs on its own schedule, so it checks on
+      # its neighbour: if no sheet-sync run has even started on main for
+      # 8 hours, start one. A run that started and failed alerts by itself.
+      - name: Start the spreadsheet sync if its schedule was dropped
+        if: always() && env.DRY_RUN != 'true' && github.ref_name == 'main'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          last=$(gh run list --workflow sheet-sync.yml --branch main --limit 1 \
+                   --json createdAt --jq '.[0].createdAt // empty' || true)
+          if [ -z "$last" ]; then echo "Could not read sheet-sync's runs; leaving it alone."; exit 0; fi
+          age=$(( ( $(date -u +%s) - $(date -u -d "$last" +%s) ) / 3600 ))
+          echo "Last sheet-sync run on main started ${age}h ago ($last)."
+          if [ "$age" -ge 8 ]; then
+            echo "::warning::sheet-sync has not run for ${age}h — starting it."
+            gh workflow run sheet-sync.yml --ref main || echo "::warning::could not start sheet-sync"
+          fi
+
       - name: Upload scan output
         if: always()
         uses: actions/upload-artifact@v6

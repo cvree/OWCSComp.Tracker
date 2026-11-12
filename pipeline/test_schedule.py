@@ -31,13 +31,53 @@ import schedule_build as SB          # noqa: E402
 import liquipedia_schedule as LQ     # noqa: E402
 
 FAILS = 0
+WARNS: list[str] = []
+
+# A DATA RUN is a workflow that has just imported new data (sheet-sync.yml,
+# liquipedia.yml set OWCS_DATA_RUN=1). There the code is the code CI already
+# passed; the only thing that changed is the season. So a check that pins
+# what the live season looked like when it was written (`fact`, and the join
+# tests, which use the live import as their fixture) must not be able to
+# stop an import: twice it did, for days (Korea's playoffs being played on
+# Nov 6, Asia Stage 3 getting its days on Nov 11). In a data run those
+# print WARN, are listed for the alert, and the run stays green. The
+# integrity checks (`check`: ids unique, every series present once,
+# standings add up, the export reproduces) still fail everywhere. Outside a
+# data run (CI, a developer) everything fails as before.
+DATA_RUN = os.environ.get("OWCS_DATA_RUN") == "1"
+_SOFT = False
 
 
-def check(name: str, ok: bool) -> None:
+def check(name: str, ok: bool, soft: bool = False) -> None:
     global FAILS
+    if not ok and DATA_RUN and (soft or _SOFT):
+        print(f"  WARN  {name}")
+        WARNS.append(name)
+        return
     print(f"  {'PASS' if ok else 'FAIL'}  {name}")
     if not ok:
         FAILS += 1
+
+
+def fact(name: str, ok: bool) -> None:
+    """A check on what a named live event looks like right now."""
+    check(name, ok, soft=True)
+
+
+def season_dependent(test) -> None:
+    """Run a test whose fixture is the live import: soft in a data run,
+    including when the live data makes it raise instead of fail."""
+    global _SOFT, FAILS
+    _SOFT = True
+    try:
+        test()
+    except Exception as e:                      # noqa: BLE001
+        if not DATA_RUN:
+            raise
+        print(f"  WARN  {test.__name__} could not run on this import: {type(e).__name__}: {e}")
+        WARNS.append(f"{test.__name__} could not run on this import ({type(e).__name__})")
+    finally:
+        _SOFT = False
 
 
 def test_classify() -> None:
@@ -86,13 +126,13 @@ def test_export() -> None:
     check("every phase lists only real matches, each once", all(r in byid for r in refs) and len(refs) == len(set(refs)))
 
     kr = [m for m in doc["matches"] if m["event"] == "korea/stage-3" and m["phase"] == "playoffs"]
-    check("Korea Stage 3 playoffs: six slots (2 QF, 2 SF, third place, final)", len(kr) == 6)
-    check("…on Nov 6, 7 and 8, from the published playoff days",
+    fact("Korea Stage 3 playoffs: six slots (2 QF, 2 SF, third place, final)", len(kr) == 6)
+    fact("…on Nov 6, 7 and 8, from the published playoff days",
           sorted({m["date"] for m in kr}) == ["2026-11-06", "2026-11-07", "2026-11-08"]
           and all(m["dateFrom"] in ("published-day", "liquipedia", "liquipedia-day", "official") for m in kr))
-    check("…every one Bo7", all(m["bestOf"] == 7 for m in kr))
+    fact("…every one Bo7", all(m["bestOf"] == 7 for m in kr))
     cn = [m for m in doc["matches"] if m["event"] == "china/stage-3" and m["phase"] == "playoffs"]
-    check("China Stage 3 playoffs: a double-elimination bracket on Nov 7-8",
+    fact("China Stage 3 playoffs: a double-elimination bracket on Nov 7-8",
           len(cn) == 6 and {m["date"] for m in cn} == {"2026-11-07", "2026-11-08"}
           and next(p for p in ev["china/stage-3"]["phases"] if p["id"] == "playoffs")["bracket"]["type"] == "double")
     # Asia Stage 3's days are not in the config (window [null, null]). Its
@@ -100,10 +140,10 @@ def test_export() -> None:
     # (Liquipedia, an official override), never by an estimate. This used
     # to demand date=None outright, which failed every import once the
     # stage began and Liquipedia published its days (Nov 11).
-    check("a stage with unpublished days gives its slots no guessed date",
+    fact("a stage with unpublished days gives its slots no guessed date",
           all(m["date"] is None or m["dateFrom"] in ("liquipedia", "liquipedia-day", "official")
               for m in doc["matches"] if m["event"] == "asia/stage-3" and m["state"] != "done"))
-    check("the World Finals are on the schedule with their window",
+    fact("the World Finals are on the schedule with their window",
           ev.get("international/world-finals", {}).get("window") == ["2026-12-02", "2026-12-06"])
     check("nothing still to play carries a start time no source gave",
           all(not m.get("startsAt") or m.get("dateFrom") in ("liquipedia", "official")
@@ -114,15 +154,15 @@ def test_export() -> None:
 
     cc = ev["international/champions-clash"]
     b = cc["phases"][-1]["bracket"]
-    check("Champions Clash: double elimination with a final", b["type"] == "double" and len(b["final"]) == 1)
-    check("…its champion is the final's winner (Crazy Raccoon)", cc["champion"] == "cr")
+    fact("Champions Clash: double elimination with a final", b["type"] == "double" and len(b["final"]) == 1)
+    fact("…its champion is the final's winner (Crazy Raccoon)", cc["champion"] == "cr")
     # The drawing order: each semifinal's winner is in the final, each
     # quarterfinal pair feeds the semifinal beside it.
     up = b["upper"]
     qf, sf = up[0]["matches"], up[1]["matches"]
     feeds = [byid[q]["winner"] for q in qf]
     sf_teams = [{byid[s]["teamA"], byid[s]["teamB"]} for s in sf]
-    check("…the bracket is drawn so quarterfinal winners sit beside their semifinal",
+    fact("…the bracket is drawn so quarterfinal winners sit beside their semifinal",
           feeds[0] in sf_teams[0] and feeds[1] in sf_teams[0] and feeds[2] in sf_teams[1] and feeds[3] in sf_teams[1])
 
     na = next(p for p in ev["na/stage-3"]["phases"] if p["id"] == "regular")
@@ -390,7 +430,7 @@ def test_played_dates() -> None:
     if any(m.get("dateFrom") == "liquipedia" for m in cn.values()):
         late = [m for m in cn.values() if m.get("label") == "Week 4 | Day 2 | Game 1"
                 and {m["teamA"], m["teamB"]} == {"x-all-gamers", "x-solus-victorem-crush"}]
-        check("the real export: China's copied-label series sits on Nov 1, not Oct 25",
+        fact("the real export: China's copied-label series sits on Nov 1, not Oct 25",
               late and late[0]["date"] == "2026-11-01")
 
 
@@ -405,10 +445,18 @@ def main() -> int:
     test_classify()
     test_export()
     test_liquipedia_parser()
-    test_merge()
-    test_merge_real_pages()
+    season_dependent(test_merge)
+    season_dependent(test_merge_real_pages)
     test_played_dates()
     test_reproducible()
+    if WARNS:
+        print(f"\n{len(WARNS)} WARNING(S): no longer true of the live season — update or retire these checks:")
+        for w in WARNS:
+            print(f"  - {w}")
+        out = os.environ.get("OWCS_GATE_WARNINGS")
+        if out:
+            with open(out, "a", encoding="utf-8") as f:
+                f.writelines(f"- test_schedule.py: {w}\n" for w in WARNS)
     print(f"\n{'OK' if not FAILS else str(FAILS) + ' FAILED'}")
     return 1 if FAILS else 0
 
