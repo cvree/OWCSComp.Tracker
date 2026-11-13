@@ -1,6 +1,6 @@
 {
  "_readme": "Written by pipeline/liquipedia_schedule.py from Liquipedia (CC BY-SA 3.0). Do not hand-edit; put corrections in config/schedule.json `matches`.",
- "fetchedAt": "2026-11-12T21:51:06+00:00",
+ "fetchedAt": "2026-11-13T10:57:32+00:00",
  "matches": [
   {
    "bestOf": 3,
@@ -5765,10 +5765,10 @@
    "order": 9,
    "page": "Overwatch Champions Series/2026/Asia/Stage 3",
    "round": "Day 3",
-   "scoreA": null,
-   "scoreB": null,
+   "scoreA": 0,
+   "scoreB": 3,
    "section": "{{HiddenSort|Day 3}}",
-   "startsAt": "2026-11-13T17:00:00+09:00",
+   "startsAt": "2026-11-13T17:15:00+09:00",
    "streams": [
     {
      "kind": "afreeca",
@@ -5796,10 +5796,10 @@
    "order": 10,
    "page": "Overwatch Champions Series/2026/Asia/Stage 3",
    "round": "Day 3",
-   "scoreA": null,
-   "scoreB": null,
+   "scoreA": 3,
+   "scoreB": 1,
    "section": "{{HiddenSort|Day 3}}",
-   "startsAt": "2026-11-13T18:45:00+09:00",
+   "startsAt": "2026-11-13T18:35:00+09:00",
    "streams": [
     {
      "kind": "afreeca",
@@ -5939,7 +5939,7 @@
     }
    ],
    "teamA": "Group A #2",
-   "teamB": "Group B #3",
+   "teamB": "VARREL",
    "url": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Asia/Stage_3"
   },
   {
@@ -5969,7 +5969,7 @@
      "url": "https://www.youtube.com/ow_esports_jp"
     }
    ],
-   "teamA": "Group A #3",
+   "teamA": "The Gatos Guapos",
    "teamB": "Group B #2",
    "url": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Asia/Stage_3"
   },
@@ -15234,7 +15234,7 @@
   {
    "event": "asia/stage-3",
    "matches": 20,
-   "revid": 1155262,
+   "revid": 1155359,
    "title": "Overwatch Champions Series/2026/Asia/Stage 3"
   },
   {
@@ -15246,7 +15246,7 @@
   {
    "event": "japan/stage-3",
    "matches": 28,
-   "revid": 1151238,
+   "revid": 1155353,
    "title": "Overwatch Champions Series/2026/Asia/Stage 3/Japan/Regular Season"
   },
   {
@@ -15258,7 +15258,7 @@
   {
    "event": "korea/stage-3",
    "matches": 36,
-   "revid": 1153993,
+   "revid": 1155354,
    "title": "Overwatch Champions Series/2026/Asia/Stage 3/Korea/Regular Season"
   },
   {
@@ -15402,7 +15402,7 @@
   {
    "event": "international/world-finals",
    "matches": 0,
-   "revid": 1155104,
+   "revid": 1155360,
    "title": "Overwatch Champions Series/2026/World Finals"
   }
  ],
