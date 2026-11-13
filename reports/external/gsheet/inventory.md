@@ -2,7 +2,7 @@
 
 - Source: https://docs.google.com/spreadsheets/d/1OaU5O7lVDZbked5FZAvgfR9MnJIdGhTdnIdu4DsL9PQ/edit?usp=sharing
 - Spreadsheet id: `1OaU5O7lVDZbked5FZAvgfR9MnJIdGhTdnIdu4DsL9PQ`
-- Snapshot: `ce169fac12a5ab924ba8cadc15eb0faebee710b5f193920342e7803dba7194c9` imported 2026-11-12T22:26:20+00:00
+- Snapshot: `9d03dd137a613b4ae948b8e5313c3e0cfe7c040357c9dd640ddaf264da3a6eae` imported 2026-11-13T07:14:28+00:00
 - Parser gsheet-parser-2 · layout v2 · aliases v3
 - Tabs: 42 (24 recognised as data) · source rows: 9906
 - Workbook package: 54.1 MB zipped, 139.3 MB unzipped, 409 parts; embedded media: 234 files, 46.8 MB
