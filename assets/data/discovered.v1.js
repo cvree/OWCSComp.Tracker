@@ -23,181 +23,21 @@ window.OWCS_DISCOVERED = {
     "why": "no calendar event covers this date"
    },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
-   "channelTitle": "Overwatch Esports",
-   "durationSeconds": null,
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 23121,
    "firstSeenAt": "2026-11-14T18:30:08+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
-     "+25 livestream metadata (upcoming)",
+     "long-form: 385m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (23121s)",
      "+15 tournament/broadcast terminology in title/description"
     ],
-    "score": 40
+    "score": 60
    },
-   "liveStatus": "upcoming",
-   "matchId": null,
-   "nextAction": {
-    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=-HF-ErEpWOg\"",
-    "href": "submit.html?url=https://www.youtube.com/watch?v=-HF-ErEpWOg",
-    "label": "Process this broadcast"
-   },
-   "parsed": {
-    "cleanTitle": "Overwatch Collegiate Homecoming Finals | Round of 4",
-    "companion": false,
-    "confidence": "partial",
-    "day": null,
-    "eventKey": "overwatch-collegiate-homecoming-finals-round-of-4",
-    "eventName": "Overwatch Collegiate Homecoming Finals — Round of 4",
-    "fixture": null,
-    "phase": "finals",
-    "regions": [],
-    "stage": null,
-    "week": null,
-    "year": null
-   },
-   "publishedAt": "2026-11-14T00:19:17+00:00",
-   "sources": [
-    "rss",
-    "streams"
-   ],
-   "state": "found",
-   "title": "Overwatch Collegiate Homecoming Finals | Round of 4",
-   "url": "https://www.youtube.com/watch?v=-HF-ErEpWOg",
-   "videoId": "-HF-ErEpWOg",
-   "why": "Found automatically. Nobody has processed it yet."
-  },
-  {
-   "calendar": {
-    "candidates": [],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "no calendar event covers this date"
-   },
-   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
-   "channelTitle": "Overwatch Esports",
-   "durationSeconds": null,
-   "firstSeenAt": "2026-11-14T18:30:08+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
-   "likeness": {
-    "confidence": "likely",
-    "reasons": [
-     "+25 livestream metadata (upcoming)",
-     "+15 tournament/broadcast terminology in title/description"
-    ],
-    "score": 40
-   },
-   "liveStatus": "upcoming",
-   "matchId": null,
-   "nextAction": {
-    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=RulHRX1O8CI\"",
-    "href": "submit.html?url=https://www.youtube.com/watch?v=RulHRX1O8CI",
-    "label": "Process this broadcast"
-   },
-   "parsed": {
-    "cleanTitle": "Overwatch Collegiate Homecoming Finals | Round of 8",
-    "companion": false,
-    "confidence": "partial",
-    "day": null,
-    "eventKey": "overwatch-collegiate-homecoming-finals-round-of-8",
-    "eventName": "Overwatch Collegiate Homecoming Finals — Round of 8",
-    "fixture": null,
-    "phase": "finals",
-    "regions": [],
-    "stage": null,
-    "week": null,
-    "year": null
-   },
-   "publishedAt": "2026-11-14T00:16:58+00:00",
-   "sources": [
-    "rss",
-    "streams"
-   ],
-   "state": "found",
-   "title": "Overwatch Collegiate Homecoming Finals | Round of 8",
-   "url": "https://www.youtube.com/watch?v=RulHRX1O8CI",
-   "videoId": "RulHRX1O8CI",
-   "why": "Found automatically. Nobody has processed it yet."
-  },
-  {
-   "calendar": {
-    "candidates": [],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "no calendar event covers this date"
-   },
-   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
-   "channelTitle": "Overwatch Esports",
-   "durationSeconds": null,
-   "firstSeenAt": "2026-11-14T18:30:08+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
-   "likeness": {
-    "confidence": "likely",
-    "reasons": [
-     "+25 livestream metadata (upcoming)",
-     "+15 tournament/broadcast terminology in title/description"
-    ],
-    "score": 40
-   },
-   "liveStatus": "upcoming",
-   "matchId": null,
-   "nextAction": {
-    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=8yQcTWu7sC8\"",
-    "href": "submit.html?url=https://www.youtube.com/watch?v=8yQcTWu7sC8",
-    "label": "Process this broadcast"
-   },
-   "parsed": {
-    "cleanTitle": "Overwatch Collegiate Homecoming Playoffs Day 2 | Round of 16",
-    "companion": false,
-    "confidence": "clear",
-    "day": 2,
-    "eventKey": "overwatch-collegiate-homecoming-playoffs-round-of-16",
-    "eventName": "Overwatch Collegiate Homecoming Playoffs — Round of 16",
-    "fixture": null,
-    "phase": "playoffs",
-    "regions": [],
-    "stage": null,
-    "week": null,
-    "year": null
-   },
-   "publishedAt": "2026-11-14T00:15:20+00:00",
-   "sources": [
-    "rss",
-    "streams"
-   ],
-   "state": "found",
-   "title": "Overwatch Collegiate Homecoming Playoffs Day 2 | Round of 16",
-   "url": "https://www.youtube.com/watch?v=8yQcTWu7sC8",
-   "videoId": "8yQcTWu7sC8",
-   "why": "Found automatically. Nobody has processed it yet."
-  },
-  {
-   "calendar": {
-    "candidates": [],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "no calendar event covers this date"
-   },
-   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
-   "channelTitle": "Overwatch Esports",
-   "durationSeconds": null,
-   "firstSeenAt": "2026-11-14T18:30:08+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
-   "likeness": {
-    "confidence": "likely",
-    "reasons": [
-     "+25 livestream metadata (live)",
-     "+15 tournament/broadcast terminology in title/description"
-    ],
-    "score": 40
-   },
-   "liveStatus": "live",
+   "liveStatus": "completed",
    "matchId": null,
    "nextAction": {
     "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=0lfhKhBauEQ\"",
@@ -218,10 +58,10 @@ window.OWCS_DISCOVERED = {
     "week": null,
     "year": null
    },
-   "publishedAt": "2026-11-14T00:13:39+00:00",
+   "publishedAt": "2026-11-14T18:53:28Z",
    "sources": [
-    "rss",
-    "streams"
+    "streams",
+    "youtube-api"
    ],
    "state": "found",
    "title": "Overwatch Collegiate Homecoming Playoffs Day 1 | Round of 32",
@@ -243,10 +83,10 @@ window.OWCS_DISCOVERED = {
     "why": null
    },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
-   "channelTitle": "Overwatch Esports",
+   "channelTitle": "ow_esports_global",
    "durationSeconds": 30834,
    "firstSeenAt": "2026-11-08T18:05:23+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -278,10 +118,10 @@ window.OWCS_DISCOVERED = {
     "week": null,
     "year": null
    },
-   "publishedAt": "2026-11-09T00:33:05+00:00",
+   "publishedAt": "2026-11-08T15:32:04Z",
    "sources": [
-    "rss",
-    "streams"
+    "streams",
+    "youtube-api"
    ],
    "state": "found",
    "title": "FACEIT League Season 10 | Master Division Playoffs | Day 2",
@@ -303,10 +143,10 @@ window.OWCS_DISCOVERED = {
     "why": null
    },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
-   "channelTitle": "Overwatch Esports",
+   "channelTitle": "ow_esports_global",
    "durationSeconds": 20290,
    "firstSeenAt": "2026-11-08T06:43:16+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -338,10 +178,10 @@ window.OWCS_DISCOVERED = {
     "week": null,
     "year": null
    },
-   "publishedAt": "2026-11-07T23:17:45+00:00",
+   "publishedAt": "2026-11-07T17:21:03Z",
    "sources": [
-    "rss",
-    "streams"
+    "streams",
+    "youtube-api"
    ],
    "state": "found",
    "title": "FACEIT League Season 10 | Master Division Playoffs | Day 1",
@@ -418,10 +258,10 @@ window.OWCS_DISCOVERED = {
     "why": null
    },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
-   "channelTitle": "Overwatch Esports",
+   "channelTitle": "ow_esports_global",
    "durationSeconds": 25139,
    "firstSeenAt": "2026-11-01T18:07:30+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -456,10 +296,10 @@ window.OWCS_DISCOVERED = {
     "week": null,
     "year": 2026
    },
-   "publishedAt": "2026-11-02T00:56:41+00:00",
+   "publishedAt": "2026-11-01T17:32:25Z",
    "sources": [
-    "rss",
-    "streams"
+    "streams",
+    "youtube-api"
    ],
    "state": "found",
    "title": "OWCS 2026 | NA/EMEA | Stage 3 Playoffs Day 3",
@@ -469,22 +309,18 @@ window.OWCS_DISCOVERED = {
   },
   {
    "calendar": {
-    "candidates": [
-     "owcs_2026_global_finals"
-    ],
-    "eventId": "owcs_2026_global_finals",
-    "eventIds": [
-     "owcs_2026_global_finals"
-    ],
-    "eventName": "OWCS 2026 — Global Finals",
-    "matchedBy": "date",
-    "why": null
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "no calendar event covers this date"
    },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
-   "channelTitle": "Overwatch Esports",
+   "channelTitle": "ow_esports_global",
    "durationSeconds": 29208,
    "firstSeenAt": "2026-10-31T13:05:25+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -519,74 +355,15 @@ window.OWCS_DISCOVERED = {
     "week": null,
     "year": 2026
    },
-   "publishedAt": "2026-11-01T01:09:56+00:00",
+   "publishedAt": "2026-10-31T16:36:33Z",
    "sources": [
-    "rss",
-    "streams"
+    "streams",
+    "youtube-api"
    ],
    "state": "found",
    "title": "OWCS 2026 | NA/EMEA | Stage 3 Playoffs Day 2",
    "url": "https://www.youtube.com/watch?v=AaW6p2fyjJQ",
    "videoId": "AaW6p2fyjJQ",
-   "why": "Found automatically. Nobody has processed it yet."
-  },
-  {
-   "calendar": {
-    "candidates": [],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "no calendar event covers this date"
-   },
-   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
-   "channelTitle": "Overwatch Esports",
-   "durationSeconds": 20778,
-   "firstSeenAt": "2026-10-30T13:36:18+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
-   "likeness": {
-    "confidence": "likely",
-    "reasons": [
-     "long-form: 346m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
-     "+25 livestream metadata (completed)",
-     "+20 substantial duration (20778s)",
-     "+15 tournament/broadcast terminology in title/description"
-    ],
-    "score": 60
-   },
-   "liveStatus": "completed",
-   "matchId": null,
-   "nextAction": {
-    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=rwBECBHt4Is\"",
-    "href": "submit.html?url=https://www.youtube.com/watch?v=rwBECBHt4Is",
-    "label": "Process this broadcast"
-   },
-   "parsed": {
-    "cleanTitle": "OWCS 2026 | NA/EMEA | Stage 3 Playoffs Day 1",
-    "companion": false,
-    "confidence": "clear",
-    "day": 1,
-    "eventKey": "owcs-2026-na-emea-stage-3-playoffs",
-    "eventName": "OWCS 2026 — NA/EMEA — Stage 3 Playoffs",
-    "fixture": null,
-    "phase": "playoffs",
-    "regions": [
-     "na",
-     "emea"
-    ],
-    "stage": 3,
-    "week": null,
-    "year": 2026
-   },
-   "publishedAt": "2026-10-30T22:45:55+00:00",
-   "sources": [
-    "rss",
-    "streams"
-   ],
-   "state": "found",
-   "title": "OWCS 2026 | NA/EMEA | Stage 3 Playoffs Day 1",
-   "url": "https://www.youtube.com/watch?v=rwBECBHt4Is",
-   "videoId": "rwBECBHt4Is",
    "why": "Found automatically. Nobody has processed it yet."
   },
   {
@@ -639,6 +416,65 @@ window.OWCS_DISCOVERED = {
    "url": "https://www.youtube.com/watch?v=4pwgoONVnBs",
    "videoId": "4pwgoONVnBs",
    "why": "Scored as unlikely to be a match broadcast."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "no calendar event covers this date"
+   },
+   "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
+   "channelTitle": "ow_esports_global",
+   "durationSeconds": 20778,
+   "firstSeenAt": "2026-10-30T13:36:18+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "long-form: 346m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (20778s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.youtube.com/watch?v=rwBECBHt4Is\"",
+    "href": "submit.html?url=https://www.youtube.com/watch?v=rwBECBHt4Is",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWCS 2026 | NA/EMEA | Stage 3 Playoffs Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "owcs-2026-na-emea-stage-3-playoffs",
+    "eventName": "OWCS 2026 — NA/EMEA — Stage 3 Playoffs",
+    "fixture": null,
+    "phase": "playoffs",
+    "regions": [
+     "na",
+     "emea"
+    ],
+    "stage": 3,
+    "week": null,
+    "year": 2026
+   },
+   "publishedAt": "2026-10-30T16:36:49Z",
+   "sources": [
+    "streams",
+    "youtube-api"
+   ],
+   "state": "found",
+   "title": "OWCS 2026 | NA/EMEA | Stage 3 Playoffs Day 1",
+   "url": "https://www.youtube.com/watch?v=rwBECBHt4Is",
+   "videoId": "rwBECBHt4Is",
+   "why": "Found automatically. Nobody has processed it yet."
   },
   {
    "calendar": {
@@ -751,10 +587,10 @@ window.OWCS_DISCOVERED = {
     "why": "no calendar event covers this date"
    },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
-   "channelTitle": "Overwatch Esports",
+   "channelTitle": "ow_esports_global",
    "durationSeconds": 23208,
    "firstSeenAt": "2026-10-25T12:01:09+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -789,10 +625,10 @@ window.OWCS_DISCOVERED = {
     "week": 3,
     "year": 2026
    },
-   "publishedAt": "2026-10-25T23:27:23+00:00",
+   "publishedAt": "2026-10-25T16:36:57Z",
    "sources": [
-    "rss",
-    "streams"
+    "streams",
+    "youtube-api"
    ],
    "state": "found",
    "title": "OWCS 2026 | NA/EMEA | Stage 3 Week 3 Day 2",
@@ -810,10 +646,10 @@ window.OWCS_DISCOVERED = {
     "why": "no calendar event covers this date"
    },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
-   "channelTitle": "Overwatch Esports",
+   "channelTitle": "ow_esports_global",
    "durationSeconds": 30363,
    "firstSeenAt": "2026-10-24T11:38:47+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -848,10 +684,10 @@ window.OWCS_DISCOVERED = {
     "week": 3,
     "year": 2026
    },
-   "publishedAt": "2026-10-25T01:23:01+00:00",
+   "publishedAt": "2026-10-24T16:37:05Z",
    "sources": [
-    "rss",
-    "streams"
+    "streams",
+    "youtube-api"
    ],
    "state": "found",
    "title": "OWCS 2026 | NA/EMEA | Stage 3 Week 3 Day 1",
@@ -872,7 +708,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 28505,
    "firstSeenAt": "2026-10-18T11:44:07+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -981,7 +817,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 27862,
    "firstSeenAt": "2026-10-17T11:11:38+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -1246,7 +1082,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 30271,
    "firstSeenAt": "2026-10-11T13:32:53+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -1305,7 +1141,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 29558,
    "firstSeenAt": "2026-10-10T13:04:10+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -2021,7 +1857,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 33695,
    "firstSeenAt": "2026-09-13T16:38:24+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -2178,7 +2014,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 38653,
    "firstSeenAt": "2026-09-12T20:57:52+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -2588,7 +2424,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 19369,
    "firstSeenAt": "2026-09-06T11:21:51+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -2644,7 +2480,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 14837,
    "firstSeenAt": "2026-09-05T10:55:41+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -2851,7 +2687,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 18406,
    "firstSeenAt": "2026-08-28T12:14:46+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -2907,7 +2743,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 17463,
    "firstSeenAt": "2026-08-28T12:14:46+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -3403,7 +3239,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 31900,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -3695,7 +3531,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 34071,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -3931,7 +3767,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 37741,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -4106,7 +3942,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 42900,
    "firstSeenAt": "2026-08-25T21:20:04+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -4560,7 +4396,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24375,
    "firstSeenAt": "2026-08-10T08:17:09+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -4620,7 +4456,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 22789,
    "firstSeenAt": "2026-08-03T22:34:18+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -4741,7 +4577,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 21185,
    "firstSeenAt": "2026-08-03T22:34:18+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -5305,7 +5141,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 31849,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -5595,7 +5431,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24861,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -5994,7 +5830,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 25656,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -6231,7 +6067,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 25087,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -6521,7 +6357,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 40894,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -7086,7 +6922,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 2502,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -7202,7 +7038,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 34113,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -7332,7 +7168,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24414,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -7458,7 +7294,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 20606,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -7639,7 +7475,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 28383,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -7698,7 +7534,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 25657,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -7814,7 +7650,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 27361,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -7930,7 +7766,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 28697,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -8046,7 +7882,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 28455,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -8162,7 +7998,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 25714,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -8278,7 +8114,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 42373,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -8332,11 +8168,68 @@ window.OWCS_DISCOVERED = {
     "matchedBy": null,
     "why": "no calendar event covers this date"
    },
+   "channelId": "ow_esports",
+   "channelTitle": "ow_esports_twitch",
+   "durationSeconds": 42389,
+   "firstSeenAt": "2026-08-27T10:34:20+00:00",
+   "lastSeenAt": "2026-11-14T18:30:08+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "long-form: 706m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (42389s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.twitch.tv/videos/2790779193\"",
+    "href": "submit.html?url=https://www.twitch.tv/videos/2790779193",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWWC 2026 | Online Qualifiers Day 5",
+    "companion": false,
+    "confidence": "clear",
+    "day": 5,
+    "eventKey": "owwc-2026-online-qualifiers",
+    "eventName": "OWWC 2026 — Online Qualifiers",
+    "fixture": null,
+    "phase": "qualifier",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2026
+   },
+   "platform": "twitch",
+   "publishedAt": "2026-06-07T08:42:32+00:00",
+   "sources": [
+    "twitch-videos",
+    "video-metadata"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWWC 2026 | Online Qualifiers Day 5",
+   "url": "https://www.twitch.tv/videos/2790779193",
+   "videoId": "2790779193",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "no calendar event covers this date"
+   },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
    "channelTitle": "ow_esports_global",
    "durationSeconds": 42899,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -8390,11 +8283,68 @@ window.OWCS_DISCOVERED = {
     "matchedBy": null,
     "why": "no calendar event covers this date"
    },
+   "channelId": "ow_esports",
+   "channelTitle": "ow_esports_twitch",
+   "durationSeconds": 43240,
+   "firstSeenAt": "2026-08-27T10:34:20+00:00",
+   "lastSeenAt": "2026-11-14T18:30:08+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "long-form: 720m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (43240s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.twitch.tv/videos/2790017925\"",
+    "href": "submit.html?url=https://www.twitch.tv/videos/2790017925",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWWC 2026 | Online Qualifiers Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "owwc-2026-online-qualifiers",
+    "eventName": "OWWC 2026 — Online Qualifiers",
+    "fixture": null,
+    "phase": "qualifier",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2026
+   },
+   "platform": "twitch",
+   "publishedAt": "2026-06-06T11:42:06+00:00",
+   "sources": [
+    "twitch-videos",
+    "video-metadata"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWWC 2026 | Online Qualifiers Day 3",
+   "url": "https://www.twitch.tv/videos/2790017925",
+   "videoId": "2790017925",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "no calendar event covers this date"
+   },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
    "channelTitle": "ow_esports_global",
    "durationSeconds": 37659,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -8446,11 +8396,68 @@ window.OWCS_DISCOVERED = {
     "matchedBy": null,
     "why": "no calendar event covers this date"
    },
+   "channelId": "ow_esports",
+   "channelTitle": "ow_esports_twitch",
+   "durationSeconds": 37836,
+   "firstSeenAt": "2026-08-27T10:34:20+00:00",
+   "lastSeenAt": "2026-11-14T18:30:08+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "long-form: 630m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (37836s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.twitch.tv/videos/2785237297\"",
+    "href": "submit.html?url=https://www.twitch.tv/videos/2785237297",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWWC 2026 | Online Qualifiers Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "owwc-2026-online-qualifiers",
+    "eventName": "OWWC 2026 — Online Qualifiers",
+    "fixture": null,
+    "phase": "qualifier",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2026
+   },
+   "platform": "twitch",
+   "publishedAt": "2026-05-31T11:38:48+00:00",
+   "sources": [
+    "twitch-videos",
+    "video-metadata"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWWC 2026 | Online Qualifiers Day 3",
+   "url": "https://www.twitch.tv/videos/2785237297",
+   "videoId": "2785237297",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "no calendar event covers this date"
+   },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
    "channelTitle": "ow_esports_global",
    "durationSeconds": 20974,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -8502,11 +8509,68 @@ window.OWCS_DISCOVERED = {
     "matchedBy": null,
     "why": "no calendar event covers this date"
    },
+   "channelId": "ow_esports",
+   "channelTitle": "ow_esports_twitch",
+   "durationSeconds": 21882,
+   "firstSeenAt": "2026-08-27T10:34:20+00:00",
+   "lastSeenAt": "2026-11-14T18:30:08+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "long-form: 364m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (21882s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.twitch.tv/videos/2785103643\"",
+    "href": "submit.html?url=https://www.twitch.tv/videos/2785103643",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWWC 2026 | Online Qualifiers Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "owwc-2026-online-qualifiers",
+    "eventName": "OWWC 2026 — Online Qualifiers",
+    "fixture": null,
+    "phase": "qualifier",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2026
+   },
+   "platform": "twitch",
+   "publishedAt": "2026-05-31T05:32:15+00:00",
+   "sources": [
+    "twitch-videos",
+    "video-metadata"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWWC 2026 | Online Qualifiers Day 3",
+   "url": "https://www.twitch.tv/videos/2785103643",
+   "videoId": "2785103643",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "no calendar event covers this date"
+   },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
    "channelTitle": "ow_esports_global",
    "durationSeconds": 42899,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -8558,11 +8622,68 @@ window.OWCS_DISCOVERED = {
     "matchedBy": null,
     "why": "no calendar event covers this date"
    },
+   "channelId": "ow_esports",
+   "channelTitle": "ow_esports_twitch",
+   "durationSeconds": 58055,
+   "firstSeenAt": "2026-08-27T10:34:20+00:00",
+   "lastSeenAt": "2026-11-14T18:30:08+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "long-form: 967m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (58055s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.twitch.tv/videos/2784299609\"",
+    "href": "submit.html?url=https://www.twitch.tv/videos/2784299609",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWWC 2026 | Online Qualifiers Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "owwc-2026-online-qualifiers",
+    "eventName": "OWWC 2026 — Online Qualifiers",
+    "fixture": null,
+    "phase": "qualifier",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2026
+   },
+   "platform": "twitch",
+   "publishedAt": "2026-05-30T05:33:30+00:00",
+   "sources": [
+    "twitch-videos",
+    "video-metadata"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWWC 2026 | Online Qualifiers Day 2",
+   "url": "https://www.twitch.tv/videos/2784299609",
+   "videoId": "2784299609",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "no calendar event covers this date"
+   },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
    "channelTitle": "ow_esports_global",
    "durationSeconds": 20389,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -8614,11 +8735,125 @@ window.OWCS_DISCOVERED = {
     "matchedBy": null,
     "why": "no calendar event covers this date"
    },
+   "channelId": "ow_esports",
+   "channelTitle": "ow_esports_twitch",
+   "durationSeconds": 20430,
+   "firstSeenAt": "2026-08-27T10:34:20+00:00",
+   "lastSeenAt": "2026-11-14T18:30:08+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "long-form: 340m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (20430s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.twitch.tv/videos/2783498121\"",
+    "href": "submit.html?url=https://www.twitch.tv/videos/2783498121",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "OWWC 2026 | Online Qualifiers Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "owwc-2026-online-qualifiers",
+    "eventName": "OWWC 2026 — Online Qualifiers",
+    "fixture": null,
+    "phase": "qualifier",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2026
+   },
+   "platform": "twitch",
+   "publishedAt": "2026-05-29T05:46:03+00:00",
+   "sources": [
+    "twitch-videos",
+    "video-metadata"
+   ],
+   "state": "found",
+   "title": "[DROPS] OWWC 2026 | Online Qualifiers Day 1",
+   "url": "https://www.twitch.tv/videos/2783498121",
+   "videoId": "2783498121",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "no calendar event covers this date"
+   },
+   "channelId": "ow_esports",
+   "channelTitle": "ow_esports_twitch",
+   "durationSeconds": 33033,
+   "firstSeenAt": "2026-08-27T10:34:20+00:00",
+   "lastSeenAt": "2026-11-14T18:30:08+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "long-form: 550m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (33033s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.twitch.tv/videos/2779850491\"",
+    "href": "submit.html?url=https://www.twitch.tv/videos/2779850491",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "2026 OWCS Champions Clash | Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "2026-owcs-champions-clash",
+    "eventName": "2026 OWCS Champions Clash",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2026
+   },
+   "platform": "twitch",
+   "publishedAt": "2026-05-24T16:14:49+00:00",
+   "sources": [
+    "twitch-videos",
+    "video-metadata"
+   ],
+   "state": "found",
+   "title": "[DROPS] [REBROADCAST] 2026 OWCS Champions Clash | Day 3",
+   "url": "https://www.twitch.tv/videos/2779850491",
+   "videoId": "2779850491",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "no calendar event covers this date"
+   },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
    "channelTitle": "ow_esports_global",
    "durationSeconds": 33100,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -8670,11 +8905,125 @@ window.OWCS_DISCOVERED = {
     "matchedBy": null,
     "why": "no calendar event covers this date"
    },
+   "channelId": "ow_esports",
+   "channelTitle": "ow_esports_twitch",
+   "durationSeconds": 33170,
+   "firstSeenAt": "2026-08-27T10:34:20+00:00",
+   "lastSeenAt": "2026-11-14T18:30:08+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "long-form: 552m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (33170s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.twitch.tv/videos/2779464510\"",
+    "href": "submit.html?url=https://www.twitch.tv/videos/2779464510",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "2026 OWCS Champions Clash | Day 3",
+    "companion": false,
+    "confidence": "clear",
+    "day": 3,
+    "eventKey": "2026-owcs-champions-clash",
+    "eventName": "2026 OWCS Champions Clash",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2026
+   },
+   "platform": "twitch",
+   "publishedAt": "2026-05-24T02:31:20+00:00",
+   "sources": [
+    "twitch-videos",
+    "video-metadata"
+   ],
+   "state": "found",
+   "title": "[DROPS] 2026 OWCS Champions Clash | Day 3",
+   "url": "https://www.twitch.tv/videos/2779464510",
+   "videoId": "2779464510",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "no calendar event covers this date"
+   },
+   "channelId": "ow_esports",
+   "channelTitle": "ow_esports_twitch",
+   "durationSeconds": 35019,
+   "firstSeenAt": "2026-08-27T10:34:20+00:00",
+   "lastSeenAt": "2026-11-14T18:30:08+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "long-form: 583m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (35019s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.twitch.tv/videos/2778949696\"",
+    "href": "submit.html?url=https://www.twitch.tv/videos/2778949696",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "2026 OWCS Champions Clash | Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "2026-owcs-champions-clash",
+    "eventName": "2026 OWCS Champions Clash",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2026
+   },
+   "platform": "twitch",
+   "publishedAt": "2026-05-23T13:58:48+00:00",
+   "sources": [
+    "twitch-videos",
+    "video-metadata"
+   ],
+   "state": "found",
+   "title": "[DROPS] [REBROADCAST] 2026 OWCS Champions Clash | Day 2",
+   "url": "https://www.twitch.tv/videos/2778949696",
+   "videoId": "2778949696",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "no calendar event covers this date"
+   },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
    "channelTitle": "ow_esports_global",
    "durationSeconds": 35152,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -8726,11 +9075,125 @@ window.OWCS_DISCOVERED = {
     "matchedBy": null,
     "why": "no calendar event covers this date"
    },
+   "channelId": "ow_esports",
+   "channelTitle": "ow_esports_twitch",
+   "durationSeconds": 35184,
+   "firstSeenAt": "2026-08-27T10:34:20+00:00",
+   "lastSeenAt": "2026-11-14T18:30:08+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "long-form: 586m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (35184s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.twitch.tv/videos/2778637313\"",
+    "href": "submit.html?url=https://www.twitch.tv/videos/2778637313",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "2026 OWCS Champions Clash | Day 2",
+    "companion": false,
+    "confidence": "clear",
+    "day": 2,
+    "eventKey": "2026-owcs-champions-clash",
+    "eventName": "2026 OWCS Champions Clash",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2026
+   },
+   "platform": "twitch",
+   "publishedAt": "2026-05-23T02:15:54+00:00",
+   "sources": [
+    "twitch-videos",
+    "video-metadata"
+   ],
+   "state": "found",
+   "title": "[DROPS] 2026 OWCS Champions Clash | Day 2",
+   "url": "https://www.twitch.tv/videos/2778637313",
+   "videoId": "2778637313",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "no calendar event covers this date"
+   },
+   "channelId": "ow_esports",
+   "channelTitle": "ow_esports_twitch",
+   "durationSeconds": 26368,
+   "firstSeenAt": "2026-08-27T10:34:20+00:00",
+   "lastSeenAt": "2026-11-08T06:43:16+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "long-form: 439m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (26368s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.twitch.tv/videos/2778200368\"",
+    "href": "submit.html?url=https://www.twitch.tv/videos/2778200368",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "2026 OWCS Champions Clash | Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "2026-owcs-champions-clash",
+    "eventName": "2026 OWCS Champions Clash",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2026
+   },
+   "platform": "twitch",
+   "publishedAt": "2026-05-22T16:02:26+00:00",
+   "sources": [
+    "twitch-videos",
+    "video-metadata"
+   ],
+   "state": "found",
+   "title": "[DROPS] [REBROADCAST] 2026 OWCS Champions Clash | Day 1",
+   "url": "https://www.twitch.tv/videos/2778200368",
+   "videoId": "2778200368",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "no calendar event covers this date"
+   },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
    "channelTitle": "ow_esports_global",
    "durationSeconds": 26826,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -8782,11 +9245,181 @@ window.OWCS_DISCOVERED = {
     "matchedBy": null,
     "why": "no calendar event covers this date"
    },
+   "channelId": "ow_esports",
+   "channelTitle": "ow_esports_twitch",
+   "durationSeconds": 26863,
+   "firstSeenAt": "2026-08-27T10:34:20+00:00",
+   "lastSeenAt": "2026-11-07T13:34:27+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "long-form: 447m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (26863s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.twitch.tv/videos/2777839457\"",
+    "href": "submit.html?url=https://www.twitch.tv/videos/2777839457",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "2026 OWCS Champions Clash | Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "2026-owcs-champions-clash",
+    "eventName": "2026 OWCS Champions Clash",
+    "fixture": null,
+    "phase": null,
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": 2026
+   },
+   "platform": "twitch",
+   "publishedAt": "2026-05-22T02:00:30+00:00",
+   "sources": [
+    "twitch-videos",
+    "video-metadata"
+   ],
+   "state": "found",
+   "title": "[DROPS] 2026 OWCS Champions Clash | Day 1",
+   "url": "https://www.twitch.tv/videos/2777839457",
+   "videoId": "2777839457",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "no calendar event covers this date"
+   },
+   "channelId": "ow_esports",
+   "channelTitle": "ow_esports_twitch",
+   "durationSeconds": 1569,
+   "firstSeenAt": "2026-08-27T10:34:20+00:00",
+   "lastSeenAt": "2026-11-01T06:52:22+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (1569s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.twitch.tv/videos/2757794338\"",
+    "href": "submit.html?url=https://www.twitch.tv/videos/2757794338",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Collegiate Championship | Grand Finals",
+    "companion": false,
+    "confidence": "partial",
+    "day": null,
+    "eventKey": "collegiate-championship-grand-finals",
+    "eventName": "Collegiate Championship — Grand Finals",
+    "fixture": null,
+    "phase": "grand-finals",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": null
+   },
+   "platform": "twitch",
+   "publishedAt": "2026-04-26T19:17:30+00:00",
+   "sources": [
+    "twitch-videos",
+    "video-metadata"
+   ],
+   "state": "found",
+   "title": "[DROPS] Collegiate Championship | Grand Finals",
+   "url": "https://www.twitch.tv/videos/2757794338",
+   "videoId": "2757794338",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "no calendar event covers this date"
+   },
+   "channelId": "ow_esports",
+   "channelTitle": "ow_esports_twitch",
+   "durationSeconds": 21521,
+   "firstSeenAt": "2026-08-27T10:34:20+00:00",
+   "lastSeenAt": "2026-10-31T13:05:25+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "long-form: 358m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (21521s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.twitch.tv/videos/2757537450\"",
+    "href": "submit.html?url=https://www.twitch.tv/videos/2757537450",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Collegiate Championship | Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "collegiate-championship",
+    "eventName": "Collegiate Championship",
+    "fixture": null,
+    "phase": "championship",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": null
+   },
+   "platform": "twitch",
+   "publishedAt": "2026-04-26T13:18:05+00:00",
+   "sources": [
+    "twitch-videos",
+    "video-metadata"
+   ],
+   "state": "found",
+   "title": "[DROPS] Collegiate Championship | Day 1",
+   "url": "https://www.twitch.tv/videos/2757537450",
+   "videoId": "2757537450",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "no calendar event covers this date"
+   },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
    "channelTitle": "ow_esports_global",
    "durationSeconds": 23139,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -8838,11 +9471,68 @@ window.OWCS_DISCOVERED = {
     "matchedBy": null,
     "why": "no calendar event covers this date"
    },
+   "channelId": "ow_esports",
+   "channelTitle": "ow_esports_twitch",
+   "durationSeconds": 35667,
+   "firstSeenAt": "2026-08-27T10:34:20+00:00",
+   "lastSeenAt": "2026-10-30T13:36:18+00:00",
+   "likeness": {
+    "confidence": "likely",
+    "reasons": [
+     "long-form: 594m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
+     "+25 livestream metadata (completed)",
+     "+20 substantial duration (35667s)",
+     "+15 tournament/broadcast terminology in title/description"
+    ],
+    "score": 60
+   },
+   "liveStatus": "completed",
+   "matchId": null,
+   "nextAction": {
+    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.twitch.tv/videos/2756670311\"",
+    "href": "submit.html?url=https://www.twitch.tv/videos/2756670311",
+    "label": "Process this broadcast"
+   },
+   "parsed": {
+    "cleanTitle": "Collegiate Championship | Day 1",
+    "companion": false,
+    "confidence": "clear",
+    "day": 1,
+    "eventKey": "collegiate-championship",
+    "eventName": "Collegiate Championship",
+    "fixture": null,
+    "phase": "championship",
+    "regions": [],
+    "stage": null,
+    "week": null,
+    "year": null
+   },
+   "platform": "twitch",
+   "publishedAt": "2026-04-25T12:30:39+00:00",
+   "sources": [
+    "twitch-videos",
+    "video-metadata"
+   ],
+   "state": "found",
+   "title": "[DROPS] Collegiate Championship | Day 1",
+   "url": "https://www.twitch.tv/videos/2756670311",
+   "videoId": "2756670311",
+   "why": "Found automatically. Nobody has processed it yet."
+  },
+  {
+   "calendar": {
+    "candidates": [],
+    "eventId": null,
+    "eventIds": [],
+    "eventName": null,
+    "matchedBy": null,
+    "why": "no calendar event covers this date"
+   },
    "channelId": "UCiAInBL9kUzz1XRxk66v-gw",
    "channelTitle": "ow_esports_global",
    "durationSeconds": 35667,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -8898,7 +9588,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24335,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -8957,7 +9647,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 22581,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -9016,7 +9706,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 24105,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -9075,7 +9765,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 28484,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -9134,7 +9824,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 29782,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -9193,7 +9883,7 @@ window.OWCS_DISCOVERED = {
    "channelTitle": "ow_esports_global",
    "durationSeconds": 26566,
    "firstSeenAt": "2026-07-29T23:14:15+00:00",
-   "lastSeenAt": "2026-11-14T22:45:51+00:00",
+   "lastSeenAt": "2026-11-15T07:13:09+00:00",
    "likeness": {
     "confidence": "likely",
     "reasons": [
@@ -21362,845 +22052,6 @@ window.OWCS_DISCOVERED = {
    },
    "channelId": "ow_esports",
    "channelTitle": "ow_esports_twitch",
-   "durationSeconds": 42389,
-   "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-11-14T18:30:08+00:00",
-   "likeness": {
-    "confidence": "likely",
-    "reasons": [
-     "long-form: 706m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
-     "-10 no livestream timing metadata",
-     "+20 substantial duration (42389s)",
-     "+15 tournament/broadcast terminology in title/description"
-    ],
-    "score": 25
-   },
-   "liveStatus": null,
-   "matchId": null,
-   "nextAction": {
-    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.twitch.tv/videos/2790779193\"",
-    "href": "submit.html?url=https://www.twitch.tv/videos/2790779193",
-    "label": "Process this broadcast"
-   },
-   "parsed": {
-    "cleanTitle": "OWWC 2026 | Online Qualifiers Day 5",
-    "companion": false,
-    "confidence": "clear",
-    "day": 5,
-    "eventKey": "owwc-2026-online-qualifiers",
-    "eventName": "OWWC 2026 — Online Qualifiers",
-    "fixture": null,
-    "phase": "qualifier",
-    "regions": [],
-    "stage": null,
-    "week": null,
-    "year": 2026
-   },
-   "platform": "twitch",
-   "publishedAt": null,
-   "sources": [
-    "twitch-videos"
-   ],
-   "state": "found",
-   "title": "[DROPS] OWWC 2026 | Online Qualifiers Day 5",
-   "url": "https://www.twitch.tv/videos/2790779193",
-   "videoId": "2790779193",
-   "why": "Found automatically. Nobody has processed it yet."
-  },
-  {
-   "calendar": {
-    "candidates": [],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "the broadcast has no publish date"
-   },
-   "channelId": "ow_esports",
-   "channelTitle": "ow_esports_twitch",
-   "durationSeconds": 43240,
-   "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-11-14T18:30:08+00:00",
-   "likeness": {
-    "confidence": "likely",
-    "reasons": [
-     "long-form: 720m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
-     "-10 no livestream timing metadata",
-     "+20 substantial duration (43240s)",
-     "+15 tournament/broadcast terminology in title/description"
-    ],
-    "score": 25
-   },
-   "liveStatus": null,
-   "matchId": null,
-   "nextAction": {
-    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.twitch.tv/videos/2790017925\"",
-    "href": "submit.html?url=https://www.twitch.tv/videos/2790017925",
-    "label": "Process this broadcast"
-   },
-   "parsed": {
-    "cleanTitle": "OWWC 2026 | Online Qualifiers Day 3",
-    "companion": false,
-    "confidence": "clear",
-    "day": 3,
-    "eventKey": "owwc-2026-online-qualifiers",
-    "eventName": "OWWC 2026 — Online Qualifiers",
-    "fixture": null,
-    "phase": "qualifier",
-    "regions": [],
-    "stage": null,
-    "week": null,
-    "year": 2026
-   },
-   "platform": "twitch",
-   "publishedAt": null,
-   "sources": [
-    "twitch-videos"
-   ],
-   "state": "found",
-   "title": "[DROPS] OWWC 2026 | Online Qualifiers Day 3",
-   "url": "https://www.twitch.tv/videos/2790017925",
-   "videoId": "2790017925",
-   "why": "Found automatically. Nobody has processed it yet."
-  },
-  {
-   "calendar": {
-    "candidates": [],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "the broadcast has no publish date"
-   },
-   "channelId": "ow_esports",
-   "channelTitle": "ow_esports_twitch",
-   "durationSeconds": 37836,
-   "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-11-14T18:30:08+00:00",
-   "likeness": {
-    "confidence": "likely",
-    "reasons": [
-     "long-form: 630m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
-     "-10 no livestream timing metadata",
-     "+20 substantial duration (37836s)",
-     "+15 tournament/broadcast terminology in title/description"
-    ],
-    "score": 25
-   },
-   "liveStatus": null,
-   "matchId": null,
-   "nextAction": {
-    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.twitch.tv/videos/2785237297\"",
-    "href": "submit.html?url=https://www.twitch.tv/videos/2785237297",
-    "label": "Process this broadcast"
-   },
-   "parsed": {
-    "cleanTitle": "OWWC 2026 | Online Qualifiers Day 3",
-    "companion": false,
-    "confidence": "clear",
-    "day": 3,
-    "eventKey": "owwc-2026-online-qualifiers",
-    "eventName": "OWWC 2026 — Online Qualifiers",
-    "fixture": null,
-    "phase": "qualifier",
-    "regions": [],
-    "stage": null,
-    "week": null,
-    "year": 2026
-   },
-   "platform": "twitch",
-   "publishedAt": null,
-   "sources": [
-    "twitch-videos"
-   ],
-   "state": "found",
-   "title": "[DROPS] OWWC 2026 | Online Qualifiers Day 3",
-   "url": "https://www.twitch.tv/videos/2785237297",
-   "videoId": "2785237297",
-   "why": "Found automatically. Nobody has processed it yet."
-  },
-  {
-   "calendar": {
-    "candidates": [],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "the broadcast has no publish date"
-   },
-   "channelId": "ow_esports",
-   "channelTitle": "ow_esports_twitch",
-   "durationSeconds": 21882,
-   "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-11-14T18:30:08+00:00",
-   "likeness": {
-    "confidence": "likely",
-    "reasons": [
-     "long-form: 364m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
-     "-10 no livestream timing metadata",
-     "+20 substantial duration (21882s)",
-     "+15 tournament/broadcast terminology in title/description"
-    ],
-    "score": 25
-   },
-   "liveStatus": null,
-   "matchId": null,
-   "nextAction": {
-    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.twitch.tv/videos/2785103643\"",
-    "href": "submit.html?url=https://www.twitch.tv/videos/2785103643",
-    "label": "Process this broadcast"
-   },
-   "parsed": {
-    "cleanTitle": "OWWC 2026 | Online Qualifiers Day 3",
-    "companion": false,
-    "confidence": "clear",
-    "day": 3,
-    "eventKey": "owwc-2026-online-qualifiers",
-    "eventName": "OWWC 2026 — Online Qualifiers",
-    "fixture": null,
-    "phase": "qualifier",
-    "regions": [],
-    "stage": null,
-    "week": null,
-    "year": 2026
-   },
-   "platform": "twitch",
-   "publishedAt": null,
-   "sources": [
-    "twitch-videos"
-   ],
-   "state": "found",
-   "title": "[DROPS] OWWC 2026 | Online Qualifiers Day 3",
-   "url": "https://www.twitch.tv/videos/2785103643",
-   "videoId": "2785103643",
-   "why": "Found automatically. Nobody has processed it yet."
-  },
-  {
-   "calendar": {
-    "candidates": [],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "the broadcast has no publish date"
-   },
-   "channelId": "ow_esports",
-   "channelTitle": "ow_esports_twitch",
-   "durationSeconds": 58055,
-   "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-11-14T18:30:08+00:00",
-   "likeness": {
-    "confidence": "likely",
-    "reasons": [
-     "long-form: 967m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
-     "-10 no livestream timing metadata",
-     "+20 substantial duration (58055s)",
-     "+15 tournament/broadcast terminology in title/description"
-    ],
-    "score": 25
-   },
-   "liveStatus": null,
-   "matchId": null,
-   "nextAction": {
-    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.twitch.tv/videos/2784299609\"",
-    "href": "submit.html?url=https://www.twitch.tv/videos/2784299609",
-    "label": "Process this broadcast"
-   },
-   "parsed": {
-    "cleanTitle": "OWWC 2026 | Online Qualifiers Day 2",
-    "companion": false,
-    "confidence": "clear",
-    "day": 2,
-    "eventKey": "owwc-2026-online-qualifiers",
-    "eventName": "OWWC 2026 — Online Qualifiers",
-    "fixture": null,
-    "phase": "qualifier",
-    "regions": [],
-    "stage": null,
-    "week": null,
-    "year": 2026
-   },
-   "platform": "twitch",
-   "publishedAt": null,
-   "sources": [
-    "twitch-videos"
-   ],
-   "state": "found",
-   "title": "[DROPS] OWWC 2026 | Online Qualifiers Day 2",
-   "url": "https://www.twitch.tv/videos/2784299609",
-   "videoId": "2784299609",
-   "why": "Found automatically. Nobody has processed it yet."
-  },
-  {
-   "calendar": {
-    "candidates": [],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "the broadcast has no publish date"
-   },
-   "channelId": "ow_esports",
-   "channelTitle": "ow_esports_twitch",
-   "durationSeconds": 20430,
-   "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-11-14T18:30:08+00:00",
-   "likeness": {
-    "confidence": "likely",
-    "reasons": [
-     "long-form: 340m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
-     "-10 no livestream timing metadata",
-     "+20 substantial duration (20430s)",
-     "+15 tournament/broadcast terminology in title/description"
-    ],
-    "score": 25
-   },
-   "liveStatus": null,
-   "matchId": null,
-   "nextAction": {
-    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.twitch.tv/videos/2783498121\"",
-    "href": "submit.html?url=https://www.twitch.tv/videos/2783498121",
-    "label": "Process this broadcast"
-   },
-   "parsed": {
-    "cleanTitle": "OWWC 2026 | Online Qualifiers Day 1",
-    "companion": false,
-    "confidence": "clear",
-    "day": 1,
-    "eventKey": "owwc-2026-online-qualifiers",
-    "eventName": "OWWC 2026 — Online Qualifiers",
-    "fixture": null,
-    "phase": "qualifier",
-    "regions": [],
-    "stage": null,
-    "week": null,
-    "year": 2026
-   },
-   "platform": "twitch",
-   "publishedAt": null,
-   "sources": [
-    "twitch-videos"
-   ],
-   "state": "found",
-   "title": "[DROPS] OWWC 2026 | Online Qualifiers Day 1",
-   "url": "https://www.twitch.tv/videos/2783498121",
-   "videoId": "2783498121",
-   "why": "Found automatically. Nobody has processed it yet."
-  },
-  {
-   "calendar": {
-    "candidates": [],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "the broadcast has no publish date"
-   },
-   "channelId": "ow_esports",
-   "channelTitle": "ow_esports_twitch",
-   "durationSeconds": 33033,
-   "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-11-14T18:30:08+00:00",
-   "likeness": {
-    "confidence": "likely",
-    "reasons": [
-     "long-form: 550m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
-     "-10 no livestream timing metadata",
-     "+20 substantial duration (33033s)",
-     "+15 tournament/broadcast terminology in title/description"
-    ],
-    "score": 25
-   },
-   "liveStatus": null,
-   "matchId": null,
-   "nextAction": {
-    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.twitch.tv/videos/2779850491\"",
-    "href": "submit.html?url=https://www.twitch.tv/videos/2779850491",
-    "label": "Process this broadcast"
-   },
-   "parsed": {
-    "cleanTitle": "2026 OWCS Champions Clash | Day 3",
-    "companion": false,
-    "confidence": "clear",
-    "day": 3,
-    "eventKey": "2026-owcs-champions-clash",
-    "eventName": "2026 OWCS Champions Clash",
-    "fixture": null,
-    "phase": null,
-    "regions": [],
-    "stage": null,
-    "week": null,
-    "year": 2026
-   },
-   "platform": "twitch",
-   "publishedAt": null,
-   "sources": [
-    "twitch-videos"
-   ],
-   "state": "found",
-   "title": "[DROPS] [REBROADCAST] 2026 OWCS Champions Clash | Day 3",
-   "url": "https://www.twitch.tv/videos/2779850491",
-   "videoId": "2779850491",
-   "why": "Found automatically. Nobody has processed it yet."
-  },
-  {
-   "calendar": {
-    "candidates": [],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "the broadcast has no publish date"
-   },
-   "channelId": "ow_esports",
-   "channelTitle": "ow_esports_twitch",
-   "durationSeconds": 33170,
-   "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-11-14T18:30:08+00:00",
-   "likeness": {
-    "confidence": "likely",
-    "reasons": [
-     "long-form: 552m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
-     "-10 no livestream timing metadata",
-     "+20 substantial duration (33170s)",
-     "+15 tournament/broadcast terminology in title/description"
-    ],
-    "score": 25
-   },
-   "liveStatus": null,
-   "matchId": null,
-   "nextAction": {
-    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.twitch.tv/videos/2779464510\"",
-    "href": "submit.html?url=https://www.twitch.tv/videos/2779464510",
-    "label": "Process this broadcast"
-   },
-   "parsed": {
-    "cleanTitle": "2026 OWCS Champions Clash | Day 3",
-    "companion": false,
-    "confidence": "clear",
-    "day": 3,
-    "eventKey": "2026-owcs-champions-clash",
-    "eventName": "2026 OWCS Champions Clash",
-    "fixture": null,
-    "phase": null,
-    "regions": [],
-    "stage": null,
-    "week": null,
-    "year": 2026
-   },
-   "platform": "twitch",
-   "publishedAt": null,
-   "sources": [
-    "twitch-videos"
-   ],
-   "state": "found",
-   "title": "[DROPS] 2026 OWCS Champions Clash | Day 3",
-   "url": "https://www.twitch.tv/videos/2779464510",
-   "videoId": "2779464510",
-   "why": "Found automatically. Nobody has processed it yet."
-  },
-  {
-   "calendar": {
-    "candidates": [],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "the broadcast has no publish date"
-   },
-   "channelId": "ow_esports",
-   "channelTitle": "ow_esports_twitch",
-   "durationSeconds": 35019,
-   "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-11-14T18:30:08+00:00",
-   "likeness": {
-    "confidence": "likely",
-    "reasons": [
-     "long-form: 583m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
-     "-10 no livestream timing metadata",
-     "+20 substantial duration (35019s)",
-     "+15 tournament/broadcast terminology in title/description"
-    ],
-    "score": 25
-   },
-   "liveStatus": null,
-   "matchId": null,
-   "nextAction": {
-    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.twitch.tv/videos/2778949696\"",
-    "href": "submit.html?url=https://www.twitch.tv/videos/2778949696",
-    "label": "Process this broadcast"
-   },
-   "parsed": {
-    "cleanTitle": "2026 OWCS Champions Clash | Day 2",
-    "companion": false,
-    "confidence": "clear",
-    "day": 2,
-    "eventKey": "2026-owcs-champions-clash",
-    "eventName": "2026 OWCS Champions Clash",
-    "fixture": null,
-    "phase": null,
-    "regions": [],
-    "stage": null,
-    "week": null,
-    "year": 2026
-   },
-   "platform": "twitch",
-   "publishedAt": null,
-   "sources": [
-    "twitch-videos"
-   ],
-   "state": "found",
-   "title": "[DROPS] [REBROADCAST] 2026 OWCS Champions Clash | Day 2",
-   "url": "https://www.twitch.tv/videos/2778949696",
-   "videoId": "2778949696",
-   "why": "Found automatically. Nobody has processed it yet."
-  },
-  {
-   "calendar": {
-    "candidates": [],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "the broadcast has no publish date"
-   },
-   "channelId": "ow_esports",
-   "channelTitle": "ow_esports_twitch",
-   "durationSeconds": 35184,
-   "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-11-14T18:30:08+00:00",
-   "likeness": {
-    "confidence": "likely",
-    "reasons": [
-     "long-form: 586m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
-     "-10 no livestream timing metadata",
-     "+20 substantial duration (35184s)",
-     "+15 tournament/broadcast terminology in title/description"
-    ],
-    "score": 25
-   },
-   "liveStatus": null,
-   "matchId": null,
-   "nextAction": {
-    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.twitch.tv/videos/2778637313\"",
-    "href": "submit.html?url=https://www.twitch.tv/videos/2778637313",
-    "label": "Process this broadcast"
-   },
-   "parsed": {
-    "cleanTitle": "2026 OWCS Champions Clash | Day 2",
-    "companion": false,
-    "confidence": "clear",
-    "day": 2,
-    "eventKey": "2026-owcs-champions-clash",
-    "eventName": "2026 OWCS Champions Clash",
-    "fixture": null,
-    "phase": null,
-    "regions": [],
-    "stage": null,
-    "week": null,
-    "year": 2026
-   },
-   "platform": "twitch",
-   "publishedAt": null,
-   "sources": [
-    "twitch-videos"
-   ],
-   "state": "found",
-   "title": "[DROPS] 2026 OWCS Champions Clash | Day 2",
-   "url": "https://www.twitch.tv/videos/2778637313",
-   "videoId": "2778637313",
-   "why": "Found automatically. Nobody has processed it yet."
-  },
-  {
-   "calendar": {
-    "candidates": [],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "the broadcast has no publish date"
-   },
-   "channelId": "ow_esports",
-   "channelTitle": "ow_esports_twitch",
-   "durationSeconds": 26368,
-   "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-11-08T06:43:16+00:00",
-   "likeness": {
-    "confidence": "likely",
-    "reasons": [
-     "long-form: 439m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
-     "-10 no livestream timing metadata",
-     "+20 substantial duration (26368s)",
-     "+15 tournament/broadcast terminology in title/description"
-    ],
-    "score": 25
-   },
-   "liveStatus": null,
-   "matchId": null,
-   "nextAction": {
-    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.twitch.tv/videos/2778200368\"",
-    "href": "submit.html?url=https://www.twitch.tv/videos/2778200368",
-    "label": "Process this broadcast"
-   },
-   "parsed": {
-    "cleanTitle": "2026 OWCS Champions Clash | Day 1",
-    "companion": false,
-    "confidence": "clear",
-    "day": 1,
-    "eventKey": "2026-owcs-champions-clash",
-    "eventName": "2026 OWCS Champions Clash",
-    "fixture": null,
-    "phase": null,
-    "regions": [],
-    "stage": null,
-    "week": null,
-    "year": 2026
-   },
-   "platform": "twitch",
-   "publishedAt": null,
-   "sources": [
-    "twitch-videos"
-   ],
-   "state": "found",
-   "title": "[DROPS] [REBROADCAST] 2026 OWCS Champions Clash | Day 1",
-   "url": "https://www.twitch.tv/videos/2778200368",
-   "videoId": "2778200368",
-   "why": "Found automatically. Nobody has processed it yet."
-  },
-  {
-   "calendar": {
-    "candidates": [],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "the broadcast has no publish date"
-   },
-   "channelId": "ow_esports",
-   "channelTitle": "ow_esports_twitch",
-   "durationSeconds": 26863,
-   "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-11-07T13:34:27+00:00",
-   "likeness": {
-    "confidence": "likely",
-    "reasons": [
-     "long-form: 447m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
-     "-10 no livestream timing metadata",
-     "+20 substantial duration (26863s)",
-     "+15 tournament/broadcast terminology in title/description"
-    ],
-    "score": 25
-   },
-   "liveStatus": null,
-   "matchId": null,
-   "nextAction": {
-    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.twitch.tv/videos/2777839457\"",
-    "href": "submit.html?url=https://www.twitch.tv/videos/2777839457",
-    "label": "Process this broadcast"
-   },
-   "parsed": {
-    "cleanTitle": "2026 OWCS Champions Clash | Day 1",
-    "companion": false,
-    "confidence": "clear",
-    "day": 1,
-    "eventKey": "2026-owcs-champions-clash",
-    "eventName": "2026 OWCS Champions Clash",
-    "fixture": null,
-    "phase": null,
-    "regions": [],
-    "stage": null,
-    "week": null,
-    "year": 2026
-   },
-   "platform": "twitch",
-   "publishedAt": null,
-   "sources": [
-    "twitch-videos"
-   ],
-   "state": "found",
-   "title": "[DROPS] 2026 OWCS Champions Clash | Day 1",
-   "url": "https://www.twitch.tv/videos/2777839457",
-   "videoId": "2777839457",
-   "why": "Found automatically. Nobody has processed it yet."
-  },
-  {
-   "calendar": {
-    "candidates": [],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "the broadcast has no publish date"
-   },
-   "channelId": "ow_esports",
-   "channelTitle": "ow_esports_twitch",
-   "durationSeconds": 1569,
-   "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-11-01T06:52:22+00:00",
-   "likeness": {
-    "confidence": "likely",
-    "reasons": [
-     "-10 no livestream timing metadata",
-     "+20 substantial duration (1569s)",
-     "+15 tournament/broadcast terminology in title/description"
-    ],
-    "score": 25
-   },
-   "liveStatus": null,
-   "matchId": null,
-   "nextAction": {
-    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.twitch.tv/videos/2757794338\"",
-    "href": "submit.html?url=https://www.twitch.tv/videos/2757794338",
-    "label": "Process this broadcast"
-   },
-   "parsed": {
-    "cleanTitle": "Collegiate Championship | Grand Finals",
-    "companion": false,
-    "confidence": "partial",
-    "day": null,
-    "eventKey": "collegiate-championship-grand-finals",
-    "eventName": "Collegiate Championship — Grand Finals",
-    "fixture": null,
-    "phase": "grand-finals",
-    "regions": [],
-    "stage": null,
-    "week": null,
-    "year": null
-   },
-   "platform": "twitch",
-   "publishedAt": null,
-   "sources": [
-    "twitch-videos"
-   ],
-   "state": "found",
-   "title": "[DROPS] Collegiate Championship | Grand Finals",
-   "url": "https://www.twitch.tv/videos/2757794338",
-   "videoId": "2757794338",
-   "why": "Found automatically. Nobody has processed it yet."
-  },
-  {
-   "calendar": {
-    "candidates": [],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "the broadcast has no publish date"
-   },
-   "channelId": "ow_esports",
-   "channelTitle": "ow_esports_twitch",
-   "durationSeconds": 21521,
-   "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-31T13:05:25+00:00",
-   "likeness": {
-    "confidence": "likely",
-    "reasons": [
-     "long-form: 358m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
-     "-10 no livestream timing metadata",
-     "+20 substantial duration (21521s)",
-     "+15 tournament/broadcast terminology in title/description"
-    ],
-    "score": 25
-   },
-   "liveStatus": null,
-   "matchId": null,
-   "nextAction": {
-    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.twitch.tv/videos/2757537450\"",
-    "href": "submit.html?url=https://www.twitch.tv/videos/2757537450",
-    "label": "Process this broadcast"
-   },
-   "parsed": {
-    "cleanTitle": "Collegiate Championship | Day 1",
-    "companion": false,
-    "confidence": "clear",
-    "day": 1,
-    "eventKey": "collegiate-championship",
-    "eventName": "Collegiate Championship",
-    "fixture": null,
-    "phase": "championship",
-    "regions": [],
-    "stage": null,
-    "week": null,
-    "year": null
-   },
-   "platform": "twitch",
-   "publishedAt": null,
-   "sources": [
-    "twitch-videos"
-   ],
-   "state": "found",
-   "title": "[DROPS] Collegiate Championship | Day 1",
-   "url": "https://www.twitch.tv/videos/2757537450",
-   "videoId": "2757537450",
-   "why": "Found automatically. Nobody has processed it yet."
-  },
-  {
-   "calendar": {
-    "candidates": [],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "the broadcast has no publish date"
-   },
-   "channelId": "ow_esports",
-   "channelTitle": "ow_esports_twitch",
-   "durationSeconds": 35667,
-   "firstSeenAt": "2026-08-27T10:34:20+00:00",
-   "lastSeenAt": "2026-10-30T13:36:18+00:00",
-   "likeness": {
-    "confidence": "likely",
-    "reasons": [
-     "long-form: 594m of runtime is longer than any promo, clip or cutdown — considered a broadcast regardless of what the title says",
-     "-10 no livestream timing metadata",
-     "+20 substantial duration (35667s)",
-     "+15 tournament/broadcast terminology in title/description"
-    ],
-    "score": 25
-   },
-   "liveStatus": null,
-   "matchId": null,
-   "nextAction": {
-    "command": "python3 pipeline/automation/cli.py convert-link --url \"https://www.twitch.tv/videos/2756670311\"",
-    "href": "submit.html?url=https://www.twitch.tv/videos/2756670311",
-    "label": "Process this broadcast"
-   },
-   "parsed": {
-    "cleanTitle": "Collegiate Championship | Day 1",
-    "companion": false,
-    "confidence": "clear",
-    "day": 1,
-    "eventKey": "collegiate-championship",
-    "eventName": "Collegiate Championship",
-    "fixture": null,
-    "phase": "championship",
-    "regions": [],
-    "stage": null,
-    "week": null,
-    "year": null
-   },
-   "platform": "twitch",
-   "publishedAt": null,
-   "sources": [
-    "twitch-videos"
-   ],
-   "state": "found",
-   "title": "[DROPS] Collegiate Championship | Day 1",
-   "url": "https://www.twitch.tv/videos/2756670311",
-   "videoId": "2756670311",
-   "why": "Found automatically. Nobody has processed it yet."
-  },
-  {
-   "calendar": {
-    "candidates": [],
-    "eventId": null,
-    "eventIds": [],
-    "eventName": null,
-    "matchedBy": null,
-    "why": "the broadcast has no publish date"
-   },
-   "channelId": "ow_esports",
-   "channelTitle": "ow_esports_twitch",
    "durationSeconds": 24569,
    "firstSeenAt": "2026-08-27T10:34:20+00:00",
    "lastSeenAt": "2026-10-25T12:01:09+00:00",
@@ -24119,122 +23970,45 @@ window.OWCS_DISCOVERED = {
   }
  ],
  "counts": {
-  "found": 349,
+  "found": 346,
   "ignored": 74,
   "published": 1,
   "queued": 0,
   "review": 0,
-  "total": 424,
+  "total": 421,
   "working": 0
  },
  "dateCoverage": {
   "blocked": false,
-  "considered": 350,
+  "considered": 347,
   "failedLookups": 0,
-  "known": 301,
+  "known": 313,
   "reason": "The scan reads a whole channel in one cheap request, and that listing carries no air date. A bounded number of per-video lookups per run fills them in over time.",
-  "unknown": 49
+  "unknown": 34
  },
  "events": [
   {
    "broadcasts": 1,
    "calendarEventIds": [],
    "channels": [
-    "Overwatch Esports"
-   ],
-   "dated": 1,
-   "days": [],
-   "firstAt": "2026-11-14T00:19:17+00:00",
-   "found": 1,
-   "key": "overwatch-collegiate-homecoming-finals-round-of-4",
-   "lastAt": "2026-11-14T00:19:17+00:00",
-   "name": "Overwatch Collegiate Homecoming Finals — Round of 4",
-   "phases": [
-    "finals"
-   ],
-   "published": 0,
-   "regions": [],
-   "runtimeKnown": 0,
-   "runtimeSeconds": 0,
-   "season": null,
-   "stages": [],
-   "weeks": [],
-   "years": []
-  },
-  {
-   "broadcasts": 1,
-   "calendarEventIds": [],
-   "channels": [
-    "Overwatch Esports"
-   ],
-   "dated": 1,
-   "days": [],
-   "firstAt": "2026-11-14T00:16:58+00:00",
-   "found": 1,
-   "key": "overwatch-collegiate-homecoming-finals-round-of-8",
-   "lastAt": "2026-11-14T00:16:58+00:00",
-   "name": "Overwatch Collegiate Homecoming Finals — Round of 8",
-   "phases": [
-    "finals"
-   ],
-   "published": 0,
-   "regions": [],
-   "runtimeKnown": 0,
-   "runtimeSeconds": 0,
-   "season": null,
-   "stages": [],
-   "weeks": [],
-   "years": []
-  },
-  {
-   "broadcasts": 1,
-   "calendarEventIds": [],
-   "channels": [
-    "Overwatch Esports"
-   ],
-   "dated": 1,
-   "days": [
-    2
-   ],
-   "firstAt": "2026-11-14T00:15:20+00:00",
-   "found": 1,
-   "key": "overwatch-collegiate-homecoming-playoffs-round-of-16",
-   "lastAt": "2026-11-14T00:15:20+00:00",
-   "name": "Overwatch Collegiate Homecoming Playoffs — Round of 16",
-   "phases": [
-    "playoffs"
-   ],
-   "published": 0,
-   "regions": [],
-   "runtimeKnown": 0,
-   "runtimeSeconds": 0,
-   "season": null,
-   "stages": [],
-   "weeks": [],
-   "years": []
-  },
-  {
-   "broadcasts": 1,
-   "calendarEventIds": [],
-   "channels": [
-    "Overwatch Esports"
+    "ow_esports_global"
    ],
    "dated": 1,
    "days": [
     1
    ],
-   "firstAt": "2026-11-14T00:13:39+00:00",
+   "firstAt": "2026-11-14T18:53:28Z",
    "found": 1,
    "key": "overwatch-collegiate-homecoming-playoffs-round-of-32",
-   "lastAt": "2026-11-14T00:13:39+00:00",
+   "lastAt": "2026-11-14T18:53:28Z",
    "name": "Overwatch Collegiate Homecoming Playoffs — Round of 32",
    "phases": [
     "playoffs"
    ],
    "published": 0,
    "regions": [],
-   "runtimeKnown": 0,
-   "runtimeSeconds": 0,
+   "runtimeKnown": 1,
+   "runtimeSeconds": 23121,
    "season": null,
    "stages": [],
    "weeks": [],
@@ -24246,7 +24020,7 @@ window.OWCS_DISCOVERED = {
     "owcs_2026_global_finals"
    ],
    "channels": [
-    "Overwatch Esports",
+    "ow_esports_global",
     "ow_esports_twitch"
    ],
    "dated": 2,
@@ -24254,10 +24028,10 @@ window.OWCS_DISCOVERED = {
     1,
     2
    ],
-   "firstAt": "2026-11-07T23:17:45+00:00",
+   "firstAt": "2026-11-07T17:21:03Z",
    "found": 4,
    "key": "faceit-league-season-10-master-division-playoffs",
-   "lastAt": "2026-11-09T00:33:05+00:00",
+   "lastAt": "2026-11-08T15:32:04Z",
    "name": "FACEIT League Season 10 — Master Division Playoffs",
    "phases": [
     "playoffs"
@@ -24277,7 +24051,7 @@ window.OWCS_DISCOVERED = {
     "owcs_2026_global_finals"
    ],
    "channels": [
-    "Overwatch Esports"
+    "ow_esports_global"
    ],
    "dated": 3,
    "days": [
@@ -24285,10 +24059,10 @@ window.OWCS_DISCOVERED = {
     2,
     3
    ],
-   "firstAt": "2026-10-30T22:45:55+00:00",
+   "firstAt": "2026-10-30T16:36:49Z",
    "found": 3,
    "key": "owcs-2026-na-emea-stage-3-playoffs",
-   "lastAt": "2026-11-02T00:56:41+00:00",
+   "lastAt": "2026-11-01T17:32:25Z",
    "name": "OWCS 2026 — NA/EMEA — Stage 3 Playoffs",
    "phases": [
     "playoffs"
@@ -24313,7 +24087,6 @@ window.OWCS_DISCOVERED = {
    "broadcasts": 5,
    "calendarEventIds": [],
    "channels": [
-    "Overwatch Esports",
     "ow_esports_global"
    ],
    "dated": 5,
@@ -24324,7 +24097,7 @@ window.OWCS_DISCOVERED = {
    "firstAt": "2026-10-11T16:39:16Z",
    "found": 5,
    "key": "owcs-2026-na-emea-stage-3",
-   "lastAt": "2026-10-25T23:27:23+00:00",
+   "lastAt": "2026-10-25T16:36:57Z",
    "name": "OWCS 2026 — NA/EMEA — Stage 3",
    "phases": [],
    "published": 0,
@@ -24920,17 +24693,17 @@ window.OWCS_DISCOVERED = {
     "ow_esports_global",
     "ow_esports_twitch"
    ],
-   "dated": 4,
+   "dated": 10,
    "days": [
     1,
     2,
     3,
     5
    ],
-   "firstAt": "2026-05-29T05:46:36Z",
+   "firstAt": "2026-05-29T05:46:03+00:00",
    "found": 10,
    "key": "owwc-2026-online-qualifiers",
-   "lastAt": "2026-05-31T11:41:32Z",
+   "lastAt": "2026-06-07T08:42:32+00:00",
    "name": "OWWC 2026 — Online Qualifiers",
    "phases": [
     "qualifier"
@@ -24939,6 +24712,35 @@ window.OWCS_DISCOVERED = {
    "regions": [],
    "runtimeKnown": 10,
    "runtimeSeconds": 345753,
+   "season": 2026,
+   "stages": [],
+   "weeks": [],
+   "years": [
+    2026
+   ]
+  },
+  {
+   "broadcasts": 6,
+   "calendarEventIds": [],
+   "channels": [
+    "ow_esports_twitch"
+   ],
+   "dated": 6,
+   "days": [
+    1,
+    2,
+    3
+   ],
+   "firstAt": "2026-05-22T02:00:30+00:00",
+   "found": 6,
+   "key": "2026-owcs-champions-clash",
+   "lastAt": "2026-05-24T16:14:49+00:00",
+   "name": "2026 OWCS Champions Clash",
+   "phases": [],
+   "published": 0,
+   "regions": [],
+   "runtimeKnown": 6,
+   "runtimeSeconds": 189637,
    "season": 2026,
    "stages": [],
    "weeks": [],
@@ -24974,6 +24776,58 @@ window.OWCS_DISCOVERED = {
    "years": [
     2026
    ]
+  },
+  {
+   "broadcasts": 1,
+   "calendarEventIds": [],
+   "channels": [
+    "ow_esports_twitch"
+   ],
+   "dated": 1,
+   "days": [],
+   "firstAt": "2026-04-26T19:17:30+00:00",
+   "found": 1,
+   "key": "collegiate-championship-grand-finals",
+   "lastAt": "2026-04-26T19:17:30+00:00",
+   "name": "Collegiate Championship — Grand Finals",
+   "phases": [
+    "grand-finals"
+   ],
+   "published": 0,
+   "regions": [],
+   "runtimeKnown": 1,
+   "runtimeSeconds": 1569,
+   "season": null,
+   "stages": [],
+   "weeks": [],
+   "years": []
+  },
+  {
+   "broadcasts": 2,
+   "calendarEventIds": [],
+   "channels": [
+    "ow_esports_twitch"
+   ],
+   "dated": 2,
+   "days": [
+    1
+   ],
+   "firstAt": "2026-04-25T12:30:39+00:00",
+   "found": 2,
+   "key": "collegiate-championship",
+   "lastAt": "2026-04-26T13:18:05+00:00",
+   "name": "Collegiate Championship",
+   "phases": [
+    "championship"
+   ],
+   "published": 0,
+   "regions": [],
+   "runtimeKnown": 2,
+   "runtimeSeconds": 57188,
+   "season": null,
+   "stages": [],
+   "weeks": [],
+   "years": []
   },
   {
    "broadcasts": 1,
@@ -27771,58 +27625,6 @@ window.OWCS_DISCOVERED = {
    "years": []
   },
   {
-   "broadcasts": 1,
-   "calendarEventIds": [],
-   "channels": [
-    "ow_esports_twitch"
-   ],
-   "dated": 0,
-   "days": [],
-   "firstAt": null,
-   "found": 1,
-   "key": "collegiate-championship-grand-finals",
-   "lastAt": null,
-   "name": "Collegiate Championship — Grand Finals",
-   "phases": [
-    "grand-finals"
-   ],
-   "published": 0,
-   "regions": [],
-   "runtimeKnown": 1,
-   "runtimeSeconds": 1569,
-   "season": null,
-   "stages": [],
-   "weeks": [],
-   "years": []
-  },
-  {
-   "broadcasts": 2,
-   "calendarEventIds": [],
-   "channels": [
-    "ow_esports_twitch"
-   ],
-   "dated": 0,
-   "days": [
-    1
-   ],
-   "firstAt": null,
-   "found": 2,
-   "key": "collegiate-championship",
-   "lastAt": null,
-   "name": "Collegiate Championship",
-   "phases": [
-    "championship"
-   ],
-   "published": 0,
-   "regions": [],
-   "runtimeKnown": 2,
-   "runtimeSeconds": 57188,
-   "season": null,
-   "stages": [],
-   "weeks": [],
-   "years": []
-  },
-  {
    "broadcasts": 3,
    "calendarEventIds": [],
    "channels": [
@@ -27875,38 +27677,9 @@ window.OWCS_DISCOVERED = {
    "stages": [],
    "weeks": [],
    "years": []
-  },
-  {
-   "broadcasts": 6,
-   "calendarEventIds": [],
-   "channels": [
-    "ow_esports_twitch"
-   ],
-   "dated": 0,
-   "days": [
-    1,
-    2,
-    3
-   ],
-   "firstAt": null,
-   "found": 6,
-   "key": "2026-owcs-champions-clash",
-   "lastAt": null,
-   "name": "2026 OWCS Champions Clash",
-   "phases": [],
-   "published": 0,
-   "regions": [],
-   "runtimeKnown": 6,
-   "runtimeSeconds": 189637,
-   "season": 2026,
-   "stages": [],
-   "weeks": [],
-   "years": [
-    2026
-   ]
   }
  ],
- "generatedAt": "2026-11-14T22:45:51+00:00",
+ "generatedAt": "2026-11-15T07:13:09+00:00",
  "inputs": [
   {
    "loaded": true,
@@ -27939,17 +27712,19 @@ window.OWCS_DISCOVERED = {
     "title": "ow_esports_twitch"
    }
   ],
-  "generatedAt": "2026-11-14T22:45:51+00:00",
+  "generatedAt": "2026-11-15T07:13:09+00:00",
   "intervalHours": 6.0,
-  "nextExpectedAt": "2026-11-15T04:45:51+00:00",
-  "sourceErrors": [],
+  "nextExpectedAt": "2026-11-15T13:13:09+00:00",
+  "sourceErrors": [
+   "rss UCiAInBL9kUzz1XRxk66v-gw: HTTPError: HTTP Error 404: Not Found"
+  ],
   "staleAfterHours": 24
  },
  "schema": "discovered.v1",
  "seasons": [
   {
    "broadcasts": 118,
-   "dated": 85,
+   "dated": 97,
    "eventKeys": [
     "2026-owcs-champions-clash",
     "2026-owcs-pre-season-bootcamp",
@@ -28074,7 +27849,7 @@ window.OWCS_DISCOVERED = {
    "season": 2024
   },
   {
-   "broadcasts": 78,
+   "broadcasts": 75,
    "dated": 64,
    "eventKeys": [
     "100-soldiers-vs-1-gorilla-overwatch-2-showmatch",
@@ -28104,34 +27879,31 @@ window.OWCS_DISCOVERED = {
     "overwatch-champions-series-stage-2-asia-owcs-asia-wildcard",
     "overwatch-collegiate-championship",
     "overwatch-collegiate-championship-finals",
-    "overwatch-collegiate-homecoming-finals-round-of-4",
-    "overwatch-collegiate-homecoming-finals-round-of-8",
-    "overwatch-collegiate-homecoming-playoffs-round-of-16",
     "overwatch-collegiate-homecoming-playoffs-round-of-32",
     "overwatch-spotlight",
     "owcs-x-faceit-league-stage-3-promotion-relegation-matches",
     "owwc-group-draw"
    ],
-   "events": 34,
-   "found": 78,
+   "events": 31,
+   "found": 75,
    "published": 0,
-   "runtimeKnown": 74,
-   "runtimeSeconds": 1526940,
+   "runtimeKnown": 75,
+   "runtimeSeconds": 1550061,
    "season": null
   }
  ],
  "summary": {
-  "awaitingProcessing": 349,
-  "broadcastsKnown": 424,
-  "calendarLinked": 31,
+  "awaitingProcessing": 346,
+  "broadcastsKnown": 421,
+  "calendarLinked": 30,
   "channelsScanned": 2,
-  "datedBroadcasts": 301,
-  "events": 124,
+  "datedBroadcasts": 313,
+  "events": 121,
   "ignored": 74,
   "inFlight": 0,
   "published": 1,
-  "runtimeKnown": 346,
-  "runtimeSeconds": 8826585,
+  "runtimeKnown": 347,
+  "runtimeSeconds": 8849706,
   "seasons": 3
  }
 };
