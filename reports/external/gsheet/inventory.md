@@ -2,10 +2,10 @@
 
 - Source: https://docs.google.com/spreadsheets/d/1OaU5O7lVDZbked5FZAvgfR9MnJIdGhTdnIdu4DsL9PQ/edit?usp=sharing
 - Spreadsheet id: `1OaU5O7lVDZbked5FZAvgfR9MnJIdGhTdnIdu4DsL9PQ`
-- Snapshot: `9aa043937c9ecb36551e61afdd6ca6d4eff03bc28d438ace94e7b92f8ca198e1` imported 2026-11-15T07:09:17+00:00
+- Snapshot: `cdfd46597ad71da659f9f1a32cfe745754d770f343e15556da978853af4e5b9c` imported 2026-11-15T19:05:31+00:00
 - Parser gsheet-parser-2 · layout v2 · aliases v3
 - Tabs: 42 (24 recognised as data) · source rows: 9928
-- Workbook package: 54.1 MB zipped, 139.5 MB unzipped, 409 parts; embedded media: 234 files, 46.8 MB
+- Workbook package: 54.1 MB zipped, 139.6 MB unzipped, 409 parts; embedded media: 234 files, 46.8 MB
 - Largest parts: `xl/worksheets/sheet8.xml` 3.9 MB, `xl/worksheets/sheet7.xml` 3.9 MB, `xl/worksheets/sheet6.xml` 3.8 MB, `xl/drawings/drawing8.xml` 3.3 MB, `xl/drawings/drawing7.xml` 3.2 MB, `xl/drawings/drawing6.xml` 3.1 MB
 
 **Imported:** 622 matches · 2267 maps · 4447 hero bans · 36994 player-hero appearances · 8605 composition observations · 0 ignored rows · 445 unmapped values · 0 identical duplicates · 0 conflicting duplicates
