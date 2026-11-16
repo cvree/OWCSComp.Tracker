@@ -1,6 +1,6 @@
 {
  "_readme": "Written by pipeline/liquipedia_schedule.py from Liquipedia (CC BY-SA 3.0). Do not hand-edit; put corrections in config/schedule.json `matches`.",
- "fetchedAt": "2026-11-14T19:56:09+00:00",
+ "fetchedAt": "2026-11-16T23:44:39+00:00",
  "matches": [
   {
    "bestOf": 3,
@@ -15582,7 +15582,7 @@
   {
    "event": "pacific/stage-1",
    "matches": 4,
-   "revid": 1134338,
+   "revid": 1155882,
    "title": "Overwatch Champions Series/2026/Asia/Stage 1/Pacific"
   },
   {
@@ -15630,7 +15630,7 @@
   {
    "event": "asia/stage-3",
    "matches": 20,
-   "revid": 1155504,
+   "revid": 1155892,
    "title": "Overwatch Champions Series/2026/Asia/Stage 3"
   },
   {
