@@ -359,23 +359,110 @@
   };
 
   /* --------------------------------------------------- teams table */
-  P.extTeamsTable = () => {
+  /* Seventy-odd rows in one fixed order answered one question ("who has
+     played most"). The table now finds a team by name, narrows to a
+     region, and sorts on any column, and the address bar remembers which
+     (tq / tr / ts), so a sorted view can be linked. */
+  const TEAM_COLS = [
+    { k: "name", label: "Team", get: (r) => (r.name || "").toLowerCase(), dir: 1 },
+    { k: "region", label: "Region", get: (r) => r.regions.map((x) => P.extRegionName(x)).join(", ").toLowerCase(), dir: 1 },
+    { k: "series", label: "Series", num: true, get: (r) => (r.series.won || 0) - (r.series.lost || 0), dir: -1,
+      title: "Series won–lost. Sorts by wins minus losses." },
+    { k: "maps", label: "Maps", num: true, get: (r) => r.maps.played || 0, dir: -1 },
+    { k: "record", label: "Map record", num: true, get: (r) => (r.maps.won || 0) - (r.maps.lost || 0), dir: -1,
+      title: "Maps won–lost(–drawn). Sorts by wins minus losses." },
+    { k: "win", label: "Map win share", get: (r) => (r.winShare == null ? -1 : r.winShare), dir: -1,
+      title: "Share of decided maps won. A team with no decided map sorts last." },
+  ];
+  const teamRows = () => {
     const s = S();
-    if (!s || !s.teamProfiles) return "";
-    const rows = E.teamList(s).map((p) => E.teamRecord(p));
+    return s && s.teamProfiles ? E.teamList(s).map((p) => E.teamRecord(p)) : [];
+  };
+  const teamRowHtml = (r) =>
+    "<tr><td>" + P.extTeamLink(r.id) + '</td><td class="small">' + esc(r.regions.map((x) => P.extRegionName(x)).join(", ") || "—") +
+    '</td><td class="num">' + (r.series.won || 0) + "–" + (r.series.lost || 0) + '</td><td class="num">' + r.maps.played +
+    '</td><td class="num">' + r.maps.won + "–" + r.maps.lost + (r.maps.draw ? "–" + r.maps.draw : "") + "</td><td>" +
+    pct(r.winShare) + " " + P.sampleNote(r.decided, "decided map") + '</td><td><span class="comp comp--tight">' +
+    r.heroes.slice(0, 5).map((x) => P.heroTile(x.hero, { size: "xs" })).join("") + "</span></td></tr>";
+
+  P.extTeamsTable = () => {
+    const rows = teamRows();
+    if (!rows.length) return "";
     const unmapped = rows.filter((r) => !r.mapped).length;
+    const regions = Array.from(new Set(rows.reduce((a, r) => a.concat(r.regions), [])));
     return '<p class="dim small">' + P.srcBadge("sheet") + " " + plural(rows.length, "team") + " named by the spreadsheet; " +
       unmapped + " of them are not in the tracker’s team registry and keep the sheet’s spelling, marked " +
       "<i>unmapped</i>. Records are the sheet’s; a winner the VOD reading disputes is left out.</p>" +
-      '<div class="table-wrap u-mt-3"><table class="tbl tbl--compact"><thead><tr><th>Team</th><th>Region</th>' +
-      '<th class="num">Series</th><th class="num">Maps</th><th class="num">Map record</th><th>Map win share</th>' +
-      "<th>Most-listed heroes</th></tr></thead><tbody>" + rows.map((r) =>
-        "<tr><td>" + P.extTeamLink(r.id) + '</td><td class="small">' + esc(r.regions.map((x) => P.extRegionName(x)).join(", ") || "—") +
-        '</td><td class="num">' + (r.series.won || 0) + "–" + (r.series.lost || 0) + '</td><td class="num">' + r.maps.played +
-        '</td><td class="num">' + r.maps.won + "–" + r.maps.lost + (r.maps.draw ? "–" + r.maps.draw : "") + "</td><td>" +
-        pct(r.winShare) + " " + P.sampleNote(r.decided, "decided map") + '</td><td><span class="comp comp--tight">' +
-        r.heroes.slice(0, 5).map((x) => P.heroTile(x.hero, { size: "xs" })).join("") + "</span></td></tr>").join("") +
-      "</tbody></table></div>";
+      '<div class="tt-bar u-mt-4" role="search" aria-label="Find a team">' +
+      '<label class="tt-find"><span class="visually-hidden">Find a team by name</span>' +
+      '<input class="input" type="search" id="tt-q" placeholder="Find a team…" autocomplete="off" spellcheck="false"></label>' +
+      '<label class="tt-region"><span class="visually-hidden">Region</span><select class="input" id="tt-region">' +
+      '<option value="">Every region</option>' + regions.map((x) =>
+        '<option value="' + esc(x == null ? "none" : x) + '">' + esc(P.extRegionName(x)) + "</option>").join("") + "</select></label>" +
+      '<span class="dim small" id="tt-count" role="status" aria-live="polite"></span></div>' +
+      '<div class="table-wrap u-mt-3"><table class="tbl tbl--compact tbl--sortable" id="tt-table"><thead><tr>' +
+      TEAM_COLS.map((c) => '<th scope="col"' + (c.num ? ' class="num"' : "") + ' data-col="' + c.k + '"><button type="button" class="th-sort" data-sort="' +
+        c.k + '"' + (c.title ? ' title="' + esc(c.title) + '"' : "") + ">" + esc(c.label) +
+        '<span class="th-sort__ic" aria-hidden="true"></span></button></th>').join("") +
+      '<th scope="col">Most-listed heroes</th></tr></thead><tbody id="tt-body"></tbody></table></div>' +
+      '<div id="tt-empty"></div>';   /* the rows are drawn once, by extTeamsMount */
+  };
+
+  P.extTeamsMount = (host) => {
+    const body = P.$("#tt-body", host);
+    if (!body) return;
+    const all = teamRows();
+    const q = P.$("#tt-q", host), reg = P.$("#tt-region", host), count = P.$("#tt-count", host);
+    const parse = (v) => {
+      const m = /^(-?)(\w+)$/.exec(v || "");
+      const col = m && TEAM_COLS.filter((c) => c.k === m[2])[0];
+      return col ? { k: col.k, dir: m[1] ? -col.dir : col.dir } : { k: "maps", dir: -1 };
+    };
+    const state = { q: P.qs("tq") || "", region: P.qs("tr") || "", sort: parse(P.qs("ts")) };
+    q.value = state.q;
+    reg.value = state.region;
+    if (reg.value !== state.region) state.region = "";
+    const paint = () => {
+      const needle = state.q.trim().toLowerCase();
+      const col = TEAM_COLS.filter((c) => c.k === state.sort.k)[0];
+      const list = all.filter((r) => (!needle || (r.name || "").toLowerCase().indexOf(needle) >= 0 || String(r.id).toLowerCase().indexOf(needle) >= 0) &&
+        (!state.region || r.regions.some((x) => (x == null ? "none" : x) === state.region)))
+        .sort((a, b) => {
+          const x = col.get(a), y = col.get(b);
+          return (x < y ? -1 : x > y ? 1 : 0) * state.sort.dir || (b.maps.played || 0) - (a.maps.played || 0) ||
+            (a.name || "").localeCompare(b.name || "");
+        });
+      body.innerHTML = list.map(teamRowHtml).join("");
+      P.$("#tt-table", host).parentElement.hidden = !list.length;
+      P.$("#tt-empty", host).innerHTML = list.length ? "" : P.empty("◇", "No team matches",
+        (needle ? "Nothing in the spreadsheet is spelled like “" + esc(state.q.trim()) + "”" : "No team") +
+        (state.region ? " in " + esc(P.extRegionName(state.region === "none" ? null : state.region)) : "") +
+        '. <button type="button" class="btn btn--sm btn--ghost u-mt-3" id="tt-reset">Clear the filters</button>');
+      count.textContent = list.length === all.length ? plural(all.length, "team") : list.length + " of " + plural(all.length, "team");
+      P.$$("th[data-col]", host).forEach((th) => {
+        const on = th.dataset.col === state.sort.k;
+        if (on) th.setAttribute("aria-sort", state.sort.dir > 0 ? "ascending" : "descending");
+        else th.removeAttribute("aria-sort");
+      });
+      const def = state.sort.k === "maps" && state.sort.dir === -1;
+      const natural = TEAM_COLS.filter((c) => c.k === state.sort.k)[0].dir;
+      P.setQs({ tq: state.q.trim() || null, tr: state.region || null,
+        ts: def ? null : (state.sort.dir === natural ? "" : "-") + state.sort.k });
+    };
+    let t = null;
+    q.addEventListener("input", () => { state.q = q.value; clearTimeout(t); t = setTimeout(paint, 120); });
+    reg.addEventListener("change", () => { state.region = reg.value; paint(); });
+    host.addEventListener("click", (e) => {
+      const b = e.target.closest && e.target.closest("[data-sort]");
+      if (b) {
+        const col = TEAM_COLS.filter((c) => c.k === b.dataset.sort)[0];
+        state.sort = state.sort.k === col.k ? { k: col.k, dir: -state.sort.dir } : { k: col.k, dir: col.dir };
+        paint();
+      } else if (e.target.id === "tt-reset") {
+        state.q = q.value = ""; state.region = reg.value = ""; paint(); q.focus();
+      }
+    });
+    paint();
   };
 
   /* ------------------------------------------ hero chart + table */

@@ -444,9 +444,21 @@ def _card(ctx, N, sheet: dict, card: dict, inv: dict, ref: dict) -> str | None:
             m["seriesScoreA"], m["seriesScoreB"] = _int(sa), _int(sb)
             m["seriesScoreRaw"], m["seriesScoreMethod"] = f"{sa}-{sb}", "sheet"
             ctx.prov(mid, "seriesScore", name, sa_cell, "direct", f"{sa}-{sb}", [_int(sa), _int(sb)])
+            top = max(_int(sa), _int(sb))
+            if best_of and top > best_of // 2 + 1:
+                # The card's own score cannot happen in the format its label
+                # states: three China Grand Finals are labelled '[Bo5]' and
+                # recorded 4-1, 4-1 and 4-0. Nobody wins four maps of a best
+                # of five, so the label is the typo, and the site was
+                # printing "4 : 0 · Bo5". The score is the recorded fact;
+                # the best-of becomes the shortest format that allows it,
+                # and the label as written is kept and flagged.
+                m["bestOfRaw"] = best_of
+                best_of = m["bestOf"] = 2 * top - 1
+                m.setdefault("flags", []).append(f"best-of-from-score:label-said-bo{m['bestOfRaw']}")
             if best_of:
                 # 'Bo5' and a side on 3: the series is over. Counted, not inferred.
-                m["seriesComplete"] = max(_int(sa), _int(sb)) >= best_of // 2 + 1
+                m["seriesComplete"] = top >= best_of // 2 + 1
         if forfeits:
             m.setdefault("flags", []).append(f"forfeited-maps:{forfeits}")
         inv["parsed"]["matches"] += 1

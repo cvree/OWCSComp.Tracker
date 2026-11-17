@@ -216,6 +216,44 @@
     return Date.now() - new Date(gen).getTime() > (hours || 24) * 3600000;
   };
 
+  /* Every dataset a page has loaded, with when it was last refreshed and
+     how old it may get before it is called stale. The footer used to print
+     one timestamp, the VOD export's, which is rewritten only when a comp is
+     published. So a page whose numbers came from a spreadsheet imported
+     yesterday read "generated 8 days ago, dataset older than 24h", and the
+     one clock a visitor was shown described none of what they were reading.
+     Each source answers for itself here; a source the page did not load is
+     not listed, because the page shows nothing from it.
+
+     `checked` is the last time the source was successfully polled even if
+     nothing had changed; staleness is judged on that, since an unchanged
+     spreadsheet that was checked an hour ago is current. */
+  P.freshness = () => {
+    const out = [];
+    const add = (id, label, at, checked, hours, href) => {
+      if (!at && !checked) return;
+      const ref = new Date(checked || at).getTime();
+      out.push({ id: id, label: label, at: at || checked, checked: checked || at, staleAfterHours: hours,
+        href: href || null, stale: isNaN(ref) ? true : Date.now() - ref > hours * 3600000 });
+    };
+    const xs = window.OWCS_EXTERNAL_SUMMARY || null;
+    if (xs && xs.snapshot) {
+      const la = xs.lastAttempt && xs.lastAttempt.status === "ok" ? xs.lastAttempt.at : null;
+      add("sheet", "Results and comps (community spreadsheet)", xs.snapshot.importedAt, la, 24, "how-it-works.html#sources");
+    }
+    const sc = window.OWCS_SCHEDULE || null;
+    const lp = sc && sc.meta && sc.meta.generatedFrom && sc.meta.generatedFrom.liquipedia;
+    if (lp && lp.fetchedAt) add("schedule", "Start times (Liquipedia)", lp.fetchedAt, null, 36, "series.html#sx-sources");
+    const scan = P.disc && P.disc.scan;
+    if (scan && scan.generatedAt) add("scan", "Broadcast scan", scan.generatedAt, null, scan.staleAfterHours || 24, null);
+    if (D && D.meta && D.meta.generatedAt && !D.meta.demo) {
+      /* The VOD export has no schedule: it is rewritten when a reading is
+         published. Its age is stated, never called stale. */
+      add("vod", "VOD-read comps (last export)", D.meta.generatedAt, null, Infinity, null);
+    }
+    return out;
+  };
+
   /* ------------------------------------------------------- hero artwork */
   const ART = new Set(window.OWCS_HERO_ART || []);
   const ROLE_HUE = { Tank: 210, Damage: 4, Support: 145 };

@@ -485,6 +485,21 @@ for t in pipeline/test_*.py; do python "$t"; done   # 101 suites
 python pipeline/check_packaging.py                  # reproducibility gate
 ```
 
+### Check the site in Chrome
+
+```bash
+node tests/browser/run.mjs
+```
+
+Opens every public page in Google Chrome at 1440, 1024, 768 and 390 pixels
+and fails on a console error, a failed request, sideways scroll or an
+undersized touch target; then drives the workflows people use (filters,
+sorting, search, the schedule, the failure states) and asserts on the DOM.
+It writes screenshots, traces of anything that failed and a readable
+report to `tests/browser/output/report.html`, and runs in CI as the
+`browser` job. Everything else, including how to measure load time and
+compare before and after, is in [docs/BROWSER-TESTS.md](docs/BROWSER-TESTS.md).
+
 ### Regenerate the public data from the DB
 
 ```bash

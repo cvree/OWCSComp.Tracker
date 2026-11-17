@@ -567,6 +567,7 @@
   function buildFooter() {
     const gen = P.dataAge();
     const stale = P.isStale(24);
+    const fresh = P.freshness ? P.freshness() : [];
     const f = document.createElement("footer");
     f.className = "ftr";
     f.innerHTML =
@@ -611,8 +612,17 @@
             "</ul></div>") +
       "</div>" +
       '<div class="ftr__in ftr__meta">' +
-        "<span>Data generated " + esc(gen ? P.fmtDateTime(gen) : "—") + "</span>" +
-        (stale ? '<span style="color:var(--amber)">dataset older than 24h</span>' : "") +
+        (fresh.length
+          ? '<ul class="ftr__fresh" aria-label="How current each data source is">' + fresh.map((x) =>
+              '<li data-source="' + esc(x.id) + '"' + (x.stale ? ' data-stale="true"' : "") + ">" +
+              '<span class="ftr__src">' + esc(x.label) + "</span> " +
+              '<time datetime="' + esc(x.at) + '" title="' + esc(P.fmtDateTime(x.at)) + '">' +
+              esc(new Date(x.at).getTime() > Date.now() ? "just now" : P.fmtRel(x.at) || P.fmtDateTime(x.at)) + "</time>" +
+              (x.checked !== x.at ? " · checked " + esc(P.fmtRel(x.checked) || P.fmtDateTime(x.checked)) : "") +
+              (x.stale ? ' <b class="ftr__stale">stale: no refresh in over ' + x.staleAfterHours + "h</b>" : "") +
+              "</li>").join("") + "</ul>"
+          : "<span>Data generated " + esc(gen ? P.fmtDateTime(gen) : "—") + "</span>" +
+            (stale ? '<span style="color:var(--amber)">dataset older than 24h</span>' : "")) +
         "<span>Independent fan project · not affiliated with Blizzard or the OWCS</span>" +
       "</div>";
     document.body.appendChild(f);

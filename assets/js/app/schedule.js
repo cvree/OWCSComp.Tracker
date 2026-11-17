@@ -395,8 +395,17 @@
       let html = filterBar(state, { follow: true });
 
       /* The spotlight: the next match day, as one glance. */
-      const nextEv = events.find((e) => evStatus(e) !== "tba" && evMatches(e).some((m) => isOpen(m) && dayKey(m)));
-      if (nextEv) html += spotlight(nextEv);
+      /* Only a series that is still AHEAD (or on now) can be "next up". A
+         series whose day has passed with no result recorded used to win this
+         slot, and the page then read "Next up · 4 days ago · First series in
+         starting". When nothing dated is ahead, the same card says what is
+         true instead: the result is not in yet. */
+      const isAhead = (m) => isOpen(m) && dayKey(m) && ["today", "upcoming", "live"].indexOf(status(m)) >= 0;
+      const isPending = (m) => isOpen(m) && dayKey(m) && status(m) === "awaiting";
+      const nextEv = events.find((e) => evStatus(e) !== "tba" && evMatches(e).some(isAhead));
+      const pendingEv = nextEv ? null : events.find((e) => evMatches(e).some(isPending));
+      if (nextEv) html += spotlight(nextEv, isAhead, false);
+      else if (pendingEv) html += spotlight(pendingEv, isPending, true);
 
       if (events.length) {
         html += '<section class="u-mt-6" aria-labelledby="sx-on"><div class="sec-head"><h2 id="sx-on">Events still to play</h2>' +
@@ -447,18 +456,19 @@
 
   const countdown = (iso) => {
     const ms = new Date(iso).getTime() - Date.now();
-    if (ms <= 0) return "starting";
+    if (ms <= 0) return "under way";
     const d = Math.floor(ms / 864e5), h = Math.floor(ms / 36e5) % 24, mi = Math.floor(ms / 6e4) % 60;
-    return d ? d + "d " + h + "h" : h ? h + "h " + mi + "m" : mi + "m";
+    return "in " + (d ? d + "d " + h + "h" : h ? h + "h " + mi + "m" : mi + "m");
   };
 
-  function spotlight(e) {
-    const ms = evMatches(e).filter(isOpen).filter((m) => dayKey(m)).sort(matchOrder);
+  function spotlight(e, pick, pending) {
+    const ms = evMatches(e).filter(pick).sort(matchOrder);
     const first = ms[0];
     const day = dayKey(first);
     const timed = ms.find((m) => m.startsAt);
     const n = dayDiff(day);
-    const lead = n === 0 ? "Today" : n === 1 ? "Tomorrow" : rel(day).replace(/^in /, "In ");
+    const lead = pending ? "Was due " + rel(day).replace(/^(Today|Yesterday)$/, (w) => w.toLowerCase())
+      : n === 0 ? "Today" : n === 1 ? "Tomorrow" : rel(day).replace(/^in /, "In ");
     const days = Array.from(new Set(ms.map(dayKey))).sort();
     const rounds = [];
     ms.forEach((m) => { const r = roundLabel(m); if (rounds.indexOf(r) < 0) rounds.push(r); });
@@ -469,11 +479,15 @@
       league.standings.slice(0, 6).map((r) => "<li>" + P.anyTeamPlate(r.team, { size: "sm" }) + '<span class="mono small">' +
         r.w + "–" + r.l + "</span></li>").join("") + "</ol></div>" : "";
     return '<section class="sx-spot card" aria-labelledby="sx-spot-h">' +
-      '<div class="sx-spot__main"><p class="eyebrow">Next up · ' + esc(regionName(e.region)) + "</p>" +
+      '<div class="sx-spot__main"><p class="eyebrow">' + (pending ? "Result pending" : "Next up") + " · " + esc(regionName(e.region)) + "</p>" +
       '<h2 id="sx-spot-h">' + esc(evName(e)) + " · " + esc(ms.some((m) => m.kind === "bracket") ? "Playoffs" : rounds[0] || "") + "</h2>" +
       '<p class="sx-spot__when"><b>' + esc(lead) + "</b> · " + esc(fDay(day)) +
       (days.length > 1 ? " – " + esc(fDay(days[days.length - 1])) : "") + "</p>" +
-      (timed ? '<p class="sx-spot__count">First series in <b data-countdown="' + esc(timed.startsAt) + '">' + esc(countdown(timed.startsAt)) +
+      (pending ? '<p class="sx-spot__pending"><span class="chip" data-state="review"><span class="dot"></span>Awaiting result</span> ' +
+        "The day has passed and the community spreadsheet has not recorded a score yet. Nothing is shown as a result until it does." +
+        (timed ? " It was scheduled for " + esc(fTime(new Date(timed.startsAt))) + " " + esc(tzShort(new Date(timed.startsAt))) + "." : "") + "</p>"
+        : timed ? '<p class="sx-spot__count">' + "First series " +
+        '<b data-countdown="' + esc(timed.startsAt) + '">' + esc(countdown(timed.startsAt)) +
         "</b> · " + esc(fTime(new Date(timed.startsAt))) + " " + esc(tzShort(new Date(timed.startsAt))) + "</p>"
         : '<p class="dim small">Start times are not announced yet; the days are from the published schedule.</p>') +
       '<ul class="sx-spot__facts">' +
@@ -483,8 +497,8 @@
       "<li><b>Teams</b>" + (known.length ? known.length + " decided" + (ms.some((m) => !teamKey(m, "A") || !teamKey(m, "B")) ? ", the rest decided by the bracket" : "")
         : "Set by the bracket — the slots fill in as the editors and Liquipedia list them") + "</li></ul>" +
       '<div class="row u-mt-4"><a class="btn btn--primary" href="series.html?view=brackets&amp;event=' + encodeURIComponent(e.id) +
-      '">See the bracket</a><button type="button" class="btn btn--ghost" data-ics-all="' + esc(e.id) + '" data-name="' + esc(evName(e)) +
-      '">+ Add to calendar</button></div></div>' + table + "</section>";
+      '">See the bracket</a>' + (pending ? "" : '<button type="button" class="btn btn--ghost" data-ics-all="' + esc(e.id) + '" data-name="' + esc(evName(e)) +
+      '">+ Add to calendar</button>') + "</div></div>" + table + "</section>";
   }
 
   function eventCard(e) {
