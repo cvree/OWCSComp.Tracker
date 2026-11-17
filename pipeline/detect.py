@@ -37,6 +37,7 @@ import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import db  # noqa: E402
+import hero_roles as hero_roles_mod  # noqa: E402
 from capture import load_layout  # noqa: E402
 
 TEMPLATES_DIR = os.path.join(db.REPO_ROOT, "templates")
@@ -165,7 +166,10 @@ def lib_for_slot(lib: dict, profile: dict | None, slot: str | int | None) -> dic
         return lib
     want = roles[idx - 1]
     known = hero_roles()
-    return {h: t for h, t in lib.items() if known.get(h) == want}
+    # a hero reworked into another role mid-season keeps both: an older
+    # VOD shows it in its former role's slot
+    return {h: t for h, t in lib.items()
+            if hero_roles_mod.can_play(h, want, known.get(h))}
 
 
 # ------------------------------------------------------------- templates

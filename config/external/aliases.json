@@ -37,6 +37,8 @@
     "hog": ["roadhog", "road hog", "hog"],
     "ram": ["ramattra", "ram"],
     "doomfist": ["doomfist", "doom"],
+    "jetcat": ["jetpack cat", "jetcat", "jet cat"],
+    "dmon": ["d.mon", "dmon", "d mon"],
     "dva": ["d.va", "dva", "d va"],
     "sojourn": ["sojourn", "soj"],
     "kiriko": ["kiriko", "kiri"],
@@ -80,7 +82,7 @@
     "blizzworld": ["blizzard world", "blizzworld", "bw"],
     "eich": ["eichenwalde", "eich"],
     "anubis": ["throne of anubis", "anubis"],
-    "neonjunction": ["neon junction", "neonjunction"],
+    "neonjunction": ["neon junction", "neonjunction", "neon jct"],
     "colosseo": ["colosseo", "colosseum"],
     "runasapi": ["runasapi"],
     "suravasa": ["suravasa"],
@@ -92,7 +94,7 @@
     {"id": "rialto", "name": "Rialto", "mode": "Escort", "aliases": ["rialto"]},
     {"id": "numbani", "name": "Numbani", "mode": "Hybrid", "aliases": ["numbani"]},
     {"id": "hollywood", "name": "Hollywood", "mode": "Hybrid", "aliases": ["hollywood"]},
-    {"id": "grimsvotn", "name": "Grímsvötn", "mode": "Escort", "aliases": ["grimsvotn", "grimsvoetn", "watchpoint grimsvotn", "watchpoint: grímsvötn", "watchpoint: grimsvotn"]}
+    {"id": "grimsvotn", "name": "Watchpoint: Grímsvötn", "mode": "Escort", "aliases": ["grimsvotn", "grimsvoetn", "watchpoint grimsvotn", "watchpoint: grímsvötn", "watchpoint: grimsvotn"]}
   ],
   "modes": {
     "Control": ["control", "koth", "king of the hill", "ctrl"],

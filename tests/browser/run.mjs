@@ -672,14 +672,19 @@ scenario("data: the numbers a page states add up from the rows behind them", asy
 
 scenario("data: every series score agrees with its own maps and best-of", async (t) => {
   await t.go("series.html?view=results");
-  const d = await t.page.evaluate(() => {
+  // "The future" is after the real today (UTC, plus a day for time zones),
+  // taken outside the page: the page clock is frozen (FROZEN_NOW) but the
+  // committed data keeps moving, so a fixed date fails once the season
+  // plays past it.
+  const today = new Date(Date.now() + 864e5).toISOString().slice(0, 10);
+  const d = await t.page.evaluate((today) => {
     const S = window.OWCS_SCHEDULE.matches.filter((m) => m.state === "done");
     const over = S.filter((m) => m.bestOf && m.scoreA != null && Math.max(m.scoreA, m.scoreB) > Math.ceil(m.bestOf / 2) + 0);
     const wrongWinner = S.filter((m) => m.winner && m.scoreA != null && m.scoreB != null && m.scoreA !== m.scoreB &&
       m.winner !== (m.scoreA > m.scoreB ? m.teamA : m.teamB));
-    const future = S.filter((m) => m.date && m.date > "2026-11-11");
+    const future = S.filter((m) => m.date && m.date > today);
     return { n: S.length, over: over.map((m) => m.id), wrongWinner: wrongWinner.map((m) => m.id), future: future.map((m) => m.id) };
-  });
+  }, today);
   check(d.n > 500, "the season's played series are loaded (" + d.n + ")");
   eq(d.wrongWinner.length, 0, "the recorded winner is the side with more maps: " + d.wrongWinner.slice(0, 5).join(", "));
   eq(d.over.length, 0, "no side has more wins than its best-of allows: " + d.over.slice(0, 5).join(", "));

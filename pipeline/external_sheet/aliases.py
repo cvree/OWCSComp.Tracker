@@ -20,12 +20,22 @@ hero must never be counted as a hero.
 from __future__ import annotations
 
 import datetime as dt
+import os
 import re
+import sys
 import unicodedata
 from dataclasses import dataclass
 from typing import Any
 
+_PIPELINE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if _PIPELINE not in sys.path:
+    sys.path.insert(0, _PIPELINE)
+import hero_roles  # noqa: E402  (pipeline/hero_roles.py: mid-season role changes)
+
 _NON_ALNUM = re.compile(r"[^a-z0-9]+")
+# the words a sheet uses for a position's role (column headers, role icons)
+ROLE_HINTS = {"tank": "Tank", "damage": "Damage", "dps": "Damage",
+              "support": "Support", "sup": "Support", "supp": "Support"}
 
 
 def norm(value: Any) -> str:
@@ -275,8 +285,20 @@ class AliasBook:
         # the handle: 'ZOX' and 'zox' become one player, labelled unmapped.
         return Resolution("p-" + slugify(text), "slug", text)
 
-    def role_of(self, hero_id: str | None) -> str | None:
-        return self.hero_roles.get(hero_id or "") or None
+    def role_of(self, hero_id: str | None, hint: str | None = None,
+                date: str | None = None) -> str | None:
+        """The role `hero_id` was played in. One role per hero (the
+        catalog's) — except a hero reworked into another role mid-season
+        (pipeline/hero_roles.py), where the sheet's own role for the
+        position (`hint`: its column header or role icon) wins when it is a
+        role the hero has held, else the role on `date`, else today's."""
+        current = self.hero_roles.get(hero_id or "") or None
+        if not hero_roles.past_roles().get(hero_id or ""):
+            return current
+        role = ROLE_HINTS.get(str(hint or "").strip().lower())
+        if role and hero_roles.can_play(hero_id, role, current):
+            return role
+        return hero_roles.role_on(hero_id, date, current)
 
     # ------------------------------------------------------------ dates
     def date(self, value: Any, year_hint: int | None = None) -> tuple[str | None, str, bool]:

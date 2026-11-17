@@ -178,7 +178,14 @@
   {
    "id": "sombra",
    "name": "Sombra",
-   "role": "Damage"
+   "role": "Support",
+   "pastRoles": [
+    {
+     "role": "Damage",
+     "until": "2026-10-06",
+     "note": "Reworked from Damage to Support in Season 5 (2026-10-06)."
+    }
+   ]
   },
   {
    "id": "sym",
@@ -349,7 +356,7 @@
   },
   {
    "id": "grimsvotn",
-   "name": "Grímsvötn",
+   "name": "Watchpoint: Grímsvötn",
    "mode": "Escort"
   },
   {

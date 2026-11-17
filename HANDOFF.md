@@ -4,7 +4,7 @@
 
 **Symptom.** Neon Junction (Season 3, Jun 2026) sat in `game_maps` as mode `Unknown`, so its 93
 sheet maps had no mode and fell out of every per-mode view. Watchpoint: Gibraltar, Rialto, Numbani,
-Hollywood and Grímsvötn (Season 5, Oct 2026) lived only in `aliases.json` → `extraMaps`, not in
+Hollywood and Watchpoint: Grímsvötn (Season 5, Oct 2026) lived only in `aliases.json` → `extraMaps`, not in
 `mapsCatalog`.
 
 **Fix.** `data/owcs.sqlite` `game_maps` and `pipeline/sample_data.json` now hold all 33 maps
@@ -13,6 +13,18 @@ same set, with "Watchpoint: Grímsvötn" spellings. Exports regenerated (`export
 `sheet_sync.py rebuild`): all 2,267 sheet maps resolve to a catalog map with a mode. `extraMaps`
 is now redundant (sync skips ids already in the catalog) but kept for its aliases. When a new
 season map ships: add it to `game_maps` + `sample_data.json` with its mode, then rebuild.
+
+**Also brought onto main** (both were stranded on branches):
+* `claude/admiring-einstein-w5gm9p` (Nov 11) — merged: each series counted once (2,262 sheet maps,
+  was 2,267 with 5 double listings), WHO Gaming / Whibo Gaming folded into Weibo Gaming, Matches /
+  Teams / footer copy and overflow fixes, the Chrome verification gate (`tests/browser`,
+  `docs/BROWSER-TESTS.md`).
+* `claude/great-einstein-l7owef` (Nov 7, before main's history restart) — ported by hand: **Sombra
+  is Support** since the Season 5 rework (2026-10-06), old role kept under `pastRoles` in
+  `sample_data.json`; `pipeline/hero_roles.py` lets the detector's role lock, the comp solver and
+  the sheet importer accept a reworked hero in every role it has held (sheet: 53 Damage before the
+  rework, 190 Support after). `init_db` seeds heroes/maps with an upsert, because INSERT OR REPLACE
+  deletes the row first and cascades through foreign keys. Hero aliases for Jetpack Cat and D.Mon.
 
 ## UPDATE (2026-11-12, twenty-fifth pass) — the sync can no longer be stopped by the season, and it tells you
 
