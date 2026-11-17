@@ -1,5 +1,19 @@
 # OWCS Comp Tracker — Handoff (control room: no-terminal workflow)
 
+## UPDATE (2026-11-17) — map catalog complete: 33 maps, every one with a mode
+
+**Symptom.** Neon Junction (Season 3, Jun 2026) sat in `game_maps` as mode `Unknown`, so its 93
+sheet maps had no mode and fell out of every per-mode view. Watchpoint: Gibraltar, Rialto, Numbani,
+Hollywood and Grímsvötn (Season 5, Oct 2026) lived only in `aliases.json` → `extraMaps`, not in
+`mapsCatalog`.
+
+**Fix.** `data/owcs.sqlite` `game_maps` and `pipeline/sample_data.json` now hold all 33 maps
+(Neon Junction = Hybrid). `faceit_parser.MAP_MODES` and `obssojourn_source.NAME_TO_ID` know the
+same set, with "Watchpoint: Grímsvötn" spellings. Exports regenerated (`export_data.py --public`,
+`sheet_sync.py rebuild`): all 2,267 sheet maps resolve to a catalog map with a mode. `extraMaps`
+is now redundant (sync skips ids already in the catalog) but kept for its aliases. When a new
+season map ships: add it to `game_maps` + `sample_data.json` with its mode, then rebuild.
+
 ## UPDATE (2026-11-12, twenty-fifth pass) — the sync can no longer be stopped by the season, and it tells you
 
 **Symptom.** Results stuck at the Nov 11 import. Every sheet-sync after it failed `test_schedule.py`:

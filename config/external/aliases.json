@@ -80,7 +80,7 @@
     "blizzworld": ["blizzard world", "blizzworld", "bw"],
     "eich": ["eichenwalde", "eich"],
     "anubis": ["throne of anubis", "anubis"],
-    "neonjunction": ["neon junction"],
+    "neonjunction": ["neon junction", "neonjunction"],
     "colosseo": ["colosseo", "colosseum"],
     "runasapi": ["runasapi"],
     "suravasa": ["suravasa"],
@@ -92,7 +92,7 @@
     {"id": "rialto", "name": "Rialto", "mode": "Escort", "aliases": ["rialto"]},
     {"id": "numbani", "name": "Numbani", "mode": "Hybrid", "aliases": ["numbani"]},
     {"id": "hollywood", "name": "Hollywood", "mode": "Hybrid", "aliases": ["hollywood"]},
-    {"id": "grimsvotn", "name": "Grímsvötn", "mode": "Escort", "aliases": ["grimsvotn", "grimsvoetn"]}
+    {"id": "grimsvotn", "name": "Grímsvötn", "mode": "Escort", "aliases": ["grimsvotn", "grimsvoetn", "watchpoint grimsvotn", "watchpoint: grímsvötn", "watchpoint: grimsvotn"]}
   ],
   "modes": {
     "Control": ["control", "koth", "king of the hill", "ctrl"],

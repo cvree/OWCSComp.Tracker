@@ -338,6 +338,21 @@
    "mode": "Escort"
   },
   {
+   "id": "gibraltar",
+   "name": "Watchpoint: Gibraltar",
+   "mode": "Escort"
+  },
+  {
+   "id": "rialto",
+   "name": "Rialto",
+   "mode": "Escort"
+  },
+  {
+   "id": "grimsvotn",
+   "name": "Grímsvötn",
+   "mode": "Escort"
+  },
+  {
    "id": "blizzworld",
    "name": "Blizzard World",
    "mode": "Hybrid"
@@ -360,6 +375,21 @@
   {
    "id": "paraiso",
    "name": "Paraíso",
+   "mode": "Hybrid"
+  },
+  {
+   "id": "neonjunction",
+   "name": "Neon Junction",
+   "mode": "Hybrid"
+  },
+  {
+   "id": "numbani",
+   "name": "Numbani",
+   "mode": "Hybrid"
+  },
+  {
+   "id": "hollywood",
+   "name": "Hollywood",
    "mode": "Hybrid"
   },
   {

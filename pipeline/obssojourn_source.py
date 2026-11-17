@@ -47,8 +47,12 @@ NAME_TO_ID = {
     "paraiso": "paraiso", "paraíso": "paraiso", "colosseo": "colosseo",
     "esperanca": "esperanca", "esperança": "esperanca",
     "new queen street": "nqs", "runasapi": "runasapi",
+    "watchpoint: gibraltar": "gibraltar", "gibraltar": "gibraltar",
+    "rialto": "rialto", "numbani": "numbani", "hollywood": "hollywood",
     # 2026 season maps (added as they appear in schedules)
     "neon junction": "neonjunction",
+    "grímsvötn": "grimsvotn", "grimsvotn": "grimsvotn",
+    "watchpoint: grímsvötn": "grimsvotn", "watchpoint: grimsvotn": "grimsvotn",
 }
 
 
