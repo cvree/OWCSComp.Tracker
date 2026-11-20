@@ -1,6 +1,6 @@
 {
  "_readme": "Written by pipeline/liquipedia_schedule.py from Liquipedia (CC BY-SA 3.0). Do not hand-edit; put corrections in config/schedule.json `matches`.",
- "fetchedAt": "2026-11-16T23:44:39+00:00",
+ "fetchedAt": "2026-11-20T11:38:30+00:00",
  "matches": [
   {
    "bestOf": 3,
@@ -5889,10 +5889,10 @@
    "order": 13,
    "page": "Overwatch Champions Series/2026/Asia/Stage 3",
    "round": "Seeding Match",
-   "scoreA": null,
-   "scoreB": null,
+   "scoreA": 1,
+   "scoreB": 2,
    "section": "{{Stage|Seeding Decider Match}}",
-   "startsAt": "2026-11-20T20:00:00+09:00",
+   "startsAt": "2026-11-20T19:05:00+09:00",
    "streams": [
     {
      "kind": "afreeca",
@@ -5920,10 +5920,10 @@
    "order": 14,
    "page": "Overwatch Champions Series/2026/Asia/Stage 3",
    "round": null,
-   "scoreA": null,
-   "scoreB": null,
+   "scoreA": 3,
+   "scoreB": 0,
    "section": "{{Stage|Main Bracket}}",
-   "startsAt": "2026-11-20T18:00:00+09:00",
+   "startsAt": "2026-11-20T16:15:00+09:00",
    "streams": [
     {
      "kind": "afreeca",
@@ -5951,10 +5951,10 @@
    "order": 15,
    "page": "Overwatch Champions Series/2026/Asia/Stage 3",
    "round": null,
-   "scoreA": null,
-   "scoreB": null,
+   "scoreA": 0,
+   "scoreB": 3,
    "section": "{{Stage|Main Bracket}}",
-   "startsAt": "2026-11-20T16:00:00+09:00",
+   "startsAt": "2026-11-20T17:50:00+09:00",
    "streams": [
     {
      "kind": "afreeca",
@@ -6000,8 +6000,8 @@
      "url": "https://www.youtube.com/ow_esports_jp"
     }
    ],
-   "teamA": "Seeding Match Winner",
-   "teamB": "Selected",
+   "teamA": "Seeding Match Decider",
+   "teamB": "T1",
    "url": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Asia/Stage_3"
   },
   {
@@ -6031,8 +6031,8 @@
      "url": "https://www.youtube.com/ow_esports_jp"
     }
    ],
-   "teamA": "Seeding Match Loser",
-   "teamB": "Remaining",
+   "teamA": "Seeding Match Decider",
+   "teamB": "Crazy Raccoon",
    "url": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Asia/Stage_3"
   },
   {
@@ -6124,8 +6124,8 @@
      "url": "https://www.youtube.com/ow_esports_jp"
     }
    ],
-   "teamA": null,
-   "teamB": null,
+   "teamA": "VARREL",
+   "teamB": "The Gatos Guapos",
    "url": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Asia/Stage_3"
   },
   {
@@ -15630,7 +15630,7 @@
   {
    "event": "asia/stage-3",
    "matches": 20,
-   "revid": 1155892,
+   "revid": 1156196,
    "title": "Overwatch Champions Series/2026/Asia/Stage 3"
   },
   {
@@ -15798,7 +15798,7 @@
   {
    "event": "international/world-finals",
    "matches": 22,
-   "revid": 1155539,
+   "revid": 1156197,
    "title": "Overwatch Champions Series/2026/World Finals"
   }
  ],
