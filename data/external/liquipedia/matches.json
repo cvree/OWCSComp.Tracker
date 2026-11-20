@@ -1,6 +1,6 @@
 {
  "_readme": "Written by pipeline/liquipedia_schedule.py from Liquipedia (CC BY-SA 3.0). Do not hand-edit; put corrections in config/schedule.json `matches`.",
- "fetchedAt": "2026-11-20T11:38:30+00:00",
+ "fetchedAt": "2026-11-20T22:14:48+00:00",
  "matches": [
   {
    "bestOf": 3,
@@ -5890,7 +5890,7 @@
    "page": "Overwatch Champions Series/2026/Asia/Stage 3",
    "round": "Seeding Match",
    "scoreA": 1,
-   "scoreB": 2,
+   "scoreB": 3,
    "section": "{{Stage|Seeding Decider Match}}",
    "startsAt": "2026-11-20T19:05:00+09:00",
    "streams": [
@@ -6000,7 +6000,7 @@
      "url": "https://www.youtube.com/ow_esports_jp"
     }
    ],
-   "teamA": "Seeding Match Decider",
+   "teamA": "Zeta DIVISION",
    "teamB": "T1",
    "url": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Asia/Stage_3"
   },
@@ -6031,7 +6031,7 @@
      "url": "https://www.youtube.com/ow_esports_jp"
     }
    ],
-   "teamA": "Seeding Match Decider",
+   "teamA": "Team Falcons",
    "teamB": "Crazy Raccoon",
    "url": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Asia/Stage_3"
   },
@@ -15558,7 +15558,7 @@
   {
    "event": "japan/stage-1",
    "matches": 4,
-   "revid": 1132162,
+   "revid": 1156246,
    "title": "Overwatch Champions Series/2026/Asia/Stage 1/Japan"
   },
   {
@@ -15570,7 +15570,7 @@
   {
    "event": "korea/stage-1",
    "matches": 15,
-   "revid": 1144803,
+   "revid": 1156284,
    "title": "Overwatch Champions Series/2026/Asia/Stage 1/Korea"
   },
   {
@@ -15582,7 +15582,7 @@
   {
    "event": "pacific/stage-1",
    "matches": 4,
-   "revid": 1155882,
+   "revid": 1156247,
    "title": "Overwatch Champions Series/2026/Asia/Stage 1/Pacific"
   },
   {
@@ -15594,7 +15594,7 @@
   {
    "event": "japan/stage-2",
    "matches": 4,
-   "revid": 1146653,
+   "revid": 1156230,
    "title": "Overwatch Champions Series/2026/Asia/Stage 2/Japan"
   },
   {
@@ -15606,7 +15606,7 @@
   {
    "event": "korea/stage-2",
    "matches": 15,
-   "revid": 1152605,
+   "revid": 1156287,
    "title": "Overwatch Champions Series/2026/Asia/Stage 2/Korea"
   },
   {
@@ -15618,7 +15618,7 @@
   {
    "event": "pacific/stage-2",
    "matches": 4,
-   "revid": 1151290,
+   "revid": 1156228,
    "title": "Overwatch Champions Series/2026/Asia/Stage 2/Pacific"
   },
   {
@@ -15630,13 +15630,13 @@
   {
    "event": "asia/stage-3",
    "matches": 20,
-   "revid": 1156196,
+   "revid": 1156243,
    "title": "Overwatch Champions Series/2026/Asia/Stage 3"
   },
   {
    "event": "japan/stage-3",
    "matches": 4,
-   "revid": 1152572,
+   "revid": 1156221,
    "title": "Overwatch Champions Series/2026/Asia/Stage 3/Japan"
   },
   {
@@ -15648,7 +15648,7 @@
   {
    "event": "korea/stage-3",
    "matches": 15,
-   "revid": 1154224,
+   "revid": 1156286,
    "title": "Overwatch Champions Series/2026/Asia/Stage 3/Korea"
   },
   {
@@ -15660,7 +15660,7 @@
   {
    "event": "pacific/stage-3",
    "matches": 4,
-   "revid": 1154549,
+   "revid": 1156223,
    "title": "Overwatch Champions Series/2026/Asia/Stage 3/Pacific"
   },
   {
@@ -15678,7 +15678,7 @@
   {
    "event": "china/stage-1",
    "matches": 6,
-   "revid": 1155534,
+   "revid": 1156242,
    "title": "Overwatch Champions Series/2026/China/Stage 1"
   },
   {
@@ -15690,7 +15690,7 @@
   {
    "event": "china/stage-2",
    "matches": 6,
-   "revid": 1155533,
+   "revid": 1156229,
    "title": "Overwatch Champions Series/2026/China/Stage 2"
   },
   {
@@ -15702,7 +15702,7 @@
   {
    "event": "china/stage-3",
    "matches": 6,
-   "revid": 1155532,
+   "revid": 1156244,
    "title": "Overwatch Champions Series/2026/China/Stage 3"
   },
   {
@@ -15714,7 +15714,7 @@
   {
    "event": "emea/stage-1",
    "matches": 6,
-   "revid": 1146812,
+   "revid": 1156241,
    "title": "Overwatch Champions Series/2026/EMEA/Stage 1"
   },
   {
@@ -15726,7 +15726,7 @@
   {
    "event": "emea/stage-2",
    "matches": 6,
-   "revid": 1153081,
+   "revid": 1156227,
    "title": "Overwatch Champions Series/2026/EMEA/Stage 2"
   },
   {
@@ -15738,7 +15738,7 @@
   {
    "event": "emea/stage-3",
    "matches": 6,
-   "revid": 1153084,
+   "revid": 1156219,
    "title": "Overwatch Champions Series/2026/EMEA/Stage 3"
   },
   {
@@ -15762,7 +15762,7 @@
   {
    "event": "na/stage-1",
    "matches": 6,
-   "revid": 1130885,
+   "revid": 1156234,
    "title": "Overwatch Champions Series/2026/NA/Stage 1"
   },
   {
@@ -15774,7 +15774,7 @@
   {
    "event": "na/stage-2",
    "matches": 6,
-   "revid": 1153082,
+   "revid": 1156226,
    "title": "Overwatch Champions Series/2026/NA/Stage 2"
   },
   {
@@ -15786,7 +15786,7 @@
   {
    "event": "na/stage-3",
    "matches": 6,
-   "revid": 1153106,
+   "revid": 1156218,
    "title": "Overwatch Champions Series/2026/NA/Stage 3"
   },
   {
